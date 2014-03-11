@@ -145,9 +145,9 @@
 
         public static int Notification_Homeowner = 97; //Shows the homeowner contact info: Homeowner + "   # " + Home_Phone + "  " + Community+ " -" + Address
         public static int NumCalls = 98; //Calculated based on # of Descript_# fields have a non empty string value
-        public static int Orig_CompDate = 99;
-        public static int Other_Phone = 100;
-        public static int OwnNum = 101;
+        public static int Orig_CompDate = 99; //If empty and compdate has a date use compdate, otherwise use orig_compdate: @If(Orig_CompDate="" & !(Comp_Date=""); Comp_Date;Orig_CompDate)
+        public static int Other_Phone = 100; //Text box shows value of Other_Phone
+        public static int OwnNum = 101; //Text box to show OwnerNo
         
         public static int PCode_1 = 102; //PCode_1-10 go with the Item_# fields, queries the db for @Unique(@DbColumn("" : "NoCache"; ""; "PROB"; 1)) drop down
         public static int PCode_10 = 103;
@@ -160,14 +160,25 @@
         public static int PCode_8 = 110;
         public static int PCode_9 = 111;
         
-        public static int Plan = 112;
-        public static int PlanType = 113;
-        public static int PlanTypeDesc = 114;
-        public static int Plan_Name = 115;
-        public static int Printed_Name = 116;
-        public static int Project = 117;
-        public static int ProjectCode = 118;
-        public static int RequestCalc = 119;
+        public static int Plan = 112; //Text box to show Plan value
+        public static int PlanType = 113; //Text box to show value of PlanType
+        public static int PlanTypeDesc = 114; //Text box to show value of PlanTypeDesc
+        public static int Plan_Name = 115; //Text box to show value of Plan_Name
+        public static int Printed_Name = 116; //Text box to show value of Printed_Name
+        public static int Project = 117; //Text box showing the value from db: @DbLookup("" : "NoCache"; "862564C7:0083BED0"; "CommNum"; @Left(Job_Num;4); 5)
+        public static int ProjectCode = 118; //Hidden field holding value from db: @DbLookup("" : "NoCache"; "862564C7:0083BED0"; "CommNum"; @Left(Job_Num;4); 12)
+        
+        /*@If(Descript_1!="";1;0) 
+         * +@If(Descript_2!="";1;0)
+         * +@If(Descript_3!="";1;0) 
+         * + @If(Descript_4!="";1;0)  
+         * + @If(Descript_5!="";1;0) 
+         * + @If(Descript_6!="";1;0) 
+         * + @If(Descript_7!="";1;0) 
+         * + @If(Descript_8!="";1;0) 
+         * + @If(Descript_9!="";1;0) 
+         * + @If(Descript_10!="";1;0)*/
+        public static int RequestCalc = 119;// Counts the non-empty descriptions
         
         public static int ResCode_1 = 120; //ResCode_# 1-10 validate with: @If(Descript_1 != "" & CDate_1 = "Yes" & ResCode_1 = "";@Failure("Item 1 is missing a Classification.");@Success)
         public static int ResCode_10 = 121;
@@ -210,55 +221,85 @@
         public static int Root_8_1 = 157;
         public static int Root_9 = 158;
         public static int Root_9_1 = 159;
+
+        public static int SalesEmp_Num = 160; //Text box to display SalesEmp_Num
+        public static int Sales_Consultant = 161; //Text box to display Sales_Consultant
+        public static int SateliteCode = 162; //I'm thinking this displays satelite city code from db: @DbLookup("" : "NoCache"; "862564C7:0083BED0"; "CommNum"; @Left(Job_Num;4); 8)
+        public static int Select2YearComp = 163; //Hidden text box to show Select2YearComp
+        public static int Server_Name = 164; //Can't find this on the form
+        public static int State = 165; //Text box to show the value of State
+        public static int Swing = 166; //Text box to show the value of Swing
         
-        public static int SalesEmp_Num = 160;
-        public static int Sales_Consultant = 161;
-        public static int SateliteCode = 162;
-        public static int Select2YearComp = 163;
-        public static int Server_Name = 164;
-        public static int State = 165;
-        public static int Swing = 166;
-        public static int Type = 167;
-        public static int unid = 168;
+        /*Home Furnishings Warranty
+        Mold Inspection
+        Presettlement List
+        Prime Trim
+        Proactive Call
+        Proactive Inspection
+        Re-sale Inspection List
+        Request on Hold
+        RWC Inspection
+        Twelve Month List
+        Warranty Service Request*/
+        public static int Type = 167; //A drop down list for the above list of items
+        public static int unid = 168; //Some type of document id for uniqueness: @Text(@DocumentUniqueID)
         public static int UnitNo = 169; //One of two fields (BldNo is other) that shows up based on PlanType field. PlanType = "" | PlanType = "SNG"
-        public static int User_Defined = 170;
-        public static int VendorCode_1 = 171; //VendorCode_# are calculated by:
-        public static int VendorCode_10 = 172; //@If(PCode_1="";@Return("");""); 
-        public static int VendorCode_2 = 173; //vendor:=@Unique(@DbLookup("" : "NoCache"; lookupserver : "Purchasing\\Vendors.nsf"; "VC"; PCode_1 + Job_Num;3)); 
-        public static int VendorCode_3 = 174; //@If(@IsError(vendor); " "; @NewLine + vendor + @NewLine)
+        public static int User_Defined = 170; //Can't find it on the form
+        
+        /*@If(PCode_1="";@Return("");"");
+        vendor:=@Unique(@DbLookup("" : "NoCache"; lookupserver : "Purchasing\\Vendors.nsf"; "VC"; PCode_1 + Job_Num;3)); 
+        @If(@IsError(vendor); " "; @NewLine + vendor + @NewLine)*/
+        public static int VendorCode_1 = 171; //VendorCode_# are calculated by the above code
+        public static int VendorCode_10 = 172; 
+        public static int VendorCode_2 = 173; 
+        public static int VendorCode_3 = 174; 
         public static int VendorCode_4 = 175;
         public static int VendorCode_5 = 176;
         public static int VendorCode_6 = 177;
         public static int VendorCode_7 = 178;
         public static int VendorCode_8 = 179;
         public static int VendorCode_9 = 180;
-        public static int VendorName_1 = 181; //VendorName_# are calculated by:
-        public static int VendorName_10 = 182; //@If(PCode_1="";@Return("");"");
-        public static int VendorName_2 = 183; //vendor:=@Unique(@DbLookup("" : "NoCache"; lookupserver : "Purchasing\\Vendors.nsf"; "VC"; PCode_1 + Job_Num;3));
-        public static int VendorName_3 = 184; //@If(@IsError(vendor); " Vendor Not Found  "; vendor)
+        
+        /*//@If(PCode_1="";@Return("");"");
+        vendor:=@Unique(@DbLookup("" : "NoCache"; lookupserver : "Purchasing\\Vendors.nsf"; "VC"; PCode_1 + Job_Num;3)); 
+        @If(@IsError(vendor); " Vendor Not Found  "; vendor) */
+        public static int VendorName_1 = 181; //VendorName_# are calculated by the above code
+        public static int VendorName_10 = 182; 
+        public static int VendorName_2 = 183; 
+        public static int VendorName_3 = 184; 
         public static int VendorName_4 = 185;
         public static int VendorName_5 = 186;
         public static int VendorName_6 = 187;
         public static int VendorName_7 = 188;
         public static int VendorName_8 = 189;
         public static int VendorName_9 = 190;
-        public static int VendorPhoneNum_1 = 191; //VendorPhoneNum_# are calculated by:
-        public static int VendorPhoneNum_10 = 192; //@If(PCode_1="";@Return("");"");
-        public static int VendorPhoneNum_2 = 193; //vendor:=@Unique(@DbLookup("" : "NoCache"; lookupserver : "Purchasing\\Vendors.nsf"; "VC"; PCode_1 + Job_Num;5));
-        public static int VendorPhoneNum_3 = 194; //@If(@IsError(vendor); " "; @NewLine + vendor)
+        
+        /* @If(PCode_1="";@Return("");"");
+        vendor:=@Unique(@DbLookup("" : "NoCache"; lookupserver : "Purchasing\\Vendors.nsf"; "VC"; PCode_1 + Job_Num;5));
+        @If(@IsError(vendor); " "; @NewLine + vendor) */
+        public static int VendorPhoneNum_1 = 191; //VendorPhoneNum_# are calculated by the above code
+        public static int VendorPhoneNum_10 = 192; 
+        public static int VendorPhoneNum_2 = 193; 
+        public static int VendorPhoneNum_3 = 194; 
         public static int VendorPhoneNum_4 = 195;
         public static int VendorPhoneNum_5 = 196;
         public static int VendorPhoneNum_6 = 197;
         public static int VendorPhoneNum_7 = 198;
         public static int VendorPhoneNum_8 = 199;
         public static int VendorPhoneNum_9 = 200;
-        public static int WorkPhone_1 = 201;
-        public static int WorkPhone_2 = 202;
-        public static int WSFU = 203;
-        public static int WSFU_1 = 204;
-        public static int WsrEmp_Num = 205;
-        public static int YearComp = 206;
-        public static int ZipCode = 207;
+        
+        public static int WorkPhone_1 = 201; //Text box for value Work_1
+        public static int WorkPhone_2 = 202; //Text box for value Work_2
+        public static int WSFU = 203; //Some integer field that is intiated as 0
+        public static int WSFU_1 = 204; //Calculated via db lookup: @If(@IsError(@DbLookup("" : "NoCache"; "86256A34:00589EF7"; "Job1";unid;2)); @Failure("0"); @Success) 
+        public static int WsrEmp_Num = 205; //Text box to hold the WSR employee id: @Text(@DbLookup("" : "NoCache"; "862564C7:0083BED0"; "WSR";Assigned_To;3))
+        public static int YearComp = 206; //Hidden field to hold value of YearComp
+        public static int ZipCode = 207; //Text box for value of ZipCode
+        
+        /*who := @If(@Left(ModifiedBy; " ") = " "; ModifiedBy; @Left(ModifiedBy; " "));
+        @Return("<h2>Thank You, " + who + ".  " +
+        "Please click on the link below to go back to the Warranty Follup View List." + "<h2><br><h4>  
+         * <a href=http://206.61.105.136/Customer/Warranty.nsf/Wfucl?OpenView>Warranty Followup Call List</a>")*/
         public static int Return = 208;
     }
 }
