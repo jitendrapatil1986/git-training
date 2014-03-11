@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{AD84599E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LotusExtract", "LotusExtract\LotusExtract.csproj", "{AF1DBB4F-8023-4488-9961-96471C6647F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.Core", "Warranty.Core\Warranty.Core.csproj", "{999BE20F-A429-489F-8EA4-7EEF8B29853D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{AF1DBB4F-8023-4488-9961-96471C6647F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF1DBB4F-8023-4488-9961-96471C6647F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF1DBB4F-8023-4488-9961-96471C6647F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{999BE20F-A429-489F-8EA4-7EEF8B29853D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{999BE20F-A429-489F-8EA4-7EEF8B29853D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{999BE20F-A429-489F-8EA4-7EEF8B29853D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{999BE20F-A429-489F-8EA4-7EEF8B29853D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
