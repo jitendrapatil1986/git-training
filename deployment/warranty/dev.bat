@@ -1,0 +1,1 @@
+.\pstrami.bat deploy-package dev . %1
