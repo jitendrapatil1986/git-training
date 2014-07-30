@@ -33,8 +33,21 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel">
+      <HintPath>..\..\..\purchasing\src\Purchasing.UI\bin\Microsoft.IdentityModel.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate.Caches.SysCache">
+      <HintPath>..\packages\NHibernate.Caches.SysCache.3.3.3.4000\lib\net35\NHibernate.Caches.SysCache.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,7 +55,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\AuditEventListener.cs" />
+    <Compile Include="DataAccess\ConfigurationFactoryExtensions.cs" />
+    <Compile Include="Entities\IAuditableEntity.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Net4Collection.cs" />
+    <Compile Include="DataAccess\IStringEnumeration.cs" />
+    <Compile Include="DataAccess\Int32EnumerationType.cs" />
+    <Compile Include="DataAccess\ConfigurationFactory.cs" />
+    <Compile Include="DataAccess\HbmMappingGenerator.cs" />
+    <Compile Include="DataAccess\IConfigurationFactory.cs" />
+    <Compile Include="DataAccess\StringEnumeration.cs" />
+    <Compile Include="DataAccess\StringEnumerationType.cs" />
+    <Compile Include="Entities\Community.cs" />
+    <Compile Include="Entities\CustomerServiceLineItem.cs" />
+    <Compile Include="Entities\CustomerServiceRequest.cs" />
+    <Compile Include="Entities\Division.cs" />
+    <Compile Include="Entities\Home.cs" />
+    <Compile Include="Entities\HomeOwner.cs" />
+    <Compile Include="Entities\Project.cs" />
+    <Compile Include="Entities\TeamMember.cs" />
+    <Compile Include="Enumerations\GenericCompositeUserType.cs" />
+    <Compile Include="Enumerations\Int32Enumeration.cs" />
+    <Compile Include="Enumerations\IEnumeration.cs" />
+    <Compile Include="Enumerations\Enumeration.cs" />
+    <Compile Include="Enumerations\ItemClassification.cs" />
+    <Compile Include="Enumerations\RequestType.cs" />
+    <Compile Include="Extensions\PropertyPathExtensions.cs" />
+    <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\UserSession.cs" />
+    <Compile Include="Security\UserInfo.cs" />
+    <Compile Include="Security\IUserSession.cs" />
+    <Compile Include="Security\IUser.cs" />
+    <Compile Include="ValueObjects\Address.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

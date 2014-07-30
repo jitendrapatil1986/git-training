@@ -1,4 +1,4 @@
-﻿namespace LotusExtract
+﻿namespace Warranty.LotusExtract.Columns
 {
     public static class WarrantyCallColumns
     {

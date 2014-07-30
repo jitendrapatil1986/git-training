@@ -94,11 +94,6 @@ namespace Headspring
             return Value.GetHashCode();
         }
 
-        public static bool TryFromValue(TValue value, out TEnumeration result)
-        {
-            return TryParse(e => e.Value.Equals(value), out result);
-        }
-
         public static bool operator ==(Enumeration<TEnumeration, TValue> left, Enumeration<TEnumeration, TValue> right)
         {
             return Equals(left, right);
