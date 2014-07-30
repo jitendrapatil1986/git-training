@@ -177,6 +177,9 @@
     </Compile>
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Core\Helpers\ClientApiHelper.cs" />
+    <Compile Include="Core\Helpers\Format.cs" />
+    <Compile Include="Core\Helpers\VersionHelper.cs" />
     <Compile Include="Core\Initialization\BundleConfig.cs" />
     <Compile Include="Core\Initialization\Bundling\LessBundleTransform.cs" />
     <Compile Include="Core\Initialization\Bundling\VirtualFileReader.cs" />
