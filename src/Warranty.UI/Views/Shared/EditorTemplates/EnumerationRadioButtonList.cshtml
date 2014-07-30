@@ -1,0 +1,38 @@
+﻿@using System.Web.Mvc.Html
+@using Yay.Enumerations
+@using Yay.Enumerations.MVC.UiHints
+
+@model EnumerationBase
+
+@{
+	var containerType = ViewData.ModelMetadata.ContainerType;
+	var property = containerType.GetProperty(ViewData.ModelMetadata.PropertyName);
+	var selectListProvider = property.GetAttribute<RadioButtonListAttribute>();
+
+	if (selectListProvider == null)
+	{
+		throw new Exception("This should be moved to the property.GetAttribute<DropDownListAttribute>() extension method.");
+	}
+	var items = selectListProvider.GetOptions(Model, property.PropertyType).ToList();
+
+}
+
+<div class="enumeration-radios">
+@foreach (var option in items)
+{
+	<label>
+		@if (option.Selected)
+		{
+			@Html.RadioButtonFor(x => x, option.Value, new { Checked = "checked" })
+		} else
+		{
+			@Html.RadioButtonFor(x => x, option.Value)
+		}
+		@option.Text
+	</label>
+	if (selectListProvider.RadioButtonsOrientation == RadioButtonsOrientation.Vertical)
+	{
+		<br />
+	}
+}
+</div>

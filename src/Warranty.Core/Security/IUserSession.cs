@@ -3,5 +3,7 @@
     public interface IUserSession
     {
         IUser GetCurrentUser();
+
+        void LogOut();
     }
 }
