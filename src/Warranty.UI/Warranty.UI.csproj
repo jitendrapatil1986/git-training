@@ -42,6 +42,12 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Net4">
+      <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.IdentityModel">
       <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
@@ -49,6 +55,18 @@
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus">
+      <HintPath>..\packages\NServiceBus.Interfaces.4.2.0\lib\net40\NServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Core">
+      <HintPath>..\packages\NServiceBus.4.2.0\lib\net40\NServiceBus.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.ObjectBuilder.StructureMap">
+      <HintPath>..\packages\NServiceBus.StructureMap.4.2.0\lib\net40\NServiceBus.ObjectBuilder.StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -122,12 +140,25 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Yay.Enumerations">
+      <HintPath>..\packages\Yay.Enumeration.0.5.1\lib\Yay.Enumerations.dll</HintPath>
+    </Reference>
+    <Reference Include="Yay.Enumerations.MVC">
+      <HintPath>..\packages\Yay.Enumeration.MVC.0.5.1\lib\Yay.Enumerations.MVC.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Core\Initialization\ModelMetadataProvider.cs" />
+    <Compile Include="Core\Initialization\WarrantyWebsiteBootstrapper.cs" />
+    <Compile Include="Core\ModelBinders\CompositeModelBinder.cs" />
+    <Compile Include="Core\ModelBinders\EnumerationCollectionModelBinder.cs" />
+    <Compile Include="Core\ModelBinders\EnumerationCollectionPropertyBinder.cs" />
+    <Compile Include="Core\ModelBinders\EnumerationModelBinder.cs" />
+    <Compile Include="Core\ModelBinders\EnumerationPropertyBinder.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -161,6 +192,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\EditorTemplates\EnumerationRadioButtonList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\EditorTemplates\EnumerationDropDownList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\DisplayTemplates\EnumerationBase.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Warranty.Core\Warranty.Core.csproj">
+      <Project>{991144F8-B588-4604-930B-3224FEC6FF32}</Project>
+      <Name>Warranty.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
