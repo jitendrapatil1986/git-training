@@ -30,7 +30,7 @@ $errorReportingSubject = "Warranty Exception (Training)"
 
 $documentSharePath = "C:\_Uploads\"
 
-$dataBusSharePath = "\\wkcorpappTraining1\LLDataBus"
+$dataBusSharePath = "\\wkcorpappdev1\LLDataBus"
 $actionMailerPickupDirectory = "C:\Temp\_Emails"
 $smtpDeliveryMethod = "network" #"SpecifiedPickupDirectory"
 $helpDeskMessagesEndPoint= "Helpdesk.Server"
