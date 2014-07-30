@@ -1,32 +1,20 @@
 Environment "dev" -servers @(
-	Server "wkcorpappdev1" @("PurchasingWeb";) 
-	Server "wkcorpappdev1" @("VendorWeb";) 
-	Server "wksql3" @("PurchasingEtlJde";)
-	Server "wksql3" @("PurchasingEtlPO";)
-	Server "wksql3" @("PurchasingNotifier";)
+	Server "wkcorpappdev1" @("WarrantyWeb";) 	
 	Server "wkcorpappdev1" @("Nsb";)
 	Server "wksql3" @("Database";) 
-	) -installPath "C:\Installs\PurchasingTest"
+	) -installPath "C:\Installs\WarrantyTest"
 	
 Environment "training" -servers @(
-	Server "wkcorpapptrain1" @("PurchasingWeb";) 
-	Server "wkcorpapptrain1" @("VendorWeb";) 
-	Server "wksql3" @("PurchasingEtlJde";)
-	Server "wksql3" @("PurchasingEtlPO";)
-	Server "wksql3" @("PurchasingNotifier";)
-	Server "wkcorpapptrain1" @("Nsb";)
+	Server "wkcorpappdev1" @("WarrantyWeb";) 	
+	Server "wkcorpappdev1" @("Nsb";)
 	Server "wksql3" @("Database";) 
-	) -installPath "C:\Installs\PurchasingTraining"
+	) -installPath "C:\Installs\WarrantyTraining"
 	
 Environment "prod" -servers @(
-	Server "wkcorpappprod1" @("PurchasingWeb";) 
-	Server "wkcorpappprod1" @("VendorWeb";) 
-	Server "wkcorpappprod1" @("PurchasingEtlJde";)
-	Server "wksql1" @("PurchasingEtlPO";)
-	Server "wksql1" @("PurchasingNotifier";)
-	Server "wkcorpappprod1" @("Nsb";)
-	Server "wksql1" @("Database";) 
-	) -installPath "C:\Installs\Purchasing"
+Server "wkcorpappdev1" @("WarrantyWeb";) 	
+	Server "wkcorpappdev1" @("Nsb";)
+	Server "wksql3" @("Database";) 
+	) -installPath "C:\Installs\Warranty"
 
 
 if(Test-Path .\environments.ps1) {
@@ -34,7 +22,7 @@ if(Test-Path .\environments.ps1) {
 }
 
 Role "Nsb" -Incremental {
-	. load-vars "nsb\Purchasing"
+	. load-vars "nsb\Warranty"
 
 	# backup existing site
 	backup-directory $nsb_directory
@@ -51,17 +39,13 @@ Role "Nsb" -Incremental {
 	Remove-Item "$nsb_directory\mscorlib.dll"
 
 	# config
-	poke-xml "$nsb_directory\Purchasing.Server.dll.config" "configuration/connectionStrings/add[@name='PurchasingDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_nsb_application_name;"
-	poke-xml "$nsb_directory\Purchasing.Server.dll.config" "configuration/appSettings/add[@key='PurchasingDbName']/@value" $db_name
-	poke-xml "$nsb_directory\Purchasing.Server.dll.config" "configuration/appSettings/add[@key='DataBusSharePath']/@value" $dataBusSharePath
-	poke-xml "$nsb_directory\Purchasing.Server.dll.config" "configuration/appSettings/add[@key='DocumentSharePath']/@value" $documentSharePath
-	poke-xml "$nsb_directory\Purchasing.Server.dll.config" "configuration/appSettings/add[@key='ActionMailerPickupDirectory']/@value" $actionMailerPickupDirectory
-	poke-xml "$nsb_directory\Purchasing.Server.dll.config" "configuration/appSettings/add[@key='PaymentRequestShared']/@value" $paymentRequestsSharedDirectory
-	poke-xml "$nsb_directory\Purchasing.Server.dll.config" "configuration/appSettings/add[@key='PurchaseOrderURL']/@value" $purchaseOrderUrl
-	poke-xml "$nsb_directory\Purchasing.Server.dll.config" "configuration/appSettings/add[@key='EnableServiceControlHeartbeat']/@value" $nsb_enableServiceControlHeartbeat
+	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_nsb_application_name;"
+	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='WarrantyDbName']/@value" $db_name
+	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='DataBusSharePath']/@value" $dataBusSharePath
+
 		
 	#Install NSB Service
-	&"$nsb_directory\NServiceBus.Host.exe" "/install" "/serviceName:$nsb_service_name" "/username:dwh\svc-purchasing-nsb" "/password:O2I(&3J,5`$V1h24"
+	&"$nsb_directory\NServiceBus.Host.exe" "/install" "/serviceName:$nsb_service_name" "/username:dwh\svc-Warranty-nsb" "/password:O2I(&3J,5`$V1h24"
 
 	#Start NSB Service
 	Start-Service "$nsb_service_name"
@@ -71,162 +55,50 @@ Role "Nsb" -Incremental {
 	# You could do IIS setup here... but it is much easier to just do that with server provisioning
 }
 
-Role "PurchasingWeb" -Incremental {
-	. load-vars "web\Purchasing"
+Role "WarrantyWeb" -Incremental {
+	. load-vars "web\Warranty"
 
-	Set-AppOffline $purchasing_web_directory
+	Set-AppOffline $warranty_web_directory
 
 	# backup existing site
-	backup-directory $purchasing_web_directory
+	backup-directory $warranty_web_directory
 
 	# copy new files
 	$skips = @(
 		@{"objectName"="filePath";"skipAction"="Delete";"absolutePath"='App_Offline\.htm$'}
 	)
-	sync-files $source_dir $purchasing_web_directory $skips
+	sync-files $source_dir $warranty_web_directory $skips
 
 	# config
-	poke-xml "$purchasing_web_directory\web.config" "configuration/connectionStrings/add[@name='PurchasingDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_p_ui_application_name;"
-	poke-xml "$purchasing_web_directory\web.config" "configuration/system.identityModel/identityConfiguration/audienceUris/add/@value" $purchasing_identity_uri
-	poke-xml "$purchasing_web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@realm" $purchasing_identity_uri
-	poke-xml "$purchasing_web_directory\web.config" "configuration/appSettings/add[@key='sendFeedbackAddresses']/@value" $sendFeedbackAddresses
-	poke-xml "$purchasing_web_directory\web.config" "configuration/appSettings/add[@key='DocumentSharePath']/@value" $documentSharePath
-	poke-xml "$purchasing_web_directory\web.config" "configuration/appSettings/add[@key='DataBusSharePath']/@value" $dataBusSharePath
-	poke-xml "$purchasing_web_directory\web.config" "configuration/appSettings/add[@key='ActionMailerPickupDirectory']/@value" $actionMailerPickupDirectory
-	poke-xml "$purchasing_web_directory\web.config" "configuration/appSettings/add[@key='NewRelic.AppName']/@value" $newRelicPurchasingName
-	poke-xml "$purchasing_web_directory\web.config" "configuration/appSettings/add[@key='Accounting.API.BaseUri']/@value" $accounting_api_uri
-	poke-xml "$purchasing_web_directory\web.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Messages='HelpDesk.Messages']/@Endpoint" $helpDeskMessagesEndPoint
+	poke-xml "$warranty_web_directory\web.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_p_ui_application_name;"
+	poke-xml "$warranty_web_directory\web.config" "configuration/system.identityModel/identityConfiguration/audienceUris/add/@value" $warranty_identity_uri
+	poke-xml "$warranty_web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@realm" $warranty_identity_uri
+	poke-xml "$warranty_web_directory\web.config" "configuration/appSettings/add[@key='sendFeedbackAddresses']/@value" $sendFeedbackAddresses
+	poke-xml "$warranty_web_directory\web.config" "configuration/appSettings/add[@key='DocumentSharePath']/@value" $documentSharePath
+	poke-xml "$warranty_web_directory\web.config" "configuration/appSettings/add[@key='DataBusSharePath']/@value" $dataBusSharePath
 	
-	poke-xml "$purchasing_web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
-	poke-xml "$purchasing_web_directory\web.config" "configuration/elmah/errorMail/@subject" $errorReportingSubject
-	poke-xml "$purchasing_web_directory\web.config" "configuration/elmah/errorMail/@smtpServer" $smtpServer
+	poke-xml "$warranty_web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
+	poke-xml "$warranty_web_directory\web.config" "configuration/elmah/errorMail/@subject" $errorReportingSubject
+	poke-xml "$warranty_web_directory\web.config" "configuration/elmah/errorMail/@smtpServer" $smtpServer
 	
-	poke-xml "$purchasing_web_directory\web.config" "configuration/system.net/mailSettings/smtp/@deliveryMethod" $smtpDeliveryMethod
+	poke-xml "$warranty_web_directory\web.config" "configuration/system.net/mailSettings/smtp/@deliveryMethod" $smtpDeliveryMethod
 
-	Rename-Header-File $purchasing_web_directory $header_image_file_name
+	Rename-Header-File $warranty_web_directory $header_image_file_name
 
-	Set-AppOnline $purchasing_web_directory
+	Set-AppOnline $warranty_web_directory
 } -FullInstall {
 	# You could do IIS setup here... but it is much easier to just do that with server provisioning
 }
 
-Role "PurchasingEtlJde" -Incremental {
-	. load-vars "tools\Purchasing.ETL.JDE"
 
-	# backup existing site
-	# backup-directory $etl_jde_directory
 
-	# copy new files
-	# $skips = @(
-	#	@{"objectName"="filePath";"skipAction"="Delete";"absolutePath"='App_Offline\.htm$'}
-	# )
-	# sync-files $source_dir $etl_jde_directory $skips
 
-	# config
-	poke-xml "$etl_jde_directory\Purchasing.ETL.JDE.exe.config" "configuration/connectionStrings/add[@name='PurchasingDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=Purchasing.ETL.JDE;"
-	poke-xml "$etl_jde_directory\Purchasing.ETL.JDE.exe.config" "configuration/connectionStrings/add[@name='JDE']/@connectionString" "DataSource=$jde_db_server;CharBitDataAsString=TRUE;UserID=$jde_db_username;Password=$jde_db_password;DefaultCollection=$jde_db_collection;"
-	
-	# Rename-Header-File $etl_jde_directory $header_image_file_name
 
-	# Set-AppOnline $etl_jde_directory
-} -FullInstall {
-	# Everything else has a comment, why not this one
-}
 
-Role "PurchasingEtlPO" -Incremental {
-	. load-vars "tools\Purchasing.ETL.JDE.PO"	
-	# config
-	poke-xml "$etl_jde_po_directory\purchasing.jde.etl.dtsConfig" "DTSConfiguration/Configuration[@Path='\Package.Connections[PurchasingSQL].Properties[ConnectionString]']/ConfiguredValue" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=Purchasing.ETL.JDE.PO;"
-	poke-xml "$etl_jde_po_directory\purchasing.jde.etl.dtsConfig" "DTSConfiguration/Configuration[@Path='\Package.Connections[JDE].Properties[ConnectionString]']/ConfiguredValue" "Data Source=$jde_db_server;User ID=$jde_db_username;Initial Catalog=DWHOMES;Provider=IBMDA400.DataSource.1;Force Translate=0;Default Collection=$jde_db_collection;Password=$jde_db_password;"
 
-} -FullInstall {
-	# Everything else has a comment, why not this one
-}
-
-Role "PurchasingNotifier" -Incremental {
-	. load-vars "tools\Purchasing.Notifier"
-
-	# backup existing site
-	# backup-directory $etl_jde_directory
-
-	# copy new files
-	# $skips = @(
-	#	@{"objectName"="filePath";"skipAction"="Delete";"absolutePath"='App_Offline\.htm$'}
-	# )
-	# sync-files $source_dir $etl_jde_directory $skips
-
-	# config
-	poke-xml "$notifier_directory\Purchasing.Notifier.exe.config" "configuration/connectionStrings/add[@name='PurchasingDB']/@connectionString" "Server=$db_server;Initial Catalog=$db_name;Trusted_Connection=yes"
-	poke-xml "$notifier_directory\Purchasing.Notifier.exe.config" "configuration/appSettings/add[@key='PurchaseOrderURL']/@value" $purchaseOrderUrl
-	poke-xml "$notifier_directory\Purchasing.Notifier.exe.config" "configuration/appSettings/add[@key='SubjectPrefix']/@value" $notifyEmailSubjectPrefix
-
-	# Rename-Header-File $etl_jde_directory $header_image_file_name
-
-	# Set-AppOnline $etl_jde_directory
-} -FullInstall {
-	# Everything else has a comment, why not this one
-}
-
-Role "VendorWeb" -Incremental {
-	. load-vars "web\Vendor"
-
-	Set-AppOffline $vendor_web_directory
-
-	# backup existing site
-	backup-directory $vendor_web_directory
-
-	# copy new files
-	$skips = @(
-		@{"objectName"="filePath";"skipAction"="Delete";"absolutePath"='App_Offline\.htm$'}
-	)
-	sync-files $source_dir $vendor_web_directory $skips
-
-	# config
-	poke-xml "$vendor_web_directory\web.config" "configuration/connectionStrings/add[@name='PurchasingDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_v_ui_application_name;"
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='BaseAuthorityUrl']/@value" $vendor_auth_base_url
-	
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='ida:FederationMetadataLocation']/@value" $vendor_auth_metadata
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='ida:Issuer']/@value" $vendor_auth_issuer
-
-	poke-xml "$vendor_web_directory\web.config" "configuration/system.identityModel/identityConfiguration/audienceUris/add/@value" $vendor_identity_uri
-	poke-xml "$vendor_web_directory\web.config" "configuration/system.identityModel/identityConfiguration/issuerNameRegistry/authority/@name" $vendor_auth_authority
-	poke-xml "$vendor_web_directory\web.config" "configuration/system.identityModel/identityConfiguration/issuerNameRegistry/authority/validIssuers/add/@name" $vendor_auth_authority
-
-	poke-xml "$vendor_web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@realm" $vendor_identity_uri
-	poke-xml "$vendor_web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@reply" $vendor_identity_uri
-	poke-xml "$vendor_web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@issuer" $vendor_auth_issuer
-	
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='sendFeedbackAddresses']/@value" $sendFeedbackAddresses
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='DocumentSharePath']/@value" $documentSharePath
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='DataBusSharePath']/@value" $dataBusSharePath
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='ActionMailerPickupDirectory']/@value" $actionMailerPickupDirectory
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='NewRelic.AppName']/@value" $newRelicVendorName
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='Accounting.API.BaseUri']/@value" $accounting_api_uri
-	
-	poke-xml "$vendor_web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
-	poke-xml "$vendor_web_directory\web.config" "configuration/elmah/errorMail/@subject" $errorReportingSubject
-	poke-xml "$vendor_web_directory\web.config" "configuration/elmah/errorMail/@smtpServer" $smtpServer
-	
-	poke-xml "$vendor_web_directory\web.config" "configuration/system.net/mailSettings/smtp/@deliveryMethod" $smtpDeliveryMethod
-	
-	Rename-Header-File $vendor_web_directory $header_image_file_name	
-	
-	$taskName = "KeepVendorPortalActive"
-	$task = Get-ScheduledTask -TaskName $taskName -TaskPath \
-
-	$A = New-ScheduledTaskAction -Execute "$keepAliveDirectory\KeepVendorPortalActive.bat" -Argument $vendor_identity_uri
-	$T = New-ScheduledTaskTrigger -Once -At 7am -RepetitionDuration  (New-TimeSpan -Days 1)  -RepetitionInterval  (New-TimeSpan -Minutes 15)
-	$D = New-ScheduledTask -Action $A -Trigger $T
-	Register-ScheduledTask $taskName -InputObject $D
-
-	
-	Set-AppOnline $vendor_web_directory
-} -FullInstall {
-	# You could do IIS setup here... but it is much easier to just do that with server provisioning
-}
 
 Role "Database" -Incremental {
-	run-dbtask "Update" "database\Purchasing" "db_server" "db_name"
+	run-dbtask "Update" "database\Warranty" "db_server" "db_name"
 } -FullInstall {
 	# You could do a database rebuild here, but why, just restore a production backup first and then do an update
 }
@@ -245,8 +117,7 @@ function script:load-vars($relativeSourceDir) {
 	$error_msg = "ERROR: Missing variable {0}!!"
 	$invalid_path_msg = "ERROR: Invalid path for variable {0}!!"
 	
-	check-pathvar $purchasing_web_directory '$purchasing_web_directory'
-	check-pathvar $vendor_web_directory '$vendor_web_directory'
+	check-pathvar $warranty_web_directory '$warranty_web_directory'
 	check-pathvar $nsb_directory '$nsb_directory'
 	check-var $db_server = "$db_server"
 }
