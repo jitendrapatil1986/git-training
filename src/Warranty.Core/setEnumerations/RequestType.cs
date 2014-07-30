@@ -7,6 +7,7 @@ namespace Warranty.Core.Enumerations
         private RequestType(int value, string displayName) 
             : base(value, displayName)
         {
+            
         }
 
         public static readonly RequestType WarrantyRequest = new RequestType(1, "Warranty Request");

@@ -5,6 +5,7 @@
         private ItemClassification(int value, string displayName)
             :base(value, displayName)
         {
+            
         }
          
         public static readonly ItemClassification BuilderIncomplete = new ItemClassification(1, "Builder Incomplete");

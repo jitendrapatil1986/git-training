@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.UI", "Warranty.UI\Warranty.UI.csproj", "{ECCA9355-3FF0-4C3A-BE4C-9E02B5C8D242}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.Core", "Warranty.Core\Warranty.Core.csproj", "{991144F8-B588-4604-930B-3224FEC6FF32}"
@@ -11,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.Tests", "Warranty.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.Server", "Warranty.Server\Warranty.Server.csproj", "{1F88DA00-AE07-4355-8368-37E3A1D6C7A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LotusExtract", "LotusExtract\LotusExtract.csproj", "{AF1DBB4F-8023-4488-9961-96471C6647F3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.LotusExtract", "Warranty.LotusExtract\Warranty.LotusExtract.csproj", "{AF1DBB4F-8023-4488-9961-96471C6647F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
