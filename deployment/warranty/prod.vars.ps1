@@ -11,7 +11,7 @@ $jde_db_password = "a5pc#n3t"
 $jde_db_collection = "TESTDATA"
 $jde_lookup_db_name = "TESTCOMM"
 
-$db_server = "WKSQL3"
+$db_server = "WKSQL1"
 $db_name = "Warranty"
 $db_nsb_application_name = "Warranty.Server"
 $db_p_ui_application_name = "Warranty.UI"
@@ -25,7 +25,7 @@ $header_image_file_name = "DWH logo_color_233x34.png"
 $Warranty_identity_uri = "https://warranty.davidweekleyhomes.com"
 
 $sendFeedbackAddresses = "dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com, imorfey@dwhomes.com, david@headspring.com"
-$errorReportingEmailAddresses = "benf@headspring.com, dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com, david@headspring.com"
+$errorReportingEmailAddresses = "dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com, david@headspring.com"
 $errorReportingSubject = "Warranty Exception (prod)"
 
 $documentSharePath = "C:\_Uploads\"

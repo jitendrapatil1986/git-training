@@ -4,13 +4,13 @@ Environment "dev" -servers @(
 	) -installPath "C:\Installs\WarrantyTest"
 	
 Environment "training" -servers @(
-	Server "wkcorpappdev1" @("WarrantyWeb";) 
+	Server "wkcorpapptrain1" @("WarrantyWeb";) 
 	Server "wksql3" @("Database";) 
 	) -installPath "C:\Installs\WarrantyTraining"
 	
 Environment "prod" -servers @(
-	Server "wkcorpappdev1" @("WarrantyWeb";) 
-	Server "wksql3" @("Database";) 
+	Server "wkcorpappprod1" @("WarrantyWeb";) 
+	Server "wksql1" @("Database";) 
 	) -installPath "C:\Installs\Warranty"
 
 

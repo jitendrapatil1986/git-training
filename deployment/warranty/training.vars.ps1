@@ -25,7 +25,7 @@ $header_image_file_name = "DWH logo_color_233x34_Train.png"
 $Warranty_identity_uri = "https://WarrantyTraining.davidweekleyhomes.com"
 
 $sendFeedbackAddresses = "dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com, imorfey@dwhomes.com, david@headspring.com"
-$errorReportingEmailAddresses = "benf@headspring.com, dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com, david@headspring.com"
+$errorReportingEmailAddresses = "dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com, david@headspring.com"
 $errorReportingSubject = "Warranty Exception (Training)"
 
 $documentSharePath = "C:\_Uploads\"
