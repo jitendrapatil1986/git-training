@@ -7,6 +7,10 @@ namespace Warranty.UI
         protected void Application_Start()
         {
             WarrantyWebsiteBootstrapper.Boostrap();
+
+#if DEBUG
+            AutoMapper.Mapper.AssertConfigurationIsValid();
+#endif
         }
     }
 }
