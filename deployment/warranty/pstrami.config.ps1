@@ -1,5 +1,5 @@
 Environment "dev" -servers @(
-	Server "wkcorpappdev1" @("PurchasingWeb";) 
+	Server "wkcorpappdev1" @("WarrantyWeb";) 
 	Server "wksql3" @("Database";) 
 	) -installPath "C:\Installs\WarrantyTest"
 	
@@ -56,35 +56,35 @@ Role "Nsb" -Incremental {
 Role "WarrantyWeb" -Incremental {
 	. load-vars "web\Warranty"
 
-	Set-AppOffline $Warranty_web_directory
+	Set-AppOffline $warranty_web_directory
 
 	# backup existing site
-	backup-directory $Warranty_web_directory
+	backup-directory $warranty_web_directory
 
 	# copy new files
 	$skips = @(
 		@{"objectName"="filePath";"skipAction"="Delete";"absolutePath"='App_Offline\.htm$'}
 	)
-	sync-files $source_dir $Warranty_web_directory $skips
+	sync-files $source_dir $warranty_web_directory $skips
 
 	# config
-	poke-xml "$Warranty_web_directory\web.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_p_ui_application_name;"
-	poke-xml "$Warranty_web_directory\web.config" "configuration/system.identityModel/identityConfiguration/audienceUris/add/@value" $Warranty_identity_uri
-	poke-xml "$Warranty_web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@realm" $Warranty_identity_uri
-	poke-xml "$Warranty_web_directory\web.config" "configuration/appSettings/add[@key='sendFeedbackAddresses']/@value" $sendFeedbackAddresses
-	poke-xml "$Warranty_web_directory\web.config" "configuration/appSettings/add[@key='DocumentSharePath']/@value" $documentSharePath
-	poke-xml "$Warranty_web_directory\web.config" "configuration/appSettings/add[@key='DataBusSharePath']/@value" $dataBusSharePath
-	poke-xml "$Warranty_web_directory\web.config" "configuration/appSettings/add[@key='ActionMailerPickupDirectory']/@value" $actionMailerPickupDirectory
+	poke-xml "$warranty_web_directory\web.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_p_ui_application_name;"
+	poke-xml "$warranty_web_directory\web.config" "configuration/system.identityModel/identityConfiguration/audienceUris/add/@value" $warranty_identity_uri
+	poke-xml "$warranty_web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@realm" $warranty_identity_uri
+	poke-xml "$warranty_web_directory\web.config" "configuration/appSettings/add[@key='sendFeedbackAddresses']/@value" $sendFeedbackAddresses
+	poke-xml "$warranty_web_directory\web.config" "configuration/appSettings/add[@key='DocumentSharePath']/@value" $documentSharePath
+	poke-xml "$warranty_web_directory\web.config" "configuration/appSettings/add[@key='DataBusSharePath']/@value" $dataBusSharePath
+	poke-xml "$warranty_web_directory\web.config" "configuration/appSettings/add[@key='ActionMailerPickupDirectory']/@value" $actionMailerPickupDirectory
 	
-	poke-xml "$Warranty_web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
-	poke-xml "$Warranty_web_directory\web.config" "configuration/elmah/errorMail/@subject" $errorReportingSubject
-	poke-xml "$Warranty_web_directory\web.config" "configuration/elmah/errorMail/@smtpServer" $smtpServer
+	poke-xml "$warranty_web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
+	poke-xml "$warranty_web_directory\web.config" "configuration/elmah/errorMail/@subject" $errorReportingSubject
+	poke-xml "$warranty_web_directory\web.config" "configuration/elmah/errorMail/@smtpServer" $smtpServer
 	
-	poke-xml "$Warranty_web_directory\web.config" "configuration/system.net/mailSettings/smtp/@deliveryMethod" $smtpDeliveryMethod
+	poke-xml "$warranty_web_directory\web.config" "configuration/system.net/mailSettings/smtp/@deliveryMethod" $smtpDeliveryMethod
 
-	Rename-Header-File $Warranty_web_directory $header_image_file_name
+	Rename-Header-File $warranty_web_directory $header_image_file_name
 
-	Set-AppOnline $Warranty_web_directory
+	Set-AppOnline $warranty_web_directory
 } -FullInstall {
 	# You could do IIS setup here... but it is much easier to just do that with server provisioning
 }
@@ -166,7 +166,7 @@ function script:load-vars($relativeSourceDir) {
 	$error_msg = "ERROR: Missing variable {0}!!"
 	$invalid_path_msg = "ERROR: Invalid path for variable {0}!!"
 	
-	check-pathvar $Warranty_web_directory '$Warranty_web_directory'
+	check-pathvar $warranty_web_directory '$warranty_web_directory'
 	check-pathvar $nsb_directory '$nsb_directory'
 	check-var $db_server = "$db_server"
 }
