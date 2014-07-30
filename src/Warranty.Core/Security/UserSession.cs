@@ -23,6 +23,11 @@ namespace Warranty.Core.Security
             };
         }
 
+        public void LogOut()
+        {
+            //TODO: Implement logout
+        }
+
         private static IEnumerable<string> GetAllRoles()
         {
             var roles = new List<string>();

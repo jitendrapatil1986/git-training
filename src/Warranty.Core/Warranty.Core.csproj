@@ -95,12 +95,9 @@
     <Compile Include="Enumerations\ItemClassification.cs" />
     <Compile Include="Enumerations\RequestType.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
-    <Compile Include="Extensions\ReflectionExtensions.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Extensions\ReflectionExtensions.cs" />    
     <Compile Include="Security\UserSession.cs" />
-    <Compile Include="Security\UserInfo.cs" />
-    <Compile Include="Security\IUserSession.cs" />
-    <Compile Include="Security\IUser.cs" />
+    <Compile Include="Security\UserInfo.cs" />    
     <Compile Include="ValueObjects\Address.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
