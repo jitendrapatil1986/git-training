@@ -89,62 +89,6 @@ Role "WarrantyWeb" -Incremental {
 	# You could do IIS setup here... but it is much easier to just do that with server provisioning
 }
 
-	. load-vars "web\Vendor"
-
-	Set-AppOffline $vendor_web_directory
-
-	# backup existing site
-	backup-directory $vendor_web_directory
-
-	# copy new files
-	$skips = @(
-		@{"objectName"="filePath";"skipAction"="Delete";"absolutePath"='App_Offline\.htm$'}
-	)
-	sync-files $source_dir $vendor_web_directory $skips
-
-	# config
-	poke-xml "$vendor_web_directory\web.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_v_ui_application_name;"
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='BaseAuthorityUrl']/@value" $vendor_auth_base_url
-	
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='ida:FederationMetadataLocation']/@value" $vendor_auth_metadata
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='ida:Issuer']/@value" $vendor_auth_issuer
-
-	poke-xml "$vendor_web_directory\web.config" "configuration/system.identityModel/identityConfiguration/audienceUris/add/@value" $vendor_identity_uri
-	poke-xml "$vendor_web_directory\web.config" "configuration/system.identityModel/identityConfiguration/issuerNameRegistry/authority/@name" $vendor_auth_authority
-	poke-xml "$vendor_web_directory\web.config" "configuration/system.identityModel/identityConfiguration/issuerNameRegistry/authority/validIssuers/add/@name" $vendor_auth_authority
-
-	poke-xml "$vendor_web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@realm" $vendor_identity_uri
-	poke-xml "$vendor_web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@reply" $vendor_identity_uri
-	poke-xml "$vendor_web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@issuer" $vendor_auth_issuer
-	
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='sendFeedbackAddresses']/@value" $sendFeedbackAddresses
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='DocumentSharePath']/@value" $documentSharePath
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='DataBusSharePath']/@value" $dataBusSharePath
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='ActionMailerPickupDirectory']/@value" $actionMailerPickupDirectory
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='NewRelic.AppName']/@value" $newRelicVendorName
-	poke-xml "$vendor_web_directory\web.config" "configuration/appSettings/add[@key='Accounting.API.BaseUri']/@value" $accounting_api_uri
-	
-	poke-xml "$vendor_web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
-	poke-xml "$vendor_web_directory\web.config" "configuration/elmah/errorMail/@subject" $errorReportingSubject
-	poke-xml "$vendor_web_directory\web.config" "configuration/elmah/errorMail/@smtpServer" $smtpServer
-	
-	poke-xml "$vendor_web_directory\web.config" "configuration/system.net/mailSettings/smtp/@deliveryMethod" $smtpDeliveryMethod
-	
-	Rename-Header-File $vendor_web_directory $header_image_file_name	
-	
-	$taskName = "KeepVendorPortalActive"
-	$task = Get-ScheduledTask -TaskName $taskName -TaskPath \
-
-	$A = New-ScheduledTaskAction -Execute "$keepAliveDirectory\KeepVendorPortalActive.bat" -Argument $vendor_identity_uri
-	$T = New-ScheduledTaskTrigger -Once -At 7am -RepetitionDuration  (New-TimeSpan -Days 1)  -RepetitionInterval  (New-TimeSpan -Minutes 15)
-	$D = New-ScheduledTask -Action $A -Trigger $T
-	Register-ScheduledTask $taskName -InputObject $D
-
-	
-	Set-AppOnline $vendor_web_directory
-} -FullInstall {
-	# You could do IIS setup here... but it is much easier to just do that with server provisioning
-}
 
 Role "Database" -Incremental {
 	run-dbtask "Update" "database\Warranty" "db_server" "db_name"
