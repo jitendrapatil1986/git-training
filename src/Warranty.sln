@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.Server", "Warranty
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.LotusExtract", "Warranty.LotusExtract\Warranty.LotusExtract.csproj", "{AF1DBB4F-8023-4488-9961-96471C6647F3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{659B26AF-25EC-4F8A-9FB4-CA7DF919C903}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
