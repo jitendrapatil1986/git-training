@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Warranty.Core.Security;
+using Warranty.LotusExtract.Security;
 
 namespace Warranty.LotusExtract
 {
@@ -23,7 +24,7 @@ namespace Warranty.LotusExtract
 
         public DataImporter()
         {
-            var sessionFactory = new ConfigurationFactory().CreateConfigurationWithAuditing(new UserSession()).BuildSessionFactory();
+            var sessionFactory = new ConfigurationFactory().CreateConfigurationWithAuditing(new ImporterUserSession()).BuildSessionFactory();
             _session = sessionFactory.OpenSession();
         }
 
