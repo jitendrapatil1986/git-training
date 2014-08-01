@@ -36,11 +36,11 @@ Role "Nsb" -Incremental {
 	Remove-Item "$nsb_directory\mscorlib.dll"
 
 	# config
-	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_nsb_application_name;"
-	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='WarrantyDbName']/@value" $db_name
-	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='DataBusSharePath']/@value" $dataBusSharePath
-	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='DocumentSharePath']/@value" $documentSharePath
-	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='ActionMailerPickupDirectory']/@value" $actionMailerPickupDirectory
+	# poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_nsb_application_name;"
+	# poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='WarrantyDbName']/@value" $db_name
+	# poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='DataBusSharePath']/@value" $dataBusSharePath
+	# poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='DocumentSharePath']/@value" $documentSharePath
+	# poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='ActionMailerPickupDirectory']/@value" $actionMailerPickupDirectory
 		
 	#Install NSB Service
 	&"$nsb_directory\NServiceBus.Host.exe" "/install" "/serviceName:$nsb_service_name" "/username:dwh\svc-Warranty-nsb" "/password:O2I(&3J,5`$V1h24"
@@ -68,19 +68,19 @@ Role "WarrantyWeb" -Incremental {
 	sync-files $source_dir $warranty_web_directory $skips
 
 	# config
-	poke-xml "$warranty_web_directory\web.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_p_ui_application_name;"
-	poke-xml "$warranty_web_directory\web.config" "configuration/system.identityModel/identityConfiguration/audienceUris/add/@value" $warranty_identity_uri
-	poke-xml "$warranty_web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@realm" $warranty_identity_uri
-	poke-xml "$warranty_web_directory\web.config" "configuration/appSettings/add[@key='sendFeedbackAddresses']/@value" $sendFeedbackAddresses
-	poke-xml "$warranty_web_directory\web.config" "configuration/appSettings/add[@key='DocumentSharePath']/@value" $documentSharePath
-	poke-xml "$warranty_web_directory\web.config" "configuration/appSettings/add[@key='DataBusSharePath']/@value" $dataBusSharePath
-	poke-xml "$warranty_web_directory\web.config" "configuration/appSettings/add[@key='ActionMailerPickupDirectory']/@value" $actionMailerPickupDirectory
+	# poke-xml "$warranty_web_directory\web.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_p_ui_application_name;"
+	# poke-xml "$warranty_web_directory\web.config" "configuration/system.identityModel/identityConfiguration/audienceUris/add/@value" $warranty_identity_uri
+	# poke-xml "$warranty_web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@realm" $warranty_identity_uri
+	# poke-xml "$warranty_web_directory\web.config" "configuration/appSettings/add[@key='sendFeedbackAddresses']/@value" $sendFeedbackAddresses
+	# poke-xml "$warranty_web_directory\web.config" "configuration/appSettings/add[@key='DocumentSharePath']/@value" $documentSharePath
+	# poke-xml "$warranty_web_directory\web.config" "configuration/appSettings/add[@key='DataBusSharePath']/@value" $dataBusSharePath
+	# poke-xml "$warranty_web_directory\web.config" "configuration/appSettings/add[@key='ActionMailerPickupDirectory']/@value" $actionMailerPickupDirectory
 	
-	poke-xml "$warranty_web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
-	poke-xml "$warranty_web_directory\web.config" "configuration/elmah/errorMail/@subject" $errorReportingSubject
-	poke-xml "$warranty_web_directory\web.config" "configuration/elmah/errorMail/@smtpServer" $smtpServer
+	# poke-xml "$warranty_web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
+	# poke-xml "$warranty_web_directory\web.config" "configuration/elmah/errorMail/@subject" $errorReportingSubject
+	# poke-xml "$warranty_web_directory\web.config" "configuration/elmah/errorMail/@smtpServer" $smtpServer
 	
-	poke-xml "$warranty_web_directory\web.config" "configuration/system.net/mailSettings/smtp/@deliveryMethod" $smtpDeliveryMethod
+	# poke-xml "$warranty_web_directory\web.config" "configuration/system.net/mailSettings/smtp/@deliveryMethod" $smtpDeliveryMethod
 
 	Rename-Header-File $warranty_web_directory $header_image_file_name
 
