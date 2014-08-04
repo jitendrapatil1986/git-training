@@ -12,6 +12,8 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -69,7 +71,27 @@
   <ItemGroup>
     <Compile Include="DataAccess\AuditEventListener.cs" />
     <Compile Include="DataAccess\ConfigurationFactoryExtensions.cs" />
+    <Compile Include="DataAccess\Mappings\CityMapping.cs" />
+    <Compile Include="DataAccess\Mappings\CommunityMapping.cs" />
+    <Compile Include="DataAccess\Mappings\DivisionMapping.cs" />
+    <Compile Include="DataAccess\Mappings\HomeOwnerMapping.cs" />
+    <Compile Include="DataAccess\Mappings\JobMapping.cs" />
+    <Compile Include="DataAccess\Mappings\JobOptionMapping.cs" />
+    <Compile Include="DataAccess\Mappings\ProjectMapping.cs" />
+    <Compile Include="DataAccess\Mappings\TeamMemberMapping.cs" />
+    <Compile Include="DataAccess\Mappings\WarrantyCallLineItemMapping.cs" />
+    <Compile Include="DataAccess\Mappings\WarrantyCallMapping.cs" />
+    <Compile Include="Entities\City.cs" />
+    <Compile Include="Entities\Community.cs" />
+    <Compile Include="Entities\Division.cs" />
+    <Compile Include="Entities\HomeOwner.cs" />
     <Compile Include="Entities\IAuditableEntity.cs" />
+    <Compile Include="Entities\Job.cs" />
+    <Compile Include="Entities\JobOption.cs" />
+    <Compile Include="Entities\Project.cs" />
+    <Compile Include="Entities\TeamMember.cs" />
+    <Compile Include="Entities\WarrantyCall.cs" />
+    <Compile Include="Entities\WarrantyCallLineItem.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Net4Collection.cs" />
@@ -80,14 +102,6 @@
     <Compile Include="DataAccess\IConfigurationFactory.cs" />
     <Compile Include="DataAccess\StringEnumeration.cs" />
     <Compile Include="DataAccess\StringEnumerationType.cs" />
-    <Compile Include="Entities\Community.cs" />
-    <Compile Include="Entities\CustomerServiceLineItem.cs" />
-    <Compile Include="Entities\CustomerServiceRequest.cs" />
-    <Compile Include="Entities\Division.cs" />
-    <Compile Include="Entities\Home.cs" />
-    <Compile Include="Entities\HomeOwner.cs" />
-    <Compile Include="Entities\Project.cs" />
-    <Compile Include="Entities\TeamMember.cs" />
     <Compile Include="Enumerations\GenericCompositeUserType.cs" />
     <Compile Include="Enumerations\Int32Enumeration.cs" />
     <Compile Include="Enumerations\IEnumeration.cs" />
@@ -123,6 +137,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

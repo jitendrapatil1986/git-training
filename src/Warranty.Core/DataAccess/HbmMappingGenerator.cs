@@ -62,7 +62,7 @@ namespace Warranty.Core.DataAccess
                 customizer.ForeignKey("FK_" + containerType.Name + "_" + member.CollectionElementType().Name + "_" + member.LocalMember.Name);
             };
 
-            mapper.AddMappings(Assembly.GetAssembly(typeof(Home)).GetExportedTypes());
+            mapper.AddMappings(Assembly.GetAssembly(typeof(Job)).GetExportedTypes());
             var mapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
             return mapping;
         }

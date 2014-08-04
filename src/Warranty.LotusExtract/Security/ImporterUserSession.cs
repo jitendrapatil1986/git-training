@@ -6,7 +6,7 @@ namespace Warranty.LotusExtract.Security
     {
         public IUser GetCurrentUser()
         {
-            return new ImporterUser();   
+            return new ImporterUser();
         }
 
         public void LogOut()

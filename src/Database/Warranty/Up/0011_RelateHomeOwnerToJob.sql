@@ -1,0 +1,2 @@
+ALTER TABLE HomeOwners ADD CONSTRAINT FK_HomeOwners_JobId
+    FOREIGN KEY (JobId) REFERENCES Jobs(JobId);
