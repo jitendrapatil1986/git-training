@@ -21,8 +21,7 @@ CREATE TABLE imports.WarrantyCallImports(
          Cause_6  VARCHAR(8000),
          Cause_7  VARCHAR(8000),
          Cause_8  VARCHAR(8000),
-         Cause_9  VARCHAR(8000),
-        
+         Cause_9  VARCHAR(8000),        
          CDate_1  VARCHAR(8000), 
          CDate_10  VARCHAR(8000),
          CDate_2  VARCHAR(8000),
@@ -32,8 +31,7 @@ CREATE TABLE imports.WarrantyCallImports(
          CDate_6  VARCHAR(8000),
          CDate_7  VARCHAR(8000),
          CDate_8  VARCHAR(8000),
-         CDate_9  VARCHAR(8000),
-        
+         CDate_9  VARCHAR(8000),        
          City  VARCHAR(8000), 
          CityCode  VARCHAR(8000), 
          CityCode_Short  VARCHAR(8000), 
@@ -47,8 +45,7 @@ CREATE TABLE imports.WarrantyCallImports(
          Date_Conv  VARCHAR(8000), 
          Date_Conv_1  VARCHAR(8000), 
          Date_O  VARCHAR(8000), 
-         Date_Open  VARCHAR(8000), 
-        
+         Date_Open  VARCHAR(8000),         
          Descript_1  VARCHAR(8000), 
          Descript_10  VARCHAR(8000),
          Descript_2  VARCHAR(8000),
@@ -213,8 +210,6 @@ CREATE TABLE imports.WarrantyCallImports(
          ZipCode  VARCHAR(8000), 
          ReturnValue  VARCHAR(8000),
 );
-
-
 
 ALTER TABLE imports.WarrantyCallImports ADD CONSTRAINT PK_WarrantyCallImports
     PRIMARY KEY (ImportId);

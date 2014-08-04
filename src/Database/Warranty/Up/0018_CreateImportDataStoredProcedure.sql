@@ -401,325 +401,152 @@ WHEN NOT MATCHED THEN INSERT (WarrantyCallId
 
 MERGE INTO WarrantyCallLineItems AS TARGET
 USING (SELECT
-            ISNULL((SELECT MAX(WarrantyCallLineItemId) FROM WarrantyCallLineItems),0) + ROW_NUMBER() OVER (ORDER BY callId) AS rowId,
-            callId,
-            LineNumber,
-            Code,
-            Descr,
-            Cause,
-            ClassNote,
-            LineRoot,
-            Closed,
-            Date_Open,
-            'LI: ' + Assigned_By AS CreatedBy            
-        FROM (
-                SELECT  Date_Open,
-                        Assigned_By,
-                        (SELECT TOP 1 WarrantyCallId 
+            ISNULL((SELECT MAX(WarrantyCallLineItemId) FROM WarrantyCallLineItems),0) + ROW_NUMBER() OVER (ORDER BY R.Call_Num) AS rowId,
+            (SELECT TOP 1 WarrantyCallId 
                             FROM WarrantyCalls C 
-                            WHERE C.WarrantyCallNumber = Call_Num 
-                            AND C.WarrantyCallType = CallType    
-                            AND C.JobId = (SELECT TOP 1 JobId
-                                            FROM Jobs
-                                            WHERE JobNumber = Job_Num)
+                            WHERE C.WarrantyCallNumber = R.Call_Num 
+                            AND C.WarrantyCallType = R.CallType    
+                            AND C.JobId = J.JobId
                             AND C.Contact = Contact
-                            AND C.WarrantyRepresentativeId = (SELECT TOP 1 TeamMemberId 
-                                        FROM TeamMembers 
-                                        WHERE TeamMemberNumber = WsrEmp_Num 
-                                        AND TeamMemberName = Assigned_To)    
-                            AND C.CompletionDate = Comp_Date
-                            AND C.HomeOwnerSignature = HOSig
-                            AND C.Comment = Call_Comments
-                            AND C.CreatedDate = Date_Open 
-                            AND C.CreatedBy = 'LI: ' + Assigned_By) AS callId,
-                        1 AS LineNumber,
+                            AND C.WarrantyRepresentativeId = TR.TeamMemberId   
+                            AND C.CompletionDate = R.Comp_Date
+                            AND C.HomeOwnerSignature = R.HOSig
+                            AND C.Comment = R.Call_Comments
+                            AND C.CreatedDate = R.Date_Open 
+                            AND C.CreatedBy = 'LI: ' + R.Assigned_By) AS callId,
+            Items.LineNumber,
+            Items.Code,
+            Items.Descr,
+            Items.Cause,
+            Items.ClassNote,
+            Items.LineRoot,
+            Items.Closed,
+            Date_Open,
+            'LI: ' + R.Assigned_By AS CreatedBy            
+        FROM imports.WarrantyCallImports R
+        INNER JOIN TeamMembers TR ON
+            TeamMemberNumber = R.WsrEmp_Num 
+            AND TeamMemberName = R.Assigned_To
+        INNER JOIN Jobs J ON
+            J.JobNumber = R.Job_Num
+        OUTER APPLY (
+                SELECT  1 AS LineNumber,
                         PCode_1 AS Code,
                         Descript_1 AS Descr,
                         Cause_1 AS Cause,                
                         ResCode_1 AS ClassNote,                
                         Root_1 AS LineRoot,
-                        Comp_date,
                         CASE WHEN CDate_1 = 'Yes' THEN 1 ELSE 0 END AS Closed
                     FROM imports.WarrantyCallImports I
+                    WHERE I.ImportId = R.ImportId
 
                 UNION ALL 
 
-                SELECT  Date_Open,
-                        Assigned_By,
-                        (SELECT TOP 1 WarrantyCallId 
-                            FROM WarrantyCalls C 
-                            WHERE C.WarrantyCallNumber = Call_Num 
-                            AND C.WarrantyCallType = CallType  
-                            AND C.JobId = (SELECT TOP 1 JobId
-                                            FROM Jobs
-                                            WHERE JobNumber = Job_Num)
-                            AND C.Contact = Contact
-                            AND C.WarrantyRepresentativeId = (SELECT TOP 1 TeamMemberId 
-                                        FROM TeamMembers 
-                                        WHERE TeamMemberNumber = WsrEmp_Num 
-                                        AND TeamMemberName = Assigned_To)     
-                            AND C.CompletionDate = Comp_Date
-                            AND C.HomeOwnerSignature = HOSig
-                            AND C.Comment = Call_Comments
-                            AND C.CreatedDate = Date_Open 
-                            AND C.CreatedBy = 'LI: ' + Assigned_By) AS callId,
-                        2 AS LineNumber,
+                SELECT  2 AS LineNumber,
                         PCode_2 AS Code,
                         Descript_2 AS Descr,
                         Cause_2 AS Cause,                
                         ResCode_2 AS ClassNote,                
-                        Root_2 AS LineRoot,
-                        Comp_date,
+                        Root_2 AS LineRoot,                        
                         CASE WHEN CDate_2 = 'Yes' THEN 1 ELSE 0 END AS Closed
                     FROM imports.WarrantyCallImports I
+                    WHERE I.ImportId = R.ImportId
 
                 UNION ALL 
 
-                SELECT  Date_Open,
-                        Assigned_By,
-                        (SELECT TOP 1 WarrantyCallId 
-                            FROM WarrantyCalls C 
-                            WHERE C.WarrantyCallNumber = Call_Num 
-                            AND C.WarrantyCallType = CallType   
-                            AND C.JobId = (SELECT TOP 1 JobId
-                                            FROM Jobs
-                                            WHERE JobNumber = Job_Num)
-                            AND C.Contact = Contact
-                            AND C.WarrantyRepresentativeId = (SELECT TOP 1 TeamMemberId 
-                                        FROM TeamMembers 
-                                        WHERE TeamMemberNumber = WsrEmp_Num 
-                                        AND TeamMemberName = Assigned_To)      
-                            AND C.CompletionDate = Comp_Date
-                            AND C.HomeOwnerSignature = HOSig
-                            AND C.Comment = Call_Comments
-                            AND C.CreatedDate = Date_Open 
-                            AND C.CreatedBy = 'LI: ' + Assigned_By) AS callId,
-                        3 AS LineNumber,
+                SELECT  3 AS LineNumber,
                         PCode_3 AS Code,
                         Descript_3 AS Descr,
                         Cause_3 AS Cause,                
                         ResCode_3 AS ClassNote,                
-                        Root_3 AS LineRoot,
-                        Comp_date,
+                        Root_3 AS LineRoot,                        
                         CASE WHEN CDate_3 = 'Yes' THEN 1 ELSE 0 END AS Closed
                     FROM imports.WarrantyCallImports I
+                    WHERE I.ImportId = R.ImportId
                     
                 UNION ALL 
 
-                SELECT  Date_Open,
-                        Assigned_By,
-                        (SELECT TOP 1 WarrantyCallId 
-                            FROM WarrantyCalls C 
-                            WHERE C.WarrantyCallNumber = Call_Num 
-                            AND C.WarrantyCallType = CallType
-                            AND C.JobId = (SELECT TOP 1 JobId
-                                            FROM Jobs
-                                            WHERE JobNumber = Job_Num)
-                            AND C.Contact = Contact
-                             AND C.WarrantyRepresentativeId = (SELECT TOP 1 TeamMemberId 
-                                        FROM TeamMembers 
-                                        WHERE TeamMemberNumber = WsrEmp_Num 
-                                        AND TeamMemberName = Assigned_To)    
-                            AND C.CompletionDate = Comp_Date
-                            AND C.HomeOwnerSignature = HOSig
-                            AND C.Comment = Call_Comments
-                            AND C.CreatedDate = Date_Open 
-                            AND C.CreatedBy = 'LI: ' + Assigned_By) AS callId,
-                        4 AS LineNumber,
+                SELECT  4 AS LineNumber,
                         PCode_4 AS Code,
                         Descript_4 AS Descr,
                         Cause_4 AS Cause,                
                         ResCode_4 AS ClassNote,                
                         Root_4 AS LineRoot,
-                        Comp_date,
                         CASE WHEN CDate_4 = 'Yes' THEN 1 ELSE 0 END AS Closed
                     FROM imports.WarrantyCallImports I
+                    WHERE I.ImportId = R.ImportId
                     
                 UNION ALL 
 
-                SELECT  Date_Open,
-                        Assigned_By,
-                        (SELECT TOP 1 WarrantyCallId 
-                            FROM WarrantyCalls C 
-                            WHERE C.WarrantyCallNumber = Call_Num 
-                            AND C.WarrantyCallType = CallType   
-                            AND C.JobId = (SELECT TOP 1 JobId
-                                            FROM Jobs
-                                            WHERE JobNumber = Job_Num)
-                            AND C.Contact = Contact
-                             AND C.WarrantyRepresentativeId = (SELECT TOP 1 TeamMemberId 
-                                        FROM TeamMembers 
-                                        WHERE TeamMemberNumber = WsrEmp_Num 
-                                        AND TeamMemberName = Assigned_To)    
-                            AND C.CompletionDate = Comp_Date
-                            AND C.HomeOwnerSignature = HOSig
-                            AND C.Comment = Call_Comments
-                            AND C.CreatedDate = Date_Open 
-                            AND C.CreatedBy = 'LI: ' + Assigned_By) AS callId,
-                        5 AS LineNumber,
+                SELECT  5 AS LineNumber,
                         PCode_5 AS Code,
                         Descript_5 AS Descr,
                         Cause_5 AS Cause,                
                         ResCode_5 AS ClassNote,                
                         Root_5 AS LineRoot,
-                        Comp_date,
                         CASE WHEN CDate_5 = 'Yes' THEN 1 ELSE 0 END AS Closed
                     FROM imports.WarrantyCallImports I
+                    WHERE I.ImportId = R.ImportId
         
                 UNION ALL 
 
-                SELECT  Date_Open,
-                        Assigned_By,
-                        (SELECT TOP 1 WarrantyCallId 
-                            FROM WarrantyCalls C 
-                            WHERE C.WarrantyCallNumber = Call_Num 
-                            AND C.WarrantyCallType = CallType  
-                            AND C.JobId = (SELECT TOP 1 JobId
-                                            FROM Jobs
-                                            WHERE JobNumber = Job_Num)
-                            AND C.Contact = Contact
-                             AND C.WarrantyRepresentativeId = (SELECT TOP 1 TeamMemberId 
-                                        FROM TeamMembers 
-                                        WHERE TeamMemberNumber = WsrEmp_Num 
-                                        AND TeamMemberName = Assigned_To)    
-                            AND C.CompletionDate = Comp_Date
-                            AND C.HomeOwnerSignature = HOSig
-                            AND C.Comment = Call_Comments
-                            AND C.CreatedDate = Date_Open 
-                            AND C.CreatedBy = 'LI: ' + Assigned_By) AS callId,
-                        6 AS LineNumber,
+                SELECT  6 AS LineNumber,
                         PCode_6 AS Code,
                         Descript_6 AS Descr,
                         Cause_6 AS Cause,                
                         ResCode_6 AS ClassNote,                
                         Root_6 AS LineRoot,
-                        Comp_date,
                         CASE WHEN CDate_6 = 'Yes' THEN 1 ELSE 0 END AS Closed
                     FROM imports.WarrantyCallImports I
+                    WHERE I.ImportId = R.ImportId
 
                 UNION ALL 
 
-                SELECT  Date_Open,
-                        Assigned_By,
-                        (SELECT TOP 1 WarrantyCallId 
-                            FROM WarrantyCalls C 
-                            WHERE C.WarrantyCallNumber = Call_Num 
-                            AND C.WarrantyCallType = CallType   
-                            AND C.JobId = (SELECT TOP 1 JobId
-                                            FROM Jobs
-                                            WHERE JobNumber = Job_Num)
-                            AND C.Contact = Contact
-                             AND C.WarrantyRepresentativeId = (SELECT TOP 1 TeamMemberId 
-                                        FROM TeamMembers 
-                                        WHERE TeamMemberNumber = WsrEmp_Num 
-                                        AND TeamMemberName = Assigned_To)       
-                            AND C.CompletionDate = Comp_Date
-                            AND C.HomeOwnerSignature = HOSig
-                            AND C.Comment = Call_Comments
-                            AND C.CreatedDate = Date_Open 
-                            AND C.CreatedBy = 'LI: ' + Assigned_By) AS callId,
-                        7 AS LineNumber,
+                SELECT  7 AS LineNumber,
                         PCode_7 AS Code,
                         Descript_7 AS Descr,
                         Cause_7 AS Cause,                
                         ResCode_7 AS ClassNote,                
                         Root_7 AS LineRoot,
-                        Comp_date,
                         CASE WHEN CDate_7 = 'Yes' THEN 1 ELSE 0 END AS Closed
                     FROM imports.WarrantyCallImports I
+                    WHERE I.ImportId = R.ImportId
             
                 UNION ALL 
 
-                SELECT  Date_Open,
-                        Assigned_By,
-                        (SELECT TOP 1 WarrantyCallId 
-                            FROM WarrantyCalls C 
-                            WHERE C.WarrantyCallNumber = Call_Num 
-                            AND C.WarrantyCallType = CallType  
-                            AND C.JobId = (SELECT TOP 1 JobId
-                                            FROM Jobs
-                                            WHERE JobNumber = Job_Num)
-                            AND C.Contact = Contact
-                             AND C.WarrantyRepresentativeId = (SELECT TOP 1 TeamMemberId 
-                                        FROM TeamMembers 
-                                        WHERE TeamMemberNumber = WsrEmp_Num 
-                                        AND TeamMemberName = Assigned_To)      
-                            AND C.CompletionDate = Comp_Date
-                            AND C.HomeOwnerSignature = HOSig
-                            AND C.Comment = Call_Comments
-                            AND C.CreatedDate = Date_Open 
-                            AND C.CreatedBy = 'LI: ' + Assigned_By) AS callId,
-                        8 AS LineNumber,
+                SELECT  8 AS LineNumber,
                         PCode_8 AS Code,
                         Descript_8 AS Descr,
                         Cause_8 AS Cause,                
                         ResCode_8 AS ClassNote,                
                         Root_8 AS LineRoot,
-                        Comp_date,
                         CASE WHEN CDate_8 = 'Yes' THEN 1 ELSE 0 END AS Closed
                     FROM imports.WarrantyCallImports I
+                    WHERE I.ImportId = R.ImportId
             
                 UNION ALL 
 
-                SELECT  Date_Open,
-                        Assigned_By,
-                        (SELECT TOP 1 WarrantyCallId 
-                            FROM WarrantyCalls C 
-                            WHERE C.WarrantyCallNumber = Call_Num 
-                            AND C.WarrantyCallType = CallType  
-                            AND C.JobId = (SELECT TOP 1 JobId
-                                            FROM Jobs
-                                            WHERE JobNumber = Job_Num)
-                            AND C.Contact = Contact
-                            AND C.WarrantyRepresentativeId = (SELECT TOP 1 TeamMemberId 
-                                        FROM TeamMembers 
-                                        WHERE TeamMemberNumber = WsrEmp_Num 
-                                        AND TeamMemberName = Assigned_To)    
-                            AND C.CompletionDate = Comp_Date
-                            AND C.HomeOwnerSignature = HOSig
-                            AND C.Comment = Call_Comments
-                            AND C.CreatedDate = Date_Open 
-                            AND C.CreatedBy = 'LI: ' + Assigned_By) AS callId,
-                        9 AS LineNumber,
+                SELECT  9 AS LineNumber,
                         PCode_9 AS Code,
                         Descript_9 AS Descr,
                         Cause_9 AS Cause,                
                         ResCode_9 AS ClassNote,                
                         Root_9 AS LineRoot,
-                        Comp_date,
                         CASE WHEN CDate_9 = 'Yes' THEN 1 ELSE 0 END AS Closed
                     FROM imports.WarrantyCallImports I
+                    WHERE I.ImportId = R.ImportId
                      
                 UNION ALL 
 
-                SELECT  Date_Open,
-                        Assigned_By,
-                        (SELECT TOP 1 WarrantyCallId 
-                            FROM WarrantyCalls C 
-                            WHERE C.WarrantyCallNumber = Call_Num 
-                            AND C.WarrantyCallType = CallType  
-                            AND C.JobId = (SELECT TOP 1 JobId
-                                            FROM Jobs
-                                            WHERE JobNumber = Job_Num)
-                            AND C.Contact = Contact
-                             AND C.WarrantyRepresentativeId = (SELECT TOP 1 TeamMemberId 
-                                        FROM TeamMembers 
-                                        WHERE TeamMemberNumber = WsrEmp_Num 
-                                        AND TeamMemberName = Assigned_To)    
-                            AND C.CompletionDate = Comp_Date
-                            AND C.HomeOwnerSignature = HOSig
-                            AND C.Comment = Call_Comments
-                            AND C.CreatedDate = Date_Open 
-                            AND C.CreatedBy = 'LI: ' + Assigned_By) AS callId,
-                        10 AS LineNumber,
+                SELECT  10 AS LineNumber,
                         PCode_10 AS Code,
                         Descript_10 AS Descr,
                         Cause_10 AS Cause,                
                         ResCode_10 AS ClassNote,                
                         Root_10 AS LineRoot,
-                        Comp_date,
                         CASE WHEN CDate_10 = 'Yes' THEN 1 ELSE 0 END AS Closed
                     FROM imports.WarrantyCallImports I
+                    WHERE I.ImportId = R.ImportId
                     ) Items ) AS LIST
 ON TARGET.WarrantyCallId = LIST.callId 
     AND TARGET.LineNumber = LIST.LineNumber
@@ -754,8 +581,9 @@ WHEN MATCHED THEN UPDATE SET ProblemCode = Code,
                 UpdatedDate = GETDATE(),
                 CreatedBy = @ImportUser;
 
+
 MERGE INTO JobOptions AS TARGET
-USING (SELECT 
+USING (SELECT
             ISNULL((SELECT MAX(JobOptionId) FROM JobOptions), 0) + ROW_NUMBER() OVER (ORDER BY JobNumber) AS rowId,
             (SELECT TOP 1 JobId 
                 FROM Jobs J 
@@ -763,18 +591,23 @@ USING (SELECT
             OptionNumber,
             OptionDescription,
             Quantity
-        FROM imports.JobOptionImports I) AS LIST
+        FROM
+            (SELECT DISTINCT JobNumber, OptionNumber, OptionDescription, Quantity FROM imports.JobOptionImports) I) AS LIST
 ON TARGET.JobId = LIST.JobId AND TARGET.OptionNumber = LIST.OptionNumber
-WHEN NOT MATCHED THEN INSERT (JobOptionId
+WHEN NOT MATCHED AND LIST.JobId IS NOT NULL THEN INSERT (JobOptionId
                                 , JobId
                                 , OptionNumber
                                 , OptionDescription
-                                , Quantity)
+                                , Quantity
+                                , CreatedDate
+                                , CreatedBy)
                          VALUES (rowId
                                 , jobId
                                 , optionNumber
                                 , optionDescription
-                                , quantity)
+                                , quantity
+                                , GETDATE()
+                                , @ImportUser)
 WHEN MATCHED THEN UPDATE SET
     TARGET.OptionDescription = LIST.OptionDescription,
     TARGET.Quantity = LIST.Quantity;
