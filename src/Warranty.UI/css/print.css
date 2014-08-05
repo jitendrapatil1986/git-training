@@ -1,0 +1,73 @@
+﻿@media print {
+    .show-accordian {
+        display: none;
+    }
+
+    .hide-accordian {
+        display: none;
+    }
+}
+
+body {
+    color: black;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: black;
+    margin-bottom: 5px;
+}
+
+.well {
+    margin-bottom: 10px;
+}
+
+.button-controls, .btn {
+    display: none;
+}
+
+.print-heading h2 h3 h4 {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+label {
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+
+.form-horizontal .control-group {
+    margin-bottom: 0px;
+}
+
+    .form-horizontal .control-group
+
+        float: left;
+        width: 160px;
+        padding-top: 0px;
+        text-align: right;
+    }
+
+    .form-horizontal .control-group .controls {
+        *display: inline-block;
+        *padding-left: 20px;
+        margin-left: 180px;
+        *margin-left: 0;
+    }
+
+        .form-horizontal .control-group .controls :first-child {
+            *padding-left: 180px;
+        }
+
+#collapseEarnestMoney .form-horizontal .control-group .control-label {
+    padding-bottom: 0px;
+}
+
+.header-text {
+    font-size: 16px;
+}

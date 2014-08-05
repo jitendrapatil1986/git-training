@@ -1,8 +1,23 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div style="width: 50%; float: left">
+    <h3>Pending Payments</h3>   
+    
+    <h3>My Service Calls</h3>     
+</div>
+<div style="float: right">
+    <h3>
+        My Team
+        <span class="label label-info">18</span>
+        <span class="label label-error" style="background-color: red">4</span>
+        <span class="label label-default">14</span>
+        <span style="font-size: 12px">36</span>
+    </h3>   
 
-<h2>Root</h2>
+    <h3>Warranty Dollars Spend</h3>  
+</div>
+<div class="ui-helper-clearfix"></div>
