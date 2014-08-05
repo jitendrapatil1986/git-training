@@ -1,12 +1,10 @@
 ﻿using System.Configuration;
 using System.Data.SqlClient;
 using System.Globalization;
-using NHibernate;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Warranty.LotusExtract.Columns;
-using Warranty.LotusExtract.Security;
 
 namespace Warranty.LotusExtract
 {
@@ -15,14 +13,6 @@ namespace Warranty.LotusExtract
         private const char _fieldDelimiter = '╫';
 
         protected static Dictionary<string, int> ColumnIndexLookup = new Dictionary<string, int>();
-
-        private static ISession _session;
-
-        public WarrantyCallDataImporter()
-        {
-            var sessionFactory = new Core.DataAccess.ConfigurationFactory().CreateConfigurationWithAuditing(new ImporterUserSession()).BuildSessionFactory();
-            _session = sessionFactory.OpenSession();
-        }
 
         public void Import(string fileName, string marketList)
         {

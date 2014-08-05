@@ -3,7 +3,7 @@ using Warranty.Core.Entities;
 
 namespace Warranty.Core.DataAccess.Mappings
 {
-    public class HomeOwnerMapping : ClassMapping<HomeOwner>
+    public class HomeOwnerMapping : AuditableEntityMapping<HomeOwner>
     {
         public HomeOwnerMapping()
         {
@@ -11,7 +11,6 @@ namespace Warranty.Core.DataAccess.Mappings
 
             Id(x => x.HomeOwnerId);
             Property(x => x.JobId);
-            Property(x => x.IsCurrent);
             Property(x => x.OwnerNumber);
             Property(x => x.Name);
             Property(x => x.HomePhone);
@@ -19,10 +18,6 @@ namespace Warranty.Core.DataAccess.Mappings
             Property(x => x.WorkPhone1);
             Property(x => x.WorkPhone2);
             Property(x => x.EmailAddress);
-            Property(x => x.CreatedDate);
-            Property(x => x.CreatedBy);
-            Property(x => x.UpdatedDate);
-            Property(x => x.UpdatedBy);
         }
     }
 }

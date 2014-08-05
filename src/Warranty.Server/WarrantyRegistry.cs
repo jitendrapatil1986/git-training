@@ -1,8 +1,7 @@
 ﻿using NHibernate;
 using NServiceBus.UnitOfWork;
 using StructureMap.Configuration.DSL;
-using Warranty.LotusExtract;
-using Warranty.LotusExtract.Security;
+using Warranty.Core.DataAccess;
 
 namespace Warranty.Server
 {

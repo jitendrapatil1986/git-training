@@ -20,8 +20,8 @@ namespace Warranty.Core.Entities
         public virtual string PlanNumber { get; set; }
         public virtual string Elevation { get; set; }
         public virtual string Swing { get; set; }
-        public virtual int BuilderId { get; set; }
-        public virtual int SalesConsultantId { get; set; }
+        public virtual int BuilderEmployeeId { get; set; }
+        public virtual int SalesConsultantEmployeeId { get; set; }
         public virtual DateTime WarrantyExpirationDate { get; set; }
         public virtual Decimal TotalPrice { get; set; }
         public virtual bool DoNotContact { get; set; }

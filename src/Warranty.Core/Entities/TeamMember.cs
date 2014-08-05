@@ -2,9 +2,9 @@ using System;
 
 namespace Warranty.Core.Entities
 {
-    public class TeamMember : IAuditableEntity
+    public class Employee : IAuditableEntity
     {
-        public virtual int TeamMemberId { get; set; }
+        public virtual int EmployeeId { get; set; }
         public virtual string Number { get; set; }
         public virtual string Name { get; set; }
         public virtual string Fax { get; set; }

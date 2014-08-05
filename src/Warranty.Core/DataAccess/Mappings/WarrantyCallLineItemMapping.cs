@@ -3,7 +3,7 @@ using Warranty.Core.Entities;
 
 namespace Warranty.Core.DataAccess.Mappings
 {
-    public class WarrantyCallLineItemMapping : ClassMapping<WarrantyCallLineItem>
+    public class WarrantyCallLineItemMapping : AuditableEntityMapping<WarrantyCallLineItem>
     {
         public WarrantyCallLineItemMapping()
         {
@@ -17,10 +17,6 @@ namespace Warranty.Core.DataAccess.Mappings
             Property(x => x.ClassificationNote);
             Property(x => x.LineItemRoot);
             Property(x => x.Completed);
-            Property(x => x.CreatedDate);
-            Property(x => x.CreatedBy);
-            Property(x => x.UpdatedDate);
-            Property(x => x.UpdatedBy);
         }
     }
 }

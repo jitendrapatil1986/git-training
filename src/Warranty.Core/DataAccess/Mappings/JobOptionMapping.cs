@@ -3,7 +3,7 @@ using Warranty.Core.Entities;
 
 namespace Warranty.Core.DataAccess.Mappings
 {
-    public class JobOptionMapping : ClassMapping<JobOption>
+    public class JobOptionMapping : AuditableEntityMapping<JobOption>
     {
         public JobOptionMapping()
         {
@@ -14,10 +14,6 @@ namespace Warranty.Core.DataAccess.Mappings
             Property(x => x.OptionNumber);
             Property(x => x.OptionDescription);
             Property(x => x.Quantity);
-            Property(x => x.CreatedDate);
-            Property(x => x.CreatedBy);
-            Property(x => x.UpdatedDate);
-            Property(x => x.UpdatedBy);
         }
     }
 }

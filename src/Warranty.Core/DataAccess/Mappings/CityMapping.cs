@@ -3,7 +3,7 @@ using Warranty.Core.Entities;
 
 namespace Warranty.Core.DataAccess.Mappings
 {
-    public class CityMapping : ClassMapping<City>
+    public class CityMapping : AuditableEntityMapping<City>
     {
         public CityMapping()
         {
@@ -12,10 +12,6 @@ namespace Warranty.Core.DataAccess.Mappings
             Id(x => x.CityId);
             Property(x => x.CityCode);
             Property(x => x.CityName);
-            Property(x => x.CreatedDate);
-            Property(x => x.CreatedBy);
-            Property(x => x.UpdatedDate);
-            Property(x => x.UpdatedBy);
         }
     }
 }

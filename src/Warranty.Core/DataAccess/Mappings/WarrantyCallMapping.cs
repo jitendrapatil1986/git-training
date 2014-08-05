@@ -3,7 +3,7 @@ using Warranty.Core.Entities;
 
 namespace Warranty.Core.DataAccess.Mappings
 {
-    public class WarrantyCallMapping : ClassMapping<WarrantyCall>
+    public class WarrantyCallMapping : AuditableEntityMapping<WarrantyCall>
     {
         public WarrantyCallMapping()
         {
@@ -14,14 +14,10 @@ namespace Warranty.Core.DataAccess.Mappings
             Property(x => x.WarrantyCallType);
             Property(x => x.JobId);
             Property(x => x.Contact);
-            Property(x => x.WarrantyRepresentativeId);
+            Property(x => x.WarrantyRepresentativeEmployeeId);
             Property(x => x.CompletionDate);
             Property(x => x.WorkSummary);
             Property(x => x.IsSigned);
-            Property(x => x.CreatedDate);
-            Property(x => x.CreatedBy);
-            Property(x => x.UpdatedDate);
-            Property(x => x.UpdatedBy);
         }
     }
 }
