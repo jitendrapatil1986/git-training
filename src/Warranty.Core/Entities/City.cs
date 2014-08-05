@@ -2,11 +2,11 @@ using System;
 
 namespace Warranty.Core.Entities
 {
-    public class Project : IAuditableEntity
+    public class City : IAuditableEntity
     {
-        public virtual int ProjectId { get; set; }
-        public virtual string ProjectNumber { get; set; }
-        public virtual string ProjectName { get; set; }
+        public virtual int CityId { get; set; }
+        public virtual string CityCode { get; set; }
+        public virtual string CityName { get; set; }
         public virtual DateTime? CreatedDate { get; set; }
         public virtual string CreatedBy { get; set; }
         public virtual DateTime? UpdatedDate { get; set; }

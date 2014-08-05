@@ -1,6 +1,7 @@
 ﻿using NHibernate;
 using NServiceBus.UnitOfWork;
 using StructureMap.Configuration.DSL;
+using Warranty.Core.DataAccess;
 
 namespace Warranty.Server
 {
@@ -15,7 +16,7 @@ namespace Warranty.Server
                 scanner.TheCallingAssembly();
             });
 
-            //For<ISessionFactory>().Singleton().Use(new ConfigurationFactory(new WarrantyRepositoryConfiguration(), new WarrantyBusUserSession()).GetConfiguration().BuildSessionFactory());
+            For<ISessionFactory>().Singleton().Use(new ConfigurationFactory().CreateConfiguration().BuildSessionFactory());
             For<ISession>().Use(ctx => ctx.GetInstance<ISessionFactory>().OpenSession());
             For<IManageUnitsOfWork>().Use<NHibernateUnitOfWork>();
         }

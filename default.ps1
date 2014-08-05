@@ -27,7 +27,7 @@ properties {
 
 	$db_server = ".\SqlExpress"
 
-	$db_name = "warranty"
+	$db_name = "Warranty"
 	$db_scripts_dir = "$source_dir\Database\warranty"
 
 	$all_database_info = @(
