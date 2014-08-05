@@ -100,7 +100,6 @@
     <Compile Include="Entities\WarrantyCallComment.cs" />
     <Compile Include="Entities\WarrantyCallLineItem.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="DataAccess\ConfigurationFactory.cs" />
     <Compile Include="DataAccess\HbmMappingGenerator.cs" />
     <Compile Include="DataAccess\IConfigurationFactory.cs" />
@@ -110,10 +109,10 @@
     <Compile Include="Enumerations\Enumeration.cs" />
     <Compile Include="Enumerations\ItemClassification.cs" />
     <Compile Include="Enumerations\RequestType.cs" />
+    <Compile Include="Extensions\MapperExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="Net4Collection.cs" />
-    <Compile Include="ValueObjects\Address.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
