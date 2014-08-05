@@ -4,11 +4,10 @@ CREATE TABLE WarrantyCalls(
     WarrantyCallType VARCHAR(50),
     JobId INT,
     Contact VARCHAR(255),
-    WarrantyRepresentativeId INT,
+    WarrantyRepresentativeEmployeeId INT,
     CompletionDate DATETIME2,
     WorkSummary VARCHAR(4000),
     HomeOwnerSignature VARCHAR(2000),
-    Comment VARCHAR(MAX),
     CreatedDate DATETIME2,
     CreatedBy VARCHAR(255),
     UpdatedDate DATETIME2,
@@ -22,4 +21,4 @@ ALTER TABLE WarrantyCalls ADD CONSTRAINT FK_WarrantyCalls_JobId
     FOREIGN KEY (JobId) REFERENCES Jobs (JobId);
 
 ALTER TABLE WarrantyCalls ADD CONSTRAINT FK_WarrantyCalls_WarrantyRepresentativeId
-    FOREIGN KEY (WarrantyRepresentativeId) REFERENCES TeamMembers (TeamMemberId);
+    FOREIGN KEY (WarrantyRepresentativeEmployeeId) REFERENCES Employees (EmployeeId);

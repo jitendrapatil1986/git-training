@@ -1,4 +1,3 @@
-using NHibernate.Mapping.ByCode.Conformist;
 using Warranty.Core.Entities;
 
 namespace Warranty.Core.DataAccess.Mappings
@@ -10,14 +9,14 @@ namespace Warranty.Core.DataAccess.Mappings
             Table("WarrantyCalls");
 
             Id(x => x.WarrantyCallId);
-            Property(x => x.CallNumber);
+            Property(x => x.WarrantyCallNumber);
             Property(x => x.WarrantyCallType);
             Property(x => x.JobId);
             Property(x => x.Contact);
             Property(x => x.WarrantyRepresentativeEmployeeId);
             Property(x => x.CompletionDate);
             Property(x => x.WorkSummary);
-            Property(x => x.IsSigned);
+            Property(x => x.HomeOwnerSignature);
         }
     }
 }

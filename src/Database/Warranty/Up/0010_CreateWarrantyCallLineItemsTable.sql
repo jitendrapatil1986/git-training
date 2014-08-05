@@ -1,7 +1,7 @@
 CREATE TABLE WarrantyCallLineItems (
     WarrantyCallLineItemId INT NOT NULL,
     WarrantyCallId INT,
-    LineNumber SMALLINT,
+    LineNumber INT,
     ProblemCode VARCHAR(4000),
     ProblemDescription VARCHAR(4000),
     CauseDescription VARCHAR(4000),

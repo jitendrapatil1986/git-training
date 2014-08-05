@@ -1,5 +1,4 @@
-﻿using NHibernate.Mapping.ByCode.Conformist;
-using Warranty.Core.Entities;
+﻿using Warranty.Core.Entities;
 
 namespace Warranty.Core.DataAccess.Mappings
 {
@@ -14,6 +13,7 @@ namespace Warranty.Core.DataAccess.Mappings
             Property(x => x.LineNumber);
             Property(x => x.ProblemCode);
             Property(x => x.ProblemDescription);
+            Property(x => x.CauseDescription);
             Property(x => x.ClassificationNote);
             Property(x => x.LineItemRoot);
             Property(x => x.Completed);

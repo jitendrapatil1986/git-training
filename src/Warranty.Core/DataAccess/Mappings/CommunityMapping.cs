@@ -1,4 +1,3 @@
-using NHibernate.Mapping.ByCode.Conformist;
 using Warranty.Core.Entities;
 
 namespace Warranty.Core.DataAccess.Mappings
@@ -19,7 +18,7 @@ namespace Warranty.Core.DataAccess.Mappings
             Property(x => x.CommunityStatusCode);
             Property(x => x.CommunityStatusDescription);
             Property(x => x.ProductType);
-            Property(x => x.PlanType);
+            Property(x => x.ProductTypeDescription);
         }
     }
 }

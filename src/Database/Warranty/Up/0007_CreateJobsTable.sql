@@ -1,7 +1,7 @@
 CREATE TABLE Jobs (
     JobId INT NOT NULL,
     JobNumber VARCHAR(8),
-    CloseDate DATETIME,
+    CloseDate DATE,
     AddressLine VARCHAR(255),
     City VARCHAR(100),
     StateCode CHAR(2),
@@ -14,10 +14,10 @@ CREATE TABLE Jobs (
     PlanName VARCHAR(30),
     PlanNumber VARCHAR(4),
     Elevation VARCHAR(3),
-    Swing NVARCHAR(1),
-    BuilderId INT,    
-    SalesConsultantId INT,
-    WarrantyExpirationDate DATETIME2,
+    Swing VARCHAR(1),
+    BuilderEmployeeId INT,    
+    SalesConsultantEmployeeId INT,
+    WarrantyExpirationDate DATE,
     TotalPrice DECIMAL(15,2),
     DoNotContact BIT,
     CreatedDate DATETIME2,
@@ -35,8 +35,8 @@ ALTER TABLE Jobs ADD CONSTRAINT FK_Jobs_CurrentOwnerId
 ALTER TABLE Jobs ADD CONSTRAINT FK_Jobs_CommunityId
     FOREIGN KEY (CommunityId) REFERENCES Communities(CommunityId);
 
-ALTER TABLE Jobs ADD CONSTRAINT FK_Jobs_BuilderId
-    FOREIGN KEY (BuilderId) REFERENCES TeamMembers(TeamMemberId);
+ALTER TABLE Jobs ADD CONSTRAINT FK_Jobs_BuilderEmployeeId
+    FOREIGN KEY (BuilderEmployeeId) REFERENCES Employees(EmployeeId);
 
-ALTER TABLE Jobs ADD CONSTRAINT FK_Jobs_SalesConsultantId
-    FOREIGN KEY (SalesConsultantId) REFERENCES TeamMembers(TeamMemberId);
+ALTER TABLE Jobs ADD CONSTRAINT FK_Jobs_SalesConsultantEmployeeId
+    FOREIGN KEY (SalesConsultantEmployeeId) REFERENCES Employees(EmployeeId);

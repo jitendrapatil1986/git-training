@@ -1,8 +1,7 @@
 CREATE TABLE HomeOwners (
     HomeOwnerId INT NOT NULL,
     JobId INT,
-    IsCurrent BIT,
-    HomeOwnerNumber TINYINT,
+    HomeOwnerNumber INT,
     HomeOwnerName VARCHAR(255),
     HomePhone VARCHAR(255),
     OtherPhone VARCHAR(255),

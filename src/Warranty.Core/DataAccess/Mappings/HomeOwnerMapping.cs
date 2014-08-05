@@ -1,4 +1,3 @@
-using NHibernate.Mapping.ByCode.Conformist;
 using Warranty.Core.Entities;
 
 namespace Warranty.Core.DataAccess.Mappings
@@ -11,8 +10,8 @@ namespace Warranty.Core.DataAccess.Mappings
 
             Id(x => x.HomeOwnerId);
             Property(x => x.JobId);
-            Property(x => x.OwnerNumber);
-            Property(x => x.Name);
+            Property(x => x.HomeOwnerNumber);
+            Property(x => x.HomeOwnerName);
             Property(x => x.HomePhone);
             Property(x => x.OtherPhone);
             Property(x => x.WorkPhone1);

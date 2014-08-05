@@ -6,7 +6,7 @@ CREATE TABLE Communities (
     DivisionId INT,
     ProjectId INT,
     SateliteCityId INT,
-    CommunityStatusCode CHAR(3),    
+    CommunityStatusCode VARCHAR(10),    
     CommunityStatusDescription VARCHAR(30),
     ProductType VARCHAR(20),
     ProductTypeDescription VARCHAR(30),

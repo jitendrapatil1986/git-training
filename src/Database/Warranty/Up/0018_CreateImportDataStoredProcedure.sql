@@ -147,9 +147,9 @@ WHEN MATCHED THEN UPDATE SET TARGET.CityId = LIST.CityId,
                                 TARGET.UpdatedDate = GETDATE(),
                                 TARGET.UPdatedBy = @ImportUser;
 
-MERGE INTO TeamMembers AS TARGET
+MERGE INTO Employees AS TARGET
 USING (SELECT
-        ISNULL((SELECT MAX(TeamMemberId) FROM TeamMembers), 0) + ROW_NUMBER() OVER (ORDER BY Number) AS rowId,
+        ISNULL((SELECT MAX(EmployeeId) FROM Employees), 0) + ROW_NUMBER() OVER (ORDER BY Number) AS rowId,
         Number,
         Name
         FROM (
@@ -188,11 +188,11 @@ USING (SELECT
         WHERE 
             Number != '' 
             OR Name != '') AS LIST
-ON TeamMemberNumber = Number 
-    AND TeamMemberName = Name
-WHEN NOT MATCHED THEN INSERT(TeamMemberId
-                             , TeamMemberNumber
-                             , TeamMemberName
+ON EmployeeNumber = Number 
+    AND EmployeeName = Name
+WHEN NOT MATCHED THEN INSERT(EmployeeId
+                             , EmployeeNumber
+                             , EmployeeName
                              , CreatedDate
                              , CreatedBy)
                     VALUES(rowId
@@ -221,14 +221,14 @@ USING (SELECT
             JobPlan,
             Elevation,
             Swing,    
-            (SELECT TOP 1 teamMemberId 
-                FROM TeamMembers 
-                WHERE TeamMemberNumber = BuilderEmployeeNumber 
-                AND TeamMemberName = Builder) AS Builder,
-            (SELECT TOP 1 teamMemberId 
-                FROM TeamMembers 
+            (SELECT TOP 1 EmployeeId 
+                FROM Employees 
+                WHERE EmployeeNumber = BuilderEmployeeNumber 
+                AND EmployeeName = Builder) AS Builder,
+            (SELECT TOP 1 EmployeeId 
+                FROM Employees 
                 WHERE SalesConsultantNumber = BuilderEmployeeNumber 
-                AND TeamMemberName = SalesConsultant) AS Sales,
+                AND EmployeeName = SalesConsultant) AS Sales,
             WarrantyExpirationDate,
             TotalSalesPrice
         FROM imports.CustomerImports CI) AS LIST
@@ -248,8 +248,8 @@ WHEN NOT MATCHED THEN INSERT (JobId
                                 , PlanNumber
                                 , Elevation
                                 , Swing
-                                , BuilderId
-                                , SalesConsultantId
+                                , BuilderEmployeeId
+                                , SalesConsultantEmployeeId
                                 , WarrantyExpirationDate
                                 , TotalPrice
                                 , CreatedDate
@@ -289,8 +289,8 @@ WHEN MATCHED THEN UPDATE SET
                     TARGET.PlanNumber = LIST.JobPlan,
                     TARGET.Elevation = LIST.Elevation,
                     TARGET.Swing = LIST.Swing,
-                    TARGET.BuilderId = LIST.Builder,
-                    TARGET.SalesConsultantId = LIST.Sales,
+                    TARGET.BuilderEmployeeId = LIST.Builder,
+                    TARGET.SalesConsultantEmployeeId = LIST.Sales,
                     TARGET.WarrantyExpirationDate = LIST.WarrantyExpirationDate,
                     TARGET.TotalPrice = LIST.TotalSalesPrice,
                     TARGET.UpdatedDate = GETDATE(),
@@ -312,7 +312,6 @@ USING (SELECT
 ON TARGET.JobId = LIST.JobId AND TARGET.HomeOwnerNumber = LIST.OwnerNumber
 WHEN NOT MATCHED THEN INSERT (HomeOwnerId
                                 , JobId
-                                , IsCurrent
                                 , HomeOwnerNumber
                                 , HomeOwnerName
                                 , HomePhone
@@ -324,7 +323,6 @@ WHEN NOT MATCHED THEN INSERT (HomeOwnerId
                                 , CreatedBy)
                         VALUES (rowId
                                 , jobId
-                                , isCurrent
                                 , ownerNumber
                                 , homeowner
                                 , homephone
@@ -334,8 +332,7 @@ WHEN NOT MATCHED THEN INSERT (HomeOwnerId
                                 , emailcontact
                                 , getdate()
                                 , @importUser)
-WHEN MATCHED THEN UPDATE SET TARGET.IsCurrent = 1,
-                    TARGET.HomeOwnerNumber = LIST.ownerNumber,
+WHEN MATCHED THEN UPDATE SET TARGET.HomeOwnerNumber = LIST.ownerNumber,
                     TARGET.HomeOwnerName = LIST.HomeOwner,
                     TARGET.HomePhone = LIST.HomePhone,
                     TARGET.OtherPhone = LIST.OtherPhone,
@@ -356,10 +353,10 @@ USING (SELECT
                 FROM Jobs J 
                 WHERE J.JobNumber = I.Job_Num) AS jobId,
             Contact,
-            (SELECT TOP 1 TeamMemberId 
-                FROM TeamMembers 
-                WHERE TeamMemberNumber = WsrEmp_Num 
-                AND TeamMemberName = Assigned_To) AS RepId,
+            (SELECT TOP 1 EmployeeId 
+                FROM Employees 
+                WHERE EmployeeNumber = WsrEmp_Num 
+                AND EmployeeName = Assigned_To) AS RepId,
             Comp_Date,
             HOSig,
             Call_Comments,
@@ -370,10 +367,9 @@ ON TARGET.WarrantyCallNumber = LIST.Call_Num
     AND TARGET.WarrantyCallType = CallType    
     AND TARGET.JobId = LIST.JobId 
     AND TARGET.Contact = LIST.Contact
-    AND TARGET.WarrantyRepresentativeId = RepId    
+    AND TARGET.WarrantyRepresentativeEmployeeId = RepId    
     AND TARGET.CompletionDate = LIST.Comp_Date
     AND TARGET.HomeOwnerSignature = LIST.HOSig
-    AND TARGET.Comment = LIST.Call_Comments
     AND TARGET.CreatedDate = LIST.Date_Open 
     AND TARGET.CreatedBy = LIST.CreatedBy
 WHEN NOT MATCHED THEN INSERT (WarrantyCallId
@@ -381,10 +377,9 @@ WHEN NOT MATCHED THEN INSERT (WarrantyCallId
                                 , WarrantyCallType
                                 , JobId
                                 , Contact
-                                , WarrantyRepresentativeId
+                                , WarrantyRepresentativeEmployeeId
                                 , CompletionDate
                                 , HomeOwnerSignature
-                                , Comment
                                 , CreatedDate
                                 , CreatedBy)
                         VALUES (rowId
@@ -395,7 +390,6 @@ WHEN NOT MATCHED THEN INSERT (WarrantyCallId
                                 , repId
                                 , Comp_Date
                                 , HOSig
-                                , Call_Comments
                                 , Date_Open
                                 , CreatedBy);
 
@@ -408,10 +402,9 @@ USING (SELECT
                             AND C.WarrantyCallType = R.CallType    
                             AND C.JobId = J.JobId
                             AND C.Contact = Contact
-                            AND C.WarrantyRepresentativeId = TR.TeamMemberId   
+                            AND C.WarrantyRepresentativeEmployeeId = TR.EmployeeId   
                             AND C.CompletionDate = R.Comp_Date
                             AND C.HomeOwnerSignature = R.HOSig
-                            AND C.Comment = R.Call_Comments
                             AND C.CreatedDate = R.Date_Open 
                             AND C.CreatedBy = 'LI: ' + R.Assigned_By) AS callId,
             Items.LineNumber,
@@ -424,9 +417,9 @@ USING (SELECT
             Date_Open,
             'LI: ' + R.Assigned_By AS CreatedBy            
         FROM imports.WarrantyCallImports R
-        INNER JOIN TeamMembers TR ON
-            TeamMemberNumber = R.WsrEmp_Num 
-            AND TeamMemberName = R.Assigned_To
+        INNER JOIN Employees TR ON
+            EmployeeNumber = R.WsrEmp_Num 
+            AND EmployeeName = R.Assigned_To
         INNER JOIN Jobs J ON
             J.JobNumber = R.Job_Num
         OUTER APPLY (

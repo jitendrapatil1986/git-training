@@ -7,8 +7,8 @@ namespace Warranty.Core.Entities
         public virtual int HomeOwnerId { get; set; }
         public virtual int JobId { get; set; }
         public virtual bool IsCurrent { get; set; }
-        public virtual string OwnerNumber { get; set; }
-        public virtual string Name { get; set; }
+        public virtual string HomeOwnerNumber { get; set; }
+        public virtual string HomeOwnerName { get; set; }
         public virtual string HomePhone { get; set; }
         public virtual string OtherPhone { get; set; }
         public virtual string WorkPhone1 { get; set; }

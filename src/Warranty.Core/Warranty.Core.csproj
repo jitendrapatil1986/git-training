@@ -79,7 +79,8 @@
     <Compile Include="DataAccess\Mappings\JobMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobOptionMapping.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMapping.cs" />
-    <Compile Include="DataAccess\Mappings\TeamMemberMapping.cs" />
+    <Compile Include="DataAccess\Mappings\EmployeeMapping.cs" />
+    <Compile Include="DataAccess\Mappings\WarrantyCallCommentMapping.cs" />
     <Compile Include="DataAccess\Mappings\WarrantyCallLineItemMapping.cs" />
     <Compile Include="DataAccess\Mappings\WarrantyCallMapping.cs" />
     <Compile Include="Entities\City.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Entities\Project.cs" />
     <Compile Include="Entities\TeamMember.cs" />
     <Compile Include="Entities\WarrantyCall.cs" />
+    <Compile Include="Entities\WarrantyCallComment.cs" />
     <Compile Include="Entities\WarrantyCallLineItem.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />

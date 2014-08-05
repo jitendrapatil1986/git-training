@@ -1,6 +1,6 @@
 CREATE TABLE Divisions (
     DivisionId INT NOT NULL,
-    DivisionCode VARCHAR(3),
+    DivisionCode VARCHAR(10),
     DivisionName VARCHAR(255),
     CreatedDate DATETIME2,
     CreatedBy VARCHAR(255),

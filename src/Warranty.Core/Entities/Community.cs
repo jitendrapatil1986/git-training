@@ -14,7 +14,7 @@ namespace Warranty.Core.Entities
         public virtual string CommunityStatusCode { get; set; }
         public virtual string CommunityStatusDescription { get; set; }
         public virtual string ProductType { get; set; }
-        public virtual string PlanType { get; set; }
+        public virtual string ProductTypeDescription { get; set; }
         public virtual DateTime? CreatedDate { get; set; }
         public virtual string CreatedBy { get; set; }
         public virtual DateTime? UpdatedDate { get; set; }

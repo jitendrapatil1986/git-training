@@ -1,5 +1,4 @@
-﻿using NHibernate.Mapping.ByCode.Conformist;
-using Warranty.Core.Entities;
+﻿using Warranty.Core.Entities;
 
 namespace Warranty.Core.DataAccess.Mappings
 {
