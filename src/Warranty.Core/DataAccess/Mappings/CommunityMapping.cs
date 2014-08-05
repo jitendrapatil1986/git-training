@@ -1,7 +1,7 @@
-using Warranty.Core.Entities;
-
 namespace Warranty.Core.DataAccess.Mappings
 {
+    using Entities;
+
     public class CommunityMapping : AuditableEntityMapping<Community>
     {
         public CommunityMapping()

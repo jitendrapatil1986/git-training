@@ -1,13 +1,11 @@
-﻿using System;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
-using System.Security.Permissions;
-using StructureMap;
-using Warranty.Core.Extensions;
-
-namespace Warranty.LotusExtract
+﻿namespace Warranty.LotusExtract
 {
+    using System;
+    using System.Configuration;
+    using System.Data;
+    using System.Data.SqlClient;
+    using Core.Extensions;
+
     class Program
     {
         static void Main(string[] args)

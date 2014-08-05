@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Web;
-using Microsoft.IdentityModel.Web;
-using Warranty.Core.Security;
-
-namespace Warranty.UI.Core.Security
+﻿namespace Warranty.UI.Core.Security
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Web;
+    using Microsoft.IdentityModel.Web;
+    using Warranty.Core.Security;
+
     public class WarrantyUserSession : IUserSession
     {
         private const string SecurityOrgPrefix = "SEC_Market_";

@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Warranty.Core.Entities
+﻿namespace Warranty.Core.Entities
 {
+    using System;
+
     public interface IAuditableEntity
     {
         string CreatedBy { get; set; }

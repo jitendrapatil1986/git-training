@@ -1,16 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using Warranty.Core.Entities;
-using Warranty.Core.Enumerations;
-using Warranty.Core.Extensions;
-using NHibernate;
-using NHibernate.Cfg.MappingSchema;
-using NHibernate.Mapping.ByCode;
-
-namespace Warranty.Core.DataAccess
+﻿namespace Warranty.Core.DataAccess
 {
+    using System;
+    using System.Linq;
+    using System.Reflection;
     using Conventions;
+    using Entities;
+    using Enumerations;
+    using Extensions;
+    using NHibernate;
+    using NHibernate.Cfg.MappingSchema;
+    using NHibernate.Mapping.ByCode;
 
     public class HbmMappingGenerator
     {

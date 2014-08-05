@@ -1,12 +1,12 @@
-﻿using System.Data;
-using NHibernate.Cfg;
-using NHibernate.Caches.SysCache;
-using NHibernate.Dialect;
-using NHibernate.Driver;
-using Warranty.Core.Security;
-
-namespace Warranty.Core.DataAccess
+﻿namespace Warranty.Core.DataAccess
 {
+    using System.Data;
+    using NHibernate.Caches.SysCache;
+    using NHibernate.Cfg;
+    using NHibernate.Dialect;
+    using NHibernate.Driver;
+    using Security;
+
     public class ConfigurationFactory : IConfigurationFactory
     {
         public Configuration CreateConfiguration()

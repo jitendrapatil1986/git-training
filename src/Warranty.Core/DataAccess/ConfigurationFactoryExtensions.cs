@@ -1,9 +1,9 @@
 ﻿namespace Warranty.Core.DataAccess
 {
     using System.Linq;
+    using Extensions;
     using NHibernate.Cfg;
     using NHibernate.Tool.hbm2ddl;
-    using Extensions;
     using Security;
 
     public static class ConfigurationFactoryExtensions

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Diagnostics;
-
-namespace Warranty.Core.Enumerations
+﻿namespace Warranty.Core.Enumerations
 {
+    using System;
+    using System.Diagnostics;
+
     [Serializable]
     [DebuggerDisplay("{DisplayName} - {Value}")]
     public abstract class Int32Enumeration<TEnumeration> : Enumeration<TEnumeration, int>, IEnumeration<TEnumeration, int>

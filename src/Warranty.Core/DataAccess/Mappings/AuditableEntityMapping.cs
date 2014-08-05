@@ -1,7 +1,7 @@
 ﻿namespace Warranty.Core.DataAccess.Mappings
 {
-    using NHibernate.Mapping.ByCode.Conformist;
     using Entities;
+    using NHibernate.Mapping.ByCode.Conformist;
 
     public class AuditableEntityMapping<T> : ClassMapping<T> where T : class , IAuditableEntity
     {

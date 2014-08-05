@@ -1,7 +1,7 @@
-using System;
-
 namespace Warranty.Core.Entities
 {
+    using System;
+
     public class Project : IAuditableEntity
     {
         public virtual int ProjectId { get; set; }
