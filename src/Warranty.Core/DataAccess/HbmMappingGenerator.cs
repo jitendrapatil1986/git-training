@@ -10,6 +10,8 @@ using NHibernate.Mapping.ByCode;
 
 namespace Warranty.Core.DataAccess
 {
+    using Conventions;
+
     public class HbmMappingGenerator
     {
         public HbmMapping GenerateMappings()

@@ -115,7 +115,7 @@
     <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="ValueObjects\Address.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AutoMapper\QueryAutoMapperProfile.cs" />
     <Compile Include="CompositeValidator.cs" />
@@ -133,9 +133,7 @@
     <Compile Include="Security\WarrantyUser.cs" />
     <Compile Include="StructureMapValidatorFactory.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Diagnostics;
-using Headspring;
-using Warranty.Core.Enumerations;
-
-namespace Warranty.Core.DataAccess
+namespace Warranty.Core.DataAccess.Conventions
 {
+    using System;
+    using System.Diagnostics;
+    using Enumerations;
+
     [Serializable]
     [DebuggerDisplay("{DisplayName} - {Value}")]
     public abstract class StringEnumeration<TEnumeration> : Enumeration<TEnumeration, string>, IEnumeration<TEnumeration, string>, IStringEnumeration

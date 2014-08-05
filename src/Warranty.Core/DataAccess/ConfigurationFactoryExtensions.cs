@@ -1,11 +1,11 @@
-﻿using System.Linq;
-using NHibernate.Cfg;
-using NHibernate.Tool.hbm2ddl;
-using Warranty.Core.Extensions;
-using Warranty.Core.Security;
-
-namespace Warranty.Core.DataAccess
+﻿namespace Warranty.Core.DataAccess
 {
+    using System.Linq;
+    using NHibernate.Cfg;
+    using NHibernate.Tool.hbm2ddl;
+    using Extensions;
+    using Security;
+
     public static class ConfigurationFactoryExtensions
     {
         public static Configuration AttachAuditEventListeners(this Configuration config, IUserSession session)

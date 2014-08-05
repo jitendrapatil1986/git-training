@@ -1,7 +1,7 @@
-﻿using Headspring;
-
-namespace Warranty.UI.Core.Enumerations
+﻿namespace Warranty.UI.Core.Enumerations
 {
+    using Warranty.Core.Enumerations;
+
     public class NavItem : Enumeration<NavItem>
     {
         public static readonly NavItem Home = new NavItem(4, Display.HomeName, Display.HomeName);

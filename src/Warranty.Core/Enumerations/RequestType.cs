@@ -1,6 +1,4 @@
-﻿using Headspring;
-
-namespace Warranty.Core.Enumerations
+﻿namespace Warranty.Core.Enumerations
 {
     public class RequestType : Enumeration<RequestType>
     {
