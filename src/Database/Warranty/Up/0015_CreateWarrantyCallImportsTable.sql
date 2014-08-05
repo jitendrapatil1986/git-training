@@ -209,6 +209,7 @@ CREATE TABLE imports.WarrantyCallImports(
          YearComp  VARCHAR(8000), 
          ZipCode  VARCHAR(8000), 
          ReturnValue  VARCHAR(8000),
+         insertedRowId INT
 );
 
 ALTER TABLE imports.WarrantyCallImports ADD CONSTRAINT PK_WarrantyCallImports
