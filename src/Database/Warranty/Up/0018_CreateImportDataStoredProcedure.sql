@@ -1,5 +1,4 @@
 CREATE PROCEDURE imports.ImportData AS
-
 DECLARE @ImportUser VARCHAR(255) = 'Lotus Import';
 
 MERGE INTO Divisions AS Target
@@ -344,9 +343,33 @@ WHEN MATCHED THEN UPDATE SET TARGET.HomeOwnerNumber = LIST.ownerNumber,
 
 UPDATE Jobs SET CurrentHomeOwnerId = (SELECT TOP 1 HomeOwnerId FROM HomeOwners HO WHERE HO.JobId = Jobs.JobId)
 
+UPDATE I SET insertedRowId = WarrantyCallId
+FROM imports.WarrantyCallImports I
+    INNER JOIN WarrantyCalls C ON
+        C.WarrantyCallNumber = I.Call_Num 
+    AND C.WarrantyCallType = I.CallType    
+    AND C.JobId = (SELECT TOP 1 JobId 
+                FROM Jobs J 
+                WHERE J.JobNumber = I.Job_Num) 
+    AND C.Contact = I.Contact
+    AND C.WarrantyRepresentativeEmployeeId = 
+            (SELECT TOP 1 EmployeeId 
+                FROM Employees 
+                WHERE EmployeeNumber = WsrEmp_Num 
+                AND EmployeeName = Assigned_To) 
+    AND C.CompletionDate = I.Comp_Date
+    AND C.HomeOwnerSignature = I.HOSig
+    AND C.CreatedDate = I.Date_Open 
+    AND C.CreatedBy = 'LI: ' + Assigned_By;
+
+DECLARE @maxCallId INT = ISNULL((SELECT MAX(WarrantyCallId) FROM WarrantyCalls),0);
+
+UPDATE imports.WarrantyCallImports SET insertedRowId = importId + @maxCallId
+    WHERE insertedRowId IS NULL;
+
 MERGE INTO WarrantyCalls AS TARGET
 USING (SELECT
-            ISNULL((SELECT MAX(WarrantyCallId) FROM WarrantyCalls), 0) + ROW_NUMBER() OVER (ORDER BY Call_Num) AS rowId,
+            insertedRowId AS rowId,
             Call_Num,
             CallType,
             (SELECT TOP 1 JobId 
@@ -393,20 +416,31 @@ WHEN NOT MATCHED THEN INSERT (WarrantyCallId
                                 , Date_Open
                                 , CreatedBy);
 
+MERGE INTO WarrantyCallComments AS TARGET
+USING (SELECT
+            ISNULL((SELECT MAX(WarrantyCallCommentId) FROM WarrantyCallComments),0) + ROW_NUMBER() OVER (ORDER BY R.Call_Num) AS rowId,
+            insertedRowId AS callId,
+            Call_Comments,
+            Date_Open,
+            'LI: ' + R.Assigned_By AS CreatedBy            
+        FROM imports.WarrantyCallImports R) AS LIST
+ON TARGET.WarrantyCallId = LIST.callId
+    AND TARGET.warrantyCallComment =  LIST.Call_Comments
+WHEN NOT MATCHED THEN INSERT (WarrantyCallCommentId,
+                                WarrantyCallId,
+                                WarrantyCallComment,
+                                CreatedDate,
+                                CreatedBy)
+                        VALUES(rowId,
+                                callId,
+                                Call_Comments,
+                                Date_Open,
+                                CreatedBy);
+
 MERGE INTO WarrantyCallLineItems AS TARGET
 USING (SELECT
-            ISNULL((SELECT MAX(WarrantyCallLineItemId) FROM WarrantyCallLineItems),0) + ROW_NUMBER() OVER (ORDER BY R.Call_Num) AS rowId,
-            (SELECT TOP 1 WarrantyCallId 
-                            FROM WarrantyCalls C 
-                            WHERE C.WarrantyCallNumber = R.Call_Num 
-                            AND C.WarrantyCallType = R.CallType    
-                            AND C.JobId = J.JobId
-                            AND C.Contact = Contact
-                            AND C.WarrantyRepresentativeEmployeeId = TR.EmployeeId   
-                            AND C.CompletionDate = R.Comp_Date
-                            AND C.HomeOwnerSignature = R.HOSig
-                            AND C.CreatedDate = R.Date_Open 
-                            AND C.CreatedBy = 'LI: ' + R.Assigned_By) AS callId,
+            ISNULL((SELECT MAX(WarrantyCallLineItemId) FROM WarrantyCallLineItems),0) + ROW_NUMBER() OVER (ORDER BY insertedRowId) AS rowId,
+            insertedRowId AS callId,
             Items.LineNumber,
             Items.Code,
             Items.Descr,
@@ -415,23 +449,19 @@ USING (SELECT
             Items.LineRoot,
             Items.Closed,
             Date_Open,
-            'LI: ' + R.Assigned_By AS CreatedBy            
-        FROM imports.WarrantyCallImports R
-        INNER JOIN Employees TR ON
-            EmployeeNumber = R.WsrEmp_Num 
-            AND EmployeeName = R.Assigned_To
-        INNER JOIN Jobs J ON
-            J.JobNumber = R.Job_Num
-        OUTER APPLY (
+            'LI: ' + Assigned_By AS CreatedBy            
+        FROM (
                 SELECT  1 AS LineNumber,
                         PCode_1 AS Code,
                         Descript_1 AS Descr,
                         Cause_1 AS Cause,                
                         ResCode_1 AS ClassNote,                
                         Root_1 AS LineRoot,
-                        CASE WHEN CDate_1 = 'Yes' THEN 1 ELSE 0 END AS Closed
+                        CASE WHEN CDate_1 = 'Yes' THEN 1 ELSE 0 END AS Closed,
+                        insertedRowId,
+                        Date_Open,
+                        Assigned_By
                     FROM imports.WarrantyCallImports I
-                    WHERE I.ImportId = R.ImportId
 
                 UNION ALL 
 
@@ -441,9 +471,11 @@ USING (SELECT
                         Cause_2 AS Cause,                
                         ResCode_2 AS ClassNote,                
                         Root_2 AS LineRoot,                        
-                        CASE WHEN CDate_2 = 'Yes' THEN 1 ELSE 0 END AS Closed
+                        CASE WHEN CDate_2 = 'Yes' THEN 1 ELSE 0 END AS Closed,
+                        insertedRowId,
+                        Date_Open,
+                        Assigned_By
                     FROM imports.WarrantyCallImports I
-                    WHERE I.ImportId = R.ImportId
 
                 UNION ALL 
 
@@ -453,9 +485,11 @@ USING (SELECT
                         Cause_3 AS Cause,                
                         ResCode_3 AS ClassNote,                
                         Root_3 AS LineRoot,                        
-                        CASE WHEN CDate_3 = 'Yes' THEN 1 ELSE 0 END AS Closed
+                        CASE WHEN CDate_3 = 'Yes' THEN 1 ELSE 0 END AS Closed,
+                        insertedRowId,
+                        Date_Open,
+                        Assigned_By
                     FROM imports.WarrantyCallImports I
-                    WHERE I.ImportId = R.ImportId
                     
                 UNION ALL 
 
@@ -465,9 +499,11 @@ USING (SELECT
                         Cause_4 AS Cause,                
                         ResCode_4 AS ClassNote,                
                         Root_4 AS LineRoot,
-                        CASE WHEN CDate_4 = 'Yes' THEN 1 ELSE 0 END AS Closed
+                        CASE WHEN CDate_4 = 'Yes' THEN 1 ELSE 0 END AS Closed,
+                        insertedRowId,
+                        Date_Open,
+                        Assigned_By
                     FROM imports.WarrantyCallImports I
-                    WHERE I.ImportId = R.ImportId
                     
                 UNION ALL 
 
@@ -477,9 +513,11 @@ USING (SELECT
                         Cause_5 AS Cause,                
                         ResCode_5 AS ClassNote,                
                         Root_5 AS LineRoot,
-                        CASE WHEN CDate_5 = 'Yes' THEN 1 ELSE 0 END AS Closed
+                        CASE WHEN CDate_5 = 'Yes' THEN 1 ELSE 0 END AS Closed,
+                        insertedRowId,
+                        Date_Open,
+                        Assigned_By
                     FROM imports.WarrantyCallImports I
-                    WHERE I.ImportId = R.ImportId
         
                 UNION ALL 
 
@@ -489,9 +527,11 @@ USING (SELECT
                         Cause_6 AS Cause,                
                         ResCode_6 AS ClassNote,                
                         Root_6 AS LineRoot,
-                        CASE WHEN CDate_6 = 'Yes' THEN 1 ELSE 0 END AS Closed
+                        CASE WHEN CDate_6 = 'Yes' THEN 1 ELSE 0 END AS Closed,
+                        insertedRowId,
+                        Date_Open,
+                        Assigned_By
                     FROM imports.WarrantyCallImports I
-                    WHERE I.ImportId = R.ImportId
 
                 UNION ALL 
 
@@ -501,9 +541,11 @@ USING (SELECT
                         Cause_7 AS Cause,                
                         ResCode_7 AS ClassNote,                
                         Root_7 AS LineRoot,
-                        CASE WHEN CDate_7 = 'Yes' THEN 1 ELSE 0 END AS Closed
+                        CASE WHEN CDate_7 = 'Yes' THEN 1 ELSE 0 END AS Closed,
+                        insertedRowId,
+                        Date_Open,
+                        Assigned_By
                     FROM imports.WarrantyCallImports I
-                    WHERE I.ImportId = R.ImportId
             
                 UNION ALL 
 
@@ -513,9 +555,11 @@ USING (SELECT
                         Cause_8 AS Cause,                
                         ResCode_8 AS ClassNote,                
                         Root_8 AS LineRoot,
-                        CASE WHEN CDate_8 = 'Yes' THEN 1 ELSE 0 END AS Closed
+                        CASE WHEN CDate_8 = 'Yes' THEN 1 ELSE 0 END AS Closed,
+                        insertedRowId,
+                        Date_Open,
+                        Assigned_By
                     FROM imports.WarrantyCallImports I
-                    WHERE I.ImportId = R.ImportId
             
                 UNION ALL 
 
@@ -525,9 +569,11 @@ USING (SELECT
                         Cause_9 AS Cause,                
                         ResCode_9 AS ClassNote,                
                         Root_9 AS LineRoot,
-                        CASE WHEN CDate_9 = 'Yes' THEN 1 ELSE 0 END AS Closed
+                        CASE WHEN CDate_9 = 'Yes' THEN 1 ELSE 0 END AS Closed,
+                        insertedRowId,
+                        Date_Open,
+                        Assigned_By
                     FROM imports.WarrantyCallImports I
-                    WHERE I.ImportId = R.ImportId
                      
                 UNION ALL 
 
@@ -537,9 +583,11 @@ USING (SELECT
                         Cause_10 AS Cause,                
                         ResCode_10 AS ClassNote,                
                         Root_10 AS LineRoot,
-                        CASE WHEN CDate_10 = 'Yes' THEN 1 ELSE 0 END AS Closed
+                        CASE WHEN CDate_10 = 'Yes' THEN 1 ELSE 0 END AS Closed,
+                        insertedRowId,
+                        Date_Open,
+                        Assigned_By
                     FROM imports.WarrantyCallImports I
-                    WHERE I.ImportId = R.ImportId
                     ) Items ) AS LIST
 ON TARGET.WarrantyCallId = LIST.callId 
     AND TARGET.LineNumber = LIST.LineNumber
@@ -573,7 +621,6 @@ WHEN MATCHED THEN UPDATE SET ProblemCode = Code,
                 Completed = Closed,
                 UpdatedDate = GETDATE(),
                 CreatedBy = @ImportUser;
-
 
 MERGE INTO JobOptions AS TARGET
 USING (SELECT
