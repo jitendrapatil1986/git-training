@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisibleAttribute(false)]
 [assembly: AssemblyVersionAttribute("1.0.0.0")]
 [assembly: AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: AssemblyCopyrightAttribute("Copyright 2012-2014")]
+[assembly: AssemblyCopyrightAttribute("Copyright 2012-2013")]
 [assembly: AssemblyProductAttribute("Warranty")]
 [assembly: AssemblyCompanyAttribute("")]
 [assembly: AssemblyConfigurationAttribute("release")]
