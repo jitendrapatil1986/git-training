@@ -10,7 +10,7 @@ properties {
 	$build_dir = "$base_dir\_build"
 	$temp_package_dir = "$build_dir\temp_for_packaging"
 	$package_dir = "$build_dir\latestVersion"
-	$warranty_package_file = "$package_dir\warranty_Package.zip"
+	$warranty_package_file = "$package_dir\Warranty_Package.zip"
 	$source_dir = "$base_dir\src"
 	$test_dir = "$build_dir\test"
 	$result_dir = "$build_dir\results"
@@ -27,7 +27,7 @@ properties {
 
 	$db_server = ".\SqlExpress"
 
-	$db_name = "warranty"
+	$db_name = "Warranty"
 	$db_scripts_dir = "$source_dir\Database\warranty"
 
 	$all_database_info = @(

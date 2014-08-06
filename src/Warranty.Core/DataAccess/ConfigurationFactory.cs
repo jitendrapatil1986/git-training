@@ -13,7 +13,7 @@ namespace Warranty.Core.DataAccess
         {
             var nhConfiguration = ConfigureNHibernate();
             var mappings = new HbmMappingGenerator().GenerateMappings();
-            nhConfiguration.AddDeserializedMapping(mappings, "Purchasing");
+            nhConfiguration.AddDeserializedMapping(mappings, "Warranty");
             return nhConfiguration;
         }
 
@@ -25,7 +25,7 @@ namespace Warranty.Core.DataAccess
         private static Configuration ConfigureNHibernate()
         {
             var configure = new Configuration();
-            configure.SessionFactoryName("Purchasing");
+            configure.SessionFactoryName("Warranty");
 
             configure.DataBaseIntegration(db =>
             {
@@ -38,7 +38,7 @@ namespace Warranty.Core.DataAccess
                 }
                 else
                 {
-                    db.ConnectionStringName = "PurchasingDB";
+                    db.ConnectionStringName = "WarrantyDB";
                 }
                 db.Timeout = 10;
                 db.BatchSize = 100;

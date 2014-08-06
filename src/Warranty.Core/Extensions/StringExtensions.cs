@@ -19,13 +19,13 @@
 
         public static string ToHomeownerNumber(this string value)
         {
-            // Homeowner Numbers stored in Purchasing do not have leading zeros
+            // Homeowner Numbers stored in Warranty do not have leading zeros
             return value.WithoutLeadingZeros();
         }
 
         public static string ToVendorNumber(this string value)
         {
-            // Vendor Numbers stored in Purchasing do not have leading zeros
+            // Vendor Numbers stored in Warranty do not have leading zeros
             return value.WithoutLeadingZeros();
         }
 
