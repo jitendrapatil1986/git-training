@@ -16,6 +16,9 @@ CREATE TABLE Communities (
     UpdatedBy VARCHAR(255)
 );
 
+ALTER TABLE Communities ADD CONSTRAINT DF_Communities_Id
+    DEFAULT NEWSEQUENTIALID() FOR CommunityId;
+
 ALTER TABLE Communities ADD CONSTRAINT PK_Communities
     PRIMARY KEY (CommunityId);
 

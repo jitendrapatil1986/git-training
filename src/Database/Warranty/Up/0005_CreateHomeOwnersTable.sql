@@ -14,5 +14,8 @@ CREATE TABLE HomeOwners (
     UpdatedBy VARCHAR(255)
 );
 
+ALTER TABLE HomeOwners ADD CONSTRAINT DF_HomeOwners_Id
+    DEFAULT NEWSEQUENTIALID() FOR HomeOwnerId;
+
 ALTER TABLE HomeOwners ADD CONSTRAINT PK_HomeOwners
     PRIMARY KEY (HomeOwnerId);

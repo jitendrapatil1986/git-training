@@ -14,6 +14,9 @@ CREATE TABLE WarrantyCalls(
     UpdatedBy VARCHAR(255)
 );
 
+ALTER TABLE WarrantyCalls ADD CONSTRAINT DF_WarrantyCalls_Id
+    DEFAULT NEWSEQUENTIALID() FOR WarrantyCallId;
+
 ALTER TABLE WarrantyCalls ADD CONSTRAINT PK_WarrantyCalls
     PRIMARY KEY (WarrantyCallId); 
 

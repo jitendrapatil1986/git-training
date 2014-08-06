@@ -8,5 +8,8 @@ CREATE TABLE Divisions (
     UpdatedBy VARCHAR(255)
 );
 
+ALTER TABLE Divisions ADD CONSTRAINT DF_Divisions_Id
+    DEFAULT NEWSEQUENTIALID() FOR DivisionId;
+
 ALTER TABLE Divisions ADD CONSTRAINT PK_Divisions
     PRIMARY KEY (DivisionId);

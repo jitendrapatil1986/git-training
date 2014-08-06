@@ -10,6 +10,9 @@ CREATE TABLE JobOptions (
     UpdatedBy VARCHAR(255)
 );
 
+ALTER TABLE JobOptions ADD CONSTRAINT DF_JobOptions_Id
+    DEFAULT NEWSEQUENTIALID() FOR JobOptionId;
+
 ALTER TABLE JobOptions ADD CONSTRAINT PK_JobOptions
     PRIMARY KEY (JobOptionId);
 

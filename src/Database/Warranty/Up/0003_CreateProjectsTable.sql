@@ -8,5 +8,8 @@ CREATE TABLE Projects (
     UpdatedBy VARCHAR(255)
 );
 
+ALTER TABLE Projects ADD CONSTRAINT DF_Projects_Id
+    DEFAULT NEWSEQUENTIALID() FOR ProjectId;
+
 ALTER TABLE Projects ADD CONSTRAINT PK_Projects
     PRIMARY KEY (ProjectId);
