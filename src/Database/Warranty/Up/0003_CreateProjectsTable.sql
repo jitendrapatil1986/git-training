@@ -1,5 +1,5 @@
 CREATE TABLE Projects (
-    ProjectId INT NOT NULL,
+    ProjectId UNIQUEIDENTIFIER NOT NULL,
     ProjectNumber VARCHAR(3),
     ProjectName VARCHAR(255),
     CreatedDate DATETIME2,

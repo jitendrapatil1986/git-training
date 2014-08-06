@@ -1,5 +1,5 @@
 CREATE TABLE Cities (
-    CityId INT NOT NULL,
+    CityId UNIQUEIDENTIFIER NOT NULL,
     CityCode VARCHAR(10),
     CityName VARCHAR(255),
     CreatedDate DATETIME2,

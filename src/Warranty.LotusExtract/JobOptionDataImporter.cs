@@ -44,7 +44,7 @@ namespace Warranty.LotusExtract
                         {
                             var items = row.Split(_fieldDelimiter);
 
-                            var sql = @"INSERT INTO imports.JobOptionImports
+                            var sql = @"INSERT INTO imports.JobOptionImports (JobNumber,Quantity,OptionNumber,OptionDescription)
                                         SELECT @jobNumber, @quantity, @option, @description";
 
                             using (var cmd = new SqlCommand(sql, sc))

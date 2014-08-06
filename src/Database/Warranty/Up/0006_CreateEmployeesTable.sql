@@ -1,5 +1,5 @@
 CREATE TABLE Employees (
-    EmployeeId INT NOT NULL,
+    EmployeeId UNIQUEIDENTIFIER NOT NULL,
     EmployeeNumber VARCHAR(8),
     EmployeeName VARCHAR(100),
     CreatedDate DATETIME2,
@@ -7,6 +7,9 @@ CREATE TABLE Employees (
     UpdatedDate DATETIME2,
     UpdatedBy VARCHAR(255)
 );
+
+ALTER TABLE Employees ADD CONSTRAINT DF_Employees_Id
+    DEFAULT NEWSEQUENTIALID() FOR EmployeeId;
 
 ALTER TABLE Employees ADD CONSTRAINT PK_Employees
     PRIMARY KEY (EmployeeId);

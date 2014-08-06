@@ -1,6 +1,6 @@
 CREATE TABLE HomeOwners (
-    HomeOwnerId INT NOT NULL,
-    JobId INT,
+    HomeOwnerId UNIQUEIDENTIFIER NOT NULL,
+    JobId UNIQUEIDENTIFIER,
     HomeOwnerNumber INT,
     HomeOwnerName VARCHAR(255),
     HomePhone VARCHAR(255),

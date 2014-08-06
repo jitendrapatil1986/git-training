@@ -4,7 +4,7 @@ namespace Warranty.Core.Entities
 {
     public class Employee : IAuditableEntity
     {
-        public virtual int EmployeeId { get; set; }
+        public virtual Guid EmployeeId { get; set; }
         public virtual string Number { get; set; }
         public virtual string Name { get; set; }
         public virtual string Fax { get; set; }

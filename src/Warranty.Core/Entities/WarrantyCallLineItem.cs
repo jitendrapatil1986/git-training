@@ -4,8 +4,8 @@ namespace Warranty.Core.Entities
 {
     public class WarrantyCallLineItem : IAuditableEntity
     {
-        public virtual int WarrantyCallLineItemId { get; set; }
-        public virtual int WarrantyCallId { get; set; }
+        public virtual Guid WarrantyCallLineItemId { get; set; }
+        public virtual Guid WarrantyCallId { get; set; }
         public virtual int LineNumber { get; set; }
         public virtual string ProblemCode { get; set; }
         public virtual string ProblemDescription { get; set; }

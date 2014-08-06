@@ -44,7 +44,7 @@ namespace Warranty.LotusExtract
                         {
                             var items = row.Split(_fieldDelimiter);
 
-                            var sql = @"INSERT INTO imports.MasterCommunityImports
+                            var sql = @"INSERT INTO imports.MasterCommunityImports (City, Division, Project, Community, WarrantyServiceRepresentative, AreaPresident, AreaPresidentCode, BuildOnYourLot, CityCode, CommunityId, CommunityNumber, CommunityNumberOld, DivisionCode, DivisionPresidentEmployeeID, DocumentAuthor, DocumentAuthorEmployeeId, DocumentAuthorFax, PlanTypeDesc, ProjectManagerEmployeeID, ProjectCode, Satelite, SateliteCode, CommunityStatus, StatusDescription, TypeCC)
                                         SELECT @City, @Division, @Project, @Community, @WarrantyServiceRepresentative, @AreaPresident, @AreaPresidentCode, @BuildOnYourLot, @CityCode, @CommunityId, @CommunityNumber, @CommunityNumberOld, @DivisionCode, @DivisionPresidentEmployeeID, @DocumentAuthor, @DocumentAuthorEmployeeId, @DocumentAuthorFax, @PlanTypeDesc, @ProjectManagerEmployeeID, @ProjectCode, @Satelite, @SateliteCode, @CommunityStatus, @StatusDescription, @TypeCC";
 
                             using (var cmd = new SqlCommand(sql, sc))

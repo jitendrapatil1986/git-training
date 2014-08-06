@@ -1,5 +1,5 @@
 CREATE TABLE Divisions (
-    DivisionId INT NOT NULL,
+    DivisionId UNIQUEIDENTIFIER NOT NULL,
     DivisionCode VARCHAR(10),
     DivisionName VARCHAR(255),
     CreatedDate DATETIME2,

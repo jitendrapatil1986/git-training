@@ -4,7 +4,7 @@ namespace Warranty.Core.Entities
 {
     public class Division : IAuditableEntity
     {
-        public virtual int DivisionId { get; set; }
+        public virtual Guid DivisionId { get; set; }
         public virtual string DivisionCode { get; set; }
         public virtual string DivisionName { get; set; }
         public virtual DateTime? CreatedDate { get; set; }

@@ -4,13 +4,13 @@ namespace Warranty.Core.Entities
 {
     public class Community : IAuditableEntity
     {
-        public virtual int CommunityId { get; set; }
+        public virtual Guid CommunityId { get; set; }
         public virtual string CommunityNumber { get; set; }
         public virtual string CommunityName { get; set; }
-        public virtual int CityId { get; set; }
-        public virtual int DivisionId { get; set; }
-        public virtual int ProjectId { get; set; }
-        public virtual int SateliteCityId { get; set; }
+        public virtual Guid CityId { get; set; }
+        public virtual Guid DivisionId { get; set; }
+        public virtual Guid ProjectId { get; set; }
+        public virtual Guid SateliteCityId { get; set; }
         public virtual string CommunityStatusCode { get; set; }
         public virtual string CommunityStatusDescription { get; set; }
         public virtual string ProductType { get; set; }

@@ -1,6 +1,6 @@
 CREATE TABLE JobOptions (
-    JobOptionId INT NOT NULL,
-    JobId INT,
+    JobOptionId UNIQUEIDENTIFIER NOT NULL,
+    JobId UNIQUEIDENTIFIER,
     OptionNumber VARCHAR(8),
     OptionDescription VARCHAR(500),
     Quantity INT,
