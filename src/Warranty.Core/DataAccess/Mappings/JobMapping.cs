@@ -1,3 +1,4 @@
+using NHibernate.Mapping.ByCode;
 using Warranty.Core.Entities;
 
 namespace Warranty.Core.DataAccess.Mappings
@@ -8,7 +9,7 @@ namespace Warranty.Core.DataAccess.Mappings
         {
             Table("Jobs");
 
-            Id(x => x.JobId);
+            Id(x => x.JobId, map => map.Generator(new GuidCombGeneratorDef()));
             Property(x => x.JobNumber);
             Property(x => x.CloseDate);
             Property(x => x.AddressLine);

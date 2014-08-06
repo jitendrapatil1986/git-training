@@ -1,3 +1,4 @@
+using NHibernate.Mapping.ByCode;
 using Warranty.Core.Entities;
 
 namespace Warranty.Core.DataAccess.Mappings
@@ -8,7 +9,7 @@ namespace Warranty.Core.DataAccess.Mappings
         {
             Table("Divisions");
 
-            Id(x => x.DivisionId);
+            Id(x => x.DivisionId, map => map.Generator(new GuidCombGeneratorDef()));
             Property(x => x.DivisionCode);
             Property(x => x.DivisionName);
         }

@@ -1,4 +1,5 @@
-﻿using Warranty.Core.Entities;
+﻿using NHibernate.Mapping.ByCode;
+using Warranty.Core.Entities;
 
 namespace Warranty.Core.DataAccess.Mappings
 {
@@ -8,7 +9,7 @@ namespace Warranty.Core.DataAccess.Mappings
         {
             Table("Cities");
 
-            Id(x => x.CityId);
+            Id(x => x.CityId, map => map.Generator(new GuidCombGeneratorDef()));
             Property(x => x.CityCode);
             Property(x => x.CityName);
         }
