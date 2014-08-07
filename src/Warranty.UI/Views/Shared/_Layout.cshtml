@@ -1,13 +1,5 @@
 ﻿@using Warranty.UI.Core.Enumerations
 @using Warranty.UI.Core.Helpers
-@helper NavItemHelper(NavItem navItem, string url, string data = null)
-{
-    data = data ?? String.Empty;
-    <li class="@(navItem.DisplayName.Equals(ViewData[Warranty.UI.Core.Filters.CurrentNavSectionAttribute.ViewDataKey]) ? "active" : "")">
-        <a @data href="@url">@navItem.Title</a>
-    </li>
-}
-
 
 <!DOCTYPE html>
 
@@ -19,20 +11,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="~/css/font.css" rel="stylesheet" />
     <link href="~/css/less/bootstrap.less" rel="stylesheet" media="screen" />
-    <link href="~/css/site.css" rel="stylesheet" media="screen" />
-    <link href="~/css/less/responsive.less" rel="stylesheet" media="screen" />
-    <link href="~/css/site-responsive.css" rel="stylesheet" media="screen" />
-    <link href="~/css/datepicker.css" rel="stylesheet" media="screen" />
-    <link href="~/css/datatables.css" rel="stylesheet" media="screen" />
-    <link href="~/css/fullcalendar.css" rel="stylesheet" />
-    <link href="~/css/bootstrap-tagmanager.css" rel="stylesheet" />
-    <link href="~/css/colorpicker.css" rel="stylesheet" />
-    <!--[if lt IE 9]>
-        <link href="~/css/site-ie8.css" rel="stylesheet" media="screen" />
-        <script src="~/Scripts/html5shiv.js"></script>
-    <![endif]-->
     
     @Html.Partial("_RequireJsConfig")
     <script src="~/Scripts/lib/require.js"></script>
