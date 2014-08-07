@@ -1,6 +1,7 @@
 namespace Warranty.Core.DataAccess.Mappings
 {
     using Entities;
+    using NHibernate.Mapping.ByCode;
 
     public class CommunityMapping : AuditableEntityMapping<Community>
     {
@@ -8,7 +9,7 @@ namespace Warranty.Core.DataAccess.Mappings
         {
             Table("Communities");
 
-            Id(x => x.CommunityId);
+            Id(x => x.CommunityId, map => map.Generator(new GuidCombGeneratorDef()));
             Property(x => x.CommunityNumber);
             Property(x => x.CommunityName);
             Property(x => x.CityId);

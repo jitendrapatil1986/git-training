@@ -1,6 +1,7 @@
 namespace Warranty.Core.DataAccess.Mappings
 {
     using Entities;
+    using NHibernate.Mapping.ByCode;
 
     public class WarrantyCallMapping : AuditableEntityMapping<WarrantyCall>
     {
@@ -8,7 +9,7 @@ namespace Warranty.Core.DataAccess.Mappings
         {
             Table("WarrantyCalls");
 
-            Id(x => x.WarrantyCallId);
+            Id(x => x.WarrantyCallId, map => map.Generator(new GuidCombGeneratorDef()));
             Property(x => x.WarrantyCallNumber);
             Property(x => x.WarrantyCallType);
             Property(x => x.JobId);
