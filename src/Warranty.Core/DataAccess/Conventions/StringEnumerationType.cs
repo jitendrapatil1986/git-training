@@ -1,9 +1,9 @@
-﻿using NHibernate;
-using NHibernate.Type;
-using Warranty.Core.Enumerations;
-
-namespace Warranty.Core.DataAccess
+namespace Warranty.Core.DataAccess.Conventions
 {
+    using Enumerations;
+    using NHibernate;
+    using NHibernate.Type;
+
     public class StringEnumerationType<TEnumeration> : GenericCompositeUserType<TEnumeration>
         where TEnumeration : StringEnumeration<TEnumeration>
     {

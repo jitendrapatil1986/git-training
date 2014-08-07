@@ -1,8 +1,8 @@
-﻿using System;
-using System.Web.Mvc;
-
-namespace Warranty.UI.Core.Helpers
+﻿namespace Warranty.UI.Core.Helpers
 {
+    using System;
+    using System.Web.Mvc;
+
     public static class Format
     {
         public static string Money(decimal amount)

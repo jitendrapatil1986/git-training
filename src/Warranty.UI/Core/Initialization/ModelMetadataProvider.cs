@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Web.Mvc;
-
-namespace Warranty.UI.Core.Initialization
+﻿namespace Warranty.UI.Core.Initialization
 {
+    using System.Collections.Generic;
+    using System.Text.RegularExpressions;
+    using System.Web.Mvc;
+
     public class ModelMetadataProvider : DataAnnotationsModelMetadataProvider
     {
         private static readonly Regex PascalCaseToSpacesRegex = new Regex(@"(\B[A-Z]+?(?=[A-Z][^A-Z])|\B[A-Z]+?(?=[^A-Z]))", RegexOptions.Compiled);

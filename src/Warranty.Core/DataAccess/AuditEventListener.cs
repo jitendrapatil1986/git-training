@@ -1,11 +1,11 @@
-﻿using System;
-using NHibernate.Event;
-using Warranty.Core.Entities;
-using Warranty.Core.Extensions;
-using Warranty.Core.Security;
-
-namespace Warranty.Core.DataAccess
+﻿namespace Warranty.Core.DataAccess
 {
+    using System;
+    using Entities;
+    using Extensions;
+    using NHibernate.Event;
+    using Security;
+
     internal class AuditEventListener : IPreInsertEventListener, IPreUpdateEventListener
     {
         private readonly IUserSession _userSession;

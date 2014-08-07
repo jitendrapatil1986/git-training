@@ -1,7 +1,7 @@
-﻿using StructureMap;
-
-namespace Warranty.Core
+﻿namespace Warranty.Core
 {
+    using StructureMap;
+
     public class Mediator : IMediator
     {
         readonly IContainer _container;

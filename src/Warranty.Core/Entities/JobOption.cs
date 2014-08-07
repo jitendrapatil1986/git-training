@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Warranty.Core.Entities
+﻿namespace Warranty.Core.Entities
 {
+    using System;
+
     public class JobOption : IAuditableEntity
     {
         public virtual int JobOptionId { get; set; }

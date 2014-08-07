@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Warranty.Core.Security
+﻿namespace Warranty.Core.Security
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class WarrantyUser : IUser
     {
         public WarrantyUser(string userName, IEnumerable<string> roles = null)

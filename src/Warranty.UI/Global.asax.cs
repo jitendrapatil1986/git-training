@@ -1,7 +1,7 @@
-﻿using Warranty.UI.Core.Initialization;
-
-namespace Warranty.UI
+﻿namespace Warranty.UI
 {
+    using Core.Initialization;
+
     public class MvcApplication : System.Web.HttpApplication
     {
         protected void Application_Start()

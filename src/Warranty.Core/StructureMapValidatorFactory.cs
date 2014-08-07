@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using FluentValidation;
-using StructureMap;
-
-namespace Warranty.Core
+﻿namespace Warranty.Core
 {
+    using System;
+    using System.Linq;
+    using FluentValidation;
+    using StructureMap;
+
     public class StructureMapValidatorFactory : ValidatorFactoryBase
     {
         private readonly IContainer _container;

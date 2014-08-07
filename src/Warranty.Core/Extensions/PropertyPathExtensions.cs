@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using NHibernate.Mapping.ByCode;
-
-namespace Warranty.Core.Extensions
+﻿namespace Warranty.Core.Extensions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using NHibernate.Mapping.ByCode;
+
     public static class PropertyPathExtensions
     {
         public static Type Owner(this PropertyPath member)

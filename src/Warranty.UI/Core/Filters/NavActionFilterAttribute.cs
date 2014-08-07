@@ -1,7 +1,7 @@
-﻿using System.Web.Mvc;
-
-namespace Warranty.UI.Core.Filters
+﻿namespace Warranty.UI.Core.Filters
 {
+    using System.Web.Mvc;
+
     public class CurrentNavSectionAttribute : ActionFilterAttribute
     {
         public const string ViewDataKey = "CurrentNavSectionAttributeData";

@@ -1,10 +1,10 @@
-﻿using NHibernate;
-using NServiceBus.UnitOfWork;
-using StructureMap.Configuration.DSL;
-using Warranty.Core.DataAccess;
-
-namespace Warranty.Server
+﻿namespace Warranty.Server
 {
+    using Core.DataAccess;
+    using NHibernate;
+    using NServiceBus.UnitOfWork;
+    using StructureMap.Configuration.DSL;
+
     public class WarrantyRegistry : Registry
     {
         public WarrantyRegistry()
