@@ -1,7 +1,7 @@
-using NServiceBus;
-
 namespace Warranty.Server
 {
+    using NServiceBus;
+
     public class EndpointConfig : IConfigureThisEndpoint, AsA_Server, IWantCustomInitialization
     {
         public void Init()

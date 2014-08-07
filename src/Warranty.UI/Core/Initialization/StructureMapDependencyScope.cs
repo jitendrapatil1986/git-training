@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http.Dependencies;
-using Microsoft.Practices.ServiceLocation;
-using StructureMap;
-
-namespace Warranty.UI.Core.Initialization
+﻿namespace Warranty.UI.Core.Initialization
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Http.Dependencies;
+    using Microsoft.Practices.ServiceLocation;
+    using StructureMap;
+
     public class StructureMapDependencyScope : ServiceLocatorImplBase, IDependencyScope
     {
         #region Constants and Fields

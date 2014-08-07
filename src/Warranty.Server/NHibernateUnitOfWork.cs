@@ -1,11 +1,11 @@
-﻿using System;
-using System.Transactions;
-using NHibernate;
-using NServiceBus.UnitOfWork;
-using IsolationLevel = System.Data.IsolationLevel;
-
-namespace Warranty.Server
+﻿namespace Warranty.Server
 {
+    using System;
+    using System.Transactions;
+    using NHibernate;
+    using NServiceBus.UnitOfWork;
+    using IsolationLevel = System.Data.IsolationLevel;
+
     public class NHibernateUnitOfWork : IManageUnitsOfWork
     {
         public NHibernateUnitOfWork(ISession session)

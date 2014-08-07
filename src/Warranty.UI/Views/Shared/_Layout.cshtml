@@ -1,7 +1,5 @@
-﻿@using System.Web.UI.WebControls.Expressions
-@using Warranty.UI.Core.Enumerations
+﻿@using Warranty.UI.Core.Enumerations
 @using Warranty.UI.Core.Helpers
-
 @helper NavItemHelper(NavItem navItem, string url, string data = null)
 {
     data = data ?? String.Empty;
@@ -10,31 +8,39 @@
     </li>
 }
 
+@helper NavHeaderItemHelper(NavHeaderItem item)
+{
+    <li><a href="@Url.Action(item.Action, item.Controller)">@item.DisplayName</a></li>
+}
+
+@helper NavItemSectionHelper(string key)
+{
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">@key <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            @foreach (var item in NavHeaderItem.GetAll(key))
+            {
+                if (item.HasDivider)
+                {
+                    <li class="divider"></li>
+                }
+                @NavHeaderItemHelper(item)
+            }
+        </ul>
+    </li>
+}
 
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="~/css/font.css" rel="stylesheet" />
     <link href="~/css/less/bootstrap.less" rel="stylesheet" media="screen" />
-    <link href="~/css/site.css" rel="stylesheet" media="screen" />
-    <link href="~/css/less/responsive.less" rel="stylesheet" media="screen" />
-    <link href="~/css/site-responsive.css" rel="stylesheet" media="screen" />
-    <link href="~/css/datepicker.css" rel="stylesheet" media="screen" />
-    <link href="~/css/datatables.css" rel="stylesheet" media="screen" />
-    <link href="~/css/fullcalendar.css" rel="stylesheet" />
-    <link href="~/css/bootstrap-tagmanager.css" rel="stylesheet" />
-    <link href="~/css/colorpicker.css" rel="stylesheet" />
-    <!--[if lt IE 9]>
-        <link href="~/css/site-ie8.css" rel="stylesheet" media="screen" />
-        <script src="~/Scripts/html5shiv.js"></script>
-    <![endif]-->
+    <link href="~/css/site.less" rel="stylesheet" media="screen" />
     
     @Html.Partial("_RequireJsConfig")
     <script src="~/Scripts/lib/require.js"></script>
@@ -56,71 +62,72 @@
     }
 
     @RenderSection("header", required: false)
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="/Scripts/lib/html5shiv.js"></script>
+      <script src="/Scripts/lib/respond.min.js"></script>
+    <![endif]-->
 </head>
     <body>
-        <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="brand brand-logo" href="@Url.Action("Index", "Home", new {Area = ""})">
-                        <img src="@Url.Content("~/img/DWH logo_color_233x34.png")" />
-                    </a>
-                    <div class="nav-collapse collapse">
-                        <div id="loadingIndicator" class="loading-gif well">
-                            <img src="/img/loader.gif" alt="Processing">
-                            <h4>Processing</h4>
-                        </div>
-                        <ul class="nav pull-right">
-                            <li class="divider divider-vertical"></li>
-                            @Html.Partial("_HelpMenu")
-                        </ul>
-                        <a class="brand brand-module" href="@Url.Action("Index", "Home", new {Area = ""})">Warranty</a>
-                    </div>
-                    <!--/.nav-collapse -->
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#"><img src="@Url.Content("~/img/DWH logo_color_233x34.png")" /></a>
                 </div>
+                <ul class="nav navbar-nav navbar-right hidden-xs">
+                    <li class="divider divider-vertical"></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Help <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><span class="logged-in-user">Logged in as: @User.Identity.Name</span></li>
+                            <li class="divider"></li>
+                            <li><a href="#feedbackModal" data-toggle="modal">Contact Developer</a></li>
+                            <li class="divider"></li>
+                        </ul>
+                    </li>                
+                </ul>
+                <div class="navbar-brand pull-right hidden-xs">Warranty</div>
             </div>
         </div>
-        
+
         <div class="subnav subnav-fixed">
-            <div class="nav nav-extra">
-                <div class="input-prepend input-append pull-right" style="margin: 3px 0 0 0;">
-                    <input id="searchBar" type="text" class="span3 contract-search" autocomplete="off" placeholder="Search Jobs">
-                    <div class="btn-group">
-                        <button class="btn dropdown-toggle" data-toggle="dropdown">Type <span class="caret"></span></button>
-                        <ul class="dropdown-menu pull-right">
-                            <li><a class="search-selector" data-search-type="" href="#">Field 1</a></li>
-                            <li><a class="search-selector" data-search-type="" href="#">Field 2</a></li>
-                            <li><a class="search-selector" data-search-type="" href="#">Field 3</a></li>
-                            <li><a class="search-selector" data-search-type="" href="#">Field 4</a></li>
-                        </ul>
+            <div class="container">
+                <ul class="nav navbar-nav">
+                    @NavItemHelper(NavItem.Home, Url.Action("Index", "Home"))
+                    <li class="divider divider-vertical hidden-xs"></li>
+                    @NavItemSectionHelper(NavHeaderItem.Create.Key)
+                </ul>
+                @*<div class="nav navbar-nav navbar-right">
+                    <div class="input-group pull-right" style="margin: 3px 0 0 0;">
+                        <span class="add-on"></span>
+                        <input id="searchBar" type="text" class="span3 main-search" autocomplete="off" placeholder="">
+                        <div class="btn-group">
+                            <button class="btn dropdown-toggle" data-toggle="dropdown">Type <span class="caret"></span></button>
+                            <ul class="dropdown-menu pull-right">
+                            </ul>
+                        </div>
                     </div>
-                </div>
+                </div>*@
             </div>
-            <ul class="nav nav-pills">
-                @NavItemHelper(NavItem.Home, Url.Action("Index", "Home", new { Area = "" }))
-            </ul>
         </div>
 
         <div class="container main-container">
             @RenderBody()
+        </div>
 
-            <div class="clearfix"></div>
-            <hr />
+        <div class="container">
+            <hr/>
             <footer>
-                <p class="text-center muted">
+                <p class="text-center text-muted">
                     Version: @VersionHelper.ApplicationVersionNumber()
                 </p>
             </footer>
         </div>
-        <!-- /container -->
-
         <script>
-            require(['app/shared/searchBar', 'bootstrap', 'jquery.validate', 'app/shared/unobtrusiveFeatures', 'app/shared/polyfill', 'app/shared/knockoutExtensions'], function (searchbar) {
-                @*$(function () {
+            require(['bootstrap', 'lib/jquery.validate.min'], function (searchbar) {
+                                                                                    @*$(function () {
                     searchbar.initialize(@((int) typeToSearchFor));
                 });*@
                 // add this later when we implement search

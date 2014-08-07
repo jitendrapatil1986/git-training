@@ -1,7 +1,7 @@
-﻿using System.Configuration;
-
-namespace Warranty.UI.Core.Helpers
+﻿namespace Warranty.UI.Core.Helpers
 {
+    using System.Configuration;
+
     public static class EnvironmentHelper
     {
         private const string EnvironmentKey = "Environment";

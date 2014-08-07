@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Web.Hosting;
-using System.Web.Optimization;
-using dotless.Core;
-using dotless.Core.Abstractions;
-using dotless.Core.Importers;
-using dotless.Core.Input;
-using dotless.Core.Loggers;
-using dotless.Core.Parser;
-
-namespace Warranty.UI.Core.Initialization.Bundling
+﻿namespace Warranty.UI.Core.Initialization.Bundling
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Web.Hosting;
+    using System.Web.Optimization;
+    using dotless.Core;
+    using dotless.Core.Abstractions;
+    using dotless.Core.Importers;
+    using dotless.Core.Input;
+    using dotless.Core.Loggers;
+    using dotless.Core.Parser;
+
     public class LessBundleTransform : IBundleTransform
     {
         public void Process(BundleContext context, BundleResponse response)

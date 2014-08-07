@@ -1,9 +1,9 @@
-﻿using System.IO;
-using System.Web.Hosting;
-using dotless.Core.Input;
-
-namespace Warranty.UI.Core.Initialization.Bundling
+﻿namespace Warranty.UI.Core.Initialization.Bundling
 {
+    using System.IO;
+    using System.Web.Hosting;
+    using dotless.Core.Input;
+
     public class VirtualFileReader : IFileReader
     {
         public VirtualFileReader(IPathResolver pathResolver)
@@ -42,5 +42,7 @@ namespace Warranty.UI.Core.Initialization.Bundling
         {
             return PathProvider.FileExists(PathResolver.GetFullPath(fileName));
         }
+
+        public bool UseCacheDependencies { get; private set; }
     }
 }

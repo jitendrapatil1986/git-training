@@ -1,9 +1,9 @@
-﻿using System.Web;
-using System.Web.Hosting;
-using dotless.Core.Input;
-
-namespace Warranty.UI.Core.Initialization.Bundling
+﻿namespace Warranty.UI.Core.Initialization.Bundling
 {
+    using System.Web;
+    using System.Web.Hosting;
+    using dotless.Core.Input;
+
     public class VirtualPathResolver : IPathResolver
     {
         private string _currentFilePath;

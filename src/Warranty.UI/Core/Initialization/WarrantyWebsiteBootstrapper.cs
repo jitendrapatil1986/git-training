@@ -1,14 +1,14 @@
-﻿using System.Web.Http;
-using System.Web.Mvc;
-using System.Web.Optimization;
-using System.Web.Routing;
-using AutoMapper;
-using NServiceBus;
-using Warranty.Core.AutoMapper;
-using Warranty.UI.Core.ModelBinders;
-
-namespace Warranty.UI.Core.Initialization
+﻿namespace Warranty.UI.Core.Initialization
 {
+    using System.Web.Http;
+    using System.Web.Mvc;
+    using System.Web.Optimization;
+    using System.Web.Routing;
+    using AutoMapper;
+    using ModelBinders;
+    using NServiceBus;
+    using Warranty.Core.AutoMapper;
+
     public class WarrantyWebsiteBootstrapper
     {
         public static void Boostrap()

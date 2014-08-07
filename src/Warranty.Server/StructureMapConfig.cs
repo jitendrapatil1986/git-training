@@ -1,7 +1,7 @@
-﻿using StructureMap;
-
-namespace Warranty.Server
+﻿namespace Warranty.Server
 {
+    using StructureMap;
+
     public static class StructureMapConfig
     {
         public static Container CreateContainer()

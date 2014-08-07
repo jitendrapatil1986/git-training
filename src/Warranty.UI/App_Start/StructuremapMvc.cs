@@ -1,13 +1,13 @@
-﻿using System.Web.Http;
-using System.Web.Mvc;
-using Microsoft.Practices.ServiceLocation;
-using StructureMap;
-using Warranty.UI.Core.Initialization;
-
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(Warranty.UI.StructuremapMvc), "Start")]
+﻿[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(Warranty.UI.StructuremapMvc), "Start")]
 
 namespace Warranty.UI
 {
+    using System.Web.Http;
+    using System.Web.Mvc;
+    using Core.Initialization;
+    using Microsoft.Practices.ServiceLocation;
+    using StructureMap;
+
     public class StructuremapMvc
     {
         public static void Start()

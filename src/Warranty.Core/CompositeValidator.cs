@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using FluentValidation;
-using FluentValidation.Internal;
-using FluentValidation.Results;
-
-namespace Warranty.Core
+﻿namespace Warranty.Core
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using FluentValidation;
+    using FluentValidation.Internal;
+    using FluentValidation.Results;
+
     public class CompositeValidator : IValidator
     {
         private readonly Type _subject;

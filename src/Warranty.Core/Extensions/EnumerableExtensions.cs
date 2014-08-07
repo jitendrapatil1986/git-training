@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Warranty.Core.Extensions
+﻿namespace Warranty.Core.Extensions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public static class EnumerableExtensions
     {
         public static string CommaSeparate<T>(this IEnumerable<T> enumerable)
