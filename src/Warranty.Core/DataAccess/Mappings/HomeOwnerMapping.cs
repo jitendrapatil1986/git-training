@@ -1,15 +1,14 @@
-using NHibernate.Mapping.ByCode;
-using Warranty.Core.Entities;
-
 namespace Warranty.Core.DataAccess.Mappings
 {
+    using Entities;
+
     public class HomeOwnerMapping : AuditableEntityMapping<HomeOwner>
     {
         public HomeOwnerMapping()
         {
             Table("HomeOwners");
 
-            Id(x => x.HomeOwnerId, map => map.Generator(new GuidCombGeneratorDef()));
+            Id(x => x.HomeOwnerId);
             Property(x => x.JobId);
             Property(x => x.HomeOwnerNumber);
             Property(x => x.HomeOwnerName);

@@ -1,9 +1,9 @@
-﻿using System;
-using StructureMap;
-using Warranty.Core;
-
-namespace Warranty.UI.Core.Initialization
+﻿namespace Warranty.UI.Core.Initialization
 {
+    using System;
+    using StructureMap;
+    using Warranty.Core;
+
     public static class IoC
     {
         private static readonly Lazy<IContainer> _container = new Lazy<IContainer>(Initialize);

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Warranty.Core.Security
+﻿namespace Warranty.Core.Security
 {
+    using System.Collections.Generic;
+
     public interface IUser
     {
         string UserName { get; }

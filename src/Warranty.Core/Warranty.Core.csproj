@@ -70,7 +70,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\AuditEventListener.cs" />
-    <Compile Include="DataAccess\AuditableEntityMapping.cs" />
+    <Compile Include="DataAccess\Conventions\Int32EnumerationType.cs" />
+    <Compile Include="DataAccess\Conventions\IStringEnumeration.cs" />
+    <Compile Include="DataAccess\Conventions\StringEnumeration.cs" />
+    <Compile Include="DataAccess\Conventions\StringEnumerationType.cs" />
+    <Compile Include="DataAccess\Mappings\AuditableEntityMapping.cs" />
     <Compile Include="DataAccess\ConfigurationFactoryExtensions.cs" />
     <Compile Include="DataAccess\Mappings\CityMapping.cs" />
     <Compile Include="DataAccess\Mappings\CommunityMapping.cs" />
@@ -91,31 +95,26 @@
     <Compile Include="Entities\Job.cs" />
     <Compile Include="Entities\JobOption.cs" />
     <Compile Include="Entities\Project.cs" />
-    <Compile Include="Entities\TeamMember.cs" />
+    <Compile Include="Entities\Employee.cs" />
     <Compile Include="Entities\WarrantyCall.cs" />
     <Compile Include="Entities\WarrantyCallComment.cs" />
     <Compile Include="Entities\WarrantyCallLineItem.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Net4Collection.cs" />
-    <Compile Include="DataAccess\IStringEnumeration.cs" />
-    <Compile Include="DataAccess\Int32EnumerationType.cs" />
     <Compile Include="DataAccess\ConfigurationFactory.cs" />
     <Compile Include="DataAccess\HbmMappingGenerator.cs" />
     <Compile Include="DataAccess\IConfigurationFactory.cs" />
-    <Compile Include="DataAccess\StringEnumeration.cs" />
-    <Compile Include="DataAccess\StringEnumerationType.cs" />
     <Compile Include="Enumerations\GenericCompositeUserType.cs" />
     <Compile Include="Enumerations\Int32Enumeration.cs" />
     <Compile Include="Enumerations\IEnumeration.cs" />
     <Compile Include="Enumerations\Enumeration.cs" />
     <Compile Include="Enumerations\ItemClassification.cs" />
     <Compile Include="Enumerations\RequestType.cs" />
+    <Compile Include="Extensions\MapperExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
-    <Compile Include="ValueObjects\Address.cs" />
+    <Compile Include="Net4Collection.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AutoMapper\QueryAutoMapperProfile.cs" />
     <Compile Include="CompositeValidator.cs" />
@@ -133,9 +132,7 @@
     <Compile Include="Security\WarrantyUser.cs" />
     <Compile Include="StructureMapValidatorFactory.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

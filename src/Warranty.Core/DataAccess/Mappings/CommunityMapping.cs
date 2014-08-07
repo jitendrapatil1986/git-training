@@ -1,15 +1,14 @@
-using NHibernate.Mapping.ByCode;
-using Warranty.Core.Entities;
-
 namespace Warranty.Core.DataAccess.Mappings
 {
+    using Entities;
+
     public class CommunityMapping : AuditableEntityMapping<Community>
     {
         public CommunityMapping()
         {
             Table("Communities");
 
-            Id(x => x.CommunityId, map => map.Generator(new GuidCombGeneratorDef()));
+            Id(x => x.CommunityId);
             Property(x => x.CommunityNumber);
             Property(x => x.CommunityName);
             Property(x => x.CityId);

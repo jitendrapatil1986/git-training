@@ -1,4 +1,4 @@
-﻿namespace Warranty.Core.DataAccess
+namespace Warranty.Core.DataAccess.Conventions
 {
     public interface IStringEnumeration
     {

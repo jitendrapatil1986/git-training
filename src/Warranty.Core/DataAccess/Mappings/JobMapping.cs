@@ -1,15 +1,14 @@
-using NHibernate.Mapping.ByCode;
-using Warranty.Core.Entities;
-
 namespace Warranty.Core.DataAccess.Mappings
 {
+    using Entities;
+
     public class JobMapping : AuditableEntityMapping<Job>
     {
         public JobMapping()
         {
             Table("Jobs");
 
-            Id(x => x.JobId, map => map.Generator(new GuidCombGeneratorDef()));
+            Id(x => x.JobId);
             Property(x => x.JobNumber);
             Property(x => x.CloseDate);
             Property(x => x.AddressLine);

@@ -1,15 +1,14 @@
-using NHibernate.Mapping.ByCode;
-using Warranty.Core.Entities;
-
 namespace Warranty.Core.DataAccess.Mappings
 {
+    using Entities;
+
     public class WarrantyCallMapping : AuditableEntityMapping<WarrantyCall>
     {
         public WarrantyCallMapping()
         {
             Table("WarrantyCalls");
 
-            Id(x => x.WarrantyCallId, map => map.Generator(new GuidCombGeneratorDef()));
+            Id(x => x.WarrantyCallId);
             Property(x => x.WarrantyCallNumber);
             Property(x => x.WarrantyCallType);
             Property(x => x.JobId);

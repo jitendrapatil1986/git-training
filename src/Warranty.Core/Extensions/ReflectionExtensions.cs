@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-
-namespace Warranty.Core.Extensions
+﻿namespace Warranty.Core.Extensions
 {
+    using System;
+    using System.Linq;
+    using System.Reflection;
+
     public static class ReflectionExtensions
     {
         public static bool HasAttribute<T>(this ICustomAttributeProvider provider) where T : Attribute

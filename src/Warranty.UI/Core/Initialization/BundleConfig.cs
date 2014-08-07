@@ -1,8 +1,7 @@
-﻿using System.Web.Optimization;
-using Warranty.UI.Core.Initialization.Bundling;
-
-namespace Warranty.UI.Core.Initialization
+﻿namespace Warranty.UI.Core.Initialization
 {
+    using System.Web.Optimization;
+
     public static class BundleConfig
     {
         public static void RegisterBundles(BundleCollection bundles)

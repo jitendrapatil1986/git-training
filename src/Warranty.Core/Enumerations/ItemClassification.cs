@@ -1,4 +1,4 @@
-﻿namespace Headspring
+﻿namespace Warranty.Core.Enumerations
 {
     public class ItemClassification : Enumeration<ItemClassification>
     {

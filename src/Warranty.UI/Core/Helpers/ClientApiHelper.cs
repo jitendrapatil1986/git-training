@@ -1,12 +1,12 @@
-﻿using System.Web.Http;
-using Yay.Enumerations;
-
-namespace Warranty.UI.Core.Helpers
+﻿namespace Warranty.UI.Core.Helpers
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web.Http;
     using System.Web.Mvc;
-    
+    using Yay.Enumerations;
+    using HttpPostAttribute = System.Web.Mvc.HttpPostAttribute;
+
     public class ClientApiHelper
     {
         public IEnumerable<ClientApi> GetUrls()

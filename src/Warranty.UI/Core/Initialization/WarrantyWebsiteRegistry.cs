@@ -1,14 +1,14 @@
-﻿using System.Web;
-using System.Web.Mvc;
-using FluentValidation;
-using FluentValidation.Mvc;
-using StructureMap.Configuration.DSL;
-using Warranty.Core;
-using Warranty.Core.Security;
-using Warranty.UI.Core.Security;
-
-namespace Warranty.UI.Core.Initialization
+﻿namespace Warranty.UI.Core.Initialization
 {
+    using System.Web;
+    using System.Web.Mvc;
+    using FluentValidation;
+    using FluentValidation.Mvc;
+    using Security;
+    using StructureMap.Configuration.DSL;
+    using Warranty.Core;
+    using Warranty.Core.Security;
+
     public class WarrantyWebsiteRegistry : Registry
     {
         public WarrantyWebsiteRegistry()

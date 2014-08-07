@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-
-namespace Warranty.Core.AutoMapper
+﻿namespace Warranty.Core.AutoMapper
 {
+    using global::AutoMapper;
+
     public class QueryAutoMapperProfile : Profile
     {
         protected override void Configure()

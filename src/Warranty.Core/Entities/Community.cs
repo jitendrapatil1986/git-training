@@ -1,7 +1,7 @@
-using System;
-
 namespace Warranty.Core.Entities
 {
+    using System;
+
     public class Community : IAuditableEntity
     {
         public virtual Guid CommunityId { get; set; }

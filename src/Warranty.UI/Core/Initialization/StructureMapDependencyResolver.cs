@@ -1,8 +1,8 @@
-﻿using System.Web.Http.Dependencies;
-using StructureMap;
-
-namespace Warranty.UI.Core.Initialization
+﻿namespace Warranty.UI.Core.Initialization
 {
+    using System.Web.Http.Dependencies;
+    using StructureMap;
+
     public class StructureMapDependencyResolver : StructureMapDependencyScope, IDependencyResolver
     {
         #region Constructors and Destructors
