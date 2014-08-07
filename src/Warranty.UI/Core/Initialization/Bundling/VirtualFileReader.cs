@@ -42,5 +42,7 @@
         {
             return PathProvider.FileExists(PathResolver.GetFullPath(fileName));
         }
+
+        public bool UseCacheDependencies { get; private set; }
     }
 }
