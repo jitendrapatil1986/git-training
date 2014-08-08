@@ -1,10 +1,10 @@
 CREATE TABLE WarrantyCalls(
-    WarrantyCallId INT NOT NULL,
+    WarrantyCallId UNIQUEIDENTIFIER NOT NULL,
     WarrantyCallNumber INT,    
     WarrantyCallType VARCHAR(50),
-    JobId INT,
+    JobId UNIQUEIDENTIFIER,
     Contact VARCHAR(255),
-    WarrantyRepresentativeEmployeeId INT,
+    WarrantyRepresentativeEmployeeId UNIQUEIDENTIFIER,
     CompletionDate DATETIME2,
     WorkSummary VARCHAR(4000),
     HomeOwnerSignature VARCHAR(2000),
@@ -13,6 +13,9 @@ CREATE TABLE WarrantyCalls(
     UpdatedDate DATETIME2,
     UpdatedBy VARCHAR(255)
 );
+
+ALTER TABLE WarrantyCalls ADD CONSTRAINT DF_WarrantyCalls_Id
+    DEFAULT NEWSEQUENTIALID() FOR WarrantyCallId;
 
 ALTER TABLE WarrantyCalls ADD CONSTRAINT PK_WarrantyCalls
     PRIMARY KEY (WarrantyCallId); 

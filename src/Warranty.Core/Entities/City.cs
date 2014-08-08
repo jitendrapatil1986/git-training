@@ -4,7 +4,7 @@ namespace Warranty.Core.Entities
 
     public class City : IAuditableEntity
     {
-        public virtual int CityId { get; set; }
+        public virtual Guid CityId { get; set; }
         public virtual string CityCode { get; set; }
         public virtual string CityName { get; set; }
         public virtual DateTime? CreatedDate { get; set; }

@@ -4,9 +4,8 @@
 
     public class HomeOwner : IAuditableEntity
     {
-        public virtual int HomeOwnerId { get; set; }
-        public virtual int JobId { get; set; }
-        public virtual bool IsCurrent { get; set; }
+        public virtual Guid HomeOwnerId { get; set; }
+        public virtual Guid JobId { get; set; }
         public virtual string HomeOwnerNumber { get; set; }
         public virtual string HomeOwnerName { get; set; }
         public virtual string HomePhone { get; set; }

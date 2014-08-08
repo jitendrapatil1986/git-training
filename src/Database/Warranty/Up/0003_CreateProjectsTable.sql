@@ -1,5 +1,5 @@
 CREATE TABLE Projects (
-    ProjectId INT NOT NULL,
+    ProjectId UNIQUEIDENTIFIER NOT NULL,
     ProjectNumber VARCHAR(3),
     ProjectName VARCHAR(255),
     CreatedDate DATETIME2,
@@ -7,6 +7,9 @@ CREATE TABLE Projects (
     UpdatedDate DATETIME2,
     UpdatedBy VARCHAR(255)
 );
+
+ALTER TABLE Projects ADD CONSTRAINT DF_Projects_Id
+    DEFAULT NEWSEQUENTIALID() FOR ProjectId;
 
 ALTER TABLE Projects ADD CONSTRAINT PK_Projects
     PRIMARY KEY (ProjectId);

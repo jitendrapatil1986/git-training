@@ -1,5 +1,5 @@
 CREATE TABLE imports.CustomerImports (
-         ImportId INT IDENTITY(1,1),
+         ImportId UNIQUEIDENTIFIER NOT NULL,
          JobAddress VARCHAR(4000),
          Area VARCHAR(4000),
          AreaPresidentCode VARCHAR(4000),
@@ -55,6 +55,9 @@ CREATE TABLE imports.CustomerImports (
          WorkPhone2 VARCHAR(4000),
          ZipCode VARCHAR(4000)
 );
+
+ALTER TABLE imports.CustomerImports ADD CONSTRAINT DF_CustomerImports
+    DEFAULT NEWSEQUENTIALID() FOR ImportId;
 
 ALTER TABLE imports.CustomerImports ADD CONSTRAINT PK_CustomerImports
     PRIMARY KEY (ImportId);

@@ -1,5 +1,5 @@
 CREATE TABLE Jobs (
-    JobId INT NOT NULL,
+    JobId UNIQUEIDENTIFIER NOT NULL,
     JobNumber VARCHAR(8),
     CloseDate DATE,
     AddressLine VARCHAR(255),
@@ -7,16 +7,16 @@ CREATE TABLE Jobs (
     StateCode CHAR(2),
     PostalCode VARCHAR(15),
     LegalDescription VARCHAR(100),    
-    CommunityId INT,    
-    CurrentHomeOwnerId INT,
+    CommunityId UNIQUEIDENTIFIER,    
+    CurrentHomeOwnerId UNIQUEIDENTIFIER,
     PlanType VARCHAR(3),
     PlanTypeDescription VARCHAR(20),
     PlanName VARCHAR(30),
     PlanNumber VARCHAR(4),
     Elevation VARCHAR(3),
     Swing VARCHAR(1),
-    BuilderEmployeeId INT,    
-    SalesConsultantEmployeeId INT,
+    BuilderEmployeeId UNIQUEIDENTIFIER,    
+    SalesConsultantEmployeeId UNIQUEIDENTIFIER,
     WarrantyExpirationDate DATE,
     TotalPrice DECIMAL(15,2),
     DoNotContact BIT,
@@ -25,6 +25,9 @@ CREATE TABLE Jobs (
     UpdatedDate DATETIME2,
     UpdatedBy VARCHAR(255)
 );
+
+ALTER TABLE Jobs ADD CONSTRAINT DF_Jobs_Id
+    DEFAULT NEWSEQUENTIALID() FOR JobId;
 
 ALTER TABLE Jobs ADD CONSTRAINT PK_Jobs
     PRIMARY KEY (JobId);

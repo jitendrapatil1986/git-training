@@ -1,11 +1,11 @@
 CREATE TABLE Communities (
-    CommunityId INT NOT NULL,
+    CommunityId UNIQUEIDENTIFIER NOT NULL,
     CommunityNumber VARCHAR(8),
     CommunityName VARCHAR(255),
-    CityId INT,
-    DivisionId INT,
-    ProjectId INT,
-    SateliteCityId INT,
+    CityId UNIQUEIDENTIFIER,
+    DivisionId UNIQUEIDENTIFIER,
+    ProjectId UNIQUEIDENTIFIER,
+    SateliteCityId UNIQUEIDENTIFIER,
     CommunityStatusCode VARCHAR(10),    
     CommunityStatusDescription VARCHAR(30),
     ProductType VARCHAR(20),
@@ -15,6 +15,9 @@ CREATE TABLE Communities (
     UpdatedDate DATETIME2,
     UpdatedBy VARCHAR(255)
 );
+
+ALTER TABLE Communities ADD CONSTRAINT DF_Communities_Id
+    DEFAULT NEWSEQUENTIALID() FOR CommunityId;
 
 ALTER TABLE Communities ADD CONSTRAINT PK_Communities
     PRIMARY KEY (CommunityId);

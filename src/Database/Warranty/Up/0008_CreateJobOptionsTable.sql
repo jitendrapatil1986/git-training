@@ -1,6 +1,6 @@
 CREATE TABLE JobOptions (
-    JobOptionId INT NOT NULL,
-    JobId INT,
+    JobOptionId UNIQUEIDENTIFIER NOT NULL,
+    JobId UNIQUEIDENTIFIER,
     OptionNumber VARCHAR(8),
     OptionDescription VARCHAR(500),
     Quantity INT,
@@ -9,6 +9,9 @@ CREATE TABLE JobOptions (
     UpdatedDate DATETIME2,
     UpdatedBy VARCHAR(255)
 );
+
+ALTER TABLE JobOptions ADD CONSTRAINT DF_JobOptions_Id
+    DEFAULT NEWSEQUENTIALID() FOR JobOptionId;
 
 ALTER TABLE JobOptions ADD CONSTRAINT PK_JobOptions
     PRIMARY KEY (JobOptionId);
