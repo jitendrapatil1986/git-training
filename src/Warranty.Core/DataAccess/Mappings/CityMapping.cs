@@ -9,7 +9,7 @@
         {
             Table("Cities");
 
-            Id(x => x.CityId, map => map.Generator(new GuidCombGeneratorDef()));
+            Id(x => x.CityId, map => map.Generator(Generators.GuidComb));
             Property(x => x.CityCode);
             Property(x => x.CityName);
         }

@@ -9,7 +9,7 @@
         {
             Table("WarrantyCallLineItems");
 
-            Id(x => x.WarrantyCallLineItemId, map => map.Generator(new GuidCombGeneratorDef()));
+            Id(x => x.WarrantyCallLineItemId, map => map.Generator(Generators.GuidComb));
             Property(x => x.WarrantyCallId);
             Property(x => x.LineNumber);
             Property(x => x.ProblemCode);

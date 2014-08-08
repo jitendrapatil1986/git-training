@@ -9,7 +9,7 @@ namespace Warranty.Core.DataAccess.Mappings
         {
             Table("Jobs");
 
-            Id(x => x.JobId, map => map.Generator(new GuidCombGeneratorDef()));
+            Id(x => x.JobId, map => map.Generator(Generators.GuidComb));
             Property(x => x.JobNumber);
             Property(x => x.CloseDate);
             Property(x => x.AddressLine);
