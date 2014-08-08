@@ -8,6 +8,7 @@
     using ModelBinders;
     using NServiceBus;
     using Warranty.Core.AutoMapper;
+    using Warranty.Core.DataAccess;
 
     public class WarrantyWebsiteBootstrapper
     {
@@ -29,9 +30,9 @@
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
 
+            DbFactory.Setup();
             InitializeAutoMapper();
             InitializeNServiceBus();
-
         }
 
         private static void InitializeNServiceBus()

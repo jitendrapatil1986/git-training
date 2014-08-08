@@ -90,7 +90,7 @@
             return date.Value.ToString("MMMM dd, yyyy");
         }
 
-        public static string DateForTaskWiget(DateTime date)
+        public static string DateForServiceCallWiget(DateTime date)
         {
             return String.Format("{0:MMM dd yyyy}", date);
         }
@@ -241,6 +241,39 @@
             var icon = includeZoomIcon ? @"<i class=""icon icon-small icon-zoom-in muted""></i>" : "";
 
             return new MvcHtmlString(string.Format(@"<span class=""has-bottom-tooltip"" title=""{0}"">{1} {2}</span>", tooltip, text, icon));
+        }
+
+        public static MvcHtmlString NumberOfLineItems(int numberOfLineItems)
+        {
+            if (numberOfLineItems <= 1)
+                return MvcHtmlString.Empty;
+
+            return MvcHtmlString.Create(string.Format("<span class=\"label label-info\">{0}</span>", numberOfLineItems));
+        }
+
+        public static MvcHtmlString ServiceCallDaysLeft(int numberOfDaysRemaining)
+        {
+            var plural = "s";
+            var css = "text-muted";
+            if (numberOfDaysRemaining == 1)
+                plural = "";
+            if (numberOfDaysRemaining <= 2)
+            {
+                css = "text-danger";
+            }
+
+            const string daysLeft = "<strong class=\"{0}\">{1}</strong> Day{2} Left";
+            return MvcHtmlString.Create(string.Format(daysLeft, css, numberOfDaysRemaining, plural));
+        }
+
+        public static MvcHtmlString PhoneNumber(string phoneNumber)
+        {
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+            {
+                return MvcHtmlString.Empty;
+            }
+
+            return MvcHtmlString.Create("<span class=\"glyphicon glyphicon-earphone text-muted\"></span> " + phoneNumber);
         }
     }
 }

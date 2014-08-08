@@ -1,0 +1,80 @@
+﻿@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.ServiceCallsWidget.ServiceCallsWidgetModel
+<div class="col-md-8">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#my_service_calls" role="tab" data-toggle="tab">My <span class="label label-default">@Model.MyServiceCalls.Count()</span></a></li>
+        <li><a href="#overdue_calls" role="tab" data-toggle="tab">Overdue <span class="label label-danger">0</span></a></li>
+        <li><a href="#escalated_calls" role="tab" data-toggle="tab">Escalated <span class="label label-default">0</span></a></li>
+        <li><a href="#special_projects" role="tab" data-toggle="tab">Special Projects <span class="label label-default">0</span></a></li>
+        <li class="pull-right"><span class="widget-header">Service Calls</span></li>
+    </ul>
+        
+    <div class="tab-content">
+        <div class="tab-pane active" id="my_service_calls">
+            @if (!Model.MyServiceCalls.Any())
+            {
+                <div class="well-sm">
+                    <em>No service calls assigned</em>
+                </div>
+            }
+            else
+            {
+                foreach (var line in Model.MyServiceCalls)
+                {
+                    <div class="service-call-line hide">
+                        <div class="padded">
+                            <div class="col-md-1">
+                                <small class="text-muted">@line.CallNumber</small>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="col-md-1">
+                                    @Format.NumberOfLineItems(line.NumberOfLineItems)
+                                </div>
+                                <div class="col-md-10">
+                                    <a>@line.HomeownerName<br />@line.Address</a><br/>
+                                    <small class="text-muted">Created: @Format.DateForServiceCallWiget(line.CreatedDate)</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">@Format.PhoneNumber(line.PhoneNumber)</div>
+                            <div class="col-md-2">
+                                <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@line.NumberOfDaysRemaining)<br/>
+                                <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                                    <div class="progress-bar @Css.ServiceCallProgressBar(line.NumberOfDaysRemaining)" role="progressbar" aria-valuenow="@line.NumberOfDaysPast" aria-valuemin="0" aria-valuemax="7" style="width: @line.PercentComplete%">
+                                        <span class="sr-only">@line.PercentComplete% Complete</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#" class="disabled">Reassign</a></li>
+                                    <li><a href="#" class="disabled">Add Note</a></li>
+                                    <li><a href="#" class="disabled">Change Homeowner</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                }
+                    if (Model.MyServiceCalls.Count() > 5)
+                     {
+                         <div>
+                             <span class="text-muted">Show:</span> 
+                             <a href="#" class="show-more">5</a>
+                             @if(Model.MyServiceCalls.Count() > 5)
+                             {
+                                <span> | <a href="#" class="show-more">10</a></span>
+                             }
+                             @if (Model.MyServiceCalls.Count() > 10)
+                             {
+                                <span> | <a href="#" class="show-more">All</a></span>
+                             }
+                         </div>
+                     }
+            }
+        </div>
+        <div class="tab-pane" id="escalated_calls">Escalated Placeholder</div>
+        <div class="tab-pane" id="overdue_calls">Overdue Calls Placeholer</div>
+        <div class="tab-pane" id="special_projects">Special Projects Placeholder</div>
+    </div>
+</div>
