@@ -19,5 +19,10 @@
          {
              return View();
          }
+
+        public ActionResult RequestPayment(Guid id)
+        {
+            return View();
+        }
     }
 }
