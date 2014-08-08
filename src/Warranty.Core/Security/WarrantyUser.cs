@@ -18,7 +18,7 @@
         public string LastName { get; set; }
         public string Email { get; set; }
         public List<string> Markets { get; set; }
-        public string EmployeeNumber { get; set; }
+        public string EmployeeNumber { get { return "02060"; } set{} } //TODO: Remove Hardcoded EmployeeNumber
         public string LoginName { get; set; }
 
         public bool IsInRole(string role)
