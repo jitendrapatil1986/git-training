@@ -22,17 +22,14 @@
             public int NumberOfLineItems { get; set; }
             public string PhoneNumber { get; set; }
 
-            public int NumberOfDaysPast
-            {
-                get { return Math.Abs(NumberOfDaysRemaining - 7); }
-            }
             public int PercentComplete
             {
                 get
                 {
                     if (NumberOfDaysRemaining == 0)
                         return 100;
-                    var complete = 100-Math.Abs(Math.Round(1-((double)NumberOfDaysRemaining/7)*100));
+
+                    var complete = (7.0 - NumberOfDaysRemaining)/7.0 * 100;
                     return Convert.ToInt16(complete);
                 }
             }
