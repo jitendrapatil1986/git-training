@@ -180,6 +180,7 @@
     </Compile>
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ServiceCallController.cs" />
     <Compile Include="Core\Enumerations\NavHeaderItem.cs" />
     <Compile Include="Core\Enumerations\NavItem.cs" />
     <Compile Include="Core\Filters\NavActionFilterAttribute.cs" />
@@ -280,6 +281,9 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\ServiceCallsWidget.cshtml" />
     <Content Include="Views\Shared\_RequireJsConfig.cshtml" />
+    <Content Include="Views\ServiceCall\Reassign.cshtml" />
+    <Content Include="Views\ServiceCall\AddNote.cshtml" />
+    <Content Include="Views\ServiceCall\Close.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -14,6 +14,7 @@
 
         public class ServiceCall
         {
+            public Guid ServiceCallId { get; set; }
             public string Address { get; set; }
             public string CallNumber { get; set; }
             public DateTime CreatedDate { get; set; }
