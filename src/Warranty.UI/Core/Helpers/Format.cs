@@ -57,7 +57,7 @@
 
         public static string DateMonthDay(DateTime date)
         {
-            return String.Format("{0:M/d}", date);
+            return String.Format("{0:MM/dd}", date);
         }
 
         public static string DateMonthDay(DateTime? date)

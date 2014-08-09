@@ -1,7 +1,9 @@
 ﻿namespace Warranty.Core.Features.ServiceCallsWidget
 {
+    using System.Collections.Generic;
     using NPoco;
     using Security;
+    using Extensions;
 
     public class ServiceCallsWidgetQueryHandler : IQueryHandler<ServiceCallsWidgetQuery, ServiceCallsWidgetModel>
     {
@@ -20,7 +22,15 @@
 
             using (_database)
             {
-                const string sql = @"SELECT 
+                return new ServiceCallsWidgetModel
+                           {
+                               MyServiceCalls = GetMyServiceCalls(user),
+                               OverdueServiceCalls = GetOverdueServiceCalls(user),
+                           };
+            }
+        }
+        
+        const string SqlTemplate = @"SELECT 
   warrantycallnumber as CallNumber
 , j.AddressLine as [Address]
 , wc.CreatedDate 
@@ -28,6 +38,8 @@
 , case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
 , NumberOfLineItems
 , ho.HomePhone as PhoneNumber
+, e.EmployeeName as AssignedTo
+, e.EmployeeNumber as AssignedToEmployeeNumber
   FROM [WarrantyCalls] wc
   inner join Jobs j
   on wc.JobId = j.JobId
@@ -37,16 +49,29 @@
   on wc.WarrantyCallId = li.WarrantyCallId
   inner join Employees e
   on wc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-  WHERE CompletionDate is null and EmployeeNumber=@0
-  ORDER BY (7-DATEDIFF(d, wc.CreatedDate, GETDATE())), wc.CreatedDate, NumberOfLineItems DESC";
+  INNER JOIN Communities cm
+  ON j.CommunityId = cm.CommunityId
+  INNER JOIN Cities ci
+  ON cm.CityId = ci.CityId
+  {0} /* WHERE */
+  {1} /* ORDER BY */";
 
-                var result = _database.Query<ServiceCallsWidgetModel.ServiceCall>(sql, user.EmployeeNumber);
+        private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetOverdueServiceCalls(IUser user)
+        {
+            var markets = user.Markets;
 
-                return new ServiceCallsWidgetModel
-                           {
-                               MyServiceCalls = result,
-                           };
-            }
+            var sql = string.Format(SqlTemplate, "WHERE CompletionDate is null AND DATEADD(dd, 7, wc.CreatedDate) <= getdate() AND CityCode IN ("+markets.CommaSeparateWrapWithSingleQuote()+")", "ORDER BY EmployeeName, wc.CreatedDate");
+
+            var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql);
+            return result;
+        }
+
+        private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetMyServiceCalls(IUser user)
+        {
+            var sql = string.Format(SqlTemplate, "WHERE CompletionDate is null and EmployeeNumber=@0", "ORDER BY (7-DATEDIFF(d, wc.CreatedDate, GETDATE())), wc.CreatedDate, NumberOfLineItems DESC");
+
+            var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, user.EmployeeNumber);
+            return result;
         }
     }
 }
