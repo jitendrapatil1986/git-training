@@ -1,15 +1,12 @@
 CREATE TABLE Divisions (
-    DivisionId UNIQUEIDENTIFIER NOT NULL,
+    DivisionId UNIQUEIDENTIFIER NOT NULL CONSTRAINT 
+        DF_Divisions_Id DEFAULT NEWSEQUENTIALID(),
     DivisionCode VARCHAR(10),
     DivisionName VARCHAR(255),
     CreatedDate DATETIME2,
     CreatedBy VARCHAR(255),
     UpdatedDate DATETIME2,
-    UpdatedBy VARCHAR(255)
+    UpdatedBy VARCHAR(255),
+    CONSTRAINT PK_Divisions
+        PRIMARY KEY (DivisionId)
 );
-
-ALTER TABLE Divisions ADD CONSTRAINT DF_Divisions_Id
-    DEFAULT NEWSEQUENTIALID() FOR DivisionId;
-
-ALTER TABLE Divisions ADD CONSTRAINT PK_Divisions
-    PRIMARY KEY (DivisionId);

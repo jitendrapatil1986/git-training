@@ -1,5 +1,6 @@
 CREATE TABLE imports.MasterCommunityImports (
-        ImportId UNIQUEIDENTIFIER NOT NULL,
+        ImportId UNIQUEIDENTIFIER NOT NULL CONSTRAINT
+            DF_MasterCommunityImports DEFAULT NEWSEQUENTIALID(),
         City VARCHAR(4000), 
         Division VARCHAR(4000), 
         Project VARCHAR(4000), 
@@ -24,11 +25,7 @@ CREATE TABLE imports.MasterCommunityImports (
         SateliteCode VARCHAR(4000), 
         CommunityStatus VARCHAR(4000), 
         StatusDescription VARCHAR(4000), 
-        TypeCC VARCHAR(4000)
+        TypeCC VARCHAR(4000),
+        CONSTRAINT PK_MasterCommunityImports
+            PRIMARY KEY(ImportId)
 );
-
-ALTER TABLE imports.MasterCommunityImports ADD CONSTRAINT DF_MasterCommunityImports
-    DEFAULT NEWSEQUENTIALID() FOR ImportId;
-
-ALTER TABLE imports.MasterCommunityImports ADD CONSTRAINT PK_MasterCommunityImports
-    PRIMARY KEY(ImportId);

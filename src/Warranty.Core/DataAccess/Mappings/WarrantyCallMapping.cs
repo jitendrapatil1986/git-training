@@ -12,6 +12,7 @@ namespace Warranty.Core.DataAccess.Mappings
             Id(x => x.WarrantyCallId, map => map.Generator(Generators.GuidComb));
             Property(x => x.WarrantyCallNumber);
             Property(x => x.WarrantyCallType);
+            Property(x => x.WarrantyCallStatus);
             Property(x => x.JobId);
             Property(x => x.Contact);
             Property(x => x.WarrantyRepresentativeEmployeeId);

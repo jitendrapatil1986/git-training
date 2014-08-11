@@ -104,6 +104,7 @@
     <Compile Include="Entities\WarrantyCall.cs" />
     <Compile Include="Entities\WarrantyCallComment.cs" />
     <Compile Include="Entities\WarrantyCallLineItem.cs" />
+    <Compile Include="Enumerations\WarrantyCallStatus.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="DataAccess\ConfigurationFactory.cs" />
     <Compile Include="DataAccess\HbmMappingGenerator.cs" />

@@ -1,4 +1,6 @@
-﻿namespace Warranty.Core.Entities
+﻿using Warranty.Core.Enumerations;
+
+namespace Warranty.Core.Entities
 {
     using System;
 
@@ -7,6 +9,7 @@
         public virtual Guid WarrantyCallId { get; set; }
         public virtual string WarrantyCallNumber { get; set; }
         public virtual string WarrantyCallType { get; set; }
+        public virtual WarrantyCallStatus WarrantyCallStatus { get; set; }
         public virtual Guid JobId { get; set; }
         public virtual string Contact { get; set; }
         public virtual Guid WarrantyRepresentativeEmployeeId { get; set; }

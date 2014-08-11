@@ -1,5 +1,6 @@
 CREATE TABLE Jobs (
-    JobId UNIQUEIDENTIFIER NOT NULL,
+    JobId UNIQUEIDENTIFIER NOT NULL CONSTRAINT 
+        DF_Jobs_Id DEFAULT NEWSEQUENTIALID(),
     JobNumber VARCHAR(8),
     CloseDate DATE,
     AddressLine VARCHAR(255),
@@ -23,23 +24,15 @@ CREATE TABLE Jobs (
     CreatedDate DATETIME2,
     CreatedBy VARCHAR(255),
     UpdatedDate DATETIME2,
-    UpdatedBy VARCHAR(255)
+    UpdatedBy VARCHAR(255),
+    CONSTRAINT PK_Jobs
+        PRIMARY KEY (JobId),
+    CONSTRAINT FK_Jobs_CurrentOwnerId
+        FOREIGN KEY (CurrentHomeOwnerId) REFERENCES HomeOwners(HomeOwnerId),
+    CONSTRAINT FK_Jobs_CommunityId
+        FOREIGN KEY (CommunityId) REFERENCES Communities(CommunityId),
+    CONSTRAINT FK_Jobs_BuilderEmployeeId
+        FOREIGN KEY (BuilderEmployeeId) REFERENCES Employees(EmployeeId),
+    CONSTRAINT FK_Jobs_SalesConsultantEmployeeId
+        FOREIGN KEY (SalesConsultantEmployeeId) REFERENCES Employees(EmployeeId)
 );
-
-ALTER TABLE Jobs ADD CONSTRAINT DF_Jobs_Id
-    DEFAULT NEWSEQUENTIALID() FOR JobId;
-
-ALTER TABLE Jobs ADD CONSTRAINT PK_Jobs
-    PRIMARY KEY (JobId);
-
-ALTER TABLE Jobs ADD CONSTRAINT FK_Jobs_CurrentOwnerId
-    FOREIGN KEY (CurrentHomeOwnerId) REFERENCES HomeOwners(HomeOwnerId);
-
-ALTER TABLE Jobs ADD CONSTRAINT FK_Jobs_CommunityId
-    FOREIGN KEY (CommunityId) REFERENCES Communities(CommunityId);
-
-ALTER TABLE Jobs ADD CONSTRAINT FK_Jobs_BuilderEmployeeId
-    FOREIGN KEY (BuilderEmployeeId) REFERENCES Employees(EmployeeId);
-
-ALTER TABLE Jobs ADD CONSTRAINT FK_Jobs_SalesConsultantEmployeeId
-    FOREIGN KEY (SalesConsultantEmployeeId) REFERENCES Employees(EmployeeId);

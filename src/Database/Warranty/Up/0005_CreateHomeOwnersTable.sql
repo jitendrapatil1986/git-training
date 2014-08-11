@@ -1,5 +1,6 @@
 CREATE TABLE HomeOwners (
-    HomeOwnerId UNIQUEIDENTIFIER NOT NULL,
+    HomeOwnerId UNIQUEIDENTIFIER NOT NULL CONSTRAINT
+        DF_HomeOwners_Id DEFAULT NEWSEQUENTIALID(),
     JobId UNIQUEIDENTIFIER,
     HomeOwnerNumber INT,
     HomeOwnerName VARCHAR(255),
@@ -11,11 +12,7 @@ CREATE TABLE HomeOwners (
     CreatedDate DATETIME2,
     CreatedBy VARCHAR(255),
     UpdatedDate DATETIME2,
-    UpdatedBy VARCHAR(255)
+    UpdatedBy VARCHAR(255),
+    CONSTRAINT PK_HomeOwners
+        PRIMARY KEY (HomeOwnerId)
 );
-
-ALTER TABLE HomeOwners ADD CONSTRAINT DF_HomeOwners_Id
-    DEFAULT NEWSEQUENTIALID() FOR HomeOwnerId;
-
-ALTER TABLE HomeOwners ADD CONSTRAINT PK_HomeOwners
-    PRIMARY KEY (HomeOwnerId);
