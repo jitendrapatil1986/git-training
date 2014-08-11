@@ -1,18 +1,18 @@
 ﻿@model Warranty.Core.Features.ServiceCallsWidget.ServiceCallsWidgetModel
 <div class="col-md-8">
     <ul class="nav nav-tabs" role="tablist">
-        <li><a href="#my_service_calls" role="tab" data-toggle="tab">My <span class="label label-default">@Model.MyServiceCalls.Count()</span></a></li>
-        <li class="active"><a href="#overdue_calls" role="tab" data-toggle="tab">Overdue <span class="label label-danger">@Model.OverdueServiceCalls.Count()</span></a></li>
+        <li class="active"><a href="#my_service_calls" role="tab" data-toggle="tab">My <span class="label label-default">@Model.MyServiceCalls.Count()</span></a></li>
+        <li><a href="#overdue_calls" role="tab" data-toggle="tab">Overdue <span class="label label-danger">@Model.OverdueServiceCalls.Count()</span></a></li>
         <li><a href="#escalated_calls" role="tab" data-toggle="tab">Escalated <span class="label label-default">0</span></a></li>
         <li><a href="#special_projects" role="tab" data-toggle="tab">Special Projects <span class="label label-default">0</span></a></li>
         <li class="pull-right"><span class="widget-header">Service Calls</span></li>
     </ul>
         
     <div class="tab-content">
-        <div class="tab-pane" id="my_service_calls">
+        <div class="tab-pane active" id="my_service_calls">
             @Html.Partial("_MyServiceCalls", Model)
         </div>
-        <div class="tab-pane active" id="overdue_calls">
+        <div class="tab-pane" id="overdue_calls">
             @Html.Partial("_OverdueCalls", Model)
         </div>
         <div class="tab-pane" id="escalated_calls">Escalated Placeholder</div>
