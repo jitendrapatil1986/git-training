@@ -2,10 +2,10 @@ namespace Warranty.Core.Entities
 {
     using System;
 
-    public class WarrantyCallComment : IAuditableEntity
+    public class ServiceCallComment : IAuditableEntity
     {
-        public virtual Guid WarrantyCallCommentId { get; set; }
-        public virtual Guid WarrantyCallId { get; set; }
+        public virtual Guid ServiceCallCommentId { get; set; }
+        public virtual Guid ServiceCallId { get; set; }
         public virtual string Comment { get; set; }
         public virtual DateTime? CreatedDate { get; set; }
         public virtual string CreatedBy { get; set; }

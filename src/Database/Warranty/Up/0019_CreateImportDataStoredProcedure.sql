@@ -173,12 +173,12 @@ WHEN MATCHED THEN UPDATE SET TARGET.CityId = LIST.CityId,
 MERGE INTO Employees AS TARGET
 USING (SELECT
         Number,
-        Name
+        MAX(Name) as Name
         FROM (
             SELECT 
                 BuilderEmp_Num AS Number
                 , Builder AS Name 
-            FROM imports.WarrantyCallImports
+            FROM imports.ServiceCallImports
             GROUP BY BuilderEmp_Num, Builder
             
             UNION
@@ -186,7 +186,7 @@ USING (SELECT
             SELECT 
                 SalesEmp_Num
                 , Sales_Consultant
-            FROM imports.WarrantyCallImports
+            FROM imports.ServiceCallImports
             GROUP BY SalesEmp_Num, Sales_Consultant
 
             UNION
@@ -210,11 +210,12 @@ USING (SELECT
             SELECT 
                 WsrEmp_Num
                 , Assigned_To 
-            FROM imports.WarrantyCallImports
+            FROM imports.ServiceCallImports
             GROUP BY WsrEmp_Num, Assigned_To ) Members
         WHERE 
             Number != '' 
-            OR Name != '') AS LIST
+            OR Name != ''
+        GROUP BY Number) AS LIST
 ON EmployeeNumber = Number 
     AND EmployeeName = Name
 WHEN NOT MATCHED THEN INSERT(EmployeeNumber
@@ -248,13 +249,13 @@ USING (SELECT
             Swing,    
             (SELECT TOP 1 EmployeeId 
                 FROM Employees 
-                WHERE EmployeeNumber = BuilderEmployeeNumber 
-                AND EmployeeName = Builder) AS Builder,
+                WHERE EmployeeNumber = BuilderEmployeeNumber
+            ) AS Builder,
             (SELECT TOP 1 EmployeeId 
                 FROM Employees 
-                WHERE SalesConsultantNumber = BuilderEmployeeNumber 
-                AND EmployeeName = SalesConsultant) AS Sales,
-            WarrantyExpirationDate,
+                WHERE SalesConsultantNumber = BuilderEmployeeNumber
+            ) AS Sales,
+            CASE WHEN WarrantyExpirationDate = '' THEN NULL ELSE WarrantyExpirationDate END AS WarrantyExpirationDate,
             TotalSalesPrice
         FROM imports.CustomerImports CI) AS LIST
 ON TARGET.JobNumber = LIST.JobNumber
@@ -369,11 +370,11 @@ WHEN MATCHED THEN UPDATE SET TARGET.HomeOwnerNumber = LIST.ownerNumber,
 
 UPDATE Jobs SET CurrentHomeOwnerId = (SELECT TOP 1 HomeOwnerId FROM HomeOwners HO WHERE HO.JobId = Jobs.JobId)
 
-UPDATE I SET importid = WarrantyCallId
-FROM imports.WarrantyCallImports I
-    INNER JOIN WarrantyCalls C ON
-        C.WarrantyCallNumber = I.Call_Num 
-    AND C.WarrantyCallType = I.CallType    
+UPDATE I SET importid = ServiceCallId
+FROM imports.ServiceCallImports I
+    INNER JOIN ServiceCalls C ON
+        C.ServiceCallNumber = I.Call_Num 
+    AND C.ServiceCallType = I.CallType    
     AND C.JobId = (SELECT TOP 1 JobId 
                 FROM Jobs J 
                 WHERE J.JobNumber = I.Job_Num) 
@@ -381,14 +382,13 @@ FROM imports.WarrantyCallImports I
     AND C.WarrantyRepresentativeEmployeeId = 
             (SELECT TOP 1 EmployeeId 
                 FROM Employees 
-                WHERE EmployeeNumber = WsrEmp_Num 
-                AND EmployeeName = Assigned_To) 
-    AND C.CompletionDate = I.Comp_Date
+                WHERE EmployeeNumber = WsrEmp_Num) 
+    AND C.CompletionDate = CASE WHEN I.Comp_Date = '' THEN NULL ELSE I.Comp_Date END
     AND C.HomeOwnerSignature = I.HOSig
-    AND C.CreatedDate = I.Date_Open 
+    AND C.CreatedDate = CASE WHEN I.Date_Open = '' THEN NULL ELSE I.Date_Open END
     AND C.CreatedBy = 'LI: ' + Assigned_By;
     
-MERGE INTO WarrantyCalls AS TARGET
+MERGE INTO ServiceCalls AS TARGET
 USING (SELECT
             importid AS rowId,
             Call_Num,
@@ -399,16 +399,16 @@ USING (SELECT
             Contact,
             (SELECT TOP 1 EmployeeId 
                 FROM Employees 
-                WHERE EmployeeNumber = WsrEmp_Num 
-                AND EmployeeName = Assigned_To) AS RepId,
-            Comp_Date,
+                WHERE EmployeeNumber = WsrEmp_Num
+                ) AS RepId,
+            CASE WHEN Comp_Date = '' THEN null ELSE Comp_Date END AS Comp_Date,
             HOSig,
             Call_Comments,
-            Date_Open ,
+            CASE WHEN Date_Open = '' THEN NULL ELSE Date_Open END AS Date_Open,
             'LI: ' + Assigned_By AS CreatedBy
-        FROM imports.WarrantyCallImports I) AS LIST
-ON TARGET.WarrantyCallNumber = LIST.Call_Num 
-    AND TARGET.WarrantyCallType = CallType    
+        FROM imports.ServiceCallImports I) AS LIST
+ON TARGET.ServiceCallNumber = LIST.Call_Num 
+    AND TARGET.ServiceCallType = CallType    
     AND TARGET.JobId = LIST.JobId 
     AND TARGET.Contact = LIST.Contact
     AND TARGET.WarrantyRepresentativeEmployeeId = RepId    
@@ -416,9 +416,9 @@ ON TARGET.WarrantyCallNumber = LIST.Call_Num
     AND TARGET.HomeOwnerSignature = LIST.HOSig
     AND TARGET.CreatedDate = LIST.Date_Open 
     AND TARGET.CreatedBy = LIST.CreatedBy
-WHEN NOT MATCHED THEN INSERT (WarrantyCallId
-                                , WarrantyCallNumber
-                                , WarrantyCallType
+WHEN NOT MATCHED THEN INSERT (ServiceCallId
+                                , ServiceCallNumber
+                                , ServiceCallType
                                 , JobId
                                 , Contact
                                 , WarrantyRepresentativeEmployeeId
@@ -437,17 +437,17 @@ WHEN NOT MATCHED THEN INSERT (WarrantyCallId
                                 , Date_Open
                                 , CreatedBy);
 
-MERGE INTO WarrantyCallComments AS TARGET
+MERGE INTO ServiceCallComments AS TARGET
 USING (SELECT
             importId AS callId,
             Call_Comments,
-            Date_Open,
+            CASE WHEN Date_Open = '' THEN NULL ELSE Date_Open END AS Date_Open,
             'LI: ' + R.Assigned_By AS CreatedBy            
-        FROM imports.WarrantyCallImports R) AS LIST
-ON TARGET.WarrantyCallId = LIST.callId
-    AND TARGET.warrantyCallComment =  LIST.Call_Comments
-WHEN NOT MATCHED THEN INSERT (WarrantyCallId,
-                                WarrantyCallComment,
+        FROM imports.ServiceCallImports R) AS LIST
+ON TARGET.ServiceCallId = LIST.callId
+    AND TARGET.ServiceCallComment =  LIST.Call_Comments
+WHEN NOT MATCHED THEN INSERT (ServiceCallId,
+                                ServiceCallComment,
                                 CreatedDate,
                                 CreatedBy)
                         VALUES(callId,
@@ -455,7 +455,7 @@ WHEN NOT MATCHED THEN INSERT (WarrantyCallId,
                                 Date_Open,
                                 CreatedBy);
 
-MERGE INTO WarrantyCallLineItems AS TARGET
+MERGE INTO ServiceCallLineItems AS TARGET
 USING (SELECT
             importId AS callId,
             Items.LineNumber,
@@ -465,7 +465,7 @@ USING (SELECT
             Items.ClassNote,
             Items.LineRoot,
             Items.Closed,
-            Date_Open,
+            CASE WHEN Date_Open = '' THEN NULL ELSE Date_Open END AS Date_Open,
             'LI: ' + Assigned_By AS CreatedBy            
         FROM (
                 SELECT  1 AS LineNumber,
@@ -478,7 +478,8 @@ USING (SELECT
                         importId,
                         Date_Open,
                         Assigned_By
-                    FROM imports.WarrantyCallImports I
+                    FROM imports.ServiceCallImports I
+                    WHERE LTRIM(RTRIM(PCode_1)) != ''
 
                 UNION ALL 
 
@@ -492,7 +493,8 @@ USING (SELECT
                         importId,
                         Date_Open,
                         Assigned_By
-                    FROM imports.WarrantyCallImports I
+                    FROM imports.ServiceCallImports I
+                    WHERE LTRIM(RTRIM(PCode_2)) != ''
 
                 UNION ALL 
 
@@ -506,7 +508,8 @@ USING (SELECT
                         importId,
                         Date_Open,
                         Assigned_By
-                    FROM imports.WarrantyCallImports I
+                    FROM imports.ServiceCallImports I
+                    WHERE LTRIM(RTRIM(PCode_3)) != ''
                     
                 UNION ALL 
 
@@ -520,7 +523,8 @@ USING (SELECT
                         importId,
                         Date_Open,
                         Assigned_By
-                    FROM imports.WarrantyCallImports I
+                    FROM imports.ServiceCallImports I
+                    WHERE LTRIM(RTRIM(PCode_4)) != ''
                     
                 UNION ALL 
 
@@ -534,7 +538,8 @@ USING (SELECT
                         importId,
                         Date_Open,
                         Assigned_By
-                    FROM imports.WarrantyCallImports I
+                    FROM imports.ServiceCallImports I
+                    WHERE LTRIM(RTRIM(PCode_5)) != ''
         
                 UNION ALL 
 
@@ -548,7 +553,8 @@ USING (SELECT
                         importId,
                         Date_Open,
                         Assigned_By
-                    FROM imports.WarrantyCallImports I
+                    FROM imports.ServiceCallImports I
+                    WHERE LTRIM(RTRIM(PCode_6)) != ''
 
                 UNION ALL 
 
@@ -562,7 +568,8 @@ USING (SELECT
                         importId,
                         Date_Open,
                         Assigned_By
-                    FROM imports.WarrantyCallImports I
+                    FROM imports.ServiceCallImports I
+                    WHERE LTRIM(RTRIM(PCode_7)) != ''
             
                 UNION ALL 
 
@@ -576,7 +583,8 @@ USING (SELECT
                         importId,
                         Date_Open,
                         Assigned_By
-                    FROM imports.WarrantyCallImports I
+                    FROM imports.ServiceCallImports I
+                    WHERE LTRIM(RTRIM(PCode_8)) != ''
             
                 UNION ALL 
 
@@ -590,7 +598,8 @@ USING (SELECT
                         importId,
                         Date_Open,
                         Assigned_By
-                    FROM imports.WarrantyCallImports I
+                    FROM imports.ServiceCallImports I
+                    WHERE LTRIM(RTRIM(PCode_9)) != ''
                      
                 UNION ALL 
 
@@ -604,11 +613,12 @@ USING (SELECT
                         importId,
                         Date_Open,
                         Assigned_By
-                    FROM imports.WarrantyCallImports I
+                    FROM imports.ServiceCallImports I
+                    WHERE LTRIM(RTRIM(PCode_10)) != ''
                     ) Items ) AS LIST
-ON TARGET.WarrantyCallId = LIST.callId 
+ON TARGET.ServiceCallId = LIST.callId 
     AND TARGET.LineNumber = LIST.LineNumber
-WHEN NOT MATCHED THEN INSERT (WarrantyCallId
+WHEN NOT MATCHED THEN INSERT (ServiceCallId
                                 , LineNumber
                                 , ProblemCode
                                 , ProblemDescription
@@ -675,3 +685,5 @@ WHEN NOT MATCHED AND LIST.JobId IS NOT NULL THEN INSERT (JobOptionId
 WHEN MATCHED THEN UPDATE SET
     TARGET.OptionDescription = LIST.OptionDescription,
     TARGET.Quantity = LIST.Quantity;
+
+UPDATE Employees SET EmployeeNumber = SUBSTRING(EmployeeNumber,3, LEN(EmployeeNumber));

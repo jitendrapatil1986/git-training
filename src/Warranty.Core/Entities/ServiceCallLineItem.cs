@@ -2,10 +2,10 @@
 {
     using System;
 
-    public class WarrantyCallLineItem : IAuditableEntity
+    public class ServiceCallLineItem : IAuditableEntity
     {
-        public virtual Guid WarrantyCallLineItemId { get; set; }
-        public virtual Guid WarrantyCallId { get; set; }
+        public virtual Guid ServiceCallLineItemId { get; set; }
+        public virtual Guid ServiceCallId { get; set; }
         public virtual int LineNumber { get; set; }
         public virtual string ProblemCode { get; set; }
         public virtual string ProblemDescription { get; set; }

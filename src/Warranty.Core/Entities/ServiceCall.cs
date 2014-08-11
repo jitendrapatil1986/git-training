@@ -1,12 +1,15 @@
-﻿namespace Warranty.Core.Entities
+﻿using Warranty.Core.Enumerations;
+
+namespace Warranty.Core.Entities
 {
     using System;
 
-    public class WarrantyCall : IAuditableEntity
+    public class ServiceCall : IAuditableEntity
     {
-        public virtual Guid WarrantyCallId { get; set; }
-        public virtual string WarrantyCallNumber { get; set; }
-        public virtual string WarrantyCallType { get; set; }
+        public virtual Guid ServiceCallId { get; set; }
+        public virtual string ServiceCallNumber { get; set; }
+        public virtual string ServiceCallType { get; set; }
+        public virtual ServiceCallStatus ServiceCallStatus { get; set; }
         public virtual Guid JobId { get; set; }
         public virtual string Contact { get; set; }
         public virtual Guid WarrantyRepresentativeEmployeeId { get; set; }

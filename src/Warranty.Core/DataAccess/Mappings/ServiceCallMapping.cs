@@ -3,15 +3,16 @@ namespace Warranty.Core.DataAccess.Mappings
     using Entities;
     using NHibernate.Mapping.ByCode;
 
-    public class WarrantyCallMapping : AuditableEntityMapping<WarrantyCall>
+    public class ServiceCallMapping : AuditableEntityMapping<ServiceCall>
     {
-        public WarrantyCallMapping()
+        public ServiceCallMapping()
         {
-            Table("WarrantyCalls");
+            Table("ServiceCalls");
 
-            Id(x => x.WarrantyCallId, map => map.Generator(Generators.GuidComb));
-            Property(x => x.WarrantyCallNumber);
-            Property(x => x.WarrantyCallType);
+            Id(x => x.ServiceCallId, map => map.Generator(Generators.GuidComb));
+            Property(x => x.ServiceCallNumber);
+            Property(x => x.ServiceCallType);
+            Property(x => x.ServiceCallStatus);
             Property(x => x.JobId);
             Property(x => x.Contact);
             Property(x => x.WarrantyRepresentativeEmployeeId);

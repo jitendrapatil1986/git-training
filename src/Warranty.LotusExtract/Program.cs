@@ -41,8 +41,8 @@
                 }
             }
 
-            var warrantyCallFilePath = appSettings["WarrantyCallFlatFileLocation"];
-            new WarrantyCallDataImporter().Import(warrantyCallFilePath, null);
+            var warrantyCallFilePath = appSettings["ServiceCallFlatFileLocation"];
+            new ServiceCallDataImporter().Import(warrantyCallFilePath, null);
 
             var masterCommunityFilePath = appSettings["MasterCommunityFlatFileLocation"];
             new MasterCommunityDataImporter().Import(masterCommunityFilePath, null);

@@ -63,8 +63,8 @@
     <Compile Include="CustomerDataImporter.cs" />
     <Compile Include="JobOptionDataImporter.cs" />
     <Compile Include="MasterCommunityDataImporter.cs" />
-    <Compile Include="WarrantyCallDataImporter.cs" />
-    <Compile Include="Columns\WarrantyCallColumns.cs" />
+    <Compile Include="ServiceCallDataImporter.cs" />
+    <Compile Include="Columns\ServiceCallColumns.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>

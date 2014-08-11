@@ -1,6 +1,6 @@
 ﻿namespace Warranty.LotusExtract.Columns
 {
-    public static class WarrantyCallColumns
+    public static class ServiceCallColumns
     {
         public static int Address = 0; //Text field for street number/name of address
         public static int Area = 1; //db lookup for area based on community. @DbLookup("" : "NoCache"; "862564C7:0083BED0"; "CommNum";@Left(Job_Num;4); 9)

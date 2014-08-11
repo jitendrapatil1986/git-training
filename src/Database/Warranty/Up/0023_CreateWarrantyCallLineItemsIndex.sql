@@ -1,0 +1,1 @@
+CREATE NONCLUSTERED INDEX IDX_ServiceCallLineItems_ServiceCallId ON ServiceCallLineItems (ServiceCallId);

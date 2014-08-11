@@ -3,14 +3,14 @@
     using Entities;
     using NHibernate.Mapping.ByCode;
 
-    public class WarrantyCallLineItemMapping : AuditableEntityMapping<WarrantyCallLineItem>
+    public class ServiceCallLineItemMapping : AuditableEntityMapping<ServiceCallLineItem>
     {
-        public WarrantyCallLineItemMapping()
+        public ServiceCallLineItemMapping()
         {
-            Table("WarrantyCallLineItems");
+            Table("ServiceCallLineItems");
 
-            Id(x => x.WarrantyCallLineItemId, map => map.Generator(Generators.GuidComb));
-            Property(x => x.WarrantyCallId);
+            Id(x => x.ServiceCallLineItemId, map => map.Generator(Generators.GuidComb));
+            Property(x => x.ServiceCallId);
             Property(x => x.LineNumber);
             Property(x => x.ProblemCode);
             Property(x => x.ProblemDescription);
