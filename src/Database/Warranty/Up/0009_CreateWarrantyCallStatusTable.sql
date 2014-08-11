@@ -1,6 +1,6 @@
-CREATE TABLE lookups.WarrantyCallStatuses (
-    WarrantyCallStatusId TINYINT NOT NULL,
-    WarrantyCallStatus VARCHAR(20),
-    CONSTRAINT PK_WarrantyCall 
-        PRIMARY KEY (WarrantyCallStatusId)
+CREATE TABLE lookups.ServiceCallStatuses (
+    ServiceCallStatusId TINYINT NOT NULL,
+    ServiceCallStatus VARCHAR(20),
+    CONSTRAINT PK_ServiceCallStatuses
+        PRIMARY KEY (ServiceCallStatusId)
 );

@@ -1,5 +1,5 @@
-CREATE TABLE imports.WarrantyCallImports(
-    ImportId UNIQUEIDENTIFIER NOT NULL CONSTRAINT DF_WarrantyCallImports
+CREATE TABLE imports.ServiceCallImports(
+    ImportId UNIQUEIDENTIFIER NOT NULL CONSTRAINT DF_ServiceCallImports
         DEFAULT NEWSEQUENTIALID(),
     JobAddress  VARCHAR(8000), 
     Area  VARCHAR(8000), 
@@ -210,6 +210,6 @@ CREATE TABLE imports.WarrantyCallImports(
     YearComp  VARCHAR(8000), 
     ZipCode  VARCHAR(8000), 
     ReturnValue  VARCHAR(8000),
-    CONSTRAINT PK_WarrantyCallImports
+    CONSTRAINT PK_ServiceCallImports
         PRIMARY KEY (ImportId)
 );

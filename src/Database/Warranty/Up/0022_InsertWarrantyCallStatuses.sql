@@ -1,4 +1,4 @@
-INSERT INTO lookups.WarrantyCallStatuses
+INSERT INTO lookups.ServiceCallStatuses
     SELECT 1, 'Requested'
     UNION ALL SELECT 2, 'Open'
     UNION ALL SELECT 3, 'Special Project'

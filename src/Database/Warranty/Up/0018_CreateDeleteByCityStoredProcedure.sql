@@ -15,21 +15,21 @@ DELETE FROM JobOptions WHERE
     JobId IN (SELECT JobId FROM Jobs
                 WHERE CommunityId IN (SELECT CommunityId FROM #CommunitiesToDelete));
 
-DELETE FROM WarrantyCallComments WHERE
-    WarrantyCallId IN (SELECT WarrantyCallId 
-                            FROM WarrantyCalls
+DELETE FROM ServiceCallComments WHERE
+    ServiceCallId IN (SELECT ServiceCallId 
+                            FROM ServiceCalls
                             WHERE JobId IN (SELECT JobId FROM Jobs 
                                                 WHERE CommunityId IN (SELECT CommunityId 
                                                                         FROM #CommunitiesToDelete)));
 
-DELETE FROM WarrantyCallLineItems WHERE
-    WarrantyCallId IN (SELECT WarrantyCallId 
-                            FROM WarrantyCalls
+DELETE FROM ServiceCallLineItems WHERE
+    ServiceCallId IN (SELECT ServiceCallId 
+                            FROM ServiceCalls
                             WHERE JobId IN (SELECT JobId FROM Jobs 
                                                 WHERE CommunityId IN (SELECT CommunityId 
                                                                         FROM #CommunitiesToDelete)));
 
-DELETE FROM WarrantyCalls WHERE
+DELETE FROM ServiceCalls WHERE
     JobId IN (SELECT JobId FROM Jobs 
                 WHERE CommunityId IN (SELECT CommunityId FROM #CommunitiesToDelete));
 

@@ -1,7 +1,7 @@
-CREATE TABLE WarrantyCallLineItems (
-    WarrantyCallLineItemId UNIQUEIDENTIFIER NOT NULL CONSTRAINT 
-        DF_WarrantyCallLineItems DEFAULT NEWSEQUENTIALID(),
-    WarrantyCallId UNIQUEIDENTIFIER,
+CREATE TABLE ServiceCallLineItems (
+    ServiceCallLineItemId UNIQUEIDENTIFIER NOT NULL CONSTRAINT 
+        DF_ServiceCallLineItems DEFAULT NEWSEQUENTIALID(),
+    ServiceCallId UNIQUEIDENTIFIER,
     LineNumber INT,
     ProblemCode VARCHAR(4000),
     ProblemDescription VARCHAR(4000),
@@ -13,8 +13,8 @@ CREATE TABLE WarrantyCallLineItems (
     CreatedBy VARCHAR(255),
     UpdatedDate DATETIME2,
     UpdatedBy VARCHAR(255),
-    CONSTRAINT PK_WarrantyCallLineItems
-        PRIMARY KEY (WarrantyCallLineItemId),
-    CONSTRAINT FK_WarrantyCallLineItems_WarrantyCallId
-        FOREIGN KEY (WarrantyCallId) REFERENCES WarrantyCalls(WarrantyCallId)
+    CONSTRAINT PK_ServiceCallLineItems
+        PRIMARY KEY (ServiceCallLineItemId),
+    CONSTRAINT FK_ServiceCallLineItems_ServiceCallId
+        FOREIGN KEY (ServiceCallId) REFERENCES ServiceCalls(ServiceCallId)
 );
