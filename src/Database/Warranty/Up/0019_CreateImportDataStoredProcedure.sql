@@ -1,15 +1,19 @@
 CREATE PROCEDURE imports.ImportData AS
+
 DECLARE @ImportUser VARCHAR(255) = 'Lotus Import';
 
 MERGE INTO Divisions AS Target
 USING (SELECT
-                ISNULL((SELECT MAX(divisionId) FROM Divisions), 0) + ROW_NUMBER() OVER (ORDER BY divisionCode) AS rowId,
+                importId AS rowId,
                 DivisionCode,
                 Division
-            FROM (SELECT DISTINCT
+            FROM (SELECT
+                        MIN(ImportId) AS ImportId,
                         RTRIM(LTRIM(DivisionCode)) AS DivisionCode,
                         RTRIM(LTRIM(Division)) AS Division
-                    FROM imports.MasterCommunityImports) AS Div) AS LIST
+                    FROM imports.MasterCommunityImports
+                    GROUP BY RTRIM(LTRIM(DivisionCode)), RTRIM(LTRIM(Division))) AS Div
+                    ) AS LIST
 ON TARGET.DivisionCode = LIST.DivisionCode
     AND TARGET.DivisionName = LIST.Division
 WHEN NOT MATCHED THEN INSERT (DivisionId
@@ -25,13 +29,15 @@ WHEN NOT MATCHED THEN INSERT (DivisionId
 
 MERGE INTO Cities AS TARGET
 USING (SELECT
-            ISNULL((SELECT MAX(cityId) FROM Cities), 0) + ROW_NUMBER() OVER (ORDER BY cityCode) AS rowId,
+            ImportId AS rowId,
             cityCode,
             city
-        FROM (SELECT DISTINCT 
+        FROM (SELECT 
+                    MIN(ImportId) AS ImportId,
                     LTRIM(RTRIM(CityCode)) AS CityCode,
                     LTRIM(RTRIM(City)) AS City
-                FROM imports.MasterCommunityImports) AS City) AS LIST
+                FROM imports.MasterCommunityImports
+                GROUP BY LTRIM(RTRIM(CityCode)), LTRIM(RTRIM(City))) AS City) AS LIST
 ON TARGET.CityCode = LIST.CityCode
     AND TARGET.CityName = LIST.City
 WHEN NOT MATCHED THEN INSERT (CityId
@@ -47,13 +53,15 @@ WHEN NOT MATCHED THEN INSERT (CityId
 
 MERGE INTO Projects AS TARGET
 USING (SELECT
-            ISNULL((SELECT MAX(projectId) FROM Projects),0) + ROW_NUMBER() OVER (ORDER BY projectCode) AS rowId,
+            ImportId AS rowId,
             projectCode,
             project
-        FROM (SELECT DISTINCT 
+        FROM (SELECT 
+                MIN(ImportId) AS ImportId,
                 LTRIM(RTRIM(ProjectCode)) AS ProjectCode,
                 LTRIM(RTRIM(Project)) Project 
-                FROM imports.MasterCommunityImports) AS Proj) AS LIST
+                FROM imports.MasterCommunityImports
+                GROUP BY LTRIM(RTRIM(ProjectCode)), LTRIM(RTRIM(Project))) AS Proj) AS LIST
 ON TARGET.ProjectNumber = LIST.ProjectCode 
     AND TARGET.ProjectName = LIST.Project
 WHEN NOT MATCHED THEN INSERT (ProjectId
@@ -69,7 +77,7 @@ WHEN NOT MATCHED THEN INSERT (ProjectId
 
 MERGE INTO Communities AS Target
 USING (SELECT
-            ISNULL((SELECT MAX(CommunityId) FROM Communities), 0) + ROW_NUMBER() OVER (ORDER BY CommunityNumber) AS rowId,
+            ImportId AS rowId,
             LTRIM(RTRIM(CommunityNumber)) AS communityNumber,
             LTRIM(RTRIM(Community)) AS community,
             (SELECT TOP 1 CityId 
@@ -92,7 +100,9 @@ USING (SELECT
             LTRIM(RTRIM(StatusDescription)) AS statusDescription,
             LTRIM(RTRIM(TypeCC)) AS communityType,
             LTRIM(RTRIM(PlanTypeDesc)) AS typeDescription 
-        FROM (SELECT DISTINCT CommunityNumber,
+        FROM (SELECT
+                                MIN(ImportId) AS ImportId,
+                                CommunityNumber,
                                 Community,
                                 CityCode,
                                 City,
@@ -106,7 +116,21 @@ USING (SELECT
                                 StatusDescription,
                                 TypeCC,
                                 PlanTypeDesc
-                    FROM imports.MasterCommunityImports) MCI) AS LIST
+                    FROM imports.MasterCommunityImports
+                    GROUP BY CommunityNumber,
+                                Community,
+                                CityCode,
+                                City,
+                                DivisionCode,
+                                Division,
+                                ProjectCode,
+                                Project,
+                                SateliteCode,
+                                Satelite,
+                                CommunityStatus,
+                                StatusDescription,
+                                TypeCC,
+                                PlanTypeDesc) MCI) AS LIST
 ON TARGET.CommunityNumber = LIST.CommunityNumber 
     AND TARGET.CommunityName = LIST.Community
 WHEN NOT MATCHED THEN INSERT (CommunityId
@@ -148,61 +172,63 @@ WHEN MATCHED THEN UPDATE SET TARGET.CityId = LIST.CityId,
 
 MERGE INTO Employees AS TARGET
 USING (SELECT
-        ISNULL((SELECT MAX(EmployeeId) FROM Employees), 0) + ROW_NUMBER() OVER (ORDER BY Number) AS rowId,
         Number,
         Name
         FROM (
-            SELECT DISTINCT 
+            SELECT 
                 BuilderEmp_Num AS Number
                 , Builder AS Name 
             FROM imports.WarrantyCallImports
+            GROUP BY BuilderEmp_Num, Builder
             
             UNION
 
-            SELECT DISTINCT 
+            SELECT 
                 SalesEmp_Num
                 , Sales_Consultant
             FROM imports.WarrantyCallImports
+            GROUP BY SalesEmp_Num, Sales_Consultant
 
             UNION
             
-            SELECT DISTINCT 
+            SELECT 
                 BuilderEmployeeNumber
                 , Builder
             FROM imports.CustomerImports
-            
+            GROUP BY BuilderEmployeeNumber, Builder
+
             UNION
             
-            SELECT DISTINCT 
+            SELECT 
                 SalesConsultantNumber
                 , SalesConsultant 
             FROM imports.CustomerImports
-            
+            GROUP BY SalesConsultantNumber, SalesConsultant 
+
             UNION
             
-            SELECT DISTINCT 
+            SELECT 
                 WsrEmp_Num
                 , Assigned_To 
-            FROM imports.WarrantyCallImports ) Members
+            FROM imports.WarrantyCallImports
+            GROUP BY WsrEmp_Num, Assigned_To ) Members
         WHERE 
             Number != '' 
             OR Name != '') AS LIST
 ON EmployeeNumber = Number 
     AND EmployeeName = Name
-WHEN NOT MATCHED THEN INSERT(EmployeeId
-                             , EmployeeNumber
+WHEN NOT MATCHED THEN INSERT(EmployeeNumber
                              , EmployeeName
                              , CreatedDate
                              , CreatedBy)
-                    VALUES(rowId
-                             , Number
+                    VALUES(Number
                              , Name
                              , getdate()
                              , @ImportUser);
 
 MERGE INTO Jobs AS TARGET
 USING (SELECT
-            ISNULL((SELECT MAX(JobId) FROM Jobs),1) + ROW_NUMBER() OVER (ORDER BY JobNumber) AS rowId,
+            ImportId AS rowId,
             JobNumber,
             CloseDate,
             JobAddress,
@@ -297,7 +323,7 @@ WHEN MATCHED THEN UPDATE SET
         
 MERGE INTO HomeOwners AS TARGET
 USING (SELECT
-            ISNULL((SELECT MAX(HomeOwnerId) FROM HomeOwners), 0) + ROW_NUMBER() OVER (ORDER BY CI.JobNumber) AS rowId,
+            ImportId AS rowId,
             (SELECT TOP 1 JobId FROM Jobs J WHERE J.JobNumber = CI.JobNumber) AS jobId,
             1 AS IsCurrent,
             OwnerNumber,
@@ -343,7 +369,7 @@ WHEN MATCHED THEN UPDATE SET TARGET.HomeOwnerNumber = LIST.ownerNumber,
 
 UPDATE Jobs SET CurrentHomeOwnerId = (SELECT TOP 1 HomeOwnerId FROM HomeOwners HO WHERE HO.JobId = Jobs.JobId)
 
-UPDATE I SET insertedRowId = WarrantyCallId
+UPDATE I SET importid = WarrantyCallId
 FROM imports.WarrantyCallImports I
     INNER JOIN WarrantyCalls C ON
         C.WarrantyCallNumber = I.Call_Num 
@@ -361,15 +387,10 @@ FROM imports.WarrantyCallImports I
     AND C.HomeOwnerSignature = I.HOSig
     AND C.CreatedDate = I.Date_Open 
     AND C.CreatedBy = 'LI: ' + Assigned_By;
-
-DECLARE @maxCallId INT = ISNULL((SELECT MAX(WarrantyCallId) FROM WarrantyCalls),0);
-
-UPDATE imports.WarrantyCallImports SET insertedRowId = importId + @maxCallId
-    WHERE insertedRowId IS NULL;
-
+    
 MERGE INTO WarrantyCalls AS TARGET
 USING (SELECT
-            insertedRowId AS rowId,
+            importid AS rowId,
             Call_Num,
             CallType,
             (SELECT TOP 1 JobId 
@@ -418,29 +439,25 @@ WHEN NOT MATCHED THEN INSERT (WarrantyCallId
 
 MERGE INTO WarrantyCallComments AS TARGET
 USING (SELECT
-            ISNULL((SELECT MAX(WarrantyCallCommentId) FROM WarrantyCallComments),0) + ROW_NUMBER() OVER (ORDER BY R.Call_Num) AS rowId,
-            insertedRowId AS callId,
+            importId AS callId,
             Call_Comments,
             Date_Open,
             'LI: ' + R.Assigned_By AS CreatedBy            
         FROM imports.WarrantyCallImports R) AS LIST
 ON TARGET.WarrantyCallId = LIST.callId
     AND TARGET.warrantyCallComment =  LIST.Call_Comments
-WHEN NOT MATCHED THEN INSERT (WarrantyCallCommentId,
-                                WarrantyCallId,
+WHEN NOT MATCHED THEN INSERT (WarrantyCallId,
                                 WarrantyCallComment,
                                 CreatedDate,
                                 CreatedBy)
-                        VALUES(rowId,
-                                callId,
+                        VALUES(callId,
                                 Call_Comments,
                                 Date_Open,
                                 CreatedBy);
 
 MERGE INTO WarrantyCallLineItems AS TARGET
 USING (SELECT
-            ISNULL((SELECT MAX(WarrantyCallLineItemId) FROM WarrantyCallLineItems),0) + ROW_NUMBER() OVER (ORDER BY insertedRowId) AS rowId,
-            insertedRowId AS callId,
+            importId AS callId,
             Items.LineNumber,
             Items.Code,
             Items.Descr,
@@ -458,7 +475,7 @@ USING (SELECT
                         ResCode_1 AS ClassNote,                
                         Root_1 AS LineRoot,
                         CASE WHEN CDate_1 = 'Yes' THEN 1 ELSE 0 END AS Closed,
-                        insertedRowId,
+                        importId,
                         Date_Open,
                         Assigned_By
                     FROM imports.WarrantyCallImports I
@@ -472,7 +489,7 @@ USING (SELECT
                         ResCode_2 AS ClassNote,                
                         Root_2 AS LineRoot,                        
                         CASE WHEN CDate_2 = 'Yes' THEN 1 ELSE 0 END AS Closed,
-                        insertedRowId,
+                        importId,
                         Date_Open,
                         Assigned_By
                     FROM imports.WarrantyCallImports I
@@ -486,7 +503,7 @@ USING (SELECT
                         ResCode_3 AS ClassNote,                
                         Root_3 AS LineRoot,                        
                         CASE WHEN CDate_3 = 'Yes' THEN 1 ELSE 0 END AS Closed,
-                        insertedRowId,
+                        importId,
                         Date_Open,
                         Assigned_By
                     FROM imports.WarrantyCallImports I
@@ -500,7 +517,7 @@ USING (SELECT
                         ResCode_4 AS ClassNote,                
                         Root_4 AS LineRoot,
                         CASE WHEN CDate_4 = 'Yes' THEN 1 ELSE 0 END AS Closed,
-                        insertedRowId,
+                        importId,
                         Date_Open,
                         Assigned_By
                     FROM imports.WarrantyCallImports I
@@ -514,7 +531,7 @@ USING (SELECT
                         ResCode_5 AS ClassNote,                
                         Root_5 AS LineRoot,
                         CASE WHEN CDate_5 = 'Yes' THEN 1 ELSE 0 END AS Closed,
-                        insertedRowId,
+                        importId,
                         Date_Open,
                         Assigned_By
                     FROM imports.WarrantyCallImports I
@@ -528,7 +545,7 @@ USING (SELECT
                         ResCode_6 AS ClassNote,                
                         Root_6 AS LineRoot,
                         CASE WHEN CDate_6 = 'Yes' THEN 1 ELSE 0 END AS Closed,
-                        insertedRowId,
+                        importId,
                         Date_Open,
                         Assigned_By
                     FROM imports.WarrantyCallImports I
@@ -542,7 +559,7 @@ USING (SELECT
                         ResCode_7 AS ClassNote,                
                         Root_7 AS LineRoot,
                         CASE WHEN CDate_7 = 'Yes' THEN 1 ELSE 0 END AS Closed,
-                        insertedRowId,
+                        importId,
                         Date_Open,
                         Assigned_By
                     FROM imports.WarrantyCallImports I
@@ -556,7 +573,7 @@ USING (SELECT
                         ResCode_8 AS ClassNote,                
                         Root_8 AS LineRoot,
                         CASE WHEN CDate_8 = 'Yes' THEN 1 ELSE 0 END AS Closed,
-                        insertedRowId,
+                        importId,
                         Date_Open,
                         Assigned_By
                     FROM imports.WarrantyCallImports I
@@ -570,7 +587,7 @@ USING (SELECT
                         ResCode_9 AS ClassNote,                
                         Root_9 AS LineRoot,
                         CASE WHEN CDate_9 = 'Yes' THEN 1 ELSE 0 END AS Closed,
-                        insertedRowId,
+                        importId,
                         Date_Open,
                         Assigned_By
                     FROM imports.WarrantyCallImports I
@@ -584,15 +601,14 @@ USING (SELECT
                         ResCode_10 AS ClassNote,                
                         Root_10 AS LineRoot,
                         CASE WHEN CDate_10 = 'Yes' THEN 1 ELSE 0 END AS Closed,
-                        insertedRowId,
+                        importId,
                         Date_Open,
                         Assigned_By
                     FROM imports.WarrantyCallImports I
                     ) Items ) AS LIST
 ON TARGET.WarrantyCallId = LIST.callId 
     AND TARGET.LineNumber = LIST.LineNumber
-WHEN NOT MATCHED THEN INSERT (WarrantyCallLineItemId
-                                , WarrantyCallId
+WHEN NOT MATCHED THEN INSERT (WarrantyCallId
                                 , LineNumber
                                 , ProblemCode
                                 , ProblemDescription
@@ -602,8 +618,7 @@ WHEN NOT MATCHED THEN INSERT (WarrantyCallLineItemId
                                 , Completed
                                 , CreatedDate
                                 , CreatedBy)
-                        VALUES (rowId
-                                , callId
+                        VALUES (callId
                                 , LineNumber
                                 , Code
                                 , Descr
@@ -624,7 +639,7 @@ WHEN MATCHED THEN UPDATE SET ProblemCode = Code,
 
 MERGE INTO JobOptions AS TARGET
 USING (SELECT
-            ISNULL((SELECT MAX(JobOptionId) FROM JobOptions), 0) + ROW_NUMBER() OVER (ORDER BY JobNumber) AS rowId,
+            rowId,
             (SELECT TOP 1 JobId 
                 FROM Jobs J 
                 WHERE J.JobNumber = I.JobNumber) AS jobId,
@@ -632,7 +647,16 @@ USING (SELECT
             OptionDescription,
             Quantity
         FROM
-            (SELECT DISTINCT JobNumber, OptionNumber, OptionDescription, Quantity FROM imports.JobOptionImports) I) AS LIST
+            (SELECT MIN(ImportId) AS rowId,
+                            JobNumber,
+                            OptionNumber,
+                            OptionDescription,
+                            Quantity
+            FROM imports.JobOptionImports
+            GROUP BY JobNumber,
+                            OptionNumber,
+                            OptionDescription,
+                            Quantity) I) AS LIST
 ON TARGET.JobId = LIST.JobId AND TARGET.OptionNumber = LIST.OptionNumber
 WHEN NOT MATCHED AND LIST.JobId IS NOT NULL THEN INSERT (JobOptionId
                                 , JobId

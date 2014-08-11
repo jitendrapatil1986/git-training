@@ -1,5 +1,5 @@
 CREATE TABLE Cities (
-    CityId INT NOT NULL,
+    CityId UNIQUEIDENTIFIER NOT NULL,
     CityCode VARCHAR(10),
     CityName VARCHAR(255),
     CreatedDate DATETIME2,
@@ -7,6 +7,9 @@ CREATE TABLE Cities (
     UpdatedDate DATETIME2,
     UpdatedBy VARCHAR(255)
 );
+
+ALTER TABLE Cities ADD CONSTRAINT DF_Cities_Id
+    DEFAULT NEWSEQUENTIALID() FOR CityId;
 
 ALTER TABLE Cities ADD CONSTRAINT PK_Cities
     PRIMARY KEY (CityId);

@@ -1,117 +1,9 @@
 ﻿/* VARIABLES */
-@BrandColor: #004799;
-@MenuHoverColor: #014899;
+@gray-lighter: #f7f7f7;
 
 .main-container {
     margin-top: 108px;
     padding: 0 10px;
-}
-
-.navbar-default {
-    background-color: #fdfdfc;
-    background-image: linear-gradient(white, white 50%, #f6f5ee);
-    background-repeat: no-repeat;
-    border-top: solid 3px #005090;
-    border-radius: 4px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
-    min-height: 50px;
-    padding: 0 20px;
-    margin: 0;
-}
-
-.navbar-default .navbar-brand {
-    color: @BrandColor;
-    font-size: 1.7em;
-    font-weight: 200;
-    padding: 15px;
-    text-shadow: 0 1px 0 #e3e2da;
-}
-
-.navbar-header .navbar-brand {
-    padding: 10px 15px;
-}
-
-.navbar-default .navbar-brand:hover {
-    color: @BrandColor;
-}
-
-.divider-vertical {
-    border-left: 1px solid #e7e7e5;
-    border-right: 0 solid #e3e2da;
-    margin: 0 9px;
-    height: 50px;
-}
-
-.subnav > .container > .nav > li.divider-vertical {
-    height: 35px;
-    margin: 0;
-}
-
-.navbar .nav > li > a {
-    color: @BrandColor;
-}
-
-.navbar .nav > li > a:focus
-, .navbar .nav > li > a:hover
-, .dropdown-menu > li > a:hover
-, .subnav > .container > .nav > li > a:hover {
-    background-color: #0c7de6;
-    background-image: url("/img/background_tab_hover.png");
-    background-repeat: repeat-x;
-    color: white;
-    text-decoration: none;
-    text-shadow: none;
-}
-.navbar .nav > .active > a
-, .navbar .nav > .active > a:hover
-, .navbar .nav > .active > a:focus
-, .dropdown-menu > li > a:focus {
-    background-color: @MenuHoverColor;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.125) inset;
-    color: white;
-    text-decoration: none;
-}
-
-.navbar .nav li.dropdown.open > .dropdown-toggle
-, .navbar .nav li.dropdown.active > .dropdown-toggle
-, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
-    background-color: @MenuHoverColor;
-    background-image: url("/img/background_tab.png");
-    background-repeat: repeat-x;
-    color: white;
-}
-
-.subnav > .container > .nav > li > a {
-    padding: 7px 10px;
-    color: @BrandColor;
-}
-
-div.subnav-fixed {
-    top: 54px;
-}
-
-div.subnav {
-    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-.subnav-fixed {
-    border-color: #d5d5d5;
-    border-radius: 0;
-    border-width: 0 0 1px;
-    box-shadow: 0 1px 0 #fff inset, 0 1px 5px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    z-index: 1020;
-}
-
-.subnav {
-    background-color: #eeeeee;
-    background-image: linear-gradient(white, white 25%, #f1f0e6);
-    background-repeat: repeat-x;
-    border: 1px solid #e7e7e5;
-    border-radius: 4px;
-    height: 36px;
-    margin-bottom: 60px;
-    width: 100%;
 }
 
 .logged-in-user {
@@ -131,12 +23,8 @@ div.subnav {
     padding: 0 10px;
 }
 
-.nav-tabs > li {
-    font-size: 1.1em;
-}
-
 .progress {
-    height: 10px;
+    height: 7px;
 }
 
 .time-remaining-progress {
@@ -144,8 +32,13 @@ div.subnav {
 }
 
 .service-call-line {
-    padding: 15px 0 0 0;
     border-bottom: solid 1px #e7e7e7;
+    padding: 5px 0 0 0;
+    margin: 0;
+}
+
+.service-call-line:hover {
+    background: @gray-lighter;
 }
 
 .text-red {

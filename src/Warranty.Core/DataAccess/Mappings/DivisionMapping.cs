@@ -1,6 +1,7 @@
 namespace Warranty.Core.DataAccess.Mappings
 {
     using Entities;
+    using NHibernate.Mapping.ByCode;
 
     public class DivisionMapping : AuditableEntityMapping<Division>
     {
@@ -8,7 +9,7 @@ namespace Warranty.Core.DataAccess.Mappings
         {
             Table("Divisions");
 
-            Id(x => x.DivisionId);
+            Id(x => x.DivisionId, map => map.Generator(Generators.GuidComb));
             Property(x => x.DivisionCode);
             Property(x => x.DivisionName);
         }

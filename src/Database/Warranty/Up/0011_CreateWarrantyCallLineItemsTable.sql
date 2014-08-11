@@ -1,6 +1,6 @@
 CREATE TABLE WarrantyCallLineItems (
-    WarrantyCallLineItemId INT NOT NULL,
-    WarrantyCallId INT,
+    WarrantyCallLineItemId UNIQUEIDENTIFIER NOT NULL,
+    WarrantyCallId UNIQUEIDENTIFIER,
     LineNumber INT,
     ProblemCode VARCHAR(4000),
     ProblemDescription VARCHAR(4000),
@@ -13,6 +13,9 @@ CREATE TABLE WarrantyCallLineItems (
     UpdatedDate DATETIME2,
     UpdatedBy VARCHAR(255)
 );
+
+ALTER TABLE WarrantyCallLineItems ADD CONSTRAINT DF_WarrantyCallLineItems
+    DEFAULT NEWSEQUENTIALID() FOR WarrantyCallLineItemId;
 
 ALTER TABLE WarrantyCallLineItems ADD CONSTRAINT PK_WarrantyCallLineItems
     PRIMARY KEY (WarrantyCallLineItemId);

@@ -4,8 +4,8 @@
 
     public class JobOption : IAuditableEntity
     {
-        public virtual int JobOptionId { get; set; }
-        public virtual int JobId { get; set; }
+        public virtual Guid JobOptionId { get; set; }
+        public virtual Guid JobId { get; set; }
         public virtual string OptionNumber { get; set; }
         public virtual string OptionDescription { get; set; }
         public virtual int Quantity { get; set; }

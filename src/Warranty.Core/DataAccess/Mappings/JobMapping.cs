@@ -1,6 +1,7 @@
 namespace Warranty.Core.DataAccess.Mappings
 {
     using Entities;
+    using NHibernate.Mapping.ByCode;
 
     public class JobMapping : AuditableEntityMapping<Job>
     {
@@ -8,7 +9,7 @@ namespace Warranty.Core.DataAccess.Mappings
         {
             Table("Jobs");
 
-            Id(x => x.JobId);
+            Id(x => x.JobId, map => map.Generator(Generators.GuidComb));
             Property(x => x.JobNumber);
             Property(x => x.CloseDate);
             Property(x => x.AddressLine);
