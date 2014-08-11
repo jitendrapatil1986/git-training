@@ -1,0 +1,1 @@
+ALTER TABLE Payments ALTER COLUMN JobNumber VARCHAR(20);

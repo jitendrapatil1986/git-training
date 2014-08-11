@@ -87,6 +87,7 @@
     <Compile Include="DataAccess\Mappings\HomeOwnerMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobOptionMapping.cs" />
+    <Compile Include="DataAccess\Mappings\PaymentMapping.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMapping.cs" />
     <Compile Include="DataAccess\Mappings\EmployeeMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallCommentMapping.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Entities\IAuditableEntity.cs" />
     <Compile Include="Entities\Job.cs" />
     <Compile Include="Entities\JobOption.cs" />
+    <Compile Include="Entities\Payment.cs" />
     <Compile Include="Entities\Project.cs" />
     <Compile Include="Entities\Employee.cs" />
     <Compile Include="Entities\ServiceCall.cs" />
