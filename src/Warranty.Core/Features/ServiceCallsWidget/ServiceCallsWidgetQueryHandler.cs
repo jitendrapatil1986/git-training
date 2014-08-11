@@ -21,7 +21,8 @@
             using (_database)
             {
                 const string sql = @"SELECT 
-  warrantycallnumber as CallNumber
+  wc.WarrantyCallId as ServiceCallId
+, warrantycallnumber as CallNumber
 , j.AddressLine as [Address]
 , wc.CreatedDate 
 , ho.HomeOwnerName
