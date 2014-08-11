@@ -70,7 +70,7 @@ Role "Web" -Incremental {
 	poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Environment']/@value" $environment
 	poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='sendFeedbackAddresses']/@value" $sendFeedbackAddresses
 	
-	poke-xml "$warranty_web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
+	poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
 	poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@subject" $errorReportingSubject
 	poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@smtpServer" $smtpServer
 	
