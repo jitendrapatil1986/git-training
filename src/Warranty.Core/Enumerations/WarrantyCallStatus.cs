@@ -7,9 +7,9 @@
         {
         }
 
-        public static readonly WarrantyCallStatus BuilderIncomplete = new WarrantyCallStatus(1, "Requested");
-        public static readonly WarrantyCallStatus CustomerGoodwill = new WarrantyCallStatus(2, "Open");
-        public static readonly WarrantyCallStatus Warrantable = new WarrantyCallStatus(3, "Special Project");
-        public static readonly WarrantyCallStatus NoAction = new WarrantyCallStatus(4, "Closed");
+        public static readonly WarrantyCallStatus Requested = new WarrantyCallStatus(1, "Requested");
+        public static readonly WarrantyCallStatus Open = new WarrantyCallStatus(2, "Open");
+        public static readonly WarrantyCallStatus SpecialProject = new WarrantyCallStatus(3, "Special Project");
+        public static readonly WarrantyCallStatus Closed = new WarrantyCallStatus(4, "Closed");
     }
 }
