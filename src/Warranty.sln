@@ -18,9 +18,47 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C00D44
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{87C2C1AD-25CF-4BDF-AF17-527FF39DC199}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.JdeImport", "Warranty.JdeImport\Warranty.JdeImport.csproj", "{24F01427-4EBA-4038-A8DE-320AC2857484}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{AD820D14-6F94-4D29-B669-11F86D8A592D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{9AE255B5-B3E9-4EAE-9930-4FE345CFE51D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Warranty", "Warranty", "{774F9200-608F-47BB-9529-283346F7A9BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Up", "Up", "{20518451-E144-488A-9C92-4DF652E04FC8}"
+	ProjectSection(SolutionItems) = preProject
+		Database\Warranty\Up\0000_AddNewDefaultFileGroup.sql = Database\Warranty\Up\0000_AddNewDefaultFileGroup.sql
+		Database\Warranty\Up\0000_SetupLookupSchema.sql = Database\Warranty\Up\0000_SetupLookupSchema.sql
+		Database\Warranty\Up\0001_CreateCitiesTable.sql = Database\Warranty\Up\0001_CreateCitiesTable.sql
+		Database\Warranty\Up\0002_CreateDivisionsTable.sql = Database\Warranty\Up\0002_CreateDivisionsTable.sql
+		Database\Warranty\Up\0003_CreateProjectsTable.sql = Database\Warranty\Up\0003_CreateProjectsTable.sql
+		Database\Warranty\Up\0004_CreateCommunitiesTable.sql = Database\Warranty\Up\0004_CreateCommunitiesTable.sql
+		Database\Warranty\Up\0005_CreateHomeOwnersTable.sql = Database\Warranty\Up\0005_CreateHomeOwnersTable.sql
+		Database\Warranty\Up\0006_CreateEmployeesTable.sql = Database\Warranty\Up\0006_CreateEmployeesTable.sql
+		Database\Warranty\Up\0007_CreateJobsTable.sql = Database\Warranty\Up\0007_CreateJobsTable.sql
+		Database\Warranty\Up\0008_CreateJobOptionsTable.sql = Database\Warranty\Up\0008_CreateJobOptionsTable.sql
+		Database\Warranty\Up\0009_CreateWarrantyCallStatusTable.sql = Database\Warranty\Up\0009_CreateWarrantyCallStatusTable.sql
+		Database\Warranty\Up\0010_CreateWarrantyCallsTable.sql = Database\Warranty\Up\0010_CreateWarrantyCallsTable.sql
+		Database\Warranty\Up\0011_CreateWarrantyCallLineItemsTable.sql = Database\Warranty\Up\0011_CreateWarrantyCallLineItemsTable.sql
+		Database\Warranty\Up\0012_RelateHomeOwnerToJob.sql = Database\Warranty\Up\0012_RelateHomeOwnerToJob.sql
+		Database\Warranty\Up\0013_CreateImportSchema.sql = Database\Warranty\Up\0013_CreateImportSchema.sql
+		Database\Warranty\Up\0014_CreateCustomerImportsTable.sql = Database\Warranty\Up\0014_CreateCustomerImportsTable.sql
+		Database\Warranty\Up\0015_CreateMasterCommunityImportTable.sql = Database\Warranty\Up\0015_CreateMasterCommunityImportTable.sql
+		Database\Warranty\Up\0016_CreateJobOptionImportsTable.sql = Database\Warranty\Up\0016_CreateJobOptionImportsTable.sql
+		Database\Warranty\Up\0017_CreateWarrantyCallImportsTable.sql = Database\Warranty\Up\0017_CreateWarrantyCallImportsTable.sql
+		Database\Warranty\Up\0018_CreateDeleteByCityStoredProcedure.sql = Database\Warranty\Up\0018_CreateDeleteByCityStoredProcedure.sql
+		Database\Warranty\Up\0019_CreateImportDataStoredProcedure.sql = Database\Warranty\Up\0019_CreateImportDataStoredProcedure.sql
+		Database\Warranty\Up\0020_CreatePaymentsTable.sql = Database\Warranty\Up\0020_CreatePaymentsTable.sql
+		Database\Warranty\Up\0021_CreateWarrantyCallCommentsTable.sql = Database\Warranty\Up\0021_CreateWarrantyCallCommentsTable.sql
+		Database\Warranty\Up\0022_InsertWarrantyCallStatuses.sql = Database\Warranty\Up\0022_InsertWarrantyCallStatuses.sql
+		Database\Warranty\Up\0023_CreateWarrantyCallLineItemsIndex.sql = Database\Warranty\Up\0023_CreateWarrantyCallLineItemsIndex.sql
+		Database\Warranty\Up\0024_AlterPaymentsToAddAuditInfo.sql = Database\Warranty\Up\0024_AlterPaymentsToAddAuditInfo.sql
+		Database\Warranty\Up\0025_AlterPaymentsToIncreaseJdeId.sql = Database\Warranty\Up\0025_AlterPaymentsToIncreaseJdeId.sql
+		Database\Warranty\Up\0026_AlterPaymentsToIncreaseJobNumber.sql = Database\Warranty\Up\0026_AlterPaymentsToIncreaseJobNumber.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{D0DD7813-D199-44F7-A1F3-EC38DCA342F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{DF34B390-2524-4D04-BAB5-FA2268223006}"
 	ProjectSection(SolutionItems) = preProject
 		..\deployment\modules\IIS.psm1 = ..\deployment\modules\IIS.psm1
 		..\deployment\modules\package.psm1 = ..\deployment\modules\package.psm1
@@ -28,7 +66,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{AD82
 		..\deployment\modules\windows.psm1 = ..\deployment\modules\windows.psm1
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "warranty", "warranty", "{E9BB5AB8-1088-4C94-A82B-DF8567B309AB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Warranty", "Warranty", "{D5835A57-4AEB-4540-8BE4-6511D4E20B32}"
 	ProjectSection(SolutionItems) = preProject
 		..\deployment\warranty\dev.bat = ..\deployment\warranty\dev.bat
 		..\deployment\warranty\dev.vars.ps1 = ..\deployment\warranty\dev.vars.ps1
@@ -41,36 +79,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "warranty", "warranty", "{E9
 		..\deployment\warranty\training.vars.ps1 = ..\deployment\warranty\training.vars.ps1
 		..\deployment\warranty\vars.ps1 = ..\deployment\warranty\vars.ps1
 	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{E05054EE-0068-482C-AAFA-828149F017C0}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Warranty", "Warranty", "{D59A61EF-8DC2-47BC-9C53-CE8189395AA6}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Up", "Up", "{CFDC65F6-8BA5-44AB-AFBE-9782D39D0D29}"
-	ProjectSection(SolutionItems) = preProject
-		Database\Warranty\Up\0000_AddNewDefaultFileGroup.sql = Database\Warranty\Up\0000_AddNewDefaultFileGroup.sql
-		Database\Warranty\Up\0001_CreateCitiesTable.sql = Database\Warranty\Up\0001_CreateCitiesTable.sql
-		Database\Warranty\Up\0002_CreateDivisionsTable.sql = Database\Warranty\Up\0002_CreateDivisionsTable.sql
-		Database\Warranty\Up\0003_CreateProjectsTable.sql = Database\Warranty\Up\0003_CreateProjectsTable.sql
-		Database\Warranty\Up\0004_CreateCommunitiesTable.sql = Database\Warranty\Up\0004_CreateCommunitiesTable.sql
-		Database\Warranty\Up\0005_CreateHomeOwnersTable.sql = Database\Warranty\Up\0005_CreateHomeOwnersTable.sql
-		Database\Warranty\Up\0006_CreateEmployeesTable.sql = Database\Warranty\Up\0006_CreateEmployeesTable.sql
-		Database\Warranty\Up\0007_CreateJobsTable.sql = Database\Warranty\Up\0007_CreateJobsTable.sql
-		Database\Warranty\Up\0008_CreateJobOptionsTable.sql = Database\Warranty\Up\0008_CreateJobOptionsTable.sql
-		Database\Warranty\Up\0009_CreateWarrantyCallsTable.sql = Database\Warranty\Up\0009_CreateWarrantyCallsTable.sql
-		Database\Warranty\Up\0010_CreateWarrantyCallLineItemsTable.sql = Database\Warranty\Up\0010_CreateWarrantyCallLineItemsTable.sql
-		Database\Warranty\Up\0011_RelateHomeOwnerToJob.sql = Database\Warranty\Up\0011_RelateHomeOwnerToJob.sql
-		Database\Warranty\Up\0012_CreateImportSchema.sql = Database\Warranty\Up\0012_CreateImportSchema.sql
-		Database\Warranty\Up\0013_CreateMasterCommunityImportTable.sql = Database\Warranty\Up\0013_CreateMasterCommunityImportTable.sql
-		Database\Warranty\Up\0014_CreateCustomerImportsTable.sql = Database\Warranty\Up\0014_CreateCustomerImportsTable.sql
-		Database\Warranty\Up\0015_CreateWarrantyCallImportsTable.sql = Database\Warranty\Up\0015_CreateWarrantyCallImportsTable.sql
-		Database\Warranty\Up\0016_CreateJobOptionImportsTable.sql = Database\Warranty\Up\0016_CreateJobOptionImportsTable.sql
-		Database\Warranty\Up\0017_CreateDeleteByCityStoredProcedure.sql = Database\Warranty\Up\0017_CreateDeleteByCityStoredProcedure.sql
-		Database\Warranty\Up\0018_CreateWarrantyCallCommentsTable.sql = Database\Warranty\Up\0018_CreateWarrantyCallCommentsTable.sql
-		Database\Warranty\Up\0019_CreateImportDataStoredProcedure.sql = Database\Warranty\Up\0019_CreateImportDataStoredProcedure.sql
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{593131C3-85D3-4FDC-95BB-45EBE0CF0ADD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,15 +106,18 @@ Global
 		{AF1DBB4F-8023-4488-9961-96471C6647F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF1DBB4F-8023-4488-9961-96471C6647F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF1DBB4F-8023-4488-9961-96471C6647F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24F01427-4EBA-4038-A8DE-320AC2857484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F01427-4EBA-4038-A8DE-320AC2857484}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F01427-4EBA-4038-A8DE-320AC2857484}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24F01427-4EBA-4038-A8DE-320AC2857484}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{AD820D14-6F94-4D29-B669-11F86D8A592D} = {87C2C1AD-25CF-4BDF-AF17-527FF39DC199}
-		{E9BB5AB8-1088-4C94-A82B-DF8567B309AB} = {87C2C1AD-25CF-4BDF-AF17-527FF39DC199}
-		{D59A61EF-8DC2-47BC-9C53-CE8189395AA6} = {E05054EE-0068-482C-AAFA-828149F017C0}
-		{CFDC65F6-8BA5-44AB-AFBE-9782D39D0D29} = {D59A61EF-8DC2-47BC-9C53-CE8189395AA6}
-		{C3CDE3C8-278C-44F6-A498-344A6E666454} = {593131C3-85D3-4FDC-95BB-45EBE0CF0ADD}
+		{774F9200-608F-47BB-9529-283346F7A9BB} = {9AE255B5-B3E9-4EAE-9930-4FE345CFE51D}
+		{20518451-E144-488A-9C92-4DF652E04FC8} = {774F9200-608F-47BB-9529-283346F7A9BB}
+		{DF34B390-2524-4D04-BAB5-FA2268223006} = {D0DD7813-D199-44F7-A1F3-EC38DCA342F2}
+		{D5835A57-4AEB-4540-8BE4-6511D4E20B32} = {D0DD7813-D199-44F7-A1F3-EC38DCA342F2}
 	EndGlobalSection
 EndGlobal

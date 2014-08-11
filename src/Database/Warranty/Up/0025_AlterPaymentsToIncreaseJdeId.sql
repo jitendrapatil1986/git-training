@@ -1,0 +1,1 @@
+ALTER TABLE Payments ALTER COLUMN JdeIdentifier VARCHAR(255);
