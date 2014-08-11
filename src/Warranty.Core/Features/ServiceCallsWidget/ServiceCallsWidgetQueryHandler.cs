@@ -31,31 +31,31 @@
         }
         
         const string SqlTemplate = @"SELECT 
-  wc.WarrantyCallId as ServiceCallId
-, warrantycallnumber as CallNumber
-, j.AddressLine as [Address]
-, wc.CreatedDate 
-, ho.HomeOwnerName
-, case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
-, NumberOfLineItems
-, ho.HomePhone as PhoneNumber
-, e.EmployeeName as AssignedTo
-, e.EmployeeNumber as AssignedToEmployeeNumber
-  FROM [WarrantyCalls] wc
-  inner join Jobs j
-  on wc.JobId = j.JobId
-  inner join HomeOwners ho
-  on j.CurrentHomeOwnerId = ho.HomeOwnerId
-  inner join (select COUNT(*) as NumberOfLineItems, WarrantyCallId FROM WarrantyCallLineItems group by WarrantyCallId) li
-  on wc.WarrantyCallId = li.WarrantyCallId
-  inner join Employees e
-  on wc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-  INNER JOIN Communities cm
-  ON j.CommunityId = cm.CommunityId
-  INNER JOIN Cities ci
-  ON cm.CityId = ci.CityId
-  {0} /* WHERE */
-  {1} /* ORDER BY */";
+                                          wc.ServiceCallId as ServiceCallId
+                                        , Servicecallnumber as CallNumber
+                                        , j.AddressLine as [Address]
+                                        , wc.CreatedDate 
+                                        , ho.HomeOwnerName
+                                        , case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
+                                        , NumberOfLineItems
+                                        , ho.HomePhone as PhoneNumber
+                                        , e.EmployeeName as AssignedTo
+                                        , e.EmployeeNumber as AssignedToEmployeeNumber
+                                     FROM [ServiceCalls] wc
+                                     inner join Jobs j
+                                       on wc.JobId = j.JobId
+                                     inner join HomeOwners ho
+                                       on j.CurrentHomeOwnerId = ho.HomeOwnerId
+                                     inner join (select COUNT(*) as NumberOfLineItems, ServiceCallId FROM ServiceCallLineItems group by ServiceCallId) li
+                                       on wc.ServiceCallId = li.ServiceCallId
+                                     inner join Employees e
+                                       on wc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+                                     INNER JOIN Communities cm
+                                       ON j.CommunityId = cm.CommunityId
+                                     INNER JOIN Cities ci
+                                       ON cm.CityId = ci.CityId
+                                     {0} /* WHERE */
+                                     {1} /* ORDER BY */";
 
         private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetOverdueServiceCalls(IUser user)
         {

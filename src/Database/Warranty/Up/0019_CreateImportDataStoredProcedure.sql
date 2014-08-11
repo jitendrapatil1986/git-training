@@ -249,13 +249,13 @@ USING (SELECT
             Swing,    
             (SELECT TOP 1 EmployeeId 
                 FROM Employees 
-                WHERE EmployeeNumber = BuilderEmployeeNumber 
-                AND EmployeeName = Builder) AS Builder,
+                WHERE EmployeeNumber = BuilderEmployeeNumber
+            ) AS Builder,
             (SELECT TOP 1 EmployeeId 
                 FROM Employees 
-                WHERE SalesConsultantNumber = BuilderEmployeeNumber 
-                AND EmployeeName = SalesConsultant) AS Sales,
-            WarrantyExpirationDate,
+                WHERE SalesConsultantNumber = BuilderEmployeeNumber
+            ) AS Sales,
+            CASE WHEN WarrantyExpirationDate = '' THEN NULL ELSE WarrantyExpirationDate END AS WarrantyExpirationDate,
             TotalSalesPrice
         FROM imports.CustomerImports CI) AS LIST
 ON TARGET.JobNumber = LIST.JobNumber
@@ -382,11 +382,10 @@ FROM imports.ServiceCallImports I
     AND C.WarrantyRepresentativeEmployeeId = 
             (SELECT TOP 1 EmployeeId 
                 FROM Employees 
-                WHERE EmployeeNumber = WsrEmp_Num 
-                AND EmployeeName = Assigned_To) 
-    AND C.CompletionDate = I.Comp_Date
+                WHERE EmployeeNumber = WsrEmp_Num) 
+    AND C.CompletionDate = CASE WHEN I.Comp_Date = '' THEN NULL ELSE I.Comp_Date END
     AND C.HomeOwnerSignature = I.HOSig
-    AND C.CreatedDate = I.Date_Open 
+    AND C.CreatedDate = CASE WHEN I.Date_Open = '' THEN NULL ELSE I.Date_Open END
     AND C.CreatedBy = 'LI: ' + Assigned_By;
     
 MERGE INTO ServiceCalls AS TARGET
@@ -400,12 +399,12 @@ USING (SELECT
             Contact,
             (SELECT TOP 1 EmployeeId 
                 FROM Employees 
-                WHERE EmployeeNumber = WsrEmp_Num 
-                AND EmployeeName = Assigned_To) AS RepId,
-            Comp_Date,
+                WHERE EmployeeNumber = WsrEmp_Num
+                ) AS RepId,
+            CASE WHEN Comp_Date = '' THEN null ELSE Comp_Date END AS Comp_Date,
             HOSig,
             Call_Comments,
-            Date_Open ,
+            CASE WHEN Date_Open = '' THEN NULL ELSE Date_Open END AS Date_Open,
             'LI: ' + Assigned_By AS CreatedBy
         FROM imports.ServiceCallImports I) AS LIST
 ON TARGET.ServiceCallNumber = LIST.Call_Num 
@@ -442,7 +441,7 @@ MERGE INTO ServiceCallComments AS TARGET
 USING (SELECT
             importId AS callId,
             Call_Comments,
-            Date_Open,
+            CASE WHEN Date_Open = '' THEN NULL ELSE Date_Open END AS Date_Open,
             'LI: ' + R.Assigned_By AS CreatedBy            
         FROM imports.ServiceCallImports R) AS LIST
 ON TARGET.ServiceCallId = LIST.callId
@@ -466,7 +465,7 @@ USING (SELECT
             Items.ClassNote,
             Items.LineRoot,
             Items.Closed,
-            Date_Open,
+            CASE WHEN Date_Open = '' THEN NULL ELSE Date_Open END AS Date_Open,
             'LI: ' + Assigned_By AS CreatedBy            
         FROM (
                 SELECT  1 AS LineNumber,

@@ -31,7 +31,7 @@ BEGIN
                             AND type_desc = 'LOG' 
                             ORDER BY file_id);
     END
-    ELSE IF DB_NAME() LIKE '%Train'
+    ELSE IF DB_NAME() LIKE '%Training'
     BEGIN
         SET @MasterFile = (SELECT TOP 1 name 
                                 FROM master.sys.master_files 
