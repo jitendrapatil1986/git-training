@@ -89,9 +89,9 @@
     <Compile Include="DataAccess\Mappings\JobOptionMapping.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMapping.cs" />
     <Compile Include="DataAccess\Mappings\EmployeeMapping.cs" />
-    <Compile Include="DataAccess\Mappings\WarrantyCallCommentMapping.cs" />
-    <Compile Include="DataAccess\Mappings\WarrantyCallLineItemMapping.cs" />
-    <Compile Include="DataAccess\Mappings\WarrantyCallMapping.cs" />
+    <Compile Include="DataAccess\Mappings\ServiceCallCommentMapping.cs" />
+    <Compile Include="DataAccess\Mappings\ServiceCallLineItemMapping.cs" />
+    <Compile Include="DataAccess\Mappings\ServiceCallMapping.cs" />
     <Compile Include="Entities\City.cs" />
     <Compile Include="Entities\Community.cs" />
     <Compile Include="Entities\Division.cs" />
@@ -101,10 +101,10 @@
     <Compile Include="Entities\JobOption.cs" />
     <Compile Include="Entities\Project.cs" />
     <Compile Include="Entities\Employee.cs" />
-    <Compile Include="Entities\WarrantyCall.cs" />
-    <Compile Include="Entities\WarrantyCallComment.cs" />
-    <Compile Include="Entities\WarrantyCallLineItem.cs" />
-    <Compile Include="Enumerations\WarrantyCallStatus.cs" />
+    <Compile Include="Entities\ServiceCall.cs" />
+    <Compile Include="Entities\ServiceCallComment.cs" />
+    <Compile Include="Entities\ServiceCallLineItem.cs" />
+    <Compile Include="Enumerations\ServiceCallStatus.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="DataAccess\ConfigurationFactory.cs" />
     <Compile Include="DataAccess\HbmMappingGenerator.cs" />
