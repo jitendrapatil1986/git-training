@@ -16,7 +16,7 @@ function Create-Website{
 #>
     $demoPool | Set-Item
 
-	New-Item IIS:\Sites\$name -physicalPath $location -bindings @{protocol="http";bindingInformation=":$port:"}
+	New-Item IIS:\Sites\$name -physicalPath $location -bindings @{protocol="http";bindingInformation=":${port}:"}
 
 	Set-ItemProperty IIS:\Sites\$name -name applicationPool -value $name
 }
