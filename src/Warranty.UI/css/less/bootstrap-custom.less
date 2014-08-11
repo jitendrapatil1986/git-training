@@ -113,3 +113,26 @@ div.subnav {
 .nav-tabs > li {
     font-size: 1.1em;
 }
+
+.list-group-item .accordion-toggle:before {
+    /* symbol for "opening" panels */
+    font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+    content: "\e114";    /* adjust as needed, taken from bootstrap.css */
+    float: left;        /* adjust as needed */
+    color: grey;         /* adjust as needed */
+    padding-right: 10px;
+}
+.list-group-item .accordion-toggle.collapsed:before {
+    /* symbol for "collapsed" panels */
+    content: "\e080";    /* adjust as needed, taken from bootstrap.css */
+}
+
+.list-group-item .accordion-toggle {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.list-group-item .accordion-toggle.collapsed {
+    font-size: 1em;
+    font-weight: normal;
+}

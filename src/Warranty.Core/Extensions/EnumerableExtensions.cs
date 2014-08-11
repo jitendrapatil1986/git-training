@@ -14,6 +14,11 @@
             return null;
         }
 
+        public static string CommaSeparateWrapWithSingleQuote<T>(this IEnumerable<T> enumerable)
+        {
+            return enumerable.Select(x => "'" + x + "'").CommaSeparate();
+        }
+
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> collection)
         {
             return collection == null || !collection.Any();
