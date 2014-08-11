@@ -285,6 +285,8 @@
     <Content Include="Views\ServiceCall\AddNote.cshtml" />
     <Content Include="Views\ServiceCall\Close.cshtml" />
     <Content Include="Views\ServiceCall\RequestPayment.cshtml" />
+    <Content Include="Views\Home\_MyServiceCalls.cshtml" />
+    <Content Include="Views\Home\_OverdueCalls.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
