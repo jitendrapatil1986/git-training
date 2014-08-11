@@ -2,6 +2,8 @@ DECLARE @DatabaseName NVARCHAR(256) = 'Warranty';
 
 IF DB_NAME() LIKE @DatabaseName + '%'
 BEGIN
+    SET @DatabaseName = DB_NAME();
+
     DECLARE @EnsureSimpleMode    NVARCHAR(MAX) = 'ALTER DATABASE [' + DB_NAME() + '] SET RECOVERY FULL;
                                                   ALTER DATABASE [' + DB_NAME() + '] SET RECOVERY SIMPLE;';
     DECLARE @CreateFileGroup     NVARCHAR(MAX) = 'ALTER DATABASE [' + DB_NAME() + '] ADD FILEGROUP ActiveData;';
@@ -12,8 +14,6 @@ BEGIN
 
     IF DB_NAME() LIKE '%Test'
     BEGIN
-        SET @DatabaseName = @DatabaseName + 'Test';
-
         SET @MasterFile = (SELECT TOP 1 name 
                                 FROM master.sys.master_files 
                                 WHERE DB_NAME(database_id) = @DatabaseName 
@@ -32,9 +32,7 @@ BEGIN
                             ORDER BY file_id);
     END
     ELSE IF DB_NAME() LIKE '%Train'
-    BEGIN 
-        SET @DatabaseName = @DatabaseName + 'Train'
-
+    BEGIN
         SET @MasterFile = (SELECT TOP 1 name 
                                 FROM master.sys.master_files 
                                 WHERE DB_NAME(database_id) = @DatabaseName 
