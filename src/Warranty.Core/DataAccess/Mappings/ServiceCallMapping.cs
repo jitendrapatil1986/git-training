@@ -14,6 +14,7 @@ namespace Warranty.Core.DataAccess.Mappings
             Property(x => x.ServiceCallType);
             Property(x => x.ServiceCallStatus);
             Property(x => x.IsEscalated, map => map.Column("Escalated"));
+            Property(x => x.IsSpecialProject, map => map.Column("SpecialProject"));
             Property(x => x.JobId);
             Property(x => x.Contact);
             Property(x => x.WarrantyRepresentativeEmployeeId);
