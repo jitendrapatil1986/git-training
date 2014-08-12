@@ -91,13 +91,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="CommandHandlerTester.cs" />
     <Compile Include="SetUp\IEntityBuilder.cs" />
     <Compile Include="SetUp\EntityBuilder.cs" />
     <Compile Include="SetUp\TestIoC.cs" />
     <Compile Include="HandlerTester.cs" />
-    <Compile Include="Headspring\Enumeration.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetUp\DatabaseDeleter.cs" />
     <Compile Include="StructureMapConfig.cs" />
     <Compile Include="WarrantyRegistry.cs" />
@@ -105,9 +106,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Headspring\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Warranty.Core\Warranty.Core.csproj">
