@@ -3,6 +3,7 @@ require.config({
     paths: {
         'jquery': 'lib/jquery-1.10.2.min',
         'jquery.validate': 'lib/jquery.validate.min',
+        'jquery.maskedinput': 'lib/jquery.maskedinput.min',
         'jquery.unobtrusive': 'lib/jquery.validate.unobtrusive.min',
         'bootstrap': 'lib/bootstrap.min',
         'tooltip': 'lib/bootstrap-tooltip',
