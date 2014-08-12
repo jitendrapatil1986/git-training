@@ -5,6 +5,7 @@ require.config({
         'jquery.validate': 'lib/jquery.validate.min',
         'jquery.maskedinput': 'lib/jquery.maskedinput.min',
         'jquery.unobtrusive': 'lib/jquery.validate.unobtrusive.min',
+        'jquery.numeric': 'lib/jquery.numeric',
         'bootstrap': 'lib/bootstrap.min',
         'tooltip': 'lib/bootstrap-tooltip',
         'datepicker': 'lib/bootstrap-datepicker',
@@ -27,6 +28,6 @@ require.config({
         'ko': ['underscore'],
     },
     callback: function () {
-        require(['app/feedbackForm', 'app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields']);
+        require(['app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields']);
     }
 });
