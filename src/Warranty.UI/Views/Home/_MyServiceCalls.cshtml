@@ -16,8 +16,8 @@ else
                 <small class="text-muted">@line.CallNumber</small>
             </div>
             <div class="col-md-5">
-                <div class="col-md-1 hidden-sm hidden-xs">
-                    @Format.NumberOfLineItems(line.NumberOfLineItems)
+                <div class="col-md-1 hidden-sm hidden-xs">                                        
+                    @Format.WithTooltip(@Format.NumberOfLineItems(line.NumberOfLineItems).ToString(), "Number of line items", false)
                 </div>
                 <div class="col-md-10">
                     <a>@line.HomeownerName</a><br />@line.Address
