@@ -239,14 +239,11 @@
     <Content Include="Scripts\app\ajaxEvents.js" />
     <Content Include="Scripts\app\customBindings.js" />
     <Content Include="Scripts\app\dates.js" />
-    <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\formInputs.js" />
     <Content Include="Scripts\app\Home\Index.js" />
     <Content Include="Scripts\app\Home\widgetServiceCalls.js" />
     <Content Include="Scripts\app\main.js" />
-    <Content Include="Scripts\app\quickSearch.js" />
     <Content Include="Scripts\app\requiredFields.js" />
-    <Content Include="Scripts\app\search.js" />
     <Content Include="Scripts\app\searchValidate.js" />
     <Content Include="Scripts\app\Shared\confirmMessage.js" />
     <Content Include="Scripts\app\Shared\Default.js" />
@@ -257,6 +254,8 @@
     <Content Include="Scripts\lib\bootstrap-tooltip.js" />
     <Content Include="Scripts\lib\bootstrap.min.js" />
     <Content Include="Scripts\lib\html5shiv.js" />
+    <Content Include="Scripts\lib\jquery.maskedinput.min.js" />
+    <Content Include="Scripts\lib\jquery.numeric.js" />
     <Content Include="Scripts\lib\jquery.validate.min.js" />
     <Content Include="Scripts\lib\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\lib\knockout.validation.min.js" />
@@ -291,6 +290,7 @@
     <Content Include="Views\Home\_MyServiceCalls.cshtml" />
     <Content Include="Views\Home\_OverdueCalls.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Home\_SpecialProjects.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

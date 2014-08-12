@@ -26,6 +26,7 @@
                            {
                                MyServiceCalls = GetMyServiceCalls(user),
                                OverdueServiceCalls = GetOverdueServiceCalls(user),
+                               SpecialProjectServiceCalls = GetSpecialProjects(user),
                            };
             }
         }
@@ -70,6 +71,16 @@
         private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetMyServiceCalls(IUser user)
         {
             var sql = string.Format(SqlTemplate, "WHERE CompletionDate is null and EmployeeNumber=@0", "ORDER BY (7-DATEDIFF(d, wc.CreatedDate, GETDATE())), wc.CreatedDate, NumberOfLineItems DESC");
+
+            var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, user.EmployeeNumber);
+            return result;
+        }
+
+        private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetSpecialProjects(IUser user)
+        {
+            var markets = user.Markets;
+
+            var sql = string.Format(SqlTemplate, "WHERE CompletionDate is null AND DATEADD(dd, 7, wc.CreatedDate) <= getdate() AND (CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ") OR EmployeeNumber=@0) AND IsSpecialProject = 1", "ORDER BY EmployeeName, wc.CreatedDate");
 
             var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, user.EmployeeNumber);
             return result;

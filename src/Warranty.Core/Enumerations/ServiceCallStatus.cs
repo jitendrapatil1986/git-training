@@ -9,7 +9,6 @@
 
         public static readonly ServiceCallStatus Requested = new ServiceCallStatus(1, "Requested");
         public static readonly ServiceCallStatus Open = new ServiceCallStatus(2, "Open");
-        public static readonly ServiceCallStatus SpecialProject = new ServiceCallStatus(3, "Special Project");
-        public static readonly ServiceCallStatus Closed = new ServiceCallStatus(4, "Closed");
+        public static readonly ServiceCallStatus Closed = new ServiceCallStatus(3, "Closed");
     }
 }
