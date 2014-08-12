@@ -78,12 +78,11 @@
 
         private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetSpecialProjects(IUser user)
         {
-            //TODO: Uncomment condition for 'IsSpecialProject' once column is added to the db.
             var markets = user.Markets;
 
-            var sql = string.Format(SqlTemplate, "WHERE CompletionDate is null AND DATEADD(dd, 7, wc.CreatedDate) <= getdate() AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ") /*AND IsSpecialProject = 1*/", "ORDER BY EmployeeName, wc.CreatedDate");
+            var sql = string.Format(SqlTemplate, "WHERE CompletionDate is null AND DATEADD(dd, 7, wc.CreatedDate) <= getdate() AND (CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ") OR EmployeeNumber=@0) AND IsSpecialProject = 1", "ORDER BY EmployeeName, wc.CreatedDate");
 
-            var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql);
+            var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, user.EmployeeNumber);
             return result;
         }
     }
