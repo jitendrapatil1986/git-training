@@ -24,7 +24,7 @@ else
                         </div>
                         <div class="col-md-5">
                             <div class="col-md-1 hidden-sm hidden-xs">
-                                @Format.WithTooltip(@Format.NumberOfLineItems(line.NumberOfLineItems).ToString(), "Number of line items", false)
+                                @Format.NumberOfLineItems(line.NumberOfLineItems)
                             </div>
                             <div class="col-md-10">
                                 <a>@line.HomeownerName</a><br />
