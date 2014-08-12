@@ -9,6 +9,7 @@ namespace Warranty.Core.Entities
         public virtual Guid ServiceCallId { get; set; }
         public virtual string ServiceCallNumber { get; set; }
         public virtual string ServiceCallType { get; set; }
+        public virtual bool IsSpecialProject { get; set; }
         public virtual ServiceCallStatus ServiceCallStatus { get; set; }
         public virtual Guid JobId { get; set; }
         public virtual string Contact { get; set; }
