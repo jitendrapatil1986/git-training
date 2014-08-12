@@ -7,7 +7,7 @@ namespace Warranty.Core.Entities
     public class ServiceCall : IAuditableEntity
     {
         public virtual Guid ServiceCallId { get; set; }
-        public virtual string ServiceCallNumber { get; set; }
+        public virtual int ServiceCallNumber { get; set; }
         public virtual string ServiceCallType { get; set; }
         public virtual bool IsSpecialProject { get; set; }
         public virtual ServiceCallStatus ServiceCallStatus { get; set; }

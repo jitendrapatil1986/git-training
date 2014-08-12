@@ -55,6 +55,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Up", "Up", "{20518451-E144-
 		Database\Warranty\Up\0025_AlterPaymentsToIncreaseJdeId.sql = Database\Warranty\Up\0025_AlterPaymentsToIncreaseJdeId.sql
 		Database\Warranty\Up\0026_AlterPaymentsToIncreaseJobNumber.sql = Database\Warranty\Up\0026_AlterPaymentsToIncreaseJobNumber.sql
 		Database\Warranty\Up\0031_AlterPaymentsToAddEscalated.sql = Database\Warranty\Up\0031_AlterPaymentsToAddEscalated.sql
+		Database\Warranty\Up\0032_AlterStateCodeTypeToVarchar.sql = Database\Warranty\Up\0032_AlterStateCodeTypeToVarchar.sql
 		Database\Warranty\Up\0027_RemoveServiceCallStatus.sql = Database\Warranty\Up\0027_RemoveServiceCallStatus.sql
 		Database\Warranty\Up\0028_AddIsSpecialProjectToServiceCalls.sql = Database\Warranty\Up\0028_AddIsSpecialProjectToServiceCalls.sql
 		Database\Warranty\Up\0029_AlterImportDataSPToInsertStatus.sql = Database\Warranty\Up\0029_AlterImportDataSPToInsertStatus.sql
@@ -84,6 +85,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Warranty", "Warranty", "{D5
 		..\deployment\warranty\training.vars.ps1 = ..\deployment\warranty\training.vars.ps1
 		..\deployment\warranty\vars.ps1 = ..\deployment\warranty\vars.ps1
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.IntegrationTests", "Warranty.IntegrationTests\Warranty.IntegrationTests.csproj", "{82F4160F-9F09-4672-8A85-C6445C801E17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.Server.IntegrationTests", "Warranty.Server.IntegrationTests\Warranty.Server.IntegrationTests.csproj", "{0E28943C-3644-4A3C-BBBC-21BDFCC64791}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,6 +120,14 @@ Global
 		{24F01427-4EBA-4038-A8DE-320AC2857484}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24F01427-4EBA-4038-A8DE-320AC2857484}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24F01427-4EBA-4038-A8DE-320AC2857484}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82F4160F-9F09-4672-8A85-C6445C801E17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82F4160F-9F09-4672-8A85-C6445C801E17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82F4160F-9F09-4672-8A85-C6445C801E17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82F4160F-9F09-4672-8A85-C6445C801E17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E28943C-3644-4A3C-BBBC-21BDFCC64791}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E28943C-3644-4A3C-BBBC-21BDFCC64791}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E28943C-3644-4A3C-BBBC-21BDFCC64791}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E28943C-3644-4A3C-BBBC-21BDFCC64791}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
