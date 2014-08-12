@@ -35,14 +35,24 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accounting.Events">
+      <HintPath>..\packages\Accounting.Events.1.1.701.0\lib\net45\Accounting.Events.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate.Caches.SysCache">
       <HintPath>..\packages\NHibernate.Caches.SysCache.3.3.3.4000\lib\net35\NHibernate.Caches.SysCache.dll</HintPath>
+    </Reference>
+    <Reference Include="NPoco, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPoco.2.5.76\lib\net40\NPoco.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\packages\NServiceBus.Interfaces.4.2.0\lib\net40\NServiceBus.dll</HintPath>
@@ -76,7 +86,13 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="EndpointConfig.cs" />
-    <Compile Include="NHibernateUnitOfWork.cs" />
+    <Compile Include="Handlers\PaymentAddedHandler.cs" />
+    <Compile Include="Handlers\PaymentAddressNumberUpdatedHandler.cs" />
+    <Compile Include="Handlers\PaymentDeletedHandler.cs" />
+    <Compile Include="Handlers\PaymentIdUpdatedHandler.cs" />
+    <Compile Include="Handlers\PaymentPaymentAmountUpdatedHandler.cs" />
+    <Compile Include="Handlers\PaymentStatusUpdatedHandler.cs" />
+    <Compile Include="Headspring\Enumeration.cs" />
     <Compile Include="StructureMapConfig.cs" />
     <Compile Include="WarrantyRegistry.cs" />
   </ItemGroup>
@@ -84,7 +100,9 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Headspring\LICENSE.txt" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Warranty.Core\Warranty.Core.csproj">
       <Project>{991144F8-B588-4604-930B-3224FEC6FF32}</Project>
