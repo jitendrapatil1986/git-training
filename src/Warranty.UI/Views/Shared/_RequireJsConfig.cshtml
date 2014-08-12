@@ -1,9 +1,9 @@
 ﻿@using Warranty.UI.Core.Helpers
 <script>
-        var require = {
-            baseUrl: '@Url.Content("~/Scripts")',
-            waitSeconds: 200,
-            @if (EnvironmentHelper.IsDevelopment)
+    var require = {
+        baseUrl: '@Url.Content("~/Scripts")',
+        waitSeconds: 200,
+        @if (EnvironmentHelper.IsDevelopment)
             {
                 <text>urlArgs: '_=' + (new Date()).getTime(),</text>
             }
@@ -11,40 +11,49 @@
             {
                 <text>urlArgs: '_=' + '@VersionHelper.ApplicationVersionNumber()',</text>
             }
-            paths: {
-                'jquery': 'lib/jquery-1.10.2.min',
-                'jquery.ui': 'lib/jquery-ui-1.9.1.min',
+        paths: {
+            'jquery': 'lib/jquery-1.10.2.min',
+            'jquery.ui': 'lib/jquery-ui-1.9.1.min',
 
-                'knockout': 'lib/knockout-2.2.1',
-                'knockout.sortable': 'lib/knockout-sortable.min',
-                'knockout.mapping': 'lib/knockout.mapping.min',
-                'knockout.validation': 'lib/knockout.validation.min',
-                'knockout.bootstrap': 'lib/knockout-bootstrap.min',
+            'knockout': 'lib/knockout-2.2.1',
+            'knockout.sortable': 'lib/knockout-sortable.min',
+            'knockout.mapping': 'lib/knockout.mapping.min',
+            'knockout.validation': 'lib/knockout.validation.min',
+            'knockout.bootstrap': 'lib/knockout-bootstrap.min',
 
-                'bootstrap': 'lib/bootstrap.min',
-                //'bootstrap.datepicker': 'lib/bootstrap-datepicker',
-                //'bootstrap.tagmanager': 'lib/bootstrap-tagmanager',
-                //'bootstrap.colorpicker': 'lib/bootstrap-colorpicker',
-                //'bootstrap.popover': 'lib/bootstrap-popover',
-                'bootstrap.tooltip': 'lib/bootstrap-tooltip',
+            'bootstrap': 'lib/bootstrap.min',
+            //'bootstrap.datepicker': 'lib/bootstrap-datepicker',
+            //'bootstrap.tagmanager': 'lib/bootstrap-tagmanager',
+            //'bootstrap.colorpicker': 'lib/bootstrap-colorpicker',
+            //'bootstrap.popover': 'lib/bootstrap-popover',
+            'bootstrap.tooltip': 'lib/bootstrap-tooltip',
 
-                'bootbox': 'lib/bootbox.min',
-                
-                //'highcharts': 'lib/highcharts',
+            'bootbox': 'lib/bootbox.min',
+
+            //'highcharts': 'lib/highcharts',
+        },
+
+        shim: {
+            'jquery.ui': {
+                deps: ['jquery'],
+                init: function($) {
+                    $.widget.bridge('uitooltip', $.ui.tooltip);
+                }
             },
-
-            shim: {
-                'jquery.ui': {
-                    deps: ['jquery'],
-                    init: function($) {
-                        $.widget.bridge('uitooltip', $.ui.tooltip);
-                    }
-                },
-                'jquery.validate': {
-                    deps: ['jquery', 'lib/jquery.validate.min']
-                },
-                'lib/jquery.validate.min': {
-                    deps: ['jquery']
+            'jquery.maskedinput': {
+                deps: ['jquery', 'lib/jquery.maskedinput.min']
+            },
+            'lib/jquery.maskedinput.min': {
+                deps: ['jquery']
+            },
+            'jquery.validate': {
+                deps: ['jquery', 'lib/jquery.validate.min']
+            },
+            'lib/jquery.validate.min': {
+                deps: ['jquery']
+            },
+            'jquery.numeric': {
+                deps: ['jquery']
                 },
                 'knockout.sortable': {
                     deps: ['knockout', 'jquery.ui']
