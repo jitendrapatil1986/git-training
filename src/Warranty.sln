@@ -54,6 +54,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Up", "Up", "{20518451-E144-
 		Database\Warranty\Up\0024_AlterPaymentsToAddAuditInfo.sql = Database\Warranty\Up\0024_AlterPaymentsToAddAuditInfo.sql
 		Database\Warranty\Up\0025_AlterPaymentsToIncreaseJdeId.sql = Database\Warranty\Up\0025_AlterPaymentsToIncreaseJdeId.sql
 		Database\Warranty\Up\0026_AlterPaymentsToIncreaseJobNumber.sql = Database\Warranty\Up\0026_AlterPaymentsToIncreaseJobNumber.sql
+		Database\Warranty\Up\0031_AlterPaymentsToAddEscalated.sql = Database\Warranty\Up\0031_AlterPaymentsToAddEscalated.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{D0DD7813-D199-44F7-A1F3-EC38DCA342F2}"
