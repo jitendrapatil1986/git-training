@@ -290,6 +290,7 @@
     <Content Include="Views\ServiceCall\RequestPayment.cshtml" />
     <Content Include="Views\Home\_MyServiceCalls.cshtml" />
     <Content Include="Views\Home\_OverdueCalls.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
