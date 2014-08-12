@@ -1,5 +1,5 @@
 ﻿define(['jquery'], function ($) {
-    $('.service-call-line:lt(4)').removeClass('hide');
+    $('.service-call-line:lt(5)').removeClass('hide');
 
     $('.show-more').click(function () {
         if ($(this).text() == 'All') {

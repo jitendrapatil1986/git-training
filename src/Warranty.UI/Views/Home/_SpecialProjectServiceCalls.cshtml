@@ -1,21 +1,22 @@
 ﻿@using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.ServiceCallsWidget.ServiceCallsWidgetModel
 
-@if (!Model.OverdueServiceCalls.Any())
+@if (!Model.SpecialProjectServiceCalls.Any())
 {
     <div class="well-sm">
-        <em>No calls are overdue. Hooray!</em>
+        <em>No Special Project calls.</em>
     </div>
 }
 else
 {
-<div class="panel-group" id="overdue_list">
-    @foreach (var employee in Model.RepresentativesWithOverdueCalls)
+<div class="panel-group" id="specialproject_list">
+    @foreach (var employee in Model.RepresentativeWithSpecialProjectCalls)
     {
         <div class="panel list-group-item">
-            <a data-toggle="collapse" data-parent="#overdue_list" href="#collapseOverdueCalls@(employee.EmployeeNumber)" class="text-capitalize accordion-toggle collapsed">@employee.Name</a> <span class="badge">@employee.ServiceCallsCount</span>
-            <div id="collapseOverdueCalls@(employee.EmployeeNumber)" class="collapse panel-body">
-                @foreach (var line in Model.OverdueServiceCalls.Where(x => x.AssignedToEmployeeNumber == employee.EmployeeNumber))
+            <a data-toggle="collapse" data-parent="#specialproject_list" href="#collapseSpecialProjectCalls@(employee.EmployeeNumber)" class="text-capitalize accordion-toggle collapsed">@employee.Name</a> <span class="badge">@employee.ServiceCallsCount</span>
+
+            <div id="collapseSpecialProjectCalls@(employee.EmployeeNumber)" class="collapse panel-body">
+                @foreach (var line in Model.SpecialProjectServiceCalls.Where(x => x.AssignedToEmployeeNumber == employee.EmployeeNumber))
                 {
                     <div class="service-call-line">
                         <div class="col-md-3">
@@ -48,7 +49,7 @@ else
                 }
             </div>
         </div>
-
     }
+
 </div>
 }

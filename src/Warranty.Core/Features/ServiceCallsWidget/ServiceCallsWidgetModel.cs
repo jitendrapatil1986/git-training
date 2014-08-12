@@ -10,10 +10,12 @@
         {
             MyServiceCalls = new List<ServiceCall>();
             OverdueServiceCalls = new List<ServiceCall>();
+            SpecialProjectServiceCalls = new List<ServiceCall>();
         }
 
         public IEnumerable<ServiceCall> MyServiceCalls { get; set; }
         public IEnumerable<ServiceCall> OverdueServiceCalls { get; set; }
+        public IEnumerable<ServiceCall> SpecialProjectServiceCalls { get; set; }
 
         public IEnumerable<RepresentativeWithCallCount> RepresentativesWithOverdueCalls
         {
@@ -29,6 +31,23 @@
                                                                    ServiceCallsCount = g.Count()
                                                                })
                                           .OrderByDescending(x=>x.ServiceCallsCount);
+            }
+        }
+
+        public IEnumerable<RepresentativeWithCallCount> RepresentativeWithSpecialProjectCalls
+        {
+            get
+            {
+                return SpecialProjectServiceCalls.GroupBy(call => call.AssignedToEmployeeNumber
+                                                          , call => call.AssignedTo,
+                                                          (key, g) =>
+                                                          new RepresentativeWithCallCount
+                                                              {
+                                                                  EmployeeNumber = key,
+                                                                  Name = g.First().ToLower(),
+                                                                  ServiceCallsCount = g.Count()
+                                                              })
+                                                 .OrderByDescending(x => x.ServiceCallsCount);
             }
         }
 
