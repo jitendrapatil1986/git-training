@@ -248,7 +248,7 @@
             if (numberOfLineItems <= 1)
                 return MvcHtmlString.Empty;
 
-            return MvcHtmlString.Create(string.Format("<span class=\"label label-info\">{0}</span>", numberOfLineItems));
+            return MvcHtmlString.Create(string.Format("<span class=\"label label-info has-bottom-tooltip\" title=\"Number of line items\">{0}</span>", numberOfLineItems));
         }
 
         public static MvcHtmlString ServiceCallDaysLeft(int numberOfDaysRemaining)
