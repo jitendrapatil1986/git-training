@@ -66,7 +66,7 @@ namespace Warranty.Core.Features.RepServiceCalls
 
         private IEnumerable<ServiceRepServiceCallsModel.ServiceCall> GetServiceRepServiceCalls(ServiceCallStatus serviceCallStatus, Guid employeeId)
         {
-            var whereClause = string.Format("WHERE wc.ServiceCallStatusId = {0} and wc.WarrantyRepresentativeEmployeeId = '{1}'",
+            var whereClause = string.Format("WHERE wc.ServiceCallStatusId = {0} and wc.WarrantyRepresentativeEmployeeId = '{1}' and wc.CreatedDate > DATEADD(year, -1, GETDATE())",
                                                serviceCallStatus.Value, employeeId);
 
             var sql = string.Format(SqlTemplate, whereClause, "ORDER BY e.EmployeeName, wc.CreatedDate");
