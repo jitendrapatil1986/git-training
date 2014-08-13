@@ -11,11 +11,13 @@
             MyServiceCalls = new List<ServiceCall>();
             OverdueServiceCalls = new List<ServiceCall>();
             SpecialProjectServiceCalls = new List<ServiceCall>();
+            EscalatedServiceCalls = new List<ServiceCall>();
         }
 
         public IEnumerable<ServiceCall> MyServiceCalls { get; set; }
         public IEnumerable<ServiceCall> OverdueServiceCalls { get; set; }
         public IEnumerable<ServiceCall> SpecialProjectServiceCalls { get; set; }
+        public IEnumerable<ServiceCall> EscalatedServiceCalls { get; set; }
 
         public IEnumerable<RepresentativeWithCallCount> RepresentativesWithOverdueCalls
         {
@@ -47,6 +49,23 @@
                                                                   Name = g.First().ToLower(),
                                                                   ServiceCallsCount = g.Count()
                                                               })
+                                                 .OrderByDescending(x => x.ServiceCallsCount);
+            }
+        }
+
+        public IEnumerable<RepresentativeWithCallCount> RepresentativeWithEscalatedCalls
+        {
+            get
+            {
+                return EscalatedServiceCalls.GroupBy(call => call.AssignedToEmployeeNumber
+                                                          , call => call.AssignedTo,
+                                                          (key, g) =>
+                                                          new RepresentativeWithCallCount
+                                                          {
+                                                              EmployeeNumber = key,
+                                                              Name = g.First().ToLower(),
+                                                              ServiceCallsCount = g.Count()
+                                                          })
                                                  .OrderByDescending(x => x.ServiceCallsCount);
             }
         }
