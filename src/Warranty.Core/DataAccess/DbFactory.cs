@@ -8,7 +8,7 @@
 
         public static void Setup()
         {
-            DatabaseFactory = DatabaseFactory.Config(x => x.UsingDatabase(() => new Database("Warranty")));
+            DatabaseFactory = DatabaseFactory.Config(x => x.UsingDatabase(() => new Database("WarrantyDB")));
         }
     }
 }
