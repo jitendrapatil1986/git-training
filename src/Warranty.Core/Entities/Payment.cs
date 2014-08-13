@@ -4,7 +4,7 @@ namespace Warranty.Core.Entities
 {
     public class Payment : IAuditableEntity
     {
-        public virtual int PaymentId { get; set; }
+        public virtual Guid PaymentId { get; set; }
         public virtual string VendorNumber { get; set; }
         public virtual decimal Amount { get; set; }
         public virtual string PaymentStatus { get; set; }

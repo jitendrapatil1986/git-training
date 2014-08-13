@@ -1,3 +1,8 @@
+using System;
+using System.Data.SqlTypes;
+using NHibernate.SqlTypes;
+using NHibernate.Type;
+
 namespace Warranty.Core.DataAccess.Mappings
 {
     using Entities;
