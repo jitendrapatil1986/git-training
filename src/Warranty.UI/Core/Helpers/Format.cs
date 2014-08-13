@@ -95,6 +95,23 @@
             return String.Format("{0:MMM dd yyyy}", date);
         }
 
+        public static MvcHtmlString DateForOpenDate(DateTime date)
+        {
+            var formattedDate = String.Format("{0:MMM dd yyyy}", date);
+            return MvcHtmlString.Create(string.Format("<span class=\"glyphicon glyphicon-calendar \"></span><span class=\"text-success\"> {0}</span>", formattedDate));
+        }
+
+        public static MvcHtmlString DateForClosedDate(DateTime? date)
+        {
+            var formattedDate = String.Empty;
+            if (date.HasValue)
+            {
+                formattedDate = String.Format("{0:MMM dd yyyy}", date);
+            }
+
+            return MvcHtmlString.Create(string.Format("<span class=\"glyphicon glyphicon-calendar\"></span><span class=\"text-danger\"> {0}</span>", formattedDate));
+        }
+
         public static string DateAsMonthDayOnly(DateTime date)
         {
             return String.Format("{0:MMM d}", date);
