@@ -18,8 +18,8 @@ namespace Warranty.Server.Handlers
             using (_database)
             {
                 const string sql = @"UPDATE Payments
-                                        SET PaymentStatus = {0}
-                                        WHERE JdeIdentifier = {1}";
+                                        SET PaymentStatus = @0
+                                        WHERE JdeIdentifier = @1";
 
                 _database.Execute(sql, message.Status, message.JDEId);
             }

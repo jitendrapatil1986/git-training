@@ -92,16 +92,12 @@
     <Compile Include="Handlers\PaymentIdUpdatedHandler.cs" />
     <Compile Include="Handlers\PaymentPaymentAmountUpdatedHandler.cs" />
     <Compile Include="Handlers\PaymentStatusUpdatedHandler.cs" />
-    <Compile Include="Headspring\Enumeration.cs" />
     <Compile Include="StructureMapConfig.cs" />
     <Compile Include="WarrantyRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Headspring\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Warranty.Core\Warranty.Core.csproj">

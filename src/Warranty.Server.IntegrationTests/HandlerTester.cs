@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NPoco;
 using NServiceBus;
-using NServiceBus.UnitOfWork;
 using StructureMap;
+using Warranty.Core.DataAccess;
 using Warranty.Server.IntegrationTests.SetUp;
 
 namespace Warranty.Server.IntegrationTests
@@ -12,15 +11,17 @@ namespace Warranty.Server.IntegrationTests
     public abstract class HandlerTester<TEvent> where TEvent : IEvent, new()
     {
         protected readonly IContainer TestContainer;
-        protected IDatabase _database;
+        protected readonly IDatabase TestDatabase;
 
-        protected HandlerTester(IDatabase database)
+        protected HandlerTester()
         {
             TestContainer = TestIoC.Container.GetNestedContainer();
-            _database = database;
 
-            var deleter = TestContainer.GetInstance<DatabaseDeleter>();
-            deleter.DeleteAllData(_database);
+            DbFactory.Setup();
+            TestDatabase = DbFactory.DatabaseFactory.GetDatabase();
+
+            var deleter = new DatabaseDeleter(TestDatabase);
+            deleter.DeleteAllData(TestDatabase);
         }
 
         protected TEvent Event { get; set; }
@@ -48,35 +49,28 @@ namespace Warranty.Server.IntegrationTests
 
         private void ExecuteSend()
         {
-            var unitOfWork = TestContainer.GetInstance<IManageUnitsOfWork>();
             var handler = TestContainer.GetInstance<IHandleMessages<TEvent>>();
 
             try
             {
-                unitOfWork.Begin();
                 handler.Handle(Event);
-                unitOfWork.End();
             }
-            catch (Exception ex)
-            {
-                unitOfWork.End(ex);
-                throw;
-            }
+            catch {}
         }
 
         protected T Get<T>(object id)
         {
-            using (_database)
+            using (TestDatabase)
             {
-                return _database.SingleById<T>(id);
+                return TestDatabase.SingleById<T>(id);
             }
         }
 
         protected IEnumerable<T> Query<T>()
         {
-            using (_database)
+            using (TestDatabase)
             {
-                return _database.Query<T>().ToList();
+                return TestDatabase.Query<T>().ToList();
             }
         }
     }

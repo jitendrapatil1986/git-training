@@ -1,7 +1,6 @@
 ﻿using Accounting.Events.Payment;
 using NPoco;
 using NServiceBus;
-using Warranty.Core.Entities;
 
 namespace Warranty.Server.Handlers
 {
@@ -19,8 +18,8 @@ namespace Warranty.Server.Handlers
             using (_database)
             {
                 const string sql = @"UPDATE Payments
-                                        SET VendorNumber = {0}
-                                        WHERE JdeIdentifier = {1}";
+                                        SET VendorNumber = @0
+                                        WHERE JdeIdentifier = @1";
 
                 _database.Execute(sql, message.AddressNumber, message.JDEId);
             }

@@ -1,6 +1,6 @@
 ﻿using StructureMap;
 
-namespace Warranty.Server.IntegrationTests
+namespace Warranty.Server.IntegrationTests.SetUp
 {
     public static class TestIoC
     {

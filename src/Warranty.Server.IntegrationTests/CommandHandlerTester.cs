@@ -4,27 +4,30 @@ using NPoco;
 using NServiceBus;
 using NServiceBus.UnitOfWork;
 using StructureMap;
+using Warranty.Core.DataAccess;
 using Warranty.Server.IntegrationTests.SetUp;
 
 namespace Warranty.Server.IntegrationTests
 {
     public abstract class CommandHandlerTester<TEvent> where TEvent : IMessage, new()
     {
-        private readonly IContainer _container;
-        private readonly IDatabase _database;
+        private readonly IContainer TestContainer;
+        private readonly IDatabase TestDatabase;
 
-        protected CommandHandlerTester(IDatabase database)
+        protected CommandHandlerTester()
         {
-            _database = database;
-            _container = TestIoC.Container.GetNestedContainer();
+            TestContainer = TestIoC.Container.GetNestedContainer();
 
-            var deleter = _container.GetInstance<DatabaseDeleter>();
-            deleter.DeleteAllData(database);
+            DbFactory.Setup();
+            TestDatabase = DbFactory.DatabaseFactory.GetDatabase();
+
+            var deleter = TestContainer.GetInstance<DatabaseDeleter>();
+            deleter.DeleteAllData(TestDatabase);
         }
 
         protected T GetSaved<T>(Action<T> action = null)
         {
-            var builder = _container.GetInstance<EntityBuilder<T>>();
+            var builder = TestContainer.GetInstance<EntityBuilder<T>>();
             return builder.GetSaved(action ?? (x => { }));
         }
 
@@ -32,21 +35,15 @@ namespace Warranty.Server.IntegrationTests
         {
             var @event = new TEvent();
             eventAction(@event);
-            _container.Configure(cfg => cfg.For<IBus>().Use(Bus));
-            var unitOfWork = _container.GetInstance<IManageUnitsOfWork>();
-            var handler = _container.GetInstance<IHandleMessages<TEvent>>();
+            TestContainer.Configure(cfg => cfg.For<IBus>().Use(Bus));
+            var handler = TestContainer.GetInstance<IHandleMessages<TEvent>>();
 
             try
             {
-                unitOfWork.Begin();
                 handler.Handle(@event);
-                unitOfWork.End();
             }
-            catch (Exception ex)
-            {
-                unitOfWork.End(ex);
-                throw;
-            }
+            catch {}
+
             return @event;
         }
 
@@ -54,17 +51,17 @@ namespace Warranty.Server.IntegrationTests
 
         protected T Get<T>(object id)
         {
-            using (_database)
+            using (TestDatabase)
             {
-                return _database.SingleById<T>(id);
+                return TestDatabase.SingleById<T>(id);
             }
         }
 
         protected T Get<T>(Expression<Func<T, bool>> predicate)
         {
-            using (_database)
+            using (TestDatabase)
             {
-                return _database.Query<T>().Where(predicate).FirstOrDefault();
+                return TestDatabase.Query<T>().Where(predicate).FirstOrDefault();
             }
         }
     }

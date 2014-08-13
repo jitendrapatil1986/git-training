@@ -18,7 +18,7 @@ namespace Warranty.Server.Handlers
         {
             using (_database)
             {
-                _database.Save<Payment>(new Payment
+                _database.Insert(new Payment
                 {
                     VendorNumber = message.AddressNumber,
                     Amount = message.PaymentAmount,

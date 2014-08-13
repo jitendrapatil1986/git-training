@@ -1,4 +1,7 @@
-﻿namespace Warranty.Server
+﻿using NPoco;
+using Warranty.Core.DataAccess;
+
+namespace Warranty.Server
 {
     using StructureMap.Configuration.DSL;
 
@@ -11,6 +14,8 @@
                 scanner.WithDefaultConventions();
                 
                 scanner.TheCallingAssembly();
+
+                For<IDatabase>().Use(() => DbFactory.DatabaseFactory.GetDatabase());
             });
         }
     }

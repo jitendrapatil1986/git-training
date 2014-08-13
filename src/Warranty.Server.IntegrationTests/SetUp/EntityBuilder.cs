@@ -23,7 +23,7 @@ namespace Warranty.Server.IntegrationTests.SetUp
             {
                 using (_database)
                 {
-                    _database.Save<T>(entity);
+                    _database.Insert(entity);
                 }
             }
 
