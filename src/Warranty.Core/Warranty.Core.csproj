@@ -109,7 +109,7 @@
     <Compile Include="Entities\ServiceCallComment.cs" />
     <Compile Include="Entities\ServiceCallLineItem.cs" />
     <Compile Include="Enumerations\ServiceCallStatus.cs" />
-    <Compile Include="DataAccess\GuidExtension.cs" />
+    <Compile Include="DataAccess\GuidComb.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="DataAccess\ConfigurationFactory.cs" />
     <Compile Include="DataAccess\HbmMappingGenerator.cs" />
