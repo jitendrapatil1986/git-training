@@ -89,6 +89,8 @@
             public int NumberOfDaysRemaining { get; set; }
             public int NumberOfLineItems { get; set; }
             public string PhoneNumber { get; set; }
+            public DateTime EscalationDate { get; set; }
+            public string EscalationReason { get; set; }
 
             public int PercentComplete
             {
