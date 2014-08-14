@@ -1,4 +1,7 @@
-﻿namespace Warranty.Core.DataAccess
+﻿using NPoco.FluentMappings;
+using Warranty.Core.DataAccess.Mappings;
+
+namespace Warranty.Core.DataAccess
 {
     using NPoco;
 
@@ -8,7 +11,13 @@
 
         public static void Setup()
         {
-            DatabaseFactory = DatabaseFactory.Config(x => x.UsingDatabase(() => new Database("WarrantyDB")));
+            var fluentConfig = FluentMappingConfiguration.Configure(new PaymentMapping());
+
+            DatabaseFactory = DatabaseFactory.Config(x =>
+            {
+                x.UsingDatabase(() => new Database("WarrantyDB"));
+                x.WithFluentConfig(fluentConfig);
+            });
         }
     }
 }

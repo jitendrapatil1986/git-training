@@ -1,20 +1,23 @@
-using NHibernate.Mapping.ByCode;
+using NPoco.FluentMappings;
 using Warranty.Core.Entities;
 
 namespace Warranty.Core.DataAccess.Mappings
 {
-    public class PaymentMapping : AuditableEntityMapping<Payment>
+    public class PaymentMapping : Map<Payment>
     {
         public PaymentMapping()
         {
-            Table("Payments");
+            PrimaryKey("PaymentId");
+            TableName("Payments");
 
-            Id(x => x.PaymentId, map => map.Generator(Generators.GuidComb));
-            Property(x => x.VendorNumber);
-            Property(x => x.Amount);
-            Property(x => x.PaymentStatus);
-            Property(x => x.JobNumber);
-            Property(x => x.JdeIdentifier);
+            Columns(x =>
+            {
+                x.Column(y => y.VendorNumber);
+                x.Column(y => y.Amount);
+                x.Column(y => y.PaymentStatus);
+                x.Column(y => y.JobNumber);
+                x.Column(y => y.JdeIdentifier);
+            });
         }
     }
 }

@@ -1,10 +1,7 @@
 using System;
-using NPoco;
 
 namespace Warranty.Core.Entities
 {
-    [TableName("Payments")]
-    [PrimaryKey("PaymentId")]
     public class Payment : IAuditableEntity
     {
         public virtual Guid PaymentId { get; set; }
