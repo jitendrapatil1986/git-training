@@ -15,7 +15,7 @@ namespace Warranty.UI.Core.Initialization
 
     public class WarrantyWebsiteBootstrapper
     {
-        public static void Boostrap(IUserSession userSession)
+        public static void Boostrap()
         {
             AreaRegistration.RegisterAllAreas();
 
@@ -33,7 +33,7 @@ namespace Warranty.UI.Core.Initialization
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
 
-            DbFactory.Setup(userSession);
+            DbFactory.Setup(new WarrantyUserSession());
             InitializeAutoMapper();
             InitializeNServiceBus();
         }

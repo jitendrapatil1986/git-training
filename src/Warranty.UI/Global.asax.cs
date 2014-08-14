@@ -6,9 +6,9 @@ namespace Warranty.UI
 
     public class MvcApplication : System.Web.HttpApplication
     {
-        protected void Application_Start(IUserSession userSession)
+        protected void Application_Start()
         {
-            WarrantyWebsiteBootstrapper.Boostrap(userSession);
+            WarrantyWebsiteBootstrapper.Boostrap();
 
 #if DEBUG
             AutoMapper.Mapper.AssertConfigurationIsValid();

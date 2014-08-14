@@ -93,6 +93,8 @@
     <Compile Include="DataAccess\Mappings\ServiceCallCommentMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallLineItemMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallMapping.cs" />
+    <Compile Include="DataAccess\SqlServerDatabase.cs" />
+    <Compile Include="DataAccess\SqlServerDatabaseType.cs" />
     <Compile Include="Entities\City.cs" />
     <Compile Include="Entities\Community.cs" />
     <Compile Include="Entities\Division.cs" />
