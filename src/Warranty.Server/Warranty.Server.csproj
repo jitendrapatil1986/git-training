@@ -92,6 +92,7 @@
     <Compile Include="Handlers\PaymentIdUpdatedHandler.cs" />
     <Compile Include="Handlers\PaymentPaymentAmountUpdatedHandler.cs" />
     <Compile Include="Handlers\PaymentStatusUpdatedHandler.cs" />
+    <Compile Include="Security\WarrantyServerUser.cs" />
     <Compile Include="StructureMapConfig.cs" />
     <Compile Include="WarrantyRegistry.cs" />
   </ItemGroup>

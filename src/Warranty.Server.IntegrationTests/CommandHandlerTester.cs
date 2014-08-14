@@ -5,6 +5,7 @@ using NServiceBus;
 using NServiceBus.UnitOfWork;
 using StructureMap;
 using Warranty.Core.DataAccess;
+using Warranty.Core.Security;
 using Warranty.Server.IntegrationTests.SetUp;
 
 namespace Warranty.Server.IntegrationTests
@@ -14,11 +15,11 @@ namespace Warranty.Server.IntegrationTests
         private readonly IContainer TestContainer;
         private readonly IDatabase TestDatabase;
 
-        protected CommandHandlerTester()
+        protected CommandHandlerTester(IUserSession userSession)
         {
             TestContainer = TestIoC.Container.GetNestedContainer();
 
-            DbFactory.Setup();
+            DbFactory.Setup(userSession);
             TestDatabase = DbFactory.DatabaseFactory.GetDatabase();
 
             var deleter = TestContainer.GetInstance<DatabaseDeleter>();

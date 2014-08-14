@@ -1,16 +1,20 @@
-﻿using Accounting.Events.Payment;
+﻿using System;
+using Accounting.Events.Payment;
 using NPoco;
 using NServiceBus;
+using Warranty.Core.Security;
 
 namespace Warranty.Server.Handlers
 {
     public class PaymentAddressNumberUpdatedHandler : IHandleMessages<PaymentAddressNumberUpdated>
     {
         private readonly IDatabase _database;
+        private readonly IUser _user;
 
-        public PaymentAddressNumberUpdatedHandler(IDatabase database)
+        public PaymentAddressNumberUpdatedHandler(IDatabase database, IUser user)
         {
             _database = database;
+            _user = user;
         }
 
         public void Handle(PaymentAddressNumberUpdated message)
@@ -18,10 +22,12 @@ namespace Warranty.Server.Handlers
             using (_database)
             {
                 const string sql = @"UPDATE Payments
-                                        SET VendorNumber = @0
-                                        WHERE JdeIdentifier = @1";
+                                        SET VendorNumber = @0,
+                                            UpdatedDate = @1,
+                                            UpdatedBy = @2
+                                        WHERE JdeIdentifier = @3";
 
-                _database.Execute(sql, message.AddressNumber, message.JDEId);
+                _database.Execute(sql, message.AddressNumber, DateTime.Now, _user.UserName, message.JDEId);
             }
         }
     }

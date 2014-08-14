@@ -4,6 +4,8 @@ using NPoco;
 using NServiceBus;
 using StructureMap;
 using Warranty.Core.DataAccess;
+using Warranty.Core.Security;
+using Warranty.Server.IntegrationTests.Security;
 using Warranty.Server.IntegrationTests.SetUp;
 
 namespace Warranty.Server.IntegrationTests
@@ -17,7 +19,7 @@ namespace Warranty.Server.IntegrationTests
         {
             TestContainer = TestIoC.Container.GetNestedContainer();
 
-            DbFactory.Setup();
+            DbFactory.Setup(new WarrantyUserSession());
             TestDatabase = DbFactory.DatabaseFactory.GetDatabase();
 
             var deleter = new DatabaseDeleter(TestDatabase);

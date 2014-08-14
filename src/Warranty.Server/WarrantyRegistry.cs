@@ -1,5 +1,7 @@
 ﻿using NPoco;
 using Warranty.Core.DataAccess;
+using Warranty.Core.Security;
+using Warranty.Server.Security;
 
 namespace Warranty.Server
 {
@@ -16,6 +18,7 @@ namespace Warranty.Server
                 scanner.TheCallingAssembly();
 
                 For<IDatabase>().Use(() => DbFactory.DatabaseFactory.GetDatabase());
+                For<IUser>().Use(() => new WarrantyServerUser());
             });
         }
     }

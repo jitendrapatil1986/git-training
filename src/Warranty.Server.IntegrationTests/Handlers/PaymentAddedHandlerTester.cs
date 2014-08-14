@@ -14,7 +14,7 @@ namespace Warranty.Server.IntegrationTests.Handlers
         {
             Send(x =>
             {
-                x.PaymentAmount = 1.32M;
+                x.PaymentAmount = 1546.35M;
             });
         }
 

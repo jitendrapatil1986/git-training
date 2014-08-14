@@ -102,6 +102,7 @@
     <Compile Include="IntegrationSetUpFixture.cs" />
     <Compile Include="CommandHandlerTester.cs" />
     <Compile Include="Handlers\PaymentIdUpdatedHandlerTester.cs" />
+    <Compile Include="Security\WarrantyUserSession.cs" />
     <Compile Include="SetUp\PaymentEntityBuilder.cs" />
     <Compile Include="SetUp\IEntityBuilder.cs" />
     <Compile Include="SetUp\EntityBuilder.cs" />
