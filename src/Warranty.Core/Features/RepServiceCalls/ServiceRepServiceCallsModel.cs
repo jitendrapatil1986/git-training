@@ -24,11 +24,16 @@ namespace Warranty.Core.Features.RepServiceCalls
             public string Address { get; set; }
             public string CallNumber { get; set; }
             public DateTime CreatedDate { get; set; }
+            public DateTime WarrantyStartDate { get; set; }
             public DateTime? CompletionDate { get; set; }
             public string HomeownerName { get; set; }
             public int NumberOfDaysRemaining { get; set; }
             public int NumberOfLineItems { get; set; }
+            public int DaysOpenedFor { get; set; }
+            public int YearsWithinWarranty { get; set; }
             public string PhoneNumber { get; set; }
+            public bool IsSpecialProject { get; set; }
+            public bool IsEscalated { get; set; }
 
             public int PercentComplete
             {

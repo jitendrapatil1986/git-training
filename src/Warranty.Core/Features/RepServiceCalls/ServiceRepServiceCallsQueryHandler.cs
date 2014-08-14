@@ -21,8 +21,8 @@ namespace Warranty.Core.Features.RepServiceCalls
                 return new ServiceRepServiceCallsModel
                            {
                                EmployeeName = GetEmployeeName(query.EmployeeId),
-                               OpenServiceCalls = GetServiceRepServiceCalls(ServiceCallStatus.Open, query.EmployeeId),
-                               ClosedServiceCalls = GetServiceRepServiceCalls(ServiceCallStatus.Closed, query.EmployeeId),
+                               OpenServiceCalls = GetServiceRepOpenServiceCalls(query.EmployeeId),
+                               ClosedServiceCalls = GetServiceRepClosedServiceCalls(query.EmployeeId),
                            };
             }
         }
@@ -39,6 +39,11 @@ namespace Warranty.Core.Features.RepServiceCalls
                                         , ho.HomePhone as PhoneNumber
                                         , e.EmployeeName as AssignedTo
                                         , e.EmployeeNumber as AssignedToEmployeeNumber
+                                        , wc.SpecialProject as IsSpecialProject
+                                        , wc.Escalated as IsEscalated
+                                        , DATEDIFF(dd, wc.CreatedDate, wc.CompletionDate) as DaysOpenedFor
+                                        , DATEDIFF(yy, j.CloseDate, wc.CreatedDate) as YearsWithinWarranty
+                                        , j.CloseDate as WarrantyStartDate
                                      FROM [ServiceCalls] wc
                                      inner join Jobs j
                                        on wc.JobId = j.JobId
@@ -55,7 +60,6 @@ namespace Warranty.Core.Features.RepServiceCalls
                                      {0} /* WHERE */
                                      {1} /* ORDER BY */";
 
-
         private string GetEmployeeName(Guid employeeId)
         {
             var sql = string.Format("Select EmployeeName from Employees where EmployeeId ='{0}'", employeeId);
@@ -64,15 +68,33 @@ namespace Warranty.Core.Features.RepServiceCalls
             return result;
         }
 
-        private IEnumerable<ServiceRepServiceCallsModel.ServiceCall> GetServiceRepServiceCalls(ServiceCallStatus serviceCallStatus, Guid employeeId)
+        private IEnumerable<ServiceRepServiceCallsModel.ServiceCall> GetServiceRepOpenServiceCalls(Guid employeeId)
         {
-            var whereClause = string.Format("WHERE wc.ServiceCallStatusId = {0} and wc.WarrantyRepresentativeEmployeeId = '{1}' and wc.CreatedDate > DATEADD(year, -1, GETDATE())",
-                                               serviceCallStatus.Value, employeeId);
+            var whereClause = GetWhereClause(ServiceCallStatus.Open, employeeId);
 
-            var sql = string.Format(SqlTemplate, whereClause, "ORDER BY e.EmployeeName, wc.CreatedDate");
+            var sql = string.Format(SqlTemplate, whereClause, "ORDER BY NumberOfDaysRemaining, ho.HomeOwnerName");
 
             var result = _database.Fetch<ServiceRepServiceCallsModel.ServiceCall>(sql);
             return result;
+        }
+
+        private IEnumerable<ServiceRepServiceCallsModel.ServiceCall> GetServiceRepClosedServiceCalls(Guid employeeId)
+        {
+            var whereClause = GetWhereClause(ServiceCallStatus.Closed, employeeId);
+
+            var sql = string.Format(SqlTemplate, whereClause, "ORDER BY wc.CompletionDate desc, ho.HomeOwnerName");
+
+            var result = _database.Fetch<ServiceRepServiceCallsModel.ServiceCall>(sql);
+            return result;
+        }
+
+        private static string GetWhereClause(ServiceCallStatus serviceCallStatus, Guid employeeId)
+        {
+            var whereClause =
+                string.Format(
+                    "WHERE wc.ServiceCallStatusId = {0} and wc.WarrantyRepresentativeEmployeeId = '{1}' and wc.CreatedDate > DATEADD(year, -1, GETDATE())",
+                    serviceCallStatus.Value, employeeId);
+            return whereClause;
         }
     }
 }

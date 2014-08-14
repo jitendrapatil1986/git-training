@@ -1,4 +1,6 @@
-﻿namespace Warranty.UI.Core.Helpers
+﻿using System.Globalization;
+
+namespace Warranty.UI.Core.Helpers
 {
     using System;
     using System.Web.Mvc;
@@ -95,22 +97,79 @@
             return String.Format("{0:MMM dd yyyy}", date);
         }
 
-        public static MvcHtmlString DateForOpenDate(DateTime date)
+        public static MvcHtmlString DaysOpenedFor(int days, DateTime openedDate, DateTime? closedDate)
         {
-            var formattedDate = String.Format("{0:MMM dd yyyy}", date);
-            return MvcHtmlString.Create(string.Format("<span class=\"glyphicon glyphicon-calendar \"></span><span class=\"text-success\"> {0}</span>", formattedDate));
+            string cssClass;
+            if (days == 7)
+                cssClass = "primary";
+            else if (days < 7)
+                cssClass = "success";
+            else
+                cssClass = "danger";
+
+            var stringDays = days <= 1 ? "Day" : "Days";
+
+            var displayedDays = days == 0 ? "< 1" : days.ToString(CultureInfo.InvariantCulture);
+
+            var htmlString =
+                string.Format(@"<div class='has-bottom-tooltip' data-original-title='From {0} to {1}'>
+                                    <span class='glyphicon glyphicon-time text-muted'></span> <strong class='text-{2}'>{3}</strong><small class='text-muted'> {4}</small>
+                                </div>",
+                                String.Format("{0:MMM dd yyyy}", openedDate),
+                                String.Format("{0:MMM dd yyyy}", closedDate),
+                                cssClass,
+                                displayedDays,
+                                stringDays);
+
+            return MvcHtmlString.Create(htmlString);
         }
 
-        public static MvcHtmlString DateForClosedDate(DateTime? date)
+        public static MvcHtmlString Escalated(bool isEscalated)
         {
-            var formattedDate = String.Empty;
-            if (date.HasValue)
-            {
-                formattedDate = String.Format("{0:MMM dd yyyy}", date);
-            }
+            var htmlString = String.Empty;
+            if (isEscalated)
+                htmlString = @"<span class='label label-info has-bottom-tooltip' data-original-title='Escalated'> E </span>";
 
-            return MvcHtmlString.Create(string.Format("<span class=\"glyphicon glyphicon-calendar\"></span><span class=\"text-danger\"> {0}</span>", formattedDate));
+            return MvcHtmlString.Create(htmlString);
         }
+
+        public static MvcHtmlString SpecialProject(bool isSpecialProject)
+        {
+            var htmlString = String.Empty;
+            if (isSpecialProject)
+                htmlString = @"<span class='label label-info has-bottom-tooltip' data-original-title='Special Project'> SP </span>";
+
+            return MvcHtmlString.Create(htmlString);
+        }
+
+        public static MvcHtmlString YearsWithinWarranty(int years, DateTime warrantyStartDate)
+        {
+            string cssClass;
+            if (years <= 1)
+                cssClass = "success";
+            else if (years == 2)
+                cssClass = "warning";
+            else if(years < 10)
+                cssClass = "warning";
+            else
+                cssClass = "danger";
+
+            var stringYears = years <= 1 ? "Year" : "Years";
+
+            var displayedYears = years == 0 ? "< 1" : years.ToString(CultureInfo.InvariantCulture);
+
+            var toolTip = string.Format("Warranty Start Date: {0}", String.Format("{0:MMM dd yyyy}", warrantyStartDate));
+
+            var htmlString = string.Format(@"<span class='label label-{0} has-bottom-tooltip' data-original-title='{1}'>{2} {3}</span>",
+                                            cssClass, 
+                                            toolTip, 
+                                            displayedYears, 
+                                            stringYears);
+
+            return MvcHtmlString.Create(htmlString);
+        }
+
+
 
         public static string DateAsMonthDayOnly(DateTime date)
         {
@@ -207,7 +266,7 @@
         {
             return string.IsNullOrEmpty(textToCheck) ? "Not Specified" : textToCheck.Trim();
         }
-        
+
         public static string InvoiceNumber(string invoiceNumber)
         {
             return string.IsNullOrEmpty(invoiceNumber) ? "" : invoiceNumber.ToUpper();
