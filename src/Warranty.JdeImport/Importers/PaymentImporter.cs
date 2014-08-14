@@ -20,7 +20,7 @@ namespace Warranty.JdeImport.Importers
                             , CASE WHEN T5FLAG=' ' THEN 'P' ELSE T5FLAG END as PaymentStatus --P = Pending Payment in Construction Portal
                             , trim(T5MCU) as JobNumber
                             , trim(T5MCU) || '/' || trim(T5$OPT) || '/' || trim(T5R006) || '/' || trim(T5SUB) || '/' || trim(T5OBJ) || '/' || trim(T5DCTO) || '/' || digits(T5DOCO) || '/' || digits(T5LNID) || '/' || trim(T5SFX) as JdeIdentifier
-                            , '" + DateTime.Now + @"' as CreatedDate
+                            , '" + DateTime.UtcNow + @"' as CreatedDate
                             , 'Warranty Jde Import' as CreatedBy
                         from f58235 p";
             }

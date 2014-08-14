@@ -27,7 +27,7 @@ namespace Warranty.Server.Handlers
                                             UpdatedBy = @2
                                         WHERE JdeIdentifier = @3";
 
-                _database.Execute(sql, message.PaymentAmount, DateTime.Now, _user.UserName, message.JDEId);
+                _database.Execute(sql, message.PaymentAmount, DateTime.UtcNow, _user.UserName, message.JDEId);
             }
         }
     }

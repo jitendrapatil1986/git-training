@@ -21,7 +21,7 @@ namespace Warranty.Core.DataAccess
 
             if (poco != null)
             {
-                poco.UpdatedDate = DateTime.Now;
+                poco.UpdatedDate = DateTime.UtcNow;
                 poco.UpdatedBy = _userSession.GetCurrentUser().UserName;
             }
 
@@ -34,7 +34,7 @@ namespace Warranty.Core.DataAccess
 
             if (poco != null)
             {
-                poco.CreatedDate = DateTime.Now;
+                poco.CreatedDate = DateTime.UtcNow;
                 poco.CreatedBy = _userSession.GetCurrentUser().UserName;
             }
 
