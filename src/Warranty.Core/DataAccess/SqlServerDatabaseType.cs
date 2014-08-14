@@ -9,6 +9,7 @@ namespace Warranty.Core.DataAccess
         public SqlServerDatabaseType()
         {
             AddTypeMap(typeof(DateTime), DbType.DateTime2);
+            AddTypeMap(typeof(DateTime?), DbType.DateTime2);
             AddTypeMap(typeof(string), DbType.AnsiString);
         }
     }
