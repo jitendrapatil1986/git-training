@@ -17,12 +17,12 @@ namespace Warranty.Core.DataAccess
 
         protected override bool OnUpdating(UpdateContext updateContext)
         {
-            var poco = updateContext.Poco as IAuditableEntity;
+            var auditableEntity = updateContext.Poco as IAuditableEntity;
 
-            if (poco != null)
+            if (auditableEntity != null)
             {
-                poco.UpdatedDate = DateTime.UtcNow;
-                poco.UpdatedBy = _userSession.GetCurrentUser().UserName;
+                auditableEntity.UpdatedDate = DateTime.UtcNow;
+                auditableEntity.UpdatedBy = _userSession.GetCurrentUser().UserName;
             }
 
             return base.OnUpdating(updateContext);
@@ -30,15 +30,30 @@ namespace Warranty.Core.DataAccess
 
         protected override bool OnInserting(InsertContext insertContext)
         {
-            var poco = insertContext.Poco as IAuditableEntity;
+            SetPrimaryKey(insertContext);
 
-            if (poco != null)
+            var auditableEntity = insertContext.Poco as IAuditableEntity;
+
+            if (auditableEntity != null)
             {
-                poco.CreatedDate = DateTime.UtcNow;
-                poco.CreatedBy = _userSession.GetCurrentUser().UserName;
+                auditableEntity.CreatedDate = DateTime.UtcNow;
+                auditableEntity.CreatedBy = _userSession.GetCurrentUser().UserName;
             }
 
             return base.OnInserting(insertContext);
+        }
+
+        private static void SetPrimaryKey(InsertContext insertContext)
+        {
+            var entity = insertContext.Poco;
+            var primaryKey = entity.GetType().GetProperty(insertContext.PrimaryKeyName);
+            if (primaryKey != null && primaryKey.PropertyType == typeof(Guid))
+            {
+                if ((Guid)primaryKey.GetValue(entity) == Guid.Empty)
+                {
+                    primaryKey.SetValue(entity, GuidComb.Generate());
+                }
+            }
         }
     }
 }
