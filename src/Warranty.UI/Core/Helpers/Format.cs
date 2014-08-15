@@ -101,11 +101,11 @@ namespace Warranty.UI.Core.Helpers
         {
             string cssClass;
             if (days == 7)
-                cssClass = "primary";
+                cssClass = "seven-day";
             else if (days < 7)
-                cssClass = "success";
+                cssClass = "less-seven-day";
             else
-                cssClass = "danger";
+                cssClass = "eight-plus-day";
 
             var stringDays = days == 1 ? "Day" : "Days";
 
@@ -148,13 +148,13 @@ namespace Warranty.UI.Core.Helpers
         {
             string cssClass;
             if (years <= 1)
-                cssClass = "success";
+                cssClass = "warranty-one-year";
             else if (years == 2)
-                cssClass = "yellow";
+                cssClass = "warranty-two-year";
             else if(years < 10)
-                cssClass = "warning";
+                cssClass = "warranty-three-nine-year";
             else
-                cssClass = "danger";
+                cssClass = "warranty-ten-plus-year";
 
             var stringYears = years <= 1 ? "Year" : "Years";
 
@@ -162,7 +162,7 @@ namespace Warranty.UI.Core.Helpers
 
             var toolTip = string.Format("Warranty Start Date: {0}", String.Format("{0:MMM dd yyyy}", warrantyStartDate));
 
-            var htmlString = string.Format(@"<span class='label label-{0} has-bottom-tooltip' data-original-title='{1}'>{2} {3}</span>",
+            var htmlString = string.Format(@"<span class='label label-{0} has-bottom-tooltip' title='{1}'>{2} {3}</span>",
                                             cssClass, 
                                             toolTip, 
                                             displayedYears, 
