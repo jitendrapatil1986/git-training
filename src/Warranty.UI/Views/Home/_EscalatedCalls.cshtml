@@ -20,9 +20,6 @@ else
                     <div class="service-call-line">
                         <div class="col-md-1">
                             <small class="text-muted">@line.CallNumber</small>
-                            <small class="nowrap-tooltip">
-                                <span class="glyphicon glyphicon-fire has-bottom-tooltip text-muted" title="@line.EscalationReason">@Format.DateMonthDay(line.EscalationDate)</span>
-                            </small>
                         </div>
                         <div class="col-md-5">
                             <div class="col-md-1 hidden-sm hidden-xs">
@@ -54,6 +51,14 @@ else
                                 <li>@Html.ActionLink("Add Note", "AddNote", "ServiceCall", new {id = @line.ServiceCallId}, null)</li>
                                 <li>@Html.ActionLink("Close", "Close", "ServiceCall", new {id = @line.ServiceCallId}, null)</li>
                             </ul>
+                        </div>
+                        <div class="col-md-8 col-md-offset-1">
+                            <div class="col-md-1 hidden-sm hidden-xs">
+                                <span class="glyphicon glyphicon-fire"></span>
+                            </div>
+                            <div class="col-md-11">
+                                @Format.DateMonthDay(line.EscalationDate) - @line.EscalationReason
+                            </div>
                         </div>
                         <div class="clearfix"></div>
                     </div>
