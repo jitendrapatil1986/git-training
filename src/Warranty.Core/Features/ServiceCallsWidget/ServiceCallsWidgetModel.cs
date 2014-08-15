@@ -11,11 +11,13 @@
             MyServiceCalls = new List<ServiceCall>();
             OverdueServiceCalls = new List<ServiceCall>();
             SpecialProjectServiceCalls = new List<ServiceCall>();
+            EscalatedServiceCalls = new List<ServiceCall>();
         }
 
         public IEnumerable<ServiceCall> MyServiceCalls { get; set; }
         public IEnumerable<ServiceCall> OverdueServiceCalls { get; set; }
         public IEnumerable<ServiceCall> SpecialProjectServiceCalls { get; set; }
+        public IEnumerable<ServiceCall> EscalatedServiceCalls { get; set; }
 
         public IEnumerable<RepresentativeWithCallCount> RepresentativesWithOverdueCalls
         {
@@ -51,6 +53,23 @@
             }
         }
 
+        public IEnumerable<RepresentativeWithCallCount> RepresentativeWithEscalatedCalls
+        {
+            get
+            {
+                return EscalatedServiceCalls.GroupBy(call => call.AssignedToEmployeeNumber
+                                                          , call => call.AssignedTo,
+                                                          (key, g) =>
+                                                          new RepresentativeWithCallCount
+                                                          {
+                                                              EmployeeNumber = key,
+                                                              Name = g.First().ToLower(),
+                                                              ServiceCallsCount = g.Count()
+                                                          })
+                                                 .OrderByDescending(x => x.ServiceCallsCount);
+            }
+        }
+
         public class RepresentativeWithCallCount
         {
             public string EmployeeNumber { get; set; }
@@ -70,6 +89,8 @@
             public int NumberOfDaysRemaining { get; set; }
             public int NumberOfLineItems { get; set; }
             public string PhoneNumber { get; set; }
+            public DateTime? EscalationDate { get; set; }
+            public string EscalationReason { get; set; }
 
             public int PercentComplete
             {

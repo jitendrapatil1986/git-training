@@ -1,0 +1,71 @@
+﻿@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.ServiceCallsWidget.ServiceCallsWidgetModel
+
+@if (!Model.EscalatedServiceCalls.Any())
+{
+    <div class="well-sm">
+        <em>No Escalated calls.</em>
+    </div>
+}
+else
+{
+<div class="panel-group" id="escalated_list">
+    @foreach (var employee in Model.RepresentativeWithEscalatedCalls)
+    {
+        <div class="panel list-group-item no-left-right-padding">
+            <a data-toggle="collapse" data-parent="#escalated_list" href="#collapseEscalatedCalls@(employee.EmployeeNumber)" class="text-capitalize accordion-toggle collapsed">@employee.Name</a> <span class="badge">@employee.ServiceCallsCount</span>
+            <div id="collapseEscalatedCalls@(employee.EmployeeNumber)" class="collapse panel-body no-left-right-padding">
+                @foreach (var line in Model.EscalatedServiceCalls.Where(x => x.AssignedToEmployeeNumber == employee.EmployeeNumber))
+                {
+                    <div class="service-call-line">
+                        <div class="col-md-1">
+                            <small class="text-muted">@line.CallNumber</small>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="col-md-1 hidden-sm hidden-xs">
+                                @Format.NumberOfLineItems(line.NumberOfLineItems)
+                            </div>
+                            <div class="col-md-10">
+                                <a>@line.HomeownerName</a><br />
+                                @line.Address<br/>
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            @Format.PhoneNumber(line.PhoneNumber)<br/>
+                        </div>
+                        <div class="col-md-2" >
+                            <div class ="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(line.CreatedDate)">
+                                <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@line.NumberOfDaysRemaining)<br/>
+                                <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                                    <div class="progress-bar @Css.ServiceCallProgressBar(line.NumberOfDaysRemaining)" role="progressbar" style="width: @line.PercentComplete%">
+                                        <span class="sr-only">@line.PercentComplete% Complete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 text-center">
+                            <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Reassign", "Reassign", "ServiceCall", new {id = @line.ServiceCallId}, null)</li>
+                                <li>@Html.ActionLink("Request Payment", "RequestPayment", "ServiceCall", new {id = @line.ServiceCallId}, null)</li>
+                                <li>@Html.ActionLink("Add Note", "AddNote", "ServiceCall", new {id = @line.ServiceCallId}, null)</li>
+                                <li>@Html.ActionLink("Close", "Close", "ServiceCall", new {id = @line.ServiceCallId}, null)</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-8 col-md-offset-1">
+                            <div class="col-md-1 hidden-sm hidden-xs">
+                                <span class="glyphicon glyphicon-fire"></span>
+                            </div>
+                            <div class="col-md-11">
+                                @Format.DateMonthDay(line.EscalationDate) - @line.EscalationReason
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    }
+</div>
+}
