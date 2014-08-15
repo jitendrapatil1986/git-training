@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Warranty.Core.Helpers;
 
 namespace Warranty.Core.Features.RepServiceCalls
 {
@@ -40,14 +41,7 @@ namespace Warranty.Core.Features.RepServiceCalls
 
             public int PercentComplete
             {
-                get
-                {
-                    if (NumberOfDaysRemaining == 0)
-                        return 100;
-
-                    var complete = (7.0 - NumberOfDaysRemaining)/7.0 * 100;
-                    return Convert.ToInt16(complete);
-                }
+                get { return WarrantyBusinessRules.ServiceCallPercentComplete(NumberOfDaysRemaining); }
             }
         }
     }
