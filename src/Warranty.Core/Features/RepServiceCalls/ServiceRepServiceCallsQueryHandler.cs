@@ -64,39 +64,33 @@ namespace Warranty.Core.Features.RepServiceCalls
 
         private string GetEmployeeName(Guid employeeId)
         {
-            var sql = string.Format("Select EmployeeName from Employees where EmployeeId ='{0}'", employeeId);
-
-            var result = _database.ExecuteScalar<string>(sql);
+            var result = _database.Single<string>("Select EmployeeName from Employees where EmployeeId = @0", employeeId);
             return result;
         }
 
         private IEnumerable<ServiceRepServiceCallsModel.ServiceCall> GetServiceRepOpenServiceCalls(Guid employeeId)
         {
-            var whereClause = GetWhereClause(ServiceCallStatus.Open, employeeId);
+            var whereClause = GetWhereClause();
 
             var sql = string.Format(SqlTemplate, whereClause, "ORDER BY NumberOfDaysRemaining, ho.HomeOwnerName");
 
-            var result = _database.Fetch<ServiceRepServiceCallsModel.ServiceCall>(sql);
+            var result = _database.Fetch<ServiceRepServiceCallsModel.ServiceCall>(sql, ServiceCallStatus.Open.Value, employeeId);
             return result;
         }
 
         private IEnumerable<ServiceRepServiceCallsModel.ServiceCall> GetServiceRepClosedServiceCalls(Guid employeeId)
         {
-            var whereClause = GetWhereClause(ServiceCallStatus.Closed, employeeId);
+            var whereClause = GetWhereClause();
 
             var sql = string.Format(SqlTemplate, whereClause, "ORDER BY wc.CompletionDate desc, ho.HomeOwnerName");
 
-            var result = _database.Fetch<ServiceRepServiceCallsModel.ServiceCall>(sql);
+            var result = _database.Fetch<ServiceRepServiceCallsModel.ServiceCall>(sql, ServiceCallStatus.Closed.Value, employeeId);
             return result;
         }
 
-        private static string GetWhereClause(ServiceCallStatus serviceCallStatus, Guid employeeId)
+        private static string GetWhereClause()
         {
-            var whereClause =
-                string.Format(
-                    "WHERE wc.ServiceCallStatusId = {0} and wc.WarrantyRepresentativeEmployeeId = '{1}' and wc.CreatedDate > DATEADD(year, -1, GETDATE())",
-                    serviceCallStatus.Value, employeeId);
-            return whereClause;
+            return "WHERE wc.ServiceCallStatusId = @0 and wc.WarrantyRepresentativeEmployeeId = @1 and wc.CreatedDate > DATEADD(year, -1, GETDATE())";
         }
     }
 }
