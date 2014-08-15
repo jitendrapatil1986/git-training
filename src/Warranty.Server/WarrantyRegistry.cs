@@ -18,7 +18,7 @@ namespace Warranty.Server
                 scanner.TheCallingAssembly();
 
                 For<IDatabase>().Use(() => DbFactory.DatabaseFactory.GetDatabase());
-                For<IUser>().Use(() => new WarrantyServerUser());
+                For<IUserSession>().Use<WarrantyServerUserSession>();
             });
         }
     }

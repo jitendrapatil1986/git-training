@@ -88,14 +88,16 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\WarrantyConstants.cs" />
     <Compile Include="EndpointConfig.cs" />
+    <Compile Include="Extensions\DatabaseExtensions.cs" />
     <Compile Include="Handlers\PaymentAddedHandler.cs" />
     <Compile Include="Handlers\PaymentAddressNumberUpdatedHandler.cs" />
     <Compile Include="Handlers\PaymentDeletedHandler.cs" />
     <Compile Include="Handlers\PaymentIdUpdatedHandler.cs" />
     <Compile Include="Handlers\PaymentPaymentAmountUpdatedHandler.cs" />
     <Compile Include="Handlers\PaymentStatusUpdatedHandler.cs" />
-    <Compile Include="Security\WarrantyServerUser.cs" />
+    <Compile Include="Security\WarrantyServerUserSession.cs" />
     <Compile Include="StructureMapConfig.cs" />
     <Compile Include="WarrantyRegistry.cs" />
   </ItemGroup>
@@ -116,6 +118,7 @@
       <Name>Warranty.LotusExtract</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

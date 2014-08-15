@@ -4,6 +4,9 @@ using NServiceBus;
 
 namespace Warranty.Server.Handlers
 {
+    using Core.Entities;
+    using Extensions;
+
     public class PaymentDeletedHandler : IHandleMessages<PaymentDeleted>
     {
         private readonly IDatabase _database;
@@ -17,10 +20,9 @@ namespace Warranty.Server.Handlers
         {
             using (_database)
             {
-                const string sql = @"DELETE FROM Payments
-                                        WHERE JdeIdentifier = @0";
-
-                _database.Execute(sql, message.JDEId);
+                var payment = _database.SingleByJdeId<Payment>(message.JDEId);
+                if (payment != null)
+                    _database.Delete(payment);
             }
         }
     }
