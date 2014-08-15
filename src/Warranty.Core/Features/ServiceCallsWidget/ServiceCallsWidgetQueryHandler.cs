@@ -43,7 +43,7 @@
                                         , ho.HomePhone as PhoneNumber
                                         , e.EmployeeName as AssignedTo
                                         , e.EmployeeNumber as AssignedToEmployeeNumber
-                                        , case when wc.EscalationDate = '01/01/0001' then null else wc.EscalationDate end as EscalationDate
+                                        , wc.EscalationDate
                                         , wc.EscalationReason
                                      FROM [ServiceCalls] wc
                                      inner join Jobs j
