@@ -28,10 +28,11 @@
             {
                 options = new List<string>
                 {
+                    "-p"
                 };
             }
 
-            if (options.Contains("-p")) new PaymentImporter().Import();
+            if (options.Contains("-p")) new PaymentImporter().CustomImport();
 
             stopWatch.Stop();
             Console.WriteLine("\n\nTOTAL TIME: {0}\n", stopWatch.Elapsed);
