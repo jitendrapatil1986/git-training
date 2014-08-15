@@ -1,12 +1,12 @@
 ﻿using System.Configuration;
-using System.Data.Common;
 using NPoco.FluentMappings;
-using Warranty.Core.DataAccess.Mappings;
 using Warranty.Core.Security;
 
 namespace Warranty.Core.DataAccess
 {
     using NPoco;
+    using StructureMap;
+    using System.Linq;
 
     public static class DbFactory
     {
@@ -14,7 +14,8 @@ namespace Warranty.Core.DataAccess
 
         public static void Setup(IUserSession userSession)
         {
-            var fluentConfig = FluentMappingConfiguration.Configure(new EntityMapper());
+            var maps = ObjectFactory.Container.GetAllInstances<IMap>().ToArray();
+            var fluentConfig = FluentMappingConfiguration.Configure(maps);
 
             var dbType = new SqlServerDatabaseType();
             var connString = ConfigurationManager.ConnectionStrings["WarrantyDB"].ConnectionString;

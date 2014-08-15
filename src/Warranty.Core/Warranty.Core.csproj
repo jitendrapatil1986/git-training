@@ -82,12 +82,13 @@
     <Compile Include="DataAccess\Mappings\AuditableEntityMapping.cs" />
     <Compile Include="DataAccess\ConfigurationFactoryExtensions.cs" />
     <Compile Include="DataAccess\Mappings\CityMapping.cs" />
-    <Compile Include="DataAccess\Mappings\EntityMapper.cs" />
+    <Compile Include="DataAccess\Mappings\AuditableEntityMap.cs" />
     <Compile Include="DataAccess\Mappings\CommunityMapping.cs" />
     <Compile Include="DataAccess\Mappings\DivisionMapping.cs" />
     <Compile Include="DataAccess\Mappings\HomeOwnerMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobOptionMapping.cs" />
+    <Compile Include="DataAccess\Mappings\PaymentMap.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMapping.cs" />
     <Compile Include="DataAccess\Mappings\EmployeeMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallCommentMapping.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Entities\Division.cs" />
     <Compile Include="Entities\HomeOwner.cs" />
     <Compile Include="Entities\IAuditableEntity.cs" />
+    <Compile Include="Entities\IJdeEntity.cs" />
     <Compile Include="Entities\Job.cs" />
     <Compile Include="Entities\JobOption.cs" />
     <Compile Include="Entities\Payment.cs" />
