@@ -1,5 +1,4 @@
-﻿using Warranty.Core.Security;
-using Warranty.UI.Core.Security;
+﻿using Warranty.UI.Core.Security;
 
 namespace Warranty.UI.Core.Initialization
 {
