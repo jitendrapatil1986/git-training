@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using NPoco;
 using NServiceBus;
 using StructureMap;
 using Warranty.Core.DataAccess;
-using Warranty.Core.Security;
-using Warranty.Server.IntegrationTests.Security;
 using Warranty.Server.IntegrationTests.SetUp;
 
 namespace Warranty.Server.IntegrationTests
 {
+    using Core.Entities;
+    using Tests.Core;
+    using Extensions;
+
     public abstract class HandlerTester<TEvent> where TEvent : IEvent, new()
     {
-        protected readonly IContainer TestContainer;
         protected readonly IDatabase TestDatabase;
 
         protected HandlerTester()
         {
-            TestContainer = TestIoC.Container.GetNestedContainer();
-
-            DbFactory.Setup(new WarrantyUserSession());
+            DbFactory.Setup(new TestWarrantyUserSession());
             TestDatabase = DbFactory.DatabaseFactory.GetDatabase();
 
             var deleter = new DatabaseDeleter(TestDatabase);
@@ -30,7 +28,7 @@ namespace Warranty.Server.IntegrationTests
 
         public T GetSaved<T>(Action<T> action = null)
         {
-            var builder = TestContainer.GetInstance<EntityBuilder<T>>();
+            var builder = ObjectFactory.GetInstance<EntityBuilder<T>>();
             var savedItem = builder.GetSaved(action ?? (x => { }));
             return savedItem;
         }
@@ -51,7 +49,7 @@ namespace Warranty.Server.IntegrationTests
 
         private void ExecuteSend()
         {
-            var handler = TestContainer.GetInstance<IHandleMessages<TEvent>>();
+            var handler = ObjectFactory.GetInstance<IHandleMessages<TEvent>>();
 
             try
             {
@@ -68,11 +66,11 @@ namespace Warranty.Server.IntegrationTests
             }
         }
 
-        protected IEnumerable<T> Query<T>()
+        protected T Get<T>(string jdeId) where T : IJdeEntity
         {
             using (TestDatabase)
             {
-                return TestDatabase.Query<T>().ToList();
+                return TestDatabase.SingleOrDefaultByJdeId<T>(jdeId);
             }
         }
     }

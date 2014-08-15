@@ -13,11 +13,10 @@ namespace Warranty.Server.IntegrationTests.SetUp
         public override Payment GetSaved(Action<Payment> action)
         {
             var entity = new Payment{
-                JdeIdentifier = "123",
+                JdeIdentifier = Guid.NewGuid().ToString("n"),
                 Amount = 1,
                 CreatedBy = "test",
                 CreatedDate = DateTime.UtcNow,
-                PaymentId = Guid.NewGuid(),
             };
 
             return Saved(entity, action);

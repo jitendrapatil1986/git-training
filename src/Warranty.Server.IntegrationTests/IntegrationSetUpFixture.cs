@@ -6,28 +6,33 @@ using Warranty.Server.IntegrationTests.SetUp;
 
 namespace Warranty.Server.IntegrationTests
 {
+    using Core;
+    using NPoco.FluentMappings;
+    using Server.Handlers;
+
     [SetUpFixture]
     public class IntegrationSetUpFixture
     {
         public IntegrationSetUpFixture()
         {
-            TestIoC.Container = new Container(cfg => cfg.AddRegistry<WarrantyRegistry>());
-            TestIoC.Container.Configure(cfg =>
-            {
+            ObjectFactory.Initialize(x =>
+                                         {
+                                             x.AddRegistry<WarrantyRegistry>();
+                                             x.AddRegistry<WarrantyCoreRegistry>();
+                                             x.Scan(scan =>
+                                                        {
+                                                            scan.WithDefaultConventions();
+                                                            scan.AssemblyContainingType<IDatabase>();
+                                                            scan.AssemblyContainingType<PaymentAddedHandler>();
+                                                            scan.TheCallingAssembly();
 
-                cfg.Scan(scan =>
-                {
-                    scan.WithDefaultConventions();
-                    scan.AssemblyContainingType<IDatabase>();
-                    scan.AssemblyContainingType<WarrantyRegistry>();
-                    scan.TheCallingAssembly();
+                                                            scan.AddAllTypesOf(typeof (IMap));
+                                                            scan.AddAllTypesOf(typeof (IHandleMessages<>));
+                                                            scan.AddAllTypesOf(typeof (EntityBuilder<>));
 
-                    scan.AddAllTypesOf(typeof(IHandleMessages<>));
-                    scan.AddAllTypesOf(typeof(EntityBuilder<>));
-
-                    scan.ConnectImplementationsToTypesClosing(typeof(IEntityBuilder<>));
-                });
-            });
+                                                            scan.ConnectImplementationsToTypesClosing(typeof (IEntityBuilder<>));
+                                                        });
+                                         });
         }
     }
 }

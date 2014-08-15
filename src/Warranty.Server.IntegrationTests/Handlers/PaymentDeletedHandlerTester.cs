@@ -1,33 +1,31 @@
-﻿using System.Linq;
-using Accounting.Events.Payment;
+﻿using Accounting.Events.Payment;
 using NUnit.Framework;
-using Should;
 using Warranty.Core.Entities;
 
 namespace Warranty.Server.IntegrationTests.Handlers
 {
+    using System;
+
     [TestFixture]
     public class PaymentDeletedHandlerTester : HandlerTester<PaymentDeleted>
     {
+        private Payment _payment;
+
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
-            var payment = GetSaved<Payment>();
+            _payment = GetSaved<Payment>();
 
             Send(x =>
             {
-                x.JDEId = payment.JdeIdentifier;
+                x.JDEId = _payment.JdeIdentifier;
             });
         }
 
-        [Test]
+        [Test, ExpectedException(typeof(InvalidOperationException))]
         public void Payment_Should_Be_Deleted()
         {
-            using (TestDatabase)
-            {
-                var payment = TestDatabase.FetchBy<Payment>(sql => sql.Where(p => p.JdeIdentifier == Event.JDEId)).FirstOrDefault();
-                payment.ShouldBeNull();
-            }
+            var payment = Get<Payment>(_payment.PaymentId);
         }
     }
 }

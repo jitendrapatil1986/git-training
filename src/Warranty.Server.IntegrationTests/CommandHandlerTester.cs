@@ -2,7 +2,6 @@
 using System.Linq.Expressions;
 using NPoco;
 using NServiceBus;
-using NServiceBus.UnitOfWork;
 using StructureMap;
 using Warranty.Core.DataAccess;
 using Warranty.Core.Security;
@@ -10,25 +9,24 @@ using Warranty.Server.IntegrationTests.SetUp;
 
 namespace Warranty.Server.IntegrationTests
 {
+    using Tests.Core;
+
     public abstract class CommandHandlerTester<TEvent> where TEvent : IMessage, new()
     {
-        private readonly IContainer TestContainer;
         private readonly IDatabase TestDatabase;
 
         protected CommandHandlerTester(IUserSession userSession)
         {
-            TestContainer = TestIoC.Container.GetNestedContainer();
-
             DbFactory.Setup(userSession);
             TestDatabase = DbFactory.DatabaseFactory.GetDatabase();
 
-            var deleter = TestContainer.GetInstance<DatabaseDeleter>();
+            var deleter = ObjectFactory.GetInstance<DatabaseDeleter>();
             deleter.DeleteAllData(TestDatabase);
         }
 
         protected T GetSaved<T>(Action<T> action = null)
         {
-            var builder = TestContainer.GetInstance<EntityBuilder<T>>();
+            var builder = ObjectFactory.GetInstance<EntityBuilder<T>>();
             return builder.GetSaved(action ?? (x => { }));
         }
 
@@ -36,8 +34,8 @@ namespace Warranty.Server.IntegrationTests
         {
             var @event = new TEvent();
             eventAction(@event);
-            TestContainer.Configure(cfg => cfg.For<IBus>().Use(Bus));
-            var handler = TestContainer.GetInstance<IHandleMessages<TEvent>>();
+            ObjectFactory.Configure(cfg => cfg.For<IBus>().Use(Bus));
+            var handler = ObjectFactory.GetInstance<IHandleMessages<TEvent>>();
 
             try
             {
