@@ -26,6 +26,8 @@ namespace Warranty.Core.Features.RepServiceCalls
             public DateTime CreatedDate { get; set; }
             public DateTime WarrantyStartDate { get; set; }
             public DateTime? CompletionDate { get; set; }
+            public DateTime? EscalationDate { get; set; }
+            public string EscalationReason { get; set; }
             public string HomeownerName { get; set; }
             public int NumberOfDaysRemaining { get; set; }
             public int NumberOfLineItems { get; set; }
@@ -34,6 +36,7 @@ namespace Warranty.Core.Features.RepServiceCalls
             public string PhoneNumber { get; set; }
             public bool IsSpecialProject { get; set; }
             public bool IsEscalated { get; set; }
+            public decimal? PaymentAmount { get; set; }
 
             public int PercentComplete
             {

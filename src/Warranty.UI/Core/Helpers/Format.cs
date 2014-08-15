@@ -107,28 +107,30 @@ namespace Warranty.UI.Core.Helpers
             else
                 cssClass = "danger";
 
-            var stringDays = days <= 1 ? "Day" : "Days";
-
-            var displayedDays = days == 0 ? "< 1" : days.ToString(CultureInfo.InvariantCulture);
+            var stringDays = days == 1 ? "Day" : "Days";
 
             var htmlString =
-                string.Format(@"<div class='has-bottom-tooltip' data-original-title='From {0} to {1}'>
-                                    <span class='glyphicon glyphicon-time text-muted'></span> <strong class='text-{2}'>{3}</strong><small class='text-muted'> {4}</small>
-                                </div>",
-                                String.Format("{0:MMM dd yyyy}", openedDate),
-                                String.Format("{0:MMM dd yyyy}", closedDate),
-                                cssClass,
-                                displayedDays,
-                                stringDays);
+                string.Format(
+                    @"<div class='opened-for opened-for-{0} has-bottom-tooltip' data-original-title='From {1} to {2}'>{3}<p>{4}</p></div>",
+                    cssClass,
+                    String.Format("{0:MMM dd yyyy}", openedDate),
+                    String.Format("{0:MMM dd yyyy}", closedDate),
+                    days,
+                    stringDays);
 
             return MvcHtmlString.Create(htmlString);
         }
 
-        public static MvcHtmlString Escalated(bool isEscalated)
+        public static MvcHtmlString Escalated(bool isEscalated, string reason, DateTime? escalatedDate)
         {
             var htmlString = String.Empty;
+
+
             if (isEscalated)
-                htmlString = @"<span class='label label-info has-bottom-tooltip' data-original-title='Escalated'> E </span>";
+                htmlString =
+                    string.Format(
+                        @"<div class='has-bottom-tooltip text-center' data-original-title='{0}'><span class='glyphicon glyphicon-fire'></span><br/>{1}</div>",
+                        reason, DateMonthDayYear(escalatedDate));
 
             return MvcHtmlString.Create(htmlString);
         }
@@ -137,7 +139,7 @@ namespace Warranty.UI.Core.Helpers
         {
             var htmlString = String.Empty;
             if (isSpecialProject)
-                htmlString = @"<span class='label label-info has-bottom-tooltip' data-original-title='Special Project'> SP </span>";
+                htmlString = @"<div class='special-project'>S</div>";
 
             return MvcHtmlString.Create(htmlString);
         }
@@ -148,7 +150,7 @@ namespace Warranty.UI.Core.Helpers
             if (years <= 1)
                 cssClass = "success";
             else if (years == 2)
-                cssClass = "warning";
+                cssClass = "yellow";
             else if(years < 10)
                 cssClass = "warning";
             else
@@ -156,7 +158,7 @@ namespace Warranty.UI.Core.Helpers
 
             var stringYears = years <= 1 ? "Year" : "Years";
 
-            var displayedYears = years == 0 ? "< 1" : years.ToString(CultureInfo.InvariantCulture);
+            var displayedYears = years == 0 ? "1" : years.ToString(CultureInfo.InvariantCulture);
 
             var toolTip = string.Format("Warranty Start Date: {0}", String.Format("{0:MMM dd yyyy}", warrantyStartDate));
 

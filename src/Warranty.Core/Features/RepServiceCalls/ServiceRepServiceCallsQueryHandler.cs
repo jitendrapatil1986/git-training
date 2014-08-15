@@ -44,6 +44,8 @@ namespace Warranty.Core.Features.RepServiceCalls
                                         , DATEDIFF(dd, wc.CreatedDate, wc.CompletionDate) as DaysOpenedFor
                                         , DATEDIFF(yy, j.CloseDate, wc.CreatedDate) as YearsWithinWarranty
                                         , j.CloseDate as WarrantyStartDate
+                                        , wc.EscalationReason
+                                        , wc.EscalationDate
                                      FROM [ServiceCalls] wc
                                      inner join Jobs j
                                        on wc.JobId = j.JobId
@@ -56,7 +58,7 @@ namespace Warranty.Core.Features.RepServiceCalls
                                      INNER JOIN Communities cm
                                        ON j.CommunityId = cm.CommunityId
                                      INNER JOIN Cities ci
-                                       ON cm.CityId = ci.CityId
+                                       ON cm.CityId = ci.CityId                                     
                                      {0} /* WHERE */
                                      {1} /* ORDER BY */";
 
