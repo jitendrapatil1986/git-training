@@ -90,7 +90,7 @@
             return date.Value.ToString("MMMM dd, yyyy");
         }
 
-        public static string DateForServiceCallWiget(DateTime date)
+        public static string DateForServiceCallWiget(DateTime? date)
         {
             return String.Format("{0:MMM dd yyyy}", date);
         }

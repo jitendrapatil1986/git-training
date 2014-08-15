@@ -1,0 +1,1 @@
+ ALTER TABLE ServiceCalls ADD EscalationDate DATETIME2;
