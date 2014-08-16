@@ -25,7 +25,8 @@ namespace Warranty.JdeImport.Importers
                             , trim(T5MCU) || '/' || trim(T5$OPT) || '/' || trim(T5R006) || '/' || trim(T5SUB) || '/' || trim(T5OBJ) || '/' || trim(T5DCTO) || '/' || digits(T5DOCO) || '/' || digits(T5LNID) || '/' || trim(T5SFX) as JdeIdentifier
                             , '" + DateTime.UtcNow + @"' as CreatedDate
                             , 'Warranty Jde Import' as CreatedBy
-                        from f58235 p";
+                        from f58235 p
+                        where trim(T5OBJ) IN ('9425', '9435')";
             }
         }
 
@@ -97,13 +98,11 @@ namespace Warranty.JdeImport.Importers
 
                 using (var cmd = new SqlCommand(addIndex, sc))
                 {
-                    cmd.CommandTimeout = 600;
                     cmd.ExecuteNonQuery();
                 }
 
                 using (var cmd = new SqlCommand(mergeScript, sc))
                 {
-                    cmd.CommandTimeout = 600;
                     cmd.ExecuteNonQuery();
                 }
 
