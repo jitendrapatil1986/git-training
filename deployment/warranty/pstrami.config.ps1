@@ -1,7 +1,7 @@
 Environment "dev" -servers @(
     Server "wkcorpappdev1" @("Web";)
-    Server "wksql3" @("Database";)
     Server "wkcorpappdev1" @("Nsb";)
+    Server "wksql3" @("Database";)
     ) -installPath "C:\Installs\WarrantyTest"
     
 Environment "training" -servers @(
