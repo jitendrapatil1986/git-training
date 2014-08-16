@@ -1,19 +1,16 @@
 Environment "dev" -servers @(
     Server "wkcorpappdev1" @("Web";)
-    Server "wkcorpappdev1" @("Nsb";)
     Server "wksql3" @("Database";)
     ) -installPath "C:\Installs\WarrantyTest"
     
 Environment "training" -servers @(
-    Server "wkcorpapptrain1" @("Web";) 
-    Server "wkcorpapptrain1" @("Nsb";) 
-    Server "wksql3" @("Database";) 
+    Server "wkcorpapptrain1" @("Web";)
+    Server "wksql3" @("Database";)
     ) -installPath "C:\Installs\WarrantyTraining"
     
 Environment "prod" -servers @(
-    Server "wkcorpappprod1" @("Web";) 
-    Server "wkcorpappprod1" @("Nsb";) 
-    Server "wksql1" @("Database";) 
+    Server "wkcorpappprod1" @("Web";)
+    Server "wksql1" @("Database";)
     ) -installPath "C:\Installs\Warranty"
 
 
