@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NPoco;
-
-namespace Warranty.Server.IntegrationTests.SetUp
+namespace Warranty.Tests.Core
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using NPoco;
+
     public class DatabaseDeleter
     {
         private static readonly string[] _ignoredTables = new[] { "sysdiagrams", "[RoundhousE].[ScriptsRun]", "[RoundhousE].[ScriptsRunErrors]", "[RoundhousE].[Version]" };
@@ -15,10 +15,22 @@ namespace Warranty.Server.IntegrationTests.SetUp
 
         public DatabaseDeleter(IDatabase database)
         {
+            using (database)
+            {
+                database.Execute(@"ALTER TABLE HomeOwners DROP CONSTRAINT FK_HomeOwners_JobId");
+                database.Execute(@"UPDATE HomeOwners SET JobId = NULL");
+            }
+            
             BuildDeleteTables(database);
+
+            using (database)
+            {
+                database.Execute(@"ALTER TABLE HomeOwners ADD CONSTRAINT FK_HomeOwners_JobId
+                                    FOREIGN KEY (JobId) REFERENCES Jobs(JobId)");
+            }
         }
 
-        private abstract class Relationship
+        private class Relationship
         {
             public string PrimaryKeyTable { get; private set; }
             public string ForeignKeyTable { get; private set; }
@@ -62,7 +74,7 @@ namespace Warranty.Server.IntegrationTests.SetUp
         private static string BuildTableSql(IEnumerable<string> tablesToDelete)
         {
             string completeQuery = "";
-            foreach (var tableName in tablesToDelete)
+            foreach (var tableName in tablesToDelete.Except(_ignoredTables))
             {
                 completeQuery += String.Format("delete from [{0}];", tableName);
             }

@@ -1,33 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using NPoco;
 using NServiceBus;
-using NServiceBus.UnitOfWork;
 using StructureMap;
+using Warranty.Core.DataAccess;
 using Warranty.Server.IntegrationTests.SetUp;
 
 namespace Warranty.Server.IntegrationTests
 {
+    using Core.Entities;
+    using Tests.Core;
+    using Extensions;
+
     public abstract class HandlerTester<TEvent> where TEvent : IEvent, new()
     {
-        protected readonly IContainer TestContainer;
-        protected IDatabase _database;
+        protected readonly IDatabase TestDatabase;
 
-        protected HandlerTester(IDatabase database)
+        protected HandlerTester()
         {
-            TestContainer = TestIoC.Container.GetNestedContainer();
-            _database = database;
+            DbFactory.Setup(new TestWarrantyUserSession());
+            TestDatabase = DbFactory.DatabaseFactory.GetDatabase();
 
-            var deleter = TestContainer.GetInstance<DatabaseDeleter>();
-            deleter.DeleteAllData(_database);
+            var deleter = new DatabaseDeleter(TestDatabase);
+            deleter.DeleteAllData(TestDatabase);
         }
 
         protected TEvent Event { get; set; }
 
         public T GetSaved<T>(Action<T> action = null)
         {
-            var builder = TestContainer.GetInstance<EntityBuilder<T>>();
+            var builder = ObjectFactory.GetInstance<EntityBuilder<T>>();
             var savedItem = builder.GetSaved(action ?? (x => { }));
             return savedItem;
         }
@@ -48,35 +49,28 @@ namespace Warranty.Server.IntegrationTests
 
         private void ExecuteSend()
         {
-            var unitOfWork = TestContainer.GetInstance<IManageUnitsOfWork>();
-            var handler = TestContainer.GetInstance<IHandleMessages<TEvent>>();
+            var handler = ObjectFactory.GetInstance<IHandleMessages<TEvent>>();
 
             try
             {
-                unitOfWork.Begin();
                 handler.Handle(Event);
-                unitOfWork.End();
             }
-            catch (Exception ex)
-            {
-                unitOfWork.End(ex);
-                throw;
-            }
+            catch {}
         }
 
         protected T Get<T>(object id)
         {
-            using (_database)
+            using (TestDatabase)
             {
-                return _database.SingleById<T>(id);
+                return TestDatabase.SingleById<T>(id);
             }
         }
 
-        protected IEnumerable<T> Query<T>()
+        protected T Get<T>(string jdeId) where T : IJdeEntity
         {
-            using (_database)
+            using (TestDatabase)
             {
-                return _database.Query<T>().ToList();
+                return TestDatabase.SingleOrDefaultByJdeId<T>(jdeId);
             }
         }
     }

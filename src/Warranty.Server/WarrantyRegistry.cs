@@ -1,8 +1,10 @@
-﻿namespace Warranty.Server
+﻿using NPoco;
+using Warranty.Core.DataAccess;
+using Warranty.Core.Security;
+using Warranty.Server.Security;
+
+namespace Warranty.Server
 {
-    using Core.DataAccess;
-    using NHibernate;
-    using NServiceBus.UnitOfWork;
     using StructureMap.Configuration.DSL;
 
     public class WarrantyRegistry : Registry
@@ -14,11 +16,10 @@
                 scanner.WithDefaultConventions();
                 
                 scanner.TheCallingAssembly();
-            });
 
-            For<ISessionFactory>().Singleton().Use(new ConfigurationFactory().CreateConfiguration().BuildSessionFactory());
-            For<ISession>().Use(ctx => ctx.GetInstance<ISessionFactory>().OpenSession());
-            For<IManageUnitsOfWork>().Use<NHibernateUnitOfWork>();
+                For<IDatabase>().Use(() => DbFactory.DatabaseFactory.GetDatabase());
+                For<IUserSession>().Use<WarrantyServerUserSession>();
+            });
         }
     }
 }
