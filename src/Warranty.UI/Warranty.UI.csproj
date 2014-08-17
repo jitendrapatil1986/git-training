@@ -254,6 +254,7 @@
     <Content Include="Scripts\lib\bootstrap-datepicker.js" />
     <Content Include="Scripts\lib\bootstrap-tooltip.js" />
     <Content Include="Scripts\lib\bootstrap.min.js" />
+    <Content Include="Scripts\lib\highcharts.js" />
     <Content Include="Scripts\lib\html5shiv.js" />
     <Content Include="Scripts\lib\jquery.maskedinput.min.js" />
     <Content Include="Scripts\lib\jquery.numeric.js" />
@@ -292,6 +293,8 @@
     <Content Include="Views\Home\_OverdueCalls.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Home\_SpecialProjects.cshtml" />
+    <Content Include="Views\Home\_WidgetMyServiceTeamChart.cshtml" />
+    <Content Include="Views\Home\MyServiceTeamChartWidget.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

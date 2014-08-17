@@ -1,0 +1,26 @@
+﻿@model Warranty.Core.Features.MyServiceTeamWidget.MyServiceTeamWidgetModel
+
+<h2>MyServiceTeamChartWidget</h2>
+
+<div class="col-md-8">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#my_service_calls" role="tab" data-toggle="tab">My <span class="label label-default">Tab1</span></a></li>
+        <li><a href="#overdue_calls" role="tab" data-toggle="tab">Overdue <span class="label label-danger">Tab2</span></a></li>
+        <li><a href="#escalated_calls" role="tab" data-toggle="tab">Escalated <span class="label label-default">0</span></a></li>
+        <li><a href="#special_projects" role="tab" data-toggle="tab">Special Projects <span class="label label-default">Tab4</span></a></li>
+        <li class="pull-right"><span class="widget-header">Service Calls</span></li>
+    </ul>
+        
+    <div class="tab-content">
+        <div class="tab-pane active" id="Testmy_service_calls">
+            @Html.Partial("_WidgetMyServiceTeamChart", Model)
+        </div>
+        <div class="tab-pane" id="Testoverdue_calls">
+            Test
+        </div>
+        <div class="tab-pane" id="Testescalated_calls">Escalated Placeholder</div>
+        <div class="tab-pane" id="Testspecial_projects">
+            Test
+        </div>
+    </div>
+</div>
