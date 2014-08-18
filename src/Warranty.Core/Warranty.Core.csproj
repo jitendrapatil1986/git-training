@@ -125,9 +125,13 @@
     <Compile Include="Extensions\MapperExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsModel.cs" />
+    <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsQuery.cs" />
+    <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsQueryHandler.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetModel.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetQuery.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetQueryHandler.cs" />
+    <Compile Include="Helpers\WarrantyBusinessRules.cs" />
     <Compile Include="Net4Collection.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
