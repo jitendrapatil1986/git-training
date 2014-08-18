@@ -1,4 +1,6 @@
-﻿namespace Warranty.UI.Controllers
+﻿using Warranty.Core.Features.AmountSpentWidget;
+
+namespace Warranty.UI.Controllers
 {
     using System.IO;
     using System.Web;
@@ -24,6 +26,13 @@
         public ActionResult ServiceCallsWidget()
         {
             var model = _mediator.Request(new ServiceCallsWidgetQuery());
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult AmountSpentWidget()
+        {
+            var model = _mediator.Request(new AmountSpentWidgetQuery());
             return PartialView(model);
         }
 

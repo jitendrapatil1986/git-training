@@ -1,0 +1,46 @@
+﻿@using Warranty.Core.Extensions
+@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.AmountSpentWidget.AmountSpentWidgetModel
+<div class="col-md-4">
+    <div class="amount-spent-header">
+        $ Spent
+        <div class="amount-spent amount-spent-green pull-right"><strong>YTD:</strong> @Format.MoneyWithoutDecimal(Model.YearTodate)</div>
+        <div class="amount-spent amount-spent-red pull-right"><strong>QTD:</strong> @Format.MoneyWithoutDecimal(Model.QuarterToDate)</div>
+        <div class="amount-spent amount-spent-green pull-right"><strong>MTD:</strong> @Format.MoneyWithoutDecimal(Model.MonthTodate)</div>
+    </div>
+    <div id="container" class="amount-spent-container"></div>
+</div>
+<script>
+    require(['jquery', 'highcharts'], function ($) {
+        $(function () {
+            $('#container').highcharts({
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: @Html.Raw(Model.Categories.ToJson())
+                    },
+                yAxis: {
+                    title: {
+                        text: 'Amount Spent'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    valuePrefix: '$'
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                },
+                series:  @Html.Raw(Model.SeriesList.ToJson())
+                });
+        });
+    });
+</script>

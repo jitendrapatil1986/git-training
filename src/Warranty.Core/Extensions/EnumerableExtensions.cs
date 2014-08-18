@@ -19,6 +19,11 @@
             return enumerable.Select(x => "'" + x + "'").CommaSeparate();
         }
 
+        public static string Truncate(this string stringToTruncate, int maxLenght)
+        {
+            return stringToTruncate.Length > maxLenght ? stringToTruncate.Substring(0, maxLenght) : stringToTruncate;
+        }
+
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> collection)
         {
             return collection == null || !collection.Any();
