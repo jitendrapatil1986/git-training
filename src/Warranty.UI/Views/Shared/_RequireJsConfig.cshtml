@@ -30,7 +30,7 @@
 
             'bootbox': 'lib/bootbox.min',
 
-            //'highcharts': 'lib/highcharts',
+            'highcharts': 'lib/highcharts',
         },
 
         shim: {
@@ -73,11 +73,11 @@
                 },
                 'calendar': {
                     deps: ['jquery.ui']
+                },
+                'highcharts': {
+                    exports: 'Highcharts',
+                    deps: ['jquery']
                 }
-                //'highcharts': {
-                //    exports: 'Highcharts',
-                //    deps: ['jquery']
-                //},
             },
             map: {
                 'knockout.sortable': {

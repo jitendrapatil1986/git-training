@@ -254,6 +254,7 @@
     <Content Include="Scripts\lib\bootstrap-datepicker.js" />
     <Content Include="Scripts\lib\bootstrap-tooltip.js" />
     <Content Include="Scripts\lib\bootstrap.min.js" />
+    <Content Include="Scripts\lib\highcharts.js" />
     <Content Include="Scripts\lib\html5shiv.js" />
     <Content Include="Scripts\lib\jquery.maskedinput.min.js" />
     <Content Include="Scripts\lib\jquery.numeric.js" />
