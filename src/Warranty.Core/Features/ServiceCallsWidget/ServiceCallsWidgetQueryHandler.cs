@@ -28,10 +28,11 @@
                                OverdueServiceCalls = GetOverdueServiceCalls(user),
                                SpecialProjectServiceCalls = GetSpecialProjects(user),
                                ClosedServiceCalls = GetClosedServiceCalls(user),
+                               EscalatedServiceCalls = GetEscalatedServiceCalls(user),
                            };
             }
         }
-        
+
         const string SqlTemplate = @"SELECT 
                                           wc.ServiceCallId as ServiceCallId
                                         , Servicecallnumber as CallNumber
@@ -43,6 +44,8 @@
                                         , ho.HomePhone as PhoneNumber
                                         , e.EmployeeName as AssignedTo
                                         , e.EmployeeNumber as AssignedToEmployeeNumber
+                                        , wc.EscalationDate
+                                        , wc.EscalationReason
                                      FROM [ServiceCalls] wc
                                      inner join Jobs j
                                        on wc.JobId = j.JobId
@@ -92,6 +95,15 @@
             var markets = user.Markets;
 
             var sql = string.Format(SqlTemplate, "WHERE CompletionDate is not null AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ")", "ORDER BY EmployeeName, wc.CreatedDate");
+
+            var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql);
+            return result;
+        }
+        public IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetEscalatedServiceCalls(IUser user)
+        {
+            var markets = user.Markets;
+
+            var sql = string.Format(SqlTemplate, "WHERE CompletionDate is null AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ") AND Escalated = 1", "ORDER BY EmployeeName, wc.CreatedDate");
 
             var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql);
             return result;

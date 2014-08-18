@@ -12,9 +12,9 @@ else
 <div class="panel-group" id="overdue_list">
     @foreach (var employee in Model.RepresentativesWithOverdueCalls)
     {
-        <div class="panel list-group-item">
+        <div class="panel list-group-item no-left-right-padding">
             <a data-toggle="collapse" data-parent="#overdue_list" href="#collapseOverdueCalls@(employee.EmployeeNumber)" class="text-capitalize accordion-toggle collapsed">@employee.Name</a> <span class="badge">@employee.ServiceCallsCount</span>
-            <div id="collapseOverdueCalls@(employee.EmployeeNumber)" class="collapse panel-body">
+            <div id="collapseOverdueCalls@(employee.EmployeeNumber)" class="collapse panel-body no-left-right-padding">
                 @foreach (var line in Model.OverdueServiceCalls.Where(x => x.AssignedToEmployeeNumber == employee.EmployeeNumber))
                 {
                     <div class="service-call-line">

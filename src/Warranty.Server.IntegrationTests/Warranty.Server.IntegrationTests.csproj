@@ -37,7 +37,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Events">
+    <Reference Include="Accounting.Events, Version=1.1.701.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Accounting.Events.1.1.701.0\lib\net45\Accounting.Events.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions">
@@ -52,7 +53,8 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NPoco">
+    <Reference Include="NPoco, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NPoco.2.5.76\lib\net40\NPoco.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus">
@@ -94,23 +96,37 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Handlers\PaymentAddedHandlerTester.cs" />
+    <Compile Include="Handlers\PaymentAddressNumberUpdatedHandlerTester.cs" />
+    <Compile Include="Handlers\PaymentDeletedHandlerTester.cs" />
+    <Compile Include="Handlers\PaymentPaymentAmountUpdatedHandlerTester.cs" />
+    <Compile Include="Handlers\PaymentStatusUpdatedHandlerTester.cs" />
+    <Compile Include="IntegrationSetUpFixture.cs" />
     <Compile Include="CommandHandlerTester.cs" />
+    <Compile Include="Handlers\PaymentIdUpdatedHandlerTester.cs" />
+    <Compile Include="SetUp\PaymentEntityBuilder.cs" />
     <Compile Include="SetUp\IEntityBuilder.cs" />
     <Compile Include="SetUp\EntityBuilder.cs" />
-    <Compile Include="SetUp\TestIoC.cs" />
     <Compile Include="HandlerTester.cs" />
-    <Compile Include="SetUp\DatabaseDeleter.cs" />
-    <Compile Include="StructureMapConfig.cs" />
-    <Compile Include="WarrantyRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Warranty.Core\Warranty.Core.csproj">
       <Project>{991144F8-B588-4604-930B-3224FEC6FF32}</Project>
       <Name>Warranty.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Warranty.Server\Warranty.Server.csproj">
+      <Project>{1F88DA00-AE07-4355-8368-37E3A1D6C7A2}</Project>
+      <Name>Warranty.Server</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Warranty.Tests\Warranty.Tests.csproj">
+      <Project>{C3CDE3C8-278C-44F6-A498-344A6E666454}</Project>
+      <Name>Warranty.Tests</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

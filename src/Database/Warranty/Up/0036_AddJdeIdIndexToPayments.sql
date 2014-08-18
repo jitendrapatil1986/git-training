@@ -1,0 +1,1 @@
+CREATE NONCLUSTERED INDEX IDX_Payments_JdeId ON Payments (JdeIdentifier);

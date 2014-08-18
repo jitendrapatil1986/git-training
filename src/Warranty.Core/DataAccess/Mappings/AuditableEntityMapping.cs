@@ -2,7 +2,7 @@
 {
     using Entities;
     using NHibernate.Mapping.ByCode.Conformist;
-
+    
     public class AuditableEntityMapping<T> : ClassMapping<T> where T : class , IAuditableEntity
     {
         public AuditableEntityMapping()

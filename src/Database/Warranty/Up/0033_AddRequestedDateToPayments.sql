@@ -1,0 +1,1 @@
+ALTER TABLE Payments ADD RequestedDate DATETIME2;
