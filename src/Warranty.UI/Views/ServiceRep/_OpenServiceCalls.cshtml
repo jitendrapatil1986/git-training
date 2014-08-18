@@ -1,0 +1,40 @@
+﻿@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.RepServiceCalls.ServiceRepServiceCallsModel
+
+@foreach (var line in Model.OpenServiceCalls)
+{
+    <div class="service-call-line">
+        <div class="col-md-1">
+            <small class="text-muted">@line.CallNumber</small><br/>@Format.YearsWithinWarranty(line.YearsWithinWarranty, line.WarrantyStartDate)
+        </div>
+        <div class="col-md-3">
+            <div class="col-md-1 hidden-sm hidden-xs">
+                @Format.NumberOfLineItems(line.NumberOfLineItems)
+            </div>
+            <div class="col-md-10">
+                <a>@line.HomeownerName</a><br />@line.Address
+            </div>
+        </div>
+        <div class="col-md-2">@Format.PhoneNumber(line.PhoneNumber)</div>
+        <div class="col-md-1">@Format.Escalated(line.IsEscalated, line.EscalationReason, line.EscalationDate)</div>
+        <div class="col-md-1">@Format.SpecialProject(line.IsSpecialProject)</div>
+        <div class="col-md-2 has-bottom-tooltip" title="@Format.DateForServiceCallWiget(line.CreatedDate)">
+            <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@line.NumberOfDaysRemaining)<br />
+            <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                <div class="progress-bar @Css.ServiceCallProgressBar(line.NumberOfDaysRemaining)" role="progressbar" style="width: @line.PercentComplete%">
+                    <span class="sr-only">@line.PercentComplete% Complete</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1 text-center">
+            <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></button>
+            <ul class="dropdown-menu" role="menu">
+                <li>@Html.ActionLink("Reassign", "Reassign", "ServiceCall", new { id = @line.ServiceCallId }, null)</li>
+                <li>@Html.ActionLink("Request Payment", "RequestPayment", "ServiceCall", new { id = @line.ServiceCallId }, null)</li>
+                <li>@Html.ActionLink("Add Note", "AddNote", "ServiceCall", new { id = @line.ServiceCallId }, null)</li>
+                <li>@Html.ActionLink("Close", "Close", "ServiceCall", new { id = @line.ServiceCallId }, null)</li>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+}

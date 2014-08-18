@@ -37,13 +37,84 @@
     margin: 0;
 }
 
-.service-call-line:hover {
-    background: @gray-lighter;
-}
+    .service-call-line:hover {
+        background: @gray-lighter;
+    }
 
 .text-red {
     color: #D9534F;
 }
+
+
+.label, badge {
+    &-warranty-one-year {
+        background-color: #5cb85c;
+    }
+}
+
+.label, badge {
+    &-warranty-two-year {
+        background-color: #FFBF00;
+    }
+}
+
+.label, badge {
+    &-warranty-three-nine-year {
+        background-color: #f0ad4e;
+    }
+}
+
+.label, badge {
+    &-warranty-ten-plus-year {
+        background-color: #d9534f;
+    }
+}
+
+.special-project {
+    background-color: #5bc0de;
+    border-radius: 10px;
+    text-align: center;
+    font-size: xx-large;
+    color: #FFFFFF;
+    height: 60px;
+}
+
+.opened-for {
+    border-radius: 10px;
+    text-align: center;
+    font-size: xx-large;
+    color: #FFFFFF;
+    height: 60px;
+}
+
+.opened-for p {
+    font-size: xx-small;
+    color: #FFFFFF;
+}
+
+.opened-for {
+    &-eight-plus-day {
+        background-color: #d9534f;
+    }
+}
+
+.opened-for {
+    &-less-seven-day {
+        background-color: #5cb85c;
+    }
+}
+
+.opened-for {
+    &-seven-day {
+        background-color: #0044cc;
+    }
+}
+
+.center-element{
+    float: none;
+    margin: 0 auto;
+}
+
 
 .no-left-right-padding {
     padding-left: 0;
@@ -54,3 +125,4 @@
     white-space: pre;
     max-width: none;
 }
+

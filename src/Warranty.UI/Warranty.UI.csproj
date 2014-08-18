@@ -184,6 +184,7 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ServiceCallController.cs" />
+    <Compile Include="Controllers\ServiceRepController.cs" />
     <Compile Include="Core\Enumerations\NavHeaderItem.cs" />
     <Compile Include="Core\Enumerations\NavItem.cs" />
     <Compile Include="Core\Filters\NavActionFilterAttribute.cs" />
@@ -293,6 +294,9 @@
     <Content Include="Views\Home\_OverdueCalls.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Home\_SpecialProjects.cshtml" />
+    <Content Include="Views\ServiceRep\ServiceCalls.cshtml" />
+    <Content Include="Views\ServiceRep\_OpenServiceCalls.cshtml" />
+    <Content Include="Views\ServiceRep\_ClosedServiceCalls.cshtml" />
     <Content Include="Views\Home\_EscalatedCalls.cshtml" />
   </ItemGroup>
   <ItemGroup>
