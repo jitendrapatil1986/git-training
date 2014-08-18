@@ -18,4 +18,37 @@
             @Html.Partial("_WidgetMyServiceTeamOverdueChart", Model)
         </div>
     </div>
+    <hr/>
+    <div>
+        @if (!Model.MyTeamChartEmployeeSummaries.Any())
+        {
+            <div class="well-sm">
+                <em>No Team service calls assigned.</em>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-6 col-md-offset-1 text-capitalize">Service Representative</div>
+                    <div class="col-md-1">Open</div>
+                    <div class="col-md-1">Closed</div>
+                    <div class="col-md-1">Overdue</div>
+                    <div class="col-md-1">Total</div>
+            <div class="clearfix"></div>
+        
+            foreach (var line in Model.MyTeamChartEmployeeSummaries)
+            {
+                @*<div class="service-call-line hide">*@
+                <div class="">
+                    <div class="col-md-6 col-md-offset-1 text-capitalize">
+                        @Html.ActionLink(line.EmployeeName, "ServiceCalls", "ServiceRep", new { id = line.WarrantyRepresentativeEmployeeId }, null)
+                    </div>
+                    <div class="col-md-1">@line.TotalOpen</div>
+                    <div class="col-md-1">@line.TotalClosed</div>
+                    <div class="col-md-1">@line.TotalOverdue</div>
+                    <div class="col-md-1">@line.TotalCalls</div>
+                    <div class="clearfix"></div>
+                </div>
+            }
+        }
+    </div>
 </div>

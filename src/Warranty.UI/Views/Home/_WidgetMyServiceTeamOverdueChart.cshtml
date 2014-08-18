@@ -12,10 +12,6 @@
                 text: 'My Team - Overdue',
                 x: 0 //center
             },
-            //subtitle: {
-            //    text: '',
-            //    x: -20
-            //},
             xAxis: {
                 categories: [@Html.Raw(Model.Months)]
             },
@@ -31,13 +27,15 @@
                 }]
             },
             tooltip: {
-                //valueSuffix: 'K'
             },
             legend: {
                 layout: 'vertical',
                 align: 'right',
                 verticalAlign: 'middle',
                 borderWidth: 0
+            },
+            credits: {
+                enabled: false
             },
             series: [@Html.Raw(Model.SeriesDataOverdue)]
         });

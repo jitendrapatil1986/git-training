@@ -45,13 +45,21 @@ namespace Warranty.Core.Features.MyServiceTeamWidget
                                         GROUP BY MONTH(sc.createddate), LEFT(DATENAME(m, sc.CreatedDate), 3)
                                     ), 
                                     EmployeeList AS
-                                    (	
+                                    (
 	                                    SELECT DISTINCT WarrantyRepresentativeEmployeeId
 	                                    , e.EmployeeName	
 	                                    FROM [ServiceCalls] sc
 	                                    INNER JOIN Employees e
 	                                    ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-	                                    WHERE YEAR(sc.CreatedDate) = YEAR(getdate())	
+                                        INNER JOIN Jobs j
+                                        ON sc.JobId = j.JobId
+                                        INNER JOIN Communities cm
+                                        ON j.CommunityId = cm.CommunityId
+                                        INNER JOIN Cities ci
+                                        ON cm.CityId = ci.CityId
+	                                    {0} /* WHERE */
+                                        GROUP BY WarrantyRepresentativeEmployeeId, e.EmployeeName
+                                        HAVING COUNT(*) > 0	
                                     ),
                                     EmployeeData AS
                                     (
@@ -66,22 +74,25 @@ namespace Warranty.Core.Features.MyServiceTeamWidget
 	                                    FROM [ServiceCalls] sc
 	                                    INNER JOIN Employees e
 	                                    ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-	                                    WHERE YEAR(sc.CreatedDate) = YEAR(getdate())	
+
+                                        INNER JOIN Jobs j
+                                        ON sc.JobId = j.JobId
+                                        INNER JOIN Communities cm
+                                        ON j.CommunityId = cm.CommunityId
+                                        INNER JOIN Cities ci
+                                        ON cm.CityId = ci.CityId
+                                        {0} /* WHERE */
 	                                    GROUP BY WarrantyRepresentativeEmployeeId, e.EmployeeName, MONTH(sc.createddate), LEFT(DATENAME(m, sc.CreatedDate), 3)
                                     )
 
-
-                                    SELECT Emp.WarrantyRepresentativeEmployeeId, Emp.EmployeeName, M.MonthNumber AS [Month], M.MonthText AS [MonthName],
+                                    SELECT Emp.WarrantyRepresentativeEmployeeId, UPPER(Emp.EmployeeName) AS EmployeeName, M.MonthNumber, M.MonthText,
 		                                    ISNULL(ED.TotalCalls, 0) AS TotalCalls, ISNULL(ED.TotalClosed, 0) AS TotalClosed, ISNULL(ED.TotalOpen, 0) AS TotalOpen, ISNULL(ED.TotalOverdue, 0) AS TotalOverdue
                                     FROM Months M
                                     CROSS JOIN EmployeeList Emp
                                     LEFT JOIN EmployeeData ED
                                     ON M.MonthNumber = ED.MonthNumber AND
 	                                    Emp.WarrantyRepresentativeEmployeeId = ED.WarrantyRepresentativeEmployeeId
-                                    --ORDER BY Emp.EmployeeName, M.MonthNumber
-                                    {0} /* WHERE */
                                     {1} /* ORDER BY */";
-
 
         const string SqlTemplateMonths = @"SELECT 
                                                 DISTINCT MONTH(sc.createddate) as [Month]
@@ -89,29 +100,35 @@ namespace Warranty.Core.Features.MyServiceTeamWidget
                                             FROM [ServiceCalls] sc
                                             WHERE YEAR(sc.CreatedDate) = YEAR(getdate())
                                             GROUP BY MONTH(sc.createddate), LEFT(DATENAME(m, sc.CreatedDate), 3)
-                                            {0} /* WHERE */
-                                            {1} /* ORDER BY */";
+                                            {0} /* ORDER BY */";
 
         const string SqlTemplateSummary = @"SELECT
-TOP 25 --TESTING 
-                                        WarrantyRepresentativeEmployeeId
-                                        , e.EmployeeName
-                                        , COUNT(*) as TotalCalls
-                                        , SUM(CASE WHEN CompletionDate IS NULL THEN 1 ELSE 0 END) as [TotalOpen]
-                                        , SUM(CASE WHEN CompletionDate IS NOT NULL THEN 1 ELSE 0 END) as [TotalClosed]
-                                        , SUM(CASE WHEN CompletionDate IS NULL AND DATEADD(dd, 7, sc.CreatedDate) < getdate() THEN 1 ELSE 0 END) as [TotalOverdue]
-                                    FROM [ServiceCalls] sc
-                                    INNER JOIN Employees e
-                                    ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-                                    WHERE YEAR(sc.CreatedDate) = YEAR(getdate())
-                                    GROUP BY WarrantyRepresentativeEmployeeId, e.EmployeeName
-                                    {0} /* WHERE */
-                                    {1} /* ORDER BY */";
+                                            WarrantyRepresentativeEmployeeId
+                                            , LOWER(e.EmployeeName) as EmployeeName
+                                            , COUNT(*) as TotalCalls
+                                            , SUM(CASE WHEN CompletionDate IS NULL THEN 1 ELSE 0 END) as [TotalOpen]
+                                            , SUM(CASE WHEN CompletionDate IS NOT NULL THEN 1 ELSE 0 END) as [TotalClosed]
+                                            , SUM(CASE WHEN CompletionDate IS NULL AND DATEADD(dd, 7, sc.CreatedDate) < getdate() THEN 1 ELSE 0 END) as [TotalOverdue]
+                                        FROM [ServiceCalls] sc
+                                        INNER JOIN Employees e
+                                        ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+
+                                        INNER JOIN Jobs j
+                                        ON sc.JobId = j.JobId
+                                        INNER JOIN Communities cm
+                                        ON j.CommunityId = cm.CommunityId
+                                        INNER JOIN Cities ci
+                                        ON cm.CityId = ci.CityId
+                                        {0} /* WHERE */
+                                        GROUP BY WarrantyRepresentativeEmployeeId, e.EmployeeName
+                                        {1} /* ORDER BY */";
 
 
         private string GetMyServiceTeamOpenData(IUser user)
         {
-            var sql = String.Format(SqlTemplate, "", "ORDER BY Emp.EmployeeName, M.MonthNumber");
+            var markets = user.Markets;
+
+            var sql = String.Format(SqlTemplate, "WHERE YEAR(sc.CreatedDate) = YEAR(getdate()) AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ")", "ORDER BY Emp.EmployeeName, M.MonthNumber");
 
             var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamChartEmployeeDetail>(sql);
 
@@ -127,7 +144,9 @@ TOP 25 --TESTING
 
         private string GetMyServiceTeamClosedData(IUser user)
         {
-            var sql = String.Format(SqlTemplate, "", "ORDER BY Emp.EmployeeName, M.MonthNumber");
+            var markets = user.Markets;
+
+            var sql = String.Format(SqlTemplate, "WHERE YEAR(sc.CreatedDate) = YEAR(getdate()) AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ")", "ORDER BY Emp.EmployeeName, M.MonthNumber");
 
             var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamChartEmployeeDetail>(sql);
 
@@ -143,7 +162,9 @@ TOP 25 --TESTING
 
         private string GetMyServiceTeamOverdueData(IUser user)
         {
-            var sql = String.Format(SqlTemplate, "", "ORDER BY Emp.EmployeeName, M.MonthNumber");
+            var markets = user.Markets;
+
+            var sql = String.Format(SqlTemplate, "WHERE YEAR(sc.CreatedDate) = YEAR(getdate()) AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ")", "ORDER BY Emp.EmployeeName, M.MonthNumber");
 
             var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamChartEmployeeDetail>(sql);
 
@@ -159,7 +180,7 @@ TOP 25 --TESTING
 
         private string GetMyServiceTeamDataMonths(IUser user)
         {
-            var sql = String.Format(SqlTemplateMonths, "", "ORDER BY [Month]");
+            var sql = String.Format(SqlTemplateMonths, "ORDER BY [Month]");
 
             var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamMonth>(sql);
 
@@ -172,7 +193,9 @@ TOP 25 --TESTING
 
         private IEnumerable<MyServiceTeamWidgetModel.MyTeamChartEmployeeSummary> GetMyServiceTeamDataSummary(IUser user)
         {
-            var sql = String.Format(SqlTemplateSummary, "", "ORDER BY e.EmployeeName");
+            var markets = user.Markets;
+
+            var sql = String.Format(SqlTemplateSummary, "WHERE YEAR(sc.CreatedDate) = YEAR(getdate()) AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ")", "ORDER BY e.EmployeeName");
 
             var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamChartEmployeeSummary>(sql);
             return result;

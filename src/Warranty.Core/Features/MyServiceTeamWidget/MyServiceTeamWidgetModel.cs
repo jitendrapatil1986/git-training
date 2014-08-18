@@ -13,7 +13,7 @@
 
         public class MyTeamChartEmployeeDetail: MyTeamChartData
         {            
-            public int Month { get; set; }
+            public int MonthNumber { get; set; }
             public string MonthName { get; set; }
         }
 
