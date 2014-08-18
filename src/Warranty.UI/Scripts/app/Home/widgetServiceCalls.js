@@ -1,4 +1,4 @@
-﻿define(['jquery'], function ($) {
+﻿define(['jquery','highcharts'], function ($) {
     $('.service-call-line:lt(5)').removeClass('hide');
 
     $('.show-more').click(function () {
