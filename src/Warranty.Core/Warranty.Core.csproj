@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.IdentityModel">
       <HintPath>..\..\..\purchasing\src\Purchasing.UI\bin\Microsoft.IdentityModel.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
@@ -71,8 +74,14 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Yay.Enumerations, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Yay.Enumeration.0.5.1\lib\Yay.Enumerations.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configurations\EnumerationDisplayConverter.cs" />
+    <Compile Include="Configurations\WarrantyContractResolver.cs" />
     <Compile Include="DataAccess\AuditEventListener.cs" />
     <Compile Include="DataAccess\Conventions\Int32EnumerationType.cs" />
     <Compile Include="DataAccess\Conventions\IStringEnumeration.cs" />
@@ -123,6 +132,7 @@
     <Compile Include="Enumerations\ItemClassification.cs" />
     <Compile Include="Enumerations\RequestType.cs" />
     <Compile Include="Extensions\MapperExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsModel.cs" />
