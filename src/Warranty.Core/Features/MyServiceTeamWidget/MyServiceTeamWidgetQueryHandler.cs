@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace Warranty.Core.Features.MyServiceTeamWidget
 {
@@ -31,25 +28,57 @@ namespace Warranty.Core.Features.MyServiceTeamWidget
                 return new MyServiceTeamWidgetModel
                     {
                         Months = GetMyServiceTeamDataMonths(user),
-                        SeriesData = GetMyServiceTeamData(user),
+                        SeriesDataOpen = GetMyServiceTeamOpenData(user),
+                        SeriesDataClosed = GetMyServiceTeamClosedData(user),
+                        SeriesDataOverdue = GetMyServiceTeamOverdueData(user),
+                        MyTeamChartEmployeeSummaries = GetMyServiceTeamDataSummary(user),
                     };
             }
         }
 
-        const string SqlTemplate = @"SELECT 
-                                        WarrantyRepresentativeEmployeeId
-                                        , e.EmployeeName
-                                        , MONTH(sc.createddate) as [Month]
-                                        , LEFT(DATENAME(m, sc.CreatedDate), 3) as [MonthName]
-                                        , COUNT(*) as TotalCalls
-                                        , SUM(CASE WHEN CompletionDate IS NULL THEN 1 ELSE 0 END) as [TotalOpen]
-                                        , SUM(CASE WHEN CompletionDate IS NOT NULL THEN 1 ELSE 0 END) as [TotalClosed]
-                                        , SUM(CASE WHEN CompletionDate IS NULL AND DATEADD(dd, 7, sc.CreatedDate) < getdate() THEN 1 ELSE 0 END) as [TotalOverdue]
-                                    FROM [ServiceCalls] sc
-                                    INNER JOIN Employees e
-                                    ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-                                    WHERE YEAR(sc.CreatedDate) = YEAR(getdate())
-                                    GROUP BY WarrantyRepresentativeEmployeeId, e.EmployeeName, MONTH(sc.createddate), LEFT(DATENAME(m, sc.CreatedDate), 3)
+        const string SqlTemplate = @";WITH Months AS
+                                    (
+                                        SELECT DISTINCT MONTH(sc.createddate) AS MonthNumber
+                                        , LEFT(DATENAME(m, sc.CreatedDate), 3) AS MonthText
+                                        FROM [ServiceCalls] sc
+                                        WHERE YEAR(sc.CreatedDate) = YEAR(getdate())
+                                        GROUP BY MONTH(sc.createddate), LEFT(DATENAME(m, sc.CreatedDate), 3)
+                                    ), 
+                                    EmployeeList AS
+                                    (	
+	                                    SELECT DISTINCT WarrantyRepresentativeEmployeeId
+	                                    , e.EmployeeName	
+	                                    FROM [ServiceCalls] sc
+	                                    INNER JOIN Employees e
+	                                    ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+	                                    WHERE YEAR(sc.CreatedDate) = YEAR(getdate())	
+                                    ),
+                                    EmployeeData AS
+                                    (
+	                                    SELECT WarrantyRepresentativeEmployeeId
+	                                    , e.EmployeeName
+	                                    , MONTH(sc.createddate) AS MonthNumber
+	                                    , LEFT(DATENAME(m, sc.CreatedDate), 3) AS MonthText
+	                                    , COUNT(*) AS TotalCalls
+	                                    , SUM(CASE WHEN CompletionDate IS NULL THEN 1 ELSE 0 END) AS [TotalOpen]
+	                                    , SUM(CASE WHEN CompletionDate IS NOT NULL THEN 1 ELSE 0 END) AS [TotalClosed]
+	                                    , SUM(CASE WHEN CompletionDate IS NULL AND DATEADD(dd, 7, sc.CreatedDate) < getdate() THEN 1 ELSE 0 END) AS [TotalOverdue]
+	                                    FROM [ServiceCalls] sc
+	                                    INNER JOIN Employees e
+	                                    ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+	                                    WHERE YEAR(sc.CreatedDate) = YEAR(getdate())	
+	                                    GROUP BY WarrantyRepresentativeEmployeeId, e.EmployeeName, MONTH(sc.createddate), LEFT(DATENAME(m, sc.CreatedDate), 3)
+                                    )
+
+
+                                    SELECT Emp.WarrantyRepresentativeEmployeeId, Emp.EmployeeName, M.MonthNumber AS [Month], M.MonthText AS [MonthName],
+		                                    ISNULL(ED.TotalCalls, 0) AS TotalCalls, ISNULL(ED.TotalClosed, 0) AS TotalClosed, ISNULL(ED.TotalOpen, 0) AS TotalOpen, ISNULL(ED.TotalOverdue, 0) AS TotalOverdue
+                                    FROM Months M
+                                    CROSS JOIN EmployeeList Emp
+                                    LEFT JOIN EmployeeData ED
+                                    ON M.MonthNumber = ED.MonthNumber AND
+	                                    Emp.WarrantyRepresentativeEmployeeId = ED.WarrantyRepresentativeEmployeeId
+                                    --ORDER BY Emp.EmployeeName, M.MonthNumber
                                     {0} /* WHERE */
                                     {1} /* ORDER BY */";
 
@@ -63,17 +92,69 @@ namespace Warranty.Core.Features.MyServiceTeamWidget
                                             {0} /* WHERE */
                                             {1} /* ORDER BY */";
 
-        private string GetMyServiceTeamData(IUser user)
+        const string SqlTemplateSummary = @"SELECT
+TOP 25 --TESTING 
+                                        WarrantyRepresentativeEmployeeId
+                                        , e.EmployeeName
+                                        , COUNT(*) as TotalCalls
+                                        , SUM(CASE WHEN CompletionDate IS NULL THEN 1 ELSE 0 END) as [TotalOpen]
+                                        , SUM(CASE WHEN CompletionDate IS NOT NULL THEN 1 ELSE 0 END) as [TotalClosed]
+                                        , SUM(CASE WHEN CompletionDate IS NULL AND DATEADD(dd, 7, sc.CreatedDate) < getdate() THEN 1 ELSE 0 END) as [TotalOverdue]
+                                    FROM [ServiceCalls] sc
+                                    INNER JOIN Employees e
+                                    ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+                                    WHERE YEAR(sc.CreatedDate) = YEAR(getdate())
+                                    GROUP BY WarrantyRepresentativeEmployeeId, e.EmployeeName
+                                    {0} /* WHERE */
+                                    {1} /* ORDER BY */";
+
+
+        private string GetMyServiceTeamOpenData(IUser user)
         {
-            var sql = String.Format(SqlTemplate, "", "ORDER BY e.EmployeeName, [Month]");
+            var sql = String.Format(SqlTemplate, "", "ORDER BY Emp.EmployeeName, M.MonthNumber");
 
-            var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamChart>(sql);
+            var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamChartEmployeeDetail>(sql);
 
-            var myTeamChart = result.OrderBy(x => x.EmployeeName)
-                                    .Select(x => String.Format("{{name:'{0}',data:[{1}]}}", x.EmployeeName, x.TotalOpen))
+            var myOpenTeamChart = result.OrderBy(x => x.EmployeeName)
+                                    .Select(x => String.Format("{{name:'{0}',data:[{1}]}}", 
+                                                                    x.EmployeeName, result.Where(y => y.EmployeeName == x.EmployeeName)
+                                                                                    .OrderBy(y => y.EmployeeName)
+                                                                                    .Select(y => y.TotalOpen).CommaSeparate()))
                                     .Distinct()
                                     .CommaSeparate();
-            return myTeamChart;
+            return myOpenTeamChart;
+        }
+
+        private string GetMyServiceTeamClosedData(IUser user)
+        {
+            var sql = String.Format(SqlTemplate, "", "ORDER BY Emp.EmployeeName, M.MonthNumber");
+
+            var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamChartEmployeeDetail>(sql);
+
+            var myClosedTeamChart = result.OrderBy(x => x.EmployeeName)
+                                    .Select(x => String.Format("{{name:'{0}',data:[{1}]}}",
+                                                                    x.EmployeeName, result.Where(y => y.EmployeeName == x.EmployeeName)
+                                                                                    .OrderBy(y => y.EmployeeName)
+                                                                                    .Select(y => y.TotalClosed).CommaSeparate()))
+                                    .Distinct()
+                                    .CommaSeparate();
+            return myClosedTeamChart;
+        }
+
+        private string GetMyServiceTeamOverdueData(IUser user)
+        {
+            var sql = String.Format(SqlTemplate, "", "ORDER BY Emp.EmployeeName, M.MonthNumber");
+
+            var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamChartEmployeeDetail>(sql);
+
+            var myOverdueTeamChart = result.OrderBy(x => x.EmployeeName)
+                                    .Select(x => String.Format("{{name:'{0}',data:[{1}]}}",
+                                                                    x.EmployeeName, result.Where(y => y.EmployeeName == x.EmployeeName)
+                                                                                    .OrderBy(y => y.EmployeeName)
+                                                                                    .Select(y => y.TotalOverdue).CommaSeparate()))
+                                    .Distinct()
+                                    .CommaSeparate();
+            return myOverdueTeamChart;
         }
 
         private string GetMyServiceTeamDataMonths(IUser user)
@@ -87,6 +168,14 @@ namespace Warranty.Core.Features.MyServiceTeamWidget
                                     .CommaSeparate();
 
             return monthString;
+        }
+
+        private IEnumerable<MyServiceTeamWidgetModel.MyTeamChartEmployeeSummary> GetMyServiceTeamDataSummary(IUser user)
+        {
+            var sql = String.Format(SqlTemplateSummary, "", "ORDER BY e.EmployeeName");
+
+            var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamChartEmployeeSummary>(sql);
+            return result;
         }
     }
 }

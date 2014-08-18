@@ -1,26 +1,21 @@
 ﻿@model Warranty.Core.Features.MyServiceTeamWidget.MyServiceTeamWidgetModel
-
-<h2>MyServiceTeamChartWidget</h2>
-
 <div class="col-md-8">
     <ul class="nav nav-tabs" role="tablist">
-        <li class="active"><a href="#my_service_calls" role="tab" data-toggle="tab">My <span class="label label-default">Tab1</span></a></li>
-        <li><a href="#overdue_calls" role="tab" data-toggle="tab">Overdue <span class="label label-danger">Tab2</span></a></li>
-        <li><a href="#escalated_calls" role="tab" data-toggle="tab">Escalated <span class="label label-default">0</span></a></li>
-        <li><a href="#special_projects" role="tab" data-toggle="tab">Special Projects <span class="label label-default">Tab4</span></a></li>
-        <li class="pull-right"><span class="widget-header">Service Calls</span></li>
+        <li class="active"><a href="#my_service_team_open" role="tab" data-toggle="tab">Open</a></li>
+        <li><a href="#my_service_team_closed" role="tab" data-toggle="tab">Closed</a></li>
+        <li><a href="#my_service_team_overdue" role="tab" data-toggle="tab">Overdue</a></li>
+        <li class="pull-right"><span class="widget-header">Team Charts</span></li>
     </ul>
         
     <div class="tab-content">
-        <div class="tab-pane active" id="Testmy_service_calls">
-            @Html.Partial("_WidgetMyServiceTeamChart", Model)
+        <div class="tab-pane active" id="my_service_team_open">
+            @Html.Partial("_WidgetMyServiceTeamOpenChart", Model)
         </div>
-        <div class="tab-pane" id="Testoverdue_calls">
-            Test
+        <div class="tab-pane" id="my_service_team_closed">
+            @Html.Partial("_WidgetMyServiceTeamClosedChart", Model)
         </div>
-        <div class="tab-pane" id="Testescalated_calls">Escalated Placeholder</div>
-        <div class="tab-pane" id="Testspecial_projects">
-            Test
+        <div class="tab-pane" id="my_service_team_overdue">
+            @Html.Partial("_WidgetMyServiceTeamOverdueChart", Model)
         </div>
     </div>
 </div>

@@ -1,0 +1,91 @@
+﻿@model Warranty.Core.Features.MyServiceTeamWidget.MyServiceTeamWidgetModel
+
+@*<div id="my_open_service_chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>*@
+
+<div>    
+    <div id="my_open_service_chart"></div>
+</div>
+
+<script type="text/javascript">
+    require(['jquery', 'highcharts'], function ($) {
+        
+        $('#my_open_service_chart').highcharts({
+            title: {
+                text: 'My Team - Open',
+                x: 0 //center
+            },
+            //subtitle: {
+            //    text: '',
+            //    x: -20
+            //},
+            xAxis: {
+                categories: [@Html.Raw(Model.Months)]
+            },
+            yAxis: {
+                title: {
+                    text: 'Total Calls'
+                },
+                min: 0,
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                //valueSuffix: 'K'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [@Html.Raw(Model.SeriesDataOpen)]
+        });
+
+    });
+</script>
+
+<hr/>
+<div>
+    @if (!Model.MyTeamChartEmployeeSummaries.Any())
+    {
+        <div class="well-sm">
+            <em>No Team service calls assigned.</em>
+        </div>
+    }
+    else
+    {
+        foreach (var line in Model.MyTeamChartEmployeeSummaries)
+        {
+            @*<div class="service-call-line hide">*@
+            <div class="">
+                <div class="col-md-6 col-md-offset-1">
+                    <a>@line.EmployeeName</a>
+                </div>
+                <div class="col-md-1">@line.TotalOpen</div>
+                <div class="col-md-1">@line.TotalClosed</div>
+                <div class="col-md-1">@line.TotalOverdue</div>
+                <div class="col-md-1">@line.TotalCalls</div>
+                <div class="clearfix"></div>
+            </div>
+        }
+        
+        if (Model.MyTeamChartEmployeeSummaries.Count() > 5)
+        {
+            <div>
+                <span class="text-muted">Show:</span> 
+                <a href="#" class="show-more">5</a>
+                @if (Model.MyTeamChartEmployeeSummaries.Count() > 5)
+                {
+                    <span> | <a href="#" class="show-more">10</a></span>
+                }
+                @if (Model.MyTeamChartEmployeeSummaries.Count() > 10)
+                {
+                    <span> | <a href="#" class="show-more">All</a></span>
+                }
+            </div>
+        }
+    }
+</div>
