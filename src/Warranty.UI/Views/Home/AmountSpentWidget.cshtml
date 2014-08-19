@@ -1,15 +1,16 @@
 ﻿@using Warranty.Core.Extensions
 @using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.AmountSpentWidget.AmountSpentWidgetModel
-<div class="col-md-4">
     <div class="amount-spent-header">
         $ Spent
-        <div class="amount-spent amount-spent-green pull-right"><strong>YTD:</strong> @Format.MoneyWithoutDecimal(Model.YearTodate)</div>
-        <div class="amount-spent amount-spent-red pull-right"><strong>QTD:</strong> @Format.MoneyWithoutDecimal(Model.QuarterToDate)</div>
-        <div class="amount-spent amount-spent-green pull-right"><strong>MTD:</strong> @Format.MoneyWithoutDecimal(Model.MonthTodate)</div>
+        <div class="amount-spent-sub-header pull-right">
+            MTD: <span class="amount-spent @Css.WarrantySpent(Model.MonthToDate)">@Format.MoneyWithoutDecimal(Model.MonthToDate)</span>
+            QTD: <span class="amount-spent @Css.WarrantySpent(Model.QuarterToDate)">@Format.MoneyWithoutDecimal(Model.QuarterToDate)</span>
+            YTD: <span class="amount-spent @Css.WarrantySpent(Model.YearToDate)">@Format.MoneyWithoutDecimal(Model.YearToDate)</span>
+        </div>
     </div>
     <div id="container" class="amount-spent-container"></div>
-</div>
+
 <script>
     require(['jquery', 'highcharts'], function ($) {
         $(function () {
@@ -22,8 +23,9 @@
                     },
                 yAxis: {
                     title: {
-                        text: 'Amount Spent'
+                        text: 'Warranty Dollars'
                     },
+                    min: 0,
                     plotLines: [{
                         value: 0,
                         width: 1,
@@ -31,13 +33,16 @@
                     }]
                 },
                 tooltip: {
-                    valuePrefix: '$'
+                    pointFormat: "${point.y:.2f}",
                 },
                 legend: {
                     layout: 'vertical',
                     align: 'right',
                     verticalAlign: 'middle',
                     borderWidth: 0
+                },
+                credits: {
+                    enabled: false
                 },
                 series:  @Html.Raw(Model.SeriesList.ToJson())
                 });

@@ -1,5 +1,7 @@
 ﻿namespace Warranty.UI.Core.Helpers
 {
+    using Warranty.Core.Configurations;
+
     public static class Css
     {
         public static string ServiceCallProgressBar(int numberOfDaysRemaining)
@@ -19,6 +21,17 @@
                     return "progress-bar-success";
 
             }
+
+            return "";
+        }
+
+        public static string WarrantySpent(decimal spentAmount)
+        {
+            if (spentAmount <= WarrantyConstants.WarrantySpentGoal)
+                return "amount-spent-green";
+
+            if (spentAmount > WarrantyConstants.WarrantySpentGoal)
+                return "amount-spent-red";
 
             return "";
         }
