@@ -1,0 +1,44 @@
+﻿@model Warranty.Core.Features.MyServiceTeamWidget.MyServiceTeamWidgetModel
+
+<div>
+    <div id="my_closed_service_chart"></div>
+</div>
+
+<script type="text/javascript">
+    require(['jquery', 'highcharts'], function ($) {
+
+        $('#my_closed_service_chart').highcharts({
+            title: {
+                text: 'My Team - Closed',
+                x: 0 //center
+            },
+            xAxis: {
+                categories: [@Html.Raw(Model.Months)]
+            },
+            yAxis: {
+                title: {
+                    text: 'Total Calls'
+                },
+                min: 0,
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            credits: {
+                enabled: false
+            },
+            series: [@Html.Raw(Model.SeriesDataClosed)]
+        });
+
+    });
+</script>

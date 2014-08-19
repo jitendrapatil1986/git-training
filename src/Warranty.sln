@@ -61,6 +61,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Up", "Up", "{20518451-E144-
 		Database\Warranty\Up\0031_AlterPaymentsToAddEscalated.sql = Database\Warranty\Up\0031_AlterPaymentsToAddEscalated.sql
 		Database\Warranty\Up\0032_AlterStateCodeTypeToVarchar.sql = Database\Warranty\Up\0032_AlterStateCodeTypeToVarchar.sql
 		Database\Warranty\Up\0033_AddEscalationDateToServiceCalls.sql = Database\Warranty\Up\0033_AddEscalationDateToServiceCalls.sql
+		Database\Warranty\Up\0034_AddEscalationReasonToServiceCalls.sql = Database\Warranty\Up\0034_AddEscalationReasonToServiceCalls.sql
 		Database\Warranty\Up\0033_AddRequestedDateToPayments.sql = Database\Warranty\Up\0033_AddRequestedDateToPayments.sql
 		Database\Warranty\Up\0033_DropDeleteStoredProcedure.sql = Database\Warranty\Up\0033_DropDeleteStoredProcedure.sql
 		Database\Warranty\Up\0034_AddEscalationReasonToServiceCalls.sql = Database\Warranty\Up\0034_AddEscalationReasonToServiceCalls.sql

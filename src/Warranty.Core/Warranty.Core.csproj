@@ -136,6 +136,9 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetModel.cs" />
+    <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQuery.cs" />
+    <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQueryHandler.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsModel.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsQuery.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsQueryHandler.cs" />
@@ -173,6 +176,7 @@
     <None Include="packages.config" />
     <None Include="Scripts\jquery-1.9.0.min.map" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
