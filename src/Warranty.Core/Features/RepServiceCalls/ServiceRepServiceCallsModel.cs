@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Warranty.Core.Helpers;
 
 namespace Warranty.Core.Features.RepServiceCalls
 {
+    using Services;
+
     public class ServiceRepServiceCallsModel
     {
         public ServiceRepServiceCallsModel()
@@ -41,7 +41,7 @@ namespace Warranty.Core.Features.RepServiceCalls
 
             public int PercentComplete
             {
-                get { return WarrantyBusinessRules.ServiceCallPercentComplete(NumberOfDaysRemaining); }
+                get { return ServiceCallCalculator.CalculatePercentComplete(NumberOfDaysRemaining); }
             }
         }
     }

@@ -1,10 +1,9 @@
-﻿using Warranty.Core.Helpers;
-
-namespace Warranty.Core.Features.ServiceCallsWidget
+﻿namespace Warranty.Core.Features.ServiceCallsWidget
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Services;
 
     public class ServiceCallsWidgetModel
     {
@@ -74,7 +73,7 @@ namespace Warranty.Core.Features.ServiceCallsWidget
             public string CallNumber { get; set; }
             public DateTime CreatedDate { get; set; }
             public string HomeownerName { get; set; }
-            public int NumberOfDaysRemaining { get; set; }
+            public int NumberOfDaysRemaining { get { return ServiceCallCalculator.CalculateNumberOfDaysRemaining(CreatedDate); }}
             public int NumberOfLineItems { get; set; }
             public string PhoneNumber { get; set; }
             public DateTime? EscalationDate { get; set; }
@@ -82,7 +81,7 @@ namespace Warranty.Core.Features.ServiceCallsWidget
 
             public int PercentComplete
             {
-                get { return WarrantyBusinessRules.ServiceCallPercentComplete(NumberOfDaysRemaining); }
+                get { return ServiceCallCalculator.CalculatePercentComplete(NumberOfDaysRemaining); }
             }
         }
     }
