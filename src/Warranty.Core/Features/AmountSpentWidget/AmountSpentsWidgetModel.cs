@@ -6,8 +6,8 @@ namespace Warranty.Core.Features.AmountSpentWidget
     {
         public IEnumerable<string> Categories { get; set; }
         public List<Series> SeriesList { get; set; }
-        public decimal YearTodate { get; set; }
-        public decimal MonthTodate { get; set; }
+        public decimal YearToDate { get; set; }
+        public decimal MonthToDate { get; set; }
         public decimal QuarterToDate { get; set; }
 
         public class Series
