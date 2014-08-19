@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configurations\EnumerationDisplayConverter.cs" />
+    <Compile Include="Configurations\WarrantyConstants.cs" />
     <Compile Include="Configurations\WarrantyContractResolver.cs" />
     <Compile Include="DataAccess\AuditEventListener.cs" />
     <Compile Include="DataAccess\Conventions\Int32EnumerationType.cs" />
@@ -149,7 +150,7 @@
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetModel.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetQuery.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetQueryHandler.cs" />
-    <Compile Include="Helpers\WarrantyBusinessRules.cs" />
+    <Compile Include="Services\ServiceCallCalculator.cs" />
     <Compile Include="Net4Collection.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>

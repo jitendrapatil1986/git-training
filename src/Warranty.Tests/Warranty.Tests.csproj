@@ -85,6 +85,7 @@
     </Compile>
     <Compile Include="Core\DatabaseDeleter.cs" />
     <Compile Include="Core\TestWarrantyUserSession.cs" />
+    <Compile Include="ServiceCallCalculatorTester.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Warranty.Core\Warranty.Core.csproj">

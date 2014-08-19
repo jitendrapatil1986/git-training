@@ -2,6 +2,7 @@
 
 namespace Warranty.Core.Features.AmountSpentWidget
 {
+    using System;
     using System.Collections.Generic;
     using NPoco;
     using Security;
@@ -27,114 +28,131 @@ namespace Warranty.Core.Features.AmountSpentWidget
             {
                 return new AmountSpentWidgetModel
                            {
-                               Categories = GetCategories(user),
+                               Categories = GetCategories(),
                                SeriesList = GetAmountsForLastSixMonths(user),
-                               YearTodate = GetYearToDateAmount(user),
-                               MonthTodate  = GetMonthToDateAmount(user),
+                               YearToDate = GetYearToDateAmount(user),
+                               MonthToDate  = GetMonthToDateAmount(user),
                                QuarterToDate = GetQuarterToDateAmount(user),
 
                            };
             }
         }
 
-        private const string AgregationsTemplate = @"SELECT SUM(TotalDollarsSpent)/SUM(NumberOfJobs) as DollarsSpent
-                                                    FROM
-                                                    (
-                                                    SELECT SUM(Amount) TotalDollarsSpent, CityCode 
-                                                    FROM Payments p
-                                                    INNER JOIN Communities c
-                                                    ON left(p.CommunityNumber, 4) = c.CommunityNumber
-                                                    INNER JOIN Cities cy
-                                                    ON c.CityId = cy.CityId
-                                                    WHERE YEAR(p.CreatedDate) = YEAR(getdate()) {0} 
-                                                                                            GROUP BY cy.CityCode
-                                                                                        ) payments
-                                                                                        INNER JOIN 
-                                                                                        (
-                                                                                            SELECT COUNT(*) as NumberOfJobs, CityCode
-                                                                                            FROM Jobs j
-                                                                                            INNER JOIN Communities c
-                                                                                            ON j.CommunityId = c.CommunityId
-                                                                                            INNER JOIN Cities cy
-                                                                                            on c.CityId = cy.CityId
-                                                                                            GROUP BY CityCode
-                                                                                        ) jobs
-                                                                                        ON payments.CityCode = jobs.CityCode
-                                                                                        WHERE payments.CityCode IN ({1})";
+        private IEnumerable<string> GetCategories()
+        {
+            var currentQuarter = Month.FromValue(DateTime.Today.Month).Quarter;
+            return Month.GetAll().Where(x => x.Quarter == currentQuarter).Select(x => x.Abbreviation);
+        }
 
         private decimal GetYearToDateAmount(IUser user)
         {
-            var markets = user.Markets;
-
-            var query = string.Format(AgregationsTemplate, string.Empty, markets.CommaSeparateWrapWithSingleQuote());
-            
-            var result = _database.Single<decimal?>(query);
-            
-            return result ?? 0;
+            const string whereClause = "WHERE YEAR(p.CreatedDate) = YEAR(getdate())";
+            return GetDollarsSpent(whereClause, user);
         }
 
         private decimal GetQuarterToDateAmount(IUser user)
         {
-            var markets = user.Markets;
-
-            var query = string.Format(AgregationsTemplate, "AND DATEPART(qq, p.CreatedDate) = DATEPART(qq, getdate())", markets.CommaSeparateWrapWithSingleQuote());
-
-            var result = _database.Single<decimal?>(query);
-
-            return result ?? 0;
+            const string whereClause = "WHERE YEAR(p.CreatedDate) = YEAR(getdate()) AND DATEPART(qq, p.CreatedDate) = DATEPART(qq, getdate())";
+            return GetDollarsSpent(whereClause, user);
         }
 
         private decimal GetMonthToDateAmount(IUser user)
         {
-            var markets = user.Markets;
+            const string whereClause = "WHERE YEAR(p.CreatedDate) = YEAR(getdate()) AND MONTH(p.CreatedDate) = MONTH(getdate())";
+            return GetDollarsSpent(whereClause, user);
+        }
 
-            var query = string.Format(AgregationsTemplate, "AND MONTH(p.CreatedDate) = MONTH(getdate())", markets.CommaSeparateWrapWithSingleQuote());
+        private decimal GetDollarsSpent(string whereClause, IUser user)
+        {
+            const string sqlTemplate = @"SELECT SUM(TotalDollarsSpent)/SUM(NumberOfJobs) as DollarsSpent
+                                              FROM
+                                              (
+                                              SELECT SUM(Amount) TotalDollarsSpent, CityCode 
+                                                  FROM Payments p
+                                                  INNER JOIN Communities c
+                                                  ON left(p.CommunityNumber, 4) = c.CommunityNumber
+                                                  INNER JOIN Cities cy
+                                                  ON c.CityId = cy.CityId
+                                              {0} /* WHERE CLAUSE */
+                                                  GROUP BY cy.CityCode
+                                              ) payments
+                                              INNER JOIN 
+                                              (
+                                                  SELECT COUNT(*) as NumberOfJobs, CityCode
+                                                  FROM Jobs j
+                                                  INNER JOIN Communities c
+                                                  ON j.CommunityId = c.CommunityId
+                                                  INNER JOIN Cities cy
+                                                  on c.CityId = cy.CityId
+                                                  GROUP BY CityCode
+                                              ) jobs
+                                              ON payments.CityCode = jobs.CityCode
+                                              WHERE payments.CityCode IN ({1})";
 
+            var query = string.Format(sqlTemplate, whereClause, user.Markets.CommaSeparateWrapWithSingleQuote());
             var result = _database.Single<decimal?>(query);
 
-            return result ?? 0;
+            return result ?? 0M;
         }
 
         private List<AmountSpentWidgetModel.Series> GetAmountsForLastSixMonths(IUser user)
         {
+            const string sql = @"SELECT AmountSpent/NumberOfJobs as Amount, jobs.DivisionCode, month
+                                    FROM
+                                    (
+                                        SELECT COUNT(*) as NumberOfJobs, d.DivisionCode
+                                        FROM Jobs j
+                                        INNER JOIN Communities c
+                                        ON j.CommunityId = c.CommunityId
+                                        INNER JOIN Divisions d
+                                        ON c.DivisionId = d.DivisionId
+                                        GROUP BY d.DivisionCode
+                                    ) jobs
+                                    INNER JOIN
+                                    (
+                                        SELECT SUM(amount) as AmountSpent, d.DivisionCode, month(p.createddate) as Month
+                                        FROM Payments p
+                                        INNER JOIN Communities c
+                                        ON left(p.CommunityNumber, 4) = c.CommunityNumber
+                                        INNER JOIN Cities cy
+                                        ON c.CityId = cy.CityId
+                                        INNER join Divisions d
+                                        ON c.DivisionId = d.DivisionId
+                                        WHERE  cy.CityCode IN ({0}) AND
+                                        YEAR(p.CreatedDate) = YEAR(getdate())
+                                        GROUP by d.DivisionCode, cy.CityCode, month(p.createddate)
+                                    ) payments
+                                    ON jobs.DivisionCode = payments.DivisionCode";
+
+
             var markets = user.Markets;
-            var listSeries = new List<AmountSpentWidgetModel.Series>();
+            var result = _database.Fetch<SpentDto>(string.Format(sql, markets.CommaSeparateWrapWithSingleQuote()));
+            var divisions = result.Select(x => x.DivisionCode).Distinct();
 
-            const string sql = @"SELECT SUM(Amount) TotalDollarsSpent
-                            FROM Payments p
-                            INNER JOIN Communities c
-                                ON left(p.CommunityNumber, 4) = c.CommunityNumber
-                            INNER JOIN Cities cy
-                                ON c.CityId = cy.CityId
-                            WHERE  cy.CityCode IN ({0}) AND
-                                YEAR(p.CreatedDate) = YEAR(getdate()) and p.CreatedDate >= DATEADD(MONTH, -6, GETDATE()) and p.createddate <= getdate()
-                                GROUP BY MONTH(p.CreatedDate)";
+            var resultWithMonths = from month in Month.GetAll().Where(x => GetCategories().Contains(x.Abbreviation))
+                                   join r in result on month.Value equals r.Month into rm
+                                   from resultmonth in rm.DefaultIfEmpty(null)
+                                   select
+                                       new SpentDto
+                                           {
+                                               Amount = resultmonth == null ? 0 : resultmonth.Amount,
+                                               DivisionCode = resultmonth == null ? "" : resultmonth.DivisionCode,
+                                               Month = month.Value
+                                           };
 
-                var result = _database.Fetch<decimal>(string.Format(sql, markets.CommaSeparateWrapWithSingleQuote()));
-                listSeries.Add(new AmountSpentWidgetModel.Series
-                    {
-                        Data = result,
-                        Name = string.Format("My Divisions ({0})", markets.CommaSeparate())
-                    });
-
-            return listSeries;
+            var series = divisions.Select(x => new AmountSpentWidgetModel.Series
+                                                {
+                                                    Data = resultWithMonths.Where(r => r.DivisionCode == x || r.DivisionCode == "").Select(dto => dto.Amount).ToList(),
+                                                    Name = x,
+                                                });
+            return series.ToList();
         }
 
-        private string[] GetCategories(IUser user)
+        internal class SpentDto
         {
-            var markets = user.Markets;
-
-            const string sql = @"SELECT MONTH(p.CreatedDate)
-                        FROM Payments p
-                        INNER JOIN Communities c
-                            ON left(p.CommunityNumber, 4) = c.CommunityNumber
-                        INNER JOIN Cities cy
-                            ON c.CityId = cy.CityId
-                        WHERE  cy.CityCode IN ({0}) AND
-                            YEAR(p.CreatedDate) = YEAR(getdate()) and p.CreatedDate >= DATEADD(MONTH, -6, GETDATE()) and p.createddate <= getdate()
-                            GROUP BY MONTH(p.CreatedDate)";
-            var result = _database.Fetch<int>(string.Format(sql, markets.CommaSeparateWrapWithSingleQuote()));
-            return result.Select(x => Month.FromValue(x).Abbreviation).ToArray();
+            public decimal Amount { get; set; }
+            public string DivisionCode { get; set; }
+            public int Month { get; set; }
         }
     }
 }

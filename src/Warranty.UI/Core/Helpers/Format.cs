@@ -139,7 +139,7 @@ namespace Warranty.UI.Core.Helpers
         {
             var htmlString = String.Empty;
             if (isSpecialProject)
-                htmlString = @"<div class='special-project'>S</div>";
+                htmlString = @"<div class='special-project has-bottom-tooltip' data-original-title='Special Project'>S</div>";
 
             return MvcHtmlString.Create(htmlString);
         }

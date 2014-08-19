@@ -27,7 +27,6 @@
                                MyServiceCalls = GetMyServiceCalls(user),
                                OverdueServiceCalls = GetOverdueServiceCalls(user),
                                SpecialProjectServiceCalls = GetSpecialProjects(user),
-                               ClosedServiceCalls = GetClosedServiceCalls(user),
                                EscalatedServiceCalls = GetEscalatedServiceCalls(user),
                            };
             }
@@ -39,13 +38,14 @@
                                         , j.AddressLine as [Address]
                                         , wc.CreatedDate 
                                         , ho.HomeOwnerName
-                                        , case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
                                         , NumberOfLineItems
                                         , ho.HomePhone as PhoneNumber
                                         , e.EmployeeName as AssignedTo
                                         , e.EmployeeNumber as AssignedToEmployeeNumber
                                         , wc.EscalationDate
                                         , wc.EscalationReason
+                                        , DATEDIFF(yy, j.CloseDate, wc.CreatedDate) as YearsWithinWarranty
+                                        , j.CloseDate as WarrantyStartDate
                                      FROM [ServiceCalls] wc
                                      inner join Jobs j
                                        on wc.JobId = j.JobId
@@ -90,16 +90,7 @@
             return result;
         }
 
-        private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetClosedServiceCalls(IUser user)
-        {
-            var markets = user.Markets;
-
-            var sql = string.Format(SqlTemplate, "WHERE CompletionDate is not null AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ")", "ORDER BY EmployeeName, wc.CreatedDate");
-
-            var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql);
-            return result;
-        }
-        public IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetEscalatedServiceCalls(IUser user)
+        private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetEscalatedServiceCalls(IUser user)
         {
             var markets = user.Markets;
 

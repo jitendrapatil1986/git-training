@@ -1,10 +1,9 @@
-﻿using Warranty.Core.Helpers;
-
-namespace Warranty.Core.Features.ServiceCallsWidget
+﻿namespace Warranty.Core.Features.ServiceCallsWidget
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Services;
 
     public class ServiceCallsWidgetModel
     {
@@ -19,23 +18,13 @@ namespace Warranty.Core.Features.ServiceCallsWidget
         public IEnumerable<ServiceCall> MyServiceCalls { get; set; }
         public IEnumerable<ServiceCall> OverdueServiceCalls { get; set; }
         public IEnumerable<ServiceCall> SpecialProjectServiceCalls { get; set; }
-        public IEnumerable<ServiceCall> ClosedServiceCalls { get; set; }
         public IEnumerable<ServiceCall> EscalatedServiceCalls { get; set; }
 
         public IEnumerable<RepresentativeWithCallCount> RepresentativesWithOverdueCalls
         {
             get
             {
-                return OverdueServiceCalls.GroupBy(call => call.AssignedToEmployeeNumber
-                                                         , call => call.AssignedTo,
-                                                           (key, g) =>
-                                                           new RepresentativeWithCallCount
-                                                               {
-                                                                   EmployeeNumber = key,
-                                                                   Name = g.First().ToLower(),
-                                                                   ServiceCallsCount = g.Count()
-                                                               })
-                                          .OrderByDescending(x=>x.ServiceCallsCount);
+                return GetRepresentativeWithCallCount(OverdueServiceCalls);
             }
         }
 
@@ -43,33 +32,7 @@ namespace Warranty.Core.Features.ServiceCallsWidget
         {
             get
             {
-                return SpecialProjectServiceCalls.GroupBy(call => call.AssignedToEmployeeNumber
-                                                          , call => call.AssignedTo,
-                                                          (key, g) =>
-                                                          new RepresentativeWithCallCount
-                                                              {
-                                                                  EmployeeNumber = key,
-                                                                  Name = g.First().ToLower(),
-                                                                  ServiceCallsCount = g.Count()
-                                                              })
-                                                 .OrderByDescending(x => x.ServiceCallsCount);
-            }
-        }
-
-        public IEnumerable<RepresentativeWithCallCount> RepresentativesWithClosedCalls
-        {
-            get
-            {
-                return ClosedServiceCalls.GroupBy(call => call.AssignedToEmployeeNumber
-                                                         , call => call.AssignedTo,
-                                                           (key, g) =>
-                                                           new RepresentativeWithCallCount
-                                                           {
-                                                               EmployeeNumber = key,
-                                                               Name = g.First().ToLower(),
-                                                               ServiceCallsCount = g.Count()
-                                                           })
-                                          .OrderByDescending(x => x.ServiceCallsCount);
+                return GetRepresentativeWithCallCount(SpecialProjectServiceCalls);
             }
         }
 
@@ -77,17 +40,21 @@ namespace Warranty.Core.Features.ServiceCallsWidget
         {
             get
             {
-                return EscalatedServiceCalls.GroupBy(call => call.AssignedToEmployeeNumber
-                                                          , call => call.AssignedTo,
-                                                          (key, g) =>
-                                                          new RepresentativeWithCallCount
-                                                          {
-                                                              EmployeeNumber = key,
-                                                              Name = g.First().ToLower(),
-                                                              ServiceCallsCount = g.Count()
-                                                          })
-                                                 .OrderByDescending(x => x.ServiceCallsCount);
+                return GetRepresentativeWithCallCount(EscalatedServiceCalls);
             }
+        }
+
+        private IEnumerable<RepresentativeWithCallCount> GetRepresentativeWithCallCount(IEnumerable<ServiceCall> calls)
+        {
+            return calls.GroupBy(call => call.AssignedToEmployeeNumber, call => call.AssignedTo,
+                                 (key, g) =>
+                                 new RepresentativeWithCallCount
+                                     {
+                                         EmployeeNumber = key,
+                                         Name = g.First().ToLower(),
+                                         ServiceCallsCount = g.Count()
+                                     })
+                        .OrderByDescending(x => x.ServiceCallsCount);
         }
 
         public class RepresentativeWithCallCount
@@ -106,7 +73,7 @@ namespace Warranty.Core.Features.ServiceCallsWidget
             public string CallNumber { get; set; }
             public DateTime CreatedDate { get; set; }
             public string HomeownerName { get; set; }
-            public int NumberOfDaysRemaining { get; set; }
+            public int NumberOfDaysRemaining { get { return ServiceCallCalculator.CalculateNumberOfDaysRemaining(CreatedDate); }}
             public int NumberOfLineItems { get; set; }
             public string PhoneNumber { get; set; }
             public DateTime? EscalationDate { get; set; }
@@ -114,8 +81,11 @@ namespace Warranty.Core.Features.ServiceCallsWidget
 
             public int PercentComplete
             {
-                get { return WarrantyBusinessRules.ServiceCallPercentComplete(NumberOfDaysRemaining); }
+                get { return ServiceCallCalculator.CalculatePercentComplete(NumberOfDaysRemaining); }
             }
+
+            public int YearsWithinWarranty { get; set; }
+            public DateTime WarrantyStartDate { get; set; }
         }
     }
 }

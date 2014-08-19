@@ -16,8 +16,8 @@
             </div>
         </div>
         <div class="col-md-2">@Format.Escalated(line.IsEscalated, line.EscalationReason, line.EscalationDate)</div>
-        <div class="col-md-1">@Format.DaysOpenedFor(line.DaysOpenedFor, line.CreatedDate, line.CompletionDate)</div>
-        <div class="col-md-1">@Format.SpecialProject(line.IsSpecialProject)</div>
+        <div class="col-md-1 pull-right">@Format.SpecialProject(line.IsSpecialProject)</div>
+        <div class="col-md-1 pull-right">@Format.DaysOpenedFor(line.DaysOpenedFor, line.CreatedDate, line.CompletionDate)</div>
         <div class="clearfix"></div>
     </div>
 }

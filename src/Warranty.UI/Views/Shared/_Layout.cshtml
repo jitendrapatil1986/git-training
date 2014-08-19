@@ -54,6 +54,7 @@
     <![endif]-->
 
     @{ Html.RenderAction("GetRequireJSUrl", "Home", new { context = ViewContext });}
+
     @RenderSection("modules", required: false)
 </head>
     <body>
