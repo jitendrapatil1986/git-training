@@ -295,6 +295,10 @@
     <Content Include="Views\Home\_OverdueCalls.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Home\_SpecialProjects.cshtml" />
+    <Content Include="Views\Home\_WidgetMyServiceTeamOpenChart.cshtml" />
+    <Content Include="Views\Home\MyServiceTeamChartWidget.cshtml" />
+    <Content Include="Views\Home\_WidgetMyServiceTeamClosedChart.cshtml" />
+    <Content Include="Views\Home\_WidgetMyServiceTeamOverdueChart.cshtml" />
     <Content Include="Views\ServiceRep\ServiceCalls.cshtml" />
     <Content Include="Views\ServiceRep\_OpenServiceCalls.cshtml" />
     <Content Include="Views\ServiceRep\_ClosedServiceCalls.cshtml" />

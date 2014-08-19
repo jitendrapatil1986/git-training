@@ -140,6 +140,9 @@
     <Compile Include="Features\AmountSpentWidget\AmountSpentsWidgetModel.cs" />
     <Compile Include="Features\AmountSpentWidget\AmountSpentsWidgetQuery.cs" />
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQueryHandler.cs" />
+    <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetModel.cs" />
+    <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQuery.cs" />
+    <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQueryHandler.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsModel.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsQuery.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsQueryHandler.cs" />

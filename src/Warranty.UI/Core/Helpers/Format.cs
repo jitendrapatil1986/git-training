@@ -329,6 +329,14 @@ namespace Warranty.UI.Core.Helpers
             return MvcHtmlString.Create(string.Format("<span class=\"label label-info has-bottom-tooltip\" title=\"Number of line items\">{0}</span>", numberOfLineItems));
         }
 
+        public static MvcHtmlString ShowRedLabelIfCountGreaterThanZero(int numberOfLines)
+        {
+            if (numberOfLines <= 0)
+                return MvcHtmlString.Create(string.Format("<span class=\"label label-default\">{0}</span>", numberOfLines));
+
+            return MvcHtmlString.Create(string.Format("<span class=\"label label-danger\">{0}</span>", numberOfLines));
+        }
+
         public static MvcHtmlString ServiceCallDaysLeft(int numberOfDaysRemaining)
         {
             var plural = "s";

@@ -6,6 +6,7 @@ namespace Warranty.UI.Controllers
     using System.Web;
     using System.Web.Mvc;
     using Warranty.Core;
+    using Warranty.Core.Features.MyServiceTeamWidget;
     using Warranty.Core.Features.ServiceCallsWidget;
 
     public class HomeController : Controller
@@ -20,6 +21,13 @@ namespace Warranty.UI.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        [ChildActionOnly]
+        public ActionResult MyServiceTeamChartWidget()
+        {
+            var model = _mediator.Request(new MyServiceTeamWidgetQuery());
+            return PartialView(model);
         }
 
         [ChildActionOnly]
