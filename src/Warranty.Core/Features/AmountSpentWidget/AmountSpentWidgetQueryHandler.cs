@@ -1,4 +1,6 @@
-﻿namespace Warranty.Core.Features.AmountSpentWidget
+﻿using Warranty.Core.Enumerations;
+
+namespace Warranty.Core.Features.AmountSpentWidget
 {
     using System.Collections.Generic;
     using NPoco;
@@ -35,37 +37,39 @@
             }
         }
 
-        private const string AgregationsTemplate = @"SELECT (SELECT sum(p.Amount) as Amount FROM [ServiceCalls] wc 
-                                        inner join Jobs j 
-                                            on wc.JobId = j.JobId   
-                                        INNER JOIN Communities cm 
-                                            ON j.CommunityId = cm.CommunityId 
-                                        INNER JOIN Cities ci
-                                            ON cm.CityId = ci.CityId 
-                                        INNER JOIN Payments p
-                                            ON p.JobNumber = j.JobNumber
-                                        INNER JOIN Divisions d
-                                            ON d.DivisionCode = ci.CityCode
-                                        where {0}) / (select count(*) from Jobs j 
-                                        INNER JOIN Communities cm 
-                                            ON j.CommunityId = cm.CommunityId 
-                                        INNER JOIN Cities ci
-                                            ON cm.CityId = ci.CityId 
-                                        INNER JOIN Payments p
-                                            ON p.JobNumber = j.JobNumber
-                                        INNER JOIN Divisions d
-                                            ON d.DivisionCode = ci.CityCode
-                                        where d.DivisionCode in ('HOU')
-                                        and p.CreatedDate >= DATEADD(MONTH, -6, GETDATE()) and p.createddate <= getdate() 
-                                        and {1})";
+        private const string AgregationsTemplate = @"SELECT SUM(TotalDollarsSpent)/SUM(NumberOfJobs) as DollarsSpent
+                                                    FROM
+                                                    (
+                                                    SELECT SUM(Amount) TotalDollarsSpent, CityCode 
+                                                    FROM Payments p
+                                                    INNER JOIN Communities c
+                                                    ON left(p.CommunityNumber, 4) = c.CommunityNumber
+                                                    INNER JOIN Cities cy
+                                                    ON c.CityId = cy.CityId
+                                                    WHERE YEAR(p.CreatedDate) = YEAR(getdate()) {0} 
+                                                                                            GROUP BY cy.CityCode
+                                                                                        ) payments
+                                                                                        INNER JOIN 
+                                                                                        (
+                                                                                            SELECT COUNT(*) as NumberOfJobs, CityCode
+                                                                                            FROM Jobs j
+                                                                                            INNER JOIN Communities c
+                                                                                            ON j.CommunityId = c.CommunityId
+                                                                                            INNER JOIN Cities cy
+                                                                                            on c.CityId = cy.CityId
+                                                                                            GROUP BY CityCode
+                                                                                        ) jobs
+                                                                                        ON payments.CityCode = jobs.CityCode
+                                                                                        WHERE payments.CityCode IN ({1})";
 
         private decimal GetYearToDateAmount(IUser user)
         {
             var markets = user.Markets;
 
-            string format = string.Format(AgregationsTemplate, @"d.DivisionCode in (" + markets.CommaSeparateWrapWithSingleQuote() + ")" + "and p.CreatedDate >= DATEADD(MONTH, -6, GETDATE()) and p.createddate <= getdate() AND year(p.CreatedDate) = year(getdate())", "year(p.CreatedDate) = year(getdate())");
-            var result =
-                _database.Single<decimal?>(format);
+            var query = string.Format(AgregationsTemplate, string.Empty, markets.CommaSeparateWrapWithSingleQuote());
+            
+            var result = _database.Single<decimal?>(query);
+            
             return result ?? 0;
         }
 
@@ -73,9 +77,10 @@
         {
             var markets = user.Markets;
 
-            var result =
-                _database.Single<decimal?>(string.Format(AgregationsTemplate, @"d.DivisionCode in (" + markets.CommaSeparateWrapWithSingleQuote() + ")" +
-                                        "and p.CreatedDate >= DATEADD(MONTH, -6, GETDATE()) and p.createddate <= getdate() AND  DATEPART(qq, p.CreatedDate) = DATEPART(qq, getdate()) and year(p.CreatedDate) = year(getdate()) ", "DATEPART(qq, p.CreatedDate) = DATEPART(qq, getdate()) and year(p.CreatedDate) = year(getdate())"));
+            var query = string.Format(AgregationsTemplate, "AND DATEPART(qq, p.CreatedDate) = DATEPART(qq, getdate())", markets.CommaSeparateWrapWithSingleQuote());
+
+            var result = _database.Single<decimal?>(query);
+
             return result ?? 0;
         }
 
@@ -83,9 +88,10 @@
         {
             var markets = user.Markets;
 
-            var result =
-                _database.Single<decimal?>(string.Format(AgregationsTemplate, @"d.DivisionCode in (" + markets.CommaSeparateWrapWithSingleQuote() + ")" +
-                                        "and p.CreatedDate >= DATEADD(MONTH, -6, GETDATE()) and p.createddate <= getdate() AND  MONTH(p.CreatedDate) = Month(getdate()) and year(p.CreatedDate) = year(getdate())", "MONTH(p.CreatedDate) = Month(getdate()) and year(p.CreatedDate) = year(getdate())"));
+            var query = string.Format(AgregationsTemplate, "AND MONTH(p.CreatedDate) = MONTH(getdate())", markets.CommaSeparateWrapWithSingleQuote());
+
+            var result = _database.Single<decimal?>(query);
+
             return result ?? 0;
         }
 
@@ -94,21 +100,17 @@
             var markets = user.Markets;
             var listSeries = new List<AmountSpentWidgetModel.Series>();
 
-                var sql = @"SELECT   sum(p.Amount) as Amount FROM [ServiceCalls] wc 
-                        inner join Jobs j 
-                            on wc.JobId = j.JobId   
-                        INNER JOIN Communities cm 
-                            ON j.CommunityId = cm.CommunityId 
-                        INNER JOIN Cities ci
-                            ON cm.CityId = ci.CityId 
-                        INNER JOIN Payments p
-                            ON p.JobNumber = j.JobNumber
-                        INNER JOIN Divisions d
-                            ON d.DivisionCode = ci.CityCode
-                        where d.DivisionCode in (" + markets.CommaSeparateWrapWithSingleQuote() + ")" +
-                        "and p.CreatedDate >= DATEADD(MONTH, -6, GETDATE()) and p.createddate <= getdate() group by month(p.CreatedDate) order by month(p.CreatedDate)";
+            const string sql = @"SELECT SUM(Amount) TotalDollarsSpent
+                            FROM Payments p
+                            INNER JOIN Communities c
+                                ON left(p.CommunityNumber, 4) = c.CommunityNumber
+                            INNER JOIN Cities cy
+                                ON c.CityId = cy.CityId
+                            WHERE  cy.CityCode IN ({0}) AND
+                                YEAR(p.CreatedDate) = YEAR(getdate()) and p.CreatedDate >= DATEADD(MONTH, -6, GETDATE()) and p.createddate <= getdate()
+                                GROUP BY MONTH(p.CreatedDate)";
 
-                var result = _database.Fetch<decimal>(sql);
+                var result = _database.Fetch<decimal>(string.Format(sql, markets.CommaSeparateWrapWithSingleQuote()));
                 listSeries.Add(new AmountSpentWidgetModel.Series
                     {
                         Data = result,
@@ -122,32 +124,17 @@
         {
             var markets = user.Markets;
 
-            var sql = @"SELECT DISTINCT DATENAME( month , p.CreatedDate) AS MonthName , 
-                DATEPART( month , p.CreatedDate) as MonthNumber 
-                      FROM
-                        ServiceCalls wc 
-                        INNER JOIN Jobs j
-                            ON wc.JobId =  j.JobId  
-                            INNER JOIN Communities cm
-                        ON j.CommunityId =  cm.CommunityId
-                            INNER JOIN Cities ci
-                        ON cm.CityId =  ci.CityId 
-                            INNER JOIN Payments p
-                        ON p.JobNumber =  j.JobNumber 
-                            INNER JOIN Divisions d
-                        ON d.DivisionCode =  ci.CityCode
-                      WHERE d.DivisionCode in (" + markets.CommaSeparateWrapWithSingleQuote() + ")" +
-                        "AND p.CreatedDate >=  DATEADD( MONTH , -6 , GETDATE()) " +
-                      "AND p.createddate <= GETDATE() " +
-                      "ORDER BY DATEPART( month , p.CreatedDate)";
-            var result = _database.Fetch<CategorieResult>(sql);
-            return result.Select(x => x.MonthName.Truncate(3)).ToArray();
-        }
-
-        public class CategorieResult
-        {
-            public string MonthName { get; set; }
-            public int MonthNumber { get; set; }
+            const string sql = @"SELECT MONTH(p.CreatedDate)
+                        FROM Payments p
+                        INNER JOIN Communities c
+                            ON left(p.CommunityNumber, 4) = c.CommunityNumber
+                        INNER JOIN Cities cy
+                            ON c.CityId = cy.CityId
+                        WHERE  cy.CityCode IN ({0}) AND
+                            YEAR(p.CreatedDate) = YEAR(getdate()) and p.CreatedDate >= DATEADD(MONTH, -6, GETDATE()) and p.createddate <= getdate()
+                            GROUP BY MONTH(p.CreatedDate)";
+            var result = _database.Fetch<int>(string.Format(sql, markets.CommaSeparateWrapWithSingleQuote()));
+            return result.Select(x => Month.FromValue(x).Abbreviation).ToArray();
         }
     }
 }
