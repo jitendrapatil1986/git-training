@@ -24,7 +24,7 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult MyServiceTeamChartWidget()
+        public ActionResult MyTeamWidget()
         {
             var model = _mediator.Request(new MyServiceTeamWidgetQuery());
             return PartialView(model);

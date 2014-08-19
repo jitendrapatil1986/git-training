@@ -1,0 +1,121 @@
+﻿@using Warranty.Core.Extensions
+@model Warranty.Core.Features.MyServiceTeamWidget.MyServiceTeamWidgetModel
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#my_team_details" role="tab" data-toggle="tab">My Team <span class="label label-default">@Model.MyTeamChartEmployeeSummaries.Count()</span></a></li>
+        <li><a href="#my_service_team_open" role="tab" data-toggle="tab">Open <span class="label label-default">@Model.MyTeamChartEmployeeSummaries.Select(x => x.TotalOpen).Sum()</span></a></li>
+        <li><a href="#my_service_team_closed" role="tab" data-toggle="tab">Closed <span class="label label-default">@Model.MyTeamChartEmployeeSummaries.Select(x => x.TotalClosed).Sum()</span></a></li>
+    </ul>
+        
+<div class="tab-content">
+    <div class="tab-pane active" id="my_team_details">
+        @if (Model.MyTeamChartEmployeeSummaries.Any())
+        {
+            <div class="widget-header-bar">
+                <div class="col-md-8 text-capitalize"><strong>Service Representative</strong></div>
+                <div class="col-md-2 text-center"><strong>Open</strong></div>
+                <div class="col-md-2 text-center"><strong>Total</strong></div>
+                <div class="clearfix"></div>
+            </div>
+            foreach (var line in Model.MyTeamChartEmployeeSummaries)
+            {
+                <div class="service-call-line">
+                    <div class="col-md-8 text-capitalize">
+                        @Html.ActionLink(line.EmployeeName, "ServiceCalls", "ServiceRep", new {id = line.WarrantyRepresentativeEmployeeId}, null)
+                    </div>
+                    <div class="col-md-2 text-right">@line.TotalOpen</div>
+                    <div class="col-md-2 text-right">@line.TotalCalls</div>
+                    <div class="clearfix"></div>
+                </div>
+            }
+        }
+        else
+        {
+            <em>No team members assigned.</em>
+        }
+    </div>
+    <div class="tab-pane" id="my_service_team_open">
+        <div id="my_open_service_chart" class="col-md-4"></div>
+
+        <script type="text/javascript">
+            require(['jquery', 'highcharts'], function ($) {
+                $(function() {
+                    $('#my_open_service_chart').highcharts({
+                        title: {
+                            text: '',
+                        },
+                        xAxis: {
+                            categories: @Html.Raw(Model.Months.ToJson())
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Total Calls'
+                            },
+                            min: 0,
+                            plotLines: [{
+                                value: 0,
+                                width: 1,
+                                color: '#808080'
+                            }]
+                        },
+                        tooltip: {
+                                        
+                        },
+                        legend: {
+                            enabled: false,
+                            layout: 'vertical',
+                            align: 'right',
+                            verticalAlign: 'middle',
+                            borderWidth: 0
+                        },
+                        credits: {
+                            enabled: false
+                        },
+                        series: @Html.Raw(Model.SeriesDataOpen.ToJson())
+                    });
+                });
+            });
+        </script>    
+    </div>
+    <div class="tab-pane" id="my_service_team_closed">
+        <div id="my_closed_service_chart" class="col-md-4"></div>
+        <script type="text/javascript">
+            require(['jquery', 'highcharts'], function ($) {
+                $(function() {
+                    $('#my_closed_service_chart').highcharts({
+                        title: {
+                            text: '',
+                        },
+                        xAxis: {
+                            categories: @Html.Raw(Model.Months.ToJson())
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Total Calls'
+                            },
+                            min: 0,
+                            plotLines: [{
+                                value: 0,
+                                width: 1,
+                                color: '#808080'
+                            }]
+                        },
+                        tooltip: {
+                    
+                        },
+                        legend: {
+                            enabled: false,
+                            layout: 'vertical',
+                            align: 'right',
+                            verticalAlign: 'middle',
+                            borderWidth: 0
+                        },
+                        credits: {
+                            enabled: false
+                        },
+                        series: @Html.Raw(Model.SeriesDataClosed.ToJson())
+                    });
+                });
+            });
+        </script>
+    </div>
+</div>

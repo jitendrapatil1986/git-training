@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace Warranty.Core.Features.MyServiceTeamWidget
 {
+    using Enumerations;
     using Extensions;
     using NPoco;
     using Security;
@@ -27,178 +28,109 @@ namespace Warranty.Core.Features.MyServiceTeamWidget
             {
                 return new MyServiceTeamWidgetModel
                     {
-                        Months = GetMyServiceTeamDataMonths(user),
+                        Months = GetMyServiceTeamDataMonths(),
                         SeriesDataOpen = GetMyServiceTeamOpenData(user),
                         SeriesDataClosed = GetMyServiceTeamClosedData(user),
-                        SeriesDataOverdue = GetMyServiceTeamOverdueData(user),
                         MyTeamChartEmployeeSummaries = GetMyServiceTeamDataSummary(user),
                     };
             }
         }
 
-        const string SqlTemplate = @";WITH Months AS
-                                    (
-                                        SELECT DISTINCT MONTH(sc.createddate) AS MonthNumber
-                                        , LEFT(DATENAME(m, sc.CreatedDate), 3) AS MonthText
-                                        FROM [ServiceCalls] sc
-                                        WHERE YEAR(sc.CreatedDate) = YEAR(getdate())
-                                        GROUP BY MONTH(sc.createddate), LEFT(DATENAME(m, sc.CreatedDate), 3)
-                                    ), 
-                                    EmployeeList AS
-                                    (
-	                                    SELECT DISTINCT WarrantyRepresentativeEmployeeId
-	                                    , e.EmployeeName	
-	                                    FROM [ServiceCalls] sc
-	                                    INNER JOIN Employees e
-	                                    ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-                                        INNER JOIN Jobs j
-                                        ON sc.JobId = j.JobId
-                                        INNER JOIN Communities cm
-                                        ON j.CommunityId = cm.CommunityId
-                                        INNER JOIN Cities ci
-                                        ON cm.CityId = ci.CityId
-	                                    {0} /* WHERE */
-                                        GROUP BY WarrantyRepresentativeEmployeeId, e.EmployeeName
-                                        HAVING COUNT(*) > 0	
-                                    ),
-                                    EmployeeData AS
-                                    (
-	                                    SELECT WarrantyRepresentativeEmployeeId
-	                                    , e.EmployeeName
-	                                    , MONTH(sc.createddate) AS MonthNumber
-	                                    , LEFT(DATENAME(m, sc.CreatedDate), 3) AS MonthText
-	                                    , COUNT(*) AS TotalCalls
-	                                    , SUM(CASE WHEN CompletionDate IS NULL THEN 1 ELSE 0 END) AS [TotalOpen]
-	                                    , SUM(CASE WHEN CompletionDate IS NOT NULL THEN 1 ELSE 0 END) AS [TotalClosed]
-	                                    , SUM(CASE WHEN CompletionDate IS NULL AND DATEADD(dd, 7, sc.CreatedDate) < getdate() THEN 1 ELSE 0 END) AS [TotalOverdue]
-	                                    FROM [ServiceCalls] sc
-	                                    INNER JOIN Employees e
-	                                    ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+        private IEnumerable<string> GetMyServiceTeamDataMonths()
+        {
+            var currentQuarter = Month.FromValue(DateTime.Today.Month).Quarter;
+            return Month.GetAll().Where(x => x.Quarter == currentQuarter).Select(x => x.Abbreviation);
+        }
 
-                                        INNER JOIN Jobs j
-                                        ON sc.JobId = j.JobId
-                                        INNER JOIN Communities cm
-                                        ON j.CommunityId = cm.CommunityId
-                                        INNER JOIN Cities ci
-                                        ON cm.CityId = ci.CityId
-                                        {0} /* WHERE */
-	                                    GROUP BY WarrantyRepresentativeEmployeeId, e.EmployeeName, MONTH(sc.createddate), LEFT(DATENAME(m, sc.CreatedDate), 3)
-                                    )
-
-                                    SELECT Emp.WarrantyRepresentativeEmployeeId, UPPER(Emp.EmployeeName) AS EmployeeName, M.MonthNumber, M.MonthText,
-		                                    ISNULL(ED.TotalCalls, 0) AS TotalCalls, ISNULL(ED.TotalClosed, 0) AS TotalClosed, ISNULL(ED.TotalOpen, 0) AS TotalOpen, ISNULL(ED.TotalOverdue, 0) AS TotalOverdue
-                                    FROM Months M
-                                    CROSS JOIN EmployeeList Emp
-                                    LEFT JOIN EmployeeData ED
-                                    ON M.MonthNumber = ED.MonthNumber AND
-	                                    Emp.WarrantyRepresentativeEmployeeId = ED.WarrantyRepresentativeEmployeeId
-                                    {1} /* ORDER BY */";
-
-        const string SqlTemplateMonths = @"SELECT 
-                                                DISTINCT MONTH(sc.createddate) as [Month]
-                                                , LEFT(DATENAME(m, sc.CreatedDate), 3) as [MonthName]
-                                            FROM [ServiceCalls] sc
-                                            WHERE YEAR(sc.CreatedDate) = YEAR(getdate())
-                                            GROUP BY MONTH(sc.createddate), LEFT(DATENAME(m, sc.CreatedDate), 3)
-                                            {0} /* ORDER BY */";
-
-        const string SqlTemplateSummary = @"SELECT
-                                            WarrantyRepresentativeEmployeeId
+        private IEnumerable<MyServiceTeamWidgetModel.MyTeamChartData> GetMyServiceTeamDataSummary(IUser user)
+        {
+            const string sql = @"SELECT WarrantyRepresentativeEmployeeId
                                             , LOWER(e.EmployeeName) as EmployeeName
                                             , COUNT(*) as TotalCalls
                                             , SUM(CASE WHEN CompletionDate IS NULL THEN 1 ELSE 0 END) as [TotalOpen]
-                                            , SUM(CASE WHEN CompletionDate IS NOT NULL THEN 1 ELSE 0 END) as [TotalClosed]
-                                            , SUM(CASE WHEN CompletionDate IS NULL AND DATEADD(dd, 7, sc.CreatedDate) < getdate() THEN 1 ELSE 0 END) as [TotalOverdue]
                                         FROM [ServiceCalls] sc
                                         INNER JOIN Employees e
                                         ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-
                                         INNER JOIN Jobs j
                                         ON sc.JobId = j.JobId
                                         INNER JOIN Communities cm
                                         ON j.CommunityId = cm.CommunityId
                                         INNER JOIN Cities ci
                                         ON cm.CityId = ci.CityId
-                                        {0} /* WHERE */
+                                        WHERE YEAR(sc.CreatedDate) = YEAR(getdate()) AND CityCode IN ({0})
                                         GROUP BY WarrantyRepresentativeEmployeeId, e.EmployeeName
-                                        {1} /* ORDER BY */";
+                                        ORDER BY e.EmployeeName";
 
+            var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamChartData>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()));
 
-        private string GetMyServiceTeamOpenData(IUser user)
-        {
-            var markets = user.Markets;
-
-            var sql = String.Format(SqlTemplate, "WHERE YEAR(sc.CreatedDate) = YEAR(getdate()) AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ")", "ORDER BY Emp.EmployeeName, M.MonthNumber");
-
-            var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamChartEmployeeDetail>(sql);
-
-            var myOpenTeamChart = result.OrderBy(x => x.EmployeeName)
-                                    .Select(x => String.Format("{{name:'{0}',data:[{1}]}}", 
-                                                                    x.EmployeeName, result.Where(y => y.EmployeeName == x.EmployeeName)
-                                                                                    .OrderBy(y => y.EmployeeName)
-                                                                                    .Select(y => y.TotalOpen).CommaSeparate()))
-                                    .Distinct()
-                                    .CommaSeparate();
-            return myOpenTeamChart;
-        }
-
-        private string GetMyServiceTeamClosedData(IUser user)
-        {
-            var markets = user.Markets;
-
-            var sql = String.Format(SqlTemplate, "WHERE YEAR(sc.CreatedDate) = YEAR(getdate()) AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ")", "ORDER BY Emp.EmployeeName, M.MonthNumber");
-
-            var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamChartEmployeeDetail>(sql);
-
-            var myClosedTeamChart = result.OrderBy(x => x.EmployeeName)
-                                    .Select(x => String.Format("{{name:'{0}',data:[{1}]}}",
-                                                                    x.EmployeeName, result.Where(y => y.EmployeeName == x.EmployeeName)
-                                                                                    .OrderBy(y => y.EmployeeName)
-                                                                                    .Select(y => y.TotalClosed).CommaSeparate()))
-                                    .Distinct()
-                                    .CommaSeparate();
-            return myClosedTeamChart;
-        }
-
-        private string GetMyServiceTeamOverdueData(IUser user)
-        {
-            var markets = user.Markets;
-
-            var sql = String.Format(SqlTemplate, "WHERE YEAR(sc.CreatedDate) = YEAR(getdate()) AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ")", "ORDER BY Emp.EmployeeName, M.MonthNumber");
-
-            var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamChartEmployeeDetail>(sql);
-
-            var myOverdueTeamChart = result.OrderBy(x => x.EmployeeName)
-                                    .Select(x => String.Format("{{name:'{0}',data:[{1}]}}",
-                                                                    x.EmployeeName, result.Where(y => y.EmployeeName == x.EmployeeName)
-                                                                                    .OrderBy(y => y.EmployeeName)
-                                                                                    .Select(y => y.TotalOverdue).CommaSeparate()))
-                                    .Distinct()
-                                    .CommaSeparate();
-            return myOverdueTeamChart;
-        }
-
-        private string GetMyServiceTeamDataMonths(IUser user)
-        {
-            var sql = String.Format(SqlTemplateMonths, "ORDER BY [Month]");
-
-            var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamMonth>(sql);
-
-            var monthString = result.Select(x => "'" + x.MonthName + "'")
-                                    .ToArray()
-                                    .CommaSeparate();
-
-            return monthString;
-        }
-
-        private IEnumerable<MyServiceTeamWidgetModel.MyTeamChartEmployeeSummary> GetMyServiceTeamDataSummary(IUser user)
-        {
-            var markets = user.Markets;
-
-            var sql = String.Format(SqlTemplateSummary, "WHERE YEAR(sc.CreatedDate) = YEAR(getdate()) AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ")", "ORDER BY e.EmployeeName");
-
-            var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamChartEmployeeSummary>(sql);
             return result;
+        }
+
+        private IEnumerable<MyServiceTeamWidgetModel.Series> GetMyServiceTeamOpenData(IUser user)
+        {
+            const string sql = @"SELECT COUNT(*) as TotalOpen, e.EmployeeName, MONTH(sc.CreatedDate) as Month
+                            FROM ServiceCalls sc
+                            INNER JOIN Employees e
+                            ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+                            INNER JOIN Jobs j
+                            ON sc.JobId = j.JobId
+                            INNER JOIN Communities c
+                            ON j.CommunityId = c.CommunityId
+                            INNER JOIN Cities cy
+                            ON c.CityId = cy.CityId
+                            WHERE YEAR(sc.CreatedDate) = YEAR(getdate()) AND CityCode IN ({0})
+                            GROUP BY e.EmployeeName, MONTH(sc.CreatedDate)
+                            ORDER BY e.EmployeeName, MONTH(sc.CreatedDate)";
+
+            return GetTeamData(user, sql, data => data.TotalOpen);
+        }
+
+        private IEnumerable<MyServiceTeamWidgetModel.Series> GetMyServiceTeamClosedData(IUser user)
+        {
+            const string sql = @"SELECT COUNT(*) as TotalClosed, e.EmployeeName, MONTH(sc.CompletionDate) as Month
+                            FROM ServiceCalls sc
+                            INNER JOIN Employees e
+                            ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+                            INNER JOIN Jobs j
+                            ON sc.JobId = j.JobId
+                            INNER JOIN Communities c
+                            ON j.CommunityId = c.CommunityId
+                            INNER JOIN Cities cy
+                            ON c.CityId = cy.CityId
+                            WHERE YEAR(sc.CompletionDate) = YEAR(getdate()) AND CityCode IN ({0})
+                            GROUP BY e.EmployeeName, MONTH(sc.CompletionDate)
+                            ORDER BY e.EmployeeName, MONTH(sc.CompletionDate)";
+
+            return GetTeamData(user, sql, data => data.TotalClosed);
+        }
+
+        private IEnumerable<MyServiceTeamWidgetModel.Series> GetTeamData(IUser user, string sql, Func<MyServiceTeamWidgetModel.MyTeamChartData, int> selector)
+        {
+            var markets = user.Markets;
+            var result = _database.Fetch<MyServiceTeamWidgetModel.MyTeamChartData>(string.Format(sql, markets.CommaSeparateWrapWithSingleQuote()));
+            var employees = result.Select(x => x.EmployeeName).Distinct();
+
+            var resultWithMonths = from month in Month.GetAll().Where(x => GetMyServiceTeamDataMonths().Contains(x.Abbreviation))
+                                   join r in result on month.Value equals r.Month into rm
+                                   from resultmonth in rm.DefaultIfEmpty(null)
+                                   select
+                                       new MyServiceTeamWidgetModel.MyTeamChartData
+                                           {
+                                               EmployeeName = resultmonth != null ? resultmonth.EmployeeName : "",
+                                               TotalOpen = resultmonth != null ? resultmonth.TotalOpen : 0,
+                                               WarrantyRepresentativeEmployeeId = resultmonth != null ? resultmonth.WarrantyRepresentativeEmployeeId : Guid.Empty,
+                                               Month = month.Value
+                                           };
+
+            var series = employees.Select(x => new MyServiceTeamWidgetModel.Series
+                                                   {
+                                                       Data = resultWithMonths.Where(data => data.EmployeeName == x || data.EmployeeName == "")
+                                                                              .Select(selector)
+                                                                              .ToList(),
+                                                       Name = x
+                                                   });
+
+            return series;
         }
     }
 }
