@@ -83,6 +83,9 @@
             {
                 get { return ServiceCallCalculator.CalculatePercentComplete(NumberOfDaysRemaining); }
             }
+
+            public int YearsWithinWarranty { get; set; }
+            public DateTime WarrantyStartDate { get; set; }
         }
     }
 }

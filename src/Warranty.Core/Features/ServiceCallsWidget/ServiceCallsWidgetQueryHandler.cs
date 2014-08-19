@@ -44,6 +44,8 @@
                                         , e.EmployeeNumber as AssignedToEmployeeNumber
                                         , wc.EscalationDate
                                         , wc.EscalationReason
+                                        , DATEDIFF(yy, j.CloseDate, wc.CreatedDate) as YearsWithinWarranty
+                                        , j.CloseDate as WarrantyStartDate
                                      FROM [ServiceCalls] wc
                                      inner join Jobs j
                                        on wc.JobId = j.JobId
