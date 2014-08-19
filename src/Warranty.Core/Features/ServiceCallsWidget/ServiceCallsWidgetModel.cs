@@ -25,16 +25,7 @@ namespace Warranty.Core.Features.ServiceCallsWidget
         {
             get
             {
-                return OverdueServiceCalls.GroupBy(call => call.AssignedToEmployeeNumber
-                                                         , call => call.AssignedTo,
-                                                           (key, g) =>
-                                                           new RepresentativeWithCallCount
-                                                               {
-                                                                   EmployeeNumber = key,
-                                                                   Name = g.First().ToLower(),
-                                                                   ServiceCallsCount = g.Count()
-                                                               })
-                                          .OrderByDescending(x=>x.ServiceCallsCount);
+                return GetRepresentativeWithCallCount(OverdueServiceCalls);
             }
         }
 
@@ -42,16 +33,7 @@ namespace Warranty.Core.Features.ServiceCallsWidget
         {
             get
             {
-                return SpecialProjectServiceCalls.GroupBy(call => call.AssignedToEmployeeNumber
-                                                          , call => call.AssignedTo,
-                                                          (key, g) =>
-                                                          new RepresentativeWithCallCount
-                                                              {
-                                                                  EmployeeNumber = key,
-                                                                  Name = g.First().ToLower(),
-                                                                  ServiceCallsCount = g.Count()
-                                                              })
-                                                 .OrderByDescending(x => x.ServiceCallsCount);
+                return GetRepresentativeWithCallCount(SpecialProjectServiceCalls);
             }
         }
 
@@ -59,17 +41,21 @@ namespace Warranty.Core.Features.ServiceCallsWidget
         {
             get
             {
-                return EscalatedServiceCalls.GroupBy(call => call.AssignedToEmployeeNumber
-                                                          , call => call.AssignedTo,
-                                                          (key, g) =>
-                                                          new RepresentativeWithCallCount
-                                                          {
-                                                              EmployeeNumber = key,
-                                                              Name = g.First().ToLower(),
-                                                              ServiceCallsCount = g.Count()
-                                                          })
-                                                 .OrderByDescending(x => x.ServiceCallsCount);
+                return GetRepresentativeWithCallCount(EscalatedServiceCalls);
             }
+        }
+
+        private IEnumerable<RepresentativeWithCallCount> GetRepresentativeWithCallCount(IEnumerable<ServiceCall> calls)
+        {
+            return calls.GroupBy(call => call.AssignedToEmployeeNumber, call => call.AssignedTo,
+                                 (key, g) =>
+                                 new RepresentativeWithCallCount
+                                     {
+                                         EmployeeNumber = key,
+                                         Name = g.First().ToLower(),
+                                         ServiceCallsCount = g.Count()
+                                     })
+                        .OrderByDescending(x => x.ServiceCallsCount);
         }
 
         public class RepresentativeWithCallCount
