@@ -27,7 +27,6 @@
                                MyServiceCalls = GetMyServiceCalls(user),
                                OverdueServiceCalls = GetOverdueServiceCalls(user),
                                SpecialProjectServiceCalls = GetSpecialProjects(user),
-                               ClosedServiceCalls = GetClosedServiceCalls(user),
                                EscalatedServiceCalls = GetEscalatedServiceCalls(user),
                            };
             }
@@ -90,16 +89,7 @@
             return result;
         }
 
-        private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetClosedServiceCalls(IUser user)
-        {
-            var markets = user.Markets;
-
-            var sql = string.Format(SqlTemplate, "WHERE CompletionDate is not null AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ")", "ORDER BY EmployeeName, wc.CreatedDate");
-
-            var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql);
-            return result;
-        }
-        public IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetEscalatedServiceCalls(IUser user)
+        private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetEscalatedServiceCalls(IUser user)
         {
             var markets = user.Markets;
 
