@@ -27,7 +27,7 @@ namespace Warranty.Core.Features.AmountSpentWidget
             {
                 return new AmountSpentWidgetModel
                            {
-                               Categories = GetCategories(user),
+                               Categories = GetCategories(),
                                SeriesList = GetAmountsForLastSixMonths(user),
                                YearTodate = GetYearToDateAmount(user),
                                MonthTodate  = GetMonthToDateAmount(user),
@@ -120,21 +120,9 @@ namespace Warranty.Core.Features.AmountSpentWidget
             return listSeries;
         }
 
-        private string[] GetCategories(IUser user)
+        private IEnumerable<string> GetCategories()
         {
-            var markets = user.Markets;
-
-            const string sql = @"SELECT MONTH(p.CreatedDate)
-                        FROM Payments p
-                        INNER JOIN Communities c
-                            ON left(p.CommunityNumber, 4) = c.CommunityNumber
-                        INNER JOIN Cities cy
-                            ON c.CityId = cy.CityId
-                        WHERE  cy.CityCode IN ({0}) AND
-                            YEAR(p.CreatedDate) = YEAR(getdate()) and p.CreatedDate >= DATEADD(MONTH, -6, GETDATE()) and p.createddate <= getdate()
-                            GROUP BY MONTH(p.CreatedDate)";
-            var result = _database.Fetch<int>(string.Format(sql, markets.CommaSeparateWrapWithSingleQuote()));
-            return result.Select(x => Month.FromValue(x).Abbreviation).ToArray();
+            return Month.GetAll().Select(x => x.Abbreviation);
         }
     }
 }
