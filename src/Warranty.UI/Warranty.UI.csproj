@@ -242,6 +242,7 @@
     <Content Include="Scripts\app\customBindings.js" />
     <Content Include="Scripts\app\dates.js" />
     <Content Include="Scripts\app\formInputs.js" />
+    <Content Include="Scripts\app\Home\widgetAmountSpent.js" />
     <Content Include="Scripts\app\Home\Index.js" />
     <Content Include="Scripts\app\Home\widgetServiceCalls.js" />
     <Content Include="Scripts\app\main.js" />
@@ -302,6 +303,7 @@
     <Content Include="Views\ServiceRep\_OpenServiceCalls.cshtml" />
     <Content Include="Views\ServiceRep\_ClosedServiceCalls.cshtml" />
     <Content Include="Views\Home\_EscalatedCalls.cshtml" />
+    <Content Include="Views\Home\AmountSpentWidget.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

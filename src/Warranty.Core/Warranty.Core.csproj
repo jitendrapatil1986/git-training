@@ -120,6 +120,7 @@
     <Compile Include="Entities\ServiceCall.cs" />
     <Compile Include="Entities\ServiceCallComment.cs" />
     <Compile Include="Entities\ServiceCallLineItem.cs" />
+    <Compile Include="Enumerations\Month.cs" />
     <Compile Include="Enumerations\ServiceCallStatus.cs" />
     <Compile Include="DataAccess\GuidComb.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
@@ -136,6 +137,9 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Features\AmountSpentWidget\AmountSpentsWidgetModel.cs" />
+    <Compile Include="Features\AmountSpentWidget\AmountSpentsWidgetQuery.cs" />
+    <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQueryHandler.cs" />
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetModel.cs" />
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQuery.cs" />
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQueryHandler.cs" />
