@@ -38,7 +38,6 @@
                                         , j.AddressLine as [Address]
                                         , wc.CreatedDate 
                                         , ho.HomeOwnerName
-                                        , case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
                                         , NumberOfLineItems
                                         , ho.HomePhone as PhoneNumber
                                         , e.EmployeeName as AssignedTo
