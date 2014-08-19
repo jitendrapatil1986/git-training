@@ -1,6 +1,5 @@
 ﻿@using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.ServiceCallsWidget.ServiceCallsWidgetModel
-<div class="col-md-8">
     <ul class="nav nav-tabs" role="tablist">
         <li class="active"><a href="#my_service_calls" role="tab" data-toggle="tab">My <span class="label label-default">@Model.MyServiceCalls.Count()</span></a></li>
         <li><a href="#overdue_calls" role="tab" data-toggle="tab">Overdue @Format.ShowRedLabelIfCountGreaterThanZero(Model.OverdueServiceCalls.Count())</a></li>
@@ -25,4 +24,3 @@
             @Html.Partial("_SpecialProjects", Model)
         </div>
     </div>
-</div>
