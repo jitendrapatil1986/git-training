@@ -1,0 +1,27 @@
+﻿@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.ServiceCallSummary.ServiceCallSummaryModel
+
+
+@foreach (var line in Model.ServiceCallLines.Where(x => !x.Completed))
+{
+    <div class="service-call-line">
+        <div class="col-md-2">
+            <small class="text-muted">@line.ProblemCode</small>
+        </div>
+        <div class="col-md-6">
+            @line.ProblemDescription
+        </div>
+        <div class="col-md-1">3</div>
+        <div class="col-md-1">4</div>
+        <div class="col-md-1">5</div>
+        
+        <div class="col-md-1 text-center">
+            <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></button>
+            <ul class="dropdown-menu" role="menu">
+                <li>@Html.ActionLink("Edit", "Edit", "ServiceCall", new { id = @line.ServiceCallId }, null)</li>
+                <li>@Html.ActionLink("Close", "Close", "ServiceCall", new { id = @line.ServiceCallId }, null)</li>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+}

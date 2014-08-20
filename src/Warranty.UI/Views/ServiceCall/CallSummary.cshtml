@@ -1,0 +1,127 @@
+﻿@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.ServiceCallSummary.ServiceCallSummaryModel
+
+@{
+    ViewBag.Title = "Service Call Summary";
+}
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading text-capitalize">
+                <div class="row">
+                    <div class="col-md-1">
+                        <h3 class="panel-title">@Model.ServiceCallSummary.CallNumber</h3>
+                        @Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate)
+                    </div>
+                    <div class="col-md-5">
+                        <a>
+                            <h3 class="panel-title text-capitalize">@Model.ServiceCallSummary.HomeownerName</h3>
+                        </a>
+                        @Model.ServiceCallSummary.Address
+                    </div>
+                    <div class="col-md-3">
+                        @Format.PhoneNumber(Model.ServiceCallSummary.PhoneNumber)<br/>
+                        <a>@Format.Email(Model.ServiceCallSummary.EmailAddress)</a> 
+                    </div>
+                    <div class="col-md-2">
+                        @if (String.IsNullOrEmpty(Model.ServiceCallSummary.CompletionDate.ToString()))
+                        {
+                            <div class="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(Model.ServiceCallSummary.CreatedDate)">
+                            <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(Model.ServiceCallSummary.NumberOfDaysRemaining)<br />
+                                <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                                    <div class="progress-bar @Css.ServiceCallProgressBar(Model.ServiceCallSummary.NumberOfDaysRemaining)" role="progressbar" style="width: @Model.ServiceCallSummary.PercentComplete%">
+                                        <span class="sr-only">Model.ServiceCallSummary.PercentComplete% Complete</span>
+                                    </div>
+                                </div>
+                            </div> 
+                        }
+                        else
+                        {
+                            <div class="col-md-1 pull-right">@Format.DaysOpenedFor(Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.CompletionDate)</div>
+                        }
+                    </div>
+                    <div class="col-md-1 text-center">
+                        <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>@Html.ActionLink("Reassign", "Reassign", "ServiceCall", new {id = Model.ServiceCallSummary.ServiceCallId}, null)</li>
+                            <li>@Html.ActionLink("Request Payment", "RequestPayment", "ServiceCall", new {id = Model.ServiceCallSummary.ServiceCallId}, null)</li>
+                            <li>@Html.ActionLink("Add Note", "AddNote", "ServiceCall", new {id = Model.ServiceCallSummary.ServiceCallId}, null)</li>
+                            <li>@Html.ActionLink("Close", "Close", "ServiceCall", new {id = Model.ServiceCallSummary.ServiceCallId}, null)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-3 text-capitalize">
+                        @Model.ServiceCallSummary.AssignedTo
+                    </div>
+                    <div class="col-md-6">
+                        
+                    </div>
+                    <div class="col-md-3">
+                        Job infor
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        
+                    </div>
+                    <div class="col-md-6">
+                        City State
+                    </div>
+                    <div class="col-md-3">
+                        Builder
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        
+                    </div>
+                    <div class="col-md-6">
+                        
+                    </div>
+                    <div class="col-md-3">
+                        Sales
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        
+                    </div>
+                    <div class="col-md-6">
+                        
+                    </div>
+                    <div class="col-md-3">
+                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        @Model.ServiceCallSummary.Comment
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#all_service_lines" role="tab" data-toggle="tab">All <span class="label label-default">@Model.ServiceCallLines.Count()</span></a></li>
+            <li><a href="#open_service_lines" role="tab" data-toggle="tab">Open <span class="label label-warning">@Model.ServiceCallLines.Count(x => !x.Completed)</span></a></li>
+            <li><a href="#closed_service_lines" role="tab" data-toggle="tab">Closed <span class="label label-success">@Model.ServiceCallLines.Count(x => x.Completed)</span></a></li>
+            <li class="pull-right"><span class="widget-header">Line Items</span></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane" id="all_service_lines">
+                @Html.Partial("_AllServiceLines", Model)
+            </div>
+            <div class="tab-pane active" id="open_service_lines">
+                @Html.Partial("_OpenServiceLines", Model)
+            </div>
+            <div class="tab-pane" id="closed_service_lines">
+                @Html.Partial("_ClosedServiceLines", Model)
+            </div>
+        </div>
+    </div>
+
+</div>
