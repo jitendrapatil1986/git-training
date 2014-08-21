@@ -135,6 +135,20 @@ namespace Warranty.UI.Core.Helpers
             return MvcHtmlString.Create(htmlString);
         }
 
+        public static MvcHtmlString EscalatedExpanded(bool isEscalated, string reason, DateTime? escalatedDate)
+        {
+            var htmlString = String.Empty;
+
+            if (isEscalated)
+                htmlString =
+                    string.Format(
+                        @"<div class='label label-danger'><span class='glyphicon glyphicon-fire'></span> {0} - {1}</div>",
+                        //@"<span class='glyphicon glyphicon-fire'></span>{0} - {1}",
+                        DateMonthDayYear(escalatedDate), reason);
+
+            return MvcHtmlString.Create(htmlString);
+        }
+
         public static MvcHtmlString SpecialProject(bool isSpecialProject)
         {
             var htmlString = String.Empty;
@@ -171,11 +185,65 @@ namespace Warranty.UI.Core.Helpers
             return MvcHtmlString.Create(htmlString);
         }
 
-        //public static MvcHtmlString ServiceCallOpenOrClosedIcon()
-        //{
-            
-        //}
+        public static MvcHtmlString ServiceCallClosedOrOpenIndicator(DateTime? completiondate, int numberOfdaysRemaining, decimal percentComplete, int daysOpenedFor, DateTime createdDate)
+        {
+            var htmlString = MvcHtmlString.Empty;
 
+            htmlString = String.IsNullOrEmpty(completiondate.ToString()) ? 
+                            ServiceCallOpenDaysLeft(completiondate, numberOfdaysRemaining, percentComplete, createdDate) 
+                            : 
+                            ServiceCallClosedDaysOpenedFor(completiondate, daysOpenedFor, createdDate);
+
+            return htmlString;
+        }
+
+        public static MvcHtmlString ServiceCallOpenDaysLeft(DateTime? completiondate, int numberOfdaysRemaining, decimal percentComplete, DateTime createdDate)
+        {
+            if (!String.IsNullOrEmpty(completiondate.ToString()))
+                return MvcHtmlString.Empty;
+
+            var htmlString = String.Empty;
+
+            htmlString = String.Format(@"<div class='has-bottom-tooltip' title='{0}'>
+                        <span class='glyphicon glyphicon-time text-muted'></span> {1}<br />
+                            <div class='progress time-remaining-progress hidden-sm hidden-xs'>
+                                <div class='progress-bar {2}' role='progressbar' style='width: {3}'>
+                                    <span class='sr-only'>{4}</span>
+                                </div>
+                            </div>
+                        </div>",
+            DateForServiceCallWiget(createdDate),
+            ServiceCallDaysLeft(numberOfdaysRemaining),
+            Css.ServiceCallProgressBar(numberOfdaysRemaining),
+            percentComplete + "%",
+            percentComplete + "% Complete");
+
+            return MvcHtmlString.Create(htmlString);
+        }
+
+        
+        public static MvcHtmlString ServiceCallClosedDaysOpenedFor(DateTime? completiondate, int daysOpenedFor, DateTime createdDate)
+        {
+            if (String.IsNullOrEmpty(completiondate.ToString()))
+                return MvcHtmlString.Empty;
+
+            var htmlString = String.Empty;
+            
+            htmlString = String.Format(@"<div class='col-md-8 pull-right'>{0}</div>",
+                                       DaysOpenedFor(daysOpenedFor, createdDate, completiondate));
+
+            return MvcHtmlString.Create(htmlString);
+        }
+
+        public static MvcHtmlString OpenCloseServiceLineIndicator(bool closed)
+        {
+            if (!closed)
+                return MvcHtmlString.Create(string.Format(@"<button type='button' class='btn btn-xs btn-warning'>
+                    <input type ='checkbox' class='has-bottom-tooltip' title='Click To Close'></button>"));
+                //return MvcHtmlString.Create(string.Format(@"<span class='label label-warning'><span class='glyphicon glyphicon-unchecked has-bottom-tooltip' title='Click To Close'></span></span>"));
+
+            return MvcHtmlString.Create(string.Format(@"<span class='label label-success'><span class='glyphicon glyphicon-ok has-bottom-tooltip' title='Closed'></span></span>"));
+        }
 
         public static string DateAsMonthDayOnly(DateTime date)
         {

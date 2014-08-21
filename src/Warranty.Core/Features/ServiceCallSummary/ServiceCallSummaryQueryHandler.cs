@@ -30,6 +30,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                     {
                         ServiceCallSummary = GetServiceCallSummary(query.ServiceCallId),
                         ServiceCallLines = GetServiceCallLines(query.ServiceCallId),
+                        ServicCallComments = GetServiceCallComments(query.ServiceCallId),
                     };
             }
         }
@@ -40,6 +41,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     wc.ServiceCallId as ServiceCallId
                                     , Servicecallnumber as CallNumber
                                     , j.AddressLine as [Address]
+                                    , j.JobNumber
                                     , wc.CreatedDate 
                                     , wc.CompletionDate
                                     , ho.HomeOwnerName
@@ -56,10 +58,10 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , j.CloseDate as WarrantyStartDate
                                     , wc.EscalationReason
                                     , wc.EscalationDate
-                                    ,cc.ServiceCallComment as Comment
+                                    , d.DivisionName
+                                    , p.ProjectName
+                                    , cm.CommunityName
                                 FROM [ServiceCalls] wc
-                                INNER JOIN ServiceCallComments cc
-                                ON wc.ServiceCallId = cc.ServiceCallId
                                 INNER JOIN Jobs j
                                 ON wc.JobId = j.JobId
                                 INNER JOIN HomeOwners ho
@@ -71,7 +73,11 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                 INNER JOIN Communities cm
                                 ON j.CommunityId = cm.CommunityId
                                 INNER JOIN Cities ci
-                                ON cm.CityId = ci.CityId";
+                                ON cm.CityId = ci.CityId
+                                INNER JOIN Divisions d
+                                ON cm.DivisionId = d.DivisionId
+                                INNER JOIN Projects p
+                                ON cm.ProjectId = p.Projectid";
 
             var result = _database.Single<ServiceCallSummaryModel.ServiceCall>(sql + " WHERE wc.ServiceCallId = @0", serviceCallId.ToString());
             
@@ -95,6 +101,20 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                 ON wc.ServiceCallId = li.ServiceCallId";
 
             var result = _database.Fetch<ServiceCallSummaryModel.ServiceCallLine>(sql + " WHERE wc.ServiceCallId = @0 ORDER BY li.LineNumber", serviceCallId.ToString());
+
+            return result;
+        }
+
+        private IEnumerable<ServiceCallSummaryModel.ServicCallComment> GetServiceCallComments(Guid serviceCallId)
+        {
+            const string sql = @"SELECT [ServiceCallCommentId]
+                                      ,[ServiceCallId]
+                                      ,[ServiceCallComment] as Comment
+                                      ,[CreatedDate]
+                                      ,[CreatedBy]     
+                                FROM [ServiceCallComments]";
+
+            var result = _database.Fetch<ServiceCallSummaryModel.ServicCallComment>(sql + " WHERE ServiceCallId = @0", serviceCallId.ToString());
 
             return result;
         }

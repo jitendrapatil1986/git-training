@@ -12,16 +12,18 @@ namespace Warranty.Core.Features.ServiceCallSummary
     {
         public ServiceCall ServiceCallSummary { get; set; }
         public IEnumerable<ServiceCallLine> ServiceCallLines { get; set; }
+        public IEnumerable<ServicCallComment> ServicCallComments { get; set; }
 
         public class ServiceCall
         {
             public Guid ServiceCallId { get; set; }
             public string AssignedTo { get; set; }
             public string AssignedToEmployeeNumber { get; set; }
+            public string JobNumber { get; set; }
             public string Address { get; set; }
             public string CallNumber { get; set; }
             public DateTime CreatedDate { get; set; }
-            public DateTime CompletionDate { get; set; }
+            public DateTime? CompletionDate { get; set; }
             public string HomeownerName { get; set; }
             public int NumberOfDaysRemaining { get { return ServiceCallCalculator.CalculateNumberOfDaysRemaining(CreatedDate); } }
             public int NumberOfLineItems { get; set; }
@@ -30,9 +32,15 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public DateTime WarrantyStartDate { get; set; }
             public string PhoneNumber { get; set; }
             public string EmailAddress { get; set; }
+            public bool IsSpecialProject { get; set; }
+            public bool IsEscalated { get; set; }
             public DateTime? EscalationDate { get; set; }
             public string EscalationReason { get; set; }
-            public string Comment { get; set; }
+            public string DivisionName { get; set; }
+            public string ProjectName { get; set; }
+            public string CommunityName { get; set; }
+            public decimal? PaymentAmount { get; set; }
+            
 
             public int PercentComplete
             {
@@ -51,6 +59,15 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public string ClassificationNote { get; set; }
             public string LineItemRoot { get; set; }
             public bool Completed { get; set; }
+        }
+
+        public class ServicCallComment
+        {
+            public Guid ServiceCallCommentId { get; set; }
+            public Guid ServiceCallId { get; set; }
+            public string Comment { get; set; }
+            public DateTime? CreatedDate { get; set; }
+            public string CreatedBy { get; set; }
         }
     }
 }
