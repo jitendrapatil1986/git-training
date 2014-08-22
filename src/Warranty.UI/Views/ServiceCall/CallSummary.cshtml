@@ -5,6 +5,38 @@
     ViewBag.Title = "Service Call Summary";
 }
 
+@helper ServiceCallStatusIconHelper(DateTime? completionDate, DateTime createdDate, int daysOpenedFor, int numberOfDaysRemaining, int percentComplete)
+{
+    if(completionDate == null)
+    {
+        <div class="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(createdDate)">
+            <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(numberOfDaysRemaining)<br/>
+                <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                    <div class="progress-bar @Css.ServiceCallProgressBar(numberOfDaysRemaining)" role="progressbar" style="width: @percentComplete%">
+                        <span class="sr-only">@percentComplete% Complete</span>
+                    </div>
+                </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-8 pull-right">
+            @Format.DaysOpenedFor(daysOpenedFor, createdDate, completionDate)
+        </div>
+    }
+}
+
+
+@helper EscalationHelper(bool escalated, DateTime? escalationDate, string escalationReason)
+{
+    if(escalated)
+    {
+        <div class='label label-danger'><span class='glyphicon glyphicon-fire'></span> 
+            @Format.DateMonthDayYear(escalationDate) - @escalationReason
+        </div>
+    }
+}
+
 <div class="container">
     <div class="col-md-12">
         <div class="panel panel-default">
@@ -25,23 +57,7 @@
                         <a>@Format.Email(Model.ServiceCallSummary.EmailAddress)</a>
                     </div>
                     <div class="col-md-2">
-                        @if (Model.ServiceCallSummary.CompletionDate == null)
-                        {
-                            <div class="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(Model.ServiceCallSummary.CreatedDate)">
-                                <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(Model.ServiceCallSummary.NumberOfDaysRemaining)<br/>
-                                    <div class="progress time-remaining-progress hidden-sm hidden-xs">
-                                        <div class="progress-bar @Css.ServiceCallProgressBar(Model.ServiceCallSummary.NumberOfDaysRemaining)" role="progressbar" style="width: @Model.ServiceCallSummary.PercentComplete%">
-                                            <span class="sr-only">@Model.ServiceCallSummary.PercentComplete% Complete</span>
-                                        </div>
-                                    </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="col-md-8 pull-right">
-                                @Format.DaysOpenedFor(Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.CompletionDate)
-                            </div>
-                        }
+                        @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
                     </div>
                     <div class="col-md-1 text-center">
                         <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></button>
@@ -131,12 +147,7 @@
             <div class="row">
                 <div class="col-md-12 text-center">
                     <h4>
-                        @if (Model.ServiceCallSummary.IsEscalated)
-                        {
-                            <div class='label label-danger'><span class='glyphicon glyphicon-fire'></span> 
-                                @Format.DateMonthDayYear(Model.ServiceCallSummary.EscalationDate) - @Model.ServiceCallSummary.EscalationReason
-                            </div>
-                        }
+                        @EscalationHelper(Model.ServiceCallSummary.IsEscalated, Model.ServiceCallSummary.EscalationDate, Model.ServiceCallSummary.EscalationReason)
                     </h4>
                 </div>
             </div>

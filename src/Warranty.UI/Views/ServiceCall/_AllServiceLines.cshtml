@@ -1,6 +1,30 @@
 ﻿@using Warranty.UI.Core.Helpers
 @model IEnumerable<Warranty.Core.Features.ServiceCallSummary.ServiceCallSummaryModel.ServiceCallLine>
 
+@helper LineTypeStatusIconHelper(bool completed)
+{
+    if (completed)
+    {
+        <span class='label label-success'><span class='glyphicon glyphicon-ok has-bottom-tooltip' title='Closed'></span></span>
+    }
+    else
+    {
+        <button type='button' class='btn btn-xs btn-warning'>
+            <input type ='checkbox' class='has-bottom-tooltip' title='Click To Close'>
+        </button>
+    }
+}
+
+@helper LineTypeActionIconHelper(bool completed, Guid callId)
+{
+    if (!completed)
+    {
+        <li>@Html.ActionLink("Edit", "Edit", "ServiceCall", new { id = callId }, null)</li>
+    }
+    <li>@Html.ActionLink("Add Commnet", "AddLineNote", "ServiceCall", new {id = callId}, null)</li>
+}
+
+
 @foreach (var line in Model)
 {
     <div class="service-call-line">
@@ -25,25 +49,12 @@
                 </div>
             </div>
             <div class="col-md-1 text-center">
-                @if (line.Completed)
-                {
-                    <span class='label label-success'><span class='glyphicon glyphicon-ok has-bottom-tooltip' title='Closed'></span></span>
-                }
-                else
-                {
-                    <button type='button' class='btn btn-xs btn-warning'>
-                        <input type ='checkbox' class='has-bottom-tooltip' title='Click To Close'>
-                    </button>
-                }
+                @LineTypeStatusIconHelper(line.Completed)
             </div>
             <div class="col-md-1 text-center">
                 <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></button>
                 <ul class="dropdown-menu" role="menu">
-                    @if (!line.Completed)
-                    {
-                        <li>@Html.ActionLink("Edit", "Edit", "ServiceCall", new { id = @line.ServiceCallId }, null)</li>
-                    }
-                    <li>@Html.ActionLink("Add Commnet", "AddLineNote", "ServiceCall", new {id = @line.ServiceCallId}, null)</li>
+                    @LineTypeActionIconHelper(line.Completed, line.ServiceCallId)
                 </ul>
             </div>
         </div>
