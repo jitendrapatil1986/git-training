@@ -301,6 +301,8 @@
     <Content Include="Views\ServiceRep\_ClosedServiceCalls.cshtml" />
     <Content Include="Views\Home\_EscalatedCalls.cshtml" />
     <Content Include="Views\Home\AmountSpentWidget.cshtml" />
+    <Content Include="Views\ServiceCall\CallSummary.cshtml" />
+    <Content Include="Views\ServiceCall\_AllServiceLines.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
