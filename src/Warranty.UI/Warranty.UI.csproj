@@ -302,8 +302,6 @@
     <Content Include="Views\Home\_EscalatedCalls.cshtml" />
     <Content Include="Views\Home\AmountSpentWidget.cshtml" />
     <Content Include="Views\ServiceCall\CallSummary.cshtml" />
-    <Content Include="Views\ServiceCall\_OpenServiceLines.cshtml" />
-    <Content Include="Views\ServiceCall\_ClosedServiceLines.cshtml" />
     <Content Include="Views\ServiceCall\_AllServiceLines.cshtml" />
     <Content Include="Views\ServiceCall\Edit.cshtml" />
   </ItemGroup>

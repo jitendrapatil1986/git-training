@@ -59,6 +59,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public string ClassificationNote { get; set; }
             public string LineItemRoot { get; set; }
             public bool Completed { get; set; }
+            public DateTime CreatedDate { get; set; }
         }
 
         public class ServicCallComment

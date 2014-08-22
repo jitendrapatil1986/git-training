@@ -25,13 +25,23 @@
                         <a>@Format.Email(Model.ServiceCallSummary.EmailAddress)</a>
                     </div>
                     <div class="col-md-2">
-                        @*@Format.ServiceCallClosedDaysOpenedFor(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.CreatedDate)
-                        
-                        @Format.ServiceCallOpenDaysLeft(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete,
-                                                                 Model.ServiceCallSummary.CreatedDate)*@
-
-                        @Format.ServiceCallClosedOrOpenIndicator(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete,
-                                                                 Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.CreatedDate)
+                        @if (Model.ServiceCallSummary.CompletionDate == null)
+                        {
+                            <div class="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(Model.ServiceCallSummary.CreatedDate)">
+                                <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(Model.ServiceCallSummary.NumberOfDaysRemaining)<br/>
+                                    <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                                        <div class="progress-bar @Css.ServiceCallProgressBar(Model.ServiceCallSummary.NumberOfDaysRemaining)" role="progressbar" style="width: @Model.ServiceCallSummary.PercentComplete%">
+                                            <span class="sr-only">@Model.ServiceCallSummary.PercentComplete% Complete</span>
+                                        </div>
+                                    </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-8 pull-right">
+                                @Format.DaysOpenedFor(Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.CompletionDate)
+                            </div>
+                        }
                     </div>
                     <div class="col-md-1 text-center">
                         <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></button>
@@ -121,34 +131,37 @@
             <div class="row">
                 <div class="col-md-12 text-center">
                     <h4>
-                        @Format.EscalatedExpanded(Model.ServiceCallSummary.IsEscalated, Model.ServiceCallSummary.EscalationReason, Model.ServiceCallSummary.EscalationDate)
+                        @if (Model.ServiceCallSummary.IsEscalated)
+                        {
+                            <div class='label label-danger'><span class='glyphicon glyphicon-fire'></span> 
+                                @Format.DateMonthDayYear(Model.ServiceCallSummary.EscalationDate) - @Model.ServiceCallSummary.EscalationReason
+                            </div>
+                        }
                     </h4>
                 </div>
             </div>
-
         </div>
-        
-        
 
         <ul class="nav nav-tabs" role="tablist">
             <li class="active"><a href="#all_service_lines" role="tab" data-toggle="tab">All <span class="label label-default">@Model.ServiceCallLines.Count()</span></a></li>
             <li><a href="#open_service_lines" role="tab" data-toggle="tab">Open <span class="label label-warning">@Model.ServiceCallLines.Count(x => !x.Completed)</span></a></li>
             <li><a href="#closed_service_lines" role="tab" data-toggle="tab">Closed <span class="label label-success">@Model.ServiceCallLines.Count(x => x.Completed)</span></a></li>
-            <li class="pull-right"><span class="widget-header">Line Items 
-                                       <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Line Item"><span class="glyphicon glyphicon-plus small"></span></button>
-                                   </span>
+            <li class="pull-right">
+                <span class="widget-header">Line Items 
+                    <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Line Item"><span class="glyphicon glyphicon-plus small"></span></button>
+                </span>
             </li>
         </ul>
 
         <div class="tab-content">
             <div class="tab-pane active" id="all_service_lines">
-                @Html.Partial("_AllServiceLines", Model)
+                @Html.Partial("_AllServiceLines", Model.ServiceCallLines, new ViewDataDictionary{{"lineStatus", "All"}})
             </div>
             <div class="tab-pane" id="open_service_lines">
-                @Html.Partial("_OpenServiceLines", Model)
+                @Html.Partial("_AllServiceLines", Model.ServiceCallLines.Where(x => !x.Completed), new ViewDataDictionary{{"lineStatus", "Open"}})
             </div>
             <div class="tab-pane" id="closed_service_lines">
-                @Html.Partial("_ClosedServiceLines", Model)
+                @Html.Partial("_AllServiceLines", Model.ServiceCallLines.Where(x => x.Completed), new ViewDataDictionary{{"lineStatus", "Closed"}})
             </div>
         </div>
     </div>

@@ -1,13 +1,12 @@
 ﻿@using Warranty.UI.Core.Helpers
-@model Warranty.Core.Features.ServiceCallSummary.ServiceCallSummaryModel
+@model IEnumerable<Warranty.Core.Features.ServiceCallSummary.ServiceCallSummaryModel.ServiceCallLine>
 
-
-@foreach (var line in Model.ServiceCallLines)
+@foreach (var line in Model)
 {
     <div class="service-call-line">
         <div class="row">
             <div class="col-md-1">
-                <small class="text-muted">@Format.DateMonthDayYear(Model.ServiceCallSummary.CreatedDate)</small>
+                <small class="text-muted">@Format.DateMonthDayYear(@line.CreatedDate)</small>
             </div>
             <div class="col-md-2">
                 <small class="text-muted"><span class="glyphicon glyphicon-wrench"></span> @line.ProblemCode</small>
@@ -20,13 +19,22 @@
             </div>
             <div class="col-md-1 small">
                 <div class="text-center has-bottom-tooltip" title="No. Of Line Comments">
-                    <a data-toggle="collapse" href="#collapseAllLineCallNotes@(line.LineNumber)" class="text-capitalize accordion-toggle collapsed">
+                    <a data-toggle="collapse" href="#collapseLineCallNotes@(ViewData["lineStatus"] + line.LineNumber.ToString())" class="text-capitalize accordion-toggle collapsed">
                         <span class="glyphicon glyphicon-comment"> <u>3</u></span>
                     </a> 
                 </div>
             </div>
             <div class="col-md-1 text-center">
-                @Format.OpenCloseServiceLineIndicator(line.Completed)
+                @if (line.Completed)
+                {
+                    <span class='label label-success'><span class='glyphicon glyphicon-ok has-bottom-tooltip' title='Closed'></span></span>
+                }
+                else
+                {
+                    <button type='button' class='btn btn-xs btn-warning'>
+                        <input type ='checkbox' class='has-bottom-tooltip' title='Click To Close'>
+                    </button>
+                }
             </div>
             <div class="col-md-1 text-center">
                 <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></button>
@@ -35,7 +43,7 @@
                     {
                         <li>@Html.ActionLink("Edit", "Edit", "ServiceCall", new { id = @line.ServiceCallId }, null)</li>
                     }
-                    <li>@Html.ActionLink("Add Commnet", "AddLineNote", "ServiceCall", new {id = Model.ServiceCallSummary.ServiceCallId}, null)</li>
+                    <li>@Html.ActionLink("Add Commnet", "AddLineNote", "ServiceCall", new {id = @line.ServiceCallId}, null)</li>
                 </ul>
             </div>
         </div>
@@ -61,7 +69,7 @@
         </div>
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
-                <ul id="collapseAllLineCallNotes@(line.LineNumber)" class="list-group collapse no-left-right-padding small">
+                <ul id="collapseLineCallNotes@(ViewData["lineStatus"] + line.LineNumber.ToString())" class="list-group collapse no-left-right-padding small">
                     <br/>
                     <li class="list-group-item">
                         Placeholder for notes 1
