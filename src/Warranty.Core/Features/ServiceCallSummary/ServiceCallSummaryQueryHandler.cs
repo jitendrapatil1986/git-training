@@ -18,8 +18,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
         {
             _database = database;
             _userSession = userSession;
-
         }
+
         public ServiceCallSummaryModel Handle(ServiceCallSummaryQuery query)
         {
             var user = _userSession.GetCurrentUser();
