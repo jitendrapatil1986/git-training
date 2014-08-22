@@ -303,7 +303,6 @@
     <Content Include="Views\Home\AmountSpentWidget.cshtml" />
     <Content Include="Views\ServiceCall\CallSummary.cshtml" />
     <Content Include="Views\ServiceCall\_AllServiceLines.cshtml" />
-    <Content Include="Views\ServiceCall\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

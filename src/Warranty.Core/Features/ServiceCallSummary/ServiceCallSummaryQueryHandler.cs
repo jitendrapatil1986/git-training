@@ -37,7 +37,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
 
         private ServiceCallSummaryModel.ServiceCall GetServiceCallSummary(Guid serviceCallId)
         {
-            const string sql = @"SELECT 
+            const string sqlTemplate = @"SELECT 
                                     wc.ServiceCallId as ServiceCallId
                                     , Servicecallnumber as CallNumber
                                     , j.AddressLine as [Address]
@@ -77,16 +77,20 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                 INNER JOIN Divisions d
                                 ON cm.DivisionId = d.DivisionId
                                 INNER JOIN Projects p
-                                ON cm.ProjectId = p.Projectid";
+                                ON cm.ProjectId = p.Projectid
+                                {0} /* WHERE */
+                                {1} /* ORDER */";
 
-            var result = _database.Single<ServiceCallSummaryModel.ServiceCall>(sql + " WHERE wc.ServiceCallId = @0", serviceCallId.ToString());
+            var sql = string.Format(sqlTemplate, "WHERE wc.ServiceCallId = @0", "");
+
+            var result = _database.Single<ServiceCallSummaryModel.ServiceCall>(sql, serviceCallId.ToString());
             
             return result;
         }
 
         private IEnumerable<ServiceCallSummaryModel.ServiceCallLine> GetServiceCallLines(Guid serviceCallId)
         {
-            const string sql = @"SELECT
+            const string sqlTemplate = @"SELECT
                                     li.ServiceCallLineItemId,
                                     li.ServiceCallId,
                                     li.LineNumber,
@@ -99,23 +103,31 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     li.CreatedDate
                                 FROM ServiceCalls wc
                                 INNER JOIN ServiceCallLineItems li
-                                ON wc.ServiceCallId = li.ServiceCallId";
+                                ON wc.ServiceCallId = li.ServiceCallId
+                                {0} /* WHERE */
+                                {1} /* ORDER */";
 
-            var result = _database.Fetch<ServiceCallSummaryModel.ServiceCallLine>(sql + " WHERE wc.ServiceCallId = @0 ORDER BY li.LineNumber", serviceCallId.ToString());
+            var sql = string.Format(sqlTemplate, "WHERE wc.ServiceCallId = @0", "ORDER BY li.LineNumber");
+
+            var result = _database.Fetch<ServiceCallSummaryModel.ServiceCallLine>(sql, serviceCallId.ToString());
 
             return result;
         }
 
         private IEnumerable<ServiceCallSummaryModel.ServicCallComment> GetServiceCallComments(Guid serviceCallId)
         {
-            const string sql = @"SELECT [ServiceCallCommentId]
+            const string sqlTemplate = @"SELECT [ServiceCallCommentId]
                                       ,[ServiceCallId]
                                       ,[ServiceCallComment] as Comment
                                       ,[CreatedDate]
                                       ,[CreatedBy]     
-                                FROM [ServiceCallComments]";
+                                FROM [ServiceCallComments]
+                                {0} /* WHERE */
+                                {1} /* ORDER */";
 
-            var result = _database.Fetch<ServiceCallSummaryModel.ServicCallComment>(sql + " WHERE ServiceCallId = @0", serviceCallId.ToString());
+            var fullSql = string.Format(sqlTemplate, "WHERE ServiceCallId = @0", "");
+
+            var result = _database.Fetch<ServiceCallSummaryModel.ServicCallComment>(fullSql, serviceCallId.ToString());
 
             return result;
         }

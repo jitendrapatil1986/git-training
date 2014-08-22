@@ -33,11 +33,6 @@
             return View();
         }
 
-        public ActionResult Edit(Guid id)
-        {
-            return View();
-        }
-
         public ActionResult CallSummary(Guid id)
         {
             var model = _mediator.Request(new ServiceCallSummaryQuery
