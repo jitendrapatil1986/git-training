@@ -5,7 +5,9 @@
 {
     <div class="service-call-line">
         <div class="col-md-1">
-            <small class="text-muted">@line.CallNumber</small><br/>@Format.YearsWithinWarranty(line.YearsWithinWarranty, line.WarrantyStartDate)
+            <small class="text-muted">
+                @Html.ActionLink(line.CallNumber, "CallSummary", "ServiceCall", new {id = line.ServiceCallId}, null)
+            </small><br/>@Format.YearsWithinWarranty(line.YearsWithinWarranty, line.WarrantyStartDate)
         </div>
         <div class="col-md-3">
             <div class="col-md-1 hidden-sm hidden-xs">

@@ -40,8 +40,6 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public string ProjectName { get; set; }
             public string CommunityName { get; set; }
             public decimal? PaymentAmount { get; set; }
-            
-
             public int PercentComplete
             {
                 get { return ServiceCallCalculator.CalculatePercentComplete(NumberOfDaysRemaining); }

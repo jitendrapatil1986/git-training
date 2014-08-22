@@ -20,7 +20,9 @@ else
                 {
                     <div class="service-call-line">
                         <div class="col-md-3">
-                            <small class="text-muted">@line.CallNumber</small>
+                            <small class="text-muted">
+                                @Html.ActionLink(line.CallNumber, "CallSummary", "ServiceCall", new {id = line.ServiceCallId}, null)
+                            </small>
                             <small class="pull-right text-muted">@Format.DateMonthDay(line.CreatedDate)</small>
                         </div>
                         <div class="col-md-5">
