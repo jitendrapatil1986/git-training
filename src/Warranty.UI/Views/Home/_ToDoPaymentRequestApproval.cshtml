@@ -1,0 +1,12 @@
+﻿@*Not the final View*@
+@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
+@model Warranty.Core.ToDoInfrastructure.Models.ToDoPaymentRequestApprovalModel
+<div class="todo @Css.ToDoClass(ToDoType.PaymentRequestApproval)">
+    @Model.PaymentAmount
+    <br />
+    @Model.HomeOwnerAddress
+    <br />
+    @Model.HomeOwnerName
+    <br />
+</div>

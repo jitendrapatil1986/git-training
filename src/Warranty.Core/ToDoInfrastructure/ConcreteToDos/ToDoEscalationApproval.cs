@@ -7,8 +7,8 @@ namespace Warranty.Core.ToDoInfrastructure.ConcreteTodos
     {
         public override string ViewName
         {
-            get { return "_ToDoEscalationapproval"; }
-            set {  }
+            get { return "_ToDoEscalationApproval"; }
+            set { }
         }
     }
 }

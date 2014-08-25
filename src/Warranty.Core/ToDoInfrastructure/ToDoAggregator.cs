@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
+using Warranty.Core.Enumerations;
 using Warranty.Core.Security;
 using Warranty.Core.ToDoInfrastructure.ConcreteTodos;
 using Warranty.Core.ToDoInfrastructure.Interfaces;
@@ -28,20 +30,22 @@ namespace Warranty.Core.ToDoInfrastructure
             toDos.AddRange(escalationApprovalToDos);
             toDos.AddRange(paymentRequestApprovalToDos);
 
-            return toDos;
+            return toDos.OrderByDescending(x => x.Date).ToList();
         }
 
         private IEnumerable<IToDo> GetServiceCallApprovalToDos()
         {
-            var todo = new ToDoServiceCallApproval()
+            //Not the final query
+            var todo = new ToDoServiceCallApproval
             {
-                Model = new ToDoServiceCallRequestApprovalModel
+                Model = new ToDoServiceCallApprovalModel
                 {
                     HomeOwnerAddress = "Address",
                     HomeOwnerName = "Name",
                     YearsWithinWarranty = 10
                 },
                 Date = DateTime.Now,
+                Type = ToDoType.ServiceCallApproval
             };
 
             yield return todo;
@@ -49,6 +53,7 @@ namespace Warranty.Core.ToDoInfrastructure
 
         private IEnumerable<IToDo> GetEscalationApprovalToDos()
         {
+            //Not the final query
             var todo = new ToDoEscalationApproval()
             {
                 Model = new ToDoEscalationApprovalModel
@@ -58,6 +63,7 @@ namespace Warranty.Core.ToDoInfrastructure
                     EscalationRequestedBy = "John S"
                 },
                 Date = DateTime.Now,
+                Type = ToDoType.EscalationApproval
             };
 
             yield return todo;
@@ -65,6 +71,7 @@ namespace Warranty.Core.ToDoInfrastructure
 
         private IEnumerable<IToDo> GetPaymentRequestApprovalToDos()
         {
+            //Not the final query
             var todo = new ToDoPaymentRequestApproval()
             {
                 Model = new ToDoPaymentRequestApprovalModel()
@@ -74,6 +81,7 @@ namespace Warranty.Core.ToDoInfrastructure
                     PaymentAmount = (decimal)150.55
                 },
                 Date = DateTime.Now,
+                Type = ToDoType.PaymentRequestApproval
             };
 
             yield return todo;

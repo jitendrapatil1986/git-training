@@ -79,6 +79,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Yay.Enumeration.0.5.1\lib\Yay.Enumerations.dll</HintPath>
     </Reference>
+    <Reference Include="Yay.Enumerations.MVC">
+      <HintPath>..\Warranty.UI\bin\Yay.Enumerations.MVC.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configurations\EnumerationDisplayConverter.cs" />
@@ -139,9 +142,9 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
-    <Compile Include="Features\AmountSpentWidget\AmountSpentsWidgetModel.cs" />
-    <Compile Include="Features\AmountSpentWidget\AmountSpentsWidgetQuery.cs" />
-    <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQueryHandler.cs" />
+    <Compile Include="Features\ToDoWidget\ToDoWidgetModel.cs" />
+    <Compile Include="Features\ToDoWidget\ToDoWidgetQuery.cs" />
+    <Compile Include="Features\ToDoWidget\ToDoWidgetQueryHandler.cs" />
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetModel.cs" />
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQuery.cs" />
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQueryHandler.cs" />
@@ -151,6 +154,9 @@
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetModel.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetQuery.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetQueryHandler.cs" />
+    <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetModel.cs" />
+    <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQuery.cs" />
+    <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQueryHandler.cs" />
     <Compile Include="Services\ServiceCallCalculator.cs" />
     <Compile Include="Net4Collection.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">
@@ -176,7 +182,7 @@
     <Compile Include="ToDoInfrastructure\Interfaces\IToDo.cs" />
     <Compile Include="ToDoInfrastructure\IToDoAggregator.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoPaymentRequestApprovalModel.cs" />
-    <Compile Include="ToDoInfrastructure\Models\ToDoServiceCallRequestApprovalModel.cs" />
+    <Compile Include="ToDoInfrastructure\Models\ToDoServiceCallApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\ToDo.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoEscalationApproval.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoEscalationApprovalModel.cs" />

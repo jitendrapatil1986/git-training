@@ -3,7 +3,7 @@ using Warranty.Core.ToDoInfrastructure.Models;
 
 namespace Warranty.Core.ToDoInfrastructure.ConcreteTodos
 {
-    public class ToDoServiceCallApproval : ToDo<ToDoServiceCallRequestApprovalModel>
+    public class ToDoServiceCallApproval : ToDo<ToDoServiceCallApprovalModel>
     {
         public override string ViewName
         {

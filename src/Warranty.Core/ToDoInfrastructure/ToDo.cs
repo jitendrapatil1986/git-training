@@ -1,4 +1,5 @@
 ﻿using System;
+using Warranty.Core.Enumerations;
 using Warranty.Core.ToDoInfrastructure.Interfaces;
 
 namespace Warranty.Core.ToDoInfrastructure
@@ -8,5 +9,6 @@ namespace Warranty.Core.ToDoInfrastructure
         public TModel Model { get; set; }
         public abstract string ViewName { get; set; }
         public DateTime Date { get; set; }
+        public ToDoType Type { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Warranty.Core.ToDoInfrastructure.Models
 {
-    public class ToDoServiceCallRequestApprovalModel
+    public class ToDoServiceCallApprovalModel
     {
         public string HomeOwnerName { get; set; }
         public string HomeOwnerAddress { get; set; }
