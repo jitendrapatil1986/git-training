@@ -28,6 +28,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         {
             var payment = Get<Job>(_job.JobId);
             payment.CloseDate.ShouldEqual(Event.WarrantyDate);
+            payment.WarrantyExpirationDate.ShouldEqual(Event.WarrantyDate.AddYears(10));
         }
     }
 }

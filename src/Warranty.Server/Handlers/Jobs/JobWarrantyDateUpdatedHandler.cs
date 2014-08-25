@@ -24,6 +24,7 @@ namespace Warranty.Server.Handlers.Jobs
                     return;
 
                 job.CloseDate = message.WarrantyDate;
+                job.WarrantyExpirationDate = message.WarrantyDate.AddYears(10);
                 _database.Update(job);
             }
         }
