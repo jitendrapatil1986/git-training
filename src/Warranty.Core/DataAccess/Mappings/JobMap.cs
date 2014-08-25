@@ -28,7 +28,6 @@ namespace Warranty.Core.DataAccess.Mappings
                     x.Column(y => y.BuilderEmployeeId);
                     x.Column(y => y.SalesConsultantEmployeeId);
                     x.Column(y => y.WarrantyExpirationDate);
-                    x.Column(y => y.TotalPrice);
                     x.Column(y => y.DoNotContact);
                     x.Column(y => y.JdeIdentifier);
                 });
