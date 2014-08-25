@@ -1,12 +1,12 @@
-﻿using Accounting.Events.Payment;
+﻿using System;
+using Accounting.Events.Payment;
 using NUnit.Framework;
-using Should;
 using Warranty.Core.Entities;
 
-namespace Warranty.Server.IntegrationTests.Handlers
+namespace Warranty.Server.IntegrationTests.Handlers.Payments
 {
     [TestFixture]
-    public class PaymentPaymentAmountUpdatedHandlerTester : HandlerTester<PaymentPaymentAmountUpdated>
+    public class PaymentDeletedHandlerTester : HandlerTester<PaymentDeleted>
     {
         private Payment _payment;
 
@@ -18,15 +18,13 @@ namespace Warranty.Server.IntegrationTests.Handlers
             Send(x =>
             {
                 x.JDEId = _payment.JdeIdentifier;
-                x.PaymentAmount = 999.99M;
             });
         }
 
-        [Test]
-        public void Payment_Amount_Should_Be_Updated()
+        [Test, ExpectedException(typeof(InvalidOperationException))]
+        public void Payment_Should_Be_Deleted()
         {
             var payment = Get<Payment>(_payment.PaymentId);
-            payment.Amount.ShouldEqual(Event.PaymentAmount);
         }
     }
 }

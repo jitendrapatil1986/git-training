@@ -1,12 +1,12 @@
-﻿namespace Warranty.Server.Handlers
-{
-    using Accounting.Events.Payment;
-    using Configuration;
-    using Core.Entities;
-    using Extensions;
-    using NPoco;
-    using NServiceBus;
+﻿using Accounting.Events.Payment;
+using NPoco;
+using NServiceBus;
+using Warranty.Core.Entities;
+using Warranty.Server.Configuration;
+using Warranty.Server.Extensions;
 
+namespace Warranty.Server.Handlers.Payments
+{
     public class PaymentAddedHandler : IHandleMessages<PaymentAdded>
     {
         private readonly IDatabase _database;

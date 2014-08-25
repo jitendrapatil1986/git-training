@@ -2,7 +2,7 @@ namespace Warranty.Core.Entities
 {
     using System;
 
-    public class Job : IAuditableEntity
+    public class Job : IAuditableEntity, IJdeEntity
     {
         public virtual Guid JobId { get; set; }
         public virtual string JobNumber { get; set; }
@@ -29,5 +29,6 @@ namespace Warranty.Core.Entities
         public virtual string CreatedBy { get; set; }
         public virtual DateTime? UpdatedDate { get; set; }
         public virtual string UpdatedBy { get; set; }
+        public string JdeIdentifier { get; set; }
     }
 }

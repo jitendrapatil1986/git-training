@@ -35,6 +35,7 @@ namespace Warranty.Core.DataAccess.Mappings
             Property(x => x.WarrantyExpirationDate);
             Property(x => x.TotalPrice);
             Property(x => x.DoNotContact);
+            Property(x => x.JdeIdentifier);
         }
     }
 }
