@@ -1,4 +1,6 @@
-﻿namespace Warranty.UI.Core.Helpers
+﻿using System.Globalization;
+
+namespace Warranty.UI.Core.Helpers
 {
     using System;
     using System.Web.Mvc;
@@ -93,6 +95,80 @@
         public static string DateForServiceCallWiget(DateTime? date)
         {
             return String.Format("{0:MMM dd yyyy}", date);
+        }
+
+        public static MvcHtmlString DaysOpenedFor(int days, DateTime openedDate, DateTime? closedDate)
+        {
+            string cssClass;
+            if (days == 7)
+                cssClass = "seven-day";
+            else if (days < 7)
+                cssClass = "less-seven-day";
+            else
+                cssClass = "eight-plus-day";
+
+            var stringDays = days == 1 ? "Day" : "Days";
+
+            var htmlString =
+                string.Format(
+                    @"<div class='opened-for opened-for-{0} has-bottom-tooltip' data-original-title='From {1} to {2}'>{3}<p>{4}</p></div>",
+                    cssClass,
+                    String.Format("{0:MMM dd yyyy}", openedDate),
+                    String.Format("{0:MMM dd yyyy}", closedDate),
+                    days,
+                    stringDays);
+
+            return MvcHtmlString.Create(htmlString);
+        }
+
+        public static MvcHtmlString Escalated(bool isEscalated, string reason, DateTime? escalatedDate)
+        {
+            var htmlString = String.Empty;
+
+
+            if (isEscalated)
+                htmlString =
+                    string.Format(
+                        @"<div class='has-bottom-tooltip text-center' data-original-title='{0}'><span class='glyphicon glyphicon-fire'></span><br/>{1}</div>",
+                        reason, DateMonthDayYear(escalatedDate));
+
+            return MvcHtmlString.Create(htmlString);
+        }
+
+        public static MvcHtmlString SpecialProject(bool isSpecialProject)
+        {
+            var htmlString = String.Empty;
+            if (isSpecialProject)
+                htmlString = @"<div class='special-project has-bottom-tooltip' data-original-title='Special Project'>S</div>";
+
+            return MvcHtmlString.Create(htmlString);
+        }
+
+        public static MvcHtmlString YearsWithinWarranty(int years, DateTime warrantyStartDate)
+        {
+            string cssClass;
+            if (years <= 1)
+                cssClass = "warranty-one-year";
+            else if (years == 2)
+                cssClass = "warranty-two-year";
+            else if(years < 10)
+                cssClass = "warranty-three-nine-year";
+            else
+                cssClass = "warranty-ten-plus-year";
+
+            var stringYears = years <= 1 ? "Year" : "Years";
+
+            var displayedYears = years == 0 ? "1" : years.ToString(CultureInfo.InvariantCulture);
+
+            var toolTip = string.Format("Warranty Start Date: {0}", String.Format("{0:MMM dd yyyy}", warrantyStartDate));
+
+            var htmlString = string.Format(@"<span class='label label-{0} has-bottom-tooltip' title='{1}'>{2} {3}</span>",
+                                            cssClass, 
+                                            toolTip, 
+                                            displayedYears, 
+                                            stringYears);
+
+            return MvcHtmlString.Create(htmlString);
         }
 
         public static string DateAsMonthDayOnly(DateTime date)
@@ -190,7 +266,7 @@
         {
             return string.IsNullOrEmpty(textToCheck) ? "Not Specified" : textToCheck.Trim();
         }
-        
+
         public static string InvoiceNumber(string invoiceNumber)
         {
             return string.IsNullOrEmpty(invoiceNumber) ? "" : invoiceNumber.ToUpper();
@@ -251,6 +327,14 @@
             return MvcHtmlString.Create(string.Format("<span class=\"label label-info has-bottom-tooltip\" title=\"Number of line items\">{0}</span>", numberOfLineItems));
         }
 
+        public static MvcHtmlString ShowRedLabelIfCountGreaterThanZero(int numberOfLines)
+        {
+            if (numberOfLines <= 0)
+                return MvcHtmlString.Create(string.Format("<span class=\"label label-default\">{0}</span>", numberOfLines));
+
+            return MvcHtmlString.Create(string.Format("<span class=\"label label-danger\">{0}</span>", numberOfLines));
+        }
+
         public static MvcHtmlString ServiceCallDaysLeft(int numberOfDaysRemaining)
         {
             var plural = "s";
@@ -274,6 +358,16 @@
             }
 
             return MvcHtmlString.Create("<span class=\"glyphicon glyphicon-earphone text-muted\"></span> " + phoneNumber);
+        }
+
+        public static MvcHtmlString Email(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return MvcHtmlString.Empty;
+            }
+
+            return MvcHtmlString.Create("<span class=\"glyphicon glyphicon-envelope text-muted\"></span> " + email);
         }
     }
 }

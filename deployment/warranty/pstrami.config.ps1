@@ -4,13 +4,13 @@ Environment "dev" -servers @(
     ) -installPath "C:\Installs\WarrantyTest"
     
 Environment "training" -servers @(
-    Server "wkcorpapptrain1" @("Web";) 
-    Server "wksql3" @("Database";) 
+    Server "wkcorpapptrain1" @("Web";)
+    Server "wksql3" @("Database";)
     ) -installPath "C:\Installs\WarrantyTraining"
     
 Environment "prod" -servers @(
-    Server "wkcorpappprod1" @("Web";) 
-    Server "wksql1" @("Database";) 
+    Server "wkcorpappprod1" @("Web";)
+    Server "wksql1" @("Database";)
     ) -installPath "C:\Installs\Warranty"
 
 
@@ -36,7 +36,7 @@ Role "Nsb" -Incremental {
     Remove-Item "$nsb_directory\mscorlib.dll"
 
     # config
-    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/connectionStrings/add[@name='Warranty']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_nsb_application_name;"
+    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_nsb_application_name;"
         
     #Install NSB Service
     &"$nsb_directory\NServiceBus.Host.exe" "/install" "/serviceName:$nsb_service_name" "/username:dwh\svc-Warranty-nsb" "/password:O2I(&3J,5`$V1h24"
@@ -64,7 +64,7 @@ Role "Web" -Incremental {
     sync-files $source_dir $web_directory $skips
 
     # config
-    poke-xml "$web_directory\web.config" "configuration/connectionStrings/add[@name='Warranty']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_web_application_name;"
+    poke-xml "$web_directory\web.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_web_application_name;"
     poke-xml "$web_directory\web.config" "configuration/system.identityModel/identityConfiguration/audienceUris/add/@value" $warranty_identity_uri
     poke-xml "$web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@realm" $warranty_identity_uri
     poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Environment']/@value" $environment

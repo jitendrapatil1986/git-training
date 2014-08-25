@@ -41,6 +41,10 @@
     <Reference Include="Microsoft.IdentityModel">
       <HintPath>..\..\..\purchasing\src\Purchasing.UI\bin\Microsoft.IdentityModel.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
@@ -71,8 +75,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Yay.Enumerations, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Yay.Enumeration.0.5.1\lib\Yay.Enumerations.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configurations\EnumerationDisplayConverter.cs" />
+    <Compile Include="Configurations\WarrantyConstants.cs" />
+    <Compile Include="Configurations\WarrantyContractResolver.cs" />
     <Compile Include="DataAccess\AuditEventListener.cs" />
     <Compile Include="DataAccess\Conventions\Int32EnumerationType.cs" />
     <Compile Include="DataAccess\Conventions\IStringEnumeration.cs" />
@@ -110,6 +121,7 @@
     <Compile Include="Entities\ServiceCall.cs" />
     <Compile Include="Entities\ServiceCallComment.cs" />
     <Compile Include="Entities\ServiceCallLineItem.cs" />
+    <Compile Include="Enumerations\Month.cs" />
     <Compile Include="Enumerations\ServiceCallStatus.cs" />
     <Compile Include="DataAccess\GuidComb.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
@@ -123,11 +135,25 @@
     <Compile Include="Enumerations\ItemClassification.cs" />
     <Compile Include="Enumerations\RequestType.cs" />
     <Compile Include="Extensions\MapperExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Features\AmountSpentWidget\AmountSpentsWidgetModel.cs" />
+    <Compile Include="Features\AmountSpentWidget\AmountSpentsWidgetQuery.cs" />
+    <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQueryHandler.cs" />
+    <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetModel.cs" />
+    <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQuery.cs" />
+    <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQueryHandler.cs" />
+    <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsModel.cs" />
+    <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsQuery.cs" />
+    <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsQueryHandler.cs" />
+    <Compile Include="Features\ServiceCallSummary\ServiceCallSummaryModel.cs" />
+    <Compile Include="Features\ServiceCallSummary\ServiceCallSummaryQuery.cs" />
+    <Compile Include="Features\ServiceCallSummary\ServiceCallSummaryQueryHandler.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetModel.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetQuery.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetQueryHandler.cs" />
+    <Compile Include="Services\ServiceCallCalculator.cs" />
     <Compile Include="Net4Collection.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
@@ -158,6 +184,7 @@
     <None Include="packages.config" />
     <None Include="Scripts\jquery-1.9.0.min.map" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

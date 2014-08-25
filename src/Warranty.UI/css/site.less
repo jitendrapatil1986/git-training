@@ -23,6 +23,13 @@
     padding: 0 10px;
 }
 
+.widget-header-bar {
+    font-size: 1.2em;
+    background: #f7f7f7;
+    padding: 5px;
+    color: #666;
+}
+
 .progress {
     height: 7px;
 }
@@ -37,13 +44,106 @@
     margin: 0;
 }
 
-.service-call-line:hover {
-    background: @gray-lighter;
-}
+    .service-call-line:hover {
+        background: @gray-lighter;
+    }
 
 .text-red {
     color: #D9534F;
 }
+
+
+.label, badge {
+    &-warranty-one-year {
+        background-color: #5cb85c;
+    }
+}
+
+.label, badge {
+    &-warranty-two-year {
+        background-color: #FFBF00;
+    }
+}
+
+.label, badge {
+    &-warranty-three-nine-year {
+        background-color: #f0ad4e;
+    }
+}
+
+.label, badge {
+    &-warranty-ten-plus-year {
+        background-color: #d9534f;
+    }
+}
+
+.special-project {
+    background-color: #5bc0de;
+    border-radius: 10px;
+    text-align: center;
+    font-size: xx-large;
+    color: #FFFFFF;
+    height: 60px;
+}
+
+.opened-for {
+    border-radius: 10px;
+    text-align: center;
+    font-size: xx-large;
+    color: #FFFFFF;
+    height: 60px;
+}
+
+.opened-for p {
+    font-size: xx-small;
+    color: #FFFFFF;
+}
+
+.opened-for {
+    &-eight-plus-day {
+        background-color: #d9534f;
+    }
+}
+
+.opened-for {
+    &-less-seven-day {
+        background-color: #5cb85c;
+    }
+}
+
+.opened-for {
+    &-seven-day {
+        background-color: #0044cc;
+    }
+}
+
+.amount-spent {
+    border-radius: 5px;
+    text-align: center;
+    font-size: small;
+    color: #FFFFFF;
+    height: 20px;
+    margin : 5px;
+    padding: 2px;
+}
+
+.amount-spent {
+    &-red {
+        background-color: #d9534f;
+    }
+}
+
+.amount-spent {
+    &-green {
+        background-color: #5cb85c;
+    }
+}
+
+.center-element{
+    float: none;
+    margin: 0 auto;
+}
+
 
 .no-left-right-padding {
     padding-left: 0;
@@ -53,4 +153,29 @@
 .nowrap-tooltip .tooltip-inner {
     white-space: pre;
     max-width: none;
+}
+
+.amount-spent-container {
+    height: 200px;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+}
+
+.amount-spent-sub-header{
+    font-size: .7em;
+    padding: 5px 5px 0 0;
+}
+
+.amount-spent-header {
+    border: 1px solid #ddd;
+    background: #f7f7f7;
+    font-size: 1.6em;
+    color: #666;
+    padding-left: 15px;
+    border-bottom: none;
+}
+
+.wrap-text {
+    overflow-x: hidden;
+    word-wrap: break-word;
 }

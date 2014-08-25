@@ -1,13 +1,13 @@
-﻿define(['jquery'], function ($) {
-    $('.service-call-line:lt(5)').removeClass('hide');
+define(['jquery'], function ($) {
+    $('.my-service-call:lt(5)').removeClass('hide');
 
     $('.show-more').click(function () {
         if ($(this).text() == 'All') {
-            $('.service-call-line').removeClass('hide');
+            $('.my-service-call').removeClass('hide');
         } else {
             var show = $(this).text();
-            $('.service-call-line:lt("' + show + '")').removeClass('hide');
-            $('.service-call-line:gt("' + show + '")').addClass('hide');
+            $('.my-service-call:lt("' + show + '")').removeClass('hide');
+            $('.my-service-call:gt("' + show + '")').addClass('hide');
         }
     });
 });

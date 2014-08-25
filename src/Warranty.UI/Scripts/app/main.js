@@ -16,6 +16,7 @@ require.config({
         'knockout': 'lib/knockout-2.2.1',
         'ko': 'app/customBindings',
         'bootbox': 'lib/bootbox.min',
+        'highcharts': 'lib/highcharts',
     },
     shim: {
         'jquery.validate': ['jquery'],
@@ -26,6 +27,10 @@ require.config({
         'collapse': { deps: ['bootstrap'], exports: '$.fn.collapse' },
         'underscore': { exports: '_' },
         'ko': ['underscore'],
+        'highcharts': {
+            exports: 'Highcharts',
+            deps: ['jquery']
+        }
     },
     callback: function () {
         require(['app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields']);

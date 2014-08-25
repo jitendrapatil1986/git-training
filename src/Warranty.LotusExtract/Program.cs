@@ -29,18 +29,6 @@
                 response = Console.ReadLine();
             } while (response != "Y");
 
-            using (var sc = new SqlConnection(connectionString))
-            {
-                sc.Open();
-
-                using (var cmd = new SqlCommand("imports.DeleteByCity", sc))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("@CityCodeList", markets));
-                    cmd.ExecuteNonQuery();
-                }
-            }
-
             var warrantyCallFilePath = appSettings["ServiceCallFlatFileLocation"];
             new ServiceCallDataImporter().Import(warrantyCallFilePath, null);
 
@@ -60,6 +48,7 @@
                 using (var cmd = new SqlCommand("imports.ImportData", sc))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("@CityCodeList", markets));
                     cmd.ExecuteNonQuery();
                 }
             }

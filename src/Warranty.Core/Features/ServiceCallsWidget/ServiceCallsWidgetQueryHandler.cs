@@ -38,13 +38,14 @@
                                         , j.AddressLine as [Address]
                                         , wc.CreatedDate 
                                         , ho.HomeOwnerName
-                                        , case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
                                         , NumberOfLineItems
                                         , ho.HomePhone as PhoneNumber
                                         , e.EmployeeName as AssignedTo
                                         , e.EmployeeNumber as AssignedToEmployeeNumber
                                         , wc.EscalationDate
                                         , wc.EscalationReason
+                                        , DATEDIFF(yy, j.CloseDate, wc.CreatedDate) as YearsWithinWarranty
+                                        , j.CloseDate as WarrantyStartDate
                                      FROM [ServiceCalls] wc
                                      inner join Jobs j
                                        on wc.JobId = j.JobId
@@ -89,7 +90,7 @@
             return result;
         }
 
-        public IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetEscalatedServiceCalls(IUser user)
+        private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetEscalatedServiceCalls(IUser user)
         {
             var markets = user.Markets;
 

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Services;
 
     public class ServiceCallsWidgetModel
     {
@@ -23,16 +24,7 @@
         {
             get
             {
-                return OverdueServiceCalls.GroupBy(call => call.AssignedToEmployeeNumber
-                                                         , call => call.AssignedTo,
-                                                           (key, g) =>
-                                                           new RepresentativeWithCallCount
-                                                               {
-                                                                   EmployeeNumber = key,
-                                                                   Name = g.First().ToLower(),
-                                                                   ServiceCallsCount = g.Count()
-                                                               })
-                                          .OrderByDescending(x=>x.ServiceCallsCount);
+                return GetRepresentativeWithCallCount(OverdueServiceCalls);
             }
         }
 
@@ -40,16 +32,7 @@
         {
             get
             {
-                return SpecialProjectServiceCalls.GroupBy(call => call.AssignedToEmployeeNumber
-                                                          , call => call.AssignedTo,
-                                                          (key, g) =>
-                                                          new RepresentativeWithCallCount
-                                                              {
-                                                                  EmployeeNumber = key,
-                                                                  Name = g.First().ToLower(),
-                                                                  ServiceCallsCount = g.Count()
-                                                              })
-                                                 .OrderByDescending(x => x.ServiceCallsCount);
+                return GetRepresentativeWithCallCount(SpecialProjectServiceCalls);
             }
         }
 
@@ -57,17 +40,21 @@
         {
             get
             {
-                return EscalatedServiceCalls.GroupBy(call => call.AssignedToEmployeeNumber
-                                                          , call => call.AssignedTo,
-                                                          (key, g) =>
-                                                          new RepresentativeWithCallCount
-                                                          {
-                                                              EmployeeNumber = key,
-                                                              Name = g.First().ToLower(),
-                                                              ServiceCallsCount = g.Count()
-                                                          })
-                                                 .OrderByDescending(x => x.ServiceCallsCount);
+                return GetRepresentativeWithCallCount(EscalatedServiceCalls);
             }
+        }
+
+        private IEnumerable<RepresentativeWithCallCount> GetRepresentativeWithCallCount(IEnumerable<ServiceCall> calls)
+        {
+            return calls.GroupBy(call => call.AssignedToEmployeeNumber, call => call.AssignedTo,
+                                 (key, g) =>
+                                 new RepresentativeWithCallCount
+                                     {
+                                         EmployeeNumber = key,
+                                         Name = g.First().ToLower(),
+                                         ServiceCallsCount = g.Count()
+                                     })
+                        .OrderByDescending(x => x.ServiceCallsCount);
         }
 
         public class RepresentativeWithCallCount
@@ -86,7 +73,7 @@
             public string CallNumber { get; set; }
             public DateTime CreatedDate { get; set; }
             public string HomeownerName { get; set; }
-            public int NumberOfDaysRemaining { get; set; }
+            public int NumberOfDaysRemaining { get { return ServiceCallCalculator.CalculateNumberOfDaysRemaining(CreatedDate); }}
             public int NumberOfLineItems { get; set; }
             public string PhoneNumber { get; set; }
             public DateTime? EscalationDate { get; set; }
@@ -94,15 +81,11 @@
 
             public int PercentComplete
             {
-                get
-                {
-                    if (NumberOfDaysRemaining == 0)
-                        return 100;
-
-                    var complete = (7.0 - NumberOfDaysRemaining)/7.0 * 100;
-                    return Convert.ToInt16(complete);
-                }
+                get { return ServiceCallCalculator.CalculatePercentComplete(NumberOfDaysRemaining); }
             }
+
+            public int YearsWithinWarranty { get; set; }
+            public DateTime WarrantyStartDate { get; set; }
         }
     }
 }

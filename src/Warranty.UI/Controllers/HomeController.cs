@@ -1,9 +1,12 @@
-﻿namespace Warranty.UI.Controllers
+﻿using Warranty.Core.Features.AmountSpentWidget;
+
+namespace Warranty.UI.Controllers
 {
     using System.IO;
     using System.Web;
     using System.Web.Mvc;
     using Warranty.Core;
+    using Warranty.Core.Features.MyServiceTeamWidget;
     using Warranty.Core.Features.ServiceCallsWidget;
 
     public class HomeController : Controller
@@ -21,9 +24,23 @@
         }
 
         [ChildActionOnly]
+        public ActionResult MyTeamWidget()
+        {
+            var model = _mediator.Request(new MyServiceTeamWidgetQuery());
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
         public ActionResult ServiceCallsWidget()
         {
             var model = _mediator.Request(new ServiceCallsWidgetQuery());
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult AmountSpentWidget()
+        {
+            var model = _mediator.Request(new AmountSpentWidgetQuery());
             return PartialView(model);
         }
 

@@ -1,4 +1,4 @@
-ALTER PROCEDURE imports.ImportData @CityCodeList VARCHAR(4000) AS
+ALTER PROCEDURE [imports].[ImportData] @CityCodeList VARCHAR(4000) AS
 
 DECLARE @ImportUser VARCHAR(255) = 'Lotus Import';
 
@@ -785,4 +785,4 @@ ALTER TABLE ServiceCallComments WITH CHECK ADD CONSTRAINT FK_ServiceCallComments
 
 ALTER TABLE ServiceCallLineItems  ADD  CONSTRAINT FK_ServiceCallLineItems_ServiceCallId 
     FOREIGN KEY(ServiceCallId) REFERENCES ServiceCalls (ServiceCallId);
-GO
+ 
