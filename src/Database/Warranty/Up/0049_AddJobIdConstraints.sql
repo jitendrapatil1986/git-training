@@ -1,0 +1,2 @@
+ALTER TABLE JobStages ADD CONSTRAINT FK_JobStages_JobId
+    FOREIGN KEY (JobId) REFERENCES Jobs(JobId);
