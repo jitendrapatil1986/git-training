@@ -62,6 +62,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Up", "Up", "{20518451-E144-
 		Database\Warranty\Up\0032_AlterStateCodeTypeToVarchar.sql = Database\Warranty\Up\0032_AlterStateCodeTypeToVarchar.sql
 		Database\Warranty\Up\0033_AddEscalationDateToServiceCalls.sql = Database\Warranty\Up\0033_AddEscalationDateToServiceCalls.sql
 		Database\Warranty\Up\0034_AddEscalationReasonToServiceCalls.sql = Database\Warranty\Up\0034_AddEscalationReasonToServiceCalls.sql
+		Database\Warranty\Up\0033_AddRequestedDateToPayments.sql = Database\Warranty\Up\0033_AddRequestedDateToPayments.sql
+		Database\Warranty\Up\0033_DropDeleteStoredProcedure.sql = Database\Warranty\Up\0033_DropDeleteStoredProcedure.sql
+		Database\Warranty\Up\0034_AddEscalationReasonToServiceCalls.sql = Database\Warranty\Up\0034_AddEscalationReasonToServiceCalls.sql
+		Database\Warranty\Up\0034_AddStagePaymentTable.sql = Database\Warranty\Up\0034_AddStagePaymentTable.sql
+		Database\Warranty\Up\0035_RemoveDuplicatePaymentJdeIds.sql = Database\Warranty\Up\0035_RemoveDuplicatePaymentJdeIds.sql
+		Database\Warranty\Up\0036_AddJdeIdIndexToPayments.sql = Database\Warranty\Up\0036_AddJdeIdIndexToPayments.sql
+		Database\Warranty\Up\0037_AlterJobTable.sql = Database\Warranty\Up\0037_AlterJobTable.sql
+		Database\Warranty\Up\0038_AddJobIndex.sql = Database\Warranty\Up\0038_AddJobIndex.sql
+		Database\Warranty\Up\0039_MoveClusteredKeyForServiceCallImport.sql = Database\Warranty\Up\0039_MoveClusteredKeyForServiceCallImport.sql
+		Database\Warranty\Up\0040_AddJobIdIndexToServiceCalls.sql = Database\Warranty\Up\0040_AddJobIdIndexToServiceCalls.sql
+		Database\Warranty\Up\0041_AddWSREmplIdIndexToServiceCalls.sql = Database\Warranty\Up\0041_AddWSREmplIdIndexToServiceCalls.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{D0DD7813-D199-44F7-A1F3-EC38DCA342F2}"
