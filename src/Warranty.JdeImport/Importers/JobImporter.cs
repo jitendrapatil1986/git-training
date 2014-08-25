@@ -78,7 +78,7 @@ namespace Warranty.JdeImport.Importers
                             LEFT OUTER JOIN F57001 des
                                   ON des.$1$mcu = '      DESIGN' AND $h$pln = des.$1$pev AND SUBSTRING($h$elv,1,1) = CASE WHEN SUBSTRING(des.$1$hse,1,1) = '' THEN SUBSTRING($h$elv,1,1) ELSE SUBSTRING(des.$1$hse,1,1) END
                             INNER JOIN f0101 job
-                                  ON ltrim(f1.$hmcu) = job.aban8
+                                  ON f1.$hmcu = '    ' || job.aban8
                             INNER JOIN F0116 jobadd
                                   ON job.aban8 = jobadd.alan8 AND job.abeftb = jobadd.aleftb
                             LEFT OUTER JOIN f0101 designer
@@ -210,7 +210,6 @@ namespace Warranty.JdeImport.Importers
                                                                             , TARGET.BuilderEmployeeId = LIST.BuilderId
                                                                             , TARGET.SalesConsultantEmployeeId = LIST.SalesId
                                                                             , TARGET.WarrantyExpirationDate = DATEADD(YY, 10, LIST.CloseDate)
-                                                                            , TARGET.TotalPrice = LIST.TotalPrice
                                                                             , TARGET.UpdatedDate = GETDATE()
                                                                             , TARGET.UpdatedBy = @ImportUser;
 
