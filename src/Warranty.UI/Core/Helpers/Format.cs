@@ -171,8 +171,6 @@ namespace Warranty.UI.Core.Helpers
             return MvcHtmlString.Create(htmlString);
         }
 
-
-
         public static string DateAsMonthDayOnly(DateTime date)
         {
             return String.Format("{0:MMM d}", date);
@@ -360,6 +358,16 @@ namespace Warranty.UI.Core.Helpers
             }
 
             return MvcHtmlString.Create("<span class=\"glyphicon glyphicon-earphone text-muted\"></span> " + phoneNumber);
+        }
+
+        public static MvcHtmlString Email(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return MvcHtmlString.Empty;
+            }
+
+            return MvcHtmlString.Create("<span class=\"glyphicon glyphicon-envelope text-muted\"></span> " + email);
         }
     }
 }

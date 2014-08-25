@@ -306,6 +306,8 @@
     <Content Include="Views\Home\_ToDoEscalationApproval.cshtml" />
     <Content Include="Views\Home\_ToDoPaymentRequestApproval.cshtml" />
     <Content Include="Views\Home\_ToDoServiceCallApproval.cshtml" />
+    <Content Include="Views\ServiceCall\CallSummary.cshtml" />
+    <Content Include="Views\ServiceCall\_AllServiceLines.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

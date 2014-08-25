@@ -151,6 +151,9 @@
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsModel.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsQuery.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsQueryHandler.cs" />
+    <Compile Include="Features\ServiceCallSummary\ServiceCallSummaryModel.cs" />
+    <Compile Include="Features\ServiceCallSummary\ServiceCallSummaryQuery.cs" />
+    <Compile Include="Features\ServiceCallSummary\ServiceCallSummaryQueryHandler.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetModel.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetQuery.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetQueryHandler.cs" />
