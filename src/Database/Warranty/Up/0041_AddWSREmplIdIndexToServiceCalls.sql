@@ -1,0 +1,1 @@
+CREATE NONCLUSTERED INDEX IDX_ServiceCalls_WREmplId ON ServiceCalls(WarrantyRepresentativeEmployeeId);
