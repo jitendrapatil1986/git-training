@@ -1,13 +1,8 @@
-using System;
-using System.Data.SqlTypes;
-using NHibernate.SqlTypes;
-using NHibernate.Type;
-
 namespace Warranty.Core.DataAccess.Mappings
 {
     using Entities;
     using NHibernate.Mapping.ByCode;
-
+    /*
     public class JobMapping : AuditableEntityMapping<Job>
     {
         public JobMapping()
@@ -38,4 +33,5 @@ namespace Warranty.Core.DataAccess.Mappings
             Property(x => x.JdeIdentifier);
         }
     }
+     * */
 }

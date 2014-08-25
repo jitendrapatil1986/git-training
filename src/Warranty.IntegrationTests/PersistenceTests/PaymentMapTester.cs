@@ -45,7 +45,7 @@ namespace Warranty.IntegrationTests.PersistenceTests
         public void Payment_Should_Be_Updated_With_Values()
         {
             _payment.Amount = 30;
-            _payment.JobNumber = "NEWNUMBER";
+            _payment.JobNumber = "NEWNMBER";
             Update(_payment);
 
             var persistedPayment = Load<Payment>(_payment.PaymentId);
