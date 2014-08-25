@@ -79,9 +79,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Yay.Enumeration.0.5.1\lib\Yay.Enumerations.dll</HintPath>
     </Reference>
-    <Reference Include="Yay.Enumerations.MVC">
-      <HintPath>..\Warranty.UI\bin\Yay.Enumerations.MVC.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configurations\EnumerationDisplayConverter.cs" />

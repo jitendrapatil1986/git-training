@@ -35,7 +35,7 @@ namespace Warranty.Core.ToDoInfrastructure
 
         private IEnumerable<IToDo> GetServiceCallApprovalToDos()
         {
-            //Not the final query
+            //TODO: Not the final query
             var todo = new ToDoServiceCallApproval
             {
                 Model = new ToDoServiceCallApprovalModel
@@ -53,7 +53,7 @@ namespace Warranty.Core.ToDoInfrastructure
 
         private IEnumerable<IToDo> GetEscalationApprovalToDos()
         {
-            //Not the final query
+            //TODO: Not the final query
             var todo = new ToDoEscalationApproval()
             {
                 Model = new ToDoEscalationApprovalModel
@@ -71,7 +71,7 @@ namespace Warranty.Core.ToDoInfrastructure
 
         private IEnumerable<IToDo> GetPaymentRequestApprovalToDos()
         {
-            //Not the final query
+            //TODO: Not the final query
             var todo = new ToDoPaymentRequestApproval()
             {
                 Model = new ToDoPaymentRequestApprovalModel()
