@@ -1,7 +1,6 @@
 CREATE TABLE JobStages (
-    JobStageId INT IDENTITY(1,1),
     JobId UNIQUEIDENTIFIER,
-    JobStage INT,
+    JobStageId INT,
     CompletionDate DATE,
     JdeIdentifier VARCHAR(25),
 	CreatedDate datetime2(7) NULL,
@@ -9,5 +8,5 @@ CREATE TABLE JobStages (
 	UpdatedDate datetime2(7) NULL,
 	UpdatedBy varchar(255) NULL,
     CONSTRAINT PK_JobStages
-        PRIMARY KEY (JobStageId)
+        PRIMARY KEY (JobId, JobStageId)
 )
