@@ -1,0 +1,1 @@
+CREATE NONCLUSTERED INDEX IDX_Jobs_JobNumber ON Jobs (JobNumber)

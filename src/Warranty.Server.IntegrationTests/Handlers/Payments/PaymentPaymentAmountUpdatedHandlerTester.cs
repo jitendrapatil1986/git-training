@@ -3,10 +3,10 @@ using NUnit.Framework;
 using Should;
 using Warranty.Core.Entities;
 
-namespace Warranty.Server.IntegrationTests.Handlers
+namespace Warranty.Server.IntegrationTests.Handlers.Payments
 {
     [TestFixture]
-    public class PaymentIdUpdatedHandlerTester : HandlerTester<PaymentIdUpdated>
+    public class PaymentPaymentAmountUpdatedHandlerTester : HandlerTester<PaymentPaymentAmountUpdated>
     {
         private Payment _payment;
 
@@ -17,16 +17,16 @@ namespace Warranty.Server.IntegrationTests.Handlers
 
             Send(x =>
             {
-                x.New_JDEId = "456";
-                x.Old_JDEId = _payment.JdeIdentifier;
+                x.JDEId = _payment.JdeIdentifier;
+                x.PaymentAmount = 999.99M;
             });
         }
 
         [Test]
-        public void Payment_Id_Should_Update()
+        public void Payment_Amount_Should_Be_Updated()
         {
             var payment = Get<Payment>(_payment.PaymentId);
-            payment.JdeIdentifier.ShouldEqual(Event.New_JDEId);
+            payment.Amount.ShouldEqual(Event.PaymentAmount);
         }
     }
 }
