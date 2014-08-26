@@ -9,6 +9,6 @@ namespace Warranty.Core.ToDoInfrastructure
         public TModel Model { get; set; }
         public abstract string ViewName { get; set; }
         public DateTime Date { get; set; }
-        public ToDoType Type { get; set; }
+        public abstract ToDoType Type { get; set; }
     }
 }

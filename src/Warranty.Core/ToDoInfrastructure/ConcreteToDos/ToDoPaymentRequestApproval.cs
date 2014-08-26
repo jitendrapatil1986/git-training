@@ -1,4 +1,4 @@
-﻿using Warranty.Core.ToDoInfrastructure.Interfaces;
+﻿using Warranty.Core.Enumerations;
 using Warranty.Core.ToDoInfrastructure.Models;
 
 namespace Warranty.Core.ToDoInfrastructure.ConcreteTodos
@@ -8,6 +8,12 @@ namespace Warranty.Core.ToDoInfrastructure.ConcreteTodos
         public override string ViewName
         {
             get { return "_ToDoPaymentRequestApproval"; }
+            set { }
+        }
+
+        public override ToDoType Type
+        {
+            get { return ToDoType.PaymentRequestApproval; }
             set { }
         }
     }
