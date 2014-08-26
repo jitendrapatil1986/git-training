@@ -1,0 +1,12 @@
+﻿@*TODO: Not the final View*@
+@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
+@model Warranty.Core.ToDoInfrastructure.Models.ToDoEscalationApprovalModel
+<div class="todo @Css.ToDoClass(ToDoType.EscalationApproval)">
+    @Model.EscalationRequestedBy
+    <br />
+    @Model.HomeOwnerAddress
+    <br />
+    @Model.HomeOwnerName
+    <br />
+</div>
