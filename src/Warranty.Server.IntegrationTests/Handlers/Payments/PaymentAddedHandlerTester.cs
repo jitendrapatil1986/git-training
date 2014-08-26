@@ -1,13 +1,12 @@
-﻿using Accounting.Events.Payment;
+﻿using System.Linq;
+using Accounting.Events.Payment;
 using NUnit.Framework;
 using Should;
 using Warranty.Core.Entities;
+using Warranty.Server.Configuration;
 
-namespace Warranty.Server.IntegrationTests.Handlers
+namespace Warranty.Server.IntegrationTests.Handlers.Payments
 {
-    using System.Linq;
-    using Configuration;
-
     [TestFixture]
     public class PaymentAddedHandlerTester : HandlerTester<PaymentAdded>
     {

@@ -1,13 +1,12 @@
 ﻿using Accounting.Events.Payment;
 using NUnit.Framework;
+using Should;
 using Warranty.Core.Entities;
 
-namespace Warranty.Server.IntegrationTests.Handlers
+namespace Warranty.Server.IntegrationTests.Handlers.Payments
 {
-    using System;
-
     [TestFixture]
-    public class PaymentDeletedHandlerTester : HandlerTester<PaymentDeleted>
+    public class PaymentAddressNumberUpdatedHandlerTester : HandlerTester<PaymentAddressNumberUpdated>
     {
         private Payment _payment;
 
@@ -19,13 +18,15 @@ namespace Warranty.Server.IntegrationTests.Handlers
             Send(x =>
             {
                 x.JDEId = _payment.JdeIdentifier;
+                x.AddressNumber = "1231111";
             });
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
-        public void Payment_Should_Be_Deleted()
+        [Test]
+        public void Payment_Vendor_Number_Should_Be_Updated()
         {
             var payment = Get<Payment>(_payment.PaymentId);
+            payment.VendorNumber.ShouldEqual(Event.AddressNumber);
         }
     }
 }

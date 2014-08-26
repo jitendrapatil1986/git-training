@@ -1,12 +1,11 @@
 ﻿using Accounting.Events.Payment;
 using NPoco;
 using NServiceBus;
+using Warranty.Core.Entities;
+using Warranty.Server.Extensions;
 
-namespace Warranty.Server.Handlers
+namespace Warranty.Server.Handlers.Payments
 {
-    using Core.Entities;
-    using Extensions;
-
     public class PaymentDeletedHandler : IHandleMessages<PaymentDeleted>
     {
         private readonly IDatabase _database;
