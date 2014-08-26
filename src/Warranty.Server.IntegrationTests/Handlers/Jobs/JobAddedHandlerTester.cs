@@ -1,4 +1,5 @@
 ﻿using Accounting.Events.Job;
+using NPoco;
 using NUnit.Framework;
 using Should;
 using Warranty.Core.Entities;
@@ -6,28 +7,28 @@ using Warranty.Core.Entities;
 namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 {
     [TestFixture]
-    public class JobPlanUpdatedHandlerTester : HandlerTester<JobPlanUpdated>
+    public class JobAddedHandlerTester : HandlerTester<JobAdded>
     {
-        private Job _job;
-
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
             var community = GetSaved<Community>();
-            _job = GetSaved<Job>(j => j.CommunityId = community.CommunityId);
 
             Send(x =>
             {
-                x.JDEId = _job.JdeIdentifier;
-                x.Plan = "1234";
+                x.Community = community.CommunityNumber;
+                x.Job = "12345678";
             });
         }
 
         [Test]
-        public void Job_Close_Date_Should_Be_Updated()
+        public void Job_Should_Be_Added()
         {
-            var job = Get<Job>(_job.JobId);
-            job.PlanNumber.ShouldEqual(Event.Plan);
+            using (TestDatabase)
+            {
+                var job = TestDatabase.First<Job>("WHERE JobNumber = @0", Event.Job);
+                job.ShouldNotBeNull();
+            }
         }
     }
 }

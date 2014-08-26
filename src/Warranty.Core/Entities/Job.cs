@@ -12,7 +12,7 @@ namespace Warranty.Core.Entities
         public virtual string StateCode { get; set; }
         public virtual string PostalCode { get; set; }
         public virtual string LegalDescription { get; set; }
-        public virtual Guid? CommunityId { get; set; }
+        public virtual Guid CommunityId { get; set; }
         public virtual Guid? CurrentHomeOwnerId { get; set; }
         public virtual string PlanType { get; set; }
         public virtual string PlanTypeDescription { get; set; }

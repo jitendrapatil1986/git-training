@@ -3,6 +3,7 @@ using Accounting.Events.Job;
 using NUnit.Framework;
 using Should;
 using Warranty.Core.Entities;
+using Warranty.Server.Handlers.Jobs;
 
 namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 {
@@ -14,7 +15,8 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
-            _job = GetSaved<Job>();
+            var community = GetSaved<Community>();
+            _job = GetSaved<Job>(j => j.CommunityId = community.CommunityId);
 
             Send(x =>
             {
@@ -26,9 +28,9 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         [Test]
         public void Job_Close_Date_Should_Be_Updated()
         {
-            var payment = Get<Job>(_job.JobId);
-            payment.CloseDate.ShouldEqual(Event.WarrantyDate);
-            payment.WarrantyExpirationDate.ShouldEqual(Event.WarrantyDate.AddYears(10));
+            var job = Get<Job>(_job.JobId);
+            job.CloseDate.ShouldEqual(Event.WarrantyDate);
+            job.WarrantyExpirationDate.ShouldEqual(Event.WarrantyDate.AddYears(10));
         }
     }
 }

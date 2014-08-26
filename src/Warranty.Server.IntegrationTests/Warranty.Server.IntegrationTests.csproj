@@ -96,6 +96,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Handlers\Jobs\JobAddedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobPlanUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentAddedHandlerTester.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="IntegrationSetUpFixture.cs" />
     <Compile Include="CommandHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentIdUpdatedHandlerTester.cs" />
+    <Compile Include="SetUp\CommunityEntityBuilder.cs" />
     <Compile Include="SetUp\JobEntityBuilder.cs" />
     <Compile Include="SetUp\PaymentEntityBuilder.cs" />
     <Compile Include="SetUp\IEntityBuilder.cs" />
