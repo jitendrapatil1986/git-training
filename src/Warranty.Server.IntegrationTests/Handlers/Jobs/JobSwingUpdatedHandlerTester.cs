@@ -25,8 +25,8 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         [Test]
         public void Job_Swing_Should_Be_Updated()
         {
-            var payment = Get<Job>(_job.JobId);
-            payment.Swing.ShouldEqual(Event.Swing);
+            var job = Get<Job>(_job.JobId);
+            job.Swing.ShouldEqual(Event.Swing);
         }
     }
 }
