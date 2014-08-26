@@ -19,9 +19,7 @@ namespace Warranty.Server.Handlers.Jobs
         {
             using (_database)
             {
-                var job = _database.SingleOrDefaultByJdeId<Job>(message.JDEId);
-                if (job == null)
-                    return;
+                var job = _database.SingleByJdeId<Job>(message.JDEId);
 
                 job.CloseDate = message.WarrantyDate;
                 job.WarrantyExpirationDate = message.WarrantyDate.AddYears(10);
