@@ -45,7 +45,6 @@ namespace Warranty.Core.ToDoInfrastructure
                     YearsWithinWarranty = 10
                 },
                 Date = DateTime.Now,
-                Type = ToDoType.ServiceCallApproval
             };
 
             yield return todo;
@@ -62,8 +61,7 @@ namespace Warranty.Core.ToDoInfrastructure
                     HomeOwnerName = "Name",
                     EscalationRequestedBy = "John S"
                 },
-                Date = DateTime.Now,
-                Type = ToDoType.EscalationApproval
+                Date = DateTime.Now
             };
 
             yield return todo;
@@ -80,8 +78,7 @@ namespace Warranty.Core.ToDoInfrastructure
                     HomeOwnerName = "Name",
                     PaymentAmount = (decimal)150.55
                 },
-                Date = DateTime.Now,
-                Type = ToDoType.PaymentRequestApproval
+                Date = DateTime.Now
             };
 
             yield return todo;

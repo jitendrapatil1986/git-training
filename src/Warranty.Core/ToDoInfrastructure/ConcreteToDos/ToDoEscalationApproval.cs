@@ -8,12 +8,10 @@ namespace Warranty.Core.ToDoInfrastructure.ConcreteTodos
         public override string ViewName
         {
             get { return "_ToDoEscalationApproval"; }
-            set { }
         }
 
         public override ToDoType Type {
             get { return ToDoType.EscalationApproval; }
-            set { }
         }
     }
 }

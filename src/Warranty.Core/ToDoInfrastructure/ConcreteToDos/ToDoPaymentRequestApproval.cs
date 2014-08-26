@@ -8,13 +8,11 @@ namespace Warranty.Core.ToDoInfrastructure.ConcreteTodos
         public override string ViewName
         {
             get { return "_ToDoPaymentRequestApproval"; }
-            set { }
         }
 
         public override ToDoType Type
         {
             get { return ToDoType.PaymentRequestApproval; }
-            set { }
         }
     }
 }

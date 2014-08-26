@@ -5,8 +5,8 @@ namespace Warranty.Core.ToDoInfrastructure.Interfaces
 {
     public interface IToDo
     {
-        string ViewName { get; set; }
+        string ViewName { get; }
         DateTime Date { get; set; }
-        ToDoType Type { get; set; }
+        ToDoType Type { get; }
     }
 }
