@@ -1,6 +1,6 @@
 CREATE TABLE JobStages (
     JobId UNIQUEIDENTIFIER,
-    JobStageId INT,
+    JobStage INT,
     CompletionDate DATE,
     JdeIdentifier VARCHAR(25),
 	CreatedDate datetime2(7) NULL,
