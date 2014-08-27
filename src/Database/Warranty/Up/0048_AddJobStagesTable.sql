@@ -8,5 +8,5 @@ CREATE TABLE JobStages (
 	UpdatedDate datetime2(7) NULL,
 	UpdatedBy varchar(255) NULL,
     CONSTRAINT PK_JobStages
-        PRIMARY KEY (JobId, JobStageId)
+        PRIMARY KEY (JobId, JobStage)
 )
