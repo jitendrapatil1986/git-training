@@ -91,6 +91,7 @@
     <Compile Include="Configuration\WarrantyConstants.cs" />
     <Compile Include="EndpointConfig.cs" />
     <Compile Include="Extensions\DatabaseExtensions.cs" />
+    <Compile Include="Handlers\Jobs\JobResetToDirtHandler.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentAddedHandler.cs" />
