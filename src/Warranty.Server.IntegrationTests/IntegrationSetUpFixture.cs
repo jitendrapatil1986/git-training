@@ -9,7 +9,6 @@ namespace Warranty.Server.IntegrationTests
 {
     using Core;
     using NPoco.FluentMappings;
-    using Server.Handlers;
 
     [SetUpFixture]
     public class IntegrationSetUpFixture
