@@ -51,8 +51,9 @@ namespace Warranty.Core.Features.CreateServiceCall
         
         public class ServiceCallLineItemModel
         {
-            public string ProblemCode { get; set; }
+            public string ProblemCodeId { get; set; }
             public string ProblemDescription { get; set; }
+            public int LineItemNumber { get; set; }
         }
         
     }

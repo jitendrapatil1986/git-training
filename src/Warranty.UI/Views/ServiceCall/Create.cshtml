@@ -63,9 +63,15 @@
                                 @Html.TextArea("Description", null, new {id="problemDescription"})
                                 <button class="btn btn-default" data-bind="click: addLineItem">Add Item</button>
 
+                                <br/>
+                                
                                 <div data-bind="foreach: lineItems">
-                                    <span data-bind="text: problemCode, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemCode' }"></span>
-                                    <span data-bind="text: problemDescription, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemDescription' }"></span>
+                                    <input type="hidden" data-bind="value: $index() + 1, attr: { name: 'ServiceCallLineItems[' + $index() + '].LineItemNumber' }" />
+                                    <input type="hidden" data-bind="value: problemCodeId, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemCodeId' }" />
+                                    <input type="hidden" data-bind="value: problemDescription, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemDescription' }" />
+                                    <span data-bind="text: problemCode"></span>
+                                    <span data-bind="text: problemDescription"></span>
+                                    <button data-bind="click: $root.removeLineItem">Remove Line Item</button>
                                 </div>
                                 
                             </div>
@@ -82,28 +88,36 @@
             </div>
         </div>
     </div>
-    
-    <script type="text/javascript">
-        require(['/Scripts/app/main.js'], function () {
-            require(['jquery', 'ko'], function ($, ko) {
-                function CreateServiceCallViewModel() {
-                    var self = this;
-                    self.lineItems = ko.observableArray([]);
-                    self.addLineItem = function () {
-                        self.lineItems.push(new LineItemViewModel({ problemCode: $("#problemCode").find('option:selected').text(), problemDescription: $("#problemDescription").val() }));
-                    };
-                }
+}
 
-                function LineItemViewModel(options) {
-                    var self = this;
-                    self.problemCode = options.problemCode;
-                    self.problemDescription = options.problemDescription;
-                }
+@section scripts{
+        <script type="text/javascript">
+            require(['/Scripts/app/main.js'], function () {
+                require(['jquery', 'ko'], function ($, ko) {
+                    function createServiceCallViewModel() {
+                        var self = this;
+                        self.lineItems = ko.observableArray([]);
+                        self.addLineItem = function () {
+                            self.lineItems.push(new lineItemViewModel({ problemCode: $("#problemCode").find('option:selected').text(), problemCodeId: $("#problemCode").val(), problemDescription: $("#problemDescription").val() }));
+                            $("#problemDescription").val('');
+                        };
 
-                var viewModel = new CreateServiceCallViewModel();
-                ko.applyBindings(viewModel);
+                        self.removeLineItem = function (lineItem) {
+                            self.lineItems.remove(lineItem);
+                        };
+                    }
 
+                    function lineItemViewModel(options) {
+                        var self = this;
+                        self.problemCode = options.problemCode;
+                        self.problemCodeId = options.problemCodeId;
+                        self.problemDescription = options.problemDescription;
+                    }
+
+                    var viewModel = new createServiceCallViewModel();
+                    ko.applyBindings(viewModel);
+
+                });
             });
-        });
     </script>
 }
