@@ -2,6 +2,7 @@
 using NServiceBus;
 using NUnit.Framework;
 using StructureMap;
+using Warranty.Server.Handlers.Payments;
 using Warranty.Server.IntegrationTests.SetUp;
 
 namespace Warranty.Server.IntegrationTests
