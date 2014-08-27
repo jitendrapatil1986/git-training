@@ -1,16 +1,23 @@
 ﻿namespace Warranty.Core.Features.CreateServiceCallCustomerSearch
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
-    using Entities;
 
     public class CreateServiceCallCustomerSearchModel
     {
         public IEnumerable<Customer> Customers { get; set; }
 
-        public class Customer : HomeOwner
+        public class Customer
         {
+            public Guid HomeOwnerId { get; set; }
+            public Guid JobId { get; set; }
+            public int HomeOwnerNumber { get; set; }
+            public string HomeOwnerName { get; set; }
+            public string HomePhone { get; set; }
+            public string OtherPhone { get; set; }
+            public string WorkPhone1 { get; set; }
+            public string WorkPhone2 { get; set; }
+            public string EmailAddress { get; set; }
             public string JobNumber { get; set; }
             public string Address1 { get; set; }
             public string City { get; set; }

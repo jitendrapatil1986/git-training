@@ -37,44 +37,44 @@
                         <div class="service-call-line">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h4><a>@Html.DisplayFor(x => x.CustomerDetail.HomeOwnerName)</a></h4>
-                                    @Format.YearsWithinWarranty(Model.CustomerDetail.YearsWithinWarranty, Model.CustomerDetail.WarrantyStartDate)
+                                    <h4><a>@Html.DisplayFor(x => x.HomeOwnerName)</a></h4>
+                                    @Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)
                                 </div>
                             </div>
                             <br/>
                             <div class="row">
                                 <div class="col-md-12">
-                                    @Html.DisplayFor(x => x.CustomerDetail.Address1)
+                                    @Html.DisplayFor(x => x.Address1)
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    @Format.CityStateZip(Model.CustomerDetail.City, Model.CustomerDetail.StateCode, Model.CustomerDetail.PostalCode)
+                                    @Format.CityStateZip(Model.City, Model.StateCode, Model.PostalCode)
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    Job Number: <a>@Model.CustomerDetail.JobNumber</a>
+                                    Job Number: <a>@Model.JobNumber</a>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    @Format.CellNumber(Model.CustomerDetail.OtherPhone)
+                                    @Format.CellNumber(Model.OtherPhone)
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    @Format.HomeNumber(Model.CustomerDetail.HomePhone)
+                                    @Format.HomeNumber(Model.HomePhone)
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    @Format.PhoneNumber(Model.CustomerDetail.WorkPhone1)
+                                    @Format.PhoneNumber(Model.WorkPhone1)
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <a>@Format.Email(Model.CustomerDetail.EmailAddress)</a>
+                                    <a>@Format.Email(Model.EmailAddress)</a>
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -83,7 +83,7 @@
                 </div>
             </div>
             <div class="panel-footer text-center">
-                @Html.ActionLink("Continue", "Create", "ServiceCall", new {id = Model.CustomerDetail.JobId}, new{ @class="btn btn-default", id="btn_search_call_verify_customer"})
+                @Html.ActionLink("Continue", "Create", "ServiceCall", new {id = Model.JobId}, new{ @class="btn btn-primary", id="btn_search_call_verify_customer"})
             </div>
         </div>
     </div>

@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Warranty.Core.Features.CreateServiceCall
 {
     using System.Web.Mvc;
-    using Entities;
     using Enumerations;
 
     public class CreateServiceCallModel
     {
-        public IEnumerable<SelectListItem> ProblemCodeList { get; set; }
-
         public Guid ServiceCallId { get; set; }
         public int ServiceCallNumber { get; set; }
         public string ServiceCallType { get; set; }
@@ -24,7 +18,6 @@ namespace Warranty.Core.Features.CreateServiceCall
         public DateTime CompletionDate { get; set; }
         public string WorkSummary { get; set; }
         public string HomeOwnerSignature { get; set; }
-
         public Guid HomeOwnerId { get; set; }
         public Guid JobId { get; set; }
         public string JobNumber { get; set; }
@@ -44,17 +37,23 @@ namespace Warranty.Core.Features.CreateServiceCall
         public DateTime WarrantyStartDate { get; set; }
         public int YearsWithinWarranty { get; set; }
 
-        public IEnumerable<ServiceCallComment> ServiceCallHeaderComments { get; set; }
+        public IEnumerable<SelectListItem> ServiceCallTypeList { get; set; } 
+        public IEnumerable<SelectListItem> ProblemCodeList { get; set; }
+        public IEnumerable<ServiceCallHeaderComment> ServiceCallHeaderComments { get; set; }
         public IEnumerable<ServiceCallLineItemModel> ServiceCallLineItems { get; set; }
         //public IEnumerable<ServiceCallLineItemComments> CallLineItemComments { get; set; }
 
-        
         public class ServiceCallLineItemModel
         {
             public string ProblemCodeId { get; set; }
             public string ProblemDescription { get; set; }
             public int LineItemNumber { get; set; }
         }
-        
+
+        public class ServiceCallHeaderComment
+        {
+            public string Comment { get; set; }
+            public int LineItemNumber { get; set; }
+        }
     }
 }

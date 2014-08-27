@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Warranty.Core.Features.CreateServiceCallVerifyCustomer
 {
@@ -27,14 +23,13 @@ namespace Warranty.Core.Features.CreateServiceCallVerifyCustomer
 
             using (_database)
             {
-                return new CreateServiceCallVerifyCustomerModel
-                {
-                    CustomerDetail = GetCustomerById(query.HomeOwnerId)
-                };
+                var model = GetCustomerById(query.HomeOwnerId);
+
+                return model;
             }
         }
 
-        private CreateServiceCallVerifyCustomerModel.Customer GetCustomerById(Guid homeOwnerId)
+        private CreateServiceCallVerifyCustomerModel GetCustomerById(Guid homeOwnerId)
         {
             const string sql = @"SELECT  ho.HomeOwnerId
                                         ,j.JobId
@@ -60,7 +55,7 @@ namespace Warranty.Core.Features.CreateServiceCallVerifyCustomer
                                 WHERE ho.HomeOwnerid = @0
                                 ORDER BY ho.HomeOwnerName, j.JobNumber";
 
-            var result = _database.Single<CreateServiceCallVerifyCustomerModel.Customer>(sql, homeOwnerId);
+            var result = _database.Single<CreateServiceCallVerifyCustomerModel>(sql, homeOwnerId);
 
             return result;
         }

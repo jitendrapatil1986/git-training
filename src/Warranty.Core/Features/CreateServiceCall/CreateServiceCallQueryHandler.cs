@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Warranty.Core.Features.CreateServiceCall
 {
@@ -27,9 +24,22 @@ namespace Warranty.Core.Features.CreateServiceCall
             {
                 var model = GetServiceCallDetails(query.JobId);
                 model.ProblemCodeList = GetProblemCodeList();
+                model.ServiceCallTypeList = GetServiceCallTypeList();
 
                 return model;
             }
+        }
+
+        private IEnumerable<SelectListItem> GetServiceCallTypeList()
+        {
+            const string sql = @"SELECT  ServiceCallTypeId as Value
+                                        ,ServiceCallType as Text
+                                FROM lookups.ServiceCallTypes
+                                ORDER BY ServiceCallType";
+
+            var result = _database.Fetch<SelectListItem>(sql);
+
+            return result;
         }
 
         private IEnumerable<SelectListItem> GetProblemCodeList()
