@@ -1,5 +1,4 @@
-﻿using System;
-using Accounting.Events.Job;
+﻿using Accounting.Events.Job;
 using NUnit.Framework;
 using Should;
 using Warranty.Core.Entities;
@@ -7,7 +6,7 @@ using Warranty.Core.Entities;
 namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 {
     [TestFixture]
-    public class JobWarrantyDateUpdatedHandlerTester : HandlerTester<JobWarrantyDateUpdated>
+    public class JobPlanUpdatedHandlerTester : HandlerTester<JobPlanUpdated>
     {
         private Job _job;
 
@@ -20,7 +19,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             Send(x =>
             {
                 x.JDEId = _job.JdeIdentifier;
-                x.WarrantyDate = DateTime.Parse("01/01/2014");
+                x.Plan = "1234";
             });
         }
 
@@ -28,8 +27,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         public void Job_Close_Date_Should_Be_Updated()
         {
             var job = Get<Job>(_job.JobId);
-            job.CloseDate.ShouldEqual(Event.WarrantyDate);
-            job.WarrantyExpirationDate.ShouldEqual(Event.WarrantyDate.AddYears(10));
+            job.PlanNumber.ShouldEqual(Event.Plan);
         }
     }
 }

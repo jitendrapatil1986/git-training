@@ -43,7 +43,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.4.5.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
@@ -95,6 +95,7 @@
     <Compile Include="DataAccess\ConfigurationFactoryExtensions.cs" />
     <Compile Include="DataAccess\Mappings\CityMapping.cs" />
     <Compile Include="DataAccess\Mappings\AuditableEntityMap.cs" />
+    <Compile Include="DataAccess\Mappings\CommunityMap.cs" />
     <Compile Include="DataAccess\Mappings\CommunityMapping.cs" />
     <Compile Include="DataAccess\Mappings\DivisionMapping.cs" />
     <Compile Include="DataAccess\Mappings\HomeOwnerMapping.cs" />
