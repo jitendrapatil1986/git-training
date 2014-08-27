@@ -50,12 +50,7 @@ namespace Warranty.Server.IntegrationTests
         private void ExecuteSend()
         {
             var handler = ObjectFactory.GetInstance<IHandleMessages<TEvent>>();
-
-            try
-            {
-                handler.Handle(Event);
-            }
-            catch {}
+            handler.Handle(Event);
         }
 
         protected T Get<T>(object id)

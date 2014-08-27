@@ -7,20 +7,19 @@ using Warranty.Core.Entities;
 namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 {
     [TestFixture]
-    public class JobWarrantyDateUpdatedHandlerTester : HandlerTester<JobWarrantyDateUpdated>
+    public class JobClosedHandlerTester : HandlerTester<JobClosed>
     {
         private Job _job;
 
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
-            var community = GetSaved<Community>();
-            _job = GetSaved<Job>(j => j.CommunityId = community.CommunityId);
+            _job = GetSaved<Job>();
 
             Send(x =>
             {
                 x.JDEId = _job.JdeIdentifier;
-                x.WarrantyDate = DateTime.Parse("01/01/2014");
+                x.CloseDate = new DateTime(2015, 1, 1);
             });
         }
 
@@ -28,8 +27,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         public void Job_Close_Date_Should_Be_Updated()
         {
             var job = Get<Job>(_job.JobId);
-            job.CloseDate.ShouldEqual(Event.WarrantyDate);
-            job.WarrantyExpirationDate.ShouldEqual(Event.WarrantyDate.AddYears(10));
+            job.CloseDate.ShouldEqual(Event.CloseDate);
         }
     }
 }
