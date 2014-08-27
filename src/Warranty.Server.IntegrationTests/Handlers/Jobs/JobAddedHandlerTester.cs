@@ -1,5 +1,5 @@
-﻿using Accounting.Events.Job;
-using NPoco;
+﻿using System.Linq;
+using Accounting.Events.Job;
 using NUnit.Framework;
 using Should;
 using Warranty.Core.Entities;
@@ -26,7 +26,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         {
             using (TestDatabase)
             {
-                var job = TestDatabase.First<Job>("WHERE JobNumber = @0", Event.Job);
+                var job = TestDatabase.FetchBy<Job>(sql => sql.Where(j => j.JobNumber == Event.Job)).Single();
                 job.ShouldNotBeNull();
             }
         }

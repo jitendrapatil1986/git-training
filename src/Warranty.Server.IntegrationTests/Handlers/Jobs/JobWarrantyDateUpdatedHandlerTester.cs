@@ -3,7 +3,6 @@ using Accounting.Events.Job;
 using NUnit.Framework;
 using Should;
 using Warranty.Core.Entities;
-using Warranty.Server.Handlers.Jobs;
 
 namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 {
