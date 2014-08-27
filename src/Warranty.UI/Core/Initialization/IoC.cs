@@ -1,4 +1,6 @@
-﻿namespace Warranty.UI.Core.Initialization
+﻿using Warranty.Core.ApprovalInfrastructure.Interfaces;
+
+namespace Warranty.UI.Core.Initialization
 {
     using System;
     using StructureMap;
@@ -25,6 +27,7 @@
                     scan.AddAllTypesOf((typeof(ICommandHandler<>)));
                     scan.AddAllTypesOf((typeof(ICommandHandler<,>)));
                     scan.AddAllTypesOf((typeof(ICommandResultHandler<,>)));
+                    scan.AddAllTypesOf((typeof(IApprovalService<>)));
 
                     scan.WithDefaultConventions();
                     scan.LookForRegistries();

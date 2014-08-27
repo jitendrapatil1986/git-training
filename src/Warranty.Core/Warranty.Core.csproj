@@ -81,6 +81,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApprovalInfrastructure\ApprovalService.cs" />
+    <Compile Include="ApprovalInfrastructure\ApprovalServices\ServiceCallApprovalService.cs" />
+    <Compile Include="ApprovalInfrastructure\Interfaces\IApprovalService.cs" />
     <Compile Include="Configurations\EnumerationDisplayConverter.cs" />
     <Compile Include="Configurations\WarrantyConstants.cs" />
     <Compile Include="Configurations\WarrantyContractResolver.cs" />
@@ -140,6 +143,10 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Features\ServiceCallApproval\ServiceCallDenyHandler.cs" />
+    <Compile Include="Features\ServiceCallApproval\ServiceCallDenyCommand.cs" />
+    <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommand.cs" />
+    <Compile Include="Features\ServiceCallApproval\ServiceCallApproveHandler.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetModel.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQuery.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQueryHandler.cs" />
