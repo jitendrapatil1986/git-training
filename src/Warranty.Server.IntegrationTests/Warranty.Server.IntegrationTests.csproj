@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="Handlers\Jobs\JobAddedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobPlanUpdatedHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\JobSwingUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentAddedHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentAddressNumberUpdatedHandlerTester.cs" />

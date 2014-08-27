@@ -1,0 +1,31 @@
+﻿@using Warranty.Core.ToDoInfrastructure.ConcreteTodos
+@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.ToDoWidget.ToDoWidgetModel
+
+<div class="col-md-12">
+    <div class="todo-header">
+        <span>To Dos</span>
+        @Html.DropDownList("SelectecToDoType", Model.ToDoTypes.Select(x => new SelectListItem { Text = x.DisplayName, Value = @Css.ToDoClass(x) }), "All", new { id = "toDoSelect" })
+    </div>
+    <div class="todo-container">
+        @foreach (var toDo in Model.ToDos)
+        {
+            if (toDo.GetType() == typeof(ToDoEscalationApproval))
+            {
+                var castedModel = (ToDoEscalationApproval)toDo;
+                @Html.Partial(castedModel.ViewName, castedModel.Model)
+            }
+            else if (toDo.GetType() == typeof(ToDoPaymentRequestApproval))
+            {
+                var castedModel = (ToDoPaymentRequestApproval)toDo;
+                @Html.Partial(castedModel.ViewName, castedModel.Model)
+            }
+            else if (toDo.GetType() == typeof(ToDoServiceCallApproval))
+            {
+                var castedModel = (ToDoServiceCallApproval)toDo;
+                @Html.Partial(castedModel.ViewName, castedModel.Model)
+            }
+        }
+    </div>
+</div>
+

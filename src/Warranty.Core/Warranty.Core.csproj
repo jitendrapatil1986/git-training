@@ -122,6 +122,7 @@
     <Compile Include="Entities\ServiceCall.cs" />
     <Compile Include="Entities\ServiceCallComment.cs" />
     <Compile Include="Entities\ServiceCallLineItem.cs" />
+    <Compile Include="Enumerations\ToDoIcon.cs" />
     <Compile Include="Enumerations\Month.cs" />
     <Compile Include="Enumerations\ServiceCallStatus.cs" />
     <Compile Include="DataAccess\GuidComb.cs" />
@@ -139,9 +140,9 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
-    <Compile Include="Features\AmountSpentWidget\AmountSpentsWidgetModel.cs" />
-    <Compile Include="Features\AmountSpentWidget\AmountSpentsWidgetQuery.cs" />
-    <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQueryHandler.cs" />
+    <Compile Include="Features\ToDoWidget\ToDoWidgetModel.cs" />
+    <Compile Include="Features\ToDoWidget\ToDoWidgetQuery.cs" />
+    <Compile Include="Features\ToDoWidget\ToDoWidgetQueryHandler.cs" />
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetModel.cs" />
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQuery.cs" />
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQueryHandler.cs" />
@@ -154,6 +155,9 @@
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetModel.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetQuery.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallsWidgetQueryHandler.cs" />
+    <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetModel.cs" />
+    <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQuery.cs" />
+    <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQueryHandler.cs" />
     <Compile Include="Services\ServiceCallCalculator.cs" />
     <Compile Include="Net4Collection.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">
@@ -174,6 +178,16 @@
     <Compile Include="Security\IUserSession.cs" />
     <Compile Include="Security\WarrantyUser.cs" />
     <Compile Include="StructureMapValidatorFactory.cs" />
+    <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoPaymentRequestApproval.cs" />
+    <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoServiceCallApproval.cs" />
+    <Compile Include="ToDoInfrastructure\Interfaces\IToDo.cs" />
+    <Compile Include="ToDoInfrastructure\IToDoAggregator.cs" />
+    <Compile Include="ToDoInfrastructure\Models\ToDoPaymentRequestApprovalModel.cs" />
+    <Compile Include="ToDoInfrastructure\Models\ToDoServiceCallApprovalModel.cs" />
+    <Compile Include="ToDoInfrastructure\ToDo.cs" />
+    <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoEscalationApproval.cs" />
+    <Compile Include="ToDoInfrastructure\Models\ToDoEscalationApprovalModel.cs" />
+    <Compile Include="ToDoInfrastructure\ToDoAggregator.cs" />
     <Compile Include="WarrantyCoreRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
