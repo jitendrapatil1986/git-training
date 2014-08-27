@@ -97,6 +97,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Handlers\Jobs\JobResetToDirtHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobAddedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobPlanUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandlerTester.cs" />
