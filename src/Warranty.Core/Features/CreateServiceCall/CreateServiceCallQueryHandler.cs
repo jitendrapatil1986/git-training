@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Warranty.Core.Features.CreateServiceCall
 {
+    using System.Web.Mvc;
     using NPoco;
     using Security;
 
@@ -24,14 +25,26 @@ namespace Warranty.Core.Features.CreateServiceCall
         {
             using (_database)
             {
-                return new CreateServiceCallModel
-                    {
-                        ServiceCallDetails = GetServiceCallDetails(query.JobId),
-                    };
+                var model = GetServiceCallDetails(query.JobId);
+                model.ProblemCodeList = GetProblemCodeList();
+
+                return model;
             }
         }
 
-        private CreateServiceCallModel.ServiceCallDetail GetServiceCallDetails(Guid jobId)
+        private IEnumerable<SelectListItem> GetProblemCodeList()
+        {
+            const string sql = @"SELECT  ProblemCodeId as Value
+                                        ,ProblemCode as Text
+                                FROM lookups.ProblemCodes
+                                ORDER BY ProblemCode";
+
+            var result = _database.Fetch<SelectListItem>(sql);
+
+            return result;
+        }
+
+        private CreateServiceCallModel GetServiceCallDetails(Guid jobId)
         {
             const string sql = @"SELECT  ho.HomeOwnerId
                                         ,j.JobId
@@ -49,15 +62,21 @@ namespace Warranty.Core.Features.CreateServiceCall
                                         ,j.StateCode
                                         ,j.PostalCode
                                         ,j.JobNumber
-                                        , j.CloseDate as WarrantyStartDate
-                                        , DATEDIFF(yy, j.CloseDate, GETDATE()) as YearsWithinWarranty
+                                        ,j.CloseDate as WarrantyStartDate
+                                        ,DATEDIFF(yy, j.CloseDate, GETDATE()) as YearsWithinWarranty
+                                        ,ISNULL(sales.EmployeeName, '') as SalesPersonName
+                                        ,ISNULL(builder.EmployeeName, '') as BuilderName
                                 FROM HomeOwners ho
                                 INNER JOIN Jobs j
                                 ON ho.JobId = j.JobId
+                                LEFT JOIN Employees sales
+                                ON j.SalesConsultantEmployeeId = sales.EmployeeId
+                                LEFT JOIN Employees builder
+                                ON j.BuilderEmployeeId = builder.EmployeeId
                                 WHERE j.JobId = @0
                                 ORDER BY ho.HomeOwnerName, j.JobNumber";
 
-            var result = _database.Single<CreateServiceCallModel.ServiceCallDetail>(sql, jobId);
+            var result = _database.Single<CreateServiceCallModel>(sql, jobId);
 
             return result;
         }

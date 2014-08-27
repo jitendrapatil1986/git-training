@@ -21,25 +21,25 @@
                         <div class="row">
                             <div class="col-md-5">
                                 <a>
-                                    <h3 class="panel-title text-capitalize">@Html.DisplayFor(x => x.ServiceCallDetails.HomeOwnerName)</h3>
+                                    <h3 class="panel-title text-capitalize">@Html.DisplayFor(x => x.HomeOwnerName)</h3>
                                 </a>
-                                @Html.DisplayFor(x => x.ServiceCallDetails.Address1)
+                                @Html.DisplayFor(x => x.Address1)
                                 <br/>
-                                @Format.CityStateZip(Model.ServiceCallDetails.City, Model.ServiceCallDetails.StateCode, Model.ServiceCallDetails.PostalCode)
+                                @Format.CityStateZip(Model.City, Model.StateCode, Model.PostalCode)
                             </div>
                             <div class="col-md-4">
-                                @Format.CellNumber(Model.ServiceCallDetails.OtherPhone)
+                                @Format.CellNumber(Model.OtherPhone)
                                 <br/>
-                                @Format.HomeNumber(Model.ServiceCallDetails.HomePhone)
+                                @Format.HomeNumber(Model.HomePhone)
                                 <br/>
-                                <a>@Format.Email(Model.ServiceCallDetails.EmailAddress)</a>
+                                <a>@Format.Email(Model.EmailAddress)</a>
                             </div>
                             <div class="col-md-3">
-                                Job Number: <a>@Html.DisplayFor(x => x.ServiceCallDetails.JobNumber)</a>
+                                Job Number: <a>@Html.DisplayFor(x => x.JobNumber)</a>
                                 <br/>
-                                Builder:
+                                Builder: @Html.DisplayFor(x => x.BuilderName)
                                 <br/>
-                                Employee: 
+                                Sales: @Html.DisplayFor(x => x.SalesPersonName)
                             </div>
                         </div>
                         <div class="row">
@@ -57,15 +57,17 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                            @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-                                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                            
+                                @Html.DropDownList("SelectProblemCode", Model.ProblemCodeList, "Select Problem Code", new {id="problemCode"} )
+                                <br/>
+                                @Html.TextArea("Description", null, new {id="problemDescription"})
+                                <button class="btn btn-default" data-bind="click: addLineItem">Add Item</button>
+
+                                <div data-bind="foreach: lineItems">
+                                    <span data-bind="text: problemCode, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemCode' }"></span>
+                                    <span data-bind="text: problemDescription, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemDescription' }"></span>
                                 </div>
-                            </div>*@
-                                Body
+                                
                             </div>
                         </div>
                     </div>
@@ -80,4 +82,28 @@
             </div>
         </div>
     </div>
+    
+    <script type="text/javascript">
+        require(['/Scripts/app/main.js'], function () {
+            require(['jquery', 'ko'], function ($, ko) {
+                function CreateServiceCallViewModel() {
+                    var self = this;
+                    self.lineItems = ko.observableArray([]);
+                    self.addLineItem = function () {
+                        self.lineItems.push(new LineItemViewModel({ problemCode: $("#problemCode").find('option:selected').text(), problemDescription: $("#problemDescription").val() }));
+                    };
+                }
+
+                function LineItemViewModel(options) {
+                    var self = this;
+                    self.problemCode = options.problemCode;
+                    self.problemDescription = options.problemDescription;
+                }
+
+                var viewModel = new CreateServiceCallViewModel();
+                ko.applyBindings(viewModel);
+
+            });
+        });
+    </script>
 }
