@@ -96,6 +96,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Handlers\Jobs\JobClosedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentAddedHandlerTester.cs" />
