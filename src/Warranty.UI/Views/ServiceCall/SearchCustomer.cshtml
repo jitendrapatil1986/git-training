@@ -1,0 +1,79 @@
+﻿@using Warranty.Core.Extensions
+@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.CreateServiceCallCustomerSearch.CreateServiceCallCustomerSearchModel
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row text-center">
+                    <h4>Create Service Call Request</h4>
+                </div>
+                <div class="row text-center">
+                    <div>
+                        Step 1: Customer Selection
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Type Homeowner, Address, or Job Number">
+                            <div class="input-group-btn">
+                                <button id="btn_add_call_search_customer" type="button" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+                            </div>
+                        </div>
+                        <form class="" role="search">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel-group">
+                            @foreach (var line in Model.Customers)
+                            {
+                                <div class="row">
+                                    <div class="service-call-line">
+                                        <div class="col-md-12">
+                                            @Html.ActionLink(@line.HomeOwnerName, "VerifyCustomer", "ServiceCall", new {id = line.HomeOwnerId}, null)
+                                            @Format.YearsWithinWarranty(line.YearsWithinWarranty, line.WarrantyStartDate)
+                                        </div>
+                                        <br/>
+                                        <div class="col-md-12">
+                                            @line.Address1
+                                        </div>
+                                        <br/>
+                                        <div class="col-md-12">
+                                            @Format.CityStateZip(line.City, line.StateCode, line.PostalCode)
+                                        </div>
+                                        <br/>
+                                        <div class="col-md-12">
+                                            Job Number: @Html.ActionLink(@line.JobNumber, "JobSummary", "Job", null)
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+    </div>
+</div>
+
+<script>
+    require(['jquery'], function ($) {
+        $(function() {
+            $('#btn_add_call_search-customer').click(function() {
+                //alert('clicked');
+            });
+
+        });
+
+    });
+</script>
+

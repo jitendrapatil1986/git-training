@@ -142,6 +142,15 @@
     <Compile Include="Features\ToDoWidget\ToDoWidgetModel.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQuery.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQueryHandler.cs" />
+    <Compile Include="Features\CreateServiceCallCustomerSearch\CreateServiceCallCustomerSearchModel.cs" />
+    <Compile Include="Features\CreateServiceCallCustomerSearch\CreateServiceCallCustomerSearchQuery.cs" />
+    <Compile Include="Features\CreateServiceCallCustomerSearch\CreateServiceCallCustomerSearchQueryHandler.cs" />
+    <Compile Include="Features\CreateServiceCallVerifyCustomer\CreateServiceCallVerifyCustomerModel.cs" />
+    <Compile Include="Features\CreateServiceCallVerifyCustomer\CreateServiceCallVerifyCustomerQuery.cs" />
+    <Compile Include="Features\CreateServiceCallVerifyCustomer\CreateServiceCallVerifyCustomerQueryHandler.cs" />
+    <Compile Include="Features\CreateServiceCall\CreateServiceCallModel.cs" />
+    <Compile Include="Features\CreateServiceCall\CreateServiceCallQuery.cs" />
+    <Compile Include="Features\CreateServiceCall\CreateServiceCallQueryHandler.cs" />
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetModel.cs" />
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQuery.cs" />
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQueryHandler.cs" />

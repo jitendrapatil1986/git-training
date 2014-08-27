@@ -3,6 +3,9 @@
     using System;
     using System.Web.Mvc;
     using Warranty.Core;
+    using Warranty.Core.Features.CreateServiceCall;
+    using Warranty.Core.Features.CreateServiceCallCustomerSearch;
+    using Warranty.Core.Features.CreateServiceCallVerifyCustomer;
     using Warranty.Core.Features.ServiceCallSummary;
 
     public class ServiceCallController : Controller
@@ -39,7 +42,52 @@
                 {
                     ServiceCallId = id
                 });
+
             return View(model);
         }
+
+        public ActionResult SearchCustomer(string searchCriteria)
+        {
+            var model = _mediator.Request(new CreateServiceCallCustomerSearchQuery
+                {
+                    SearchCriteria = searchCriteria
+                });
+
+            return View(model);
+        }
+
+        public ActionResult VerifyCustomer(Guid id)
+        {
+            var model = _mediator.Request(new CreateServiceCallVerifyCustomerQuery
+                {
+                    HomeOwnerId = id
+                });
+
+            return View(model);
+        }
+
+        public ActionResult Create(Guid id)
+        {
+            var model = _mediator.Request(new CreateServiceCallQuery
+                {
+                    JobId = id
+                });
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Create(CreateServiceCallModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return View();
+            }
+        }
+
     }
 }

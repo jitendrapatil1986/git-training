@@ -1,0 +1,83 @@
+﻿@using Warranty.Core.Extensions
+@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.CreateServiceCall.CreateServiceCallModel
+
+@using (Html.BeginForm())
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row text-center">
+                            <h4>Create Service Call Request</h4>
+                        </div>
+                        <div class="row text-center">
+                            <div>
+                                Step 3: Enter & Submit Data
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <a>
+                                    <h3 class="panel-title text-capitalize">@Html.DisplayFor(x => x.ServiceCallDetails.HomeOwnerName)</h3>
+                                </a>
+                                @Html.DisplayFor(x => x.ServiceCallDetails.Address1)
+                                <br/>
+                                @Format.CityStateZip(Model.ServiceCallDetails.City, Model.ServiceCallDetails.StateCode, Model.ServiceCallDetails.PostalCode)
+                            </div>
+                            <div class="col-md-4">
+                                @Format.CellNumber(Model.ServiceCallDetails.OtherPhone)
+                                <br/>
+                                @Format.HomeNumber(Model.ServiceCallDetails.HomePhone)
+                                <br/>
+                                <a>@Format.Email(Model.ServiceCallDetails.EmailAddress)</a>
+                            </div>
+                            <div class="col-md-3">
+                                Job Number: <a>@Html.DisplayFor(x => x.ServiceCallDetails.JobNumber)</a>
+                                <br/>
+                                Builder:
+                                <br/>
+                                Employee: 
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                
+                            </div>
+                            <div class="col-md-4">
+                                
+                            </div>
+                            <div class="col-md-3">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                            @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                                </div>
+                            </div>*@
+                                Body
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer text-center">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="submit" value="Submit" class="btn btn-default" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
