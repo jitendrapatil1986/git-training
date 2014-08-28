@@ -17,7 +17,6 @@ namespace Warranty.Server.IntegrationTests
 
         protected HandlerTester()
         {
-            DbFactory.Setup(new TestWarrantyUserSession());
             TestDatabase = DbFactory.DatabaseFactory.GetDatabase();
 
             var deleter = new DatabaseDeleter(TestDatabase);

@@ -114,6 +114,7 @@
                                                         <div class="row">
                                                             <input type="hidden" data-bind="value: $index() + 1, attr: { name: 'ServiceCallLineItems[' + $index() + '].LineItemNumber' }" />
                                                             <input type="hidden" data-bind="value: problemCodeId, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemCodeId' }" />
+                                                            <input type="hidden" data-bind="value: problemCode, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemCodeDisplayName' }" />
                                                             <input type="hidden" data-bind="value: problemDescription, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemDescription' }" />
                                                             <div class="col-md-3">
                                                                 <span data-bind="text: problemCode"></span>

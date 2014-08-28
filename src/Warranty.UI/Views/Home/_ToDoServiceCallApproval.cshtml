@@ -4,9 +4,9 @@
 <div class="todo @Css.ToDoClass(ToDoType.ServiceCallApproval)">
     
     <div class="todo-widget-action-buttons">
-        <a href="#"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
+        <a href="#" data-service-call-id="@Model.ServiceCallId" class="approve-todo-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
         <br />
-        <a href="#"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
+        <a href="#" data-service-call-id="@Model.ServiceCallId" class="deny-todo-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
     </div>
 
     <div class="todo-widget-data-container">

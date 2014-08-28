@@ -1,4 +1,6 @@
-﻿namespace Warranty.UI.Controllers
+﻿using Warranty.Core.Features.ServiceCallApproval;
+
+namespace Warranty.UI.Controllers
 {
     using System;
     using System.Web.Mvc;
@@ -91,5 +93,24 @@
             }
         }
 
+        public ActionResult Approve(Guid id)
+        {
+            _mediator.Send(new ServiceCallApproveCommand
+            {
+                ServiceCallId = id
+            });
+
+            return Json (new { success = "true"}, JsonRequestBehavior.AllowGet );
+        }
+
+        public ActionResult Deny(Guid id)
+        {
+            _mediator.Send(new ServiceCallDenyCommand
+            {
+                ServiceCallId = id
+            });
+
+            return Json(new { success = "true" }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

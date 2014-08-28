@@ -37,14 +37,14 @@ namespace Warranty.IntegrationTests.PersistenceTests
 
             _serviceCall = new ServiceCall
                 {
-                    CompletionDate = DateTime.Now,
+                    CompletionDate = null,
                     Contact = "Mr. Test",
                     HomeOwnerSignature = "sign",
                     IsEscalated = true,
                     IsSpecialProject = true,
                     JobId = _jobId,
                     ServiceCallId = _serviceCallId,
-                    //ServiceCallStatus = ServiceCallStatus.Open,  //TODO: Need to update.
+                    ServiceCallStatus = ServiceCallStatus.Open,  //TODO: Need to update.
                     ServiceCallNumber = 12345,
                     ServiceCallType = "Warranty",  //TODO: Need to update.
                     WarrantyRepresentativeEmployeeId = _employeeId,

@@ -22,30 +22,6 @@ namespace Warranty.Core.Features.CreateServiceCall
             _userSession = userSession;
         }
 
-
-        public class ServiceCalls
-        {
-            public Guid ServiceCallId { get; set; }
-            public int ServiceCallNumber { get; set; }
-            public string ServiceCallType { get; set; }
-            //public bool IsSpecialProject { get; set; }
-            //public ServiceCallStatus ServiceCallStatus { get; set; }
-            //public bool IsEscalated { get; set; }
-
-            public int ServiceCallStatusId { get; set; }
-
-            public Guid JobId { get; set; }
-            public string Contact { get; set; }
-            public Guid WarrantyRepresentativeEmployeeId { get; set; }
-            public DateTime? CompletionDate { get; set; }
-            public string WorkSummary { get; set; }
-            public string HomeOwnerSignature { get; set; }
-            public DateTime? CreatedDate { get; set; }
-            public string CreatedBy { get; set; }
-            public DateTime? UpdatedDate { get; set; }
-            public string UpdatedBy { get; set; }
-        }
-
         public class ServiceCallLineItems
         {
             public Guid ServiceCallLineItemId { get; set; }
@@ -94,36 +70,19 @@ namespace Warranty.Core.Features.CreateServiceCall
                 var employee = _database.First<Employee>(sql3, user.EmployeeNumber);
                 var newCallId = Guid.NewGuid(); 
 
-                //TODO: Not the final model data and may need to use Entity model instead of newly created class in file.
-                //var serviceCall = new ServiceCall
-                //{
-                //    ServiceCallId = newCallId,
-                //    ServiceCallNumber = newCallNumber,
-                //    //ServiceCallStatusId = 2,  //TODO: Pull correct status code.
-                //    JobId = message.JobId,
-                //    Contact = message.Contact,
-                //    WarrantyRepresentativeEmployeeId = employee.EmployeeId, //For now set call to user logged in.
-                //    ServiceCallType = message.ServiceCallType,
-                //    WorkSummary = "Testing",
-                //    //CompletionDate = null,
-                //    CreatedBy = employee.Name, //Doesn't pull Name bc of Employee entity mapping issue.
-                //    CreatedDate = DateTime.Now,
-                //};
-
-                var serviceCall = new ServiceCalls
-                    {
-                        ServiceCallId = newCallId,
-                        ServiceCallNumber = newCallNumber,
-                        ServiceCallStatusId = 2,  //TODO: Pull correct status code.
-                        JobId = message.JobId,
-                        Contact = message.Contact,
-                        WarrantyRepresentativeEmployeeId = employee.EmployeeId, //For now set call to user logged in.
-                        ServiceCallType = message.ServiceCallType,
-                        WorkSummary = "Testing",
-                        CompletionDate = null,
-                        CreatedBy = employee.Name, //Doesn't pull Name bc of Employee entity mapping issue.
-                        CreatedDate = DateTime.Now,
-                    };
+                var serviceCall = new ServiceCall
+                {
+                    ServiceCallId = newCallId,
+                    ServiceCallNumber = newCallNumber,
+                    ServiceCallStatus = ServiceCallStatus.Open,
+                    JobId = message.JobId,
+                    Contact = message.Contact,
+                    WarrantyRepresentativeEmployeeId = employee.EmployeeId,
+                    ServiceCallType = message.ServiceCallType,
+                    CompletionDate = null,
+                    CreatedBy = employee.Name,
+                    CreatedDate = DateTime.Now,
+                };
 
                 _database.Insert(serviceCall);
 
@@ -131,12 +90,11 @@ namespace Warranty.Core.Features.CreateServiceCall
                 {
                     foreach (var line in message.ServiceCallLineItems)
                     {
-                        //TODO: Not the final model data and may need to use Entity model instead of newly created class in file.
-                        var serviceCallLine = new ServiceCallLineItems
+                        var serviceCallLine = new ServiceCallLineItem
                             {
                                 ServiceCallId = newCallId,
                                 ServiceCallLineItemId = Guid.NewGuid(),
-                                ProblemCode = line.ProblemCodeId,
+                                ProblemCode = line.ProblemCodeDisplayName,
                                 ProblemDescription = line.ProblemDescription,
                                 CreatedBy = employee.Name,
                                 CreatedDate = DateTime.Now,
@@ -146,16 +104,16 @@ namespace Warranty.Core.Features.CreateServiceCall
                     }
                 }
 
+                //TODO: Remove if not saving header notes.
                 if (message.ServiceCallHeaderComments != null)
                 {
                     foreach (var noteLine in message.ServiceCallHeaderComments)
                     {
-                        //TODO: Not the final model data and may need to use Entity model instead of newly created class in file.
-                        var serviceCallComment = new ServiceCallComments
+                        var serviceCallComment = new ServiceCallComment
                             {
                                 ServiceCallId = newCallId,
                                 ServiceCallCommentId = Guid.NewGuid(),
-                                ServiceCallComment = noteLine.Comment,
+                                Comment = noteLine.Comment,
                                 CreatedBy = employee.Name,
                                 CreatedDate = DateTime.Now,
                             };

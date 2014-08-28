@@ -20,7 +20,6 @@ namespace Warranty.IntegrationTests.PersistenceTests
         public void TestFixtureSetup()
         {
             ObjectFactory.Initialize(x => x.AddRegistry<WarrantyCoreRegistry>());
-            DbFactory.Setup(new TestWarrantyUserSession());
 
             var deleter = new DatabaseDeleter(DbFactory.DatabaseFactory.GetDatabase());
             deleter.DeleteAllData(DbFactory.DatabaseFactory.GetDatabase());
