@@ -81,10 +81,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApprovalInfrastructure\ApprovalServices\ServiceCallApprovalService.cs" />
+    <Compile Include="ApprovalInfrastructure\Interfaces\IApprovalService.cs" />
     <Compile Include="Configurations\EnumerationDisplayConverter.cs" />
     <Compile Include="Configurations\WarrantyConstants.cs" />
     <Compile Include="Configurations\WarrantyContractResolver.cs" />
     <Compile Include="DataAccess\AuditEventListener.cs" />
+    <Compile Include="DataAccess\EnumerationMapper.cs" />
     <Compile Include="DataAccess\Conventions\Int32EnumerationType.cs" />
     <Compile Include="DataAccess\Conventions\IStringEnumeration.cs" />
     <Compile Include="DataAccess\Conventions\StringEnumeration.cs" />
@@ -126,6 +129,7 @@
     <Compile Include="Enumerations\Month.cs" />
     <Compile Include="Enumerations\ServiceCallStatus.cs" />
     <Compile Include="DataAccess\GuidComb.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="DataAccess\ConfigurationFactory.cs" />
     <Compile Include="DataAccess\HbmMappingGenerator.cs" />
@@ -140,6 +144,10 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Features\ServiceCallApproval\ServiceCallDenyHandler.cs" />
+    <Compile Include="Features\ServiceCallApproval\ServiceCallDenyCommand.cs" />
+    <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommand.cs" />
+    <Compile Include="Features\ServiceCallApproval\ServiceCallApproveHandler.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetModel.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQuery.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQueryHandler.cs" />

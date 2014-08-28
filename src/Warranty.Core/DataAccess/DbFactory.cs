@@ -12,9 +12,9 @@ namespace Warranty.Core.DataAccess
     {
         public static DatabaseFactory DatabaseFactory { get; set; }
 
-        public static void Setup(IUserSession userSession)
+        public static void Setup(IContainer container, IUserSession userSession)
         {
-            var maps = ObjectFactory.Container.GetAllInstances<IMap>().ToArray();
+            var maps = container.GetAllInstances<IMap>().ToArray();
             var fluentConfig = FluentMappingConfiguration.Configure(maps);
 
             var dbType = new SqlServerDatabaseType();
@@ -26,7 +26,10 @@ namespace Warranty.Core.DataAccess
             {
                 x.UsingDatabase(() => dataBase);
                 x.WithFluentConfig(fluentConfig);
+                x.WithMapper(new EnumerationMapper());
             });
         }
     }
+
+
 }
