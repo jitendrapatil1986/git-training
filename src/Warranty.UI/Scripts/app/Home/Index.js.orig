@@ -1,7 +1,0 @@
-﻿require(['/Scripts/app/main.js'], function () {
-<<<<<<< Updated upstream
-    require(['app/Home/widgetServiceCalls', 'app/Home/widgetAmountSpent', 'app/Home/widgetToDos']);
-=======
-    require(['app/Home/widgetServiceCalls', 'app/Home/widgetAmountSpent', 'app/Home/Search']);
->>>>>>> Stashed changes
-});
