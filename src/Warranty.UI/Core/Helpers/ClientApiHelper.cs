@@ -2,23 +2,23 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Http;
     using System.Web.Mvc;
-    using Yay.Enumerations;
-    using HttpPostAttribute = System.Web.Mvc.HttpPostAttribute;
+    using Api;
+    using Warranty.Core.Extensions;
 
     public class ClientApiHelper
     {
         public IEnumerable<ClientApi> GetUrls()
         {
-            return from type in typeof(ApiController).Assembly.GetTypes()
-                   where type.IsAssignableTo<Controller>() && !type.IsAbstract
+            var urls= from type in typeof(ApiController).Assembly.GetTypes()
+                   where (type.IsAssignableTo<Controller>() || type.IsAssignableTo<ApiController>()) && !type.IsAbstract
                    let controller = type.Name.Replace("Controller", "")
                    let methods = from method in type.GetMethods()
                                  where method.ReturnType.IsAssignableTo<ActionResult>()
                                  where !method.HasAttribute<HttpPostAttribute>()
                                  select new ClientApiUrl { Action = method.Name, Controller = controller }
                    select new ClientApi { Name = controller, Methods = methods };
+            return urls;
         }
 
         public class ClientApi

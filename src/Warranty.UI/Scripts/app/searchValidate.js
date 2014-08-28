@@ -9,8 +9,8 @@
             if (!ep.display) {
                 message += 'Invalid <span class="badge badge-warning">display</span> property for ' + display + ' search configuration.<br />';
             }
-            if (!ep.apiUrl) {
-                message += 'Invalid <span class="badge badge-warning">apiUrl</span> property for ' + display + ' search configuration.<br />';
+            if (!ep.engine) {
+                message += 'Invalid <span class="badge badge-warning">engine</span> property for ' + display + ' search configuration.<br />';
             }
             if (!ep.itemTemplate) {
                 message += 'Invalid <span class="badge badge-warning">itemTemplate</span> property for ' + display + ' search configuration.<br />';
