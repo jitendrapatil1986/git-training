@@ -55,8 +55,9 @@
 
     @{ Html.RenderAction("GetRequireJSUrl", "Home", new { context = ViewContext });}
     <script>
-        define('urls', [], function () {
+        define('urls', [], function() {
             return @{ Html.RenderAction("GetApiUrls", "Home");};
+        }
     </script>
     @RenderSection("modules", required: false)
 </head>
