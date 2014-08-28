@@ -1,11 +1,12 @@
 ﻿using System;
 using NPoco;
+using Warranty.Core.ApprovalInfrastructure.Interfaces;
 using Warranty.Core.Entities;
 using Warranty.Core.Enumerations;
 
 namespace Warranty.Core.ApprovalInfrastructure.ApprovalServices
 {
-    public class ServiceCallApprovalService : ApprovalService<ServiceCall>
+    public class ServiceCallApprovalService : IApprovalService<ServiceCall>
     {
         private readonly IDatabase _database;
 
@@ -14,12 +15,12 @@ namespace Warranty.Core.ApprovalInfrastructure.ApprovalServices
             _database = database;
         }
 
-        public override ServiceCall Approve(Guid id)
+        public ServiceCall Approve(Guid id)
         {
             return UpdateServiceCall(id, ServiceCallStatus.Open);
         }
 
-        public override ServiceCall Deny(Guid id)
+        public ServiceCall Deny(Guid id)
         {
             return UpdateServiceCall(id, ServiceCallStatus.Closed);
         }
