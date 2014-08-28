@@ -1,4 +1,4 @@
-sing Warranty.Core.Entities;
+using Warranty.Core.Entities;
 
 namespace Warranty.Core.DataAccess.Mappings
 {

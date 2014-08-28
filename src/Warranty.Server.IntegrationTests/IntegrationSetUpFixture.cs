@@ -9,6 +9,7 @@ namespace Warranty.Server.IntegrationTests
     using Core;
     using Core.DataAccess;
     using NPoco.FluentMappings;
+    using Server.Handlers.Payments;
     using Tests.Core;
 
     [SetUpFixture]
