@@ -81,7 +81,9 @@
         {
             if (ModelState.IsValid)
             {
-                return RedirectToAction("Index", "Home");
+                var newCallId = _mediator.Send(model);
+
+                return RedirectToAction("CallSummary", "ServiceCall", new {id = newCallId} );
             }
             else
             {

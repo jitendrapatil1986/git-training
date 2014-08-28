@@ -4,6 +4,9 @@
 
 @using (Html.BeginForm())
 {
+    @Html.HiddenFor(model => model.JobId)
+    @Html.HiddenFor(model => model.WarrantyRepresentativeEmployeeId)
+
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -66,34 +69,35 @@
                                             </div>
                                         </div>
                                         <hr/>*@
+                                        
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                @Html.Label("Problem Code")
+                                                @Html.DropDownList("SelectProblemCode", Model.ProblemCodeList, "Select Problem Code", new {id="problemCode", @class="form-control"} )
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-md-11">
+                                                @Html.Label("Description")
+                                                @Html.TextArea("Description", null, new {id="problemDescription", @class="form-control"})
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <button class="btn btn-default" data-bind="click: addLineItem">Add Item</button>
+                                            </div>
+                                        </div>
+                                        <br/>
+
                                         <ul class="nav nav-tabs" role="tablist">
-                                            <li class="active"><a href="#add_service_call_lines" role="tab" data-toggle="tab">Line(s) <span class="label label-default">?</span></a></li>
-                                            <li><a href="#add_service_call_notes" role="tab" data-toggle="tab">Note(s) <span class="label label-default">?</span></a></li>
+                                            <li class="active"><a href="#add_service_call_lines" role="tab" data-toggle="tab">Line(s) <span class="label label-default" data-bind="text: lineItems().length"></span></a></li>
+                                            @*<li><a href="#add_service_call_notes" role="tab" data-toggle="tab">Note(s) <span class="label label-default" data-bind="text: headerCommentLineItems().length"></span></a></li>*@
                                         </ul>
                                     
                                         <div class="tab-content">
                                             <div class="tab-pane active" id="add_service_call_lines">
-                                                <br/>
-                                                <div class="row">
-                                                    <div class="col-md-5">
-                                                        @Html.Label("Problem Code")
-                                                        @Html.DropDownList("SelectProblemCode", Model.ProblemCodeList, "Select Problem Code", new {id="problemCode", @class="form-control"} )
-                                                    </div>
-                                                </div>
-                                                <br/>
-                                                <div class="row">
-                                                    <div class="col-md-11">
-                                                        @Html.Label("Description")
-                                                        @Html.TextArea("Description", null, new {id="problemDescription", @class="form-control"})
-                                                    </div>
-                                                </div>
-                                                <br/>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <button class="btn btn-default" data-bind="click: addLineItem">Add Item</button>
-                                                    </div>
-                                                </div>
-                                                <br/>
                                                 <div class="service-call-line small">
                                                     <div class="row">
                                                         <div class="col-md-3">
@@ -105,7 +109,6 @@
                                                     </div>
                                                     <div class="clearfix"></div>
                                                 </div>
-
                                                 <div data-bind="foreach: lineItems">
                                                     <div class="service-call-line small">
                                                         <div class="row">
@@ -127,7 +130,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="tab-pane" id="add_service_call_notes">
+                                            @*<div class="tab-pane" id="add_service_call_notes">
                                                 <br/>
                                                 <div class="row">
                                                     <div class="col-md-11">
@@ -166,10 +169,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-
+                                            </div>*@
                                         </div>
-                                        
                                     </div>
                                     <div class="col-md-3">
                                         @Html.Label("Related Calls")
@@ -180,7 +181,7 @@
                     </div>
                     <div class="panel-footer text-center">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-12" data-bind="visible: lineItems().length > 0">
                                 <input type="submit" value="Submit" class="btn btn-primary" />
                             </div>
                         </div>

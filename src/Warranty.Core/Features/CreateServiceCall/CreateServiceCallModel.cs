@@ -6,7 +6,7 @@ namespace Warranty.Core.Features.CreateServiceCall
     using System.Web.Mvc;
     using Enumerations;
 
-    public class CreateServiceCallModel
+    public class CreateServiceCallModel : ICommand<Guid>
     {
         public Guid ServiceCallId { get; set; }
         public int ServiceCallNumber { get; set; }

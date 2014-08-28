@@ -98,6 +98,8 @@
     <Compile Include="DataAccess\Mappings\CommunityMap.cs" />
     <Compile Include="DataAccess\Mappings\CommunityMapping.cs" />
     <Compile Include="DataAccess\Mappings\DivisionMapping.cs" />
+    <Compile Include="DataAccess\Mappings\EmployeeMap.cs" />
+    <Compile Include="DataAccess\Mappings\HomeOwnerMap.cs" />
     <Compile Include="DataAccess\Mappings\HomeOwnerMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobMap.cs" />
     <Compile Include="DataAccess\Mappings\JobOptionMapping.cs" />
@@ -105,7 +107,9 @@
     <Compile Include="DataAccess\Mappings\ProjectMapping.cs" />
     <Compile Include="DataAccess\Mappings\EmployeeMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallCommentMapping.cs" />
+    <Compile Include="DataAccess\Mappings\ServiceCallLineItemMap.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallLineItemMapping.cs" />
+    <Compile Include="DataAccess\Mappings\ServiceCallMap.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallMapping.cs" />
     <Compile Include="DataAccess\SqlServerDatabase.cs" />
     <Compile Include="DataAccess\SqlServerDatabaseType.cs" />
@@ -141,6 +145,8 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Features\CreateServiceCall\CreateServiceCallCommand.cs" />
+    <Compile Include="Features\CreateServiceCall\CreateServiceCallCommandHandler.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetModel.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQuery.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQueryHandler.cs" />
