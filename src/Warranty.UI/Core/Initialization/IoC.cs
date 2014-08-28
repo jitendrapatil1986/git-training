@@ -18,10 +18,12 @@ namespace Warranty.UI.Core.Initialization
         private static IContainer Initialize()
         {
             var container = new Container(cfg =>
+            {
+                cfg.AddRegistry<WarrantyCoreRegistry>();
+                cfg.AddRegistry<WarrantyWebsiteRegistry>();
                 cfg.Scan(scan =>
                 {
                     scan.AssemblyContainingType<IMediator>();
-                    scan.AssemblyContainingType<WarrantyWebsiteRegistry>();
 
                     scan.AddAllTypesOf((typeof(IQueryHandler<,>)));
                     scan.AddAllTypesOf((typeof(ICommandHandler<>)));
@@ -30,8 +32,8 @@ namespace Warranty.UI.Core.Initialization
                     scan.AddAllTypesOf((typeof(IApprovalService<>)));
 
                     scan.WithDefaultConventions();
-                    scan.LookForRegistries();
-                }));
+                });
+            });
 
             return container;
         }

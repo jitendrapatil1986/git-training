@@ -1,4 +1,5 @@
-﻿using Warranty.UI.Core.Security;
+﻿using StructureMap;
+using Warranty.UI.Core.Security;
 
 namespace Warranty.UI.Core.Initialization
 {
@@ -32,7 +33,7 @@ namespace Warranty.UI.Core.Initialization
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
 
-            DbFactory.Setup(new WarrantyUserSession());
+            DbFactory.Setup(IoC.Container, new WarrantyUserSession());
             InitializeAutoMapper();
             InitializeNServiceBus();
         }
