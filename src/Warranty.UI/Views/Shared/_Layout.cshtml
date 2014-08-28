@@ -1,4 +1,4 @@
-﻿@using System.Web.Optimization
+@using System.Web.Optimization
 @using Warranty.UI.Core.Enumerations
 @using Warranty.UI.Core.Helpers
 @helper NavItemHelper(NavItem navItem, string url, string data = null)
@@ -57,7 +57,6 @@
     <script>
         define('urls', [], function () {
             return @{ Html.RenderAction("GetApiUrls", "Home");};
-            });
     </script>
     @RenderSection("modules", required: false)
 </head>

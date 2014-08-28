@@ -1,4 +1,4 @@
-﻿using NPoco;
+using NPoco;
 using NServiceBus;
 using NUnit.Framework;
 using StructureMap;
@@ -9,7 +9,6 @@ namespace Warranty.Server.IntegrationTests
     using Core;
     using Core.DataAccess;
     using NPoco.FluentMappings;
-    using Server.Handlers;
     using Tests.Core;
 
     [SetUpFixture]

@@ -1,4 +1,6 @@
-﻿namespace Warranty.UI.Core.Helpers
+﻿using Warranty.Core.Enumerations;
+
+namespace Warranty.UI.Core.Helpers
 {
     using Warranty.Core.Configurations;
 
@@ -34,6 +36,14 @@
                 return "amount-spent-red";
 
             return "";
+        }
+
+        public static string ToDoClass(ToDoType toDoType)
+        {
+            var toDoDisplayNameWithSingleWhiteSpace =
+                System.Text.RegularExpressions.Regex.Replace(toDoType.DisplayName, @"\s+", " ").ToLower().Trim();
+
+            return string.Format("{0}{1}", "todo-", toDoDisplayNameWithSingleWhiteSpace.Replace(" ", "-"));
         }
     }
 }

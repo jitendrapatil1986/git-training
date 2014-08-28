@@ -26,7 +26,10 @@ namespace Warranty.Core.DataAccess
             {
                 x.UsingDatabase(() => dataBase);
                 x.WithFluentConfig(fluentConfig);
+                x.WithMapper(new EnumerationMapper());
             });
         }
     }
+
+
 }

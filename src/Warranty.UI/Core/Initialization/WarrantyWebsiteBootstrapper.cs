@@ -1,4 +1,5 @@
-﻿using Warranty.UI.Core.Security;
+﻿using StructureMap;
+using Warranty.UI.Core.Security;
 
 namespace Warranty.UI.Core.Initialization
 {

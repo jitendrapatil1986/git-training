@@ -1,0 +1,35 @@
+﻿@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
+@model Warranty.Core.ToDoInfrastructure.Models.ToDoServiceCallApprovalModel
+<div class="todo @Css.ToDoClass(ToDoType.ServiceCallApproval)">
+    
+    <div class="todo-widget-action-buttons">
+        <a href="#" data-service-call-id="@Model.ServiceCallId" class="approve-todo-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
+        <br />
+        <a href="#" data-service-call-id="@Model.ServiceCallId" class="deny-todo-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
+    </div>
+
+    <div class="todo-widget-data-container">
+        <div class="service-call-request-icon">
+            W
+        </div>
+
+        <div class="todo-widget-separator-line">
+        </div>
+        
+        <div class="todo-widget-element">
+            <small class="text-muted">
+                @Html.ActionLink(Model.ServiceCallNumber.ToString(), "CallSummary", "ServiceCall", new { id = Model.ServiceCallId }, null)
+            </small>
+            @Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)
+        </div>
+        
+        <div class="todo-widget-element margin-top-10">
+            <span>@Format.TruncateWithElipse(Model.HomeOwnerName, 30)</span>
+            <br />
+            <a href="#" class="has-bottom-tooltip" title="Job # @Model.JobNumber">@Model.AddressLine</a>
+        </div>
+
+    </div>
+
+</div>

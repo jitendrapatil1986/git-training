@@ -97,14 +97,23 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Handlers\PaymentAddedHandlerTester.cs" />
-    <Compile Include="Handlers\PaymentAddressNumberUpdatedHandlerTester.cs" />
-    <Compile Include="Handlers\PaymentDeletedHandlerTester.cs" />
-    <Compile Include="Handlers\PaymentPaymentAmountUpdatedHandlerTester.cs" />
-    <Compile Include="Handlers\PaymentStatusUpdatedHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\JobElevationUpdatedHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\JobClosedHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\JobResetToDirtHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\JobAddedHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\JobPlanUpdatedHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\JobSwingUpdatedHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandlerTester.cs" />
+    <Compile Include="Handlers\Payments\PaymentAddedHandlerTester.cs" />
+    <Compile Include="Handlers\Payments\PaymentAddressNumberUpdatedHandlerTester.cs" />
+    <Compile Include="Handlers\Payments\PaymentDeletedHandlerTester.cs" />
+    <Compile Include="Handlers\Payments\PaymentPaymentAmountUpdatedHandlerTester.cs" />
+    <Compile Include="Handlers\Payments\PaymentStatusUpdatedHandlerTester.cs" />
     <Compile Include="IntegrationSetUpFixture.cs" />
     <Compile Include="CommandHandlerTester.cs" />
-    <Compile Include="Handlers\PaymentIdUpdatedHandlerTester.cs" />
+    <Compile Include="Handlers\Payments\PaymentIdUpdatedHandlerTester.cs" />
+    <Compile Include="SetUp\CommunityEntityBuilder.cs" />
+    <Compile Include="SetUp\JobEntityBuilder.cs" />
     <Compile Include="SetUp\PaymentEntityBuilder.cs" />
     <Compile Include="SetUp\IEntityBuilder.cs" />
     <Compile Include="SetUp\EntityBuilder.cs" />
@@ -130,6 +139,7 @@
       <Name>Warranty.Tests</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

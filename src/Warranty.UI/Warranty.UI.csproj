@@ -256,6 +256,10 @@
     <Content Include="Scripts\app\home\widgetAmountSpent.js" />
     <Content Include="Scripts\app\home\Index.js" />
     <Content Include="Scripts\app\home\widgetServiceCalls.js" />
+    <Content Include="Scripts\app\Home\widgetToDos.js" />
+    <Content Include="Scripts\app\Home\widgetAmountSpent.js" />
+    <Content Include="Scripts\app\Home\Index.js" />
+    <Content Include="Scripts\app\Home\widgetServiceCalls.js" />
     <Content Include="Scripts\app\main.js" />
     <Content Include="Scripts\app\quickSearch.js" />
     <Content Include="Scripts\app\requiredFields.js" />
@@ -322,6 +326,12 @@
     <Content Include="Views\Home\AmountSpentWidget.cshtml" />
     <Content Include="Views\Job\Index.cshtml" />
     <Content Include="css\less\toastr.less" />
+    <Content Include="Views\Home\ToDoWidget.cshtml" />
+    <Content Include="Views\Home\_ToDoEscalationApproval.cshtml" />
+    <Content Include="Views\Home\_ToDoPaymentRequestApproval.cshtml" />
+    <Content Include="Views\Home\_ToDoServiceCallApproval.cshtml" />
+    <Content Include="Views\ServiceCall\CallSummary.cshtml" />
+    <Content Include="Views\ServiceCall\_AllServiceLines.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
