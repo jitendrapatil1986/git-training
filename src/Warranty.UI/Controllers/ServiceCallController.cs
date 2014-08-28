@@ -52,7 +52,7 @@ namespace Warranty.UI.Controllers
                 ServiceCallId = id
             });
 
-            return new JsonResult { Data = "success" };
+            return Json (new { success = "true"}, JsonRequestBehavior.AllowGet );
         }
 
         public ActionResult Deny(Guid id)
@@ -62,7 +62,7 @@ namespace Warranty.UI.Controllers
                 ServiceCallId = id
             });
 
-            return new JsonResult {Data = "success"};
+            return Json(new { success = "true" }, JsonRequestBehavior.AllowGet);
         }
     }
 }
