@@ -7,8 +7,10 @@ using Warranty.Server.IntegrationTests.SetUp;
 namespace Warranty.Server.IntegrationTests
 {
     using Core;
+    using Core.DataAccess;
     using NPoco.FluentMappings;
     using Server.Handlers;
+    using Tests.Core;
 
     [SetUpFixture]
     public class IntegrationSetUpFixture
@@ -33,6 +35,8 @@ namespace Warranty.Server.IntegrationTests
                                                             scan.ConnectImplementationsToTypesClosing(typeof (IEntityBuilder<>));
                                                         });
                                          });
+
+            DbFactory.Setup(ObjectFactory.Container, new TestWarrantyUserSession());
         }
     }
 }

@@ -15,7 +15,7 @@
         public void TestFixtureSetUp()
         {
             ObjectFactory.Initialize(x => x.AddRegistry<WarrantyCoreRegistry>()); 
-            DbFactory.Setup(new TestWarrantyUserSession());
+            DbFactory.Setup(ObjectFactory.Container, new TestWarrantyUserSession());
 
             var deleter = new DatabaseDeleter(DbFactory.DatabaseFactory.GetDatabase());
             deleter.DeleteAllData(DbFactory.DatabaseFactory.GetDatabase());

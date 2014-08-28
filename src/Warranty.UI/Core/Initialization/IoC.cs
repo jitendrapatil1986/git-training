@@ -16,19 +16,21 @@
         private static IContainer Initialize()
         {
             var container = new Container(cfg =>
-                cfg.Scan(scan =>
-                {
-                    scan.AssemblyContainingType<IMediator>();
-                    scan.AssemblyContainingType<WarrantyWebsiteRegistry>();
+                                              {
+                                                cfg.AddRegistry<WarrantyCoreRegistry>();
+                                                cfg.AddRegistry<WarrantyWebsiteRegistry>();
+                                                cfg.Scan(scan =>
+                                                {
+                                                    scan.AssemblyContainingType<IMediator>();
 
-                    scan.AddAllTypesOf((typeof(IQueryHandler<,>)));
-                    scan.AddAllTypesOf((typeof(ICommandHandler<>)));
-                    scan.AddAllTypesOf((typeof(ICommandHandler<,>)));
-                    scan.AddAllTypesOf((typeof(ICommandResultHandler<,>)));
+                                                    scan.AddAllTypesOf((typeof (IQueryHandler<,>)));
+                                                    scan.AddAllTypesOf((typeof (ICommandHandler<>)));
+                                                    scan.AddAllTypesOf((typeof (ICommandHandler<,>)));
+                                                    scan.AddAllTypesOf((typeof (ICommandResultHandler<,>)));
 
-                    scan.WithDefaultConventions();
-                    scan.LookForRegistries();
-                }));
+                                                    scan.WithDefaultConventions();
+                                                });
+                                              });
 
             return container;
         }

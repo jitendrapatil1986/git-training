@@ -7,6 +7,7 @@ namespace Warranty.UI.Core.Initialization
     using System.Web.Optimization;
     using System.Web.Routing;
     using AutoMapper;
+    using Microsoft.Practices.ServiceLocation;
     using ModelBinders;
     using NServiceBus;
     using Warranty.Core.AutoMapper;
@@ -32,7 +33,7 @@ namespace Warranty.UI.Core.Initialization
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
 
-            DbFactory.Setup(new WarrantyUserSession());
+            DbFactory.Setup(IoC.Container, new WarrantyUserSession());
             InitializeAutoMapper();
             InitializeNServiceBus();
         }

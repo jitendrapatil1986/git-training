@@ -17,6 +17,6 @@
             For<ModelValidatorProvider>().Use<FluentValidationModelValidatorProvider>();
             For<HttpRequest>().Use(() => HttpContext.Current.Request);
             For<IUserSession>().Use<WarrantyUserSession>();
-        }
+ }
     }
 }
