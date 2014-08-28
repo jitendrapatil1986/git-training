@@ -94,10 +94,11 @@
     <Compile Include="DataAccess\ConfigurationFactoryExtensions.cs" />
     <Compile Include="DataAccess\Mappings\CityMapping.cs" />
     <Compile Include="DataAccess\Mappings\AuditableEntityMap.cs" />
+    <Compile Include="DataAccess\Mappings\CommunityMap.cs" />
     <Compile Include="DataAccess\Mappings\CommunityMapping.cs" />
     <Compile Include="DataAccess\Mappings\DivisionMapping.cs" />
     <Compile Include="DataAccess\Mappings\HomeOwnerMapping.cs" />
-    <Compile Include="DataAccess\Mappings\JobMapping.cs" />
+    <Compile Include="DataAccess\Mappings\JobMap.cs" />
     <Compile Include="DataAccess\Mappings\JobOptionMapping.cs" />
     <Compile Include="DataAccess\Mappings\PaymentMap.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMapping.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Enumerations\Month.cs" />
     <Compile Include="Enumerations\ServiceCallStatus.cs" />
     <Compile Include="DataAccess\GuidComb.cs" />
+    <Compile Include="Extensions\DatabaseExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="DataAccess\ConfigurationFactory.cs" />
     <Compile Include="DataAccess\HbmMappingGenerator.cs" />
@@ -144,6 +146,11 @@
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetModel.cs" />
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQuery.cs" />
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQueryHandler.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchCallsQuery.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchCallsQueryHandler.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchJobsQuery.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchJobsQueryHandler.cs" />
+    <Compile Include="Features\QuickSearch\SearchResults.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsModel.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsQuery.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsQueryHandler.cs" />
