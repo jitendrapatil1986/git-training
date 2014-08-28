@@ -28,10 +28,8 @@ namespace Warranty.Core.ApprovalInfrastructure.ApprovalServices
         {
             using (_database)
             {
-                var serviceCall = _database.SingleById<ServiceCall>(id);
-                serviceCall.ServiceCallStatus = newStatus;
-                _database.Update(serviceCall);
-                return serviceCall;
+                _database.Execute("Update ServiceCalls Set ServiceCallStatusId = @0 where ServiceCallId = @1", newStatus.Value, id);
+                return _database.Single<ServiceCall>("Select * from ServiceCalls where ServiceCallId = @0", id);
             }
         }
     }

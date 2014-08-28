@@ -23,4 +23,27 @@ namespace Warranty.Core.DataAccess.Mappings
             Property(x => x.HomeOwnerSignature);
         }
     }
+
+    public class ServiceCallMap : AuditableEntityMap<ServiceCall>
+    {
+        public ServiceCallMap()
+        {
+            TableName("ServiceCalls")
+                .PrimaryKey("ServiceCallId", false)
+                .Columns(x =>
+                {
+                    x.Column(y => y.ServiceCallNumber);
+                    x.Column(y => y.ServiceCallType);
+                    x.Column(y => y.ServiceCallStatus);
+                    x.Column(y => y.IsEscalated).WithAlias("Escalated");
+                    x.Column(y => y.IsSpecialProject).WithAlias("SpecialProject");
+                    x.Column(y => y.JobId);
+                    x.Column(y => y.Contact);
+                    x.Column(y => y.WarrantyRepresentativeEmployeeId);
+                    x.Column(y => y.CompletionDate);
+                    x.Column(y => y.WorkSummary);
+                    x.Column(y => y.HomeOwnerSignature);
+                });
+        }
+    }
 }
