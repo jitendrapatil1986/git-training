@@ -7,7 +7,7 @@
 
     public class NavHeaderItem : Enumeration<NavHeaderItem>
     {
-        public static NavHeaderItem CreatePanelCharge = new NavHeaderItem(1, Create.Key, Create.Display.ServiceCall, "ServiceCall", "CreateServiceCall");
+        public static NavHeaderItem CreatePanelCharge = new NavHeaderItem(1, Create.Key, Create.Display.ServiceCall, "ServiceCall", "SearchCustomer");
 
         protected NavHeaderItem(int value, string key, string displayName, string controller, string action, bool hasDivider = false)
             : base(value, displayName)

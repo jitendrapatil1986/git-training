@@ -1,0 +1,194 @@
+﻿@using Warranty.Core.Extensions
+@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.CreateServiceCall.CreateServiceCallModel
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.JobId)
+    @Html.HiddenFor(model => model.WarrantyRepresentativeEmployeeId)
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row text-center">
+                            <h4>Create Service Call Request</h4>
+                        </div>
+                        <div class="row text-center">
+                            <div>
+                                Step 3: Enter & Submit Data
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <a class="text-capitalize">@Html.DisplayFor(x => x.HomeOwnerName)</a>
+                                @Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)
+                                <br/>
+                                @Html.DisplayFor(x => x.Address1)
+                                <br/>
+                                @Format.CityStateZip(Model.City, Model.StateCode, Model.PostalCode)
+                            </div>
+                            <div class="col-md-4">
+                                @Format.CellNumber(Model.OtherPhone)
+                                <br/>
+                                @Format.HomeNumber(Model.HomePhone)
+                                <br/>
+                                <a>@Format.Email(Model.EmailAddress)</a>
+                            </div>
+                            <div class="col-md-3">
+                                Job Number: <a>@Html.DisplayFor(x => x.JobNumber)</a>
+                                <br/>
+                                Builder: @Html.DisplayFor(x => x.BuilderName)
+                                <br/>
+                                Sales: @Html.DisplayFor(x => x.SalesPersonName)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                
+                            </div>
+                            <div class="col-md-4">
+                                
+                            </div>
+                            <div class="col-md-3">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        @*<div class="row">
+                                            <div class="col-md-6">
+                                                @Html.Label("Service Call Type")
+                                                @Html.DropDownListFor(x => x.ServiceCallType, Model.ServiceCallTypeList, "Select Call Type", new {id="callType", @class="form-control"} )
+                                            </div>
+                                        </div>
+                                        <hr/>*@
+                                        
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                @Html.Label("Problem Code")
+                                                @Html.DropDownList("SelectProblemCode", Model.ProblemCodeList, "Select Problem Code", new {id="problemCode", @class="form-control"} )
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-md-11">
+                                                @Html.Label("Description")
+                                                @Html.TextArea("Description", null, new {id="problemDescription", @class="form-control"})
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <button class="btn btn-default" data-bind="click: addLineItem">Add Item</button>
+                                            </div>
+                                        </div>
+                                        <br/>
+
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li class="active"><a href="#add_service_call_lines" role="tab" data-toggle="tab">Line(s) <span class="label label-default" data-bind="text: lineItems().length"></span></a></li>
+                                            @*<li><a href="#add_service_call_notes" role="tab" data-toggle="tab">Note(s) <span class="label label-default" data-bind="text: headerCommentLineItems().length"></span></a></li>*@
+                                        </ul>
+                                    
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="add_service_call_lines">
+                                                <div class="service-call-line small">
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            @Html.Label("Problem Code")
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            @Html.Label("Description")
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                                <div data-bind="foreach: lineItems">
+                                                    <div class="service-call-line small">
+                                                        <div class="row">
+                                                            <input type="hidden" data-bind="value: $index() + 1, attr: { name: 'ServiceCallLineItems[' + $index() + '].LineItemNumber' }" />
+                                                            <input type="hidden" data-bind="value: problemCodeId, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemCodeId' }" />
+                                                            <input type="hidden" data-bind="value: problemCode, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemCodeDisplayName' }" />
+                                                            <input type="hidden" data-bind="value: problemDescription, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemDescription' }" />
+                                                            <div class="col-md-3">
+                                                                <span data-bind="text: problemCode"></span>
+                                                            </div>
+                                                            <div class="col-md-7">
+                                                                <span data-bind="text: problemDescription"></span>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <button data-bind="click: $root.removeLineItem" class="btn btn-default btn-xs">Remove</button>
+                                                            </div>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @*<div class="tab-pane" id="add_service_call_notes">
+                                                <br/>
+                                                <div class="row">
+                                                    <div class="col-md-11">
+                                                        @Html.Label("Comment")
+                                                        @Html.TextArea("Comment", null, new {id="headerComment", @class="form-control"})
+                                                    </div>
+                                                </div>
+                                                <br/>
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <button class="btn btn-default" data-bind="click: addHeaderCommentLineItem">Add Item</button>
+                                                    </div>
+                                                </div>
+                                                <br/>
+                                                <div class="service-call-line small">
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            @Html.Label("Comment")
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+
+                                                <div data-bind="foreach: headerCommentLineItems">
+                                                    <div class="service-call-line small">
+                                                        <div class="row">
+                                                            <input type="hidden" data-bind="value: $index() + 1, attr: { name: 'ServiceCallHeaderComments[' + $index() + '].LineItemNumber' }" />
+                                                            <input type="hidden" data-bind="value: comment, attr: { name: 'ServiceCallHeaderComments[' + $index() + '].Comment' }" />
+                                                            <div class="col-md-9">
+                                                                <span data-bind="text: comment"></span>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <button data-bind="click: $root.removeHeaderCommentLineItem" class="btn btn-default btn-xs">Remove</button>
+                                                            </div>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>*@
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        @Html.Label("Related Calls")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer text-center">
+                        <div class="row">
+                            <div class="col-md-12" data-bind="visible: lineItems().length > 0">
+                                <input type="submit" value="Submit" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

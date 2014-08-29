@@ -31,6 +31,8 @@
             'bootbox': 'lib/bootbox.min',
 
             'highcharts': 'lib/highcharts',
+            
+            'underscore': 'lib/underscore',
         },
 
         shim: {
@@ -51,6 +53,9 @@
             },
             'lib/jquery.validate.min': {
                 deps: ['jquery']
+            },
+            'underscore': {
+                exports: '_'
             },
             'jquery.numeric': {
                 deps: ['jquery']

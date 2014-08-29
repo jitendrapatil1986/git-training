@@ -360,6 +360,26 @@ namespace Warranty.UI.Core.Helpers
             return MvcHtmlString.Create("<span class=\"glyphicon glyphicon-earphone text-muted\"></span> " + phoneNumber);
         }
 
+        public static MvcHtmlString CellNumber(string cellNumber)
+        {
+            if (string.IsNullOrWhiteSpace(cellNumber))
+            {
+                return MvcHtmlString.Empty;
+            }
+
+            return MvcHtmlString.Create("<span class=\"glyphicon glyphicon-phone text-muted\"></span> " + cellNumber);
+        }
+
+        public static MvcHtmlString HomeNumber(string homeNumber)
+        {
+            if (string.IsNullOrWhiteSpace(homeNumber))
+            {
+                return MvcHtmlString.Empty;
+            }
+
+            return MvcHtmlString.Create("<span class=\"glyphicon glyphicon-home text-muted\"></span> " + homeNumber);
+        }
+
         public static MvcHtmlString Email(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
@@ -368,6 +388,11 @@ namespace Warranty.UI.Core.Helpers
             }
 
             return MvcHtmlString.Create("<span class=\"glyphicon glyphicon-envelope text-muted\"></span> " + email);
+        }
+
+        public static string CityStateZip(string city, string state, string zip)
+        {
+            return city + ", " + state + " " + zip;
         }
     }
 }

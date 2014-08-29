@@ -42,7 +42,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , Servicecallnumber as CallNumber
                                     , j.AddressLine as [Address]
                                     , j.JobNumber
-                                    , wc.CreatedDate 
+                                    , wc.CreatedDate
                                     , wc.CompletionDate
                                     , ho.HomeOwnerName
                                     , case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
