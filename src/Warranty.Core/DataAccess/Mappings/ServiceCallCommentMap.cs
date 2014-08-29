@@ -10,7 +10,6 @@
                 .PrimaryKey("ServiceCallCommentId", false)
                 .Columns(x =>
                 {
-                    x.Column(y => y.ServiceCallCommentId);
                     x.Column(y => y.ServiceCallId);
                     x.Column(y => y.Comment).WithName("ServiceCallComment");
                 });

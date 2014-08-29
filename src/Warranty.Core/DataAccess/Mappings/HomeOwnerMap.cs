@@ -16,7 +16,6 @@ namespace Warranty.Core.DataAccess.Mappings
                 .PrimaryKey("HomeOwnerId", false)
                 .Columns(x =>
                     {
-                        x.Column(y => y.HomeOwnerId);
                         x.Column(y => y.HomeOwnerName);
                         x.Column(y => y.HomeOwnerNumber);
                         x.Column(y => y.HomePhone);
