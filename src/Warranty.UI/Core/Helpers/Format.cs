@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Warranty.Core.Enumerations;
 
 namespace Warranty.UI.Core.Helpers
 {
@@ -393,6 +394,14 @@ namespace Warranty.UI.Core.Helpers
         public static string CityStateZip(string city, string state, string zip)
         {
             return city + ", " + state + " " + zip;
+        }
+
+        public static MvcHtmlString ServiceCallStatus(ServiceCallStatus serviceCallStatus)
+        {
+            var status = serviceCallStatus.DisplayName;
+            var htmlString = string.Format("<span class='label label-{0}-service-call'>{1}</span>", status.ToLower(),
+                                           status);
+            return MvcHtmlString.Create(htmlString);
         }
     }
 }

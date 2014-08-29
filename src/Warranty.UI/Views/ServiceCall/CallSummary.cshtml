@@ -1,4 +1,5 @@
-﻿@using Warranty.UI.Core.Helpers
+﻿@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.ServiceCallSummary.ServiceCallSummaryModel
 
 @{
@@ -7,33 +8,34 @@
 
 @helper ServiceCallStatusIconHelper(DateTime? completionDate, DateTime createdDate, int daysOpenedFor, int numberOfDaysRemaining, int percentComplete)
 {
-    if(completionDate == null)
+    if (completionDate == null)
     {
-        <div class="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(createdDate)">
-            <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(numberOfDaysRemaining)<br/>
-                <div class="progress time-remaining-progress hidden-sm hidden-xs">
-                    <div class="progress-bar @Css.ServiceCallProgressBar(numberOfDaysRemaining)" role="progressbar" style="width: @percentComplete%">
-                        <span class="sr-only">@percentComplete% Complete</span>
-                    </div>
-                </div>
+    <div class="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(createdDate)">
+        <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(numberOfDaysRemaining)<br />
+        <div class="progress time-remaining-progress hidden-sm hidden-xs">
+            <div class="progress-bar @Css.ServiceCallProgressBar(numberOfDaysRemaining)" role="progressbar" style="width: @percentComplete%">
+                <span class="sr-only">@percentComplete% Complete</span>
+            </div>
         </div>
+    </div>
     }
     else
     {
-        <div class="col-md-8 pull-right">
-            @Format.DaysOpenedFor(daysOpenedFor, createdDate, completionDate)
-        </div>
+    <div class="col-md-8 pull-right">
+        @Format.DaysOpenedFor(daysOpenedFor, createdDate, completionDate)
+    </div>
     }
 }
 
 
 @helper EscalationHelper(bool escalated, DateTime? escalationDate, string escalationReason)
 {
-    if(escalated)
+    if (escalated)
     {
-        <div class='label label-danger'><span class='glyphicon glyphicon-fire'></span> 
-            @Format.DateMonthDayYear(escalationDate) - @escalationReason
-        </div>
+    <div class='label label-danger'>
+        <span class='glyphicon glyphicon-fire'></span>
+        @Format.DateMonthDayYear(escalationDate) - @escalationReason
+    </div>
     }
 }
 
@@ -53,7 +55,7 @@
                         @Model.ServiceCallSummary.Address
                     </div>
                     <div class="col-md-3">
-                        @Format.PhoneNumber(Model.ServiceCallSummary.PhoneNumber)<br/>
+                        @Format.PhoneNumber(Model.ServiceCallSummary.PhoneNumber)<br />
                         <a>@Format.Email(Model.ServiceCallSummary.EmailAddress)</a>
                     </div>
                     <div class="col-md-2">
@@ -62,10 +64,10 @@
                     <div class="col-md-1 text-center">
                         <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></button>
                         <ul class="dropdown-menu" role="menu">
-                            <li>@Html.ActionLink("Reassign", "Reassign", "ServiceCall", new {id = Model.ServiceCallSummary.ServiceCallId}, null)</li>
-                            <li>@Html.ActionLink("Request Payment", "RequestPayment", "ServiceCall", new {id = Model.ServiceCallSummary.ServiceCallId}, null)</li>
-                            <li>@Html.ActionLink("Add Note", "AddNote", "ServiceCall", new {id = Model.ServiceCallSummary.ServiceCallId}, null)</li>
-                            <li>@Html.ActionLink("Close", "Close", "ServiceCall", new {id = Model.ServiceCallSummary.ServiceCallId}, null)</li>
+                            <li>@Html.ActionLink("Reassign", "Reassign", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId }, null)</li>
+                            <li>@Html.ActionLink("Request Payment", "RequestPayment", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId }, null)</li>
+                            <li>@Html.ActionLink("Add Note", "AddNote", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId }, null)</li>
+                            <li>@Html.ActionLink("Close", "Close", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId }, null)</li>
                         </ul>
                     </div>
                 </div>
@@ -79,8 +81,17 @@
                     <div class="col-md-3">
                         Payments:
                     </div>
-                    <div class="col-md-3">
-                       
+                    <div class="col-md-3" id="approveCommands">
+                        @if (Model.ServiceCallSummary.ServiceCallStatus == ServiceCallStatus.Requested)
+                        {
+                            <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
+                            
+                            <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
+                        }
+                        else
+                        {
+                            <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus) </span>
+                        }
                     </div>
                 </div>
             </div>
@@ -104,13 +115,10 @@
                         Sales:
                     </div>
                     <div class="col-md-3">
-                        
                     </div>
                     <div class="col-md-3">
-                        
                     </div>
                     <div class="col-md-3">
-                        
                     </div>
                 </div>
                 <div class="row">
@@ -120,10 +128,10 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="panel-footer">
                 <div class="panel list-group-item no-left-right-padding">
-                    <a data-toggle="collapse" href="#collapseCallNotes" class="text-capitalize accordion-toggle collapsed">Notes</a> 
+                    <a data-toggle="collapse" href="#collapseCallNotes" class="text-capitalize accordion-toggle collapsed">Notes</a>
                     <div class="label label-default">
                         @Model.ServicCallComments.Count()
                     </div>
@@ -143,7 +151,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-md-12 text-center">
                     <h4>
@@ -166,13 +174,13 @@
 
         <div class="tab-content">
             <div class="tab-pane active" id="all_service_lines">
-                @Html.Partial("_AllServiceLines", Model.ServiceCallLines, new ViewDataDictionary{{"lineStatus", "All"}})
+                @Html.Partial("_AllServiceLines", Model.ServiceCallLines, new ViewDataDictionary { { "lineStatus", "All" } })
             </div>
             <div class="tab-pane" id="open_service_lines">
-                @Html.Partial("_AllServiceLines", Model.ServiceCallLines.Where(x => !x.Completed), new ViewDataDictionary{{"lineStatus", "Open"}})
+                @Html.Partial("_AllServiceLines", Model.ServiceCallLines.Where(x => !x.Completed), new ViewDataDictionary { { "lineStatus", "Open" } })
             </div>
             <div class="tab-pane" id="closed_service_lines">
-                @Html.Partial("_AllServiceLines", Model.ServiceCallLines.Where(x => x.Completed), new ViewDataDictionary{{"lineStatus", "Closed"}})
+                @Html.Partial("_AllServiceLines", Model.ServiceCallLines.Where(x => x.Completed), new ViewDataDictionary { { "lineStatus", "Closed" } })
             </div>
         </div>
     </div>

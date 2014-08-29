@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Warranty.Core.Enumerations;
 
 namespace Warranty.Core.Features.ServiceCallSummary
 {
@@ -40,6 +38,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public string ProjectName { get; set; }
             public string CommunityName { get; set; }
             public decimal? PaymentAmount { get; set; }
+            public ServiceCallStatus ServiceCallStatus { get; set; }
             public int PercentComplete
             {
                 get { return ServiceCallCalculator.CalculatePercentComplete(NumberOfDaysRemaining); }
