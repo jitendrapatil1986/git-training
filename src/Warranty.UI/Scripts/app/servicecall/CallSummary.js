@@ -16,7 +16,6 @@ define(['urls','jquery'], function(urls, $) {
         });
             
         function executeApproval(url, serviceCallId, button, status) {
-            debugger;
             $.ajax({
                 type: "POST",
                 url: url,
