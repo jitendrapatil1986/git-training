@@ -46,7 +46,7 @@ namespace Warranty.Core.Features.CreateServiceCall
                 {
                     ServiceCallId = newCallId,
                     ServiceCallNumber = newCallNumber,
-                    ServiceCallStatus = ServiceCallStatus.Open,
+                    ServiceCallStatus = ServiceCallStatus.Requested, //TODO: Set to requested for now until we figure out who is WSR and WC. ServiceCallStatus.Open,
                     JobId = message.JobId,
                     Contact = message.Contact,
                     WarrantyRepresentativeEmployeeId = employee.EmployeeId,
