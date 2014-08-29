@@ -16,13 +16,13 @@ namespace Warranty.IntegrationTests.PersistenceTests
         private Guid _serviceCallId;
         private Guid _jobId;
         private Guid _communityId;
+        private Guid _employeeId;
+        private Community _community;
+        private Employee _employee;
+        private HomeOwner _homeOwner;
         private Guid _builderId;
         private Guid _homeownerId;
         private Guid _salespersonId;
-        private Guid _employeeId;
-        private HomeOwner _homeOwner;
-        private Community _community;
-        private Employee _employee;
 
         [SetUp]
         public void TestFixtureSetup()
@@ -77,15 +77,6 @@ namespace Warranty.IntegrationTests.PersistenceTests
                     EmployeeId = _employeeId,
                     Name = "Employee A"
                 };
-
-            //_homeOwner = new HomeOwner
-            //    {
-            //        HomeOwnerId = _homeownerId,
-            //        JobId = _jobId,
-            //        HomeOwnerName = "John Doey"
-            //    };
-
-            //Insert(_homeOwner);
 
             Insert(_employee);
             Insert(_community);

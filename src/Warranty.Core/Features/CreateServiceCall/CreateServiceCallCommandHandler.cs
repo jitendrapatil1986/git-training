@@ -22,34 +22,6 @@ namespace Warranty.Core.Features.CreateServiceCall
             _userSession = userSession;
         }
 
-        public class ServiceCallLineItems
-        {
-            public Guid ServiceCallLineItemId { get; set; }
-            public Guid ServiceCallId { get; set; }
-            public int LineNumber { get; set; }
-            public string ProblemCode { get; set; }
-            public string ProblemDescription { get; set; }
-            public string CauseDescription { get; set; }
-            public string ClassificationNote { get; set; }
-            public string LineItemRoot { get; set; }
-            public bool Completed { get; set; }
-            public DateTime? CreatedDate { get; set; }
-            public string CreatedBy { get; set; }
-            public DateTime? UpdatedDate { get; set; }
-            public string UpdatedBy { get; set; }
-        }
-
-        public class ServiceCallComments
-        {
-            public Guid ServiceCallCommentId { get; set; }
-            public Guid ServiceCallId { get; set; }
-            public string ServiceCallComment { get; set; }
-            public DateTime? CreatedDate { get; set; }
-            public string CreatedBy { get; set; }
-            public DateTime? UpdatedDate { get; set; }
-            public string UpdatedBy { get; set; }
-        }
-
         public Guid Handle(CreateServiceCallModel message)
         {
             var user = _userSession.GetCurrentUser();

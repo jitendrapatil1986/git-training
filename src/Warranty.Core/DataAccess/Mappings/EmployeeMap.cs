@@ -13,7 +13,6 @@
                     x.Column(y => y.EmployeeId);
                     x.Column(y => y.Number).WithName("EmployeeNumber");
                     x.Column(y => y.Name).WithName("EmployeeName");
-                    x.Column(y => y.Fax).Ignore();
                 });
         }
     }
