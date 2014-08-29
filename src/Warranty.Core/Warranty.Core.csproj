@@ -165,7 +165,6 @@
     <Compile Include="Features\QuickSearch\QuickSearchCallsQueryHandler.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchJobsQuery.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchJobsQueryHandler.cs" />
-    <Compile Include="Features\QuickSearch\SearchResults.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsModel.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsQuery.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsQueryHandler.cs" />
