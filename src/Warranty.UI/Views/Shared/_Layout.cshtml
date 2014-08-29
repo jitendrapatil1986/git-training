@@ -1,4 +1,5 @@
-﻿@using Warranty.UI.Core.Enumerations
+@using System.Web.Optimization
+@using Warranty.UI.Core.Enumerations
 @using Warranty.UI.Core.Helpers
 @helper NavItemHelper(NavItem navItem, string url, string data = null)
 {
@@ -39,9 +40,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="~/css/less/bootstrap.less" rel="stylesheet" media="screen" />
-    <link href="~/css/less/bootstrap-custom.less" rel="stylesheet" media="screen" />
-    <link href="~/css/site.less" rel="stylesheet" media="screen" />
+    @Styles.Render("~/css/less/main")
+    @Styles.Render("~/css/extra")
     
     @Html.Partial("_RequireJsConfig")
     @RenderSection("header", required: false)
@@ -54,15 +54,11 @@
     <![endif]-->
 
     @{ Html.RenderAction("GetRequireJSUrl", "Home", new { context = ViewContext });}
-        <script>
-            define('urls', [], function () {
-                return {
-                    approveServiceCallUrl: '@Url.Action("Approve","ServiceCall")',
-                    denyServiceCallUrl: '@Url.Action("Deny","ServiceCall")'
-                };
-            });
+    <script>
+        define('urls', [], function() {
+            return @{ Html.RenderAction("GetApiUrls", "Home");};
+        });
     </script>
-
     @RenderSection("modules", required: false)
 </head>
     <body>
@@ -94,17 +90,17 @@
                     <li class="divider divider-vertical hidden-xs"></li>
                     @NavItemSectionHelper(NavHeaderItem.Create.Key)
                 </ul>
-                @*<div class="nav navbar-nav navbar-right">
-                    <div class="input-group pull-right" style="margin: 3px 0 0 0;">
-                        <span class="add-on"></span>
-                        <input id="searchBar" type="text" class="span3 main-search" autocomplete="off" placeholder="">
-                        <div class="btn-group">
-                            <button class="btn dropdown-toggle" data-toggle="dropdown">Type <span class="caret"></span></button>
-                            <ul class="dropdown-menu pull-right">
+                <div class="nav nav-extra col-md-3 pull-right">
+                    <div class="input-group">
+                        <span class="input-group-addon"></span>
+                        <input id="searchBar" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder="">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Type <span class="caret"></span></button>
+                            <ul class="dropdown-menu dropdown-menu-right">
                             </ul>
                         </div>
                     </div>
-                </div>*@
+                </div>
             </div>
         </div>
 

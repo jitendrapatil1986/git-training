@@ -16,7 +16,10 @@
 
         public static string CommaSeparateWrapWithSingleQuote<T>(this IEnumerable<T> enumerable)
         {
-            return enumerable.Select(x => "'" + x + "'").CommaSeparate();
+            if (enumerable.Any())
+                return enumerable.Select(x => "'" + x + "'").CommaSeparate();
+
+            return "''";
         }
 
         public static string Truncate(this string stringToTruncate, int maxLength)

@@ -2,7 +2,6 @@
 using NPoco;
 using NServiceBus;
 using StructureMap;
-using Warranty.Core.DataAccess;
 using Warranty.Server.IntegrationTests.SetUp;
 
 namespace Warranty.Server.IntegrationTests
@@ -17,8 +16,7 @@ namespace Warranty.Server.IntegrationTests
 
         protected HandlerTester()
         {
-            DbFactory.Setup(new TestWarrantyUserSession());
-            TestDatabase = DbFactory.DatabaseFactory.GetDatabase();
+            TestDatabase = ObjectFactory.GetInstance<IDatabase>();
 
             var deleter = new DatabaseDeleter(TestDatabase);
             deleter.DeleteAllData(TestDatabase);
