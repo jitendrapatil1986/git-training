@@ -22,9 +22,9 @@ namespace Warranty.Core.Features.QuickSearch
             var markets = currentuser.Markets;
 
             const string sqlTemplate = @"select 
-                                            REPLACE((SELECT li.problemcode + ','
+                                            REPLACE((SELECT li.problemcode + ', '
                                                     FROM ServiceCallLineItems li WHERE li.ServiceCallId = c.servicecallid
-                                                    FOR xml path('')) + ';', ',;', '') AS ProblemCodes,
+                                                    FOR xml path('')) + ';', ', ;', '') AS ProblemCodes,
                                             c.ServiceCallId as Id, JobNumber, AddressLine, HomeOwnerName, HomePhone
                                             from ServiceCalls c
                                             inner join Jobs j
