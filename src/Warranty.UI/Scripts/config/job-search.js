@@ -14,7 +14,7 @@
         engine: new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: urls.QuickSearch.SearchJobs + '?query=%QUERY'
+            remote: urls.QuickSearch.Jobs + '?query=%QUERY'
         })
     };
 });

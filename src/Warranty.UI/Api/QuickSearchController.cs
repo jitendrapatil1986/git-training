@@ -15,14 +15,14 @@
         }
         
         [HttpGet]
-        public IEnumerable<QuickSearchJobModel> SearchJobs(string query, bool includeInactive = false)
+        public IEnumerable<QuickSearchJobModel> Jobs(string query, bool includeInactive = false)
         {
             var results = _mediator.Request(new QuickSearchJobsQuery{Query = query, IncludeInactive = includeInactive});
             return results;
         }
 
         [HttpGet]
-        public IEnumerable<QuickSearchCallModel> SearchCalls(string query, bool includeInactive = false)
+        public IEnumerable<QuickSearchCallModel> Calls(string query, bool includeInactive = false)
         {
             var results = _mediator.Request(new QuickSearchCallsQuery {Query = query, IncludeInactive = includeInactive});
             return results;
