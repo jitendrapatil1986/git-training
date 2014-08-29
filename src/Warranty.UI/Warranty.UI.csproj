@@ -223,7 +223,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="App_Readme\Handlebarsjs_README.md" />
+    <Content Include="App_Readme\Handlebarsjs_LICENSE" />
     <None Include="css\less\bootstrap-custom.less" />
+    <Content Include="App_Readme\Elmah.txt" />
     <Content Include="css\bootstrap-theme.css" />
     <Content Include="css\bootstrap-theme.min.css" />
     <Content Include="css\bootstrap.css" />
@@ -246,6 +249,14 @@
     <Content Include="img\saturation.png" />
     <Content Include="Scripts\app\ajaxEvents.js" />
     <Content Include="Scripts\app\search.js" />
+    <Content Include="Scripts\lib\handlebars.amd.js" />
+    <Content Include="Scripts\lib\handlebars.amd.min.js" />
+    <Content Include="Scripts\lib\handlebars.js" />
+    <Content Include="Scripts\lib\handlebars.min.js" />
+    <Content Include="Scripts\lib\handlebars.runtime.amd.js" />
+    <Content Include="Scripts\lib\handlebars.runtime.amd.min.js" />
+    <Content Include="Scripts\lib\handlebars.runtime.js" />
+    <Content Include="Scripts\lib\handlebars.runtime.min.js" />
     <Content Include="Scripts\lib\bloodhound.js" />
     <Content Include="Scripts\lib\bloodhound.min.js" />
     <Content Include="Scripts\config\call-search.js" />

@@ -20,6 +20,7 @@ require.config({
         'highcharts': 'lib/highcharts',
         'typeahead': 'lib/typeahead.bundle.min',
         'bloodhound': 'lib/bloodhound.min',
+        'handlebars': 'lib/handlebars.min',
     },
     shim: {
         'jquery.validate': ['jquery'],

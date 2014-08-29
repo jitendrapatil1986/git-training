@@ -1,13 +1,11 @@
 ﻿namespace Warranty.Core.Features.QuickSearch
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using Entities;
     using NPoco;
     using Security;
+    using Extensions;
 
-    public class QuickSearchJobsQueryHandler : IQueryHandler<QuickSearchJobsQuery, SearchResults>
+    public class QuickSearchJobsQueryHandler : IQueryHandler<QuickSearchJobsQuery, IEnumerable<QuickSearchJobModel>>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
@@ -18,27 +16,23 @@
             _userSession = userSession;
         }
 
-        public SearchResults Handle(QuickSearchJobsQuery request)
+        public IEnumerable<QuickSearchJobModel> Handle(QuickSearchJobsQuery request)
         {
             var currentuser = _userSession.GetCurrentUser();
             var markets = currentuser.Markets;
 
-            //var sql = "SELECT * FROM Jobs WHERE JobNumber + AddressLine + HomeownerName LIKE '%@0%'";
+            const string sqlTemplate = @"SELECT TOP 10 j.JobId as Id, JobNumber, AddressLine, HomeOwnerName, HomePhone
+                                FROM Jobs j
+                                INNER JOIN HomeOwners h
+                                ON j.CurrentHomeOwnerId = h.HomeOwnerId and HomeOwnerNumber=1
+                                INNER JOIN Communities c
+                                ON j.CommunityId = c.CommunityId
+                                INNER JOIN Cities m
+                                ON c.CityId = m.CityId
+                                WHERE CityCode IN ({0}) AND JobNumber+AddressLine+HomeOwnerName LIKE '%'+@0+'%'";
 
-            //var jobs = _database.Fetch<Job>(sql, request.Query).Take(10);
-                
-            //var jobs = _repository.Query<Job>()
-            //    .Where(job => (currentuser.Markets.Contains(job.CostCenter.Market.JdeCode)) && job.Homeowner.Name.Like(request.Query) || job.JobNumber.Like(request.Query) || job.Lot.Address.StreetAddress1.Like(request.Query))
-            //    .Select(job => new { job.Id, job.JobNumber, job.Lot.Address, Buyer = job.Homeowner.Name, IsInactive = (job.WarrantyDate.HasValue && job.CloseStatus == JobCloseStatus.InFourMonthWindow) })
-            //    .Where(x => request.IncludeInactive || !x.IsInactive);
-
-            //var result = jobs.Take(10)
-            //                 .ToArray()
-            //                 .Select(job => new { job.Id, job.JobNumber, Address = job.Address.ToString(), job.Buyer });
-
-//            var data = result.ToDictionary(x => Convert.ToString(x.Id), x => x.ToJson());
-  //          return new SearchResults(data) { TotalMatches = jobs.Count(), Query = request.Query };
-            return new SearchResults(new Dictionary<string, string>()){TotalMatches = 5, Query = request.Query};
+            var result = _database.Fetch<QuickSearchJobModel>(string.Format(sqlTemplate, markets.CommaSeparateWrapWithSingleQuote()), request.Query);
+            return result;
         }
     }
 }

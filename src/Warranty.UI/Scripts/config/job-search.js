@@ -1,8 +1,10 @@
 ﻿define(['urls', 'text!templates/job-search-item.html'], function (urls, template) {
     return {
         display: 'Jobs',
+        key: 'HomeOwnerName',
         itemTemplate: template,
-        targetUrl: urls.Job.Index,
+        targetUrl: urls.Job.Index + '/Index',
+        emptyText: 'No jobs found.',
         addOns: [{
             id: 'completedAndTerminated2',
             title: 'Include Closed Jobs',
@@ -12,6 +14,7 @@
         engine: new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: urls.Api.SearchJobs + '?query=%QUERY'})
+            remote: urls.QuickSearch.SearchJobs + '?query=%QUERY'
+        })
     };
 });

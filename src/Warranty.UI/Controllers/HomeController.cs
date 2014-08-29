@@ -34,7 +34,7 @@ namespace Warranty.UI.Controllers
                 select new JProperty(url.Name,
                     new JObject(
                         from method in url.Methods
-                        select new JProperty(method.Action, Url.Action(method.Controller, method.Action)
+                        select new JProperty(method.Action, method.IsWebApi ? Url.HttpRouteUrl("DefaultApi", new { controller = method.Controller, action = method.Action }) :  Url.Action(method.Action, method.Controller)
                     ))));
         }
 

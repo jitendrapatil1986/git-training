@@ -1,10 +1,11 @@
 namespace Warranty.Core.Features.QuickSearch
 {
     using System.Collections.Generic;
+    using Extensions;
     using NPoco;
     using Security;
 
-    public class QuickSearchCallsQueryHandler : IQueryHandler<QuickSearchCallsQuery, SearchResults>
+    public class QuickSearchCallsQueryHandler : IQueryHandler<QuickSearchCallsQuery, IEnumerable<QuickSearchCallModel>>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
@@ -15,22 +16,29 @@ namespace Warranty.Core.Features.QuickSearch
             _userSession = userSession;
         }
 
-        public SearchResults Handle(QuickSearchCallsQuery request)
+        public IEnumerable<QuickSearchCallModel> Handle(QuickSearchCallsQuery request)
         {
             var currentuser = _userSession.GetCurrentUser();
+            var markets = currentuser.Markets;
 
-            //var jobs = _repository.Query<Job>()
-            //    .Where(job => (currentuser.Markets.Contains(job.CostCenter.Market.JdeCode)) && job.Homeowner.Name.Like(request.Query) || job.JobNumber.Like(request.Query) || job.Lot.Address.StreetAddress1.Like(request.Query))
-            //    .Select(job => new { job.Id, job.JobNumber, job.Lot.Address, Buyer = job.Homeowner.Name, IsInactive = (job.WarrantyDate.HasValue && job.CloseStatus == JobCloseStatus.InFourMonthWindow) })
-            //    .Where(x => request.IncludeInactive || !x.IsInactive);
+            const string sqlTemplate = @"select 
+                                            REPLACE((SELECT li.problemcode + ','
+                                                    FROM ServiceCallLineItems li WHERE li.ServiceCallId = c.servicecallid
+                                                    FOR xml path('')) + ';', ',;', '') AS ProblemCodes,
+                                            c.ServiceCallId as Id, JobNumber, AddressLine, HomeOwnerName, HomePhone
+                                            from ServiceCalls c
+                                            inner join Jobs j
+                                            on c.JobId = j.JobId
+                                            inner join HomeOwners ho
+                                            on j.CurrentHomeOwnerId = ho.HomeOwnerId
+                                            inner join Communities co
+                                            on j.CommunityId = co.CommunityId
+                                            inner join Cities cy
+                                            on co.CityId = cy.CityId
+                                            WHERE CityCode IN ({0}) AND JobNumber+AddressLine+HomeOwnerName LIKE '%'+@0+'%'";
 
-            //var result = jobs.Take(10)
-            //                 .ToArray()
-            //                 .Select(job => new { job.Id, job.JobNumber, Address = job.Address.ToString(), job.Buyer });
-
-//            var data = result.ToDictionary(x => Convert.ToString(x.Id), x => x.ToJson());
-            //          return new SearchResults(data) { TotalMatches = jobs.Count(), Query = request.Query };
-            return new SearchResults(new Dictionary<string, string>());
+            var result = _database.Fetch<QuickSearchCallModel>(string.Format(sqlTemplate, markets.CommaSeparateWrapWithSingleQuote()), request.Query);
+            return result;
         }
     }
 }

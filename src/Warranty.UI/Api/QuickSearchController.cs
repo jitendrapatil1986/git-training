@@ -1,6 +1,7 @@
-﻿namespace Warranty.UI.Api.Version1
+﻿namespace Warranty.UI.Api
 {
-    using System.Web.Mvc;
+    using System.Collections.Generic;
+    using System.Web.Http;
     using Warranty.Core;
     using Warranty.Core.Features.QuickSearch;
 
@@ -14,34 +15,16 @@
         }
         
         [HttpGet]
-        public object SearchJobs(QuickSearchJobsQuery model)
+        public IEnumerable<QuickSearchJobModel> SearchJobs(string query, bool includeInactive = false)
         {
-            var results = new[]
-                              {
-                                  new
-                                      {
-                                          id = 1,
-                                          value = "Homeowner Name",
-                                          jobnumber = "12345678",
-                                          homeowner = "Homeowner",
-                                          address = "1234 N. Main"
-                                      },
-                                  new
-                                      {
-                                          id = 2,
-                                          value = "Homeowner Name 1",
-                                          jobnumber = "87654321",
-                                          homeowner = "Homeowner 1",
-                                          address = "4321 N. Main"
-                                      }
-                              };
+            var results = _mediator.Request(new QuickSearchJobsQuery{Query = query, IncludeInactive = includeInactive});
             return results;
         }
 
         [HttpGet]
-        public object SearchCalls(QuickSearchCallsQuery model)
+        public IEnumerable<QuickSearchCallModel> SearchCalls(string query, bool includeInactive = false)
         {
-            var results = _mediator.Request(model);
+            var results = _mediator.Request(new QuickSearchCallsQuery {Query = query, IncludeInactive = includeInactive});
             return results;
         }
     }

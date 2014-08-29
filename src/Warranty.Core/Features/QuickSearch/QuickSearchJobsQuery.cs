@@ -1,6 +1,8 @@
 ﻿namespace Warranty.Core.Features.QuickSearch
 {
-    public class QuickSearchJobsQuery : IQuery<SearchResults>
+    using System.Collections.Generic;
+
+    public class QuickSearchJobsQuery : IQuery<IEnumerable<QuickSearchJobModel>>
     {
         public string Query { get; set; }
         public bool IncludeInactive { get; set; }
