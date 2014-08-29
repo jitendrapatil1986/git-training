@@ -66,6 +66,7 @@ namespace Warranty.Core.Features.CreateServiceCall
                             {
                                 ServiceCallId = newCallId,
                                 ServiceCallLineItemId = Guid.NewGuid(),
+                                LineNumber = line.LineItemNumber,
                                 ProblemCode = line.ProblemCodeDisplayName,
                                 ProblemDescription = line.ProblemDescription,
                                 CreatedBy = employee.Name,
