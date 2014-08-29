@@ -2,7 +2,8 @@
     require(['jquery', 'ko'], function ($, ko) {
         function createServiceCallViewModel() {
             var self = this;
-            self.lineItems = ko.observableArray([]).extend(require: );
+            self.lineItems = ko.observableArray([]);
+
             self.addLineItem = function () {
                 self.lineItems.push(new lineItemViewModel({ problemCode: $("#problemCode").find('option:selected').text(), problemCodeId: $("#problemCode").val(), problemDescription: $("#problemDescription").val() }));
                 $("#problemDescription").val('');
