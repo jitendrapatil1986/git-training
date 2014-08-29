@@ -13,11 +13,14 @@ namespace Warranty.Server.IntegrationTests.SetUp
 
         public override Job GetSaved(Action<Job> action)
         {
+            var community = GetSaved<Community>();
+
             var entity = new Job{
                 JdeIdentifier = "12345678",
                 JobNumber = "12345678",
                 CreatedBy = "test",
                 CreatedDate = DateTime.UtcNow,
+                CommunityId = community.CommunityId,
             };
 
             return Saved(entity, action);

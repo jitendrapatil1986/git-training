@@ -4,9 +4,13 @@ using Warranty.Core.Features.ToDoWidget;
 namespace Warranty.UI.Controllers
 {
     using System.IO;
+    using System.Linq;
     using System.Web;
     using System.Web.Mvc;
+    using Core.Helpers;
+    using Newtonsoft.Json.Linq;
     using Warranty.Core;
+    using Warranty.Core.Extensions;
     using Warranty.Core.Features.MyServiceTeamWidget;
     using Warranty.Core.Features.ServiceCallsWidget;
 
@@ -17,6 +21,27 @@ namespace Warranty.UI.Controllers
         public HomeController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        private readonly ClientApiHelper _clientApiHelper = new ClientApiHelper();
+        private static object _clientApiUrls;
+
+        private object BuildClientApiUrls()
+        {
+            return new JObject(
+                new JProperty("Root", Url.Content("~")),
+                from url in _clientApiHelper.GetUrls()
+                select new JProperty(url.Name,
+                    new JObject(
+                        from method in url.Methods
+                        select new JProperty(method.Action, method.IsWebApi ? Url.HttpRouteUrl("DefaultApi", new { controller = method.Controller, action = method.Action }) :  Url.Action(method.Action, method.Controller)
+                    ))));
+        }
+
+        public string GetApiUrls()
+        {
+            _clientApiUrls = _clientApiUrls ?? BuildClientApiUrls();
+            return _clientApiUrls.ToJson();
         }
 
         public ActionResult Index()

@@ -8,6 +8,7 @@ namespace Warranty.UI.Core.Initialization
     using System.Web.Optimization;
     using System.Web.Routing;
     using AutoMapper;
+    using Microsoft.Practices.ServiceLocation;
     using ModelBinders;
     using NServiceBus;
     using Warranty.Core.AutoMapper;

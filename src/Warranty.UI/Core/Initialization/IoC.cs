@@ -1,4 +1,4 @@
-﻿using Warranty.Core.ApprovalInfrastructure.Interfaces;
+using Warranty.Core.ApprovalInfrastructure.Interfaces;
 
 namespace Warranty.UI.Core.Initialization
 {

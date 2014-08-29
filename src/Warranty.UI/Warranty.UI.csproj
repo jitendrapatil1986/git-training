@@ -181,17 +181,23 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Api\ApiController.cs" />
+    <Compile Include="Api\QuickSearchController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\ServiceCallController.cs" />
     <Compile Include="Controllers\ServiceRepController.cs" />
     <Compile Include="Core\Enumerations\NavHeaderItem.cs" />
     <Compile Include="Core\Enumerations\NavItem.cs" />
+    <Compile Include="Core\Enumerations\ToastType.cs" />
     <Compile Include="Core\Filters\NavActionFilterAttribute.cs" />
     <Compile Include="Core\Helpers\ClientApiHelper.cs" />
     <Compile Include="Core\Helpers\Css.cs" />
     <Compile Include="Core\Helpers\EnvironmentHelper.cs" />
     <Compile Include="Core\Helpers\Format.cs" />
+    <Compile Include="Core\Helpers\HtmlHelperExtensions.cs" />
+    <Compile Include="Core\Helpers\SystemConstants.cs" />
     <Compile Include="Core\Helpers\VersionHelper.cs" />
     <Compile Include="Core\Initialization\BundleConfig.cs" />
     <Compile Include="Core\Initialization\Bundling\LessBundleTransform.cs" />
@@ -217,7 +223,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="App_Readme\Handlebarsjs_README.md" />
+    <Content Include="App_Readme\Handlebarsjs_LICENSE" />
     <None Include="css\less\bootstrap-custom.less" />
+    <Content Include="App_Readme\Elmah.txt" />
     <Content Include="css\bootstrap-theme.css" />
     <Content Include="css\bootstrap-theme.min.css" />
     <Content Include="css\bootstrap.css" />
@@ -239,18 +248,38 @@
     <Content Include="img\loader.gif" />
     <Content Include="img\saturation.png" />
     <Content Include="Scripts\app\ajaxEvents.js" />
+    <Content Include="Scripts\app\search.js" />
+    <Content Include="Scripts\lib\handlebars.amd.js" />
+    <Content Include="Scripts\lib\handlebars.amd.min.js" />
+    <Content Include="Scripts\lib\handlebars.js" />
+    <Content Include="Scripts\lib\handlebars.min.js" />
+    <Content Include="Scripts\lib\handlebars.runtime.amd.js" />
+    <Content Include="Scripts\lib\handlebars.runtime.amd.min.js" />
+    <Content Include="Scripts\lib\handlebars.runtime.js" />
+    <Content Include="Scripts\lib\handlebars.runtime.min.js" />
+    <Content Include="Scripts\lib\bloodhound.js" />
+    <Content Include="Scripts\lib\bloodhound.min.js" />
+    <Content Include="Scripts\config\call-search.js" />
+    <Content Include="Scripts\config\job-search.js" />
     <Content Include="Scripts\app\customBindings.js" />
     <Content Include="Scripts\app\dates.js" />
     <Content Include="Scripts\app\formInputs.js" />
+    <Content Include="Scripts\app\home\widgetAmountSpent.js" />
+    <Content Include="Scripts\app\home\Index.js" />
+    <Content Include="Scripts\app\home\widgetServiceCalls.js" />
     <Content Include="Scripts\app\Home\widgetToDos.js" />
     <Content Include="Scripts\app\Home\widgetAmountSpent.js" />
     <Content Include="Scripts\app\Home\Index.js" />
     <Content Include="Scripts\app\Home\widgetServiceCalls.js" />
     <Content Include="Scripts\app\main.js" />
+    <Content Include="Scripts\app\quickSearch.js" />
     <Content Include="Scripts\app\requiredFields.js" />
     <Content Include="Scripts\app\searchValidate.js" />
-    <Content Include="Scripts\app\Shared\confirmMessage.js" />
-    <Content Include="Scripts\app\Shared\Default.js" />
+    <Content Include="Scripts\app\shared\confirmMessage.js" />
+    <Content Include="Scripts\app\shared\Default.js" />
+    <Content Include="Scripts\lib\text.js" />
+    <Content Include="Scripts\templates\call-search-item.html" />
+    <Content Include="Scripts\templates\job-search-item.html" />
     <Content Include="Scripts\app\toastrNotify.js" />
     <Content Include="Scripts\app\tooltips.js" />
     <Content Include="Scripts\lib\bootstrap-collapse.js" />
@@ -276,6 +305,10 @@
     <Content Include="Scripts\lib\respond.min.js" />
     <Content Include="Scripts\lib\toastr.min.js" />
     <Content Include="Scripts\lib\underscore.js" />
+    <Content Include="Scripts\lib\typeahead.bundle.js" />
+    <Content Include="Scripts\lib\typeahead.bundle.min.js" />
+    <Content Include="Scripts\lib\typeahead.jquery.js" />
+    <Content Include="Scripts\lib\typeahead.jquery.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -302,6 +335,8 @@
     <Content Include="Views\ServiceRep\_ClosedServiceCalls.cshtml" />
     <Content Include="Views\Home\_EscalatedCalls.cshtml" />
     <Content Include="Views\Home\AmountSpentWidget.cshtml" />
+    <Content Include="Views\Job\Index.cshtml" />
+    <Content Include="css\less\toastr.less" />
     <Content Include="Views\Home\ToDoWidget.cshtml" />
     <Content Include="Views\Home\_ToDoEscalationApproval.cshtml" />
     <Content Include="Views\Home\_ToDoPaymentRequestApproval.cshtml" />

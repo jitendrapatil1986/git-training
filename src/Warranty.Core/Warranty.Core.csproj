@@ -96,10 +96,12 @@
     <Compile Include="DataAccess\DbFactory.cs" />
     <Compile Include="DataAccess\Mappings\AuditableEntityMapping.cs" />
     <Compile Include="DataAccess\ConfigurationFactoryExtensions.cs" />
+    <Compile Include="DataAccess\Mappings\CityMap.cs" />
     <Compile Include="DataAccess\Mappings\CityMapping.cs" />
     <Compile Include="DataAccess\Mappings\AuditableEntityMap.cs" />
     <Compile Include="DataAccess\Mappings\CommunityMap.cs" />
     <Compile Include="DataAccess\Mappings\CommunityMapping.cs" />
+    <Compile Include="DataAccess\Mappings\DivisionMap.cs" />
     <Compile Include="DataAccess\Mappings\DivisionMapping.cs" />
     <Compile Include="DataAccess\Mappings\EmployeeMap.cs" />
     <Compile Include="DataAccess\Mappings\HomeOwnerMap.cs" />
@@ -107,6 +109,7 @@
     <Compile Include="DataAccess\Mappings\JobMap.cs" />
     <Compile Include="DataAccess\Mappings\JobOptionMapping.cs" />
     <Compile Include="DataAccess\Mappings\PaymentMap.cs" />
+    <Compile Include="DataAccess\Mappings\ProjectMap.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMapping.cs" />
     <Compile Include="DataAccess\Mappings\EmployeeMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallCommentMap.cs" />
@@ -135,6 +138,7 @@
     <Compile Include="Enumerations\Month.cs" />
     <Compile Include="Enumerations\ServiceCallStatus.cs" />
     <Compile Include="DataAccess\GuidComb.cs" />
+    <Compile Include="Extensions\DatabaseExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="DataAccess\ConfigurationFactory.cs" />
@@ -152,6 +156,8 @@
     <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommand.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommandHandler.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchCallModel.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchJobModel.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallDenyHandler.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallDenyCommand.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommand.cs" />
@@ -171,6 +177,10 @@
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetModel.cs" />
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQuery.cs" />
     <Compile Include="Features\MyServiceTeamWidget\MyServiceTeamWidgetQueryHandler.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchCallsQuery.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchCallsQueryHandler.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchJobsQuery.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchJobsQueryHandler.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsModel.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsQuery.cs" />
     <Compile Include="Features\RepServiceCalls\ServiceRepServiceCallsQueryHandler.cs" />
@@ -216,13 +226,7 @@
     <Compile Include="WarrantyCoreRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\jquery-1.9.0.intellisense.js" />
-    <Content Include="Scripts\jquery-1.9.0.js" />
-    <Content Include="Scripts\jquery-1.9.0.min.js" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Scripts\jquery-1.9.0.min.map" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
