@@ -19,6 +19,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public Guid ServiceCallId { get; set; }
             public string AssignedTo { get; set; }
             public string AssignedToEmployeeNumber { get; set; }
+            public Guid JobId { get; set; }
             public string JobNumber { get; set; }
             public string Address { get; set; }
             public string CallNumber { get; set; }

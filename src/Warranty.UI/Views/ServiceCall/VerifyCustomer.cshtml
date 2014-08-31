@@ -54,7 +54,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    Job Number: <a>@Model.JobNumber</a>
+                                    Job Number: @Html.ActionLink(Model.JobNumber, "JobSummary", "Job", new {id = Model.JobId}, null)
                                 </div>
                             </div>
                             <div class="row">

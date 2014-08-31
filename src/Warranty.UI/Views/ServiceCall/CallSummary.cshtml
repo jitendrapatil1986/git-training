@@ -38,6 +38,7 @@
 }
 
 <div class="container">
+    
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading text-capitalize">
@@ -74,7 +75,7 @@
                         Employee: @Model.ServiceCallSummary.AssignedTo
                     </div>
                     <div class="col-md-3">
-                        Job Number: <a>@Model.ServiceCallSummary.JobNumber</a>
+                        Job Number: @Html.ActionLink(Model.ServiceCallSummary.JobNumber, "JobSummary", "Job", new {id = Model.ServiceCallSummary.JobId}, null)
                     </div>
                     <div class="col-md-3">
                         Payments:
