@@ -48,6 +48,7 @@ namespace Warranty.UI.Controllers
             return View(model);
         }
 
+
         public ActionResult SearchCustomer(string searchCriteria)
         {
             var model = _mediator.Request(new CreateServiceCallCustomerSearchQuery
