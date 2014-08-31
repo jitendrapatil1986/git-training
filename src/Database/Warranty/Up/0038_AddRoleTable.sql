@@ -1,6 +1,6 @@
 CREATE TABLE CommunityAssignments(    
     EmployeeAssignmentId UNIQUEIDENTIFIER NOT NULL 
-        CONSTRAINT DF_Payments_PaymentId DEFAULT NEWSEQUENTIALID(),
+        CONSTRAINT DF_CommunityAssignments_EmployeeAssignmentId DEFAULT NEWSEQUENTIALID(),
     CommunityId UNIQUEIDENTIFIER NOT NULL,
     EmployeeId UNIQUEIDENTIFIER NOT NULL,
     CONSTRAINT PK_CommunityWarrantyServiceRepresentatives
