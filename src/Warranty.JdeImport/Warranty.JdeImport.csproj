@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Importers\JobImporter.cs" />
+    <Compile Include="Importers\JobStageImport.cs" />
     <Compile Include="Importers\PaymentImporter.cs" />
     <Compile Include="Importers\ImporterTemplate.cs" />
     <Compile Include="Program.cs" />
