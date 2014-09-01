@@ -10,14 +10,14 @@ define(['urls','jquery'], function(urls, $) {
             }
         });
             
-        $(".approve-todo-button").click(function (e) {
+        $(".approve-button").click(function (e) {
             e.preventDefault();
             var serviceCallId = $(this).data("service-call-id");
             var url = urls.approveServiceCallUrl;
             executeApproval(url, serviceCallId, $(this));
         });
             
-        $(".deny-todo-button").click(function (e) {
+        $(".deny-button").click(function (e) {
             e.preventDefault();
             var serviceCallId = $(this).data("service-call-id");
             var url = urls.denyServiceCallUrl;
