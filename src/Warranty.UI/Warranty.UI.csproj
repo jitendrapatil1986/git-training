@@ -350,6 +350,7 @@
     <Content Include="Views\ServiceCall\SearchCustomer.cshtml" />
     <Content Include="Views\ServiceCall\VerifyCustomer.cshtml" />
     <Content Include="Views\ServiceCall\Create.cshtml" />
+    <Content Include="Views\Job\JobSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

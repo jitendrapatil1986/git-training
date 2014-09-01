@@ -41,6 +41,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     wc.ServiceCallId as ServiceCallId
                                     , Servicecallnumber as CallNumber
                                     , j.AddressLine as [Address]
+                                    , j.JobId
                                     , j.JobNumber
                                     , wc.CreatedDate
                                     , wc.CompletionDate

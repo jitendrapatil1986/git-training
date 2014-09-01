@@ -27,7 +27,7 @@
         <div class="todo-widget-element margin-top-10">
             <span>@Format.TruncateWithElipse(Model.HomeOwnerName, 30)</span>
             <br />
-            <a href="#" class="has-bottom-tooltip" title="Job # @Model.JobNumber">@Model.AddressLine</a>
+            @Html.ActionLink(Model.AddressLine, "JobSummary", "Job", new {id = Model.JobId}, new{@class="has-bottom-tooltip", title="Job # " + @Model.JobNumber})
         </div>
 
     </div>
