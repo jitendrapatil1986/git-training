@@ -192,8 +192,8 @@ namespace Warranty.JdeImport.Importers
                                             MERGE INTO Jobs AS TARGET
                                             USING stage AS LIST
                                             ON TARGET.JdeIdentifier = LIST.JdeIdentifier
-                                            WHEN NOT MATCHED BY TARGET THEN INSERT (JobNumber, CloseDate, AddressLine, City, StateCode, PostalCode, LegalDescription, CommunityId, PlanType, PlanTypeDescription, PlanName, PlanNumber, Elevation, Swing, BuilderEmployeeId, SalesConsultantEmployeeId, WarrantyExpirationDate, CreatedDate, CreatedBy, JdeIdentifier)
-                                                                                VALUES (JobNumber, CloseDate, AddressLine, City, StateCode, PostalCode, LegalDescription, CommunityId, PlanType, PlanTypeDescription, PlanName, PlanNumber, Elevation, Swing, BuilderId, SalesId, CloseDate, SYSDATETIME(), @ImportUser, JdeIdentifier)
+                                            WHEN NOT MATCHED BY TARGET THEN INSERT (JobNumber, CloseDate, AddressLine, City, StateCode, PostalCode, LegalDescription, CommunityId, PlanType, PlanTypeDescription, PlanName, PlanNumber, Elevation, Swing, Stage, BuilderEmployeeId, SalesConsultantEmployeeId, WarrantyExpirationDate, CreatedDate, CreatedBy, JdeIdentifier)
+                                                                                VALUES (JobNumber, CloseDate, AddressLine, City, StateCode, PostalCode, LegalDescription, CommunityId, PlanType, PlanTypeDescription, PlanName, PlanNumber, Elevation, Swing, Stage, BuilderId, SalesId, CloseDate, SYSDATETIME(), @ImportUser, JdeIdentifier)
                                             WHEN MATCHED THEN UPDATE SET    TARGET.CloseDate = LIST.CloseDate
                                                                             , TARGET.AddressLine = LIST.AddressLine
                                                                             , TARGET.City = LIST.City
@@ -207,6 +207,7 @@ namespace Warranty.JdeImport.Importers
                                                                             , TARGET.PlanNumber = LIST.PlanNumber
                                                                             , TARGET.Elevation = LIST.Elevation
                                                                             , TARGET.Swing = LIST.Swing
+                                                                            , TARGET.Stage = LIST.Stage
                                                                             , TARGET.BuilderEmployeeId = LIST.BuilderId
                                                                             , TARGET.SalesConsultantEmployeeId = LIST.SalesId
                                                                             , TARGET.WarrantyExpirationDate = DATEADD(YY, 10, LIST.CloseDate)
@@ -245,6 +246,7 @@ namespace Warranty.JdeImport.Importers
 
                 using (var cmd = new SqlCommand(mergeScript, sc))
                 {
+                    cmd.CommandTimeout = 600;
                     cmd.ExecuteNonQuery();
                 }
 

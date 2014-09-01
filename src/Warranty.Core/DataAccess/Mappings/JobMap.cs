@@ -25,6 +25,7 @@ namespace Warranty.Core.DataAccess.Mappings
                     x.Column(y => y.PlanNumber);
                     x.Column(y => y.Elevation);
                     x.Column(y => y.Swing);
+                    x.Column(y => y.Stage);
                     x.Column(y => y.BuilderEmployeeId);
                     x.Column(y => y.SalesConsultantEmployeeId);
                     x.Column(y => y.WarrantyExpirationDate);

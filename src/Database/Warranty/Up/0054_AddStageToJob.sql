@@ -1,0 +1,1 @@
+ALTER TABLE Jobs ADD Stage INT;
