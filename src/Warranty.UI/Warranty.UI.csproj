@@ -191,6 +191,8 @@
     <Compile Include="Core\Enumerations\NavHeaderItem.cs" />
     <Compile Include="Core\Enumerations\NavItem.cs" />
     <Compile Include="Core\Enumerations\ToastType.cs" />
+    <Compile Include="Core\Filters\WarrantyServiceCoordinatorOnlyAttribute.cs" />
+    <Compile Include="Core\Filters\WarrantyAuthorize.cs" />
     <Compile Include="Core\Filters\NavActionFilterAttribute.cs" />
     <Compile Include="Core\Helpers\ClientApiHelper.cs" />
     <Compile Include="Core\Helpers\Css.cs" />
