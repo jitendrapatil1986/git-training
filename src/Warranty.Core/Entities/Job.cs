@@ -1,8 +1,6 @@
 namespace Warranty.Core.Entities
 {
     using System;
-    using Configurations;
-    using Yay.Enumerations;
 
     public class Job : IAuditableEntity, IJdeEntity
     {
