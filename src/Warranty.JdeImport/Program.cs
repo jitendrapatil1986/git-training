@@ -29,12 +29,14 @@
                 options = new List<string>
                 {
                     "-p",
-                    "-j"
+                    "-j",
+                    "-js"
                 };
             }
 
             if (options.Contains("-p")) new PaymentImporter().CustomImport();
             if (options.Contains("-j")) new JobImporter().CustomImport();
+            if (options.Contains("-js")) new JobStageImporter().CustomImport();
 
             stopWatch.Stop();
             Console.WriteLine("\n\nTOTAL TIME: {0}\n", stopWatch.Elapsed);
@@ -48,6 +50,7 @@
             Console.WriteLine("\nEach option needs to be separated by a space and prefixed with a -:");
             Console.WriteLine("-p\tPayments");
             Console.WriteLine("-j\tJobs");
+            Console.WriteLine("-js\tJob Stage History");
         }
     }
 }

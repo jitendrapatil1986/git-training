@@ -136,6 +136,7 @@
     <Compile Include="Entities\ServiceCall.cs" />
     <Compile Include="Entities\ServiceCallComment.cs" />
     <Compile Include="Entities\ServiceCallLineItem.cs" />
+    <Compile Include="Enumerations\UserRoles.cs" />
     <Compile Include="Enumerations\ToDoIcon.cs" />
     <Compile Include="Enumerations\Month.cs" />
     <Compile Include="Enumerations\ServiceCallStatus.cs" />
@@ -160,6 +161,9 @@
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommandHandler.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchCallModel.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchJobModel.cs" />
+    <Compile Include="Features\JobSummary\JobSummaryModel.cs" />
+    <Compile Include="Features\JobSummary\JobSummaryQuery.cs" />
+    <Compile Include="Features\JobSummary\JobSummaryQueryHandler.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallDenyHandler.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallDenyCommand.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommand.cs" />
