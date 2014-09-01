@@ -12,10 +12,6 @@ namespace Warranty.Core.DataAccess.Mappings
                 {
                     x.Column(y => y.CompletionDate);
                     x.Column(y => y.JdeIdentifier);
-                    x.Column(y => y.CreatedDate);
-                    x.Column(y => y.CreatedBy);
-                    x.Column(y => y.UpdatedDate);
-                    x.Column(y => y.UpdatedBy);
                 });
         }
     }
