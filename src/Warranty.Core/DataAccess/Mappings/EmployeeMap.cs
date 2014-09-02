@@ -1,4 +1,4 @@
-﻿namespace Warranty.Core.DataAccess.Mappings
+namespace Warranty.Core.DataAccess.Mappings
 {
     using Entities;
 
@@ -7,12 +7,13 @@
         public EmployeeMap()
         {
             TableName("Employees")
-                .PrimaryKey("EmployeeId", false)
+                .PrimaryKey(x => x.EmployeeId, false)
                 .Columns(x =>
-                {
-                    x.Column(y => y.Number).WithName("EmployeeNumber");
-                    x.Column(y => y.Name).WithName("EmployeeName");
-                });
+                             {
+                                 x.Column(col => col.Number).WithName("EmployeeNumber");
+                                 x.Column(col => col.Name).WithName("EmployeeName");
+                                 x.Column(col => col.JdeIdentifier);
+                             });
         }
     }
 }
