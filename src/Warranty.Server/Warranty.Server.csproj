@@ -94,6 +94,7 @@
     <Compile Include="Extensions\DatabaseExtensions.cs" />
     <Compile Include="Handlers\Jobs\JobElevationUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobClosedHandler.cs" />
+    <Compile Include="Handlers\Jobs\JobPrimaryBuilderUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobResetToDirtHandler.cs" />
     <Compile Include="Handlers\Jobs\JobAddedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobPlanUpdatedHandler.cs" />

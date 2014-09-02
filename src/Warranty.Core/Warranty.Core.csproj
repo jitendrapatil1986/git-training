@@ -102,6 +102,7 @@
     <Compile Include="DataAccess\Mappings\CommunityMapping.cs" />
     <Compile Include="DataAccess\Mappings\DivisionMap.cs" />
     <Compile Include="DataAccess\Mappings\DivisionMapping.cs" />
+    <Compile Include="DataAccess\Mappings\EmployeeMap.cs" />
     <Compile Include="DataAccess\Mappings\HomeOwnerMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobMap.cs" />
     <Compile Include="DataAccess\Mappings\JobOptionMapping.cs" />
