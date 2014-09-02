@@ -8,16 +8,16 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
     [TestFixture]
     public class JobHomeBuyerNameUpdatedHandlerTester : HandlerTester<JobHomeBuyerNameUpdated>
     {
-        private HomeOwner _homeOwner;
+        private HomeOwner _homeBuyer;
         private Job _job;
 
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
             _job = GetSaved<Job>();
-            _homeOwner = GetSaved<HomeOwner>(ho => ho.JobId = _job.JobId);
+            _homeBuyer = GetSaved<HomeOwner>(ho => ho.JobId = _job.JobId);
 
-            _job.CurrentHomeOwnerId = _homeOwner.HomeOwnerId;
+            _job.CurrentHomeOwnerId = _homeBuyer.HomeOwnerId;
 
             using (TestDatabase)
                 TestDatabase.Update(_job);
@@ -30,11 +30,11 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         }
 
         [Test]
-        public void Job_Close_Date_Should_Be_Updated()
+        public void Home_Buyer_Name_Should_Be_Updated()
         {
             var job = Get<Job>(_job.JobId);
-            var homeOwner = Get<HomeOwner>(job.CurrentHomeOwnerId);
-            homeOwner.HomeOwnerName.ShouldEqual(Event.BuyerName);
+            var homeBuyer = Get<HomeOwner>(job.CurrentHomeOwnerId);
+            homeBuyer.HomeOwnerName.ShouldEqual(Event.BuyerName);
         }
     }
 }
