@@ -1,5 +1,6 @@
 ﻿using Warranty.Core.Features.AmountSpentWidget;
 using Warranty.Core.Features.ToDoWidget;
+using Warranty.UI.Core.Filters;
 
 namespace Warranty.UI.Controllers
 {
@@ -71,6 +72,7 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
+        [WarrantyServiceCoordinatorOnly]
         public ActionResult ToDoWidget()
         {
             var model = _mediator.Request(new ToDoWidgetQuery());

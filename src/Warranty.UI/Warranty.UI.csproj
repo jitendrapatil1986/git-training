@@ -191,6 +191,8 @@
     <Compile Include="Core\Enumerations\NavHeaderItem.cs" />
     <Compile Include="Core\Enumerations\NavItem.cs" />
     <Compile Include="Core\Enumerations\ToastType.cs" />
+    <Compile Include="Core\Filters\WarrantyServiceCoordinatorOnlyAttribute.cs" />
+    <Compile Include="Core\Filters\WarrantyAuthorize.cs" />
     <Compile Include="Core\Filters\NavActionFilterAttribute.cs" />
     <Compile Include="Core\Helpers\ClientApiHelper.cs" />
     <Compile Include="Core\Helpers\Css.cs" />
@@ -249,6 +251,8 @@
     <Content Include="img\saturation.png" />
     <Content Include="Scripts\app\ajaxEvents.js" />
     <Content Include="Scripts\app\search.js" />
+    <Content Include="Scripts\app\servicecall\CallSummary.js" />
+    <Content Include="Scripts\app\servicecall\create.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />
     <Content Include="Scripts\lib\handlebars.amd.min.js" />
     <Content Include="Scripts\lib\handlebars.js" />
@@ -343,6 +347,10 @@
     <Content Include="Views\Home\_ToDoServiceCallApproval.cshtml" />
     <Content Include="Views\ServiceCall\CallSummary.cshtml" />
     <Content Include="Views\ServiceCall\_AllServiceLines.cshtml" />
+    <Content Include="Views\ServiceCall\SearchCustomer.cshtml" />
+    <Content Include="Views\ServiceCall\VerifyCustomer.cshtml" />
+    <Content Include="Views\ServiceCall\Create.cshtml" />
+    <Content Include="Views\Job\JobSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -366,12 +374,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\DisplayTemplates\EnumerationBase.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Warranty.Core\Warranty.Core.csproj">
-      <Project>{991144F8-B588-4604-930B-3224FEC6FF32}</Project>
-      <Name>Warranty.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\font\fontawesome-webfont.eot" />
@@ -472,6 +474,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Warranty.Core\Warranty.Core.csproj">
+      <Project>{991144f8-b588-4604-930b-3224fec6ff32}</Project>
+      <Name>Warranty.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

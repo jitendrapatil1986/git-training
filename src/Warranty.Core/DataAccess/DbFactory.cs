@@ -30,6 +30,4 @@ namespace Warranty.Core.DataAccess
             });
         }
     }
-
-
 }

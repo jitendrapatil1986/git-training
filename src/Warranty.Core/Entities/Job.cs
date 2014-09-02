@@ -1,8 +1,6 @@
 namespace Warranty.Core.Entities
 {
     using System;
-    using Configurations;
-    using Yay.Enumerations;
 
     public class Job : IAuditableEntity, IJdeEntity
     {
@@ -22,6 +20,7 @@ namespace Warranty.Core.Entities
         public virtual string PlanNumber { get; set; }
         public virtual string Elevation { get; set; }
         public virtual string Swing { get; set; }
+        public virtual int Stage { get; set; }
         public virtual Guid? BuilderEmployeeId { get; set; }
         public virtual Guid? SalesConsultantEmployeeId { get; set; }
         public virtual DateTime? WarrantyExpirationDate { get; set; }

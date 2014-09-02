@@ -108,6 +108,8 @@
     <Compile Include="IntegrationSetUpFixture.cs" />
     <Compile Include="PersistenceTests\PaymentMapTester.cs" />
     <Compile Include="PersistenceTests\PersistenceTesterBase.cs" />
+    <Compile Include="PersistenceTests\ServiceCallMapTester.cs" />
+    <Compile Include="PersistenceTests\ServiceCallTesterBase.cs" />
   </ItemGroup>
   <ItemGroup />
   <Choose>
