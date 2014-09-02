@@ -6,7 +6,7 @@
     {
         public virtual Guid HomeOwnerId { get; set; }
         public virtual Guid JobId { get; set; }
-        public virtual int HomeOwnerNumber { get; set; }
+        public virtual int? HomeOwnerNumber { get; set; }
         public virtual string HomeOwnerName { get; set; }
         public virtual string HomePhone { get; set; }
         public virtual string OtherPhone { get; set; }
