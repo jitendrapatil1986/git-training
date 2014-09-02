@@ -54,5 +54,47 @@
             return MvcHtmlString.Empty;
         }
          
+         public static MvcHtmlString ServiceCallActions(this HtmlHelper htmlHelper, Guid serviceCallId)
+         {
+             return MvcHtmlString.Empty;
+
+             var buttonSpan = new TagBuilder("span");
+             buttonSpan.AddCssClass("glyphicon");
+             buttonSpan.AddCssClass("glyphicon-cog");
+
+             var button = new TagBuilder("button");
+             button.Attributes.Add("type", "button");
+             button.Attributes.Add("data-toggle", "dropdown");
+             button.AddCssClass("btn");
+             button.AddCssClass("btn-default");
+             button.AddCssClass("dropdown-toggle");
+             button.AddCssClass("pull-right");
+             button.InnerHtml = buttonSpan.ToString(TagRenderMode.Normal);
+
+             var menu = new TagBuilder("ul");
+             menu.AddCssClass("dropdown-menu");
+             menu.Attributes.Add("role", "menu");
+
+             var reassignLink = new TagBuilder("li")
+             {
+                 InnerHtml = htmlHelper.ActionLink("Reassign", "Reassign", "ServiceCall", new {id = serviceCallId}, null).ToHtmlString()
+             };
+             var requestPaymentLink = new TagBuilder("li")
+             {
+                 InnerHtml = htmlHelper.ActionLink("Request Payment", "RequestPayment", "ServiceCall", new {id = serviceCallId}, null).ToHtmlString()
+             };
+             var addNote = new TagBuilder("li")
+             {
+                 InnerHtml = htmlHelper.ActionLink("Add Note", "AddNote", "ServiceCall", new {id = serviceCallId}, null).ToHtmlString()
+             };
+             var closeCall = new TagBuilder("li")
+             {
+                 InnerHtml = htmlHelper.ActionLink("Close", "Close", "ServiceCall", new {id = serviceCallId}, null).ToHtmlString()
+             };
+
+             menu.InnerHtml = reassignLink.ToString(TagRenderMode.Normal) + requestPaymentLink.ToString(TagRenderMode.Normal) + addNote.ToString(TagRenderMode.Normal) + closeCall.ToString(TagRenderMode.Normal);
+
+             return MvcHtmlString.Create(button.ToString(TagRenderMode.Normal) + menu.ToString(TagRenderMode.Normal));
+         }
     }
 }
