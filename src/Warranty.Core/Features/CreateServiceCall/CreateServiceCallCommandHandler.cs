@@ -50,10 +50,8 @@ namespace Warranty.Core.Features.CreateServiceCall
                     JobId = message.JobId,
                     Contact = message.Contact,
                     WarrantyRepresentativeEmployeeId = employee.EmployeeId,
-                    ServiceCallType = message.ServiceCallType,
+                    ServiceCallType = "Warranty Service Request",
                     CompletionDate = null,
-                    CreatedBy = employee.Name,
-                    CreatedDate = DateTime.Now,
                 };
 
                 _database.Insert(serviceCall);
@@ -69,8 +67,6 @@ namespace Warranty.Core.Features.CreateServiceCall
                                 LineNumber = line.LineItemNumber,
                                 ProblemCode = line.ProblemCodeDisplayName,
                                 ProblemDescription = line.ProblemDescription,
-                                CreatedBy = employee.Name,
-                                CreatedDate = DateTime.Now,
                             };
 
                         _database.Insert(serviceCallLine);

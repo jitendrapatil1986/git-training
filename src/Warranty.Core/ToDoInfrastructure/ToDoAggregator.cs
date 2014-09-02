@@ -26,14 +26,14 @@ namespace Warranty.Core.ToDoInfrastructure
         {
             var user = _userSession.GetCurrentUser();
             var serviceCallApprovalToDos = GetServiceCallApprovalToDos(user);
-            var escalationApprovalToDos = GetEscalationApprovalToDos();
-            var paymentRequestApprovalToDos = GetPaymentRequestApprovalToDos();
+            //var escalationApprovalToDos = GetEscalationApprovalToDos();
+            //var paymentRequestApprovalToDos = GetPaymentRequestApprovalToDos();
 
             var toDos = new List<IToDo>();
 
             toDos.AddRange(serviceCallApprovalToDos);
-            toDos.AddRange(escalationApprovalToDos);
-            toDos.AddRange(paymentRequestApprovalToDos);
+            //toDos.AddRange(escalationApprovalToDos);
+            //toDos.AddRange(paymentRequestApprovalToDos);
 
             return toDos.OrderBy(x => x.Date).ToList();
         }
@@ -74,38 +74,38 @@ namespace Warranty.Core.ToDoInfrastructure
             return toDos;
         }
 
-        private IEnumerable<IToDo> GetEscalationApprovalToDos()
-        {
-            //TODO: Not the final query
-            var todo = new ToDoEscalationApproval()
-            {
-                Model = new ToDoEscalationApprovalModel
-                {
-                    HomeOwnerAddress = "Address",
-                    HomeOwnerName = "Name",
-                    EscalationRequestedBy = "John S"
-                },
-                Date = DateTime.Now
-            };
+        //private IEnumerable<IToDo> GetEscalationApprovalToDos()
+        //{
+        //    //TODO: Not the final query
+        //    var todo = new ToDoEscalationApproval()
+        //    {
+        //        Model = new ToDoEscalationApprovalModel
+        //        {
+        //            HomeOwnerAddress = "Address",
+        //            HomeOwnerName = "Name",
+        //            EscalationRequestedBy = "John S"
+        //        },
+        //        Date = DateTime.Now
+        //    };
 
-            yield return todo;
-        }
+        //    yield return todo;
+        //}
 
-        private IEnumerable<IToDo> GetPaymentRequestApprovalToDos()
-        {
-            //TODO: Not the final query
-            var todo = new ToDoPaymentRequestApproval()
-            {
-                Model = new ToDoPaymentRequestApprovalModel()
-                {
-                    HomeOwnerAddress = "Address",
-                    HomeOwnerName = "Name",
-                    PaymentAmount = (decimal)150.55
-                },
-                Date = DateTime.Now
-            };
+        //private IEnumerable<IToDo> GetPaymentRequestApprovalToDos()
+        //{
+        //    //TODO: Not the final query
+        //    var todo = new ToDoPaymentRequestApproval()
+        //    {
+        //        Model = new ToDoPaymentRequestApprovalModel()
+        //        {
+        //            HomeOwnerAddress = "Address",
+        //            HomeOwnerName = "Name",
+        //            PaymentAmount = (decimal)150.55
+        //        },
+        //        Date = DateTime.Now
+        //    };
 
-            yield return todo;
-        }
+        //    yield return todo;
+        //}
     }
 }

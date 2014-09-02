@@ -13,14 +13,14 @@ define(['urls','jquery'], function(urls, $) {
         $(".approve-button").click(function (e) {
             e.preventDefault();
             var serviceCallId = $(this).data("service-call-id");
-            var url = urls.approveServiceCallUrl;
+            var url = urls.ServiceCall.Approve;
             executeApproval(url, serviceCallId, $(this));
         });
             
         $(".deny-button").click(function (e) {
             e.preventDefault();
             var serviceCallId = $(this).data("service-call-id");
-            var url = urls.denyServiceCallUrl;
+            var url = urls.ServiceCall.Deny;
             executeApproval(url, serviceCallId, $(this));
         });
             

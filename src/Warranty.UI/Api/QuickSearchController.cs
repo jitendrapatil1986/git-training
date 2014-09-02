@@ -30,7 +30,7 @@
         }
 
         [HttpGet]
-        public IEnumerable<CustomerSearchModel> Customer(string query)
+        public IEnumerable<CustomerSearchModel> Customers(string query)
         {
             var results = _mediator.Request(new CreateServiceCallCustomerSearchQuery {Query = query});
             return results;
