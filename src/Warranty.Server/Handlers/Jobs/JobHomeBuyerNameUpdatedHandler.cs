@@ -1,3 +1,4 @@
+using System;
 using Accounting.Events.Job;
 using NPoco;
 using NServiceBus;
@@ -22,6 +23,7 @@ namespace Warranty.Server.Handlers.Jobs
                 var job = _database.SingleByJdeId<Job>(message.JDEId);
                 var homeOwner = _database.SingleById<HomeOwner>(job.CurrentHomeOwnerId);
 
+                homeOwner.HomeOwnerNumber = Convert.ToInt32(message.HomeBuyerNumber);
                 homeOwner.HomeOwnerName = message.BuyerName;
                 _database.Update(homeOwner);
             }

@@ -1,4 +1,5 @@
-﻿using Accounting.Events.Job;
+﻿using System;
+using Accounting.Events.Job;
 using NUnit.Framework;
 using Should;
 using Warranty.Core.Entities;
@@ -26,15 +27,18 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             {
                 x.JDEId = _job.JdeIdentifier;
                 x.BuyerName = "Jo Test";
+                x.HomeBuyerNumber = "123";
             });
         }
 
         [Test]
-        public void Home_Buyer_Name_Should_Be_Updated()
+        public void Home_Buyer_Should_Be_Updated()
         {
             var job = Get<Job>(_job.JobId);
             var homeBuyer = Get<HomeOwner>(job.CurrentHomeOwnerId);
             homeBuyer.HomeOwnerName.ShouldEqual(Event.BuyerName);
+            homeBuyer.HomeOwnerNumber.ShouldEqual(Convert.ToInt32(Event.HomeBuyerNumber));
+
         }
     }
 }
