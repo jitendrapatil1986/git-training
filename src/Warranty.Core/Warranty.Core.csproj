@@ -99,6 +99,7 @@
     <Compile Include="DataAccess\Mappings\CityMap.cs" />
     <Compile Include="DataAccess\Mappings\CityMapping.cs" />
     <Compile Include="DataAccess\Mappings\AuditableEntityMap.cs" />
+    <Compile Include="DataAccess\Mappings\CommunityAssignmentMap.cs" />
     <Compile Include="DataAccess\Mappings\CommunityMap.cs" />
     <Compile Include="DataAccess\Mappings\CommunityMapping.cs" />
     <Compile Include="DataAccess\Mappings\DivisionMap.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="DataAccess\SqlServerDatabaseType.cs" />
     <Compile Include="Entities\City.cs" />
     <Compile Include="Entities\Community.cs" />
+    <Compile Include="Entities\CommunityAssignment.cs" />
     <Compile Include="Entities\Division.cs" />
     <Compile Include="Entities\HomeOwner.cs" />
     <Compile Include="Entities\IAuditableEntity.cs" />
@@ -157,6 +159,9 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Features\AssignWSRs\AssignWSRsModel.cs" />
+    <Compile Include="Features\AssignWSRs\AssignWSRsQuery.cs" />
+    <Compile Include="Features\AssignWSRs\AssignWSRsQueryHandler.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommand.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommandHandler.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchCallModel.cs" />

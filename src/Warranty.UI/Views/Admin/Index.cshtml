@@ -1,0 +1,13 @@
+﻿@using System.Web.Mvc.Html
+@model Warranty.Core.Features.AssignWSRs.AssignWSRsModel
+
+@{
+    ViewBag.Title = "Assign WSR's";
+}
+
+<h2>Assign WSR's</h2>
+
+Community:
+@Html.DropDownList("community", Model.Communities.Select(c => new SelectListItem{Text = c.Name, Value = c.Id.ToString()}))
+Employee:
+@Html.DropDownList("employee", Model.Employees.Select(c => new SelectListItem{Text = c.Name, Value = c.EmployeeId.ToString()}))
