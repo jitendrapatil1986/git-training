@@ -1,14 +1,9 @@
 ﻿namespace Warranty.Core.Features.CreateServiceCallCustomerSearch
 {
     using System;
-    using System.Collections.Generic;
 
-    public class CreateServiceCallCustomerSearchModel
+    public class CustomerSearchModel
     {
-        public IEnumerable<Customer> Customers { get; set; }
-
-        public class Customer
-        {
             public Guid HomeOwnerId { get; set; }
             public Guid JobId { get; set; }
             public int HomeOwnerNumber { get; set; }
@@ -25,6 +20,5 @@
             public string PostalCode { get; set; }
             public DateTime WarrantyStartDate { get; set; }
             public int YearsWithinWarranty { get; set; }
-        }
     }
 }
