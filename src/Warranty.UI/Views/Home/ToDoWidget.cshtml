@@ -8,23 +8,30 @@
         @Html.DropDownList("SelectecToDoType", Model.ToDoTypes.Select(x => new SelectListItem { Text = x.DisplayName, Value = @Css.ToDoClass(x) }), "All", new { id = "toDoSelect" })
     </div>
     <div class="todo-container">
-        @foreach (var toDo in Model.ToDos)
+        @if (Model.ToDos.Any())
         {
-            if (toDo.GetType() == typeof(ToDoEscalationApproval))
+            foreach (var toDo in Model.ToDos)
             {
-                var castedModel = (ToDoEscalationApproval)toDo;
-                @Html.Partial(castedModel.ViewName, castedModel.Model)
+                if (toDo.GetType() == typeof (ToDoEscalationApproval))
+                {
+                    var castedModel = (ToDoEscalationApproval) toDo;
+                    @Html.Partial(castedModel.ViewName, castedModel.Model)
+                }
+                else if (toDo.GetType() == typeof (ToDoPaymentRequestApproval))
+                {
+                    var castedModel = (ToDoPaymentRequestApproval) toDo;
+                    @Html.Partial(castedModel.ViewName, castedModel.Model)
+                }
+                else if (toDo.GetType() == typeof (ToDoServiceCallApproval))
+                {
+                    var castedModel = (ToDoServiceCallApproval) toDo;
+                    @Html.Partial(castedModel.ViewName, castedModel.Model)
+                }
             }
-            else if (toDo.GetType() == typeof(ToDoPaymentRequestApproval))
-            {
-                var castedModel = (ToDoPaymentRequestApproval)toDo;
-                @Html.Partial(castedModel.ViewName, castedModel.Model)
-            }
-            else if (toDo.GetType() == typeof(ToDoServiceCallApproval))
-            {
-                var castedModel = (ToDoServiceCallApproval)toDo;
-                @Html.Partial(castedModel.ViewName, castedModel.Model)
-            }
+        }
+        else
+        {
+            <em>No To Dos Today.</em>
         }
     </div>
 </div>

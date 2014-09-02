@@ -253,6 +253,7 @@
     <Content Include="Scripts\app\search.js" />
     <Content Include="Scripts\app\servicecall\CallSummary.js" />
     <Content Include="Scripts\app\servicecall\create.js" />
+    <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
     <Content Include="Scripts\config\customer-search.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />
     <Content Include="Scripts\lib\handlebars.amd.min.js" />
@@ -269,9 +270,6 @@
     <Content Include="Scripts\app\customBindings.js" />
     <Content Include="Scripts\app\dates.js" />
     <Content Include="Scripts\app\formInputs.js" />
-    <Content Include="Scripts\app\home\widgetAmountSpent.js" />
-    <Content Include="Scripts\app\home\Index.js" />
-    <Content Include="Scripts\app\home\widgetServiceCalls.js" />
     <Content Include="Scripts\app\Home\widgetToDos.js" />
     <Content Include="Scripts\app\Home\widgetAmountSpent.js" />
     <Content Include="Scripts\app\Home\Index.js" />
@@ -284,6 +282,7 @@
     <Content Include="Scripts\app\shared\Default.js" />
     <Content Include="Scripts\lib\text.js" />
     <Content Include="Scripts\templates\call-search-item.html" />
+    <Content Include="Scripts\templates\customer-search-item.html" />
     <Content Include="Scripts\templates\job-search-item.html" />
     <Content Include="Scripts\app\toastrNotify.js" />
     <Content Include="Scripts\app\tooltips.js" />

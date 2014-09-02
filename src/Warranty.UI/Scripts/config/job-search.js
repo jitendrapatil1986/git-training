@@ -3,7 +3,7 @@
         display: 'Jobs',
         key: 'HomeOwnerName',
         itemTemplate: template,
-        targetUrl: urls.Job.Index + '/Index',
+        targetUrl: urls.Job.JobSummary,
         emptyText: 'No jobs found.',
         addOns: [{
             id: 'completedAndTerminated2',
