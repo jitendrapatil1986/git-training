@@ -82,7 +82,7 @@ namespace Warranty.JdeImport.Importers
                                                             TARGET.UpdatedDate = SYSDATETIME(),
                                                             TARGET.UpdatedBy = 'Warranty Jde Import'
                                             WHEN NOT MATCHED THEN
-                                                INSERT (JobId, JobStage, CompletionDate, JdeIdentifier, CreatedDate, CreatedBy)
+                                                INSERT (JobId, Stage, CompletionDate, JdeIdentifier, CreatedDate, CreatedBy)
                                                 VALUES (JobId, JobStage, CompletionDate, JdeIdentifier, SYSDATETIME(), 'Warranty Jde Import');";
 
             Import();

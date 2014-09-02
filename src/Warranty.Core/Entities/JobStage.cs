@@ -1,12 +1,12 @@
+using System;
+
 namespace Warranty.Core.Entities
 {
-    using System;
-
-    public class Employee : IAuditableEntity, IJdeEntity
+    public class JobStage : IAuditableEntity, IJdeEntity
     {
-        public virtual Guid EmployeeId { get; set; }
-        public virtual string Number { get; set; }
-        public virtual string Name { get; set; }
+        public virtual Guid JobId { get; set; }
+        public virtual int Stage { get; set; }
+        public virtual DateTime? CompletionDate { get; set; }
         public virtual DateTime? CreatedDate { get; set; }
         public virtual string CreatedBy { get; set; }
         public virtual DateTime? UpdatedDate { get; set; }
