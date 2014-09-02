@@ -5,7 +5,7 @@ namespace Warranty.Core.Features.CreateServiceCallCustomerSearch
     using NPoco;
     using Security;
 
-    public class CreateServiceCallCustomerSearchQueryHandler : IQueryHandler<CreateServiceCallCustomerSearchQuery, CreateServiceCallCustomerSearchModel>
+    public class CreateServiceCallCustomerSearchQueryHandler : IQueryHandler<CreateServiceCallCustomerSearchQuery, IEnumerable<CustomerSearchModel>>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
@@ -16,20 +16,17 @@ namespace Warranty.Core.Features.CreateServiceCallCustomerSearch
             _userSession = userSession;
         }
 
-        public CreateServiceCallCustomerSearchModel Handle(CreateServiceCallCustomerSearchQuery query)
+        public IEnumerable<CustomerSearchModel> Handle(CreateServiceCallCustomerSearchQuery query)
         {
             var user = _userSession.GetCurrentUser();
 
             using (_database)
             {
-                return new CreateServiceCallCustomerSearchModel
-                    {
-                        Customers = GetCustomers(query.SearchCriteria),
-                    };
+                return GetCustomers(query.Query);
             }
         }
 
-        private IEnumerable<CreateServiceCallCustomerSearchModel.Customer> GetCustomers(string searchCriteria)
+        private IEnumerable<CustomerSearchModel> GetCustomers(string searchCriteria)
         {
             const string sql = @"SELECT  ho.HomeOwnerId
                                         ,j.JobId
@@ -57,7 +54,7 @@ namespace Warranty.Core.Features.CreateServiceCallCustomerSearch
                                 (j.JobNumber LIKE '%' + @0 + '%')
                                 ORDER BY ho.HomeOwnerName, j.JobNumber";
 
-            var result = _database.Fetch<CreateServiceCallCustomerSearchModel.Customer>(sql, searchCriteria);
+            var result = _database.Fetch<CustomerSearchModel>(sql, searchCriteria);
 
             return result;
         }

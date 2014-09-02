@@ -97,12 +97,14 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Handlers\Jobs\JobHomeBuyerNameUpdatedHandlerEdgeCaseTester.cs" />
     <Compile Include="Handlers\Jobs\JobPrimaryBuilderUpdatedHandlerNewBuilderTester.cs" />
     <Compile Include="Handlers\Jobs\JobPrimaryBuilderUpdatedHandlerExistingBuilderTester.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateAddedHandlerTester.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobElevationUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobClosedHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\JobHomeBuyerNameUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobResetToDirtHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobAddedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobPlanUpdatedHandlerTester.cs" />
@@ -118,6 +120,7 @@
     <Compile Include="CommandHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentIdUpdatedHandlerTester.cs" />
     <Compile Include="SetUp\CommunityEntityBuilder.cs" />
+    <Compile Include="SetUp\HomeOwnerEntityBuilder.cs" />
     <Compile Include="SetUp\EmployeeEntityBuilder.cs" />
     <Compile Include="SetUp\JobEntityBuilder.cs" />
     <Compile Include="SetUp\JobStageEntityBuilder.cs" />

@@ -254,6 +254,7 @@
     <Content Include="Scripts\app\search.js" />
     <Content Include="Scripts\app\servicecall\CallSummary.js" />
     <Content Include="Scripts\app\servicecall\create.js" />
+    <Content Include="Scripts\config\customer-search.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />
     <Content Include="Scripts\lib\handlebars.amd.min.js" />
     <Content Include="Scripts\lib\handlebars.js" />

@@ -1,7 +1,9 @@
 ﻿namespace Warranty.Core.Features.CreateServiceCallCustomerSearch
 {
-    public class CreateServiceCallCustomerSearchQuery : IQuery<CreateServiceCallCustomerSearchModel>
+    using System.Collections.Generic;
+
+    public class CreateServiceCallCustomerSearchQuery : IQuery<IEnumerable<CustomerSearchModel>>
     {
-        public string SearchCriteria { get; set; }
+        public string Query { get; set; }
     }
 }
