@@ -13,7 +13,6 @@
         public virtual string WorkPhone1 { get; set; }
         public virtual string WorkPhone2 { get; set; }
         public virtual string EmailAddress { get; set; }
-        public bool DoNotContact { get; set; }
         
         public virtual DateTime? CreatedDate { get; set; }
         public virtual string CreatedBy { get; set; }
