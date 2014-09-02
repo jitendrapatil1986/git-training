@@ -1,0 +1,11 @@
+﻿@model Warranty.Core.Features.ManageLookups.ManageLookupsModel
+
+<h1>Manage Lookups</h1>
+
+<h3>Select Lookup to Edit</h3>
+<select id="lookups">
+    @foreach (var lookup in Model.LookupTypes)
+    {
+        <option>@lookup</option>
+    }
+</select>
