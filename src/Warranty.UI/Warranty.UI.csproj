@@ -250,6 +250,7 @@
     <Content Include="img\hue.png" />
     <Content Include="img\loader.gif" />
     <Content Include="img\saturation.png" />
+    <Content Include="Scripts\app\admin\ManageLookups.js" />
     <Content Include="Scripts\app\ajaxEvents.js" />
     <Content Include="Scripts\app\search.js" />
     <Content Include="Scripts\app\servicecall\CallSummary.js" />

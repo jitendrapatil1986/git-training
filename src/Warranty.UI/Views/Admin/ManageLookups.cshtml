@@ -1,11 +1,28 @@
-﻿@model Warranty.Core.Features.ManageLookups.ManageLookupsModel
+﻿@using Warranty.Core.Extensions
+@model Warranty.Core.Features.ManageLookups.ManageLookupsModel
 
 <h1>Manage Lookups</h1>
 
 <h3>Select Lookup to Edit</h3>
-<select id="lookups">
-    @foreach (var lookup in Model.LookupTypes)
-    {
-        <option>@lookup</option>
-    }
-</select>
+<select data-bind="options: availableLookups, value: selectedLookup,event: { change: selectionChanged }"></select>
+
+<h4 data-bind="text: lookupType()"></h4>
+<ul data-bind="foreach: lookupItems">
+    <li>
+        <span data-bind="text: displayName"></span>
+        <a href="#" data-bind="click: $parent.removeItem">Remove</a>
+    </li>
+</ul>
+<button data-bind="click: addItem">Add</button>
+
+
+@section modules
+{
+    <script>
+        define('modelData', function () {
+            return {
+                availableLookups: @Html.Raw(Model.LookupTypes.ToJson())
+                };
+        });
+    </script>
+}
