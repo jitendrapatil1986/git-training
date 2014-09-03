@@ -10,6 +10,7 @@ namespace Warranty.UI.Controllers
     using System.Net.Mail;
     using System.Web;
     using System.Web.Mvc;
+    using Core.Filters;
     using Core.Helpers;
     using Newtonsoft.Json.Linq;
     using Warranty.Core;
@@ -54,6 +55,7 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
+        [WarrantyServiceCoordinatorOnly]
         public ActionResult MyTeamWidget()
         {
             var model = _mediator.Request(new MyServiceTeamWidgetQuery());
@@ -61,6 +63,7 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
+        [WarrantyServiceCoordinatorOnly]
         public ActionResult ServiceCallsWidget()
         {
             var model = _mediator.Request(new ServiceCallsWidgetQuery());
@@ -68,6 +71,15 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
+        [WarrantyServiceRepresentativeOnly]
+        public ActionResult WarrantyServiceRepServiceCallsWidget()
+        {
+            var model = _mediator.Request(new WarrantyServiceRepServiceCallsWidgetQuery());
+            return PartialView("ServiceCallsWidget", model);
+        }
+
+        [ChildActionOnly]
+        [WarrantyServiceCoordinatorOnly]
         public ActionResult AmountSpentWidget()
         {
             var model = _mediator.Request(new AmountSpentWidgetQuery());
@@ -75,7 +87,7 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-//        [WarrantyServiceCoordinatorOnly]
+        [WarrantyServiceCoordinatorOnly]
         public ActionResult ToDoWidget()
         {
             var model = _mediator.Request(new ToDoWidgetQuery());
