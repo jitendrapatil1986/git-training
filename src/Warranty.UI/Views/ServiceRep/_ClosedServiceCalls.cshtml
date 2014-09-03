@@ -9,12 +9,12 @@
                 @Html.ActionLink(line.CallNumber, "CallSummary", "ServiceCall", new {id = line.ServiceCallId}, null)
             </small><br/>@Format.YearsWithinWarranty(line.YearsWithinWarranty, line.WarrantyStartDate)
         </div>
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="col-md-1 hidden-sm hidden-xs">
                 @Format.NumberOfLineItems(line.NumberOfLineItems)
             </div>
             <div class="col-md-10">
-                <a>@line.HomeownerName</a><br />@line.Address
+                @line.HomeownerName<br />@Html.ActionLink(line.Address, "JobSummary", "Job", new {id=line.JobId}, null)
             </div>
         </div>
         <div class="col-md-2">@Format.Escalated(line.IsEscalated, line.EscalationReason, line.EscalationDate)</div>

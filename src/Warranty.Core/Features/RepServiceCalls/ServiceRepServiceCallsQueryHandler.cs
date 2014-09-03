@@ -29,6 +29,7 @@ namespace Warranty.Core.Features.RepServiceCalls
 
         const string SqlTemplate = @"SELECT 
                                           wc.ServiceCallId as ServiceCallId
+                                        , j.JobId
                                         , Servicecallnumber as CallNumber
                                         , j.AddressLine as [Address]
                                         , wc.CreatedDate 

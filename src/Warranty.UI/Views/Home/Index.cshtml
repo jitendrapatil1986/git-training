@@ -5,17 +5,17 @@
 }
 
 <div class="container">
-    <div class="col-md-8">
+    <div class="col-md-12">
         @Html.Action("ServiceCallsWidget", "Home")
 
-        <div class="col-md-7">
+        <div class="col-md-6">
             @Html.Action("MyTeamWidget", "Home")
         </div>
-        <div class="col-md-5 pull-right">
+        <div class="col-md-6 pull-right">
             @Html.Action("AmountSpentWidget", "Home")
         </div>
     </div>
-    <div class="col-md-4">
+@*    <div class="col-md-4">
         @Html.Action("ToDoWidget", "Home")
-    </div>
+    </div>*@
 </div>
