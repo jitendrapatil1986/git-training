@@ -55,7 +55,7 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-        [WarrantyServiceCoordinatorOnly]
+//        [WarrantyServiceCoordinatorOnly]
         public ActionResult MyTeamWidget()
         {
             var model = _mediator.Request(new MyServiceTeamWidgetQuery());
@@ -63,7 +63,7 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-        [WarrantyServiceCoordinatorOnly]
+//        [WarrantyServiceCoordinatorOnly]
         public ActionResult ServiceCallsWidget()
         {
             var model = _mediator.Request(new ServiceCallsWidgetQuery());
@@ -71,7 +71,7 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-        [WarrantyServiceRepresentativeOnly]
+//        [WarrantyServiceRepresentativeOnly]
         public ActionResult WarrantyServiceRepServiceCallsWidget()
         {
             var model = _mediator.Request(new WarrantyServiceRepServiceCallsWidgetQuery());
@@ -79,7 +79,7 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-        [WarrantyServiceCoordinatorOnly]
+//        [WarrantyServiceCoordinatorOnly]
         public ActionResult AmountSpentWidget()
         {
             var model = _mediator.Request(new AmountSpentWidgetQuery());
@@ -87,7 +87,7 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-        [WarrantyServiceCoordinatorOnly]
+//        [WarrantyServiceCoordinatorOnly]
         public ActionResult ToDoWidget()
         {
             var model = _mediator.Request(new ToDoWidgetQuery());
