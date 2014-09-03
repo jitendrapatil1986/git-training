@@ -71,7 +71,7 @@ namespace Warranty.Core.Features.RepServiceCalls
 
         private IEnumerable<ServiceRepServiceCallsModel.ServiceCall> GetServiceRepOpenServiceCalls(Guid employeeId)
         {
-            const string whereClause = "WHERE CompletionDate IS NULL and wc.WarrantyRepresentativeEmployeeId = @1 and wc.CreatedDate > DATEADD(year, -1, GETDATE())";
+            const string whereClause = "WHERE CompletionDate IS NULL and wc.WarrantyRepresentativeEmployeeId = @1";
 
             var sql = string.Format(SqlTemplate, whereClause, "ORDER BY NumberOfDaysRemaining, ho.HomeOwnerName");
 
@@ -81,7 +81,7 @@ namespace Warranty.Core.Features.RepServiceCalls
 
         private IEnumerable<ServiceRepServiceCallsModel.ServiceCall> GetServiceRepClosedServiceCalls(Guid employeeId)
         {
-            const string whereClause = "WHERE CompletionDate IS NOT NULL and wc.WarrantyRepresentativeEmployeeId = @1 and wc.CreatedDate > DATEADD(year, -1, GETDATE())";
+            const string whereClause = "WHERE CompletionDate IS NOT NULL and wc.WarrantyRepresentativeEmployeeId = @1";
 
             var sql = string.Format(SqlTemplate, whereClause, "ORDER BY wc.CompletionDate desc, ho.HomeOwnerName");
 
