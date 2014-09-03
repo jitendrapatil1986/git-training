@@ -3,6 +3,7 @@ using Accounting.Events.Job;
 using NPoco;
 using NServiceBus;
 using Warranty.Core.Entities;
+using Warranty.Core.Extensions;
 using Warranty.Server.Extensions;
 
 namespace Warranty.Server.Handlers.Jobs
@@ -23,8 +24,10 @@ namespace Warranty.Server.Handlers.Jobs
                 var job = _database.SingleByJdeId<Job>(message.JDEId);
                 var homeOwner = _database.SingleById<HomeOwner>(job.CurrentHomeOwnerId);
 
-                homeOwner.HomeOwnerNumber = Convert.ToInt32(message.HomeBuyerNumber);
-                homeOwner.HomeOwnerName = message.BuyerName;
+                var ownerNumber = Convert.ToInt32(message.HomeBuyerNumber);
+
+                homeOwner.HomeOwnerNumber = (ownerNumber == 0) ? null : (int?)ownerNumber;
+                homeOwner.HomeOwnerName = (message.BuyerName.IsNullOrEmpty()) ? null : message.BuyerName;
                 _database.Update(homeOwner);
             }
         }

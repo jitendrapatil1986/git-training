@@ -72,7 +72,7 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-        [WarrantyServiceCoordinatorOnly]
+//        [WarrantyServiceCoordinatorOnly]
         public ActionResult ToDoWidget()
         {
             var model = _mediator.Request(new ToDoWidgetQuery());

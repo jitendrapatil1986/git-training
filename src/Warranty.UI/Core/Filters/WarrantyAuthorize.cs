@@ -7,7 +7,8 @@ namespace Warranty.UI.Core.Filters
     {
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
-            if (filterContext.HttpContext.User.IsInRole(UserRoles.WarrantyServiceCoordinator) || AuthorizeCore(filterContext.HttpContext)) return;
+            if (filterContext.HttpContext.User.IsInRole(UserRoles.WarrantyServiceCoordinator) || AuthorizeCore(filterContext.HttpContext)) 
+                return;
 
             filterContext.Result = new ViewResult { ViewName = "AuthorizationError" };
         }

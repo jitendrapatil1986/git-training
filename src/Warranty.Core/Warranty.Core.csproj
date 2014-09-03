@@ -176,7 +176,7 @@
     <Compile Include="Features\ToDoWidget\ToDoWidgetModel.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQuery.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQueryHandler.cs" />
-    <Compile Include="Features\CreateServiceCallCustomerSearch\CreateServiceCallCustomerSearchModel.cs" />
+    <Compile Include="Features\CreateServiceCallCustomerSearch\CustomerSearchModel.cs" />
     <Compile Include="Features\CreateServiceCallCustomerSearch\CreateServiceCallCustomerSearchQuery.cs" />
     <Compile Include="Features\CreateServiceCallCustomerSearch\CreateServiceCallCustomerSearchQueryHandler.cs" />
     <Compile Include="Features\CreateServiceCallVerifyCustomer\CreateServiceCallVerifyCustomerModel.cs" />
