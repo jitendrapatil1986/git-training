@@ -116,15 +116,7 @@
                 </p>
             </footer>
         </div>
-@*        <script>
-            require(['bootstrap', 'lib/jquery.validate.min'], function (searchbar) {
-                                                                                                                    @*$(function () {
-                    searchbar.initialize(@((int) typeToSearchFor));
-                });
-                // add this later when we implement search
-            });
-    </script>
-    *@
+        @Html.Partial("_FeedbackModal")
         @RenderSection("scripts", required: false)
     </body>
 </html>

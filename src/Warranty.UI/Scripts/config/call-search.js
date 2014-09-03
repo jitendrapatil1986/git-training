@@ -1,4 +1,4 @@
-﻿define(['urls', 'text!templates/call-search-item.html'], function (urls, template) {
+﻿define(['urls', 'text!templates/call-search-item.html', 'bloodhound'], function (urls, template, bloodhound) {
     return {
         display: 'Service Calls',
         key: 'HomeOwnerName',

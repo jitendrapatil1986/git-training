@@ -48,6 +48,7 @@ namespace Warranty.Core.Features.MyServiceTeamWidget
                                             , LOWER(e.EmployeeName) as EmployeeName
                                             , COUNT(*) as TotalCalls
                                             , SUM(CASE WHEN CompletionDate IS NULL THEN 1 ELSE 0 END) as [TotalOpen]
+                                            , SUM(CASE WHEN CompletionDate IS NOT NULL THEN 1 ELSE 0 END) as [TotalClosed]
                                         FROM [ServiceCalls] sc
                                         INNER JOIN Employees e
                                         ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
@@ -57,7 +58,7 @@ namespace Warranty.Core.Features.MyServiceTeamWidget
                                         ON j.CommunityId = cm.CommunityId
                                         INNER JOIN Cities ci
                                         ON cm.CityId = ci.CityId
-                                        WHERE YEAR(sc.CreatedDate) = YEAR(getdate()) AND CityCode IN ({0})
+                                        WHERE CityCode IN ({0})
                                         GROUP BY WarrantyRepresentativeEmployeeId, e.EmployeeName
                                         ORDER BY e.EmployeeName";
 
@@ -97,7 +98,7 @@ namespace Warranty.Core.Features.MyServiceTeamWidget
                             ON j.CommunityId = c.CommunityId
                             INNER JOIN Cities cy
                             ON c.CityId = cy.CityId
-                            WHERE YEAR(sc.CompletionDate) = YEAR(getdate()) AND CityCode IN ({0})
+                            WHERE ServiceCallStatusId = 3 AND CityCode IN ({0})
                             GROUP BY e.EmployeeName, MONTH(sc.CompletionDate)
                             ORDER BY e.EmployeeName, MONTH(sc.CompletionDate)";
 

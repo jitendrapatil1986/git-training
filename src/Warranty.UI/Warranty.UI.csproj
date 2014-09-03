@@ -250,6 +250,7 @@
     <Content Include="img\loader.gif" />
     <Content Include="img\saturation.png" />
     <Content Include="Scripts\app\ajaxEvents.js" />
+    <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\search.js" />
     <Content Include="Scripts\app\servicecall\CallSummary.js" />
     <Content Include="Scripts\app\servicecall\create.js" />
@@ -351,6 +352,7 @@
     <Content Include="Views\ServiceCall\VerifyCustomer.cshtml" />
     <Content Include="Views\ServiceCall\Create.cshtml" />
     <Content Include="Views\Job\JobSummary.cshtml" />
+    <Content Include="Views\Shared\_FeedbackModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

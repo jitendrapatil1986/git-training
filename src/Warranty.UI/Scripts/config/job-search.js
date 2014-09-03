@@ -1,4 +1,4 @@
-﻿define(['urls', 'text!templates/job-search-item.html'], function (urls, template) {
+﻿define(['urls', 'text!templates/job-search-item.html', 'bloodhound'], function (urls, template, bloodhound) {
     return {
         display: 'Jobs',
         key: 'HomeOwnerName',
