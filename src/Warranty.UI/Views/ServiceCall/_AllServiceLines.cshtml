@@ -1,30 +1,6 @@
 ﻿@using Warranty.UI.Core.Helpers
 @model IEnumerable<Warranty.Core.Features.ServiceCallSummary.ServiceCallSummaryModel.ServiceCallLine>
 
-@helper LineTypeStatusIconHelper(bool completed)
-{
-    if (completed)
-    {
-        <span class='label label-success'><span class='glyphicon glyphicon-ok has-bottom-tooltip' title='Closed'></span></span>
-    }
-    else
-    {
-        <button type='button' class='btn btn-xs btn-warning'>
-            <input type ='checkbox' class='has-bottom-tooltip' title='Click To Close'>
-        </button>
-    }
-}
-
-@helper LineTypeActionIconHelper(bool completed, Guid callId)
-{
-    if (!completed)
-    {
-        <li>@Html.ActionLink("Edit", "Edit", "ServiceCall", new { id = callId }, null)</li>
-    }
-    <li>@Html.ActionLink("Add Comment", "AddLineNote", "ServiceCall", new {id = callId}, null)</li>
-}
-
-
 @foreach (var line in Model)
 {
     <div class="service-call-line">
@@ -41,22 +17,6 @@
             <div class="col-md-1 small wrap-text has-bottom-tooltip" title="Root Cause">
                 @line.LineItemRoot
             </div>
-            <div class="col-md-1 small">
-                <div class="text-center has-bottom-tooltip" title="No. Of Line Comments">
-                    <a data-toggle="collapse" href="#collapseLineCallNotes@(ViewData["lineStatus"] + line.LineNumber.ToString())" class="text-capitalize accordion-toggle collapsed">
-                        <span class="glyphicon glyphicon-comment"> <u>3</u></span>
-                    </a> 
-                </div>
-            </div>
-            <div class="col-md-1 text-center">
-                @LineTypeStatusIconHelper(line.Completed)
-            </div>
-            <div class="col-md-1 text-center">
-                <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></button>
-                <ul class="dropdown-menu" role="menu">
-                    @LineTypeActionIconHelper(line.Completed, line.ServiceCallId)
-                </ul>
-            </div>
         </div>
         <div class="row">
             <div class="col-md-1">
@@ -67,31 +27,6 @@
             </div>
             <div class="col-md-6 small">
                 @line.CauseDescription
-            </div>
-            <div class="col-md-1 small">
-                
-            </div>
-            <div class="col-md-1">
-                
-            </div>
-            <div class="col-md-1">
-                
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-10 col-md-offset-1">
-                <ul id="collapseLineCallNotes@(ViewData["lineStatus"] + line.LineNumber.ToString())" class="list-group collapse no-left-right-padding small">
-                    <br/>
-                    <li class="list-group-item">
-                        Placeholder for notes 1
-                    </li>
-                    <li class="list-group-item">
-                        Placeholder for notes 2
-                    </li>
-                    <li class="list-group-item">
-                        Placeholder for notes 3
-                    </li>
-                </ul>
             </div>
         </div>
         <div class="clearfix"></div>
