@@ -1,4 +1,4 @@
-define(['urls','jquery'], function(urls, $) {
+define(['urls','jquery', 'bootstrap'], function(urls, $, bootstrap) {
     $(function() {
            
         $(".approve-button").click(function (e) {

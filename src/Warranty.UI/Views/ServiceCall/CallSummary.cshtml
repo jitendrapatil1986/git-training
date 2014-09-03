@@ -50,10 +50,8 @@
                         @Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate)
                     </div>
                     <div class="col-md-5">
-                        <a>
                             <h3 class="panel-title text-capitalize">@Model.ServiceCallSummary.HomeownerName</h3>
-                        </a>
-                        @Model.ServiceCallSummary.Address
+                        @Html.ActionLink(Model.ServiceCallSummary.Address, "JobSummary", "Job", new {id = Model.ServiceCallSummary.JobId}, null)
                     </div>
                     <div class="col-md-3">
                         @Format.PhoneNumber(Model.ServiceCallSummary.PhoneNumber)<br />
@@ -62,25 +60,13 @@
                     <div class="col-md-2">
                         @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
                     </div>
-                    <div class="col-md-1 text-center">
-                        <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>@Html.ActionLink("Reassign", "Reassign", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId }, null)</li>
-                            <li>@Html.ActionLink("Request Payment", "RequestPayment", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId }, null)</li>
-                            <li>@Html.ActionLink("Add Note", "AddNote", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId }, null)</li>
-                            <li>@Html.ActionLink("Close", "Close", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId }, null)</li>
-                        </ul>
-                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3 text-capitalize">
                         Employee: @Model.ServiceCallSummary.AssignedTo
                     </div>
                     <div class="col-md-3">
-                        Job Number: @Html.ActionLink(Model.ServiceCallSummary.JobNumber, "JobSummary", "Job", new {id = Model.ServiceCallSummary.JobId}, null)
-                    </div>
-                    <div class="col-md-3">
-                        Payments:
+                        Job Number: @Model.ServiceCallSummary.JobNumber
                     </div>
                     <div class="col-md-3" id="approveCommands">
                         @if (Model.ServiceCallSummary.ServiceCallStatus == ServiceCallStatus.Requested)
@@ -130,29 +116,6 @@
                 </div>
             </div>
 
-            <div class="panel-footer">
-                <div class="panel list-group-item no-left-right-padding">
-                    <a data-toggle="collapse" href="#collapseCallNotes" class="text-capitalize accordion-toggle collapsed">Notes</a>
-                    <div class="label label-default">
-                        @Model.ServicCallComments.Count()
-                    </div>
-                    <div id="collapseCallNotes" class="collapse panel-body no-left-right-padding">
-                        @foreach (var line in Model.ServicCallComments)
-                        {
-                            <div class="service-call-line">
-                                <div class="col-md-1">
-                                    <small class="pull-right text-muted">@Format.DateMonthDayYear(line.CreatedDate)</small>
-                                </div>
-                                <div class="col-md-10">
-                                    @line.Comment
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
-
             <div class="row">
                 <div class="col-md-12 text-center">
                     <h4>
@@ -167,9 +130,7 @@
             <li><a href="#open_service_lines" role="tab" data-toggle="tab">Open <span class="label label-warning">@Model.ServiceCallLines.Count(x => !x.Completed)</span></a></li>
             <li><a href="#closed_service_lines" role="tab" data-toggle="tab">Closed <span class="label label-success">@Model.ServiceCallLines.Count(x => x.Completed)</span></a></li>
             <li class="pull-right">
-                <span class="widget-header">Line Items 
-                    <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Line Item"><span class="glyphicon glyphicon-plus small"></span></button>
-                </span>
+                <span class="widget-header">Line Items</span>
             </li>
         </ul>
 
@@ -185,5 +146,4 @@
             </div>
         </div>
     </div>
-
 </div>
