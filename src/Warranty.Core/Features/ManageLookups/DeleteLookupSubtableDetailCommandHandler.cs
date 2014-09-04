@@ -5,7 +5,7 @@
     using Entities.Lookups;
     using NPoco;
 
-    public class DeleteLookupSubtableDetailCommandHandler : ICommandHandler<DeleteLookupSubtableDetailModel, int>
+    public class DeleteLookupSubtableDetailCommandHandler : ICommandHandler<DeleteLookupSubtableDetailCommand, bool>
     {
         private readonly IDatabase _database;
 
@@ -13,17 +13,18 @@
         {
             _database = database;
         }
-        public int Handle(DeleteLookupSubtableDetailModel message)
+        public bool Handle(DeleteLookupSubtableDetailCommand message)
         {
-            var lookupType = Assembly.GetAssembly(typeof(LookupEntity)).GetTypes().Single(x => x.Name == message.LookupType);
+            var lookupType = Assembly.GetAssembly(typeof(LookupEntity)).GetTypes().Single(x => x.Name == message.Model.LookupType);
             var singleByIdMethod = typeof (Database).GetMethod("SingleById");
             var genericSingleByIdMethod = singleByIdMethod.MakeGenericMethod(lookupType);
 
-            object[] args = {message.Id};
+            object[] args = {message.Model.Id};
 
             var result = genericSingleByIdMethod.Invoke(_database, args);
             _database.Delete(result);
-            return message.Id;
+
+            return true;
         }
     }
 }

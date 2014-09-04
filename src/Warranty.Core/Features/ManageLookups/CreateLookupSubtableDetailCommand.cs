@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Warranty.Core.Features.ManageLookups
+﻿namespace Warranty.Core.Features.ManageLookups
 {
-    public class CreateLookupSubtableDetailCommand : ICommand<CreateLookupSubtableDetailModel>
+    public class CreateLookupSubtableDetailCommand : ICommand<bool>
     {
+        public CreateLookupSubtableDetailModel Model { get; set; }
     }
 }
