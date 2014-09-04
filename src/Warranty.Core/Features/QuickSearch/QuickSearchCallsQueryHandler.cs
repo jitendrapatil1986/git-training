@@ -35,7 +35,8 @@ namespace Warranty.Core.Features.QuickSearch
                                             on j.CommunityId = co.CommunityId
                                             inner join Cities cy
                                             on co.CityId = cy.CityId
-                                            WHERE CityCode IN ({0}) AND JobNumber+AddressLine+HomeOwnerName LIKE '%'+@0+'%'";
+                                            WHERE CityCode IN ({0}) AND JobNumber+AddressLine+HomeOwnerName LIKE '%'+@0+'%'
+                                            ORDER BY HomeOwnerName";
 
             var result = _database.Fetch<QuickSearchCallModel>(string.Format(sqlTemplate, markets.CommaSeparateWrapWithSingleQuote()), request.Query);
             return result;

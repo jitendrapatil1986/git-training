@@ -4,6 +4,7 @@ namespace Warranty.Core.Features.CreateServiceCallCustomerSearch
 {
     using NPoco;
     using Security;
+    using Extensions;
 
     public class CreateServiceCallCustomerSearchQueryHandler : IQueryHandler<CreateServiceCallCustomerSearchQuery, IEnumerable<CustomerSearchModel>>
     {
@@ -22,13 +23,7 @@ namespace Warranty.Core.Features.CreateServiceCallCustomerSearch
 
             using (_database)
             {
-                return GetCustomers(query.Query);
-            }
-        }
-
-        private IEnumerable<CustomerSearchModel> GetCustomers(string searchCriteria)
-        {
-            const string sql = @"SELECT  ho.HomeOwnerId
+                const string sql = @"SELECT  ho.HomeOwnerId as Id
                                         ,j.JobId
                                         ,ho.[HomeOwnerNumber]
                                         ,ho.[HomeOwnerName]
@@ -49,14 +44,20 @@ namespace Warranty.Core.Features.CreateServiceCallCustomerSearch
                                 FROM HomeOwners ho
                                 INNER JOIN Jobs j
                                 ON ho.JobId = j.JobId
-                                WHERE (ho.HomeOwnerName LIKE '%' + @0 + '%') OR 
+                                INNER JOIN Communities c
+                                ON j.CommunityId = c.CommunityId
+                                INNER JOIN Cities cy
+                                ON c.CityId = cy.CityId
+                                WHERE ((ho.HomeOwnerName LIKE '%' + @0 + '%') OR 
                                 (j.AddressLine LIKE '%' + @0 + '%') OR 
-                                (j.JobNumber LIKE '%' + @0 + '%')
+                                (j.JobNumber LIKE '%' + @0 + '%'))
+                                AND CityCode IN ({0})
                                 ORDER BY ho.HomeOwnerName, j.JobNumber";
 
-            var result = _database.Fetch<CustomerSearchModel>(sql, searchCriteria);
+                var result = _database.Fetch<CustomerSearchModel>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()), query.Query);
 
-            return result;
+                return result;
+            }
         }
     }
 }

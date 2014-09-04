@@ -39,6 +39,8 @@ namespace Warranty.Core.Features.JobSummary
         public string OtherNumber { get; set; }
         public string WorkNumber { get; set; }
         public string Email { get; set; }
+        public int YearsWithinWarranty { get; set; }
+        public DateTime WarrantyStartDate { get; set; }
 
         public IEnumerable<JobServiceCall> JobServiceCalls { get; set; }
         public IEnumerable<JobPayment> JobPayments { get; set; }
@@ -99,7 +101,11 @@ namespace Warranty.Core.Features.JobSummary
                 get { return ServiceCallCalculator.CalculatePercentComplete(NumberOfDaysRemaining); }
             }
 
-            public List<JobServiceCallComment> JobServiceCallComments { get; set; }  //NPoco needs prop to be List<> to use FetchOneToMany(). Also need to set to IGNORE if inserting.
+            public List<JobServiceCallComment> JobServiceCallComments { get; set; }
+
+            public string Summary { get; set; }
+            public string[] SummaryOfLineItems{get { return Summary.Split('|'); }}
+//NPoco needs prop to be List<> to use FetchOneToMany(). Also need to set to IGNORE if inserting.
 
             public class JobServiceCallComment
             {

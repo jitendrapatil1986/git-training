@@ -4,7 +4,7 @@
 
     public class CustomerSearchModel
     {
-            public Guid HomeOwnerId { get; set; }
+            public Guid Id { get; set; }
             public Guid JobId { get; set; }
             public int HomeOwnerNumber { get; set; }
             public string HomeOwnerName { get; set; }

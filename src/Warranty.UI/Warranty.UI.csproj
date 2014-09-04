@@ -196,6 +196,8 @@
     <Compile Include="Core\Filters\WarrantyServiceCoordinatorOnlyAttribute.cs" />
     <Compile Include="Core\Filters\WarrantyAuthorize.cs" />
     <Compile Include="Core\Filters\NavActionFilterAttribute.cs" />
+    <Compile Include="Core\Filters\WarrantyServiceManagerOnlyAttribute.cs" />
+    <Compile Include="Core\Filters\WarrantyServiceRepresentativeOnlyAttribute.cs" />
     <Compile Include="Core\Helpers\ClientApiHelper.cs" />
     <Compile Include="Core\Helpers\Css.cs" />
     <Compile Include="Core\Helpers\EnvironmentHelper.cs" />
@@ -253,9 +255,11 @@
     <Content Include="img\saturation.png" />
     <Content Include="Scripts\app\admin\ManageLookups.js" />
     <Content Include="Scripts\app\ajaxEvents.js" />
+    <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\search.js" />
     <Content Include="Scripts\app\servicecall\CallSummary.js" />
     <Content Include="Scripts\app\servicecall\create.js" />
+    <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
     <Content Include="Scripts\config\customer-search.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />
     <Content Include="Scripts\lib\handlebars.amd.min.js" />
@@ -272,9 +276,6 @@
     <Content Include="Scripts\app\customBindings.js" />
     <Content Include="Scripts\app\dates.js" />
     <Content Include="Scripts\app\formInputs.js" />
-    <Content Include="Scripts\app\home\widgetAmountSpent.js" />
-    <Content Include="Scripts\app\home\Index.js" />
-    <Content Include="Scripts\app\home\widgetServiceCalls.js" />
     <Content Include="Scripts\app\Home\widgetToDos.js" />
     <Content Include="Scripts\app\Home\widgetAmountSpent.js" />
     <Content Include="Scripts\app\Home\Index.js" />
@@ -287,6 +288,7 @@
     <Content Include="Scripts\app\shared\Default.js" />
     <Content Include="Scripts\lib\text.js" />
     <Content Include="Scripts\templates\call-search-item.html" />
+    <Content Include="Scripts\templates\customer-search-item.html" />
     <Content Include="Scripts\templates\job-search-item.html" />
     <Content Include="Scripts\app\toastrNotify.js" />
     <Content Include="Scripts\app\tooltips.js" />
@@ -356,6 +358,7 @@
     <Content Include="Views\ServiceCall\Create.cshtml" />
     <Content Include="Views\Job\JobSummary.cshtml" />
     <Content Include="Views\Admin\ManageLookups.cshtml" />
+    <Content Include="Views\Shared\_FeedbackModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

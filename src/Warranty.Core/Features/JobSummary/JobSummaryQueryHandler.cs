@@ -82,6 +82,8 @@ namespace Warranty.Core.Features.JobSummary
                                 ,be.EmployeeName as BuilderName
                                 ,se.EmployeeId as SalesConsultantEmployeeId
                                 ,se.EmployeeName as SalesConsultantName
+                                , DATEDIFF(yy, j.CloseDate, getdate()) as YearsWithinWarranty
+                                , j.CloseDate as WarrantyStartDate
                             FROM Jobs j
                             INNER JOIN HomeOwners ho
                             ON j.JobId = ho.JobId
@@ -101,6 +103,9 @@ namespace Warranty.Core.Features.JobSummary
             const string sql = @"SELECT 
                                     wc.ServiceCallId as ServiceCallId
                                     ,Servicecallnumber as CallNumber
+                                    ,STUFF((SELECT '| ' + l.ProblemDescription
+                                                    FROM ServiceCallLineItems l WHERE l.ServiceCallId = wc.servicecallid
+                                                    FOR xml path('')),1,1,'') AS Summary
                                     ,wc.CreatedDate
                                     ,wc.CompletionDate
                                     ,case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining

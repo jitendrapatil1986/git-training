@@ -34,6 +34,6 @@ require.config({
         'highcharts': { deps: ['jquery'], exports: 'Highcharts' },
     },
     callback: function () {
-        require(['app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields']);
+        require(['app/feedbackForm', 'app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields']);
     }
 });

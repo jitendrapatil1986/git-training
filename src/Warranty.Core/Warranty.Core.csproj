@@ -188,10 +188,14 @@
     <Compile Include="Features\JobSummary\JobSummaryModel.cs" />
     <Compile Include="Features\JobSummary\JobSummaryQuery.cs" />
     <Compile Include="Features\JobSummary\JobSummaryQueryHandler.cs" />
+    <Compile Include="Features\SendFeedback\SendFeedbackCommand.cs" />
+    <Compile Include="Features\SendFeedback\SendFeedbackCommandHandler.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallDenyHandler.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallDenyCommand.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommand.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveHandler.cs" />
+    <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQuery.cs" />
+    <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQueryHandler.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetModel.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQuery.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQueryHandler.cs" />
@@ -223,6 +227,8 @@
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetModel.cs" />
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQuery.cs" />
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQueryHandler.cs" />
+    <Compile Include="Services\ISendSmtpMailMessage.cs" />
+    <Compile Include="Services\SendSmtpMailMessage.cs" />
     <Compile Include="Services\ServiceCallCalculator.cs" />
     <Compile Include="Net4Collection.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">

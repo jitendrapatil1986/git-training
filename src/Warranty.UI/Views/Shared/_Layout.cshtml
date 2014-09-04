@@ -87,17 +87,17 @@
             <div class="container">
                 <ul class="nav navbar-nav">
                     @NavItemHelper(NavItem.Home, Url.Action("Index", "Home"))
-                    <li class="divider divider-vertical hidden-xs"></li>
-                    @NavItemSectionHelper(NavHeaderItem.Create.Key)
+                    @*<li class="divider divider-vertical hidden-xs"></li>
+                    @NavItemSectionHelper(NavHeaderItem.Create.Key)*@
                 </ul>
-                <div class="nav nav-extra col-md-3 pull-right">
-                    <div class="input-group">
-                        <span class="input-group-addon"></span>
-                        <input id="searchBar" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder="">
-                        <div class="input-group-btn">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Type <span class="caret"></span></button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                            </ul>
+                <div class="nav nav-extra">
+                    <div class="col-md-3 pull-right">
+                        <div class="input-group">
+                            <input id="searchBar" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder=""/>
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Type <span class="caret"></span></button>
+                                <ul class="dropdown-menu dropdown-menu-right"></ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -116,15 +116,7 @@
                 </p>
             </footer>
         </div>
-@*        <script>
-            require(['bootstrap', 'lib/jquery.validate.min'], function (searchbar) {
-                                                                                                                    @*$(function () {
-                    searchbar.initialize(@((int) typeToSearchFor));
-                });
-                // add this later when we implement search
-            });
-    </script>
-    *@
+        @Html.Partial("_FeedbackModal")
         @RenderSection("scripts", required: false)
     </body>
 </html>
