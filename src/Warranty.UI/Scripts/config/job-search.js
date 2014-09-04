@@ -2,6 +2,7 @@
     return {
         display: 'Jobs',
         key: 'HomeOwnerName',
+        updateWatermark: true,
         itemTemplate: template,
         targetUrl: urls.Job.JobSummary,
         emptyText: 'No jobs found.',
