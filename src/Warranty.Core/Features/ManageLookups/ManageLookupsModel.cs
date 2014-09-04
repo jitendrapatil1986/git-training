@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class ManageLookupsModel
+    public class ManageLookupsModel : ICommand<int>
     {
         public ManageLookupsModel()
         {
@@ -10,5 +10,8 @@
         }
 
         public IEnumerable<string> LookupTypes { get; set; }
+        public int Id { get; set; }
+        public string DisplayName { get; set; }
+        public string LookupType { get; set; }
     }
 }

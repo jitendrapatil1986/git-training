@@ -1,20 +1,41 @@
 ﻿@using Warranty.Core.Extensions
 @model Warranty.Core.Features.ManageLookups.ManageLookupsModel
 
-<h1>Manage Lookups</h1>
+<div class="container">
+    <h2>Manage Lookups</h2>
 
-<h3>Select Lookup to Edit</h3>
-<select data-bind="options: availableLookups, value: selectedLookup,event: { change: selectionChanged }"></select>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>Select Lookup to Edit</h4>
+            <select class="dropdown" data-bind="options: availableLookups, value: selectedLookup,event: { change: selectionChanged }"></select>
 
-<h4 data-bind="text: lookupType()"></h4>
-<ul data-bind="foreach: lookupItems">
-    <li>
-        <span data-bind="text: displayName"></span>
-        <a href="#" data-bind="click: $parent.removeItem">Remove</a>
-    </li>
-</ul>
-<button data-bind="click: addItem">Add</button>
-
+            <h4 data-bind="text: lookupType()"></h4>
+        </div>
+        
+        <div class="panel-body">
+            <div data-bind="foreach: lookupItems" class="">
+                @*<li>
+                    <span data-bind="text: displayName"></span>
+                    <a href="#" data-bind="click: $parent.removeItem">Remove</a>
+                </li>*@
+    
+                <div class="row">
+                    <div class="col-md-3">
+                        <span data-bind="text: displayName"></span>
+                    </div>
+                    <div class="col-md-1 pull-left">
+                        <a href="#" data-bind="click: $parent.removeItem">Remove</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    @Html.Label("Description")
+    @Html.TextArea("Description", null, new {id="displayName", @class="form-control"})
+    <br/>
+    <button data-bind="click: addItem">Add</button>
+</div>
 
 @section modules
 {
