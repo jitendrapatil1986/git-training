@@ -1,0 +1,90 @@
+﻿@model Warranty.Core.Features.ServiceCallSummary.ServiceCallSummaryModel.NewServiceCallLineItem
+
+<h3 >Line Items
+    <span>
+        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Line Item" data-toggle="collapse" data-target="#addCallLineItem"><span class="glyphicon glyphicon-plus"></span></button>
+    </span>
+</h3>
+
+@Html.HiddenFor(model => model.ServiceCallId, new{id="addCallLineServiceCallId", @class="form-control"})
+<div id="addCallLineItem" class="collapse">
+    <div class="panel panel-default">
+        <div class="panel-heading">Add Line Item</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Label("Problem Code")
+                    @Html.DropDownList("SelectProblemCode", Model.ProblemCodes, "Select Problem Code", new {id="addCallLineProblemCode", @class="form-control"} )
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Label("Description")
+                    @Html.TextArea("Description", null, new {id="addCallLineProblemDescription", @class="form-control"})
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-md-1">
+                    <button class="btn btn-default" data-bind="click: addLineItem">Save</button>
+                </div>
+                <div class="col-md-1">
+                    <a href="#">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    require(['/Scripts/app/main.js'], function () {
+        require(['jquery', 'ko', 'urls', 'toastr'], function ($, ko, urls, toastr) {
+            function createServiceCallLineItemViewModel() {
+                var self = this;
+
+                self.addLineItem = function () {
+                    self.serviceCallId = $("#addCallLineServiceCallId").val();
+                    self.problemCode = $("#addCallLineProblemCode").find('option:selected').text();
+                    self.problemCodeId = $("#addCallLineProblemCode").val();
+                    self.problemDescription = $("#addCallLineProblemDescription").val();
+                    var lineData = ko.toJSON(self);
+
+                    $.ajax({
+                        url: "/ServiceCall/AddLineItem", //TODO: Set without hard-code.
+                        type: "POST",
+                        data: lineData,
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    })
+                    .fail(function (response) {
+                        toastr.error("There was an issue adding the line item. Please try again!");
+                    })
+                    .done(function (response) {
+                        self.lookupItems.removeAll();
+
+                        $.ajax({
+                            url: urls.ManageLookups.LookupSubtableDetails,
+                            cache: false,
+                            data: { query: self.selectedLookup() },
+                            dataType: "json",
+                        })
+                        .done(function (nestedResponse) {
+                            //TODO: Refresh the line item partial page.
+                            toastr.success("Success!");
+                        });
+                    });
+
+                    $("#addCallLineProblemDescription").val('');
+                    $("#addCallLineProblemCode").val('');
+                };
+
+            }
+
+            var viewModel = new createServiceCallLineItemViewModel();
+            ko.applyBindings(viewModel);
+        });
+    });
+
+</script>

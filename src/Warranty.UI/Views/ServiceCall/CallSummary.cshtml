@@ -124,26 +124,9 @@
                 </div>
             </div>
         </div>
-
-        <ul class="nav nav-tabs" role="tablist">
-            <li class="active"><a href="#all_service_lines" role="tab" data-toggle="tab">All <span class="label label-default">@Model.ServiceCallLines.Count()</span></a></li>
-            <li><a href="#open_service_lines" role="tab" data-toggle="tab">Open <span class="label label-warning">@Model.ServiceCallLines.Count(x => !x.Completed)</span></a></li>
-            <li><a href="#closed_service_lines" role="tab" data-toggle="tab">Closed <span class="label label-success">@Model.ServiceCallLines.Count(x => x.Completed)</span></a></li>
-            <li class="pull-right">
-                <span class="widget-header">Line Items</span>
-            </li>
-        </ul>
-
-        <div class="tab-content">
-            <div class="tab-pane active" id="all_service_lines">
-                @Html.Partial("_AllServiceLines", Model.ServiceCallLines, new ViewDataDictionary { { "lineStatus", "All" } })
-            </div>
-            <div class="tab-pane" id="open_service_lines">
-                @Html.Partial("_AllServiceLines", Model.ServiceCallLines.Where(x => !x.Completed), new ViewDataDictionary { { "lineStatus", "Open" } })
-            </div>
-            <div class="tab-pane" id="closed_service_lines">
-                @Html.Partial("_AllServiceLines", Model.ServiceCallLines.Where(x => x.Completed), new ViewDataDictionary { { "lineStatus", "Closed" } })
-            </div>
-        </div>
+        <section>
+            @Html.Partial("_AddServiceLineItem", Model.AddServiceCallLineItem)
+            @Html.Partial("_AllServiceLines", Model.ServiceCallLines, new ViewDataDictionary { { "lineStatus", "All" } })
+        </section>
     </div>
 </div>

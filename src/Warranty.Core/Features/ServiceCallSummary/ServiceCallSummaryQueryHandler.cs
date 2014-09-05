@@ -31,6 +31,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                         ServiceCallSummary = GetServiceCallSummary(query.ServiceCallId),
                         ServiceCallLines = GetServiceCallLines(query.ServiceCallId),
                         ServicCallComments = GetServiceCallComments(query.ServiceCallId),
+                        AddServiceCallLineItem = new ServiceCallSummaryModel.NewServiceCallLineItem(query.ServiceCallId, SharedQueries.ProblemCodes.GetProblemCodeList(_database))
                     };
             }
         }
@@ -107,6 +108,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                 ORDER BY li.LineNumber";
 
             var result = _database.Fetch<ServiceCallSummaryModel.ServiceCallLine>(sql, serviceCallId.ToString());
+
+
 
             return result;
         }

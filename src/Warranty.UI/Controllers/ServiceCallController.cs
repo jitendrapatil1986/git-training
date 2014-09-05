@@ -5,6 +5,7 @@ namespace Warranty.UI.Controllers
     using System;
     using System.Web.Mvc;
     using Warranty.Core;
+    using Warranty.Core.Features.AddServiceCallLineItem;
     using Warranty.Core.Features.CreateServiceCall;
     using Warranty.Core.Features.CreateServiceCallCustomerSearch;
     using Warranty.Core.Features.CreateServiceCallVerifyCustomer;
@@ -92,6 +93,17 @@ namespace Warranty.UI.Controllers
             {
                 return View();
             }
+        }
+
+        [HttpPost]
+        public ActionResult AddLineItem(AddServiceCallLineItemModel model)
+        {
+            _mediator.Send(new AddServiceCallLineItemCommand
+                {
+                    Model = model
+                });
+
+            return Json(new {success = "true"}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Approve(Guid id)
