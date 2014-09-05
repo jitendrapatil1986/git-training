@@ -463,7 +463,16 @@ WHEN NOT MATCHED THEN INSERT (ServiceCallId
                                 , Comp_Date
                                 , HOSig
                                 , Date_Open
-                                , CreatedBy);
+                                , CreatedBy)
+WHEN MATCHED THEN UPDATE SET ServiceCallType = LIST.CallType
+                                , JobId = LIST.JobId
+                                , Contact = LIST.Contact
+                                , WarrantyRepresentativeEmployeeId = LIST.repId
+                                , CompletionDate = LIST.Comp_Date
+                                , HomeOwnerSignature = LIST.HOSig
+                                , CreatedDate = LIST.Date_Open
+                                , CreatedBy = LIST.CreatedBy;
+;
 
 ;WITH JobSet AS (SELECT * 
                 FROM Jobs
@@ -745,7 +754,13 @@ WHEN MATCHED THEN UPDATE SET
 
 UPDATE ServiceCalls SET ServiceCallStatusId = S.ServiceCallStatusId
 FROM lookups.ServiceCallStatuses S
-WHERE ServiceCalls.ServiceCallStatusId IS NULL AND
+WHERE 
+(
+    ServiceCalls.ServiceCallStatusId IS NULL
+    OR ServiceCalls.ServiceCallStatusId IN (SELECT ServiceCallStatusId
+                                                FROM lookups.ServiceCallStatuses
+                                                WHERE ServiceCallStatus IN ('Open', 'Closed'))
+) AND
     (
         (
             CASE WHEN CompletionDate = '' THEN NULL ELSE CompletionDate END IS NULL
