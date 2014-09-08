@@ -57,14 +57,14 @@
                         });
                     });
                         
-                    toastr.success("Success!");
+                    toastr.success("Success! Item added.");
                 });
 
                 $("#displayName").val('');
             };
             
             self.removeItem = function (item) {
-                var strConfirm = confirm("Continue removing item?");
+                var strConfirm = confirm("Are you sure you want to delete the item?");
                 if (strConfirm) {
                     item.lookupType = self.selectedLookup();
                     var lineData = ko.toJSON(item);
@@ -81,7 +81,7 @@
                             toastr.error("There was an issue removing the line item. Please try again");
                         })
                         .done(function (response) {
-                            toastr.success("Success!");
+                            toastr.success("Success! Item deleted.");
                         });
                     self.lookupItems.remove(item);
                 }
