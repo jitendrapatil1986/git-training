@@ -113,8 +113,6 @@
     <Compile Include="DataAccess\Mappings\Lookups\LookupMap.cs" />
     <Compile Include="DataAccess\Mappings\Lookups\ProblemCodeMap.cs" />
     <Compile Include="DataAccess\Mappings\Lookups\RootCauseMap.cs" />
-    <Compile Include="DataAccess\Mappings\Lookups\ServiceCallStatusMap.cs" />
-    <Compile Include="DataAccess\Mappings\Lookups\ServiceCallTypeMap.cs" />
     <Compile Include="DataAccess\Mappings\PaymentMap.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMap.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMapping.cs" />
@@ -140,8 +138,6 @@
     <Compile Include="Entities\Lookups\LookupEntity.cs" />
     <Compile Include="Entities\Lookups\ProblemCode.cs" />
     <Compile Include="Entities\Lookups\RootCause.cs" />
-    <Compile Include="Entities\Lookups\ServiceCallStatus.cs" />
-    <Compile Include="Entities\Lookups\ServiceCallType.cs" />
     <Compile Include="Entities\Payment.cs" />
     <Compile Include="Entities\Project.cs" />
     <Compile Include="Entities\Employee.cs" />
