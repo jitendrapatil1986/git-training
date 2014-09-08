@@ -105,7 +105,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                 INNER JOIN ServiceCallLineItems li
                                 ON wc.ServiceCallId = li.ServiceCallId
                                 WHERE wc.ServiceCallId = @0
-                                ORDER BY li.LineNumber";
+                                ORDER BY li.LineNumber DESC";
 
             var result = _database.Fetch<ServiceCallSummaryModel.ServiceCallLine>(sql, serviceCallId.ToString());
 

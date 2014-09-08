@@ -254,7 +254,7 @@
     <Content Include="Scripts\app\ajaxEvents.js" />
     <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\search.js" />
-    <Content Include="Scripts\app\servicecall\addLineItem.js" />
+    <Content Include="Scripts\app\servicecall\addServiceLineItem.js" />
     <Content Include="Scripts\app\servicecall\CallSummary.js" />
     <Content Include="Scripts\app\servicecall\create.js" />
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />

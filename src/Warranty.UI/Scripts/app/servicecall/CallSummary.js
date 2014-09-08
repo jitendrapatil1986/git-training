@@ -1,5 +1,5 @@
 require(['/Scripts/app/main.js'], function() {
-    require(['urls', 'jquery', 'bootstrap'], function(urls, $, bootstrap) {
+    require(['urls', 'jquery', 'bootstrap', 'app/servicecall/addServiceLineItem'], function (urls, $, bootstrap) {
         $(function() {
             $(".approve-button").click(function(e) {
                 e.preventDefault();
