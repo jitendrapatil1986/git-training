@@ -15,7 +15,6 @@ DELETE FROM imports.ServiceCallImports WHERE EXISTS (SELECT 1 FROM imports.Servi
                                                                     AND imports.ServiceCallImports.Call_Num = Sub.Call_Num
                                                                     AND imports.ServiceCallImports.Last_Modified < Sub.Last_Modified)
 
-
 SELECT CommunityId INTO #CommunitiesToDelete
     FROM Communities 
     WHERE CityId IN (SELECT CityId FROM Cities WHERE ',' + @CityCodeList + ',' LIKE '%,' + CityCode + ',%' OR @CityCodeList IS NULL);
@@ -284,9 +283,9 @@ USING (SELECT
                                         ELSE SalesConsultantNumber END
             ) AS Sales,
             WarrantyExpirationDate,
-            TotalSalesPrice
+            ROW_NUMBER() OVER (PARTITION BY JobNumber ORDER BY ImportId DESC) AS rowNumber
         FROM imports.CustomerImports CI) AS LIST
-ON TARGET.JobNumber = LIST.JobNumber
+ON TARGET.JobNumber = LIST.JobNumber AND rowNumber = 1
 WHEN NOT MATCHED BY TARGET THEN INSERT (JobId
                                 , JobNumber
                                 , CloseDate
@@ -305,7 +304,6 @@ WHEN NOT MATCHED BY TARGET THEN INSERT (JobId
                                 , BuilderEmployeeId
                                 , SalesConsultantEmployeeId
                                 , WarrantyExpirationDate
-                                , TotalPrice
                                 , CreatedDate
                                 , CreatedBy
                                 , JdeIdentifier)
@@ -327,7 +325,6 @@ WHEN NOT MATCHED BY TARGET THEN INSERT (JobId
                                 , Builder
                                 , Sales
                                 , WarrantyExpirationDate
-                                , TotalSalesPrice
                                 , GETDATE()
                                 , @ImportUser
                                 , JobNumber)
@@ -348,11 +345,8 @@ WHEN MATCHED THEN UPDATE SET
                     TARGET.BuilderEmployeeId = LIST.Builder,
                     TARGET.SalesConsultantEmployeeId = LIST.Sales,
                     TARGET.WarrantyExpirationDate = LIST.WarrantyExpirationDate,
-                    TARGET.TotalPrice = LIST.TotalSalesPrice,
                     TARGET.UpdatedDate = GETDATE(),
-                    TARGET.UpdatedBy = @ImportUser
-WHEN NOT MATCHED BY SOURCE THEN DELETE;
-
+                    TARGET.UpdatedBy = @ImportUser;
 
 ;WITH JobSet AS ((SELECT * 
                 FROM Jobs
@@ -372,10 +366,11 @@ USING (SELECT
             OtherPhone,
             WorkPhone1,
             WorkPhone2,
-            Emailcontact
+            Emailcontact,
+            ROW_NUMBER() OVER (PARTITION BY (SELECT TOP 1 JobId FROM Jobs J WHERE J.JobNumber = CI.JobNumber ORDER BY JobId), OwnerNumber ORDER BY ImportId DESC) as rowNumber
             FROM imports.CustomerImports CI
             WHERE EXISTS (SELECT TOP 1 JobId FROM Jobs J WHERE J.JobNumber = CI.JobNumber ORDER BY JobId)) AS LIST
-ON TARGET.JobId = LIST.JobId AND TARGET.HomeOwnerNumber = LIST.OwnerNumber
+ON TARGET.JobId = LIST.JobId AND TARGET.HomeOwnerNumber = LIST.OwnerNumber AND rowNumber = 1
 WHEN NOT MATCHED BY TARGET THEN INSERT (HomeOwnerId
                                 , JobId
                                 , HomeOwnerNumber
@@ -406,8 +401,7 @@ WHEN MATCHED THEN UPDATE SET TARGET.HomeOwnerNumber = LIST.ownerNumber,
                     TARGET.WorkPhone2 = LIST.WorkPhone2,
                     TARGET.EmailAddress = LIST.EmailContact,
                     TARGET.UpdatedDate = GETDATE(),
-                    TARGET.UpdatedBy = @ImportUser
-WHEN NOT MATCHED BY SOURCE THEN DELETE;
+                    TARGET.UpdatedBy = @ImportUser;
 
 UPDATE Jobs SET CurrentHomeOwnerId = (SELECT TOP 1 HomeOwnerId 
                                         FROM HomeOwners HO 
@@ -470,7 +464,15 @@ WHEN NOT MATCHED THEN INSERT (ServiceCallId
                                 , HOSig
                                 , Date_Open
                                 , CreatedBy)
-WHEN NOT MATCHED BY SOURCE THEN DELETE;
+WHEN MATCHED THEN UPDATE SET ServiceCallType = LIST.CallType
+                                , JobId = LIST.JobId
+                                , Contact = LIST.Contact
+                                , WarrantyRepresentativeEmployeeId = LIST.repId
+                                , CompletionDate = LIST.Comp_Date
+                                , HomeOwnerSignature = LIST.HOSig
+                                , CreatedDate = LIST.Date_Open
+                                , CreatedBy = LIST.CreatedBy;
+;
 
 ;WITH JobSet AS (SELECT * 
                 FROM Jobs
@@ -499,8 +501,7 @@ WHEN NOT MATCHED THEN INSERT (ServiceCallId,
                         VALUES(callId,
                                 Call_Comments,
                                 Date_Open,
-                                CreatedBy)
-WHEN NOT MATCHED BY SOURCE THEN DELETE;
+                                CreatedBy);
 
 ;WITH JobSet AS (SELECT * 
                 FROM Jobs
@@ -703,8 +704,7 @@ WHEN MATCHED THEN UPDATE SET ProblemCode = Code,
                 LineItemRoot = LineRoot,
                 Completed = Closed,
                 UpdatedDate = GETDATE(),
-                CreatedBy = @ImportUser
-WHEN NOT MATCHED BY SOURCE THEN DELETE;
+                CreatedBy = @ImportUser;
 
 ;WITH JobSet AS (SELECT * 
                 FROM Jobs
@@ -750,12 +750,17 @@ WHEN NOT MATCHED AND LIST.JobId IS NOT NULL THEN INSERT (JobOptionId
                                 , @ImportUser)
 WHEN MATCHED THEN UPDATE SET
     TARGET.OptionDescription = LIST.OptionDescription,
-    TARGET.Quantity = LIST.Quantity
-WHEN NOT MATCHED BY SOURCE THEN DELETE;
+    TARGET.Quantity = LIST.Quantity;
 
 UPDATE ServiceCalls SET ServiceCallStatusId = S.ServiceCallStatusId
 FROM lookups.ServiceCallStatuses S
-WHERE ServiceCalls.ServiceCallStatusId IS NULL AND
+WHERE 
+(
+    ServiceCalls.ServiceCallStatusId IS NULL
+    OR ServiceCalls.ServiceCallStatusId IN (SELECT ServiceCallStatusId
+                                                FROM lookups.ServiceCallStatuses
+                                                WHERE ServiceCallStatus IN ('Open', 'Closed'))
+) AND
     (
         (
             CASE WHEN CompletionDate = '' THEN NULL ELSE CompletionDate END IS NULL
@@ -785,4 +790,3 @@ ALTER TABLE ServiceCallComments WITH CHECK ADD CONSTRAINT FK_ServiceCallComments
 
 ALTER TABLE ServiceCallLineItems  ADD  CONSTRAINT FK_ServiceCallLineItems_ServiceCallId 
     FOREIGN KEY(ServiceCallId) REFERENCES ServiceCalls (ServiceCallId);
- 
