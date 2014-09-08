@@ -1,7 +1,5 @@
 ﻿namespace Warranty.Core.Features.ManageLookups
 {
-    using System.Linq;
-    using System.Reflection;
     using Entities.Lookups;
     using NPoco;
 
@@ -15,7 +13,7 @@
         }
         public bool Handle(DeleteLookupSubtableDetailCommand message)
         {
-            var lookupType = Assembly.GetAssembly(typeof(LookupEntity)).GetTypes().Single(x => x.Name == message.Model.LookupType);
+            var lookupType = LookupEntity.GetTypeFromName(message.Model.LookupType);
             var singleByIdMethod = typeof (Database).GetMethod("SingleById");
             var genericSingleByIdMethod = singleByIdMethod.MakeGenericMethod(lookupType);
 

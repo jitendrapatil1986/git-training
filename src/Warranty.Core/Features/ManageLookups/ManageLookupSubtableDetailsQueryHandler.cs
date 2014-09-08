@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Warranty.Core.Features.ManageLookups
+﻿namespace Warranty.Core.Features.ManageLookups
 {
+    using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
     using Entities.Lookups;
     using NPoco;
 
@@ -18,7 +16,7 @@ namespace Warranty.Core.Features.ManageLookups
 
         public IEnumerable<ManageLookupSubtableDetailsModel> Handle(ManageLookupSubtableDetailsQuery query)
         {
-            var lookupType = Assembly.GetAssembly(typeof (LookupEntity)).GetTypes().Single(x=>x.Name == query.Query);
+            var lookupType = LookupEntity.GetTypeFromName(query.Query);
             var fetchMethod = typeof (Database).GetMethods().Single(x=>x.Name == "Fetch" && !x.GetParameters().Any());
             var genericFetchMethod = fetchMethod.MakeGenericMethod(lookupType);
             

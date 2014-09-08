@@ -1,8 +1,6 @@
 ﻿namespace Warranty.Core.Features.ManageLookups
 {
     using System;
-    using System.Linq;
-    using System.Reflection;
     using Entities.Lookups;
     using NPoco;
 
@@ -17,7 +15,7 @@
 
         public bool Handle(CreateLookupSubtableDetailCommand message)
         {
-            var lookupType = Assembly.GetAssembly(typeof(LookupEntity)).GetTypes().Single(x => x.Name == message.Model.LookupType);
+            var lookupType = LookupEntity.GetTypeFromName(message.Model.LookupType);
             var newLookupClass = Activator.CreateInstance(lookupType) as LookupEntity;
 
             newLookupClass.DisplayName = message.Model.DisplayName;
