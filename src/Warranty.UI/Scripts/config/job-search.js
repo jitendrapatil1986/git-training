@@ -1,16 +1,10 @@
-﻿define(['urls', 'text!templates/job-search-item.html'], function (urls, template) {
+﻿define(['urls', 'text!templates/job-search-item.html', 'bloodhound'], function (urls, template, bloodhound) {
     return {
         display: 'Jobs',
         key: 'HomeOwnerName',
         itemTemplate: template,
         targetUrl: urls.Job.JobSummary,
         emptyText: 'No jobs found.',
-        addOns: [{
-            id: 'completedAndTerminated2',
-            title: 'Include Closed Jobs',
-            type: 'checkbox',
-            queryParam: 'includeInactive'
-        }],
         engine: new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,

@@ -20,6 +20,7 @@ namespace Warranty.Core.Features.RepServiceCalls
         public class ServiceCall
         {
             public Guid ServiceCallId { get; set; }
+            public Guid JobId { get; set; }
             public string AssignedTo { get; set; }
             public string AssignedToEmployeeNumber { get; set; }
             public string Address { get; set; }

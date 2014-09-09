@@ -29,7 +29,8 @@
                                 ON j.CommunityId = c.CommunityId
                                 INNER JOIN Cities m
                                 ON c.CityId = m.CityId
-                                WHERE CityCode IN ({0}) AND JobNumber+AddressLine+HomeOwnerName LIKE '%'+@0+'%'";
+                                WHERE CityCode IN ({0}) AND JobNumber+AddressLine+HomeOwnerName LIKE '%'+@0+'%'
+                                ORDER BY HomeOwnerName";
 
             var result = _database.Fetch<QuickSearchJobModel>(string.Format(sqlTemplate, markets.CommaSeparateWrapWithSingleQuote()), request.Query);
             return result;

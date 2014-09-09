@@ -8,12 +8,14 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-md-12">
-                            <h4>Job # @Html.DisplayFor(x => x.JobNumber)</h4>
+                            <h4>Job # @Html.DisplayFor(x => x.JobNumber)
+                                <small>@Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)</small>
+                            </h4>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <a>@Html.DisplayFor(x => x.HomeOwnerName)</a>
+                            @Html.DisplayFor(x => x.HomeOwnerName)
                             <br/>
                             @Html.DisplayFor(x => x.AddressLine)
                             <br/>
@@ -28,17 +30,17 @@
                             <br/>
                             @Html.DisplayFor(x => x.PlanName)
                             <br/>
-                            Elevation : @Html.DisplayFor(x => x.Elevation)
+                            Elevation: @Html.DisplayFor(x => x.Elevation)
                             <br/>
-                            Swing : @Html.DisplayFor(x => x.Swing)
+                            Swing: @Html.DisplayFor(x => x.Swing)
                         </div>
                         <div class="col-md-4">
-                            Builder : @Html.DisplayFor(x => x.BuilderName)
+                            Builder: @Html.DisplayFor(x => x.BuilderName)
                             <br/>
-                            Sales : @Html.DisplayFor(x => x.SalesConsultantName)
+                            Sales: @Html.DisplayFor(x => x.SalesConsultantName)
                             <br/>
                             <br/>
-                            Close Date : <span class="text-danger">@Format.DateMonthDayYear(Model.CloseDate)</span>
+                            Close Date: <span class="text-danger">@Format.DateMonthDayYear(Model.CloseDate)</span>
                         </div>
                     </div>
                     <br />
@@ -61,64 +63,60 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <ul class="nav nav-tabs" role="tablist">
                 <li class="active"><a href="#job_service_calls" role="tab" data-toggle="tab">Call History <span class="label label-default">@Model.JobServiceCalls.Count()</span></a></li>
-                <li><a href="#job_selections" role="tab" data-toggle="tab">Selections <span class="label label-default">@Model.JobSelections.Count()</span></a></li>
+                <li><a href="#job_selections" role="tab" data-toggle="tab">Options <span class="label label-default">@Model.JobSelections.Count()</span></a></li>
                 <li><a href="#job_vendors" role="tab" data-toggle="tab">Vendors </a></li>
                 <li><a href="#job_payments" role="tab" data-toggle="tab">Payments </a></li>
-                <li><a href="#job_notes" role="tab" data-toggle="tab">Notes </a></li>
             </ul>
         
             <div class="tab-content">
                 <div class="tab-pane active" id="job_service_calls">
-                    @foreach (var line in Model.JobServiceCalls)
+                    @foreach (var line in Model.JobServiceCalls.OrderByDescending(x=>x.CreatedDate))
                     {
-                        <div class="service-call-line">
+                        <div class="service-call-line col-md-12">
                             <div class="col-md-1">
                                 <small class="text-muted">
                                     @Html.ActionLink(line.CallNumber, "CallSummary", "ServiceCall", new {id = line.ServiceCallId}, null)
                                 </small>
                             </div>
-                            <div class="col-md-5 text-capitalize small">
-                                (Placeholder for summary description)
-                                <br/>
+                            <div class="col-md-7 text-capitalize small">
+                                <b>Line Item Problem Descriptions</b>
+                                <ul>
+                                @foreach (var summary in line.SummaryOfLineItems)
+                                {
+                                    <li>@Html.Raw(summary)</li>
+                                }
+                                </ul>
                                 Assigned to @Html.DisplayFor(x => line.AssignedTo)
                                 <br/>
                                 @(line.CompletionDate == null ? "Date Added: " + Format.DateMonthDayYear(line.CreatedDate) : "Date Completed: " + Format.DateMonthDayYear(line.CompletionDate))
                             </div>
                             <div class="col-md-2">
-                                <div class="text-center has-bottom-tooltip" title="No. Of Comments">
-                                    <a data-toggle="collapse" href="#collapseJobCallLineNotes@(line.CallNumber)" class="text-capitalize accordion-toggle collapsed">
-                                        <span class="glyphicon glyphicon-comment"> <u>@line.JobServiceCallComments.Count()</u></span>
-                                    </a>
-                                </div>
+                                @if (line.JobServiceCallComments.Any(x => !string.IsNullOrEmpty(x.Comment))) { 
+                                    <div class="text-center has-bottom-tooltip" title="No. Of Comments">
+                                        <a data-toggle="collapse" href="#collapseJobCallLineNotes@(line.CallNumber)" class="text-capitalize accordion-toggle collapsed">
+                                            <span class="glyphicon glyphicon-comment"> <u>@line.JobServiceCallComments.Count()</u></span>
+                                        </a>
+                                    </div>
+                                }
                             </div>
-                            <div class="col-md-2 has-bottom-tooltip" title="@Format.DateForServiceCallWiget(line.CreatedDate)">
-                                <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@line.NumberOfDaysRemaining)<br/>
-                                <div class="progress time-remaining-progress hidden-sm hidden-xs">
-                                    <div class="progress-bar @Css.ServiceCallProgressBar(line.NumberOfDaysRemaining)" role="progressbar" style="width: @line.PercentComplete%">
-                                        <span class="sr-only">@line.PercentComplete% Complete</span>
+                            @if (line.CompletionDate == null)
+                            {
+                                <div class="col-md-2 has-bottom-tooltip" title="@Format.DateForServiceCallWiget(line.CreatedDate)">
+                                    <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@line.NumberOfDaysRemaining)<br/>
+                                    <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                                        <div class="progress-bar @Css.ServiceCallProgressBar(line.NumberOfDaysRemaining)" role="progressbar" style="width: @line.PercentComplete%">
+                                            <span class="sr-only">@line.PercentComplete% Complete</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-1 text-center">
-                                @if (line.CompletionDate == null)
-                                {
-                                    <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></button>
-                                }
-                                else
-                                {
-                                    <button type="button" class="btn btn-default dropdown-toggle pull-right disabled" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></button>
-                                }
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>@Html.ActionLink("Reassign", "Reassign", "ServiceCall", new {id = @line.ServiceCallId}, null)</li>
-                                    <li>@Html.ActionLink("Request Payment", "RequestPayment", "ServiceCall", new {id = @line.ServiceCallId}, null)</li>
-                                    <li>@Html.ActionLink("Add Note", "AddNote", "ServiceCall", new {id = @line.ServiceCallId}, null)</li>
-                                    <li>@Html.ActionLink("Close", "Close", "ServiceCall", new {id = @line.ServiceCallId}, null)</li>
-                                </ul>
-                            </div>
-                            
+                            }
+                            else
+                            {
+                                 <div class="col-md-1 pull-right">@Format.DaysOpenedFor(line.DaysOpenedFor, line.CreatedDate, line.CompletionDate)</div>
+                            }            
                             <div class="row">
                                 <div class="col-md-8 col-md-offset-2">
                                     <div id="collapseJobCallLineNotes@(line.CallNumber)" class="collapse panel-body no-left-right-padding">
@@ -140,20 +138,15 @@
                 </div>
                 <div class="tab-pane" id="job_selections">
                     <div class="col-md-12">
-                                           @foreach (var selection in Model.JobSelections)
+                    @foreach (var selection in Model.JobSelections)
                     {
                         <div class="service-call-line">
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <small class="text-muted">
                                     @Html.DisplayFor(x => selection.OptionNumber)
                                 </small>
                             </div>
-                            <div class="col-md-1">
-                                <small class="text-muted">
-                                    @Html.DisplayFor(x => selection.Quantity)
-                                </small>
-                            </div>
-                            <div class="col-md-8 text-capitalize small">
+                            <div class="col-md-11 text-capitalize small">
                                 @Html.DisplayFor(x => selection.OptionDescription)
                             </div>
                             <div class="clearfix"></div>
@@ -163,31 +156,14 @@
                 </div>
                 <div class="tab-pane" id="job_vendors">
                     <div class="col-md-12">
-                        Vendors
+                        Vendor Information - Coming Soon
                     </div>
                 </div>
                 <div class="tab-pane" id="job_payments">
                     <div class="col-md-12">
-                        Payments
+                        Payment Information - Coming Soon
                     </div>
                 </div>
-                <div class="tab-pane" id="job_notes">
-                    <div class="col-md-12">
-                        Notes
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="btn-group pull-right">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    Tasks
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Task 1</a></li>
-                    <li><a href="#">Task 2</a></li>
-                </ul>
             </div>
         </div>
     </div>

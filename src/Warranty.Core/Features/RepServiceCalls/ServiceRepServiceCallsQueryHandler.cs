@@ -29,6 +29,7 @@ namespace Warranty.Core.Features.RepServiceCalls
 
         const string SqlTemplate = @"SELECT 
                                           wc.ServiceCallId as ServiceCallId
+                                        , j.JobId
                                         , Servicecallnumber as CallNumber
                                         , j.AddressLine as [Address]
                                         , wc.CreatedDate 
@@ -70,7 +71,7 @@ namespace Warranty.Core.Features.RepServiceCalls
 
         private IEnumerable<ServiceRepServiceCallsModel.ServiceCall> GetServiceRepOpenServiceCalls(Guid employeeId)
         {
-            var whereClause = GetWhereClause();
+            const string whereClause = "WHERE CompletionDate IS NULL and wc.WarrantyRepresentativeEmployeeId = @1";
 
             var sql = string.Format(SqlTemplate, whereClause, "ORDER BY NumberOfDaysRemaining, ho.HomeOwnerName");
 
@@ -80,17 +81,12 @@ namespace Warranty.Core.Features.RepServiceCalls
 
         private IEnumerable<ServiceRepServiceCallsModel.ServiceCall> GetServiceRepClosedServiceCalls(Guid employeeId)
         {
-            var whereClause = GetWhereClause();
+            const string whereClause = "WHERE CompletionDate IS NOT NULL and wc.WarrantyRepresentativeEmployeeId = @1";
 
             var sql = string.Format(SqlTemplate, whereClause, "ORDER BY wc.CompletionDate desc, ho.HomeOwnerName");
 
             var result = _database.Fetch<ServiceRepServiceCallsModel.ServiceCall>(sql, ServiceCallStatus.Closed.Value, employeeId);
             return result;
-        }
-
-        private static string GetWhereClause()
-        {
-            return "WHERE wc.ServiceCallStatusId = @0 and wc.WarrantyRepresentativeEmployeeId = @1 and wc.CreatedDate > DATEADD(year, -1, GETDATE())";
         }
     }
 }

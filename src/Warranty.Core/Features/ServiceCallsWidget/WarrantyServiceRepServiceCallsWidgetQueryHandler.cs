@@ -1,22 +1,22 @@
 ﻿namespace Warranty.Core.Features.ServiceCallsWidget
 {
     using System.Collections.Generic;
+    using Extensions;
     using NPoco;
     using Security;
-    using Extensions;
 
-    public class ServiceCallsWidgetQueryHandler : IQueryHandler<ServiceCallsWidgetQuery, ServiceCallsWidgetModel>
+    public class WarrantyServiceRepServiceCallsWidgetQueryHandler : IQueryHandler<WarrantyServiceRepServiceCallsWidgetQuery, ServiceCallsWidgetModel>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
 
-        public ServiceCallsWidgetQueryHandler(IDatabase database, IUserSession userSession)
+        public WarrantyServiceRepServiceCallsWidgetQueryHandler(IDatabase database, IUserSession userSession)
         {
             _database = database;
             _userSession = userSession;
         }
 
-        public ServiceCallsWidgetModel Handle(ServiceCallsWidgetQuery query)
+        public ServiceCallsWidgetModel Handle(WarrantyServiceRepServiceCallsWidgetQuery query)
         {
             var user = _userSession.GetCurrentUser();
 
@@ -67,9 +67,9 @@
         {
             var markets = user.Markets;
 
-            var sql = string.Format(SqlTemplate, "WHERE CompletionDate is null AND DATEADD(dd, 7, wc.CreatedDate) <= getdate() AND CityCode IN ("+markets.CommaSeparateWrapWithSingleQuote()+")", "ORDER BY EmployeeName, wc.CreatedDate");
+            var sql = string.Format(SqlTemplate, "WHERE CompletionDate is null AND DATEADD(dd, 7, wc.CreatedDate) <= getdate() AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ") AND EmployeeNumber=@0", "ORDER BY EmployeeName, wc.CreatedDate");
 
-            var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql);
+            var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, user.EmployeeNumber);
             return result;
         }
 
@@ -95,9 +95,9 @@
         {
             var markets = user.Markets;
 
-            var sql = string.Format(SqlTemplate, "WHERE CompletionDate is null AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ") AND Escalated = 1", "ORDER BY EmployeeName, wc.CreatedDate");
+            var sql = string.Format(SqlTemplate, "WHERE CompletionDate is null AND EmployeeNumber=@0 AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ") AND Escalated = 1", "ORDER BY EmployeeName, wc.CreatedDate");
 
-            var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql);
+            var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, user.EmployeeNumber);
             return result;
         }
     }

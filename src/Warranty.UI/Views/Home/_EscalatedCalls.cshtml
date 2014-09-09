@@ -28,8 +28,7 @@ else
                                 @Format.NumberOfLineItems(line.NumberOfLineItems)
                             </div>
                             <div class="col-md-10">
-                                <a>@line.HomeownerName</a><br />
-                                @line.Address<br/>
+                                @line.HomeownerName<br />@Html.ActionLink(line.Address, "JobSummary", "Job", new {id=line.JobId}, null)
                             </div>
                         </div>
                         <div class="col-md-3 text-center">
@@ -46,13 +45,7 @@ else
                             </div>
                         </div>
                         <div class="col-md-1 text-center">
-                            <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("Reassign", "Reassign", "ServiceCall", new {id = @line.ServiceCallId}, null)</li>
-                                <li>@Html.ActionLink("Request Payment", "RequestPayment", "ServiceCall", new {id = @line.ServiceCallId}, null)</li>
-                                <li>@Html.ActionLink("Add Note", "AddNote", "ServiceCall", new {id = @line.ServiceCallId}, null)</li>
-                                <li>@Html.ActionLink("Close", "Close", "ServiceCall", new {id = @line.ServiceCallId}, null)</li>
-                            </ul>
+                            @Html.ServiceCallActions(line.ServiceCallId)
                         </div>
                         <div class="col-md-8 col-md-offset-1">
                             <div class="col-md-1 hidden-sm hidden-xs">

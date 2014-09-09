@@ -1,18 +1,22 @@
 ﻿using Warranty.Core.Features.AmountSpentWidget;
 using Warranty.Core.Features.ToDoWidget;
-using Warranty.UI.Core.Filters;
 
 namespace Warranty.UI.Controllers
 {
+    using System;
+    using System.Configuration;
     using System.IO;
     using System.Linq;
+    using System.Net.Mail;
     using System.Web;
     using System.Web.Mvc;
+    using Core.Filters;
     using Core.Helpers;
     using Newtonsoft.Json.Linq;
     using Warranty.Core;
     using Warranty.Core.Extensions;
     using Warranty.Core.Features.MyServiceTeamWidget;
+    using Warranty.Core.Features.SendFeedback;
     using Warranty.Core.Features.ServiceCallsWidget;
 
     public class HomeController : Controller
@@ -51,6 +55,7 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
+//        [WarrantyServiceCoordinatorOnly]
         public ActionResult MyTeamWidget()
         {
             var model = _mediator.Request(new MyServiceTeamWidgetQuery());
@@ -58,6 +63,7 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
+//        [WarrantyServiceCoordinatorOnly]
         public ActionResult ServiceCallsWidget()
         {
             var model = _mediator.Request(new ServiceCallsWidgetQuery());
@@ -65,6 +71,15 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
+//        [WarrantyServiceRepresentativeOnly]
+        public ActionResult WarrantyServiceRepServiceCallsWidget()
+        {
+            var model = _mediator.Request(new WarrantyServiceRepServiceCallsWidgetQuery());
+            return PartialView("ServiceCallsWidget", model);
+        }
+
+        [ChildActionOnly]
+//        [WarrantyServiceCoordinatorOnly]
         public ActionResult AmountSpentWidget()
         {
             var model = _mediator.Request(new AmountSpentWidgetQuery());
@@ -96,6 +111,48 @@ namespace Warranty.UI.Controllers
             }
 
             return "<script data-main='" + VirtualPathUtility.ToAbsolute("~/Scripts/app/Shared/Default.js") + "' src='" + requirePath + "'></script>";
+        }
+
+        public JsonResult SendFeedback(string subject, string body)
+        {
+            var request = HttpContext.Request;
+            var urlReferrer = request.UrlReferrer;
+            var browser = request.Browser.Browser;
+            var userAgent = request.UserAgent;
+            var hostAddress = request.UserHostAddress;
+            var hostName = request.UserHostName;
+
+            var mailMessage = new MailMessage
+            {
+                Subject = subject,
+                Body = "Message: " + body
+                + "\n\n\nUser: " + User.Identity.Name
+                + "\nURL: " + urlReferrer
+                + "\nBrowser: " + browser
+                + "\nUser Agent: " + userAgent
+                + "\nHost Address: " + hostAddress
+                + "\nHost Name: " + hostName
+            };
+
+            var result = new JsonResult();
+
+            mailMessage.To.Add(ConfigurationManager.AppSettings["sendFeedbackAddresses"]);
+
+            try
+            {
+                _mediator.Send(new SendFeedbackCommand {MailMessage = mailMessage});
+            }
+            catch (Exception)
+            {
+                result.Data = "error";
+                result.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+                return result;
+            }
+
+            result.Data = "success";
+            result.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+
+            return result;
         }
     }
 }

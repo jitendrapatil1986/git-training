@@ -84,7 +84,7 @@
                             templates: {
                                 empty: [
                                 '<div class="empty-message">',
-                                    searchConfig.emptyText,
+                                    'no results found',
                                 '</div>'
                                 ].join('\n'),
                                 suggestion: Handlebars.compile(config.itemTemplate),
