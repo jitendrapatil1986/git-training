@@ -1,6 +1,8 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using Warranty.Core;
 using Warranty.Core.Features.AmountSpentWidget;
+using Warranty.Core.Features.AssignWSRs;
 
 namespace Warranty.UI.Controllers
 {
@@ -17,6 +19,12 @@ namespace Warranty.UI.Controllers
         {
             var model = _mediator.Request(new AssignWSRsQuery());
             return View(model);
+        }
+
+        [HttpPost]
+        public void AddAssignment(Guid communityId, Guid employeeId)
+        {
+            _mediator.Send(new AssignWSRCommand());
         }
     }
 }

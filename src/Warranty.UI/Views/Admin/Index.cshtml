@@ -12,4 +12,26 @@ Community:
 @Html.DropDownList("community", Model.Communities.Select(c => new SelectListItem{Text = c.Name, Value = c.Id.ToString()}))
 Employee:
 @Html.DropDownList("employee", Model.Employees.Select(c => new SelectListItem{Text = c.Name, Value = c.EmployeeId.ToString()}))
-<input type="button" class="button" value="Add"/>
+<input type="button" id="bAddAssignment" value="Add"/>
+
+<div class="well">
+    <h2>Assignments</h2>
+
+    @if (!Model.Communities.Any(c => c.Employees.Any()))
+    {
+        <div>No assignments found.</div>
+    }
+
+    @foreach (var com in Model.Communities.Where(c => c.Employees.Any()))
+    {
+        <div>
+            <h3>@com.Name</h3>
+            <ul>
+                @foreach (var emp in com.Employees)
+                {
+                    <li>@emp.Name</li>
+                }
+            </ul>
+        </div>
+    }
+</div>
