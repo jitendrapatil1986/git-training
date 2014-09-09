@@ -8,7 +8,7 @@
         {
             @Html.HiddenFor(model => line.ServiceCallId, new {data_bind="serviceCallId"})
 
-            <div class="service-call-line">
+            <div id="allServiceCallLineItems" class="service-call-line">
                 <li class="row">
                     <h4><small class="text-muted"><span class="glyphicon glyphicon-wrench"></span> @line.ProblemCode</small></h4>
                     <div class="col-md-9">

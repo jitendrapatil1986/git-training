@@ -50,7 +50,7 @@
                         @Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate)
                     </div>
                     <div class="col-md-5">
-                            <h3 class="panel-title text-capitalize">@Model.ServiceCallSummary.HomeownerName</h3>
+                        <h3 class="panel-title text-capitalize">@Model.ServiceCallSummary.HomeownerName</h3>
                         @Html.ActionLink(Model.ServiceCallSummary.Address, "JobSummary", "Job", new {id = Model.ServiceCallSummary.JobId}, null)
                     </div>
                     <div class="col-md-3">

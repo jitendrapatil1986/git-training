@@ -1,6 +1,32 @@
-﻿require(['/Scripts/app/main.js'], function () {
+﻿require(['/Scripts/app/main.js', '/Scripts/lib/jquery.color-2.1.0.min.js'], function () {
     require(['jquery', 'ko', 'urls', 'toastr'], function ($, ko, urls, toastr) {
         $(function() {
+            function highlight(elemId) {
+                var elem = $(elemId);
+                elem.css("backgroundColor", "#ffffff"); // hack for Safari
+                //elem.animate({ backgroundColor: '#ffffaa' }, 1250);
+                elem.animate({ backgroundColor: '#0099ff' }, 1250);
+                setTimeout(function () {
+                    $(elemId).animate({ backgroundColor: "#ffffff" }, 1250);
+                }, 500);
+            }
+
+            $('a[href*=#]').click(function () {
+                var elemId = '#' + $(this).attr('href').split('#')[1];
+                highlight(elemId);
+            });
+
+
+            $('#testClick').click(function () {
+                //alert('click');
+                var elemId = '#testHighlight';
+                highlight(elemId);
+            });
+            
+
+
+
+
             function createServiceCallLineItemViewModel() {
                 var self = this;
                 self.problemDescription = ko.observable("");
@@ -24,8 +50,8 @@
                             toastr.error("There was an issue adding the line item. Please try again!");
                         })
                         .done(function(response) {
-                            toastr.success("Success! Item added.");
                             window.location.reload();
+                            highlight($("#allServiceCallLineItems").first());
                         });
 
                     $("#addCallLineProblemDescription").val('');
