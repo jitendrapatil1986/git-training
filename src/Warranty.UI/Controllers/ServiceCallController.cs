@@ -3,6 +3,7 @@
 namespace Warranty.UI.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Web.Mvc;
     using Warranty.Core;
     using Warranty.Core.Features.AddServiceCallLineItem;
@@ -49,6 +50,15 @@ namespace Warranty.UI.Controllers
             return View(model);
         }
 
+        public JsonResult GetServiceLines(Guid id)
+        {
+            var model = _mediator.Request(new ServiceCallSummaryQuery
+                {
+                    ServiceCallId = id
+                });
+
+            return Json(model.ServiceCallLines,JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult SearchCustomer(string searchCriteria)
         {

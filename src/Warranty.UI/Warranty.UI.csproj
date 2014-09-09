@@ -254,7 +254,6 @@
     <Content Include="Scripts\app\ajaxEvents.js" />
     <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\search.js" />
-    <Content Include="Scripts\app\servicecall\addServiceLineItem.js" />
     <Content Include="Scripts\app\servicecall\CallSummary.js" />
     <Content Include="Scripts\app\servicecall\create.js" />
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
@@ -351,13 +350,11 @@
     <Content Include="Views\Home\_ToDoPaymentRequestApproval.cshtml" />
     <Content Include="Views\Home\_ToDoServiceCallApproval.cshtml" />
     <Content Include="Views\ServiceCall\CallSummary.cshtml" />
-    <Content Include="Views\ServiceCall\_AllServiceLines.cshtml" />
     <Content Include="Views\ServiceCall\SearchCustomer.cshtml" />
     <Content Include="Views\ServiceCall\VerifyCustomer.cshtml" />
     <Content Include="Views\ServiceCall\Create.cshtml" />
     <Content Include="Views\Job\JobSummary.cshtml" />
     <Content Include="Views\Shared\_FeedbackModal.cshtml" />
-    <Content Include="Views\ServiceCall\_AddServiceLineItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
