@@ -1,4 +1,6 @@
 ﻿/* VARIABLES */
+@danger-bg: #f2dede;
+@highlight-bg: #FFF2A8;
 @gray-lighter: #f7f7f7;
 
 .main-container {
@@ -73,7 +75,7 @@
 
 .label, badge {
     &-warranty-three-nine-year {
-        background-color: #f0ad4e;
+        background-color: #f60;
     }
 }
 
@@ -323,4 +325,20 @@
 
 .twitter-typeahead {
   width: 100%;
+}
+
+.delete-group-item .glyphicon-remove{
+  opacity: 0;
+}
+
+a.delete-group-item:hover {
+    background: @danger-bg;
+}
+
+.delete-group-item:hover .glyphicon-remove{
+  opacity: 1;
+}
+
+.highlight {
+    background: @highlight-bg;
 }
