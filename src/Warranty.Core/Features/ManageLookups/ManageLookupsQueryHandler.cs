@@ -9,7 +9,8 @@
     {
         public ManageLookupsModel Handle(ManageLookupsQuery query)
         {
-            var lookups = Assembly.GetAssembly(typeof(LookupEntity)).GetTypes().Where(x=>ReflectionExtensions.IsAssignableTo<LookupEntity>(x) && !x.IsAbstract);
+            var lookups = Assembly.GetAssembly(typeof(LookupEntity)).GetTypes().Where(x=> x.IsAssignableTo<LookupEntity>() && !x.IsAbstract);
+
             return new ManageLookupsModel
                 {
                     LookupTypes = lookups.Select(x => x.Name),

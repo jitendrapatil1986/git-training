@@ -1,8 +1,7 @@
 ﻿namespace Warranty.Core.Features.ManageLookups
 {
-    public class DeleteLookupSubtableDetailModel : ICommand<int>
+    public class CreateLookupItemModel
     {
-        public int Id { get; set; }
         public string DisplayName { get; set; }
         public string LookupType { get; set; }
     }

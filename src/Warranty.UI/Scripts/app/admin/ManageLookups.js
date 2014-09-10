@@ -3,33 +3,33 @@
         function manageLookupsViewModel() {
             var self = this;
             self.availableLookups = ko.observableArray(modelData.availableLookups);
-            self.selectedLookup = ko.observable('');
-
-            self.lookupType = ko.computed(function() {
-                return this.selectedLookup;
-            });
+            self.selectedLookup = ko.observable({ name: '', displayName: '' });
             self.lookupItems = ko.observableArray([]);
 
             self.selectionChanged = function () {
                 self.lookupItems.removeAll();
-                
+
                 $.ajax({
                     url: urls.ManageLookups.LookupSubtableDetails,
                     cache: false,
-                    data: {query: this.selectedLookup()},
+                    data: { query: this.selectedLookup().name },
                     dataType: "json",
                 })
                 .done(function (response) {
-                    $.each(response, function(index, value) {
-                        self.lookupItems.push(new lookupLineItemViewMode({ id: value.Id, displayName: value.DisplayName }));
+                    $.each(response, function (index, value) {
+                        self.lookupItems.push(new lookupItemViewModel({ id: value.Id, displayName: value.DisplayName }));
                     });
                 });
             };
-            
+
             self.addItem = function () {
-                self.lookupType = self.selectedLookup();
-                self.displayName = $("#displayName").val();
-                var lineData = ko.toJSON(self);
+                var newDisplayName = $('#displayName');
+                if (newDisplayName.val() == "") {
+                    $(newDisplayName).parent().addClass("has-error");
+                    return;
+                }
+                var lookupItem = new lookupItemViewModel({ displayName: newDisplayName.val(), lookupType: self.selectedLookup().name });
+                var lineData = ko.toJSON(lookupItem);
 
                 $.ajax({
                     url: urls.ManageLookups.CreateLookup,
@@ -39,36 +39,27 @@
                     processData: false,
                     contentType: "application/json; charset=utf-8"
                 })
-                .fail(function(response) {
-                    toastr.error("There was an issue adding a new line item. Please try again.");
+                .fail(function (response) {
+                    toastr.error("There was an error adding a new item. Please try again.");
                 })
-                .done(function(response) {
-                    self.lookupItems.removeAll();
-                            
-                    $.ajax({
-                        url: urls.ManageLookups.LookupSubtableDetails,
-                        cache: false,
-                        data: { query: self.selectedLookup() },
-                        dataType: "json",
-                    })
-                    .done(function (nestedResponse) {
-                        $.each(nestedResponse, function (index, value) {
-                            self.lookupItems.push(new lookupLineItemViewMode({ id: value.Id, displayName: value.DisplayName }));
-                        });
-                    });
-                        
-                    toastr.success("Success! Item added.");
+                .done(function (response) {
+                    if (response == 0) {
+                        toastr.error("Item Display Name is Required");
+                    } else {
+                        self.lookupItems.push(new lookupItemViewModel({ id: response, displayName: lookupItem.displayName, isNew: true }));
+                        toastr.success("Success! Item added.");
+                    }
                 });
 
                 $("#displayName").val('');
             };
-            
+
             self.removeItem = function (item) {
-                var strConfirm = confirm("Are you sure you want to delete the item?");
+                var strConfirm = confirm("Are you sure you want to delete \"" + item.displayName + "\"?");
                 if (strConfirm) {
-                    item.lookupType = self.selectedLookup();
+                    item.lookupType = self.selectedLookup().name;
                     var lineData = ko.toJSON(item);
-                    
+
                     $.ajax({
                         url: urls.ManageLookups.DeleteLookup,
                         type: "POST",
@@ -77,22 +68,23 @@
                         processData: false,
                         contentType: "application/json; charset=utf-8"
                     })
-                        .fail(function(response) {
-                            toastr.error("There was an issue removing the line item. Please try again");
-                        })
-                        .done(function (response) {
-                            toastr.success("Success! Item deleted.");
-                        });
+                    .fail(function (response) {
+                        toastr.error("There was an error deleting the item. Please try again");
+                    })
+                    .done(function (response) {
+                        toastr.success("Success! Item deleted.");
+                    });
                     self.lookupItems.remove(item);
                 }
             };
         }
 
-        function lookupLineItemViewMode(options) {
+        function lookupItemViewModel(options) {
             var self = this;
             self.id = options.id;
             self.displayName = options.displayName;
             self.lookupType = options.lookupType;
+            self.isNew = options.isNew;
         }
 
         var viewModel = new manageLookupsViewModel();

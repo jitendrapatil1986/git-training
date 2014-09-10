@@ -2,34 +2,25 @@
 @model Warranty.Core.Features.ManageLookups.ManageLookupsModel
 
 <div class="container">
-    <h2>Manage Lookups</h2>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4>Select Lookup to Edit</h4>
-            <select class="dropdown" data-bind="options: availableLookups, value: selectedLookup,event: { change: selectionChanged }"></select>
-
-            <h4 data-bind="text: lookupType()"></h4>
-        </div>
-        
-        <div class="panel-body">
-            <div data-bind="foreach: lookupItems" class="">
-                <div class="row">
-                    <div class="col-md-3">
-                        <span data-bind="text: displayName"></span>
-                    </div>
-                    <div class="col-md-1 pull-left">
-                        <a href="#" data-bind="click: $parent.removeItem">Delete</a>
-                    </div>
-                </div>
+    <h2>Select Lookup to Edit</h2>
+    <div class="col-md-3">
+        <select class="dropdown form-control" data-bind="options: availableLookups, value: selectedLookup, optionsText: 'displayName', event: { change: selectionChanged }"></select>
+    </div>
+    <div class="clearfix"></div>
+    <br/>
+    <div  class="list-group col-md-4">
+        <div class="list-group-item">
+            <div class="input-group col-md-12">
+                <input type="text" class="form-control" id="displayName" data-bind="attr:{placeholder: 'Add ' + selectedLookup().displayName}" name="Description"/> 
+                <span class="input-group-btn">
+                    <button data-bind="click: addItem" class="btn btn-success">Add</button>
+                </span>
             </div>
         </div>
+        <div data-bind="foreach: lookupItems">
+            <a href="#" data-bind="click: $parent.removeItem, css:{highlight: isNew == true}" class="delete-group-item list-group-item"><span data-bind="text: displayName"></span><span class="pull-right glyphicon glyphicon-remove"></span></a>
+        </div>
     </div>
-    
-    @Html.Label("Description")
-    @Html.TextArea("Description", null, new {id="displayName", @class="form-control"})
-    <br/>
-    <button data-bind="click: addItem">Add</button>
 </div>
 
 @section modules
@@ -37,7 +28,7 @@
     <script>
         define('modelData', function () {
             return {
-                availableLookups: @Html.Raw(Model.LookupTypes.ToJson())
+                availableLookups: @Html.Raw(Model.LookupTypes.Select(x=>new{name=x, displayName=x.SplitTitleCase()}).ToJson())
                 };
         });
     </script>

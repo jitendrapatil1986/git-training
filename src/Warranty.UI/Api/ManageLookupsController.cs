@@ -23,18 +23,16 @@
         }
 
         [HttpPost]
-        public bool DeleteLookup(DeleteLookupSubtableDetailModel model)
+        public bool DeleteLookup(DeleteLookupItemModel model)
         {
-            var result = _mediator.Send(new DeleteLookupSubtableDetailCommand {Model = model});
-
+            var result = _mediator.Send(new DeleteLookupItemCommand {Id = model.Id, LookupType = model.LookupType});
             return result;
         }
 
         [HttpPost]
-        public bool CreateLookup(CreateLookupSubtableDetailModel model)
+        public int CreateLookup(CreateLookupItemModel model)
         {
-            var result = _mediator.Send(new CreateLookupSubtableDetailCommand {Model = model});
-
+            var result = _mediator.Send(new CreateLookupItemCommand {DisplayName = model.DisplayName, LookupType = model.LookupType});
             return result;
         }
     }
