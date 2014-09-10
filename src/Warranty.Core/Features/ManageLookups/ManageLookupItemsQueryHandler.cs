@@ -5,16 +5,16 @@
     using Entities.Lookups;
     using NPoco;
 
-    public class ManageLookupSubtableDetailsQueryHandler : IQueryHandler<ManageLookupSubtableDetailsQuery, IEnumerable<ManageLookupSubtableDetailsModel>>
+    public class ManageLookupItemsQueryHandler : IQueryHandler<ManageLookupItemsQuery, IEnumerable<ManageLookupItemsModel>>
     {
         private readonly IDatabase _database;
 
-        public ManageLookupSubtableDetailsQueryHandler(IDatabase database)
+        public ManageLookupItemsQueryHandler(IDatabase database)
         {
             _database = database;
         }
 
-        public IEnumerable<ManageLookupSubtableDetailsModel> Handle(ManageLookupSubtableDetailsQuery query)
+        public IEnumerable<ManageLookupItemsModel> Handle(ManageLookupItemsQuery query)
         {
             var lookupType = LookupEntity.GetTypeFromName(query.Query);
             var fetchMethod = typeof (Database).GetMethods().Single(x=>x.Name == "Fetch" && !x.GetParameters().Any());
@@ -22,7 +22,7 @@
             
             var result = genericFetchMethod.Invoke(_database, null) as IEnumerable<LookupEntity>;
 
-            return result.Select(x => new ManageLookupSubtableDetailsModel {DisplayName = x.DisplayName, Id = x.Id});
+            return result.Select(x => new ManageLookupItemsModel {DisplayName = x.DisplayName, Id = x.Id}).OrderBy(x => x.DisplayName);
         }
     }
 }

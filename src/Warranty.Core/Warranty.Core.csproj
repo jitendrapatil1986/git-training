@@ -180,9 +180,9 @@
     <Compile Include="Features\ManageLookups\ManageLookupsModel.cs" />
     <Compile Include="Features\ManageLookups\ManageLookupsQuery.cs" />
     <Compile Include="Features\ManageLookups\ManageLookupsQueryHandler.cs" />
-    <Compile Include="Features\ManageLookups\ManageLookupSubtableDetailsModel.cs" />
-    <Compile Include="Features\ManageLookups\ManageLookupSubtableDetailsQuery.cs" />
-    <Compile Include="Features\ManageLookups\ManageLookupSubtableDetailsQueryHandler.cs" />
+    <Compile Include="Features\ManageLookups\ManageLookupItemsModel.cs" />
+    <Compile Include="Features\ManageLookups\ManageLookupItemsQuery.cs" />
+    <Compile Include="Features\ManageLookups\ManageLookupItemsQueryHandler.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchCallModel.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchJobModel.cs" />
     <Compile Include="Features\JobSummary\JobSummaryModel.cs" />
