@@ -1,5 +1,5 @@
 ﻿require(['/Scripts/app/main.js'], function () {
-    require(['modelData', 'jquery', 'ko', 'urls', 'toastr'], function (modelData, $, ko, urls, toastr) {
+    require(['modelData', 'jquery', 'ko', 'urls', 'toastr', 'bootbox'], function (modelData, $, ko, urls, toastr, bootbox) {
         function manageLookupsViewModel() {
             var self = this;
             self.availableLookups = ko.observableArray(modelData.availableLookups);
@@ -46,7 +46,7 @@
                     if (response == 0) {
                         toastr.error("Item Display Name is Required");
                     } else {
-                        self.lookupItems.push(new lookupItemViewModel({ id: response, displayName: lookupItem.displayName, isNew: true }));
+                        self.lookupItems.splice(0, 0, new lookupItemViewModel({ id: response, displayName: lookupItem.displayName, isNew: true }));
                         toastr.success("Success! Item added.");
                     }
                 });
@@ -55,27 +55,28 @@
             };
 
             self.removeItem = function (item) {
-                var strConfirm = confirm("Are you sure you want to delete \"" + item.displayName + "\"?");
-                if (strConfirm) {
-                    item.lookupType = self.selectedLookup().name;
-                    var lineData = ko.toJSON(item);
+                bootbox.confirm("Are you sure you want to delete \"" + item.displayName + "\"?", function(result) {
+                    if (result) {
+                        item.lookupType = self.selectedLookup().name;
+                        var lineData = ko.toJSON(item);
 
-                    $.ajax({
-                        url: urls.ManageLookups.DeleteLookup,
-                        type: "POST",
-                        data: lineData,
-                        dataType: "json",
-                        processData: false,
-                        contentType: "application/json; charset=utf-8"
-                    })
-                    .fail(function (response) {
-                        toastr.error("There was an error deleting the item. Please try again");
-                    })
-                    .done(function (response) {
-                        toastr.success("Success! Item deleted.");
-                    });
-                    self.lookupItems.remove(item);
-                }
+                        $.ajax({
+                            url: urls.ManageLookups.DeleteLookup,
+                            type: "POST",
+                            data: lineData,
+                            dataType: "json",
+                            processData: false,
+                            contentType: "application/json; charset=utf-8"
+                        })
+                        .fail(function (response) {
+                            toastr.error("There was an error deleting the item. Please try again");
+                        })
+                        .done(function (response) {
+                            toastr.success("Success! Item deleted.");
+                        });
+                        self.lookupItems.remove(item);
+                    }
+                });
             };
         }
 
