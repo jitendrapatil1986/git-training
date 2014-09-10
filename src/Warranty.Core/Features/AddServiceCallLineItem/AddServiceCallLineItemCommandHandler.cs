@@ -4,7 +4,7 @@
     using Entities;
     using NPoco;
 
-    public class AddServiceCallLineItemCommandHandler : ICommandHandler<AddServiceCallLineItemCommand, bool>
+    public class AddServiceCallLineItemCommandHandler : ICommandHandler<AddServiceCallLineItemCommand, Guid>
     {
         private readonly IDatabase _database;
 
@@ -13,7 +13,7 @@
             _database = database;
         }
 
-        public bool Handle(AddServiceCallLineItemCommand message)
+        public Guid Handle(AddServiceCallLineItemCommand message)
         {
             using (_database)
             {
@@ -22,20 +22,19 @@
                                      WHERE ServiceCallId = @0
                                      ORDER BY LineNumber DESC";
 
-                var newLine = _database.FirstOrDefault<int>(sql, message.Model.ServiceCallId) + 1;
+                var newLine = _database.FirstOrDefault<int>(sql, message.ServiceCallId) + 1;
 
-                var serviceLineItem = new ServiceCallLineItem
+                var newServiceLineItem = new ServiceCallLineItem
                     {
-                        ServiceCallLineItemId = Guid.NewGuid(),
-                        ServiceCallId = message.Model.ServiceCallId,
+                        ServiceCallId = message.ServiceCallId,
                         LineNumber = newLine,
-                        ProblemCode = message.Model.ProblemCode,
-                        ProblemDescription = message.Model.ProblemDescription
+                        ProblemCode = message.ProblemCode,
+                        ProblemDescription = message.ProblemDescription
                     };
 
-                _database.Insert(serviceLineItem);
+                _database.Insert(newServiceLineItem);
 
-                return true;
+                return newServiceLineItem.ServiceCallLineItemId;
             }
         }
     }

@@ -55,7 +55,19 @@ require(['/Scripts/app/main.js'], function () {
                     self.problemCode = $("#addCallLineProblemCode").find('option:selected').text();
                     self.problemCodeId = $("#addCallLineProblemCode").val();
                     self.problemDescription = $("#addCallLineProblemDescription").val();
-                    var lineData = ko.toJSON(self);
+                    
+                    var newProblemDescription = $("#addCallLineProblemDescription");
+                    if (newProblemDescription.val() == "") {
+                        $(newProblemDescription).parent().addClass("has-error");
+                        return;
+                    }
+                    
+                    var newLineItem = new AllLineItemsViewModel({
+                        serviceCallId: self.serviceCallId, problemCodeId: self.problemCodeId,
+                        problemCode: self.problemCode, problemDescription: self.problemDescription
+                    });
+                    
+                    var lineData = ko.toJSON(newLineItem);
 
                     $.ajax({
                         url: "/ServiceCall/AddLineItem", //TODO: Set without hard-code url.
@@ -65,45 +77,31 @@ require(['/Scripts/app/main.js'], function () {
                         processData: false,
                         contentType: "application/json; charset=utf-8"
                     })
-                        .fail(function(response) {
+                        .fail(function (response) {
                             toastr.error("There was an issue adding the line item. Please try again!");
                         })
                         .done(function (response) {
-                            self.allLineItems.removeAll();
+                            self.allLineItems.unshift(new AllLineItemsViewModel({
+                                serviceCallId: self.serviceCallId,
+                                serviceCallLineItemId: response.newServiceLineId,
+                                problemCode: self.problemCode,
+                                problemCodeId: self.problemCodeId,
+                                problemDescription: self.problemDescription,
+                                completed: false
+                            }));
                             
-                            $.ajax({
-                                url: "/ServiceCall/GetServiceLines", //TODO: Set without hard-code url.
-                                cache: false,
-                                data: { id: $("#addCallLineServiceCallId").val() },
-                                dataType: "json",
-                            })
-                                .fail(function(innerResponse) {
-                                    toastr.error("There was an issue retrieving the newly created line item. Please refresh the page!");
-                                })
-                                .done(function (nestedResponse) {
-                                    $.each(nestedResponse, function (index, value) {
-                                        self.allLineItems.push(new AllLineItemsViewModel({ serviceCallId: value.ServiceCallId, 
-                                            serviceCallLineItemId: value.ServiceCallLineItemId,
-                                            problemCode: value.ProblemCode,
-                                            problemCodeId: value.ProblemCodeId,
-                                            problemDescription: value.ProblemDescription,
-                                            completed: value.Completed}));
-                                    });
-                                        
-                                    highlight($("#allServiceCallLineItems").first());
-                                });
+                            highlight($("#allServiceCallLineItems").first());
+                            
+                            $("#addCallLineProblemDescription").val('');
+                            $("#addCallLineProblemCode").val('');
+                            self.problemDescription = '';
                         });
-                        
-                    $("#addCallLineProblemDescription").val('');
-                    $("#addCallLineProblemCode").val('');
-                    self.problemDescription = '';
                 };
             }
 
             var viewModel = new createServiceCallLineItemViewModel();
             ko.applyBindings(viewModel);
 
-            //var persistedAllLineItemsViewModel = @Html.Raw(Model.ServiceCallLines.ToJson());
             var persistedAllLineItemsViewModel = modelData.initialServiceLines;
                 
             _(persistedAllLineItemsViewModel).each(function(item) {

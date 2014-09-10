@@ -3,7 +3,6 @@
 namespace Warranty.UI.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Web.Mvc;
     using Warranty.Core;
     using Warranty.Core.Features.AddServiceCallLineItem;
@@ -106,14 +105,14 @@ namespace Warranty.UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddLineItem(AddServiceCallLineItemModel model)
+        public JsonResult AddLineItem(AddServiceCallLineItemModel model)
         {
-            _mediator.Send(new AddServiceCallLineItemCommand
+            var result = _mediator.Send(new AddServiceCallLineItemCommand
                 {
-                    Model = model
+                    ServiceCallId = model.ServiceCallId, ProblemCode = model.ProblemCode, ProblemDescription = model.ProblemDescription
                 });
 
-            return Json(new {success = "true"}, JsonRequestBehavior.AllowGet);
+            return Json(new {newServiceLineId = result}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Approve(Guid id)
