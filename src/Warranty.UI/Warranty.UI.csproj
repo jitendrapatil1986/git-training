@@ -182,8 +182,10 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Api\ApiController.cs" />
+    <Compile Include="Api\ManageLookupsController.cs" />
     <Compile Include="Api\QuickSearchController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\ServiceCallController.cs" />
@@ -251,6 +253,7 @@
     <Content Include="img\hue.png" />
     <Content Include="img\loader.gif" />
     <Content Include="img\saturation.png" />
+    <Content Include="Scripts\app\admin\ManageLookups.js" />
     <Content Include="Scripts\app\ajaxEvents.js" />
     <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\search.js" />
@@ -354,6 +357,7 @@
     <Content Include="Views\ServiceCall\VerifyCustomer.cshtml" />
     <Content Include="Views\ServiceCall\Create.cshtml" />
     <Content Include="Views\Job\JobSummary.cshtml" />
+    <Content Include="Views\Admin\ManageLookups.cshtml" />
     <Content Include="Views\Shared\_FeedbackModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
