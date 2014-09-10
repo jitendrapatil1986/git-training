@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using Warranty.Core;
 using Warranty.Core.Features.AmountSpentWidget;
+using Warranty.Core.Features.ManageLookups;
 
 namespace Warranty.UI.Controllers
 {
@@ -17,6 +18,12 @@ namespace Warranty.UI.Controllers
         {
             var model = _mediator.Request(new AssignWSRsQuery());
             return View(model);
+	}
+
+        public ActionResult ManageLookups()
+        {
+            var result = _mediator.Request(new ManageLookupsQuery());
+            return View(result);
         }
     }
 }

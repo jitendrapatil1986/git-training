@@ -1,0 +1,35 @@
+﻿@using Warranty.Core.Extensions
+@model Warranty.Core.Features.ManageLookups.ManageLookupsModel
+
+<div class="container">
+    <h2>Select Lookup to Edit</h2>
+    <div class="col-md-3">
+        <select class="dropdown form-control" data-bind="options: availableLookups, value: selectedLookup, optionsText: 'displayName', event: { change: selectionChanged }"></select>
+    </div>
+    <div class="clearfix"></div>
+    <br/>
+    <div  class="list-group col-md-4">
+        <div class="list-group-item">
+            <div class="input-group col-md-12">
+                <input type="text" class="form-control" id="displayName" data-bind="attr:{placeholder: 'Add ' + selectedLookup().displayName}" name="Description"/> 
+                <span class="input-group-btn">
+                    <button data-bind="click: addItem" class="btn btn-success">Add</button>
+                </span>
+            </div>
+        </div>
+        <div data-bind="foreach: lookupItems">
+            <a href="#" data-bind="click: $parent.removeItem, css:{highlight: isNew == true}" class="delete-group-item list-group-item"><span data-bind="text: displayName"></span><span class="pull-right glyphicon glyphicon-remove"></span></a>
+        </div>
+    </div>
+</div>
+
+@section modules
+{
+    <script>
+        define('modelData', function () {
+            return {
+                availableLookups: @Html.Raw(Model.LookupTypes.Select(x=>new{name=x, displayName=x.SplitTitleCase()}).ToJson())
+                };
+        });
+    </script>
+}
