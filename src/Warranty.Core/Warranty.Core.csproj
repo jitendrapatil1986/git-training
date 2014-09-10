@@ -168,11 +168,16 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Features\AssignWSRs\AddAssignmentModel.cs" />
+    <Compile Include="Features\AssignWSRs\AssignedEmployee.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRCommand.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRCommandHandler.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRsModel.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRsQuery.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRsQueryHandler.cs" />
+    <Compile Include="Features\AssignWSRs\RemoveAssignmentCommand.cs" />
+    <Compile Include="Features\AssignWSRs\RemoveAssignmentCommandHandler.cs" />
+    <Compile Include="Features\AssignWSRs\RemoveAssignmentModel.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommand.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommandHandler.cs" />
     <Compile Include="Features\ManageLookups\CreateLookupItemCommandHandler.cs" />

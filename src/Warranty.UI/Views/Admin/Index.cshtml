@@ -29,7 +29,11 @@ Employee:
             <ul>
                 @foreach (var emp in com.Employees)
                 {
-                    <li>@emp.Name</li>
+                    <li>
+                        @emp.Name (
+                        <span class="text-danger" data-assignmentId="@emp.EmployeeAssignmentId">remove</span>
+                        )
+                    </li>
                 }
             </ul>
         </div>

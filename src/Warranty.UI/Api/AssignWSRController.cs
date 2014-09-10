@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Http;
+using AutoMapper;
 using Warranty.Core;
+using Warranty.Core.Extensions;
 using Warranty.Core.Features.AssignWSRs;
 using Warranty.Core.Features.CreateServiceCallCustomerSearch;
 using Warranty.Core.Features.QuickSearch;
@@ -18,9 +20,41 @@ namespace Warranty.UI.Api
         }
 
         [HttpPost]
-        public void AddAssignment(string communityId, string employeeId)
+        public bool AddAssignment(AddAssignmentModel newAddAssignment)
         {
-            _mediator.Send(new AssignWSRCommand{CommunityId = Guid.Parse(communityId), EmployeeId = Guid.Parse(employeeId)});
+            try
+            {
+                _mediator.Send(new AssignWSRCommand
+                {
+                    CommunityId = newAddAssignment.CommunityId,
+                    EmployeeId = newAddAssignment.EmployeeId
+                });
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        [HttpPost]
+        public bool RemoveAssignment(RemoveAssignmentModel assignment)
+        {
+            try
+            {
+                _mediator.Send(new RemoveAssignmentCommand
+                {
+                    AssignmentId = assignment.AssignmentId
+                });
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

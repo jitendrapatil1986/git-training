@@ -43,7 +43,7 @@ namespace Warranty.Core.Features.AssignWSRs
                             {
                                 Id = com.CommunityId,
                                 Name = com.CommunityName,
-                                Employees = _database.Fetch<Employee>(@"SELECT E.*
+                                Employees = _database.Fetch<AssignedEmployee>(@"SELECT E.EmployeeName as Name, CA.EmployeeAssignmentId
                                             FROM Employees E
                                             INNER JOIN CommunityAssignments CA ON
                                                 E.EmployeeId = CA.EmployeeId
