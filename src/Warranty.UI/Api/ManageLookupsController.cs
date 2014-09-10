@@ -15,9 +15,9 @@
         }
 
         [HttpGet]
-        public IEnumerable<ManageLookupSubtableDetailsModel> LookupSubtableDetails(string query)
+        public IEnumerable<ManageLookupItemsModel> LookupSubtableDetails(string query)
         {
-            var results = _mediator.Request(new ManageLookupSubtableDetailsQuery {Query = query});
+            var results = _mediator.Request(new ManageLookupItemsQuery {Query = query});
 
             return results;
         }

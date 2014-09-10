@@ -173,7 +173,8 @@ namespace Warranty.JdeImport.Importers
                                                                                 VALUES (Number, Name)
                                             WHEN MATCHED THEN UPDATE SET EmployeeName = Name;
 
-                                            ;WITH stage AS (SELECT removeDups.*
+                                            ;WITH nonDupEmps AS (SELECT MIN(EmployeeId) EmployeeId, EmployeeNumber FROM employees GROUP BY EmployeeNumber),
+                                                  stage AS (SELECT removeDups.*
                                                                     , builder.EmployeeId as BuilderId
                                                                     , sales.EmployeeId as SalesId
                                                                     , COM.CommunityId
