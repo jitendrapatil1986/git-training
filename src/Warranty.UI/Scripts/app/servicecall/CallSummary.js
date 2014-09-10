@@ -89,7 +89,8 @@ require(['/Scripts/app/main.js'], function () {
                                 problemDescription: self.problemDescription,
                                 completed: false
                             }));
-                            
+
+                            toastr.success("Success! Item added.");
                             highlight($("#allServiceCallLineItems").first());
                             
                             $("#addCallLineProblemDescription").val('');
