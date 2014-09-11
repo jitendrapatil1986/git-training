@@ -3,6 +3,7 @@
 @using Warranty.Core.Security
 @model IUser
 
+<h2>User Details</h2>
 <div class="list-group">
     @foreach (var property in Model.GetType().GetProperties().OrderBy(x=>x.Name))
     {
