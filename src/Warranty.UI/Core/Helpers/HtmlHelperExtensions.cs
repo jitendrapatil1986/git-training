@@ -83,6 +83,7 @@
             select.Id("problemCode");
             select.Attr("name", "SelectProblemCode");
             select.AddClass("form-control");
+
             return select;
         }
 

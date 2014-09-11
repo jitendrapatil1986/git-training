@@ -69,8 +69,15 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-3" data-bind="visible: relatedCalls().length > 0">
                                         @Html.Label("Related Calls")
+                                        <div class="well well-sm">
+                                        <div data-bind="foreach: relatedCalls">
+                                            <a data-bind="attr: {href: callSummaryUrl}"><span data-bind="text: callNumber"></span></a><br />
+                                            <span data-bind="text: problemDescription"></span><br />
+                                            <small class="text-muted">Date Created: <span data-bind="text: moment(createdDate).format('LL')"></span></small>
+                                        </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
