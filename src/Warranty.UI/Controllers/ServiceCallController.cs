@@ -5,6 +5,7 @@ namespace Warranty.UI.Controllers
     using System;
     using System.Web.Mvc;
     using Warranty.Core;
+    using Warranty.Core.Features.AddServiceCallLineItem;
     using Warranty.Core.Features.CreateServiceCall;
     using Warranty.Core.Features.CreateServiceCallCustomerSearch;
     using Warranty.Core.Features.CreateServiceCallVerifyCustomer;
@@ -48,6 +49,15 @@ namespace Warranty.UI.Controllers
             return View(model);
         }
 
+        public JsonResult GetServiceLines(Guid id)
+        {
+            var model = _mediator.Request(new ServiceCallSummaryQuery
+                {
+                    ServiceCallId = id
+                });
+
+            return Json(model.ServiceCallLines,JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult SearchCustomer(string searchCriteria)
         {
@@ -92,6 +102,17 @@ namespace Warranty.UI.Controllers
             {
                 return View();
             }
+        }
+
+        [HttpPost]
+        public JsonResult AddLineItem(AddServiceCallLineItemModel model)
+        {
+            var result = _mediator.Send(new AddServiceCallLineItemCommand
+                {
+                    ServiceCallId = model.ServiceCallId, ProblemCode = model.ProblemCode, ProblemDescription = model.ProblemDescription
+                });
+
+            return Json(new {newServiceLineId = result}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Approve(Guid id)

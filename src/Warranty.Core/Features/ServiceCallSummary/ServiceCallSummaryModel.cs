@@ -4,6 +4,7 @@ using Warranty.Core.Enumerations;
 
 namespace Warranty.Core.Features.ServiceCallSummary
 {
+    using System.Web.Mvc;
     using Services;
 
     public class ServiceCallSummaryModel
@@ -11,6 +12,23 @@ namespace Warranty.Core.Features.ServiceCallSummary
         public ServiceCall ServiceCallSummary { get; set; }
         public IEnumerable<ServiceCallLine> ServiceCallLines { get; set; }
         public IEnumerable<ServicCallComment> ServicCallComments { get; set; }
+        public NewServiceCallLineItem AddServiceCallLineItem { get; set; }
+        
+        public class NewServiceCallLineItem
+        {
+            public NewServiceCallLineItem(Guid serviceCallId, IEnumerable<SelectListItem> problemCodes)
+            {
+                ServiceCallId = serviceCallId;
+                ProblemCodes = problemCodes;
+            }
+
+            public NewServiceCallLineItem()
+            {
+            }
+
+            public Guid ServiceCallId { get; set; }
+            public IEnumerable<SelectListItem> ProblemCodes { get; set; }
+        }
 
         public class ServiceCall
         {

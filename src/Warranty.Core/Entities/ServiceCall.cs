@@ -14,7 +14,7 @@ namespace Warranty.Core.Entities
         public virtual bool IsEscalated { get; set; }
         public virtual Guid JobId { get; set; }
         public virtual string Contact { get; set; }
-        public virtual Guid WarrantyRepresentativeEmployeeId { get; set; }
+        public virtual Guid? WarrantyRepresentativeEmployeeId { get; set; }
         public virtual DateTime? CompletionDate { get; set; }
         public virtual string WorkSummary { get; set; }
         public virtual string HomeOwnerSignature { get; set; }

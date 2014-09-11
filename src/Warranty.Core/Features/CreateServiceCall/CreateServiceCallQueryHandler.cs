@@ -41,18 +41,6 @@ namespace Warranty.Core.Features.CreateServiceCall
             return result;
         }
 
-        private IEnumerable<SelectListItem> GetProblemCodeList()
-        {
-            const string sql = @"SELECT  ProblemCodeId as Value
-                                        ,ProblemCode as Text
-                                FROM lookups.ProblemCodes
-                                ORDER BY ProblemCode";
-
-            var result = _database.Fetch<SelectListItem>(sql);
-
-            return result;
-        }
-
         private CreateServiceCallModel GetServiceCallDetails(Guid jobId)
         {
             const string sql = @"SELECT  ho.HomeOwnerId

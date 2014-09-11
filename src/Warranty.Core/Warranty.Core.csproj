@@ -166,6 +166,9 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommand.cs" />
+    <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommandHandler.cs" />
+    <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemModel.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommand.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommandHandler.cs" />
     <Compile Include="Features\ManageLookups\CreateLookupItemCommandHandler.cs" />
@@ -198,6 +201,7 @@
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveHandler.cs" />
     <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQuery.cs" />
     <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQueryHandler.cs" />
+    <Compile Include="Features\SharedQueries\ProblemCodes.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetModel.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQuery.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQueryHandler.cs" />
