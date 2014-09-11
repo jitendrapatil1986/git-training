@@ -1,5 +1,5 @@
 ﻿require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'urls'], function ($, ko, urls) {
+    require(['jquery', 'ko', 'urls'], function ($, ko, urls) {        
         function createServiceCallViewModel() {
             var self = this;
             self.lineItems = ko.observableArray([]);
@@ -15,6 +15,11 @@
             };
 
             $('#problemCode').change(function () {
+                self.loadRelatedCalls();
+            });
+
+
+            self.loadRelatedCalls = function loadRelatedCalls() {
                 self.relatedCalls.removeAll();
 
                 $.ajax({
@@ -25,12 +30,12 @@
                 })
                 .done(function (response) {
                     $.each(response, function (index, value) {
-                        self.relatedCalls.push(new relatedCallViewModel({serviceCallId: value.ServiceCallId, callNumber: value.CallNumber, problemDescription: value.ProblemDescription, createdDate: value.CreatedDate}));
+                        self.relatedCalls.push(new relatedCallViewModel({ serviceCallId: value.ServiceCallId, callNumber: value.CallNumber, problemDescription: value.ProblemDescription, createdDate: value.CreatedDate }));
                     });
                 });
-            });
+            }
         }
-
+        
         function lineItemViewModel(options) {
             var self = this;
             self.problemCode = options.problemCode;
@@ -52,5 +57,7 @@
 
         var viewModel = new createServiceCallViewModel();
         ko.applyBindings(viewModel);
+
+        viewModel.loadRelatedCalls();
     });
 });
