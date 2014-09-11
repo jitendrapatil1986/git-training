@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web.Http;
-using AutoMapper;
+﻿using System.Web.Http;
 using Warranty.Core;
-using Warranty.Core.Extensions;
 using Warranty.Core.Features.AssignWSRs;
-using Warranty.Core.Features.CreateServiceCallCustomerSearch;
-using Warranty.Core.Features.QuickSearch;
 
 namespace Warranty.UI.Api
 {
@@ -29,7 +23,6 @@ namespace Warranty.UI.Api
             });
             return true;
         }
-
 
         [HttpPost]
         public bool RemoveAssignment(RemoveAssignmentModel assignment)
