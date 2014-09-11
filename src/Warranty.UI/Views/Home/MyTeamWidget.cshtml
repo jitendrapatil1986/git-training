@@ -1,7 +1,7 @@
 ﻿@using Warranty.Core.Extensions
 @model Warranty.Core.Features.MyServiceTeamWidget.MyServiceTeamWidgetModel
     <ul class="nav nav-tabs" role="tablist">
-        <li class="active"><a href="#my_team_details" role="tab" data-toggle="tab">My Team <span class="label label-default">@Model.MyTeamChartEmployeeSummaries.Count()</span></a></li>
+        <li class="active"><a href="#my_team_details" role="tab" data-toggle="tab">Team <span class="label label-default">@Model.MyTeamChartEmployeeSummaries.Count()</span></a></li>
         <li><a href="#my_service_team_open" role="tab" data-toggle="tab">Open <span class="label label-default">@Model.MyTeamChartEmployeeSummaries.Select(x => x.TotalOpen).Sum()</span></a></li>
         <li><a href="#my_service_team_closed" role="tab" data-toggle="tab">Closed <span class="label label-default">@Model.MyTeamChartEmployeeSummaries.Select(x => x.TotalClosed).Sum()</span></a></li>
     </ul>

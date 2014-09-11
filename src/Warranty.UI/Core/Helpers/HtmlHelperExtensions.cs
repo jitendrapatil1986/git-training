@@ -6,7 +6,11 @@
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
     using Enumerations;
-    using Warranty.Core.Features.SelectListProviders;
+    using HtmlTags;
+    using Microsoft.Practices.ServiceLocation;
+    using Warranty.Core;
+    using Warranty.Core.Entities.Lookups;
+    using Warranty.Core.Features.ProblemCodes;
     using Yay.Enumerations;
 
     public static class HtmlHelperExtensions
@@ -58,24 +62,28 @@
             return MvcHtmlString.Empty;
         }
 
-        public static MvcHtmlString DropDownListFor<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression) where TModel : class
+        public static HtmlTag ProblemCodeDropdown<T>(this HtmlHelper<T> html, ProblemCode currentProblemCode) where T : class
         {
-            var property = expression.GetProperty();
-            IEnumerable<SelectListItem> selectList;
+            SelectTag select;
+            var mediator = ServiceLocator.Current.GetInstance<IMediator>();
 
-            var selectListProviderAttribute = property.GetAttribute<SelectListProviderAttribute>();
+                var problemCodes = mediator.Request(new ProblemCodesQuery());
 
-            if (selectListProviderAttribute != null)
-            {
-                var provider = selectListProviderAttribute.Provider;
-                selectList = provider.Provide();
-            }
-            else
-            {
-                throw new ArgumentException(string.Format("SelectListProvider not specified for property \"{0}\"", property.Name));
-            }
+                select = new SelectTag(t =>
+                {
+                    t.Option("Select Problem Code", string.Empty);
+                    foreach (var problemCode in problemCodes)
+                    {
+                        var htmlTag = t.Option(problemCode.DisplayName, problemCode.Id);
+                        if (currentProblemCode == problemCode)
+                            htmlTag.Attr("selected");
+                    }
+                });
 
-            return html.DropDownListFor(expression, selectList);
+            select.Id("problemCode");
+            select.Attr("name", "SelectProblemCode");
+            select.AddClass("form-control");
+            return select;
         }
 
          public static MvcHtmlString ServiceCallActions(this HtmlHelper htmlHelper, Guid serviceCallId)

@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace Warranty.Core.Features.CreateServiceCall
 {
     using System.Web.Mvc;
+    using Entities.Lookups;
     using Enumerations;
-    using SelectListProviders;
 
     public class CreateServiceCallModel : ICommand<Guid>
     {
@@ -43,8 +43,7 @@ namespace Warranty.Core.Features.CreateServiceCall
         public IEnumerable<ServiceCallHeaderComment> ServiceCallHeaderComments { get; set; }
         public IEnumerable<ServiceCallLineItemModel> ServiceCallLineItems { get; set; }
 
-        [SelectListProvider(typeof(ProblemCodesSelectListProvider))]
-        public int ProblemCodeId { get; set; }
+        public ProblemCode ProblemCode { get; set; }
 
         //public IEnumerable<ServiceCallLineItemComments> CallLineItemComments { get; set; }
 
