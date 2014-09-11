@@ -1,0 +1,26 @@
+﻿@using System.Collections
+@using Warranty.Core.Extensions
+@using Warranty.Core.Security
+@model IUser
+
+<div class="list-group">
+    @foreach (var property in Model.GetType().GetProperties().OrderBy(x=>x.Name))
+    {
+        <div class="list-group-item">
+            @if (property.PropertyType.IsAssignableTo<IEnumerable<string>>())
+            {
+                <strong>@property.Name.SplitTitleCase()</strong>
+                <ul>
+                    @foreach (var item in (IEnumerable) property.GetValue(Model))
+                    {
+                        <li>@item</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span>@property.Name.SplitTitleCase(): <strong>@property.GetValue(Model)</strong></span>
+            }
+        </div>
+    }
+</div>

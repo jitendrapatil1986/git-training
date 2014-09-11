@@ -13,7 +13,7 @@ namespace Warranty.UI.Controllers
             _userSession = userSession;
         }
 
-        public ActionResult User()
+        public ActionResult UserDetails()
         {
             var user = _userSession.GetCurrentUser();
             return View(user);
