@@ -288,6 +288,7 @@
     <Content Include="Scripts\app\searchValidate.js" />
     <Content Include="Scripts\app\shared\confirmMessage.js" />
     <Content Include="Scripts\app\shared\Default.js" />
+    <Content Include="Scripts\lib\jquery.color-2.1.0.min.js" />
     <Content Include="Scripts\lib\text.js" />
     <Content Include="Scripts\templates\call-search-item.html" />
     <Content Include="Scripts\templates\customer-search-item.html" />
@@ -354,7 +355,6 @@
     <Content Include="Views\Home\_ToDoPaymentRequestApproval.cshtml" />
     <Content Include="Views\Home\_ToDoServiceCallApproval.cshtml" />
     <Content Include="Views\ServiceCall\CallSummary.cshtml" />
-    <Content Include="Views\ServiceCall\_AllServiceLines.cshtml" />
     <Content Include="Views\ServiceCall\SearchCustomer.cshtml" />
     <Content Include="Views\ServiceCall\VerifyCustomer.cshtml" />
     <Content Include="Views\ServiceCall\Create.cshtml" />

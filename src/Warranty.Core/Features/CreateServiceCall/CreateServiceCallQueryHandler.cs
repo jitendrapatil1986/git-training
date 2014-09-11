@@ -23,7 +23,7 @@ namespace Warranty.Core.Features.CreateServiceCall
             using (_database)
             {
                 var model = GetServiceCallDetails(query.JobId);
-                model.ProblemCodeList = GetProblemCodeList();
+                model.ProblemCodeList = SharedQueries.ProblemCodes.GetProblemCodeList(_database);
                 model.ServiceCallTypeList = GetServiceCallTypeList();
 
                 return model;
@@ -36,18 +36,6 @@ namespace Warranty.Core.Features.CreateServiceCall
                                         ,ServiceCallType as Text
                                 FROM lookups.ServiceCallTypes
                                 ORDER BY ServiceCallType";
-
-            var result = _database.Fetch<SelectListItem>(sql);
-
-            return result;
-        }
-
-        private IEnumerable<SelectListItem> GetProblemCodeList()
-        {
-            const string sql = @"SELECT  ProblemCodeId as Value
-                                        ,ProblemCode as Text
-                                FROM lookups.ProblemCodes
-                                ORDER BY ProblemCode";
 
             var result = _database.Fetch<SelectListItem>(sql);
 
