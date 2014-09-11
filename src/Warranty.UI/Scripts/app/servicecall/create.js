@@ -1,8 +1,9 @@
 ﻿require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko'], function ($, ko) {
+    require(['jquery', 'ko', 'urls'], function ($, ko, urls) {        
         function createServiceCallViewModel() {
             var self = this;
             self.lineItems = ko.observableArray([]);
+            self.relatedCalls = ko.observableArray([]);
 
             self.addLineItem = function () {
                 self.lineItems.push(new lineItemViewModel({ problemCode: $("#problemCode").find('option:selected').text(), problemCodeId: $("#problemCode").val(), problemDescription: $("#problemDescription").val() }));
@@ -13,17 +14,28 @@
                 self.lineItems.remove(lineItem);
             };
 
-            self.headerCommentLineItems = ko.observableArray([]);
-            self.addHeaderCommentLineItem = function () {
-                self.headerCommentLineItems.push(new headerCommentLineItemViewModel({ comment: $("#headerComment").val() }));
-                $("#headerComment").val('');
-            };
+            $('#problemCode').change(function () {
+                self.loadRelatedCalls();
+            });
 
-            self.removeHeaderCommentLineItem = function (headerCommentLineItem) {
-                self.headerCommentLineItems.remove(headerCommentLineItem);
-            };
+
+            self.loadRelatedCalls = function loadRelatedCalls() {
+                self.relatedCalls.removeAll();
+
+                $.ajax({
+                    url: urls.RelatedCall.RelatedCalls,
+                    cache: false,
+                    data: { jobId: $('#JobId').val(), problemCode: $('#problemCode option:selected').text() },
+                    dataType: "json",
+                })
+                .done(function (response) {
+                    $.each(response, function (index, value) {
+                        self.relatedCalls.push(new relatedCallViewModel({ serviceCallId: value.ServiceCallId, callNumber: value.CallNumber, problemDescription: value.ProblemDescription, createdDate: value.CreatedDate }));
+                    });
+                });
+            }
         }
-
+        
         function lineItemViewModel(options) {
             var self = this;
             self.problemCode = options.problemCode;
@@ -31,15 +43,21 @@
             self.problemDescription = options.problemDescription;
         }
 
-        function headerCommentLineItemViewModel(options) {
+        function relatedCallViewModel(options) {
             var self = this;
-            self.comment = options.comment;
-            //self.createdBy = options.createdBy;
-            //self.createdDate = options.createdDate;
+            self.serviceCallId = options.serviceCallId;
+            self.callNumber = options.callNumber;
+            self.problemDescription = options.problemDescription;
+            self.createdDate = options.createdDate;
+
+            self.callSummaryUrl = ko.computed(function () {
+                return urls.ServiceCall.CallSummary + '/' + self.serviceCallId;
+            });
         }
 
         var viewModel = new createServiceCallViewModel();
         ko.applyBindings(viewModel);
 
+        viewModel.loadRelatedCalls();
     });
 });

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Warranty.Core;
 using Warranty.Core.Features.RepServiceCalls;
@@ -25,6 +22,5 @@ namespace Warranty.UI.Controllers
                 });
             return View(model);
         }
-
     }
 }

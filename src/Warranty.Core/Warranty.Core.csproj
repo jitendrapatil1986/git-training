@@ -169,8 +169,11 @@
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommand.cs" />
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemModel.cs" />
+    <Compile Include="Features\CreateServiceCall\RelatedProblemCodeQueryHandler.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommand.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommandHandler.cs" />
+    <Compile Include="Features\CreateServiceCall\RelatedProblemCode.cs" />
+    <Compile Include="Features\CreateServiceCall\RelatedProblemCodeQuery.cs" />
     <Compile Include="Features\ManageLookups\CreateLookupItemCommandHandler.cs" />
     <Compile Include="Features\ManageLookups\CreateLookupItemModel.cs" />
     <Compile Include="Features\ManageLookups\CreateLookupItemCommand.cs" />
@@ -183,6 +186,8 @@
     <Compile Include="Features\ManageLookups\ManageLookupItemsModel.cs" />
     <Compile Include="Features\ManageLookups\ManageLookupItemsQuery.cs" />
     <Compile Include="Features\ManageLookups\ManageLookupItemsQueryHandler.cs" />
+    <Compile Include="Features\ProblemCodes\ProblemCodesQuery.cs" />
+    <Compile Include="Features\ProblemCodes\ProblemCodesQueryHandler.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchCallModel.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchJobModel.cs" />
     <Compile Include="Features\JobSummary\JobSummaryModel.cs" />
