@@ -23,7 +23,7 @@
                                                                  {
                                                                      Name = x.Name.Replace("Controller", ""),
                                                                      Methods = x.GetMethods()
-                                                                                .Where(method => method.HasAttribute<System.Web.Http.HttpGetAttribute>() && method.IsPublic)
+                                                                                .Where(method => method.IsPublic)
                                                                                 .Where(method => method.ReturnType != typeof(void))
                                                                                 .Select(method => new ClientApiUrl{Action = method.Name, Controller = x.Name.Replace("Controller", ""), IsWebApi = true})
                                                                  });
