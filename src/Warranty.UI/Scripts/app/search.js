@@ -97,7 +97,9 @@
 
                 if (validate.isValid(searchConfig)) {
                     start(searchConfig);
-                    updateSearchWatermark("Search " + searchingFor);
+                    if(getOptions().updateWatermark){
+                        updateSearchWatermark("Search " + searchingFor);
+                    }
                     setupSearch();
                 }
             };

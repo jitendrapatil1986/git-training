@@ -5,11 +5,13 @@ namespace Warranty.UI.Controllers
     using System;
     using System.Web.Mvc;
     using Warranty.Core;
+    using Warranty.Core.Entities;
     using Warranty.Core.Features.AddServiceCallLineItem;
     using Warranty.Core.Features.CreateServiceCall;
     using Warranty.Core.Features.CreateServiceCallCustomerSearch;
     using Warranty.Core.Features.CreateServiceCallVerifyCustomer;
     using Warranty.Core.Features.ServiceCallSummary;
+    using System.Linq;
 
     public class ServiceCallController : Controller
     {
@@ -94,14 +96,11 @@ namespace Warranty.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var newCallId = _mediator.Send(model);
+                var newCallId = _mediator.Send(new CreateServiceCallCommand{JobId = model.JobId, ServiceCallLineItems = model.ServiceCallLineItems.ToList().Select(x=>new ServiceCallLineItem{LineNumber = x.LineItemNumber, ProblemCode = x.ProblemCodeDisplayName, ProblemDescription = x.ProblemDescription})});
+                return RedirectToAction("CallSummary", new {id = newCallId} );
+            }
 
-                return RedirectToAction("CallSummary", "ServiceCall", new {id = newCallId} );
-            }
-            else
-            {
-                return View();
-            }
+            return View();
         }
 
         [HttpPost]

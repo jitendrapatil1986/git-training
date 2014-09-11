@@ -66,6 +66,9 @@
     <Reference Include="FluentValidation.Mvc">
       <HintPath>..\packages\FluentValidation.MVC4.4.0.0.1\lib\Net40\FluentValidation.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlTags">
+      <HintPath>..\packages\HtmlTags.2.1.0.183\lib\4.0\HtmlTags.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.IdentityModel">
       <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
@@ -183,6 +186,7 @@
     </Compile>
     <Compile Include="Api\ApiController.cs" />
     <Compile Include="Api\AssignWSRController.cs" />
+    <Compile Include="Api\RelatedCallController.cs" />
     <Compile Include="Api\ManageLookupsController.cs" />
     <Compile Include="Api\QuickSearchController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />

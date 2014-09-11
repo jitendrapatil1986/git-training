@@ -7,10 +7,13 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <h4>Job # @Html.DisplayFor(x => x.JobNumber)
                                 <small>@Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)</small>
                             </h4>
+                        </div>
+                        <div class="col-md-4 pull-right">
+                            @Html.ActionLink("Create Call", "Create", "ServiceCall", new{id=Model.JobId}, new{@class="btn btn-default pull-right"})
                         </div>
                     </div>
                     <div class="row">

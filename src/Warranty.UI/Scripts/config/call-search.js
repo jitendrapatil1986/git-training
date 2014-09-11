@@ -2,6 +2,7 @@
     return {
         display: 'Service Calls',
         key: 'HomeOwnerName',
+        updateWatermark: true,
         itemTemplate: template,
         targetUrl: urls.ServiceCall.CallSummary,
         emptyText: 'No calls found.',
