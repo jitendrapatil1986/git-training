@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Warranty.Core.Features.CreateServiceCall
+﻿namespace Warranty.Core.Features.CreateServiceCall
 {
-    using System.Web.Mvc;
+    using System;
     using NPoco;
-    using Security;
 
     public class CreateServiceCallQueryHandler : IQueryHandler<CreateServiceCallQuery, CreateServiceCallModel>
     {
         private readonly IDatabase _database;
-        private readonly IUserSession _userSession;
 
-        public CreateServiceCallQueryHandler(IDatabase database, IUserSession userSession)
+        public CreateServiceCallQueryHandler(IDatabase database)
         {
             _database = database;
-            _userSession = userSession;
         }
 
         public CreateServiceCallModel Handle(CreateServiceCallQuery query)
@@ -23,22 +17,9 @@ namespace Warranty.Core.Features.CreateServiceCall
             using (_database)
             {
                 var model = GetServiceCallDetails(query.JobId);
-                model.ServiceCallTypeList = GetServiceCallTypeList();
 
                 return model;
             }
-        }
-
-        private IEnumerable<SelectListItem> GetServiceCallTypeList()
-        {
-            const string sql = @"SELECT  ServiceCallTypeId as Value
-                                        ,ServiceCallType as Text
-                                FROM lookups.ServiceCallTypes
-                                ORDER BY ServiceCallType";
-
-            var result = _database.Fetch<SelectListItem>(sql);
-
-            return result;
         }
 
         private CreateServiceCallModel GetServiceCallDetails(Guid jobId)
@@ -74,7 +55,6 @@ namespace Warranty.Core.Features.CreateServiceCall
                                 ORDER BY ho.HomeOwnerName, j.JobNumber";
 
             var result = _database.Single<CreateServiceCallModel>(sql, jobId);
-
             return result;
         }
     }

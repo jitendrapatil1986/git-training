@@ -1,28 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Warranty.Core.Features.CreateServiceCall
+﻿namespace Warranty.Core.Features.CreateServiceCall
 {
-    using System.Web.Mvc;
-    using Entities.Lookups;
-    using Enumerations;
+    using System;
+    using System.Collections.Generic;
 
-    public class CreateServiceCallModel : ICommand<Guid>
+    public class CreateServiceCallModel
     {
-        public Guid ServiceCallId { get; set; }
-        public int ServiceCallNumber { get; set; }
-        public string ServiceCallType { get; set; }
-        public bool IsSpecialProject { get; set; }
-        public ServiceCallStatus ServiceCallStatus { get; set; }
-        public string Contact { get; set; }
-        public Guid WarrantyRepresentativeEmployeeId { get; set; }
-        public DateTime CompletionDate { get; set; }
-        public string WorkSummary { get; set; }
-        public string HomeOwnerSignature { get; set; }
-        public Guid HomeOwnerId { get; set; }
-        public Guid JobId { get; set; }
+        public CreateServiceCallModel()
+        {
+            ServiceCallLineItems = new List<ServiceCallLineItemForm>();
+        }
+
         public string JobNumber { get; set; }
-        public int HomeOwnerNumber { get; set; }
         public string HomeOwnerName { get; set; }
         public string HomePhone { get; set; }
         public string OtherPhone { get; set; }
@@ -38,26 +26,15 @@ namespace Warranty.Core.Features.CreateServiceCall
         public DateTime WarrantyStartDate { get; set; }
         public int YearsWithinWarranty { get; set; }
 
-        public IEnumerable<SelectListItem> ServiceCallTypeList { get; set; } 
-//        public IEnumerable<SelectListItem> ProblemCodeList { get; set; }
-        public IEnumerable<ServiceCallHeaderComment> ServiceCallHeaderComments { get; set; }
-        public IEnumerable<ServiceCallLineItemModel> ServiceCallLineItems { get; set; }
+        public Guid JobId { get; set; }
+        public string Contact { get; set; }
+        public IEnumerable<ServiceCallLineItemForm> ServiceCallLineItems { get; set; }
 
-        public ProblemCode ProblemCode { get; set; }
-
-        //public IEnumerable<ServiceCallLineItemComments> CallLineItemComments { get; set; }
-
-        public class ServiceCallLineItemModel
+        public class ServiceCallLineItemForm
         {
             public string ProblemCodeId { get; set; }
             public string ProblemCodeDisplayName { get; set; }
             public string ProblemDescription { get; set; }
-            public int LineItemNumber { get; set; }
-        }
-
-        public class ServiceCallHeaderComment
-        {
-            public string Comment { get; set; }
             public int LineItemNumber { get; set; }
         }
     }

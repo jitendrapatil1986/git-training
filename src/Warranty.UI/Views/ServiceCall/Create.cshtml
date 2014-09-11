@@ -1,16 +1,14 @@
 ﻿@using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.CreateServiceCall.CreateServiceCallModel
 
-@using (Html.BeginForm())
-{
-    @Html.HiddenFor(model => model.JobId)
-    @Html.HiddenFor(model => model.WarrantyRepresentativeEmployeeId)
-
-    <div class="container">
-        <h2>Create Service Call Request</h2>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default">
+<div class="container">
+    <h2>Create Service Call Request</h2>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                @using (Html.BeginForm())
+                {
+                    @Html.HiddenFor(model => model.JobId)
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-md-5">
@@ -44,11 +42,11 @@
                                     <div class="col-md-9">
                                         <div class="row col-md-4">
                                             @Html.Label("Problem Code")<br/>
-                                            @Html.ProblemCodeDropdown(Model.ProblemCode)<br/>
+                                            @Html.ProblemCodeDropdown(null)<br/>
                                         </div>
                                         <div class="row col-md-10">
                                             @Html.Label("Description")
-                                            @Html.TextArea("Description", null, new {id="problemDescription", @class="form-control"})
+                                            @Html.TextArea("Description", null, new {id = "problemDescription", @class = "form-control"})
                                             <br/>
                                             <button class="btn btn-default" data-bind="click: addLineItem">Add Item</button>
                                         </div>
@@ -85,8 +83,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                }
             </div>
         </div>
     </div>
-}
+</div>

@@ -7,6 +7,6 @@
         {
         }
 
-        public static readonly RequestType WarrantyRequest = new RequestType(1, "Warranty Request");
+        public static readonly RequestType WarrantyRequest = new RequestType(1, "Warranty Service Request");
     }
 }
