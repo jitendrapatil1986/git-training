@@ -22,20 +22,24 @@ Employee:
         <div>No assignments found.</div>
     }
 
+
     @foreach (var com in Model.Communities.Where(c => c.Employees.Any()))
     {
-        <div>
-            <h3>@com.Name</h3>
-            <ul>
+        <div  class="list-group col-md-12">
+            <div class="list-group-item">
+                    @com.Name
+            </div>
                 @foreach (var emp in com.Employees)
                 {
-                    <li>
-                        @emp.Name (
-                        <span class="text-danger" data-assignmentId="@emp.EmployeeAssignmentId">remove</span>
-                        )
-                    </li>
+                    <div>
+                        <span class="list-group-item">
+                            @emp.Name
+                            <span class="pull-right glyphicon glyphicon-remove" data-assignmentId="@emp.EmployeeAssignmentId"></span>
+                        </span>
+                    </div>
                 }
-            </ul>
         </div>
     }
+
+    <div class="clearfix"></div>
 </div>

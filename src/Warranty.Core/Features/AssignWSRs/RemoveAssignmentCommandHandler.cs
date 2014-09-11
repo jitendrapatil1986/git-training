@@ -32,8 +32,7 @@ namespace Warranty.Core.Features.AssignWSRs
                                     FROM Communities C
                                     INNER JOIN Cities CT ON
                                         @0 LIKE '%' + CT.CityCode + '%'
-                                        AND LEN(LTRIM(RTRIM(CityCode))) = 3
-                                        AND LEN(LTRIM(RTRIM(C.CommunityNumber))) = 4
+                                        AND C.CityId = CT.CityId
                                     INNER JOIN CommunityAssignments CA ON
                                         C.CommunityId = CA.CommunityId
                                         AND CA.EmployeeAssignmentId = @1", marketList, cmd.AssignmentId).Single();

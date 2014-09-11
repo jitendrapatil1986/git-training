@@ -22,39 +22,23 @@ namespace Warranty.UI.Api
         [HttpPost]
         public bool AddAssignment(AddAssignmentModel newAddAssignment)
         {
-            try
+            _mediator.Send(new AssignWSRCommand
             {
-                _mediator.Send(new AssignWSRCommand
-                {
-                    CommunityId = newAddAssignment.CommunityId,
-                    EmployeeId = newAddAssignment.EmployeeId
-                });
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+                CommunityId = newAddAssignment.CommunityId,
+                EmployeeId = newAddAssignment.EmployeeId
+            });
+            return true;
         }
 
 
         [HttpPost]
         public bool RemoveAssignment(RemoveAssignmentModel assignment)
-        {
-            try
-            {
-                _mediator.Send(new RemoveAssignmentCommand
+        {   
+            _mediator.Send(new RemoveAssignmentCommand
                 {
                     AssignmentId = assignment.AssignmentId
                 });
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return true;
         }
     }
 }

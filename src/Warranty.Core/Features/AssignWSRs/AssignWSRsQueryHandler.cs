@@ -35,8 +35,7 @@ namespace Warranty.Core.Features.AssignWSRs
                                     FROM Communities C
                                     INNER JOIN Cities CT ON
                                         @0 LIKE '%' + CT.CityCode + '%'
-                                        AND LEN(LTRIM(RTRIM(CityCode))) = 3
-                                        AND LEN(LTRIM(RTRIM(C.CommunityNumber))) = 4
+                                        AND CT.CityId = C.CityId
                                     GROUP BY C.CommunityId
                                     ORDER BY CommunityName", marketList)
                             .Select(com => new AssignWSRsModel.Community
