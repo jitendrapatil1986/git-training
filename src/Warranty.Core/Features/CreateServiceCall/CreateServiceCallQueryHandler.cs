@@ -23,7 +23,6 @@ namespace Warranty.Core.Features.CreateServiceCall
             using (_database)
             {
                 var model = GetServiceCallDetails(query.JobId);
-                model.ProblemCodeList = GetProblemCodeList();
                 model.ServiceCallTypeList = GetServiceCallTypeList();
 
                 return model;

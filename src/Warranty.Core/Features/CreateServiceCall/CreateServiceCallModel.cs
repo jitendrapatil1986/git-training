@@ -5,6 +5,7 @@ namespace Warranty.Core.Features.CreateServiceCall
 {
     using System.Web.Mvc;
     using Enumerations;
+    using SelectListProviders;
 
     public class CreateServiceCallModel : ICommand<Guid>
     {
@@ -38,9 +39,13 @@ namespace Warranty.Core.Features.CreateServiceCall
         public int YearsWithinWarranty { get; set; }
 
         public IEnumerable<SelectListItem> ServiceCallTypeList { get; set; } 
-        public IEnumerable<SelectListItem> ProblemCodeList { get; set; }
+//        public IEnumerable<SelectListItem> ProblemCodeList { get; set; }
         public IEnumerable<ServiceCallHeaderComment> ServiceCallHeaderComments { get; set; }
         public IEnumerable<ServiceCallLineItemModel> ServiceCallLineItems { get; set; }
+
+        [SelectListProvider(typeof(ProblemCodesSelectListProvider))]
+        public int ProblemCodeId { get; set; }
+
         //public IEnumerable<ServiceCallLineItemComments> CallLineItemComments { get; set; }
 
         public class ServiceCallLineItemModel

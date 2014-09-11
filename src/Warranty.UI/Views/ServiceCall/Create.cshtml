@@ -7,19 +7,11 @@
     @Html.HiddenFor(model => model.WarrantyRepresentativeEmployeeId)
 
     <div class="container">
+            <h2>Create Service Call Request</h2>
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <div class="row text-center">
-                            <h4>Create Service Call Request</h4>
-                        </div>
-                        <div class="row text-center">
-                            <div>
-                                Step 3: Enter & Submit Data
-                            </div>
-                        </div>
-                        <br/>
                         <div class="row">
                             <div class="col-md-5">
                                 <a class="text-capitalize">@Html.DisplayFor(x => x.HomeOwnerName)</a>
@@ -72,7 +64,8 @@
                                         <div class="row">
                                             <div class="col-md-5">
                                                 @Html.Label("Problem Code")
-                                                @Html.DropDownList("SelectProblemCode", Model.ProblemCodeList, "Select Problem Code", new {id="problemCode", @class="form-control"} )
+                                                @Html.DropDownListFor(x=>x.ProblemCodeId)
+@*                                                @Html.DropDownList("SelectProblemCode", Model.ProblemCodeList, "Select Problem Code", new {id="problemCode", @class="form-control"} )*@
                                             </div>
                                         </div>
                                         <br/>

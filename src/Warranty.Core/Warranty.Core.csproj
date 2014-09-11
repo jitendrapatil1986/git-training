@@ -180,11 +180,16 @@
     <Compile Include="Features\ManageLookups\ManageLookupItemsModel.cs" />
     <Compile Include="Features\ManageLookups\ManageLookupItemsQuery.cs" />
     <Compile Include="Features\ManageLookups\ManageLookupItemsQueryHandler.cs" />
+    <Compile Include="Features\ProblemCodes\ProblemCodesQuery.cs" />
+    <Compile Include="Features\ProblemCodes\ProblemCodesQueryHandler.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchCallModel.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchJobModel.cs" />
     <Compile Include="Features\JobSummary\JobSummaryModel.cs" />
     <Compile Include="Features\JobSummary\JobSummaryQuery.cs" />
     <Compile Include="Features\JobSummary\JobSummaryQueryHandler.cs" />
+    <Compile Include="Features\SelectListProviders\ISelectListProvider.cs" />
+    <Compile Include="Features\SelectListProviders\ProblemCodesSelectListProvider.cs" />
+    <Compile Include="Features\SelectListProviders\SelectListProviderAttribute.cs" />
     <Compile Include="Features\SendFeedback\SendFeedbackCommand.cs" />
     <Compile Include="Features\SendFeedback\SendFeedbackCommandHandler.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallDenyHandler.cs" />
