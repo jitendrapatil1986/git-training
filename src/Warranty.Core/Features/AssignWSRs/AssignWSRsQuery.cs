@@ -1,6 +1,4 @@
-﻿using Warranty.Core.Features.AssignWSRs;
-
-namespace Warranty.Core.Features.AmountSpentWidget
+﻿namespace Warranty.Core.Features.AssignWSRs
 {
     public class AssignWSRsQuery : IQuery<AssignWSRsModel>
     {

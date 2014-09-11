@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using Warranty.Core;
 using Warranty.Core.Features.AmountSpentWidget;
+using Warranty.Core.Features.AssignWSRs;
 using Warranty.Core.Features.ManageLookups;
 
 namespace Warranty.UI.Controllers

@@ -2,7 +2,6 @@
 using NPoco;
 using Warranty.Core.Entities;
 using Warranty.Core.Extensions;
-using Warranty.Core.Features.AmountSpentWidget;
 using Warranty.Core.Security;
 
 namespace Warranty.Core.Features.AssignWSRs
