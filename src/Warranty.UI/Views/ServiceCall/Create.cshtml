@@ -7,7 +7,7 @@
     @Html.HiddenFor(model => model.WarrantyRepresentativeEmployeeId)
 
     <div class="container">
-            <h2>Create Service Call Request</h2>
+        <h2>Create Service Call Request</h2>
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
@@ -36,132 +36,39 @@
                                 Sales: @Html.DisplayFor(x => x.SalesPersonName)
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-5">
-                                
-                            </div>
-                            <div class="col-md-4">
-                                
-                            </div>
-                            <div class="col-md-3">
-                                
-                            </div>
-                        </div>
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-9">
-                                        @*<div class="row">
-                                            <div class="col-md-6">
-                                                @Html.Label("Service Call Type")
-                                                @Html.DropDownListFor(x => x.ServiceCallType, Model.ServiceCallTypeList, "Select Call Type", new {id="callType", @class="form-control"} )
-                                            </div>
+                                        <div class="row col-md-4">
+                                            @Html.Label("Problem Code")<br/>
+                                            @Html.ProblemCodeDropdown(Model.ProblemCode)<br/>
                                         </div>
-                                        <hr/>*@
-                                        
-                                        <div class="row">
-                                            <div class="col-md-5">
-                                                @Html.Label("Problem Code")<br/>
-                                                @Html.ProblemCodeDropdown(Model.ProblemCode)
-                                            </div>
+                                        <div class="row col-md-10">
+                                            @Html.Label("Description")
+                                            @Html.TextArea("Description", null, new {id="problemDescription", @class="form-control"})
+                                            <br/>
+                                            <button class="btn btn-default" data-bind="click: addLineItem">Add Item</button>
                                         </div>
+                                        <div class="clearfix"></div>
                                         <br/>
-                                        <div class="row">
-                                            <div class="col-md-11">
-                                                @Html.Label("Description")
-                                                @Html.TextArea("Description", null, new {id="problemDescription", @class="form-control"})
-                                            </div>
-                                        </div>
-                                        <br/>
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <button class="btn btn-default" data-bind="click: addLineItem">Add Item</button>
-                                            </div>
-                                        </div>
-                                        <br/>
-
-                                        <ul class="nav nav-tabs" role="tablist">
-                                            <li class="active"><a href="#add_service_call_lines" role="tab" data-toggle="tab">Line(s) <span class="label label-default" data-bind="text: lineItems().length"></span></a></li>
-                                            @*<li><a href="#add_service_call_notes" role="tab" data-toggle="tab">Note(s) <span class="label label-default" data-bind="text: headerCommentLineItems().length"></span></a></li>*@
-                                        </ul>
-                                    
-                                        <div class="tab-content">
-                                            <div class="tab-pane active" id="add_service_call_lines">
-                                                <div class="service-call-line small">
-                                                    <div class="row">
-                                                        <div class="col-md-3">
-                                                            @Html.Label("Problem Code")
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            @Html.Label("Description")
-                                                        </div>
-                                                    </div>
-                                                    <div class="clearfix"></div>
-                                                </div>
+                                        <div data-bind="visible: lineItems().length > 0">
+                                            <h3>Line Items <small class="label label-default" data-bind="text: lineItems().length"></small></h3>
+                                            <div id="add_service_call_lines">
                                                 <div data-bind="foreach: lineItems">
-                                                    <div class="service-call-line small">
-                                                        <div class="row">
-                                                            <input type="hidden" data-bind="value: $index() + 1, attr: { name: 'ServiceCallLineItems[' + $index() + '].LineItemNumber' }" />
-                                                            <input type="hidden" data-bind="value: problemCodeId, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemCodeId' }" />
-                                                            <input type="hidden" data-bind="value: problemCode, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemCodeDisplayName' }" />
-                                                            <input type="hidden" data-bind="value: problemDescription, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemDescription' }" />
-                                                            <div class="col-md-3">
-                                                                <span data-bind="text: problemCode"></span>
-                                                            </div>
-                                                            <div class="col-md-7">
-                                                                <span data-bind="text: problemDescription"></span>
-                                                            </div>
-                                                            <div class="col-md-2">
-                                                                <button data-bind="click: $root.removeLineItem" class="btn btn-default btn-xs">Remove</button>
-                                                            </div>
-                                                            <div class="clearfix"></div>
-                                                        </div>
+                                                    <div class="service-call-line">
+                                                        <input type="hidden" data-bind="value: $index() + 1, attr: { name: 'ServiceCallLineItems[' + $index() + '].LineItemNumber' }" />
+                                                        <input type="hidden" data-bind="value: problemCodeId, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemCodeId' }" />
+                                                        <input type="hidden" data-bind="value: problemCode, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemCodeDisplayName' }" />
+                                                        <input type="hidden" data-bind="value: problemDescription, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemDescription' }" />
+                                                        <h4 data-bind="text: problemCode"></h4>
+                                                        <span data-bind="text: problemDescription"></span>
+                                                        <button data-bind="click: $root.removeLineItem" class="btn btn-default btn-xs pull-right">Delete</button>
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            @*<div class="tab-pane" id="add_service_call_notes">
-                                                <br/>
-                                                <div class="row">
-                                                    <div class="col-md-11">
-                                                        @Html.Label("Comment")
-                                                        @Html.TextArea("Comment", null, new {id="headerComment", @class="form-control"})
-                                                    </div>
-                                                </div>
-                                                <br/>
-                                                <div class="row">
-                                                    <div class="col-md-2">
-                                                        <button class="btn btn-default" data-bind="click: addHeaderCommentLineItem">Add Item</button>
-                                                    </div>
-                                                </div>
-                                                <br/>
-                                                <div class="service-call-line small">
-                                                    <div class="row">
-                                                        <div class="col-md-3">
-                                                            @Html.Label("Comment")
-                                                        </div>
-                                                    </div>
-                                                    <div class="clearfix"></div>
-                                                </div>
-
-                                                <div data-bind="foreach: headerCommentLineItems">
-                                                    <div class="service-call-line small">
-                                                        <div class="row">
-                                                            <input type="hidden" data-bind="value: $index() + 1, attr: { name: 'ServiceCallHeaderComments[' + $index() + '].LineItemNumber' }" />
-                                                            <input type="hidden" data-bind="value: comment, attr: { name: 'ServiceCallHeaderComments[' + $index() + '].Comment' }" />
-                                                            <div class="col-md-9">
-                                                                <span data-bind="text: comment"></span>
-                                                            </div>
-                                                            <div class="col-md-2">
-                                                                <button data-bind="click: $root.removeHeaderCommentLineItem" class="btn btn-default btn-xs">Remove</button>
-                                                            </div>
-                                                            <div class="clearfix"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>*@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
