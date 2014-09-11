@@ -10,7 +10,6 @@ namespace Warranty.UI.Controllers
     using System.Net.Mail;
     using System.Web;
     using System.Web.Mvc;
-    using Core.Filters;
     using Core.Helpers;
     using Newtonsoft.Json.Linq;
     using Warranty.Core;
