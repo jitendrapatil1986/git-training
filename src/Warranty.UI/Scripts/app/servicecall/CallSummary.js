@@ -43,10 +43,71 @@ require(['/Scripts/app/main.js'], function () {
                 self.problemCodeId = options.problemCodeId;
                 self.problemDescription = options.problemDescription;
                 self.completed = options.completed;
+
+                //track problem code editing.
+                self.problemCodeEditing = ko.observable();
+                
+                self.problemCodeEditItem = function() {
+                    this.problemCodeEditing(true);
+                };
+    
+                self.problemCodeStopEditing = function() {
+                    this.problemCodeEditing(false);
+                };
+                
+                //track problem desc editing.
+                self.problemDescriptionEditing = ko.observable();
+
+                self.problemDescriptionEditItem = function () {
+                    this.problemDescriptionEditing(true);
+                };
+
+                self.problemDescriptionStopEditing = function () {
+                    this.problemDescriptionEditing(false);
+                    updateServiceCallLineItem(this);
+                };
             }
 
+            function updateServiceCallLineItem(line) {
+                //var newProblemDescription = $("#addCallLineProblemDescription");
+                //if (newProblemDescription.val() == "") {
+                //    $(newProblemDescription).parent().addClass("has-error");
+                //    return;
+                //}
+
+                //var updateLineItem = new AllLineItemsViewModel({
+                //    serviceCallLineItemId: line.serviceCallLineItemId, problemCodeId: line.problemCodeId,
+                //    problemCode: line.problemCode, problemDescription: line.problemDescription
+                //});
+
+                var lineData = ko.toJSON(line);
+
+                $.ajax({
+                    url: "/ServiceCall/EditLineItem", //TODO: Set without hard-code url.
+                    type: "POST",
+                    data: lineData,
+                    dataType: "json",
+                    processData: false,
+                    contentType: "application/json; charset=utf-8"
+                })
+                    .fail(function (response) {
+                        alert(JSON.stringify(response));
+                        toastr.error("There was an issue updating the line item. Please try again!");
+                    })
+                    .done(function (response) {
+                        toastr.success("Success! Item updated.");
+
+                        //$("#addCallLineProblemDescription").val('');
+                        //$("#addCallLineProblemCode").val('');
+                        self.problemDescription = $("#addCallLineProblemDescription").val();
+                        //self.problemCode = 
+                    });
+            }
+            
             function createServiceCallLineItemViewModel() {
                 var self = this;
+                self.problemCode = ko.observable();
+                
                 self.problemDescription = ko.observable("");
                 self.allLineItems = ko.observableArray([]);
 

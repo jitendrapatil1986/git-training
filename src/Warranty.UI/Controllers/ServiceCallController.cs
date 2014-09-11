@@ -9,6 +9,7 @@ namespace Warranty.UI.Controllers
     using Warranty.Core.Features.CreateServiceCall;
     using Warranty.Core.Features.CreateServiceCallCustomerSearch;
     using Warranty.Core.Features.CreateServiceCallVerifyCustomer;
+    using Warranty.Core.Features.EditServiceCallLineItem;
     using Warranty.Core.Features.ServiceCallSummary;
 
     public class ServiceCallController : Controller
@@ -19,20 +20,21 @@ namespace Warranty.UI.Controllers
         {
             _mediator = mediator;
         }
-         public ActionResult Reassign(Guid id)
-         {
-             return View();
-         }
 
-         public ActionResult AddNote(Guid id)
-         {
-             return View();
-         }
+        public ActionResult Reassign(Guid id)
+        {
+            return View();
+        }
 
-         public ActionResult Close(Guid id)
-         {
-             return View();
-         }
+        public ActionResult AddNote(Guid id)
+        {
+            return View();
+        }
+
+        public ActionResult Close(Guid id)
+        {
+            return View();
+        }
 
         public ActionResult RequestPayment(Guid id)
         {
@@ -98,10 +100,8 @@ namespace Warranty.UI.Controllers
 
                 return RedirectToAction("CallSummary", "ServiceCall", new {id = newCallId} );
             }
-            else
-            {
-                return View();
-            }
+
+            return View();
         }
 
         [HttpPost]
@@ -113,6 +113,17 @@ namespace Warranty.UI.Controllers
                 });
 
             return Json(new {newServiceLineId = result}, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult EditLineItem(EditServiceCallLineModel model)
+        {
+            var result = _mediator.Send(new EditServiceCallLineCommand
+            {
+                ServiceCallLineItemId = model.ServiceCallLineItemId, ProblemCode = model.ProblemCode, ProblemDescription = model.ProblemDescription
+            });
+
+            return Json(new { serviceLineItemId = result }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Approve(Guid id)

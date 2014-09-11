@@ -168,9 +168,18 @@
                     <div data-bind="foreach: allLineItems">
                         <div id="allServiceCallLineItems" class="service-call-line">
                             <li class="row">
-                                <h4><span class="text-muted small glyphicon glyphicon-wrench"></span> <small class="text-muted" data-bind="text: problemCode"></small></h4>
+                                <div class="editor" data-bind="css: { editing: problemCodeEditing }"> 
+                                    <h4><span class="text-muted small glyphicon glyphicon-wrench"></span> 
+                                        <small class="text-muted view" data-bind="event: { dblclick: problemCodeEditItem }, text: problemCode"></small>
+                                        <input class="edit small form-control" type="text" data-bind="value: problemCode, event: { blur: problemCodeStopEditing }" /> 
+                                    </h4>
+                                </div>
+
                                 <div class="col-md-9">
-                                    <p data-bind="text: problemDescription"></p>
+                                    <div class="editor" data-bind="css: { editing: problemDescriptionEditing }"> 
+                                        <p class="view" data-bind="text: problemDescription, event: { dblclick: problemDescriptionEditItem }"></p>
+                                        <input class="edit small form-control" type="text" data-bind="value: problemDescription, event: { blur: problemDescriptionStopEditing }" /> 
+                                    </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="pull-right" data-bind="visible: completed != true">
