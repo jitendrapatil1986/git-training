@@ -184,6 +184,7 @@
     <Compile Include="Api\ApiController.cs" />
     <Compile Include="Api\QuickSearchController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\ServiceCallController.cs" />
@@ -355,6 +356,7 @@
     <Content Include="Views\ServiceCall\Create.cshtml" />
     <Content Include="Views\Job\JobSummary.cshtml" />
     <Content Include="Views\Shared\_FeedbackModal.cshtml" />
+    <Content Include="Views\Help\User.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
