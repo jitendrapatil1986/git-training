@@ -129,7 +129,7 @@ namespace Warranty.Core.Features.JobSummary
                                 ON j.CurrentHomeOwnerId = ho.HomeOwnerId
                                 INNER JOIN (select COUNT(*) as NumberOfLineItems, ServiceCallId FROM ServiceCallLineItems group by ServiceCallId) li
                                 ON wc.ServiceCallId = li.ServiceCallId
-                                INNER JOIN Employees e
+                                LEFT JOIN Employees e
                                 ON wc.WarrantyRepresentativeEmployeeId = e.EmployeeId
                                 LEFT JOIN ServiceCallComments cc
                                 ON wc.ServiceCallId = cc.ServiceCallId

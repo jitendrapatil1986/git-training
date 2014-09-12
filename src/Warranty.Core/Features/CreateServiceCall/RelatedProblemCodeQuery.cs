@@ -2,11 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
-    using Entities;
+    using Core;
 
-    public class CreateServiceCallCommand : ICommand<Guid>
+    public class RelatedProblemCodeQuery : IQuery<IEnumerable<RelatedProblemCode>>
     {
         public Guid JobId { get; set; }
-        public IEnumerable<ServiceCallLineItem> ServiceCallLineItems { get; set; }
+        public string ProblemCode { get; set; }
     }
 }

@@ -1,9 +1,17 @@
 ﻿namespace Warranty.UI.Core.Helpers
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq.Expressions;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
     using Enumerations;
+    using HtmlTags;
+    using Microsoft.Practices.ServiceLocation;
+    using Warranty.Core;
+    using Warranty.Core.Entities.Lookups;
+    using Warranty.Core.Features.ProblemCodes;
+    using Yay.Enumerations;
 
     public static class HtmlHelperExtensions
     {
@@ -53,7 +61,32 @@
 
             return MvcHtmlString.Empty;
         }
-         
+
+        public static HtmlTag ProblemCodeDropdown<T>(this HtmlHelper<T> html, ProblemCode currentProblemCode) where T : class
+        {
+            SelectTag select;
+            var mediator = ServiceLocator.Current.GetInstance<IMediator>();
+
+                var problemCodes = mediator.Request(new ProblemCodesQuery());
+
+                select = new SelectTag(t =>
+                {
+                    t.Option("Select Problem Code", string.Empty);
+                    foreach (var problemCode in problemCodes)
+                    {
+                        var htmlTag = t.Option(problemCode.DisplayName, problemCode.Id);
+                        if (currentProblemCode == problemCode)
+                            htmlTag.Attr("selected");
+                    }
+                });
+
+            select.Id("problemCode");
+            select.Attr("name", "SelectProblemCode");
+            select.AddClass("form-control");
+
+            return select;
+        }
+
          public static MvcHtmlString ServiceCallActions(this HtmlHelper htmlHelper, Guid serviceCallId)
          {
              return MvcHtmlString.Empty;
