@@ -146,13 +146,15 @@
                         <div class="row">
                             <div class="col-md-12">
                                 @Html.Label("Description")
-                                @Html.TextArea("Description", null, new {id="addCallLineProblemDescription", @class="form-control", data_bind="value: problemDescription, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Description'}"})
+                                @*@Html.TextArea("Description", null, new {id="addCallLineProblemDescription", @class="form-control", data_bind="value: problemDescription, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Description'}"})*@
+                                @Html.TextArea("Description", null, new {id="addCallLineProblemDescription", @class="form-control", data_bind="attr:{placeholder: 'Add Description'}"})
                             </div>
                         </div>
                         <br/>
                         <div class="row">
                             <div class="col-md-1">
-                                <button class="btn btn-default" data-bind="click: addLineItem, enable: problemDescription().length > 0">Save</button>
+                                @*<button class="btn btn-default" data-bind="click: addLineItem, enable: problemDescription().length > 0">Save</button>*@
+                                <button class="btn btn-default" data-bind="click: addLineItem">Save</button>
                             </div>
                             <div class="col-md-1 btn">
                                 <a href="#" data-toggle="collapse" data-target="#addCallLineItem">Cancel</a>
@@ -166,29 +168,55 @@
                 <div class="clearfix"></div>
                 <ul>
                     <div data-bind="foreach: allLineItems">
-                        <div id="allServiceCallLineItems" class="service-call-line">
-                            <li class="row">
-                                <div class="editor" data-bind="css: { editing: problemCodeEditing }"> 
-                                    <h4><span class="text-muted small glyphicon glyphicon-wrench"></span> 
-                                        <small class="text-muted view" data-bind="event: { dblclick: problemCodeEditItem }, text: problemCode"></small>
-                                        <input class="edit small form-control" type="text" data-bind="value: problemCode, event: { blur: problemCodeStopEditing }" /> 
-                                    </h4>
-                                </div>
-
-                                <div class="col-md-9">
-                                    <div class="editor" data-bind="css: { editing: problemDescriptionEditing }"> 
-                                        <p class="view" data-bind="text: problemDescription, event: { dblclick: problemDescriptionEditItem }"></p>
-                                        <input class="edit small form-control" type="text" data-bind="value: problemDescription, event: { blur: problemDescriptionStopEditing }" /> 
+                        <div id="allServiceCallLineItems " class="service-call-line">
+                            <div class="edit-line-item">
+                                <li class="row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-9">
+                                            <div class="no-left-right-padding">
+                                                <div class="row">
+                                                    <div class="col-md-9">
+                                                        <div class="editor" data-bind="css: { editing: problemCodeEditing }"> 
+                                                            <h4>
+                                                                <span class="text-muted small glyphicon glyphicon-wrench" data-bind="visible: lineEditing() == false"></span> 
+                                                                <select class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
+                                                                <small class="text-muted view" data-bind="text: problemCode"></small>
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="editor" data-bind="css: { editing: problemDescriptionEditing }"> 
+                                                            <p class="view" data-bind="text: problemDescription"></p>
+                                                            <textarea id="updateCallLineProblemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4 col-xs-12 no-left-right-padding top-buffer bottom-buffer">
+                                                        <div class="editor" data-bind="css: { editing: lineEditing }">
+                                                            <div class="col-md-3 col-xs-4">
+                                                                <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges">Save</button>
+                                                            </div>
+                                                            <div class="col-md-3 col-xs-4">
+                                                                <button type="button" class="btn btn-default btn-sm edit" data-bind="click: cancelLineItemChanges">Cancel</button>
+                                                                @*<a href="#" class="small editable-cancel edit" data-bind="click: cancelLineItemChanges">Cancel</a>*@
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button id="btn-edit-line-item" type="button" class="pull-right btn btn-default btn-sm btn-hover-show" data-bind="click: editLine, visible: lineEditing() == false">Edit</button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="pull-right" data-bind="visible: completed != true">
-                                        <a href="#">Edit</a> | <a href="#">Close</a>
-                                    </div>
-                                </div>
-                            </li>
-                            <div class="clearfix"></div>
+                                </li>
+                                <div class="clearfix"></div>
+                            </div>
                         </div>
+
                     </div>
                 </ul>
             </div>
@@ -203,6 +231,12 @@
         define('modelData', function () {
             return {
                 initialServiceLines: @Html.Raw(Model.ServiceCallLines.ToJson())
+            };
+        });
+        
+        define('dropdownData', function () {
+            return {
+                availableLookups: @Html.Raw(Model.AddServiceCallLineItem.ProblemCodes.Select(x => new { problemId = x.Value, problemCode = x.Text }).ToJson())
             };
         });
     </script>
