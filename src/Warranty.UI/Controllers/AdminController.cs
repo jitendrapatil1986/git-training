@@ -1,8 +1,8 @@
 ﻿using System.Web.Mvc;
 using Warranty.Core;
-using Warranty.Core.Features.AmountSpentWidget;
 using Warranty.Core.Features.AssignWSRs;
 using Warranty.Core.Features.ManageLookups;
+using Warranty.UI.Core.Filters;
 
 namespace Warranty.UI.Controllers
 {
@@ -15,11 +15,28 @@ namespace Warranty.UI.Controllers
             _mediator = mediator;
         }
 
-        public ActionResult Index()
+        [ModelStateToTempData]
+        public ActionResult ManageAssignments()
         {
             var model = _mediator.Request(new AssignWSRsQuery());
             return View(model);
-	}
+        }
+
+        [HttpPost]
+        [ModelStateToTempData]
+        public ActionResult ManageAssignments(AssignWSRsModel newAddAssignment)
+        {
+            if (ModelState.IsValid)
+            {
+                _mediator.Send(new AssignWSRCommand
+                {
+                    CommunityId = newAddAssignment.SelectedCommunityId,
+                    EmployeeId = newAddAssignment.SelectedEmployeeId
+                });
+            }
+
+            return RedirectToAction("ManageAssignments");
+        }
 
         public ActionResult ManageLookups()
         {

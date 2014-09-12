@@ -60,11 +60,13 @@
     <Reference Include="Elmah">
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
-    <Reference Include="FluentValidation">
-      <HintPath>..\packages\FluentValidation.4.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
+    <Reference Include="FluentValidation, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
-    <Reference Include="FluentValidation.Mvc">
-      <HintPath>..\packages\FluentValidation.MVC4.4.0.0.1\lib\Net40\FluentValidation.Mvc.dll</HintPath>
+    <Reference Include="FluentValidation.Mvc, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentValidation.MVC4.5.1.0.0\lib\Net40\FluentValidation.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="HtmlTags">
       <HintPath>..\packages\HtmlTags.2.1.0.183\lib\4.0\HtmlTags.dll</HintPath>
@@ -198,6 +200,7 @@
     <Compile Include="Core\Enumerations\NavHeaderItem.cs" />
     <Compile Include="Core\Enumerations\NavItem.cs" />
     <Compile Include="Core\Enumerations\ToastType.cs" />
+    <Compile Include="Core\Filters\ModelStateToTempData.cs" />
     <Compile Include="Core\Filters\WarrantyServiceCoordinatorOnlyAttribute.cs" />
     <Compile Include="Core\Filters\WarrantyAuthorize.cs" />
     <Compile Include="Core\Filters\NavActionFilterAttribute.cs" />
@@ -258,7 +261,7 @@
     <Content Include="img\hue.png" />
     <Content Include="img\loader.gif" />
     <Content Include="img\saturation.png" />
-    <Content Include="Scripts\app\Admin\Index.js" />
+    <Content Include="Scripts\app\Admin\ManageAssignments.js" />
     <Content Include="Scripts\app\admin\ManageLookups.js" />
     <Content Include="Scripts\app\ajaxEvents.js" />
     <Content Include="Scripts\app\feedbackForm.js" />
@@ -363,7 +366,7 @@
     <Content Include="Views\ServiceCall\VerifyCustomer.cshtml" />
     <Content Include="Views\ServiceCall\Create.cshtml" />
     <Content Include="Views\Job\JobSummary.cshtml" />
-    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\ManageAssignments.cshtml" />
     <Content Include="Views\Admin\ManageLookups.cshtml" />
     <Content Include="Views\Shared\_FeedbackModal.cshtml" />
   </ItemGroup>

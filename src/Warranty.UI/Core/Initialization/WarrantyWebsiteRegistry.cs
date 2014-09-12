@@ -1,9 +1,10 @@
-﻿namespace Warranty.UI.Core.Initialization
+﻿using FluentValidation;
+using FluentValidation.Mvc;
+
+namespace Warranty.UI.Core.Initialization
 {
     using System.Web;
     using System.Web.Mvc;
-    using FluentValidation;
-    using FluentValidation.Mvc;
     using Security;
     using StructureMap.Configuration.DSL;
     using Warranty.Core;
@@ -17,6 +18,6 @@
             For<ModelValidatorProvider>().Use<FluentValidationModelValidatorProvider>();
             For<HttpRequest>().Use(() => HttpContext.Current.Request);
             For<IUserSession>().Use<WarrantyUserSession>();
- }
+        }
     }
 }

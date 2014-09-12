@@ -21,5 +21,8 @@ namespace Warranty.Core.Features.AssignWSRs
             public string Name { get; set; }
             public List<AssignedEmployee> Employees { get; set; }
         }
+
+        public Guid SelectedCommunityId { get; set; }
+        public Guid SelectedEmployeeId { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Web.Http;
 using Warranty.Core;
 using Warranty.Core.Features.AssignWSRs;
+using Warranty.Core.Features.SharedQueries;
 
 namespace Warranty.UI.Api
 {
@@ -14,24 +15,14 @@ namespace Warranty.UI.Api
         }
 
         [HttpPost]
-        public bool AddAssignment(AddAssignmentModel newAddAssignment)
-        {
-            _mediator.Send(new AssignWSRCommand
-            {
-                CommunityId = newAddAssignment.CommunityId,
-                EmployeeId = newAddAssignment.EmployeeId
-            });
-            return true;
-        }
-
-        [HttpPost]
-        public bool RemoveAssignment(RemoveAssignmentModel assignment)
+        public PostResponseModel RemoveAssignment(RemoveAssignmentModel assignment)
         {   
             _mediator.Send(new RemoveAssignmentCommand
                 {
                     AssignmentId = assignment.AssignmentId
                 });
-            return true;
+
+            return new PostResponseModel { Success = true };
         }
     }
 }

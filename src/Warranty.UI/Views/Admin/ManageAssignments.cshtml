@@ -7,12 +7,16 @@
 }
 
 <h2>Assign WSR's</h2>
-
-Community:
-@Html.DropDownList("community", Model.Communities.Select(c => new SelectListItem{Text = c.Name, Value = c.Id.ToString()}))
-Employee:
-@Html.DropDownList("employee", Model.Employees.Select(c => new SelectListItem{Text = c.Name, Value = c.EmployeeId.ToString()}))
-<input type="button" id="bAddAssignment" value="Add"/>
+@using (Html.BeginForm("ManageAssignments"))
+{
+    <span>Community:</span>
+    @Html.DropDownListFor(x => x.SelectedCommunityId, Model.Communities.Select(c => new SelectListItem {Text = c.Name, Value = c.Id.ToString()}))
+    @Html.ValidationMessageFor(x=>x.SelectedCommunityId)
+    <span>Employee:</span>
+    @Html.DropDownListFor(x => x.SelectedEmployeeId, Model.Employees.Select(c => new SelectListItem {Text = c.Name, Value = c.EmployeeId.ToString()}))
+    @Html.ValidationMessageFor(x=>x.SelectedEmployeeId)
+    <input type="submit" value="Add" class="btn btn-success"/>
+}
 
 <div class="well">
     <h2>Assignments</h2>
@@ -33,7 +37,7 @@ Employee:
                     <div>
                         <span class="list-group-item">
                             @emp.Name
-                            <span class="pull-right glyphicon glyphicon-remove" data-assignmentId="@emp.EmployeeAssignmentId"></span>
+                            <a href="#" class="pull-right glyphicon glyphicon-remove" data-assignmentId="@emp.EmployeeAssignmentId"></a>
                         </span>
                     </div>
                 }
