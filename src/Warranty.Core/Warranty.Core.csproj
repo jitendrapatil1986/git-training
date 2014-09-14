@@ -186,6 +186,9 @@
     <Compile Include="Features\ManageLookups\ManageLookupItemsModel.cs" />
     <Compile Include="Features\ManageLookups\ManageLookupItemsQuery.cs" />
     <Compile Include="Features\ManageLookups\ManageLookupItemsQueryHandler.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemCommand.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemCommandHandler.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemModel.cs" />
     <Compile Include="Features\ProblemCodes\ProblemCodesQuery.cs" />
     <Compile Include="Features\ProblemCodes\ProblemCodesQueryHandler.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchCallModel.cs" />

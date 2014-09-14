@@ -364,6 +364,7 @@
     <Content Include="Views\Job\JobSummary.cshtml" />
     <Content Include="Views\Admin\ManageLookups.cshtml" />
     <Content Include="Views\Shared\_FeedbackModal.cshtml" />
+    <Content Include="Views\ServiceCall\_EditLine.cshtml" />
     <Content Include="Views\Help\UserDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
