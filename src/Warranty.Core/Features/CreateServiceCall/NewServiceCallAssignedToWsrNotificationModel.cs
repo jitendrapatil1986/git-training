@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Warranty.Core.Features.CreateServiceCall
 {
-    public class NewCsrAssignedToWsrNotificationModel
+    public class NewServiceCallAssignedToWsrNotificationModel
     {
         public Guid ServiceCallId { get; set; }
         public string ServiceCallNumber { get; set; }

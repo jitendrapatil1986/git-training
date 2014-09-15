@@ -2,16 +2,16 @@
 
 namespace Warranty.Core.Features.CreateServiceCall
 {
-    public class NewCsrAssignedToWsrNotificationQueryHandler : IQueryHandler<NewCsrAssignedToWsrNotificationQuery, NewCsrAssignedToWsrNotificationModel>
+    public class NewServiceCallAssignedToWsrNotificationQueryHandler : IQueryHandler<NewServiceCallAssignedToWsrNotificationQuery, NewServiceCallAssignedToWsrNotificationModel>
     {
         private readonly IDatabase _database;
 
-        public NewCsrAssignedToWsrNotificationQueryHandler(IDatabase database)
+        public NewServiceCallAssignedToWsrNotificationQueryHandler(IDatabase database)
         {
             _database = database;
         }
 
-        public NewCsrAssignedToWsrNotificationModel Handle(NewCsrAssignedToWsrNotificationQuery query)
+        public NewServiceCallAssignedToWsrNotificationModel Handle(NewServiceCallAssignedToWsrNotificationQuery query)
         {
             using (_database)
             {
@@ -34,7 +34,7 @@ namespace Warranty.Core.Features.CreateServiceCall
                             ON e.EmployeeId = sc.WarrantyRepresentativeEmployeeId 
                           WHERE sc.ServiceCallId = @0";
 
-                var model = _database.SingleOrDefault<NewCsrAssignedToWsrNotificationModel>(sql, query.ServiceCallId);
+                var model = _database.SingleOrDefault<NewServiceCallAssignedToWsrNotificationModel>(sql, query.ServiceCallId);
                 model.WarrantyRepresentativeEmployeeEmail = GetEmployeeEmail(model.EmployeeNumber);
 
 

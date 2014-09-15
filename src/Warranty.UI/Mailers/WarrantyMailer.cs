@@ -15,9 +15,9 @@ namespace Warranty.UI.Mailer
             MasterName = "_Layout";
         }
 
-        public MvcMailMessage NewCsrAssignedToWsr(Guid serviceCallId)
+        public MvcMailMessage NewServiceCallAssignedToWsr(Guid serviceCallId)
         {
-            var serviceCallModel = _mediator.Request(new NewCsrAssignedToWsrNotificationQuery
+            var serviceCallModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery
             {
                 ServiceCallId = serviceCallId
             });
@@ -31,7 +31,7 @@ namespace Warranty.UI.Mailer
             return Populate(x =>
                 {
                     x.Subject = string.Format("Warranty Call # {0}", serviceCallModel.ServiceCallNumber);
-                    x.ViewName = "NewCsrAssignedToWsr";
+                    x.ViewName = "NewServiceCallAssignedToWsr";
                     x.To.Add(serviceCallModel.WarrantyRepresentativeEmployeeEmail);
                 });
         }

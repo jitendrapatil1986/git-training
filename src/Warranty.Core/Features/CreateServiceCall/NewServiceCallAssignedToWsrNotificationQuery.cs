@@ -2,7 +2,7 @@
 
 namespace Warranty.Core.Features.CreateServiceCall
 {
-    public class NewCsrAssignedToWsrNotificationQuery : IQuery<NewCsrAssignedToWsrNotificationModel>
+    public class NewServiceCallAssignedToWsrNotificationQuery : IQuery<NewServiceCallAssignedToWsrNotificationModel>
     {
         public Guid ServiceCallId { get; set; }
     }

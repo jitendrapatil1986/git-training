@@ -369,8 +369,9 @@
     <Content Include="Views\Job\JobSummary.cshtml" />
     <Content Include="Views\Admin\ManageLookups.cshtml" />
     <Content Include="Views\Shared\_FeedbackModal.cshtml" />
+    <Content Include="Views\ServiceCall\_EditLine.cshtml" />
     <Content Include="Views\Help\UserDetails.cshtml" />
-    <Content Include="Views\WarrantyMailer\NewCsrAssignedToWsr.cshtml" />
+    <Content Include="Views\WarrantyMailer\NewServiceCallAssignedToWsr.cshtml" />
     <Content Include="Views\WarrantyMailer\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>

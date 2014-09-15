@@ -11,6 +11,7 @@ namespace Warranty.UI.Controllers
     using Warranty.Core.Features.CreateServiceCall;
     using Warranty.Core.Features.CreateServiceCallCustomerSearch;
     using Warranty.Core.Features.CreateServiceCallVerifyCustomer;
+    using Warranty.Core.Features.EditServiceCallLineItem;
     using Warranty.Core.Features.ServiceCallSummary;
     using System.Linq;
 
@@ -26,19 +27,19 @@ namespace Warranty.UI.Controllers
         }
 
         public ActionResult Reassign(Guid id)
-         {
-             return View();
-         }
+        {
+            return View();
+        }
 
-         public ActionResult AddNote(Guid id)
-         {
-             return View();
-         }
+        public ActionResult AddNote(Guid id)
+        {
+            return View();
+        }
 
-         public ActionResult Close(Guid id)
-         {
-             return View();
-         }
+        public ActionResult Close(Guid id)
+        {
+            return View();
+        }
 
         public ActionResult RequestPayment(Guid id)
         {
@@ -101,11 +102,11 @@ namespace Warranty.UI.Controllers
             if (ModelState.IsValid)
             {
                 var newCallId = _mediator.Send(new CreateServiceCallCommand{JobId = model.JobId, ServiceCallLineItems = model.ServiceCallLineItems.ToList().Select(x=>new ServiceCallLineItem{LineNumber = x.LineItemNumber, ProblemCode = x.ProblemCodeDisplayName, ProblemDescription = x.ProblemDescription})});
-                _mailer.NewCsrAssignedToWsr(newCallId).SendAsync();
+                _mailer.NewServiceCallAssignedToWsr(newCallId).SendAsync();
                 return RedirectToAction("CallSummary", new {id = newCallId} );
             }
 
-            return View();
+            return View(model);
         }
 
         [HttpPost]
@@ -117,6 +118,17 @@ namespace Warranty.UI.Controllers
                 });
 
             return Json(new {newServiceLineId = result}, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult EditLineItem(EditServiceCallLineModel model)
+        {
+            var result = _mediator.Send(new EditServiceCallLineCommand
+            {
+                ServiceCallLineItemId = model.ServiceCallLineItemId, ProblemCode = model.ProblemCode, ProblemDescription = model.ProblemDescription
+            });
+
+            return Json(new { serviceLineItemId = result }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Approve(Guid id)

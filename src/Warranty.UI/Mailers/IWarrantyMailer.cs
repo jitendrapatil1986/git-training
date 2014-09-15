@@ -5,6 +5,6 @@ namespace Warranty.UI.Mailer
 {
     public interface IWarrantyMailer
     {
-        MvcMailMessage NewCsrAssignedToWsr(Guid serviceCallId);
+        MvcMailMessage NewServiceCallAssignedToWsr(Guid serviceCallId);
     }
 }

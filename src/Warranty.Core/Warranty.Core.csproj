@@ -173,9 +173,9 @@
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommand.cs" />
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemModel.cs" />
-    <Compile Include="Features\CreateServiceCall\NewCsrAssignedToWsrNotificationModel.cs" />
-    <Compile Include="Features\CreateServiceCall\NewCsrAssignedToWsrNotificationQuery.cs" />
-    <Compile Include="Features\CreateServiceCall\NewCsrAssignedToWsrNotificationQueryHandler.cs" />
+    <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationModel.cs" />
+    <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationQuery.cs" />
+    <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationQueryHandler.cs" />
     <Compile Include="Features\CreateServiceCall\RelatedProblemCodeQueryHandler.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommand.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommandHandler.cs" />
@@ -193,6 +193,9 @@
     <Compile Include="Features\ManageLookups\ManageLookupItemsModel.cs" />
     <Compile Include="Features\ManageLookups\ManageLookupItemsQuery.cs" />
     <Compile Include="Features\ManageLookups\ManageLookupItemsQueryHandler.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemCommand.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemCommandHandler.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemModel.cs" />
     <Compile Include="Features\ProblemCodes\ProblemCodesQuery.cs" />
     <Compile Include="Features\ProblemCodes\ProblemCodesQueryHandler.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchCallModel.cs" />
