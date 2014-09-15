@@ -192,6 +192,7 @@
     <Compile Include="Api\ManageLookupsController.cs" />
     <Compile Include="Api\QuickSearchController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Controllers\CommunityController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -373,6 +374,7 @@
     <Content Include="Views\Help\UserDetails.cshtml" />
     <Content Include="Views\WarrantyMailer\NewServiceCallAssignedToWsr.cshtml" />
     <Content Include="Views\WarrantyMailer\_Layout.cshtml" />
+    <Content Include="Views\Home\_ToDoCommunityEmployeeAssignment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

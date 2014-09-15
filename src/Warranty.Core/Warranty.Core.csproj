@@ -103,6 +103,7 @@
     <Compile Include="DataAccess\Mappings\CityMap.cs" />
     <Compile Include="DataAccess\Mappings\CityMapping.cs" />
     <Compile Include="DataAccess\Mappings\AuditableEntityMap.cs" />
+    <Compile Include="DataAccess\Mappings\CommunityAssignmentMap.cs" />
     <Compile Include="DataAccess\Mappings\CommunityMap.cs" />
     <Compile Include="DataAccess\Mappings\CommunityMapping.cs" />
     <Compile Include="DataAccess\Mappings\DivisionMap.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="DataAccess\SqlServerDatabaseType.cs" />
     <Compile Include="Entities\City.cs" />
     <Compile Include="Entities\Community.cs" />
+    <Compile Include="Entities\CommunityAssignment.cs" />
     <Compile Include="Entities\Division.cs" />
     <Compile Include="Entities\HomeOwner.cs" />
     <Compile Include="Entities\IAuditableEntity.cs" />
@@ -176,6 +178,8 @@
     <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationModel.cs" />
     <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationQuery.cs" />
     <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationQueryHandler.cs" />
+    <Compile Include="Features\CommunityEmployeeAssignment\CommunityEmployeAssignmentCommand.cs" />
+    <Compile Include="Features\CommunityEmployeeAssignment\CommunityEmployeAssignmentCommandHandler.cs" />
     <Compile Include="Features\CreateServiceCall\RelatedProblemCodeQueryHandler.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommand.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommandHandler.cs" />
@@ -265,10 +269,12 @@
     <Compile Include="Security\IUserSession.cs" />
     <Compile Include="Security\WarrantyUser.cs" />
     <Compile Include="StructureMapValidatorFactory.cs" />
+    <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoCommunityEmployeeAssignment.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoPaymentRequestApproval.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoServiceCallApproval.cs" />
     <Compile Include="ToDoInfrastructure\Interfaces\IToDo.cs" />
     <Compile Include="ToDoInfrastructure\IToDoAggregator.cs" />
+    <Compile Include="ToDoInfrastructure\Models\ToDoCommunityEmployeeAssignmentModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoPaymentRequestApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoServiceCallApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\ToDo.cs" />
