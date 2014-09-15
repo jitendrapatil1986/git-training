@@ -374,3 +374,36 @@ a.delete-group-item:hover {
     position: absolute;
     right: 0px;
 }
+//Testing inline-edit via ko.
+.edit {
+    display: none;
+}
+
+.editing .edit {
+    display: block;
+}
+
+.editing .view {
+    display: none;
+}
+
+.edit-line-item:hover, .edit-line-item:focus{
+    background: @highlight-bg;
+}
+
+.edit-line-item .glyphicon-pencil, .edit-line-item .btn-hover-show{
+    opacity: 0;
+}
+
+.edit-line-item:hover .glyphicon-pencil, .edit-line-item:focus .glyphicon-pencil, .edit-line-item:hover .btn-hover-show{
+    opacity: 1;
+    color: blue;
+}
+
+.top-buffer { 
+    margin-top: 0.5em; 
+}
+
+.bottom-buffer {
+    margin-bottom: 0.5em;
+}
