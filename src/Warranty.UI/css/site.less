@@ -1,6 +1,6 @@
 ﻿/* VARIABLES */
 @danger-bg: #f2dede;
-@highlight-bg: #FFF2A8;
+@highlight-bg: #d4dde3; //#FFF2A8;
 @gray-lighter: #f7f7f7;
 
 .main-container {
@@ -101,6 +101,7 @@
     font-size: xx-large;
     color: #FFFFFF;
     height: 60px;
+    width: 60px;
 }
 
 .opened-for p {
@@ -334,6 +335,12 @@
     padding: 0%;
 }
 
+.remove-list-style ul.border-bottom-1-solid li {
+    border-bottom: 1px solid #DDD;
+    padding-bottom: 3px;
+    margin-bottom: 3px;
+}
+
 .delete-group-item .glyphicon-remove{
   opacity: 0;
 }
@@ -377,7 +384,6 @@ a.delete-group-item:hover {
 
 .edit-line-item:hover .glyphicon-pencil, .edit-line-item:focus .glyphicon-pencil, .edit-line-item:hover .btn-hover-show{
     opacity: 1;
-    color: blue;
 }
 
 .top-buffer { 
@@ -386,4 +392,56 @@ a.delete-group-item:hover {
 
 .bottom-buffer {
     margin-bottom: 0.5em;
+}
+
+.margin-top-13 { 
+    margin-top: 13px;
+}
+
+.margin-bottom-10 { 
+    margin-bottom: 10px;
+}
+
+.margin-bottom-3 { 
+    margin-bottom: 3px;
+}
+
+.margin-right-10 { 
+    margin-right: 10px;
+}
+
+.padding-bottom-3 { 
+    padding-bottom: 3px;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.no-padding{ padding: 0;}
+.no-top-padding{ padding-top: 0;}
+.no-bottom-padding{ padding-bottom: 0;}
+.no-right-padding{ padding-right: 0;}
+.no-left-padding{ padding-left: 0;}
+
+.float-right-non-xs-screen {
+    float: right;
+}
+
+@media (max-width: 767px) {
+    .float-right-non-xs-screen {
+        float: none !important;
+    }
+
+    .text-align-right {
+        text-align: left;
+    }
+
+    .margin-top-13 {
+        margin-top: 0;
+    }
+
+    .edit-line-item > row > .col-md-12 {
+        padding-left: 0;
+    }
 }
