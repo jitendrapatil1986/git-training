@@ -17,7 +17,7 @@ namespace Warranty.UI.Controllers
         {
             var result  = _mediator.Send(command);
 
-            return Json(new { success = result.ToString() }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = result }, JsonRequestBehavior.AllowGet);
         }
     }
 }
