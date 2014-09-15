@@ -51,9 +51,8 @@ define(['urls','jquery'], function(urls, $) {
                 url: url,
                 data: { CommunityId: communityId, EmployeeNumber: employeeNumber },
                 success: function (result) {
-                    debugger;
                     if (result.success == "True") {
-                        var divToHide = button.parent().parent().parent();
+                        var divToHide = button.parents('div[class^="todo"]').eq(-2);
                         divToHide.addClass('hide');
                     }
                 }
