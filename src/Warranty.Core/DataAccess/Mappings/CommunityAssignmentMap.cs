@@ -8,12 +8,12 @@ namespace Warranty.Core.DataAccess.Mappings
         public CommunityAssignmentMap()
         {
             TableName("CommunityAssignments")
-                .PrimaryKey(x => x.EmployeeAssignmentId, false)
+                .PrimaryKey("EmployeeAssignmentId", false)
                 .Columns(x =>
-                {
-                    x.Column(y => y.CommunityId);
-                    x.Column(y => y.EmployeeId);
-                });
+                    {
+                        x.Column(y => y.CommunityId);
+                        x.Column(y => y.EmployeeId);
+                    });
         }
     }
 }

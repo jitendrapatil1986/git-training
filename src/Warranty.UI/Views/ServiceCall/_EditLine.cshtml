@@ -1,0 +1,79 @@
+﻿@*@model Warranty.Core.Features.EditServiceCall.EditServiceCallLineModel*@
+@model Warranty.Core.Features.ServiceCallSummary.ServiceCallSummaryModel.ServiceCallLine
+
+
+@using (Html.BeginForm())
+{
+    <div id="editLineModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Edit Line</h4>
+                </div>
+                <form id="editLineForm">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                @Html.Label("Problem Code")
+                                @*@Html.DropDownList("SelectProblemCode", Model.ProblemCodeList, "Select Problem Code", new {id="problemCode", @class="form-control"} )*@
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-md-11">
+                                @Html.LabelFor(model => model.ProblemDescription)
+                                @Html.TextAreaFor(model => model.ProblemDescription, new {htmlAttributes = new {@class = "form-control"}})
+                                @*@Html.Label("Description")
+                            @Html.TextArea("Description", Model.ProblemDescription, new {id="problemDescription", @class="form-control"})*@
+                            </div>
+                        </div>
+                    
+
+                        @*                    <div class="form-group">
+                        <input name="subject" type="text" class="form-control editLineInput" placeholder=@Model.ProblemCode />
+                    </div>
+                    <div class="form-group">
+                        <label for="body">Description</label>
+                        <textarea name="body" rows="5" class="form-control editLineInput required">@Model.ProblemDescription</textarea>
+                    </div>*@
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <input id="editLineSaveButton" type="submit" value="Save" class="btn btn-primary" aria-hidden="true" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@*<script type="text/javascript">
+require(['/Scripts/app/main.js'], function () {
+    require(['jquery', 'ko'], function ($, ko) {
+        function editServiceCallViewModel() {
+            var self = this;
+            self.lineItems = ko.observableArray([]);
+
+            self.editLineItem = function () {
+                self.lineItems.push(new lineItemViewModel({ problemCode: $("#problemCode").find('option:selected').text(), problemCodeId: $("#problemCode").val(), problemDescription: $("#problemDescription").val() }));
+                $("#problemDescription").val('');
+            };
+
+            self.removeLineItem = function (lineItem) {
+                self.lineItems.remove(lineItem);
+            };
+        }
+
+        function lineItemViewModel(options) {
+            var self = this;
+            self.problemCode = options.problemCode;
+            self.problemCodeId = options.problemCodeId;
+            self.problemDescription = options.problemDescription;
+        }
+
+        var viewModel = new editServiceCallViewModel();
+        ko.applyBindings(viewModel);
+    });
+});
+</script>*@

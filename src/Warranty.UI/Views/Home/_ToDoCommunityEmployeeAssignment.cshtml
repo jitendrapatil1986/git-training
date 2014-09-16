@@ -1,0 +1,30 @@
+﻿@using System.Globalization
+@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
+@model Warranty.Core.ToDoInfrastructure.Models.ToDoCommunityEmployeeAssignmentModel
+<div class="todo @Css.ToDoClass(ToDoType.CommunityEmployeeAssignment)"  id="community-todo-@Model.CommunityId">
+    <div class="todo-widget-data-container">
+        <div class="assign-employee-community-icon">
+            A
+        </div>
+
+        <div class="todo-widget-separator-line">
+        </div>
+
+        <div class="todo-widget-element">
+            <small>Community <strong>@Model.CommunityName</strong> has no employee assigned. Assign one now: </small>
+        </div>
+        <br/>
+        <div class="todo-widget-element">
+            @if (Model.Employees.Any())
+            {
+                @Html.DropDownList("ddlEmployee", Model.Employees.Select(x => new SelectListItem {Text = x.DisplayName, Value = x.EmployeeNumber.ToString(CultureInfo.InvariantCulture)}), "-", new {@id = "list_assignable_employee_" + Model.CommunityId})
+                <a href="#" data-community-id="@Model.CommunityId" class="assign-employee-community-button"><span class="glyphicon glyphicon-hand-right assign-employee-community"></span>&nbsp;Assign</a>
+            }
+            else
+            {
+                <small class="alert-danger">There are no employees associated to this community.</small>
+            }
+        </div>
+    </div>
+</div>

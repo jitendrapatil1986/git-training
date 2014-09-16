@@ -8,7 +8,7 @@
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{ECCA9355-3FF0-4C3A-BE4C-9E02B5C8D242}</ProjectGuid>
-    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Warranty.UI</RootNamespace>
@@ -77,6 +77,9 @@
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Mvc.Mailer">
+      <HintPath>..\packages\MvcMailer.4.5\lib\45\Mvc.Mailer.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -192,6 +195,8 @@
     <Compile Include="Api\ManageLookupsController.cs" />
     <Compile Include="Api\QuickSearchController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Controllers\CommunityController.cs" />
+    <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobController.cs" />
@@ -232,6 +237,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Mailers\WarrantyMailer.cs" />
+    <Compile Include="Mailers\IWarrantyMailer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -369,6 +376,11 @@
     <Content Include="Views\Admin\ManageAssignments.cshtml" />
     <Content Include="Views\Admin\ManageLookups.cshtml" />
     <Content Include="Views\Shared\_FeedbackModal.cshtml" />
+    <Content Include="Views\ServiceCall\_EditLine.cshtml" />
+    <Content Include="Views\Help\UserDetails.cshtml" />
+    <Content Include="Views\WarrantyMailer\NewServiceCallAssignedToWsr.cshtml" />
+    <Content Include="Views\WarrantyMailer\_Layout.cshtml" />
+    <Content Include="Views\Home\_ToDoCommunityEmployeeAssignment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

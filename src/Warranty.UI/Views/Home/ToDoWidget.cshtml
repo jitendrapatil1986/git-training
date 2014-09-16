@@ -27,6 +27,11 @@
                     var castedModel = (ToDoServiceCallApproval) toDo;
                     @Html.Partial(castedModel.ViewName, castedModel.Model)
                 }
+                else if (toDo.GetType() == typeof (ToDoCommunityEmployeeAssignment))
+                {
+                    var castedModel = (ToDoCommunityEmployeeAssignment)toDo;
+                    @Html.Partial(castedModel.ViewName, castedModel.Model)
+                }
             }
         }
         else

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Mvc;
+﻿using Warranty.UI.Mailer;
 
 namespace Warranty.UI.Core.Initialization
 {
@@ -18,6 +19,7 @@ namespace Warranty.UI.Core.Initialization
             For<ModelValidatorProvider>().Use<FluentValidationModelValidatorProvider>();
             For<HttpRequest>().Use(() => HttpContext.Current.Request);
             For<IUserSession>().Use<WarrantyUserSession>();
+            For<IWarrantyMailer>().Use<WarrantyMailer>();
         }
     }
 }

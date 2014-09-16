@@ -39,6 +39,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Common.Security.1.1.55.0\lib\net45\Common.Security.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -182,6 +186,11 @@
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommand.cs" />
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemModel.cs" />
+    <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationModel.cs" />
+    <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationQuery.cs" />
+    <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationQueryHandler.cs" />
+    <Compile Include="Features\CommunityEmployeeAssignment\CommunityEmployeAssignmentCommand.cs" />
+    <Compile Include="Features\CommunityEmployeeAssignment\CommunityEmployeAssignmentCommandHandler.cs" />
     <Compile Include="Features\CreateServiceCall\RelatedProblemCodeQueryHandler.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommand.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommandHandler.cs" />
@@ -199,6 +208,9 @@
     <Compile Include="Features\ManageLookups\ManageLookupItemsModel.cs" />
     <Compile Include="Features\ManageLookups\ManageLookupItemsQuery.cs" />
     <Compile Include="Features\ManageLookups\ManageLookupItemsQueryHandler.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemCommand.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemCommandHandler.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemModel.cs" />
     <Compile Include="Features\ProblemCodes\ProblemCodesQuery.cs" />
     <Compile Include="Features\ProblemCodes\ProblemCodesQueryHandler.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchCallModel.cs" />
@@ -269,10 +281,12 @@
     <Compile Include="Security\IUserSession.cs" />
     <Compile Include="Security\WarrantyUser.cs" />
     <Compile Include="StructureMapValidatorFactory.cs" />
+    <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoCommunityEmployeeAssignment.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoPaymentRequestApproval.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoServiceCallApproval.cs" />
     <Compile Include="ToDoInfrastructure\Interfaces\IToDo.cs" />
     <Compile Include="ToDoInfrastructure\IToDoAggregator.cs" />
+    <Compile Include="ToDoInfrastructure\Models\ToDoCommunityEmployeeAssignmentModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoPaymentRequestApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoServiceCallApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\ToDo.cs" />

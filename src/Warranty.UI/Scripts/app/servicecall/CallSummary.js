@@ -1,5 +1,5 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'urls', 'toastr', 'modelData', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData) {
+    require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData, dropdownData) {
         $(function () {
             $(".approve-button").click(function (e) {
                 e.preventDefault();
@@ -39,17 +39,75 @@ require(['/Scripts/app/main.js'], function () {
                 var self = this;
                 self.serviceCallId = options.serviceCallId;
                 self.serviceCallLineItemId = options.serviceCallLineItemId;
-                self.problemCode = options.problemCode;
-                self.problemCodeId = options.problemCodeId;
-                self.problemDescription = options.problemDescription;
                 self.completed = options.completed;
+
+                //track line item properties.
+                self.problemCodeId = ko.observable(options.problemCodeId);
+                self.problemCode = ko.observable(options.problemCode);
+                self.problemDescription = ko.observable(options.problemDescription);
+                self.currentProblemCode = ko.observable();
+                self.currentProblemDescription = ko.observable();
+                
+                //track editing problem code, desc, and line altogether.
+                self.problemCodeEditing = ko.observable();
+                self.problemDescriptionEditing = ko.observable("");
+                self.lineEditing = ko.observable("");
+                
+                //edit line item.
+                self.editLine = function() {
+                    this.problemCodeEditing(true);
+                    this.problemDescriptionEditing(true);
+                    this.lineEditing(true);
+                    this.currentProblemCode(this.problemCode());
+                    this.currentProblemDescription(this.problemDescription());
+                };
+                
+                //save line item changes.
+                self.saveLineItemChanges = function () {
+                    this.problemCodeEditing(false);
+                    this.problemDescriptionEditing(false);
+                    this.lineEditing(false);
+                    updateServiceCallLineItem(this);
+                };
+                
+                //cancel line item changes.
+                self.cancelLineItemChanges = function () {
+                    this.problemCodeEditing(false);
+                    this.problemDescriptionEditing(false);
+                    this.lineEditing(false);
+                    this.problemCode(this.currentProblemCode());
+                    this.problemDescription(this.currentProblemDescription());
+                };
             }
 
+            function updateServiceCallLineItem(line) {
+                //TODO: Add validations.
+
+                var lineData = ko.toJSON(line);
+
+                $.ajax({
+                    url: "/ServiceCall/EditLineItem", //TODO: Set without hard-code url.
+                    type: "POST",
+                    data: lineData,
+                    dataType: "json",
+                    processData: false,
+                    contentType: "application/json; charset=utf-8"
+                })
+                    .fail(function (response) {
+                        toastr.error("There was an issue updating the line item. Please try again!");
+                    })
+                    .done(function (response) {
+                        toastr.success("Success! Item updated.");
+                        self.problemCode = line.problemCode;
+                    });
+            }
+            
             function createServiceCallLineItemViewModel() {
                 var self = this;
-                self.problemDescription = ko.observable("");
+                
                 self.allLineItems = ko.observableArray([]);
-
+                self.theLookups = dropdownData.availableLookups;  //dropdown list does not need to be observable. Only the actual elements w/i the array do.
+                
                 self.addLineItem = function() {
                     self.serviceCallId = $("#addCallLineServiceCallId").val();
                     self.problemCode = $("#addCallLineProblemCode").find('option:selected').text();

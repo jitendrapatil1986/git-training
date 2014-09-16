@@ -1,0 +1,21 @@
+﻿Here are the details of your newly assgined Warranty Service Call:<br />
+<br />
+
+<strong>Home Owner's Name: </strong>@ViewBag.HomeOwnerName
+<br />
+<strong>Home Phone: </strong># @ViewBag.HomePhone
+<br />
+<strong>Community: </strong>@ViewBag.CommunityName
+<br />
+<strong>Address: </strong>@ViewBag.AddressLine<br />
+
+@if (((List<string>)@ViewBag.Comments).Any())
+{
+    <span>Comments:</span><br />
+    <br />
+
+    foreach (var comment in @ViewBag.Comments)
+    {
+        <p>@comment</p>
+    }
+}

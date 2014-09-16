@@ -22,7 +22,7 @@
     }
     else
     {
-    <div class="col-md-8 pull-right">
+    <div class="float-right-non-xs-screen">
         @Format.DaysOpenedFor(daysOpenedFor, createdDate, completionDate)
     </div>
     }
@@ -40,74 +40,57 @@
     }
 }
 
+
 <div class="container">
     <div class="col-md-12">
+        <section>
+            <h2>Service Call # @Model.ServiceCallSummary.CallNumber</h2>
+        </section>
         <div class="panel panel-default">
             <div class="panel-heading text-capitalize">
-                <div class="row">
-                    <div class="col-md-1">
-                        <h3 class="panel-title">@Model.ServiceCallSummary.CallNumber</h3>
-                        @Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate)
-                    </div>
-                    <div class="col-md-5">
+                <div class="row remove-list-style">
+                    <div class="col-md-3 margin-bottom-10">
                         <h3 class="panel-title text-capitalize">@Model.ServiceCallSummary.HomeownerName</h3>
-                        @Html.ActionLink(Model.ServiceCallSummary.Address, "JobSummary", "Job", new {id = Model.ServiceCallSummary.JobId}, null)
+                        <ul>
+                            <li>@Html.ActionLink(Model.ServiceCallSummary.Address, "JobSummary", "Job", new {id = Model.ServiceCallSummary.JobId}, null)</li>
+                            <li>@Format.PhoneNumber(Model.ServiceCallSummary.PhoneNumber)</li>
+                            <li><a>@Format.Email(Model.ServiceCallSummary.EmailAddress)</a></li>
+                        </ul>
+                        <span>@Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate)</span>
                     </div>
                     <div class="col-md-3">
-                        @Format.PhoneNumber(Model.ServiceCallSummary.PhoneNumber)<br />
-                        <a>@Format.Email(Model.ServiceCallSummary.EmailAddress)</a>
+                        <ul class="border-bottom-1-solid">
+                            <li class="clearfix"><span class="pull-left">Created By:</span><span class="pull-right">Mr. Placeholder</span></li>
+                            <li class="clearfix"><span class="pull-left">Created On:</span><span class="pull-right">@Format.DateMonthDayYear(Model.ServiceCallSummary.CreatedDate)</span></li>
+                            <li class="clearfix"><span class="pull-left">Assignee:</span><span class="pull-right">@Model.ServiceCallSummary.AssignedTo</span></li>
+                        </ul>
                     </div>
-                    <div class="col-md-2">
-                        @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
+                    <div class="col-md-3">
+                        <ul class="border-bottom-1-solid">
+                            <li class="clearfix"><span class="pull-left">Job Number:</span>
+                                <span class="pull-right">@Html.ActionLink(Model.ServiceCallSummary.JobNumber, "JobSummary", "Job", new {id = Model.ServiceCallSummary.JobId}, null)</span></li>
+                            <li class="clearfix"><span class="pull-left">Payments:</span><span class="pull-right">&nbsp;</span></li>
+                            <li class="clearfix"><span class="pull-left">Division:</span><span class="pull-right">@Model.ServiceCallSummary.DivisionName</span></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="float-right-non-xs-screen">
+                            <div id="approveCommands" class="margin-bottom-10">
+                                @if (Model.ServiceCallSummary.ServiceCallStatus == ServiceCallStatus.Requested)
+                                {
+                                    <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
+                                    <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
+                                }
+                                else
+                                {
+                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus) </span>
+                                }
+                            </div>
+                            @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-3 text-capitalize">
-                        Employee: @Model.ServiceCallSummary.AssignedTo
-                    </div>
-                    <div class="col-md-3">
-                        Job Number: @Model.ServiceCallSummary.JobNumber
-                    </div>
-                    <div class="col-md-3" id="approveCommands">
-                        @if (Model.ServiceCallSummary.ServiceCallStatus == ServiceCallStatus.Requested)
-                        {
-                            <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
-                            
-                            <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
-                        }
-                        else
-                        {
-                            <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus) </span>
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-3">
-                        Division: @Model.ServiceCallSummary.DivisionName
-                    </div>
-                    <div class="col-md-3">
-                        Community: @Model.ServiceCallSummary.CommunityName
-                    </div>
-                    <div class="col-md-3">
-                        Project: @Model.ServiceCallSummary.ProjectName
-                    </div>
-                    <div class="col-md-3">
-                        Builder:
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        Sales:
-                    </div>
-                    <div class="col-md-3">
-                    </div>
-                    <div class="col-md-3">
-                    </div>
-                    <div class="col-md-3">
-                    </div>
-                </div>
+            @*<div class="panel-body">
                 <div class="row">
                     <div class="col-md-11"></div>
                     <div class="col-md-1 pull-right">
@@ -121,70 +104,121 @@
                         @EscalationHelper(Model.ServiceCallSummary.IsEscalated, Model.ServiceCallSummary.EscalationDate, Model.ServiceCallSummary.EscalationReason)
                     </h4>
                 </div>
-            </div>
+            </div>*@
         </div>
-
-        <section>
-            <h3 >Line Items
-                <span>
-                    <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Line Item" data-toggle="collapse" data-target="#addCallLineItem"><span class="glyphicon glyphicon-plus"></span></button>
-                </span>
-            </h3>
-
-            @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallId, new{id="addCallLineServiceCallId", @class="form-control"})
-            <div id="addCallLineItem" class="collapse">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Add Line Item</div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                @Html.Label("Problem Code")
-                                @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select Problem Code", new {id="addCallLineProblemCode", @class="form-control"} )
+            <section>
+                <h3 class="col-md-12">Line Items
+                    <span>
+                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Line Item" data-toggle="collapse" data-target="#addCallLineItem"><span class="glyphicon glyphicon-plus"></span></button>
+                    </span>
+                </h3>
+                @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallId, new{id="addCallLineServiceCallId", @class="form-control"})
+                <div id="addCallLineItem" class="collapse">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Add Line Item</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @Html.Label("Problem Code")
+                                    @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select Problem Code", new {id="addCallLineProblemCode", @class="form-control"} )
+                                </div>
                             </div>
-                        </div>
-                        <br/>
-                        <div class="row">
-                            <div class="col-md-12">
-                                @Html.Label("Description")
-                                @Html.TextArea("Description", null, new {id="addCallLineProblemDescription", @class="form-control", data_bind="value: problemDescription, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Description'}"})
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @Html.Label("Description")
+                                    @*@Html.TextArea("Description", null, new {id="addCallLineProblemDescription", @class="form-control", data_bind="value: problemDescription, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Description'}"})*@
+                                    @Html.TextArea("Description", null, new {id="addCallLineProblemDescription", @class="form-control", data_bind="attr:{placeholder: 'Add Description'}"})
+                                </div>
                             </div>
-                        </div>
-                        <br/>
-                        <div class="row">
-                            <div class="col-md-1">
-                                <button class="btn btn-default" data-bind="click: addLineItem, enable: problemDescription().length > 0">Save</button>
-                            </div>
-                            <div class="col-md-1 btn">
-                                <a href="#" data-toggle="collapse" data-target="#addCallLineItem">Cancel</a>
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-1">
+                                    @*<button class="btn btn-default" data-bind="click: addLineItem, enable: problemDescription().length > 0">Save</button>*@
+                                    <button class="btn btn-default" data-bind="click: addLineItem">Save</button>
+                                </div>
+                                <div class="col-md-1 btn">
+                                    <a href="#" data-toggle="collapse" data-target="#addCallLineItem">Cancel</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="remove-list-style">
-                <div class="clearfix"></div>
-                <ul>
-                    <div data-bind="foreach: allLineItems">
-                        <div id="allServiceCallLineItems" class="service-call-line">
+                <div class="remove-list-style">
+                    <div class="clearfix"></div>
+                    <ul>
+                        <div data-bind="foreach: allLineItems">
+                            <div id="allServiceCallLineItems" class="service-call-line edit-line-item">
+                                    <li class="row">
+                                        <div class="col-md-12">
+                                            <div class="col-md-9">
+                                                <div class="no-left-right-padding">
+                                                    <div class="row">
+                                                        <div class="col-md-9">
+                                                            <div class="editor" data-bind="css: { editing: problemCodeEditing }"> 
+                                                                <h4>
+                                                                    <select class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
+                                                                    <small class="text-muted view" data-bind="text: problemCode"></small>
+                                                                </h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="editor" data-bind="css: { editing: problemDescriptionEditing }"> 
+                                                                <p class="view" data-bind="text: problemDescription"></p>
+                                                                <textarea id="updateCallLineProblemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-xs-12 no-left-right-padding top-buffer bottom-buffer">
+                                                            <div class="editor" data-bind="css: { editing: lineEditing }">
+                                                                <div class="col-md-3 col-xs-4">
+                                                                    <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges">Save</button>
+                                                                </div>
+                                                                <div class="col-md-3 col-xs-4">
+                                                                    <button type="button" class="btn btn-default btn-sm edit" data-bind="click: cancelLineItemChanges">Cancel</button>
+                                                                    @*<a href="#" class="small editable-cancel edit" data-bind="click: cancelLineItemChanges">Cancel</a>*@
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 margin-top-13 margin-bottom-3 text-align-right no-right-padding">
+                                                <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: lineEditing() == false">Edit</button>
+                                                <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show" data-bind="visible: lineEditing() == false">Complete</button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </ul>
+                </div>
+            </section>
+            
+            <section >
+                <h3 class="col-md-12">Notes</h3>
+                <div class="remove-list-style">
+                    <div class="clearfix"></div>
+                    <ul>
+                        @foreach (var line in Model.ServicCallComments)
+                        {
                             <li class="row">
-                                <h4><span class="text-muted small glyphicon glyphicon-wrench"></span> <small class="text-muted" data-bind="text: problemCode"></small></h4>
-                                <div class="col-md-9">
-                                    <p data-bind="text: problemDescription"></p>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="pull-right" data-bind="visible: completed != true">
-                                        <a href="#">Edit</a> | <a href="#">Close</a>
-                                    </div>
+                                <div class="col-md-12">
+                                    <span>@line.CreatedBy</span> <span>@Format.DateMonthDayYear(line.CreatedDate)</span> 
+                                    <div class="float-right-non-xs-screen">Ref: <a href="#">Placeholder</a></div>
+                                    <p>@line.Comment</p>
                                 </div>
                             </li>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                </ul>
-            </div>
-        </section>
-    </div>
+                        }
+                    </ul>
+                </div>
+            </section>
+        </div>
 </div>
 
 
@@ -194,6 +228,12 @@
         define('modelData', function () {
             return {
                 initialServiceLines: @Html.Raw(Model.ServiceCallLines.ToJson())
+            };
+        });
+        
+        define('dropdownData', function () {
+            return {
+                availableLookups: @Html.Raw(Model.AddServiceCallLineItem.ProblemCodes.Select(x => new { problemId = x.Value, problemCode = x.Text }).ToJson())
             };
         });
     </script>

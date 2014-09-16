@@ -35,5 +35,27 @@ define(['urls','jquery'], function(urls, $) {
                 }
             });
         }
+        
+
+
+        $(".assign-employee-community-button").click(function (e) {
+            e.preventDefault();
+            var communityId = $(this).data("community-id");
+            var employeeNumber = $("#list_assignable_employee_" + communityId).val();
+            
+            var url = urls.Community.AssignEmployee;
+            var button = $(this);
+            
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { CommunityId: communityId, EmployeeNumber: employeeNumber },
+                success: function (result) {
+                        if (result.success == true) {
+                        $('#community-todo-' + communityId).addClass('hide');
+                    }
+                }
+            });
+        });
     });
 });
