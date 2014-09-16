@@ -1,11 +1,11 @@
+﻿using FluentValidation;
+using FluentValidation.Mvc;
 ﻿using Warranty.UI.Mailer;
 
 namespace Warranty.UI.Core.Initialization
 {
     using System.Web;
     using System.Web.Mvc;
-    using FluentValidation;
-    using FluentValidation.Mvc;
     using Security;
     using StructureMap.Configuration.DSL;
     using Warranty.Core;
@@ -20,6 +20,6 @@ namespace Warranty.UI.Core.Initialization
             For<HttpRequest>().Use(() => HttpContext.Current.Request);
             For<IUserSession>().Use<WarrantyUserSession>();
             For<IWarrantyMailer>().Use<WarrantyMailer>();
- }
+        }
     }
 }

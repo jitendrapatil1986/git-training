@@ -35,6 +35,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentValidation, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Common.Security.1.1.55.0\lib\net45\Common.Security.dll</HintPath>
@@ -60,9 +64,6 @@
     </Reference>
     <Reference Include="AutoMapper.Net4">
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentValidation">
-      <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="NPoco">
       <HintPath>..\packages\NPoco.2.5.76\lib\net40\NPoco.dll</HintPath>
@@ -172,6 +173,16 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Features\AssignWSRs\AssignedEmployee.cs" />
+    <Compile Include="Features\AssignWSRs\AssignWSRCommand.cs" />
+    <Compile Include="Features\AssignWSRs\AssignWSRCommandHandler.cs" />
+    <Compile Include="Features\AssignWSRs\AssignWSRsModel.cs" />
+    <Compile Include="Features\AssignWSRs\AssignWSRsQuery.cs" />
+    <Compile Include="Features\AssignWSRs\AssignWSRsQueryHandler.cs" />
+    <Compile Include="Features\AssignWSRs\AssignWSRsValidator.cs" />
+    <Compile Include="Features\AssignWSRs\RemoveAssignmentCommand.cs" />
+    <Compile Include="Features\AssignWSRs\RemoveAssignmentCommandHandler.cs" />
+    <Compile Include="Features\AssignWSRs\RemoveAssignmentModel.cs" />
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommand.cs" />
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemModel.cs" />
@@ -215,6 +226,7 @@
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveHandler.cs" />
     <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQuery.cs" />
     <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQueryHandler.cs" />
+    <Compile Include="Features\SharedQueries\PostResponseModel.cs" />
     <Compile Include="Features\SharedQueries\ProblemCodes.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetModel.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQuery.cs" />
