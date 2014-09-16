@@ -102,7 +102,13 @@ namespace Warranty.UI.Controllers
             if (ModelState.IsValid)
             {
                 var newCallId = _mediator.Send(new CreateServiceCallCommand{JobId = model.JobId, ServiceCallLineItems = model.ServiceCallLineItems.ToList().Select(x=>new ServiceCallLineItem{LineNumber = x.LineItemNumber, ProblemCode = x.ProblemCodeDisplayName, ProblemDescription = x.ProblemDescription})});
-                _mailer.NewServiceCallAssignedToWsr(newCallId).SendAsync();
+
+                var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery
+                    {
+                        ServiceCallId = newCallId
+                    });
+
+                _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
                 return RedirectToAction("CallSummary", new {id = newCallId} );
             }
 

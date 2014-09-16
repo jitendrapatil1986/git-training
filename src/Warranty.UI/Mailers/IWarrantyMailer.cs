@@ -1,10 +1,10 @@
-﻿using System;
-using Mvc.Mailer;
+﻿using Mvc.Mailer;
+using Warranty.Core.Features.CreateServiceCall;
 
 namespace Warranty.UI.Mailer
 {
     public interface IWarrantyMailer
     {
-        MvcMailMessage NewServiceCallAssignedToWsr(Guid serviceCallId);
+        MvcMailMessage NewServiceCallAssignedToWsr(NewServiceCallAssignedToWsrNotificationModel model);
     }
 }

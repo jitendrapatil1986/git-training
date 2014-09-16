@@ -1,5 +1,4 @@
-﻿using System;
-using Mvc.Mailer;
+﻿using Mvc.Mailer;
 using Warranty.Core;
 using Warranty.Core.Features.CreateServiceCall;
 
@@ -7,32 +6,24 @@ namespace Warranty.UI.Mailer
 {
     public class WarrantyMailer : MailerBase, IWarrantyMailer
     {
-        private readonly IMediator _mediator;
-
-        public WarrantyMailer(IMediator mediator)
+        public WarrantyMailer()
         {
-            _mediator = mediator;
             MasterName = "_Layout";
         }
 
-        public MvcMailMessage NewServiceCallAssignedToWsr(Guid serviceCallId)
+        public MvcMailMessage NewServiceCallAssignedToWsr(NewServiceCallAssignedToWsrNotificationModel model)
         {
-            var serviceCallModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery
-            {
-                ServiceCallId = serviceCallId
-            });
-
-            ViewBag.HomeOwnerName = serviceCallModel.HomeOwnerName;
-            ViewBag.HomePhone = serviceCallModel.HomePhone;
-            ViewBag.CommunityName = serviceCallModel.CommunityName;
-            ViewBag.AddressLine = serviceCallModel.AddressLine;
-            ViewBag.Comments = serviceCallModel.Comments;
+            ViewBag.HomeOwnerName = model.HomeOwnerName;
+            ViewBag.HomePhone = model.HomePhone;
+            ViewBag.CommunityName = model.CommunityName;
+            ViewBag.AddressLine = model.AddressLine;
+            ViewBag.Comments = model.Comments;
 
             return Populate(x =>
                 {
-                    x.Subject = string.Format("Warranty Call # {0}", serviceCallModel.ServiceCallNumber);
+                    x.Subject = string.Format("Warranty Call # {0}", model.ServiceCallNumber);
                     x.ViewName = "NewServiceCallAssignedToWsr";
-                    x.To.Add(serviceCallModel.WarrantyRepresentativeEmployeeEmail);
+                    x.To.Add(model.WarrantyRepresentativeEmployeeEmail);
                 });
         }
     }
