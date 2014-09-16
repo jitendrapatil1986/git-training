@@ -97,16 +97,18 @@ namespace Warranty.Core.ToDoInfrastructure
             return toDos;
         }
 
-        private static void AddToDoEmployees(ToDoCommunityEmployeeAssignment todo)
+        private void AddToDoEmployees(ToDoCommunityEmployeeAssignment todo)
         {
+            var availableUsers = _database.Fetch<string>("Select EmployeeNumber From Employees");
+
             var queryUsers = new GetUsersByCommunityQuery(todo.Model.CommunityNumber);
             var users = queryUsers.Execute();
-                              
+
             todo.Model.Employees = users.Select(x => new ToDoCommunityEmployeeAssignmentModel.EmployeeViewModel
             {
-            DisplayName = x.DisplayName,
-            EmployeeNumber = x.EmployeeNumber
-            }).ToList();
+                DisplayName = x.DisplayName,
+                EmployeeNumber = x.EmployeeNumber
+            }).Where(x => availableUsers.Contains(x.EmployeeNumber)).OrderBy(x => x.DisplayName).ToList();
         }
 
         //private IEnumerable<IToDo> GetEscalationApprovalToDos()
