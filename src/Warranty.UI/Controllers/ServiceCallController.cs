@@ -1,4 +1,5 @@
 ﻿using Warranty.Core.Features.ServiceCallApproval;
+using Warranty.UI.Mailer;
 
 namespace Warranty.UI.Controllers
 {
@@ -17,10 +18,12 @@ namespace Warranty.UI.Controllers
     public class ServiceCallController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IWarrantyMailer _mailer;
 
-        public ServiceCallController(IMediator mediator)
+        public ServiceCallController(IMediator mediator, IWarrantyMailer mailer)
         {
             _mediator = mediator;
+            _mailer = mailer;
         }
 
         public ActionResult Reassign(Guid id)
@@ -99,6 +102,13 @@ namespace Warranty.UI.Controllers
             if (ModelState.IsValid)
             {
                 var newCallId = _mediator.Send(new CreateServiceCallCommand{JobId = model.JobId, ServiceCallLineItems = model.ServiceCallLineItems.ToList().Select(x=>new ServiceCallLineItem{LineNumber = x.LineItemNumber, ProblemCode = x.ProblemCodeDisplayName, ProblemDescription = x.ProblemDescription})});
+
+                var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery
+                    {
+                        ServiceCallId = newCallId
+                    });
+
+                _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
                 return RedirectToAction("CallSummary", new {id = newCallId} );
             }
 
