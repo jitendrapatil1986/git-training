@@ -7,6 +7,7 @@ namespace Warranty.UI.Controllers
     using System.Web.Mvc;
     using Warranty.Core;
     using Warranty.Core.Entities;
+    using Warranty.Core.Enumerations;
     using Warranty.Core.Features.AddServiceCallLineItem;
     using Warranty.Core.Features.CreateServiceCall;
     using Warranty.Core.Features.CreateServiceCallCustomerSearch;
@@ -14,16 +15,19 @@ namespace Warranty.UI.Controllers
     using Warranty.Core.Features.EditServiceCallLineItem;
     using Warranty.Core.Features.ServiceCallSummary;
     using System.Linq;
+    using Warranty.Core.Security;
 
     public class ServiceCallController : Controller
     {
         private readonly IMediator _mediator;
         private readonly IWarrantyMailer _mailer;
+        private readonly IUserSession _userSession;
 
-        public ServiceCallController(IMediator mediator, IWarrantyMailer mailer)
+        public ServiceCallController(IMediator mediator, IWarrantyMailer mailer, IUserSession userSession)
         {
             _mediator = mediator;
             _mailer = mailer;
+            _userSession = userSession;
         }
 
         public ActionResult Reassign(Guid id)
@@ -102,13 +106,12 @@ namespace Warranty.UI.Controllers
             if (ModelState.IsValid)
             {
                 var newCallId = _mediator.Send(new CreateServiceCallCommand{JobId = model.JobId, ServiceCallLineItems = model.ServiceCallLineItems.ToList().Select(x=>new ServiceCallLineItem{LineNumber = x.LineItemNumber, ProblemCode = x.ProblemCodeDisplayName, ProblemDescription = x.ProblemDescription})});
+                if (_userSession.GetCurrentUser().IsInRole(UserRoles.WarrantyServiceManager) || _userSession.GetCurrentUser().IsInRole(UserRoles.WarrantyServiceCoordinator))
+                { 
+                    var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery { ServiceCallId = newCallId });
+                    _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
+                }
 
-                var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery
-                    {
-                        ServiceCallId = newCallId
-                    });
-
-                _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
                 return RedirectToAction("CallSummary", new {id = newCallId} );
             }
 
@@ -143,6 +146,9 @@ namespace Warranty.UI.Controllers
             {
                 ServiceCallId = id
             });
+
+            var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery { ServiceCallId = id });
+            _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
 
             return Json (new { success = "true"}, JsonRequestBehavior.AllowGet );
         }
