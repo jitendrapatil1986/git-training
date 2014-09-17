@@ -11,6 +11,9 @@ using Warranty.Core.ToDoInfrastructure.Models;
 
 namespace Warranty.Core.ToDoInfrastructure
 {
+    using Common.Security.Entities;
+    using Entities;
+
     public class ToDoAggregator : IToDoAggregator
     {
         private readonly IDatabase _database;
@@ -82,7 +85,7 @@ namespace Warranty.Core.ToDoInfrastructure
         private static IEnumerable<IToDo> GetCommunityEmployeeAssignmentToDos(IUser user, IDatabase database)
         {
             var userMarkets = user.Markets;
-            const string sql = @"SELECT c.CreatedDate [Date], c.CommunityId, c.CommunityNumber, c.CommunityName
+            const string sql = @"SELECT c.CreatedDate [Date], c.CommunityId, c.CommunityNumber, c.CommunityName, ci.CityCode as Market
                                 FROM Communities c 
                             LEFT JOIN CommunityAssignments ca
                                 ON c.CommunityId = ca.CommunityId
@@ -93,23 +96,23 @@ namespace Warranty.Core.ToDoInfrastructure
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
             var toDos = database.Fetch<ToDoCommunityEmployeeAssignment, ToDoCommunityEmployeeAssignmentModel>(query);
 
-            toDos.ForEach(x => AddToDoEmployees(x, database));
+            var currentEmployees = database.Fetch<Employee>().Select(x=>x.Number);
+            var employeesByMarket = new List<KeyValuePair<string, List<SecurityUser>>>();
+            foreach (var market in user.Markets)
+            {
+                var employeesInMarket = new GetUsersByMarketQuery(market).Execute().Where(x=>currentEmployees.Contains(x.EmployeeNumber)).ToList();
+                employeesByMarket.Add(new KeyValuePair<string, List<SecurityUser>>(market, employeesInMarket));
+            }
+
+            toDos.ForEach(
+                x =>
+                x.Model.Employees = employeesByMarket.Find(y => y.Key == x.Model.Market).Value.Select(securityUser => new ToDoCommunityEmployeeAssignmentModel.EmployeeViewModel
+                                                         {
+                                                             DisplayName = securityUser.DisplayName,
+                                                             EmployeeNumber = securityUser.EmployeeNumber
+                                                         }).OrderBy(u => u.DisplayName).ToList());
 
             return toDos;
-        }
-
-        private static void AddToDoEmployees(ToDoCommunityEmployeeAssignment todo, IDatabase database)
-        {
-            var availableUsers = database.Fetch<string>("Select EmployeeNumber From Employees");
-
-            var queryUsers = new GetUsersByCommunityQuery(todo.Model.CommunityNumber);
-            var users = queryUsers.Execute();
-
-            todo.Model.Employees = users.Select(x => new ToDoCommunityEmployeeAssignmentModel.EmployeeViewModel
-            {
-                DisplayName = x.DisplayName,
-                EmployeeNumber = x.EmployeeNumber
-            }).Where(x => availableUsers.Contains(x.EmployeeNumber)).OrderBy(x => x.DisplayName).ToList();
         }
 
         //private IEnumerable<IToDo> GetEscalationApprovalToDos()
