@@ -38,8 +38,8 @@ namespace Warranty.Core.Features.CreateServiceCall
                 model.WarrantyRepresentativeEmployeeEmail = GetEmployeeEmail(model.EmployeeNumber);
 
 
-                const string sqlcomments = @"  SELECT ServiceCallComment 
-                                                FROM ServiceCallComments 
+                const string sqlcomments = @"  SELECT ServiceCallNote 
+                                                FROM ServiceCallNotes 
                                                 WHERE ServiceCallId = @0";
 
                 model.Comments = _database.Fetch<string>(sqlcomments, query.ServiceCallId);

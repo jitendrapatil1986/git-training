@@ -31,7 +31,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                     {
                         ServiceCallSummary = GetServiceCallSummary(query.ServiceCallId),
                         ServiceCallLines = GetServiceCallLines(query.ServiceCallId),
-                        ServicCallComments = GetServiceCallComments(query.ServiceCallId),
+                        ServicCallNotes = GetServiceCallNotes(query.ServiceCallId),
                         AddServiceCallLineItem = new ServiceCallSummaryModel.NewServiceCallLineItem(query.ServiceCallId, SharedQueries.ProblemCodes.GetProblemCodeList(_database)),
                         CanApprove = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
                     };
@@ -116,17 +116,17 @@ namespace Warranty.Core.Features.ServiceCallSummary
             return result;
         }
 
-        private IEnumerable<ServiceCallSummaryModel.ServicCallComment> GetServiceCallComments(Guid serviceCallId)
+        private IEnumerable<ServiceCallSummaryModel.ServiceCallNote> GetServiceCallNotes(Guid serviceCallId)
         {
-            const string sql = @"SELECT [ServiceCallCommentId]
+            const string sql = @"SELECT [ServiceCallNoteId]
                                       ,[ServiceCallId]
-                                      ,[ServiceCallComment] as Comment
+                                      ,[ServiceCallNote] as Note
                                       ,[CreatedDate]
                                       ,[CreatedBy]     
-                                FROM [ServiceCallComments]
+                                FROM [ServiceCallNotes]
                                 WHERE ServiceCallId = @0";
 
-            var result = _database.Fetch<ServiceCallSummaryModel.ServicCallComment>(sql, serviceCallId.ToString());
+            var result = _database.Fetch<ServiceCallSummaryModel.ServiceCallNote>(sql, serviceCallId.ToString());
 
             return result;
         }

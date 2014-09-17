@@ -11,7 +11,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
     {
         public ServiceCall ServiceCallSummary { get; set; }
         public IEnumerable<ServiceCallLine> ServiceCallLines { get; set; }
-        public IEnumerable<ServicCallComment> ServicCallComments { get; set; }
+        public IEnumerable<ServiceCallNote> ServicCallNotes { get; set; }
         public NewServiceCallLineItem AddServiceCallLineItem { get; set; }
         public bool CanApprove { get; set; }
 
@@ -79,11 +79,11 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public DateTime CreatedDate { get; set; }
         }
 
-        public class ServicCallComment
+        public class ServiceCallNote
         {
-            public Guid ServiceCallCommentId { get; set; }
+            public Guid ServiceCallNoteId { get; set; }
             public Guid ServiceCallId { get; set; }
-            public string Comment { get; set; }
+            public string Note { get; set; }
             public DateTime? CreatedDate { get; set; }
             public string CreatedBy { get; set; }
         }

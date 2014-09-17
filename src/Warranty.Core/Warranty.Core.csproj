@@ -123,8 +123,8 @@
     <Compile Include="DataAccess\Mappings\ProjectMap.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMapping.cs" />
     <Compile Include="DataAccess\Mappings\EmployeeMapping.cs" />
-    <Compile Include="DataAccess\Mappings\ServiceCallCommentMap.cs" />
-    <Compile Include="DataAccess\Mappings\ServiceCallCommentMapping.cs" />
+    <Compile Include="DataAccess\Mappings\ServiceCallNoteMap.cs" />
+    <Compile Include="DataAccess\Mappings\ServiceCallNoteMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallLineItemMap.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallLineItemMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallMap.cs" />
@@ -149,7 +149,7 @@
     <Compile Include="Entities\Project.cs" />
     <Compile Include="Entities\Employee.cs" />
     <Compile Include="Entities\ServiceCall.cs" />
-    <Compile Include="Entities\ServiceCallComment.cs" />
+    <Compile Include="Entities\ServiceCallNote.cs" />
     <Compile Include="Entities\ServiceCallLineItem.cs" />
     <Compile Include="Enumerations\UserRoles.cs" />
     <Compile Include="Enumerations\ToDoIcon.cs" />

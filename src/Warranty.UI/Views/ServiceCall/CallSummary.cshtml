@@ -205,13 +205,13 @@
                 <div class="remove-list-style">
                     <div class="clearfix"></div>
                     <ul>
-                        @foreach (var line in Model.ServicCallComments)
+                        @foreach (var line in Model.ServicCallNotes)
                         {
                             <li class="row">
                                 <div class="col-md-12">
                                     <span>@line.CreatedBy</span> <span>@Format.DateMonthDayYear(line.CreatedDate)</span> 
                                     <div class="float-right-non-xs-screen">Ref: <a href="#">Placeholder</a></div>
-                                    <p>@line.Comment</p>
+                                    <p>@line.Note</p>
                                 </div>
                             </li>
                         }
