@@ -6,7 +6,7 @@ ALTER TABLE HomeOwners DROP CONSTRAINT FK_HomeOwners_JobId;
 ALTER TABLE Jobs DROP CONSTRAINT FK_Jobs_CurrentOwnerId;
 ALTER TABLE JobOptions DROP CONSTRAINT FK_JobOptions;
 ALTER TABLE ServiceCallLineItems DROP CONSTRAINT FK_ServiceCallLineItems_ServiceCallId;
-ALTER TABLE ServiceCallComments DROP CONSTRAINT FK_ServiceCallComments_ServiceCallId;
+ALTER TABLE ServiceCallNotes DROP CONSTRAINT FK_ServiceCallNotes_ServiceCallId;
 ALTER TABLE ServiceCalls DROP CONSTRAINT FK_ServiceCalls_JobId;
 
 /*Import clean up*/
@@ -437,7 +437,7 @@ USING (SELECT
                 ) AS RepId,
             CASE WHEN Comp_Date = '' THEN null ELSE Comp_Date END AS Comp_Date,
             HOSig,
-            Call_Comments,
+            Call_Notes,
             Date_Open ,
             'LI: ' + Assigned_By AS CreatedBy
         FROM imports.ServiceCallImports I
@@ -477,29 +477,29 @@ WHEN MATCHED THEN UPDATE SET ServiceCallType = LIST.CallType
 ;WITH JobSet AS (SELECT * 
                 FROM Jobs
                 WHERE CommunityId IN (SELECT CommunityId FROM #CommunitiesToDelete)),
-CommentSet AS (SELECT C.*
-                   FROM ServiceCallComments C
+NoteSet AS (SELECT C.*
+                   FROM ServiceCallNotes C
                    INNER JOIN ServiceCalls SC ON
                     C.ServiceCallId = SC.ServiceCallId
                    INNER JOIN JobSet JS ON
                     SC.JobId = JS.JobId OR SC.JobId IS NULL)
-MERGE INTO CommentSet AS TARGET
+MERGE INTO NoteSet AS TARGET
 USING (SELECT
             importId AS callId,
-            Call_Comments,
+            Call_Notes,
             Date_Open,
             'LI: ' + R.Assigned_By AS CreatedBy            
         FROM imports.ServiceCallImports R
         INNER JOIN ServiceCalls SC ON
             R.importId = SC.ServiceCallId) AS LIST
 ON TARGET.ServiceCallId = LIST.callId
-    AND TARGET.ServiceCallComment =  LIST.Call_Comments
+    AND TARGET.ServiceCallNote =  LIST.Call_Notes
 WHEN NOT MATCHED THEN INSERT (ServiceCallId,
-                                ServiceCallComment,
+                                ServiceCallNote,
                                 CreatedDate,
                                 CreatedBy)
                         VALUES(callId,
-                                Call_Comments,
+                                Call_Notes,
                                 Date_Open,
                                 CreatedBy);
 
@@ -785,7 +785,7 @@ ALTER TABLE JobOptions ADD CONSTRAINT FK_JobOptions
 ALTER TABLE ServiceCalls ADD CONSTRAINT FK_ServiceCalls_JobId
     FOREIGN KEY(JobId) REFERENCES Jobs (JobId);
 
-ALTER TABLE ServiceCallComments WITH CHECK ADD CONSTRAINT FK_ServiceCallComments_ServiceCallId 
+ALTER TABLE ServiceCallNotes WITH CHECK ADD CONSTRAINT FK_ServiceCallNotes_ServiceCallId 
     FOREIGN KEY(ServiceCallId) REFERENCES ServiceCalls (ServiceCallId);
 
 ALTER TABLE ServiceCallLineItems  ADD  CONSTRAINT FK_ServiceCallLineItems_ServiceCallId 
