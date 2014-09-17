@@ -12,6 +12,7 @@ namespace Warranty.Core.DataAccess.Mappings
             Id(x => x.ServiceCallNoteId, map => map.Generator(Generators.GuidComb));
             Property(x => x.ServiceCallId);
             Property(x => x.Note, map => map.Column("ServiceCallNote"));
+            Property(x => x.ServiceCallLineItemId);
         }
     }
 }

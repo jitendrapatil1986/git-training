@@ -78,6 +78,27 @@ require(['/Scripts/app/main.js'], function () {
                     this.problemCode(this.currentProblemCode());
                     this.problemDescription(this.currentProblemDescription());
                 };
+                
+                self.lineNumber = ko.observable(options.lineNumber);
+                
+                self.lineNumberWithProblemCode = ko.computed(function() {
+                    return self.lineNumber() + " - " + self.problemCode();
+                });
+
+            }
+            
+            function CallNotesViewModel(options) {
+                var self = this;
+                self.serviceCallNoteId = options.serviceCallNoteId;
+                self.serviceCallId = options.serviceCallId;
+                self.serviceCallLineItemId = options.serviceCallLineItemId;
+                self.note = options.note;
+                self.createdBy = options.createdBy;
+                self.createdDate = options.createdDate;
+                self.serviceCallCommentTypeId = options.serviceCallCommentTypeId;
+                self.createdByWithCreatedDate = ko.computed(function() {
+                    return self.createdBy + ' - ' +  self.createdDate;  //TODO: How to reference format date value.
+                });
             }
 
             function updateServiceCallLineItem(line) {
@@ -107,6 +128,8 @@ require(['/Scripts/app/main.js'], function () {
                 
                 self.allLineItems = ko.observableArray([]);
                 self.theLookups = dropdownData.availableLookups;  //dropdown list does not need to be observable. Only the actual elements w/i the array do.
+                self.allCallNotes = ko.observableArray([]);
+                self.selectedLineToAttachToNote = ko.observable();
                 
                 self.addLineItem = function() {
                     self.serviceCallId = $("#addCallLineServiceCallId").val();
@@ -156,6 +179,60 @@ require(['/Scripts/app/main.js'], function () {
                             self.problemDescription = '';
                         });
                 };
+
+                self.addCallNote = function () {
+                    self.serviceCallId = $("#addCallLineServiceCallId").val();
+                    self.serviceCallLineItemId = $("#addCallNoteLineReferenceDropDown").find('option:selected').val();
+                    self.note = $("#addCallNoteDescription").val();
+
+                    var newCallNote = new CallNotesViewModel({
+                        serviceCallId: self.serviceCallId,
+                        serviceCallLineItemId: self.serviceCallLineItemId,
+                        note: self.note,
+                        serviceCallCommentTypeId: self.serviceCallCommentTypeId
+                    });
+                    
+                    var lineNoteData = ko.toJSON(newCallNote);
+
+                    $.ajax({
+                        url: "/ServiceCall/AddNote", //TODO: Set without hard-code url.
+                        type: "POST",
+                        data: lineNoteData,
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    })
+                        .fail(function (response) {
+                            toastr.error("There was an issue adding the call note. Please try again!");
+                        })
+                        .done(function (response) {
+                            self.allCallNotes.unshift(new CallNotesViewModel({
+                                serviceCallNoteId: response.serviceCallNoteId,
+                                serviceCallId: self.serviceCallId,
+                                serviceCallLineItemId: self.serviceCallLineItemId,
+                                note: self.note,
+                                serviceCallCommentTypeId: self.serviceCallCommentTypeId
+                            }));
+
+                            toastr.success("Success! Note added.");
+                            highlight($("#allServiceCallNotes").first());
+
+                            $("#addCallNoteDescription").val('');
+                            $("#addCallNoteLineItemNo").val('');
+                            self.addCallNoteDescription = '';
+                        });
+                };
+
+                self.cancelCallNote = function () {
+                    $("#addCallNoteDescription").val('');
+                    $("#addCallNoteLineItemNo").val('');
+                    self.addCallNoteDescription = '';
+                    self.selectedLineToAttachToNote = '';
+                };
+                
+                self.resetCallNoteFilter = function () {
+                    $("#filterCallNoteByLineItemNo").val('');
+                };
             }
 
             var viewModel = new createServiceCallLineItemViewModel();
@@ -165,6 +242,12 @@ require(['/Scripts/app/main.js'], function () {
                 
             _(persistedAllLineItemsViewModel).each(function(item) {
                 viewModel.allLineItems.push(new AllLineItemsViewModel(item));
+            });
+
+            var persistedAllCallNotesViewModel = modelData.initialServiceNotes;
+
+            _(persistedAllCallNotesViewModel).each(function(note) {
+                viewModel.allCallNotes.push(new CallNotesViewModel(note));
             });
         });
     });

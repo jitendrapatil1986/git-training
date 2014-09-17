@@ -200,24 +200,96 @@
                 </div>
             </section>
             
-@*            <section >
-                <h3 class="col-md-12">Notes</h3>
+            <section >
+                <h3 class="col-md-12">Notes
+                    <span>
+                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Note" data-toggle="collapse" data-target="#addCallNote"><span class="glyphicon glyphicon-plus"></span></button>
+                    </span>
+                </h3>
+                <div id="addCallNote" class="collapse">
+                    <div class="panel panel-default no-bottom-margin">
+                        @*<div class="panel-heading">Add Note</div>*@
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @Html.TextArea("Description", null, new {id="addCallNoteDescription", @class="form-control", data_bind="attr:{placeholder: 'Add Notes'}", @rows=3})
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @Html.Label("Reference line item (optional)")
+                                    <select id="addCallNoteLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToAttachToNote, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'Select Line Number' "></select>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <button class="btn btn-default" data-bind="click: addCallNote">Save</button>
+                                </div>
+                                <div class="col-md-1 btn">
+                                    <a href="#" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="col-md-3">
+                    @Html.DropDownList("FilterNoteByLine", Model.AddServiceCallLineItem.ProblemCodes, "Filter Notes By Line", new {id="filterCallNoteByLineItemNo", @class="form-control"} )
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-default" data-bind="click: resetCallNoteFilter">Reset</button>
+                </div>
+                
+                
+                
                 <div class="remove-list-style">
+                    <div class="clearfix"></div>
+                    <ul>
+                        <div data-bind="foreach: allCallNotes">
+                            <div id="allServiceCallNotes" class="service-call-line edit-line-item">
+                                <li class="row">
+                                    <div class="col-md-12">
+                                        <div class="no-left-right-padding">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <span data-bind="text: createdBy + ' ' + createdDate"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p data-bind="text: note"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </ul>
+                </div>
+
+@*                <div class="remove-list-style">
                     <div class="clearfix"></div>
                     <ul>
                         @foreach (var line in Model.ServicCallNotes)
                         {
-                            <li class="row">
-                                <div class="col-md-12">
-                                    <span>@line.CreatedBy</span> <span>@Format.DateMonthDayYear(line.CreatedDate)</span> 
-                                    <div class="float-right-non-xs-screen">Ref: <a href="#">Placeholder</a></div>
-                                    <p>@line.Note</p>
-                                </div>
-                            </li>
+                            <div id="allServiceCallNotesOld" class="service-call-line edit-line-item">
+                                <li class="row">
+                                    <div class="col-md-12">
+                                        <span>@line.CreatedBy</span> <span>@Format.DateMonthDayYear(line.CreatedDate)</span> 
+                                        <div class="float-right-non-xs-screen">Ref: <a href="#">Placeholder</a></div>
+                                        <p>@line.Note</p>
+                                    </div>
+                                </li>
+                            </div>
                         }
                     </ul>
-                </div>
-            </section>*@
+                </div>*@
+
+            </section>
         </div>
 </div>
 
@@ -227,7 +299,8 @@
     <script>
         define('modelData', function () {
             return {
-                initialServiceLines: @Html.Raw(Model.ServiceCallLines.ToJson())
+                initialServiceLines: @Html.Raw(Model.ServiceCallLines.ToJson()),
+                initialServiceNotes: @Html.Raw(Model.ServicCallNotes.ToJson())
             };
         });
         

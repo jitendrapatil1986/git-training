@@ -9,6 +9,7 @@ namespace Warranty.UI.Controllers
     using Warranty.Core.Entities;
     using Warranty.Core.Enumerations;
     using Warranty.Core.Features.AddServiceCallLineItem;
+    using Warranty.Core.Features.AddServiceCallNote;
     using Warranty.Core.Features.CreateServiceCall;
     using Warranty.Core.Features.CreateServiceCallCustomerSearch;
     using Warranty.Core.Features.CreateServiceCallVerifyCustomer;
@@ -35,9 +36,16 @@ namespace Warranty.UI.Controllers
             return View();
         }
 
-        public ActionResult AddNote(Guid id)
+        public JsonResult AddNote(AddServiceCallNoteModel model)
         {
-            return View();
+            var result = _mediator.Send(new AddServiceCallNoteCommand
+                {
+                    ServiceCallId = model.ServiceCallId,
+                    ServiceCallLineItemId = model.ServiceCallLineItemId,
+                    Note = model.Note
+                });
+
+            return Json(new { newServiceCallNoteId = result }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Close(Guid id)
