@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
-using Common.Security.Entities;
 using Common.Security.Queries;
 using NPoco;
 using Warranty.Core.Enumerations;
@@ -13,6 +11,9 @@ using Warranty.Core.ToDoInfrastructure.Models;
 
 namespace Warranty.Core.ToDoInfrastructure
 {
+    using Common.Security.Entities;
+    using Entities;
+
     public class ToDoAggregator : IToDoAggregator
     {
         private readonly IDatabase _database;
@@ -26,23 +27,26 @@ namespace Warranty.Core.ToDoInfrastructure
 
         public List<IToDo> Execute()
         {
-            var user = _userSession.GetCurrentUser();
-            var serviceCallApprovalToDos = GetServiceCallApprovalToDos(user);
-            var communityEmployeeAssignmentToDos = GetCommunityEmployeeAssignmentToDos(user);
-            //var escalationApprovalToDos = GetEscalationApprovalToDos();
-            //var paymentRequestApprovalToDos = GetPaymentRequestApprovalToDos();
+            using (_database)
+            {
+                var user = _userSession.GetCurrentUser();
+                var serviceCallApprovalToDos = GetServiceCallApprovalToDos(user, _database);
+                var communityEmployeeAssignmentToDos = GetCommunityEmployeeAssignmentToDos(user, _database);
+                //var escalationApprovalToDos = GetEscalationApprovalToDos();
+                //var paymentRequestApprovalToDos = GetPaymentRequestApprovalToDos();
 
-            var toDos = new List<IToDo>();
+                var toDos = new List<IToDo>();
 
-            toDos.AddRange(serviceCallApprovalToDos);
-            toDos.AddRange(communityEmployeeAssignmentToDos);
-            //toDos.AddRange(escalationApprovalToDos);
-            //toDos.AddRange(paymentRequestApprovalToDos);
+                toDos.AddRange(serviceCallApprovalToDos);
+                toDos.AddRange(communityEmployeeAssignmentToDos);
+                //toDos.AddRange(escalationApprovalToDos);
+                //toDos.AddRange(paymentRequestApprovalToDos);
 
-            return toDos.OrderBy(x => x.Date).ToList();
+                return toDos.OrderBy(x => x.Date).ToList();
+            }
         }
 
-        private IEnumerable<IToDo> GetServiceCallApprovalToDos(IUser user)
+        private static IEnumerable<IToDo> GetServiceCallApprovalToDos(IUser user, IDatabase database)
         {
             var userMarkets = user.Markets;
             const string sql = @"SELECT
@@ -73,15 +77,15 @@ namespace Warranty.Core.ToDoInfrastructure
                                         ci.CityCode in ({0})";
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
-            var toDos = _database.Fetch<ToDoServiceCallApproval, ToDoServiceCallApprovalModel>(query, ServiceCallStatus.Requested.Value);
+            var toDos = database.Fetch<ToDoServiceCallApproval, ToDoServiceCallApprovalModel>(query, ServiceCallStatus.Requested.Value);
 
             return toDos;
         }
 
-        private IEnumerable<IToDo> GetCommunityEmployeeAssignmentToDos(IUser user)
+        private static IEnumerable<IToDo> GetCommunityEmployeeAssignmentToDos(IUser user, IDatabase database)
         {
             var userMarkets = user.Markets;
-            const string sql = @"SELECT c.CreatedDate [Date], c.CommunityId, c.CommunityNumber, c.CommunityName
+            const string sql = @"SELECT c.CreatedDate [Date], c.CommunityId, c.CommunityNumber, c.CommunityName, ci.CityCode as Market
                                 FROM Communities c 
                             LEFT JOIN CommunityAssignments ca
                                 ON c.CommunityId = ca.CommunityId
@@ -90,25 +94,25 @@ namespace Warranty.Core.ToDoInfrastructure
                             WHERE ci.CityCode IN ({0}) AND ca.EmployeeId IS NULL;";
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
-            var toDos = _database.Fetch<ToDoCommunityEmployeeAssignment, ToDoCommunityEmployeeAssignmentModel>(query);
+            var toDos = database.Fetch<ToDoCommunityEmployeeAssignment, ToDoCommunityEmployeeAssignmentModel>(query);
 
-            toDos.ForEach(AddToDoEmployees);
+            var currentEmployees = database.Fetch<Employee>().Select(x=>x.Number);
+            var employeesByMarket = new List<KeyValuePair<string, List<SecurityUser>>>();
+            foreach (var market in user.Markets)
+            {
+                var employeesInMarket = new GetUsersByMarketQuery(market).Execute().Where(x=>currentEmployees.Contains(x.EmployeeNumber)).ToList();
+                employeesByMarket.Add(new KeyValuePair<string, List<SecurityUser>>(market, employeesInMarket));
+            }
+
+            toDos.ForEach(
+                x =>
+                x.Model.Employees = employeesByMarket.Find(y => y.Key == x.Model.Market).Value.Select(securityUser => new ToDoCommunityEmployeeAssignmentModel.EmployeeViewModel
+                                                         {
+                                                             DisplayName = securityUser.DisplayName,
+                                                             EmployeeNumber = securityUser.EmployeeNumber
+                                                         }).OrderBy(u => u.DisplayName).ToList());
 
             return toDos;
-        }
-
-        private void AddToDoEmployees(ToDoCommunityEmployeeAssignment todo)
-        {
-            var availableUsers = _database.Fetch<string>("Select EmployeeNumber From Employees");
-
-            var queryUsers = new GetUsersByCommunityQuery(todo.Model.CommunityNumber);
-            var users = queryUsers.Execute();
-
-            todo.Model.Employees = users.Select(x => new ToDoCommunityEmployeeAssignmentModel.EmployeeViewModel
-            {
-                DisplayName = x.DisplayName,
-                EmployeeNumber = x.EmployeeNumber
-            }).Where(x => availableUsers.Contains(x.EmployeeNumber)).OrderBy(x => x.DisplayName).ToList();
         }
 
         //private IEnumerable<IToDo> GetEscalationApprovalToDos()
