@@ -14,7 +14,7 @@ $db_web_application_name = "Warranty.UI"
 
 $nsb_service_name = "DWH - Warranty.Server"
 
-$header_image_file_name = "DWH logo_color_233x34.png"
+$header_image_file_name = "DWH logo_color_233x34_prod.png"
 
 $Warranty_identity_uri = "https://warranty.davidweekleyhomes.com"
 

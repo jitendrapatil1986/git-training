@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
-using Common.Security.Entities;
 using Common.Security.Queries;
 using NPoco;
 using Warranty.Core.Enumerations;
@@ -26,23 +24,26 @@ namespace Warranty.Core.ToDoInfrastructure
 
         public List<IToDo> Execute()
         {
-            var user = _userSession.GetCurrentUser();
-            var serviceCallApprovalToDos = GetServiceCallApprovalToDos(user);
-            var communityEmployeeAssignmentToDos = GetCommunityEmployeeAssignmentToDos(user);
-            //var escalationApprovalToDos = GetEscalationApprovalToDos();
-            //var paymentRequestApprovalToDos = GetPaymentRequestApprovalToDos();
+            using (_database)
+            {
+                var user = _userSession.GetCurrentUser();
+                var serviceCallApprovalToDos = GetServiceCallApprovalToDos(user);
+                var communityEmployeeAssignmentToDos = GetCommunityEmployeeAssignmentToDos(user);
+                //var escalationApprovalToDos = GetEscalationApprovalToDos();
+                //var paymentRequestApprovalToDos = GetPaymentRequestApprovalToDos();
 
-            var toDos = new List<IToDo>();
+                var toDos = new List<IToDo>();
 
-            toDos.AddRange(serviceCallApprovalToDos);
-            toDos.AddRange(communityEmployeeAssignmentToDos);
-            //toDos.AddRange(escalationApprovalToDos);
-            //toDos.AddRange(paymentRequestApprovalToDos);
+                toDos.AddRange(serviceCallApprovalToDos);
+                toDos.AddRange(communityEmployeeAssignmentToDos);
+                //toDos.AddRange(escalationApprovalToDos);
+                //toDos.AddRange(paymentRequestApprovalToDos);
 
-            return toDos.OrderBy(x => x.Date).ToList();
+                return toDos.OrderBy(x => x.Date).ToList();
+            }
         }
 
-        private IEnumerable<IToDo> GetServiceCallApprovalToDos(IUser user)
+        private static IEnumerable<IToDo> GetServiceCallApprovalToDos(IUser user, IDatabase database)
         {
             var userMarkets = user.Markets;
             const string sql = @"SELECT
@@ -73,12 +74,12 @@ namespace Warranty.Core.ToDoInfrastructure
                                         ci.CityCode in ({0})";
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
-            var toDos = _database.Fetch<ToDoServiceCallApproval, ToDoServiceCallApprovalModel>(query, ServiceCallStatus.Requested.Value);
+            var toDos = database.Fetch<ToDoServiceCallApproval, ToDoServiceCallApprovalModel>(query, ServiceCallStatus.Requested.Value);
 
             return toDos;
         }
 
-        private IEnumerable<IToDo> GetCommunityEmployeeAssignmentToDos(IUser user)
+        private static IEnumerable<IToDo> GetCommunityEmployeeAssignmentToDos(IUser user, IDatabase database)
         {
             var userMarkets = user.Markets;
             const string sql = @"SELECT c.CreatedDate [Date], c.CommunityId, c.CommunityNumber, c.CommunityName
@@ -90,16 +91,16 @@ namespace Warranty.Core.ToDoInfrastructure
                             WHERE ci.CityCode IN ({0}) AND ca.EmployeeId IS NULL;";
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
-            var toDos = _database.Fetch<ToDoCommunityEmployeeAssignment, ToDoCommunityEmployeeAssignmentModel>(query);
+            var toDos = database.Fetch<ToDoCommunityEmployeeAssignment, ToDoCommunityEmployeeAssignmentModel>(query);
 
-            toDos.ForEach(AddToDoEmployees);
+            toDos.ForEach(x => AddToDoEmployees(x, database));
 
             return toDos;
         }
 
-        private void AddToDoEmployees(ToDoCommunityEmployeeAssignment todo)
+        private static void AddToDoEmployees(ToDoCommunityEmployeeAssignment todo, IDatabase database)
         {
-            var availableUsers = _database.Fetch<string>("Select EmployeeNumber From Employees");
+            var availableUsers = database.Fetch<string>("Select EmployeeNumber From Employees");
 
             var queryUsers = new GetUsersByCommunityQuery(todo.Model.CommunityNumber);
             var users = queryUsers.Execute();
