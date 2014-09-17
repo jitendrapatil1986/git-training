@@ -87,8 +87,7 @@
             <div class="container">
                 <ul class="nav navbar-nav">
                     @NavItemHelper(NavItem.Home, Url.Action("Index", "Home"))
-                    @*<li class="divider divider-vertical hidden-xs"></li>
-                    @NavItemSectionHelper(NavHeaderItem.Create.Key)*@
+                    <li class="divider divider-vertical hidden-xs"></li>
                 </ul>
                 <div class="nav nav-extra">
                     <div class="col-md-3 pull-right">
@@ -118,5 +117,7 @@
         </div>
         @Html.Partial("_FeedbackModal")
         @RenderSection("scripts", required: false)
+
+        @Html.RenderToastMessage()
     </body>
 </html>

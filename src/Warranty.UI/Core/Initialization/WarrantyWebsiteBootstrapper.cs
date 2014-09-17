@@ -1,14 +1,12 @@
-﻿using StructureMap;
-using Warranty.UI.Core.Security;
-
-namespace Warranty.UI.Core.Initialization
+﻿namespace Warranty.UI.Core.Initialization
 {
     using System.Web.Http;
     using System.Web.Mvc;
+    using Security;
+    using FluentValidation.Mvc;
     using System.Web.Optimization;
     using System.Web.Routing;
     using AutoMapper;
-    using Microsoft.Practices.ServiceLocation;
     using ModelBinders;
     using NServiceBus;
     using Warranty.Core.AutoMapper;
@@ -24,10 +22,11 @@ namespace Warranty.UI.Core.Initialization
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            FluentValidationModelValidatorProvider.Configure();
 
             DataAnnotationsModelValidatorProvider.AddImplicitRequiredAttributeForValueTypes = false;
 
-            System.Web.Mvc.ModelBinders.Binders.DefaultBinder = new CompositeModelBinder();
+            ModelBinders.Binders.DefaultBinder = new CompositeModelBinder();
             ModelMetadataProviders.Current = new ModelMetadataProvider();
 
 

@@ -1,3 +1,4 @@
+using FluentValidation;
 using Warranty.Core.ApprovalInfrastructure.Interfaces;
 
 namespace Warranty.UI.Core.Initialization
@@ -25,6 +26,7 @@ namespace Warranty.UI.Core.Initialization
                 {
                     scan.AssemblyContainingType<IMediator>();
 
+                    scan.AddAllTypesOf(typeof(IValidator<>));
                     scan.AddAllTypesOf((typeof(IQueryHandler<,>)));
                     scan.AddAllTypesOf((typeof(ICommandHandler<>)));
                     scan.AddAllTypesOf((typeof(ICommandHandler<,>)));

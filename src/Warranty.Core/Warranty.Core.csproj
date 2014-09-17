@@ -35,6 +35,14 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentValidation, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Common.Security.1.1.55.0\lib\net45\Common.Security.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -56,9 +64,6 @@
     </Reference>
     <Reference Include="AutoMapper.Net4">
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentValidation">
-      <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="NPoco">
       <HintPath>..\packages\NPoco.2.5.76\lib\net40\NPoco.dll</HintPath>
@@ -99,6 +104,7 @@
     <Compile Include="DataAccess\Mappings\CityMap.cs" />
     <Compile Include="DataAccess\Mappings\CityMapping.cs" />
     <Compile Include="DataAccess\Mappings\AuditableEntityMap.cs" />
+    <Compile Include="DataAccess\Mappings\CommunityAssignmentMap.cs" />
     <Compile Include="DataAccess\Mappings\CommunityMap.cs" />
     <Compile Include="DataAccess\Mappings\CommunityMapping.cs" />
     <Compile Include="DataAccess\Mappings\DivisionMap.cs" />
@@ -109,6 +115,10 @@
     <Compile Include="DataAccess\Mappings\JobMap.cs" />
     <Compile Include="DataAccess\Mappings\JobOptionMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobStageMap.cs" />
+    <Compile Include="DataAccess\Mappings\Lookups\ClassificationCodeMap.cs" />
+    <Compile Include="DataAccess\Mappings\Lookups\LookupMap.cs" />
+    <Compile Include="DataAccess\Mappings\Lookups\ProblemCodeMap.cs" />
+    <Compile Include="DataAccess\Mappings\Lookups\RootCauseMap.cs" />
     <Compile Include="DataAccess\Mappings\PaymentMap.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMap.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMapping.cs" />
@@ -123,6 +133,7 @@
     <Compile Include="DataAccess\SqlServerDatabaseType.cs" />
     <Compile Include="Entities\City.cs" />
     <Compile Include="Entities\Community.cs" />
+    <Compile Include="Entities\CommunityAssignment.cs" />
     <Compile Include="Entities\Division.cs" />
     <Compile Include="Entities\HomeOwner.cs" />
     <Compile Include="Entities\IAuditableEntity.cs" />
@@ -130,6 +141,10 @@
     <Compile Include="Entities\Job.cs" />
     <Compile Include="Entities\JobOption.cs" />
     <Compile Include="Entities\JobStage.cs" />
+    <Compile Include="Entities\Lookups\ClassificationCode.cs" />
+    <Compile Include="Entities\Lookups\LookupEntity.cs" />
+    <Compile Include="Entities\Lookups\ProblemCode.cs" />
+    <Compile Include="Entities\Lookups\RootCause.cs" />
     <Compile Include="Entities\Payment.cs" />
     <Compile Include="Entities\Project.cs" />
     <Compile Include="Entities\Employee.cs" />
@@ -142,6 +157,7 @@
     <Compile Include="Enumerations\ServiceCallStatus.cs" />
     <Compile Include="DataAccess\GuidComb.cs" />
     <Compile Include="Extensions\DatabaseExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="DataAccess\ConfigurationFactory.cs" />
@@ -157,8 +173,46 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Features\AssignWSRs\AssignedEmployee.cs" />
+    <Compile Include="Features\AssignWSRs\AssignWSRCommand.cs" />
+    <Compile Include="Features\AssignWSRs\AssignWSRCommandHandler.cs" />
+    <Compile Include="Features\AssignWSRs\AssignWSRsModel.cs" />
+    <Compile Include="Features\AssignWSRs\AssignWSRsQuery.cs" />
+    <Compile Include="Features\AssignWSRs\AssignWSRsQueryHandler.cs" />
+    <Compile Include="Features\AssignWSRs\AssignWSRsValidator.cs" />
+    <Compile Include="Features\AssignWSRs\RemoveAssignmentCommand.cs" />
+    <Compile Include="Features\AssignWSRs\RemoveAssignmentCommandHandler.cs" />
+    <Compile Include="Features\AssignWSRs\RemoveAssignmentModel.cs" />
+    <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommand.cs" />
+    <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommandHandler.cs" />
+    <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemModel.cs" />
+    <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationModel.cs" />
+    <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationQuery.cs" />
+    <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationQueryHandler.cs" />
+    <Compile Include="Features\CommunityEmployeeAssignment\CommunityEmployeAssignmentCommand.cs" />
+    <Compile Include="Features\CommunityEmployeeAssignment\CommunityEmployeAssignmentCommandHandler.cs" />
+    <Compile Include="Features\CreateServiceCall\RelatedProblemCodeQueryHandler.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommand.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommandHandler.cs" />
+    <Compile Include="Features\CreateServiceCall\RelatedProblemCode.cs" />
+    <Compile Include="Features\CreateServiceCall\RelatedProblemCodeQuery.cs" />
+    <Compile Include="Features\ManageLookups\CreateLookupItemCommandHandler.cs" />
+    <Compile Include="Features\ManageLookups\CreateLookupItemModel.cs" />
+    <Compile Include="Features\ManageLookups\CreateLookupItemCommand.cs" />
+    <Compile Include="Features\ManageLookups\DeleteLookupItemCommand.cs" />
+    <Compile Include="Features\ManageLookups\DeleteLookupItemCommandHandler.cs" />
+    <Compile Include="Features\ManageLookups\DeleteLookupItemModel.cs" />
+    <Compile Include="Features\ManageLookups\ManageLookupsModel.cs" />
+    <Compile Include="Features\ManageLookups\ManageLookupsQuery.cs" />
+    <Compile Include="Features\ManageLookups\ManageLookupsQueryHandler.cs" />
+    <Compile Include="Features\ManageLookups\ManageLookupItemsModel.cs" />
+    <Compile Include="Features\ManageLookups\ManageLookupItemsQuery.cs" />
+    <Compile Include="Features\ManageLookups\ManageLookupItemsQueryHandler.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemCommand.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemCommandHandler.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemModel.cs" />
+    <Compile Include="Features\ProblemCodes\ProblemCodesQuery.cs" />
+    <Compile Include="Features\ProblemCodes\ProblemCodesQueryHandler.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchCallModel.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchJobModel.cs" />
     <Compile Include="Features\JobSummary\JobSummaryModel.cs" />
@@ -172,6 +226,8 @@
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveHandler.cs" />
     <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQuery.cs" />
     <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQueryHandler.cs" />
+    <Compile Include="Features\SharedQueries\PostResponseModel.cs" />
+    <Compile Include="Features\SharedQueries\ProblemCodes.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetModel.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQuery.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetQueryHandler.cs" />
@@ -225,10 +281,12 @@
     <Compile Include="Security\IUserSession.cs" />
     <Compile Include="Security\WarrantyUser.cs" />
     <Compile Include="StructureMapValidatorFactory.cs" />
+    <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoCommunityEmployeeAssignment.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoPaymentRequestApproval.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoServiceCallApproval.cs" />
     <Compile Include="ToDoInfrastructure\Interfaces\IToDo.cs" />
     <Compile Include="ToDoInfrastructure\IToDoAggregator.cs" />
+    <Compile Include="ToDoInfrastructure\Models\ToDoCommunityEmployeeAssignmentModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoPaymentRequestApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoServiceCallApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\ToDo.cs" />

@@ -1,0 +1,48 @@
+﻿@using System.Linq
+@using System.Web.Mvc.Html
+@model Warranty.Core.Features.AssignWSRs.AssignWSRsModel
+
+@{
+    ViewBag.Title = "Assign WSR's";
+}
+
+<h2>Assign WSR's</h2>
+@using (Html.BeginForm("ManageAssignments"))
+{
+    <span>Community:</span>
+    @Html.DropDownListFor(x => x.SelectedCommunityId, Model.Communities.Select(c => new SelectListItem {Text = c.Name, Value = c.Id.ToString()}))
+    @Html.ValidationMessageFor(x=>x.SelectedCommunityId)
+    <span>Employee:</span>
+    @Html.DropDownListFor(x => x.SelectedEmployeeId, Model.Employees.Select(c => new SelectListItem {Text = c.Name, Value = c.EmployeeId.ToString()}))
+    @Html.ValidationMessageFor(x=>x.SelectedEmployeeId)
+    <input type="submit" value="Add" class="btn btn-success"/>
+}
+
+<div class="well">
+    <h2>Assignments</h2>
+
+    @if (!Model.Communities.Any(c => c.Employees.Any()))
+    {
+        <div>No assignments found.</div>
+    }
+
+    @foreach (var com in Model.Communities.Where(c => c.Employees.Any()))
+    {
+        <div  class="list-group col-md-12">
+            <div class="list-group-item">
+                    @com.Name
+            </div>
+                @foreach (var emp in com.Employees)
+                {
+                    <div>
+                        <span class="list-group-item">
+                            @emp.Name
+                            <a href="#" class="pull-right glyphicon glyphicon-remove" data-assignmentId="@emp.EmployeeAssignmentId"></a>
+                        </span>
+                    </div>
+                }
+        </div>
+    }
+
+    <div class="clearfix"></div>
+</div>

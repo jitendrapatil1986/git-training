@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Warranty.Core.Features.CreateServiceCall
+﻿namespace Warranty.Core.Features.CreateServiceCall
 {
-    public class CreateServiceCallCommand : ICommand<CreateServiceCallModel>
+    using System;
+    using System.Collections.Generic;
+    using Entities;
+
+    public class CreateServiceCallCommand : ICommand<Guid>
     {
+        public Guid JobId { get; set; }
+        public IEnumerable<ServiceCallLineItem> ServiceCallLineItems { get; set; }
     }
 }

@@ -38,7 +38,6 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             var homeBuyer = Get<HomeOwner>(job.CurrentHomeOwnerId);
             homeBuyer.HomeOwnerName.ShouldEqual(Event.BuyerName);
             homeBuyer.HomeOwnerNumber.ShouldEqual(Convert.ToInt32(Event.HomeBuyerNumber));
-
         }
     }
 }

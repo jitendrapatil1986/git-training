@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Warranty.Core.Features.CreateServiceCall
 {
@@ -11,7 +7,7 @@ namespace Warranty.Core.Features.CreateServiceCall
     using NPoco;
     using Security;
 
-    public class CreateServiceCallCommandHandler: ICommandHandler<CreateServiceCallModel, Guid>
+    public class CreateServiceCallCommandHandler: ICommandHandler<CreateServiceCallCommand, Guid>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
@@ -22,12 +18,19 @@ namespace Warranty.Core.Features.CreateServiceCall
             _userSession = userSession;
         }
 
-        public Guid Handle(CreateServiceCallModel message)
+        public Guid Handle(CreateServiceCallCommand message)
         {
             var user = _userSession.GetCurrentUser();
-            
+
+            var status = ServiceCallStatus.Requested;
+            if (user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager))
+            {
+                status = ServiceCallStatus.Open;
+            }
+
             using (_database)
             {
+                //TODO: change logic to generate call number
                 const string sql = @"SELECT TOP 1 ServiceCallNumber
                                     FROM ServiceCalls
                                     ORDER BY ServiceCallNumber DESC";
@@ -35,23 +38,15 @@ namespace Warranty.Core.Features.CreateServiceCall
                 var lastCall = _database.First<int>(sql);
                 var newCallNumber = lastCall + 1;
 
-                const string sql3 = @"SELECT *
-                                        FROM Employees
-                                        WHERE EmployeeNumber = @0";
-
-                var employee = _database.First<Employee>(sql3, user.EmployeeNumber);
-                var newCallId = Guid.NewGuid(); 
+                var employeeId = GetEmployeeIdForWsc(message);
 
                 var serviceCall = new ServiceCall
                 {
-                    ServiceCallId = newCallId,
                     ServiceCallNumber = newCallNumber,
-                    ServiceCallStatus = ServiceCallStatus.Requested, //TODO: Set to requested for now until we figure out who is WSR and WC. ServiceCallStatus.Open,
+                    ServiceCallStatus = status,
                     JobId = message.JobId,
-                    Contact = message.Contact,
-                    WarrantyRepresentativeEmployeeId = employee.EmployeeId,
-                    ServiceCallType = "Warranty Service Request",
-                    CompletionDate = null,
+                    WarrantyRepresentativeEmployeeId = employeeId,
+                    ServiceCallType = RequestType.WarrantyRequest.DisplayName,
                 };
 
                 _database.Insert(serviceCall);
@@ -62,10 +57,9 @@ namespace Warranty.Core.Features.CreateServiceCall
                     {
                         var serviceCallLine = new ServiceCallLineItem
                             {
-                                ServiceCallId = newCallId,
-                                ServiceCallLineItemId = Guid.NewGuid(),
-                                LineNumber = line.LineItemNumber,
-                                ProblemCode = line.ProblemCodeDisplayName,
+                                ServiceCallId = serviceCall.ServiceCallId,
+                                LineNumber = line.LineNumber,
+                                ProblemCode = line.ProblemCode,
                                 ProblemDescription = line.ProblemDescription,
                             };
 
@@ -73,26 +67,22 @@ namespace Warranty.Core.Features.CreateServiceCall
                     }
                 }
 
-                //TODO: Remove if not saving header notes.
-                if (message.ServiceCallHeaderComments != null)
-                {
-                    foreach (var noteLine in message.ServiceCallHeaderComments)
-                    {
-                        var serviceCallComment = new ServiceCallComment
-                            {
-                                ServiceCallId = newCallId,
-                                ServiceCallCommentId = Guid.NewGuid(),
-                                Comment = noteLine.Comment,
-                                CreatedBy = employee.Name,
-                                CreatedDate = DateTime.Now,
-                            };
-
-                        _database.Insert(serviceCallComment);
-                    }
-                }
-
-                return newCallId;
+                return serviceCall.ServiceCallId;
             }
+        }
+
+        private Guid? GetEmployeeIdForWsc(CreateServiceCallCommand message)
+        {
+            const string sqlEmployeeId = @"SELECT TOP 1 ca.EmployeeId
+                                                    FROM CommunityAssignments ca
+                                                    INNER JOIN Jobs j
+                                                    ON ca.CommunityId = j.CommunityId
+                                                    WHERE j.JobId = @0";
+
+
+            var employeeId = _database.FirstOrDefault<Guid>(sqlEmployeeId, message.JobId);
+
+            return employeeId == Guid.Empty ? (Guid?)null : employeeId;
         }
     }
 }

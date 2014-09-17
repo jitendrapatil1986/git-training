@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using Common.Security.Entities;
+using Common.Security.Queries;
 using NPoco;
 using Warranty.Core.Enumerations;
 using Warranty.Core.Extensions;
@@ -26,12 +28,14 @@ namespace Warranty.Core.ToDoInfrastructure
         {
             var user = _userSession.GetCurrentUser();
             var serviceCallApprovalToDos = GetServiceCallApprovalToDos(user);
+            var communityEmployeeAssignmentToDos = GetCommunityEmployeeAssignmentToDos(user);
             //var escalationApprovalToDos = GetEscalationApprovalToDos();
             //var paymentRequestApprovalToDos = GetPaymentRequestApprovalToDos();
 
             var toDos = new List<IToDo>();
 
             toDos.AddRange(serviceCallApprovalToDos);
+            toDos.AddRange(communityEmployeeAssignmentToDos);
             //toDos.AddRange(escalationApprovalToDos);
             //toDos.AddRange(paymentRequestApprovalToDos);
 
@@ -72,6 +76,39 @@ namespace Warranty.Core.ToDoInfrastructure
             var toDos = _database.Fetch<ToDoServiceCallApproval, ToDoServiceCallApprovalModel>(query, ServiceCallStatus.Requested.Value);
 
             return toDos;
+        }
+
+        private IEnumerable<IToDo> GetCommunityEmployeeAssignmentToDos(IUser user)
+        {
+            var userMarkets = user.Markets;
+            const string sql = @"SELECT c.CreatedDate [Date], c.CommunityId, c.CommunityNumber, c.CommunityName
+                                FROM Communities c 
+                            LEFT JOIN CommunityAssignments ca
+                                ON c.CommunityId = ca.CommunityId
+                            INNER JOIN Cities ci
+                                ON c.CityId = ci.CityId
+                            WHERE ci.CityCode IN ({0}) AND ca.EmployeeId IS NULL;";
+
+            var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
+            var toDos = _database.Fetch<ToDoCommunityEmployeeAssignment, ToDoCommunityEmployeeAssignmentModel>(query);
+
+            toDos.ForEach(AddToDoEmployees);
+
+            return toDos;
+        }
+
+        private void AddToDoEmployees(ToDoCommunityEmployeeAssignment todo)
+        {
+            var availableUsers = _database.Fetch<string>("Select EmployeeNumber From Employees");
+
+            var queryUsers = new GetUsersByCommunityQuery(todo.Model.CommunityNumber);
+            var users = queryUsers.Execute();
+
+            todo.Model.Employees = users.Select(x => new ToDoCommunityEmployeeAssignmentModel.EmployeeViewModel
+            {
+                DisplayName = x.DisplayName,
+                EmployeeNumber = x.EmployeeNumber
+            }).Where(x => availableUsers.Contains(x.EmployeeNumber)).OrderBy(x => x.DisplayName).ToList();
         }
 
         //private IEnumerable<IToDo> GetEscalationApprovalToDos()

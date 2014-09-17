@@ -6,6 +6,7 @@ require.config({
         'jquery.maskedinput': 'lib/jquery.maskedinput.min',
         'jquery.unobtrusive': 'lib/jquery.validate.unobtrusive.min',
         'jquery.numeric': 'lib/jquery.numeric',
+        'jquery.color': 'lib/jquery.color-2.1.0.min',
         'bootstrap': 'lib/bootstrap.min',
         'tooltip': 'lib/bootstrap-tooltip',
         'datepicker': 'lib/bootstrap-datepicker',
@@ -32,6 +33,7 @@ require.config({
         'underscore': { exports: '_' },
         'ko': ['underscore'],
         'highcharts': { deps: ['jquery'], exports: 'Highcharts' },
+        "bloodhound": { deps: ["jquery"], exports: "Bloodhound" },
     },
     callback: function () {
         require(['app/feedbackForm', 'app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields']);
