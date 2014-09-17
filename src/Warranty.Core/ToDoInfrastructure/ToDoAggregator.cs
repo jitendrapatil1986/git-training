@@ -27,8 +27,8 @@ namespace Warranty.Core.ToDoInfrastructure
             using (_database)
             {
                 var user = _userSession.GetCurrentUser();
-                var serviceCallApprovalToDos = GetServiceCallApprovalToDos(user);
-                var communityEmployeeAssignmentToDos = GetCommunityEmployeeAssignmentToDos(user);
+                var serviceCallApprovalToDos = GetServiceCallApprovalToDos(user, _database);
+                var communityEmployeeAssignmentToDos = GetCommunityEmployeeAssignmentToDos(user, _database);
                 //var escalationApprovalToDos = GetEscalationApprovalToDos();
                 //var paymentRequestApprovalToDos = GetPaymentRequestApprovalToDos();
 
