@@ -76,7 +76,7 @@
                     <div class="col-md-3">
                         <div class="float-right-non-xs-screen">
                             <div id="approveCommands" class="margin-bottom-10">
-                                @if (Model.ServiceCallSummary.ServiceCallStatus == ServiceCallStatus.Requested)
+                                @if (Model.ServiceCallSummary.ServiceCallStatus == ServiceCallStatus.Requested && Model.CanApprove)
                                 {
                                     <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
                                     <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>

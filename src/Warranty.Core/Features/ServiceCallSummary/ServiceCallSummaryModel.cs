@@ -13,7 +13,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
         public IEnumerable<ServiceCallLine> ServiceCallLines { get; set; }
         public IEnumerable<ServicCallComment> ServicCallComments { get; set; }
         public NewServiceCallLineItem AddServiceCallLineItem { get; set; }
-        
+        public bool CanApprove { get; set; }
+
         public class NewServiceCallLineItem
         {
             public NewServiceCallLineItem(Guid serviceCallId, IEnumerable<SelectListItem> problemCodes)
