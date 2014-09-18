@@ -5,7 +5,7 @@
 {
     data = data ?? String.Empty;
     <li class="@(navItem.DisplayName.Equals(ViewData[Warranty.UI.Core.Filters.CurrentNavSectionAttribute.ViewDataKey]) ? "active" : "")">
-        <a @data href="@url">@navItem.Title</a>
+            <a @data href="@url">@navItem.Title</a>
     </li>
 }
 
@@ -34,33 +34,33 @@
 <!DOCTYPE html>
 
 <html>
-<head>
-    <title>@ViewBag.Title - Warranty - David Weekley Homes</title>
+    <head>
+        <title>@ViewBag.Title - Warranty - David Weekley Homes</title>
     
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    @Styles.Render("~/css/less/main")
-    @Styles.Render("~/css/extra")
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        @Styles.Render("~/css/less/main")
+        @Styles.Render("~/css/extra")
     
-    @Html.Partial("_RequireJsConfig")
-    @RenderSection("header", required: false)
+        @Html.Partial("_RequireJsConfig")
+        @RenderSection("header", required: false)
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="/Scripts/lib/html5shiv.js"></script>
-      <script src="/Scripts/lib/respond.min.js"></script>
-    <![endif]-->
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="/Scripts/lib/html5shiv.js"></script>
+            <script src="/Scripts/lib/respond.min.js"></script>
+        <![endif]-->
 
-    @{ Html.RenderAction("GetRequireJSUrl", "Home", new { context = ViewContext });}
-    <script>
-        define('urls', [], function() {
-            return @{ Html.RenderAction("GetApiUrls", "Home");};
-        });
-    </script>
-    @RenderSection("modules", required: false)
-</head>
+        @{ Html.RenderAction("GetRequireJSUrl", "Home", new { context = ViewContext });}
+        <script>
+            define('urls', [], function() {
+                return @{ Html.RenderAction("GetApiUrls", "Home");};
+            });
+        </script>
+        @RenderSection("modules", required: false)
+    </head>
     <body>
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
@@ -82,12 +82,12 @@
                 <div class="navbar-brand pull-right hidden-xs">Warranty</div>
             </div>
         </div>
-
-        <div class="subnav subnav-fixed">
+        
+        <!--Menu for Desktop view. Use same id for input as well.-->
+        <div class="subnavDesktop subnav subnav-fixed">
             <div class="container">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav no-bottom-margin">
                     @NavItemHelper(NavItem.Home, Url.Action("Index", "Home"))
-                    <li class="divider divider-vertical hidden-xs"></li>
                 </ul>
                 <div class="nav nav-extra">
                     <div class="col-md-3 pull-right">
@@ -102,8 +102,42 @@
                 </div>
             </div>
         </div>
+        
+        <!--Menu for Mobile view. Use same id for input as well.-->
+        <div class="subnavMobile subnav subnav-fixed" >
+            <div class="container">
+                <div class="navbar-header">
+                    <div class="panel-group" id="accordion">
+                        <div class="panel panel-default">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseSubMenuMobile">
+                                <button type="button" class="navbar-toggle collapsed no-top-margin no-bottom-margin" data-toggle="collapse" data-target="#navbar-collapse-submenu">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                                <a href="@Url.Action("Index", "Home")" class="navbar-brand @(NavItem.Home.DisplayName.Equals(ViewData[Warranty.UI.Core.Filters.CurrentNavSectionAttribute.ViewDataKey]) ? "active" : "")">@NavItem.Home.Title</a>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="container main-container">
+            <!--Menu for Mobile view. Use same id for input as well.-->
+            <div class="subnavMobile">
+                <div id="collapseSubMenuMobile" class="collapse">
+                    <div class="col-md-3 pull-right">
+                        <div class="input-group">
+                            <input id="searchBar" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder=""/>
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Type <span class="caret"></span></button>
+                                <ul class="dropdown-menu dropdown-menu-right"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             @RenderBody()
         </div>
 
