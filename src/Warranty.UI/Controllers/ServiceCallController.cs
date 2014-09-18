@@ -5,6 +5,7 @@ namespace Warranty.UI.Controllers
 {
     using System;
     using System.Web.Mvc;
+    using Core.Helpers;
     using Warranty.Core;
     using Warranty.Core.Entities;
     using Warranty.Core.Enumerations;
@@ -38,14 +39,14 @@ namespace Warranty.UI.Controllers
 
         public JsonResult AddNote(AddServiceCallNoteModel model)
         {
-            var result = _mediator.Send(new AddServiceCallNoteCommand
+            var resultModel = _mediator.Send(new AddServiceCallNoteCommand
                 {
                     ServiceCallId = model.ServiceCallId,
                     ServiceCallLineItemId = model.ServiceCallLineItemId,
                     Note = model.Note
                 });
 
-            return Json(new { newServiceCallNoteId = result }, JsonRequestBehavior.AllowGet);
+            return Json(resultModel,JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Close(Guid id)
@@ -129,12 +130,12 @@ namespace Warranty.UI.Controllers
         [HttpPost]
         public JsonResult AddLineItem(AddServiceCallLineItemModel model)
         {
-            var result = _mediator.Send(new AddServiceCallLineItemCommand
+            var resultModel = _mediator.Send(new AddServiceCallLineItemCommand
                 {
                     ServiceCallId = model.ServiceCallId, ProblemCode = model.ProblemCode, ProblemDescription = model.ProblemDescription
                 });
 
-            return Json(new {newServiceLineId = result}, JsonRequestBehavior.AllowGet);
+            return Json(resultModel, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

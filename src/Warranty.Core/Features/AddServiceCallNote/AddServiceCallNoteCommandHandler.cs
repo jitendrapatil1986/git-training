@@ -4,7 +4,7 @@
     using Entities;
     using NPoco;
 
-    public class AddServiceCallNoteCommandHandler: ICommandHandler<AddServiceCallNoteCommand, Guid>
+    public class AddServiceCallNoteCommandHandler: ICommandHandler<AddServiceCallNoteCommand, AddServiceCallNoteModel>
     {
         private readonly IDatabase _database;
 
@@ -13,7 +13,7 @@
             _database = database;
         }
 
-        public Guid Handle(AddServiceCallNoteCommand message)
+        public AddServiceCallNoteModel Handle(AddServiceCallNoteCommand message)
         {
             using (_database)
             {
@@ -30,7 +30,17 @@
                 
                 _database.Insert(newServiceCallNote);
 
-                return newServiceCallNote.ServiceCallNoteId;
+                var model = new AddServiceCallNoteModel
+                    {
+                        ServiceCallNoteId = newServiceCallNote.ServiceCallNoteId,
+                        ServiceCallId = newServiceCallNote.ServiceCallId,
+                        ServiceCallLineItemId = newServiceCallNote.ServiceCallLineItemId,
+                        Note = newServiceCallNote.Note,
+                        CreatedBy = newServiceCallNote.CreatedBy,
+                        CreatedDate = newServiceCallNote.CreatedDate
+                    };
+
+                return model;
             }
         }
     }

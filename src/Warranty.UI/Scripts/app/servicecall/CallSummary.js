@@ -96,9 +96,6 @@ require(['/Scripts/app/main.js'], function () {
                 self.createdBy = options.createdBy;
                 self.createdDate = options.createdDate;
                 self.serviceCallCommentTypeId = options.serviceCallCommentTypeId;
-                self.createdByWithCreatedDate = ko.computed(function() {
-                    return self.createdBy + ' - ' +  self.createdDate;  //TODO: How to reference format date value.
-                });
             }
 
             function updateServiceCallLineItem(line) {
@@ -130,12 +127,30 @@ require(['/Scripts/app/main.js'], function () {
                 self.theLookups = dropdownData.availableLookups;  //dropdown list does not need to be observable. Only the actual elements w/i the array do.
                 self.allCallNotes = ko.observableArray([]);
                 self.selectedLineToAttachToNote = ko.observable();
+                self.selectedLineToFilterNotes = ko.observable();
+                self.noteDescriptionToAdd = ko.observable('');
+                self.filteredCallNotes = ko.computed(function() {
+                    var lineIdToFilterNotes = self.selectedLineToFilterNotes();
+                    if (!lineIdToFilterNotes || lineIdToFilterNotes == "") {
+                        return self.allCallNotes();
+                    } else {
+                        return ko.utils.arrayFilter(self.allCallNotes(), function (i) {
+                            return i.serviceCallLineItemId == lineIdToFilterNotes;
+                        });
+                    }
+                });
                 
                 self.addLineItem = function() {
                     self.serviceCallId = $("#addCallLineServiceCallId").val();
                     self.problemCode = $("#addCallLineProblemCode").find('option:selected').text();
                     self.problemCodeId = $("#addCallLineProblemCode").val();
                     self.problemDescription = $("#addCallLineProblemDescription").val();
+                    
+                    var newProblemCode = $("#addCallLineProblemCode");
+                    if (newProblemCode.val() == "") {
+                        $(newProblemCode).parent().addClass("has-error");
+                        return;
+                    }
                     
                     var newProblemDescription = $("#addCallLineProblemDescription");
                     if (newProblemDescription.val() == "") {
@@ -151,7 +166,7 @@ require(['/Scripts/app/main.js'], function () {
                     var lineData = ko.toJSON(newLineItem);
 
                     $.ajax({
-                        url: "/ServiceCall/AddLineItem", //TODO: Set without hard-code url.
+                        url: "/ServiceCall/AddLineItem",
                         type: "POST",
                         data: lineData,
                         dataType: "json",
@@ -164,7 +179,8 @@ require(['/Scripts/app/main.js'], function () {
                         .done(function (response) {
                             self.allLineItems.unshift(new AllLineItemsViewModel({
                                 serviceCallId: self.serviceCallId,
-                                serviceCallLineItemId: response.newServiceLineId,
+                                serviceCallLineItemId: response.ServiceCallLineItemId,
+                                lineNumber: response.LineNumber,
                                 problemCode: self.problemCode,
                                 problemCodeId: self.problemCodeId,
                                 problemDescription: self.problemDescription,
@@ -185,6 +201,12 @@ require(['/Scripts/app/main.js'], function () {
                     self.serviceCallLineItemId = $("#addCallNoteLineReferenceDropDown").find('option:selected').val();
                     self.note = $("#addCallNoteDescription").val();
 
+                    var newNoteDescription = $("#addCallNoteDescription");
+                    if (newNoteDescription.val() == "") {
+                        $(newNoteDescription).parent().addClass("has-error");
+                        return;
+                    }
+                    
                     var newCallNote = new CallNotesViewModel({
                         serviceCallId: self.serviceCallId,
                         serviceCallLineItemId: self.serviceCallLineItemId,
@@ -195,7 +217,7 @@ require(['/Scripts/app/main.js'], function () {
                     var lineNoteData = ko.toJSON(newCallNote);
 
                     $.ajax({
-                        url: "/ServiceCall/AddNote", //TODO: Set without hard-code url.
+                        url: "/ServiceCall/AddNote",
                         type: "POST",
                         data: lineNoteData,
                         dataType: "json",
@@ -207,11 +229,13 @@ require(['/Scripts/app/main.js'], function () {
                         })
                         .done(function (response) {
                             self.allCallNotes.unshift(new CallNotesViewModel({
-                                serviceCallNoteId: response.serviceCallNoteId,
+                                serviceCallNoteId: response.ServiceCallNoteId,
                                 serviceCallId: self.serviceCallId,
                                 serviceCallLineItemId: self.serviceCallLineItemId,
                                 note: self.note,
-                                serviceCallCommentTypeId: self.serviceCallCommentTypeId
+                                serviceCallCommentTypeId: self.serviceCallCommentTypeId,
+                                createdBy: response.CreatedBy,
+                                createdDate: response.CreatedDate
                             }));
 
                             toastr.success("Success! Note added.");
@@ -220,6 +244,9 @@ require(['/Scripts/app/main.js'], function () {
                             $("#addCallNoteDescription").val('');
                             $("#addCallNoteLineItemNo").val('');
                             self.addCallNoteDescription = '';
+                            $("#addCallNoteLineReferenceDropDown").val('');
+                            self.selectedLineToAttachToNote('');
+                            self.noteDescriptionToAdd('');
                         });
                 };
 
@@ -227,11 +254,13 @@ require(['/Scripts/app/main.js'], function () {
                     $("#addCallNoteDescription").val('');
                     $("#addCallNoteLineItemNo").val('');
                     self.addCallNoteDescription = '';
-                    self.selectedLineToAttachToNote = '';
+                    $("#addCallNoteLineReferenceDropDown").val('');
+                    self.selectedLineToAttachToNote('');
                 };
                 
                 self.resetCallNoteFilter = function () {
-                    $("#filterCallNoteByLineItemNo").val('');
+                    $("#filterCallNoteLineReferenceDropDown").val('');
+                    self.selectedLineToFilterNotes('');
                 };
             }
 
