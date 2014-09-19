@@ -17,7 +17,7 @@ namespace Warranty.IntegrationTests.PersistenceTests
             _activityLog = new ActivityLog
                 {
                     ActivityName = "Test",
-                    ActivityType = ActivityType.Escalate,
+                    ActivityType = ActivityType.Escalation,
                     ReferenceType = ReferenceType.ServiceCall,
                     Details = "These are the details",
                     ReferenceId = Guid.NewGuid()
