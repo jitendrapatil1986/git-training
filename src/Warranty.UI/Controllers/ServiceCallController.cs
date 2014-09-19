@@ -1,4 +1,5 @@
 ﻿using Warranty.Core.Features.ServiceCallApproval;
+using Warranty.Core.Features.ServiceCallToggleActions;
 using Warranty.UI.Mailer;
 
 namespace Warranty.UI.Controllers
@@ -161,6 +162,16 @@ namespace Warranty.UI.Controllers
             });
 
             return Json(new { success = "true" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ToggleMarkAsSpecialProject(Guid id, string message)
+        {
+            _mediator.Send(new ServiceCallToogleSpecialProjectCommand
+                {
+                    ServiceCallId = id,
+                    Text = message
+                });
+            return RedirectToAction("CallSummary", new {id});
         }
     }
 }
