@@ -11,7 +11,7 @@ namespace Warranty.Core.Entities
         public virtual Guid ReferenceId { get; set; }
         public virtual ReferenceType ReferenceType { get; set; }
         public virtual ActivityType ActivityType { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public virtual string CreatedBy { get; set; }
+        public virtual DateTime CreatedDate { get; set; }
     }
 }

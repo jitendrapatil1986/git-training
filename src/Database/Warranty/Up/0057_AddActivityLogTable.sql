@@ -6,7 +6,7 @@ CREATE TABLE ActivityLog(
     ReferenceId UNIQUEIDENTIFIER NULL,
     ReferenceType int,
     ActivityType int,
-    CreatedDate DATETIME,
+    CreatedDate DATETIME2,
     CreatedBy VARCHAR(255),  
     CONSTRAINT ActivityLogs
         PRIMARY KEY (ActivityLogId)
