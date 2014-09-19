@@ -5,18 +5,18 @@ using Warranty.Core.Enumerations;
 
 namespace Warranty.Core.Features.ServiceCallToggleActions
 {
-    public class ServiceCallToogleSpecialProjectCommandhandler : ICommandHandler<ServiceCallToogleSpecialProjectCommand>
+    public class ServiceCallToggleSpecialProjectCommandhandler : ICommandHandler<ServiceCallToggleSpecialProjectCommand>
     {
         private readonly IDatabase _database;
         private readonly IActivityLogger _logger;
 
-        public ServiceCallToogleSpecialProjectCommandhandler(IDatabase database, IActivityLogger logger)
+        public ServiceCallToggleSpecialProjectCommandhandler(IDatabase database, IActivityLogger logger)
         {
             _database = database;
             _logger = logger;
         }
 
-        public void Handle(ServiceCallToogleSpecialProjectCommand message)
+        public void Handle(ServiceCallToggleSpecialProjectCommand message)
         {
             using (_database)
             {

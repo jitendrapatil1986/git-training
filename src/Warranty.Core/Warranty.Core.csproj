@@ -234,8 +234,10 @@
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommandHandler.cs" />
     <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQuery.cs" />
     <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQueryHandler.cs" />
-    <Compile Include="Features\ServiceCallToggleActions\ServiceCallToogleSpecialProjectCommandhandler.cs" />
-    <Compile Include="Features\ServiceCallToggleActions\ServiceCallToogleSpecialProjectCommand.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallToggleEscalateCommand.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallToggleEscalateCommandCommandhandler.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallToggleSpecialProjectCommandhandler.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallToggleSpecialProjectCommand.cs" />
     <Compile Include="Features\SharedQueries\PostResponseModel.cs" />
     <Compile Include="Features\SharedQueries\ProblemCodes.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetModel.cs" />

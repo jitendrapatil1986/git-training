@@ -166,12 +166,22 @@ namespace Warranty.UI.Controllers
 
         public ActionResult ToggleSpecialProject(Guid id, string message)
         {
-            _mediator.Send(new ServiceCallToogleSpecialProjectCommand
-                {
-                    ServiceCallId = id,
-                    Text = message
-                });
-            return RedirectToAction("CallSummary", new {id});
+            _mediator.Send(new ServiceCallToggleSpecialProjectCommand
+            {
+                ServiceCallId = id,
+                Text = message
+            });
+            return RedirectToAction("CallSummary", new { id });
+        }
+
+        public ActionResult ToggleEscalate(Guid id, string message)
+        {
+            _mediator.Send(new ServiceCallToggleEscalateCommand
+            {
+                ServiceCallId = id,
+                Text = message
+            });
+            return RedirectToAction("CallSummary", new { id });
         }
     }
 }
