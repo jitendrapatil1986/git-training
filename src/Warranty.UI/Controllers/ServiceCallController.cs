@@ -164,7 +164,7 @@ namespace Warranty.UI.Controllers
             return Json(new { success = "true" }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult ToggleMarkAsSpecialProject(Guid id, string message)
+        public ActionResult ToggleSpecialProject(Guid id, string message)
         {
             _mediator.Send(new ServiceCallToogleSpecialProjectCommand
                 {
