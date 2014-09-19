@@ -40,25 +40,6 @@
     }
 }
 
-@helper SpecialProjectActionHelper()
-{
-    string message;
-    string buttonText;
-    if (!Model.ServiceCallSummary.IsSpecialProject)
-    {
-        message = "Reason for special project designation";
-        buttonText = "Designate as Special Project";
-    }
-    else
-    {
-        message = "Reason for undesignating as special project";
-        buttonText = "Undesignate as Special Project";
-    }
-    
-    @Format.ActionwithPopup("special_project", message, @Url.Action("ToggleMArkAsSpecialProject", "ServiceCall"), Model.ServiceCallSummary.ServiceCallId, buttonText)
-}
-
-
 <div class="container">
     <div class="col-md-12">
         <section>
@@ -66,7 +47,7 @@
             @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
             {
                 <div class="service-call-header-buttons">
-                    @Format.SpecialProjectToggleButton(Model.ServiceCallSummary.IsSpecialProject)
+                    @Format.ServiceCallToggleButton("special_project", Model.ServiceCallSummary.IsSpecialProject, "Special Project", "Not Special Project")
                 </div>
             }
             <div class="clearfix"></div>
@@ -246,8 +227,10 @@
         </div>
     </div>
 </div>
-
-@SpecialProjectActionHelper()
+@if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+{
+    @Format.ActionwithPopup("special_project", @Url.Action("ToggleSpecialProject", "ServiceCall"), Model.ServiceCallSummary.ServiceCallId)
+}
 
 @section modules
 {

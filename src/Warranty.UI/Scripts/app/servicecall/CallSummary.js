@@ -3,6 +3,7 @@ require(['/Scripts/app/main.js'], function () {
         $(function () {
 
             $('.btn-action-with-popup').click(function (e) {
+                $(this).addClass("active");
                 $('.popup-action-with-message').hide();
                 var right = ($(window).width() - ($(this).offset().left + $(this).outerWidth()));
                 var actionwithPopup = $(this).data('action-with-popup');
@@ -10,7 +11,7 @@ require(['/Scripts/app/main.js'], function () {
                     'position': 'absolute',
                     'right': right,
                     'top': $(this).offset().top + $(this).height() + 15
-                }).show("slow");
+                }).show();
             });
             
             $('.btn-cancel-popup').click(function (e) {
@@ -19,17 +20,30 @@ require(['/Scripts/app/main.js'], function () {
             });
 
             $('.btn-execute-action').click(function (e) {
+                var popupWindow = $(this).parent();
                 var actionUrl = $(this).data('action-url');
-                var message = $(this).prev('textarea').val();
+                var textArea = $(this).prev('textarea');
+                var message = textArea.val();
+                textArea.val('');
                 var serviceCallId = $(this).data('service-call-id');
+                var parentButton = $("#btn_" + popupWindow.attr('id'));
                 $.ajax({
                     type: "POST",
                     url: actionUrl,
                     data: { id: serviceCallId, message: message },
                     success: function () {
-                        location.reload();
+                        parentButton.removeClass("active");
+                        changeButtonText(parentButton);
+                        popupWindow.hide();
                     }
                 });
+                
+                function changeButtonText(button) {
+                    var currentText = button.text();
+                    var nextText = button.data('next-text');
+                    button.data('next-text', currentText);
+                    button.text(nextText);
+                }
             });
             
 
