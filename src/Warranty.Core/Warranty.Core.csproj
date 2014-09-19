@@ -99,8 +99,10 @@
     <Compile Include="DataAccess\Conventions\StringEnumeration.cs" />
     <Compile Include="DataAccess\Conventions\StringEnumerationType.cs" />
     <Compile Include="DataAccess\DbFactory.cs" />
+    <Compile Include="DataAccess\Mappings\ActivityLogMap.cs" />
     <Compile Include="DataAccess\Mappings\AuditableEntityMapping.cs" />
     <Compile Include="DataAccess\ConfigurationFactoryExtensions.cs" />
+    <Compile Include="DataAccess\Mappings\AuditCreatedEntityMap.cs" />
     <Compile Include="DataAccess\Mappings\CityMap.cs" />
     <Compile Include="DataAccess\Mappings\CityMapping.cs" />
     <Compile Include="DataAccess\Mappings\AuditableEntityMap.cs" />
@@ -131,12 +133,14 @@
     <Compile Include="DataAccess\Mappings\ServiceCallMapping.cs" />
     <Compile Include="DataAccess\SqlServerDatabase.cs" />
     <Compile Include="DataAccess\SqlServerDatabaseType.cs" />
+    <Compile Include="Entities\ActivityLog.cs" />
     <Compile Include="Entities\City.cs" />
     <Compile Include="Entities\Community.cs" />
     <Compile Include="Entities\CommunityAssignment.cs" />
     <Compile Include="Entities\Division.cs" />
     <Compile Include="Entities\HomeOwner.cs" />
     <Compile Include="Entities\IAuditableEntity.cs" />
+    <Compile Include="Entities\IAuditCreatedEntity.cs" />
     <Compile Include="Entities\IJdeEntity.cs" />
     <Compile Include="Entities\Job.cs" />
     <Compile Include="Entities\JobOption.cs" />
@@ -151,6 +155,8 @@
     <Compile Include="Entities\ServiceCall.cs" />
     <Compile Include="Entities\ServiceCallNote.cs" />
     <Compile Include="Entities\ServiceCallLineItem.cs" />
+    <Compile Include="Enumerations\ActivityType.cs" />
+    <Compile Include="Enumerations\ReferenceType.cs" />
     <Compile Include="Enumerations\UserRoles.cs" />
     <Compile Include="Enumerations\ToDoIcon.cs" />
     <Compile Include="Enumerations\Month.cs" />
@@ -229,6 +235,8 @@
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommandHandler.cs" />
     <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQuery.cs" />
     <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQueryHandler.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallToogleSpecialProjectCommandhandler.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallToogleSpecialProjectCommand.cs" />
     <Compile Include="Features\SharedQueries\PostResponseModel.cs" />
     <Compile Include="Features\SharedQueries\ProblemCodes.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetModel.cs" />

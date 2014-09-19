@@ -403,5 +403,22 @@ namespace Warranty.UI.Core.Helpers
                                            status);
             return MvcHtmlString.Create(htmlString);
         }
+
+        public static MvcHtmlString ActionwithPopup(string id, string message, string url, Guid serviceCallId, string buttonText)
+        {
+            var html = string.Format(@"<div id='{0}' class='popup-action-with-message'>
+                            <p><small>{1}</small></p>
+                            <textarea rows='5'></textarea>
+                            <a href='#' class='btn btn-primary btn-sm pull-left btn-execute-action' data-action-url='{2}' data-service-call-id='{3}'>{4}</a>
+                            <a href='#' class='btn-link btn-sm pull-right btn-cancel-popup'>Cancel</a>
+                        </div>", id, message, url, serviceCallId, buttonText);
+            return MvcHtmlString.Create(html);
+        }
+
+        public static MvcHtmlString SpecialProjectToggleButton(bool isSpecialProject)
+        {
+            var text = !isSpecialProject ? "Special Project" : "Not Special Project";
+            return MvcHtmlString.Create(string.Format("<a href='#' class='btn btn-default pull-right btn-action-with-popup' data-action-with-popup='special_project'>{0}</a>",text));
+        }
     }
 }

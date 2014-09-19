@@ -1,6 +1,38 @@
 require(['/Scripts/app/main.js'], function () {
     require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData, dropdownData) {
         $(function () {
+
+            $('.btn-action-with-popup').click(function (e) {
+                $('.popup-action-with-message').hide();
+                var right = ($(window).width() - ($(this).offset().left + $(this).outerWidth()));
+                var actionwithPopup = $(this).data('action-with-popup');
+                $("#" + actionwithPopup).css({
+                    'position': 'absolute',
+                    'right': right,
+                    'top': $(this).offset().top + $(this).height() + 15
+                }).show("slow");
+            });
+            
+            $('.btn-cancel-popup').click(function (e) {
+                var parent = $(this).parent();
+                parent.hide();
+            });
+
+            $('.btn-execute-action').click(function (e) {
+                var actionUrl = $(this).data('action-url');
+                var message = $(this).prev('textarea').val();
+                var serviceCallId = $(this).data('service-call-id');
+                $.ajax({
+                    type: "POST",
+                    url: actionUrl,
+                    data: { id: serviceCallId, message: message },
+                    success: function () {
+                        location.reload();
+                    }
+                });
+            });
+            
+
             $(".approve-button").click(function (e) {
                 e.preventDefault();
                 var serviceCallId = $(this).data("service-call-id");
