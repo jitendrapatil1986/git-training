@@ -29,6 +29,13 @@
                 e.State[createdByIndex] = auditableEntity.CreatedBy = GetUserFullName();
                 e.State[createdDateIndex] = auditableEntity.CreatedDate = DateTime.UtcNow;
             }
+            else if (type.IsAssignableTo<IAuditCreatedEntity>())
+            {
+                var auditableEntity = (IAuditCreatedEntity)e.Entity;
+
+                e.State[createdByIndex] = auditableEntity.CreatedBy = GetUserFullName();
+                e.State[createdDateIndex] = auditableEntity.CreatedDate = DateTime.UtcNow;
+            }
 
             return false;
         }
