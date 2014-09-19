@@ -35,6 +35,13 @@ require(['/Scripts/app/main.js'], function () {
                 }, 500);
             }
 
+            function clearNoteFields() {
+                $("#addCallNoteDescription").val('');
+                $("#addCallNoteLineReferenceDropDown").val('');
+                self.selectedLineToAttachToNote('');
+                self.noteDescriptionToAdd('');
+            }
+            
             function AllLineItemsViewModel(options) {
                 var self = this;
                 self.serviceCallId = options.serviceCallId;
@@ -104,7 +111,7 @@ require(['/Scripts/app/main.js'], function () {
                 var lineData = ko.toJSON(line);
 
                 $.ajax({
-                    url: "/ServiceCall/EditLineItem", //TODO: Set without hard-code url.
+                    url: urls.ManageServiceCall.EditLineItem,
                     type: "POST",
                     data: lineData,
                     dataType: "json",
@@ -166,7 +173,7 @@ require(['/Scripts/app/main.js'], function () {
                     var lineData = ko.toJSON(newLineItem);
 
                     $.ajax({
-                        url: "/ServiceCall/AddLineItem",
+                        url: urls.ManageServiceCall.AddLineItem,
                         type: "POST",
                         data: lineData,
                         dataType: "json",
@@ -217,7 +224,7 @@ require(['/Scripts/app/main.js'], function () {
                     var lineNoteData = ko.toJSON(newCallNote);
 
                     $.ajax({
-                        url: "/ServiceCall/AddNote",
+                        url: urls.ManageServiceCall.AddNote,
                         type: "POST",
                         data: lineNoteData,
                         dataType: "json",
@@ -240,22 +247,12 @@ require(['/Scripts/app/main.js'], function () {
 
                             toastr.success("Success! Note added.");
                             highlight($("#allServiceCallNotes").first());
-
-                            $("#addCallNoteDescription").val('');
-                            $("#addCallNoteLineItemNo").val('');
-                            self.addCallNoteDescription = '';
-                            $("#addCallNoteLineReferenceDropDown").val('');
-                            self.selectedLineToAttachToNote('');
-                            self.noteDescriptionToAdd('');
+                            clearNoteFields();
                         });
                 };
 
                 self.cancelCallNote = function () {
-                    $("#addCallNoteDescription").val('');
-                    $("#addCallNoteLineItemNo").val('');
-                    self.addCallNoteDescription = '';
-                    $("#addCallNoteLineReferenceDropDown").val('');
-                    self.selectedLineToAttachToNote('');
+                    clearNoteFields();
                 };
                 
                 self.resetCallNoteFilter = function () {

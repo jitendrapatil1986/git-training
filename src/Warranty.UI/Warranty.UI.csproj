@@ -194,6 +194,7 @@
     <Compile Include="Api\RelatedCallController.cs" />
     <Compile Include="Api\ManageLookupsController.cs" />
     <Compile Include="Api\QuickSearchController.cs" />
+    <Compile Include="Api\ManageServiceCallController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
