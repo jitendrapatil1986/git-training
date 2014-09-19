@@ -15,8 +15,10 @@ require(['/Scripts/app/main.js'], function () {
             });
             
             $('.btn-cancel-popup').click(function (e) {
-                var parent = $(this).parent();
-                parent.hide();
+                var popupWindow = $(this).parent();
+                var parentButton = $("#btn_" + popupWindow.attr('id'));
+                parentButton.removeClass("active");
+                popupWindow.hide();
             });
 
             $('.btn-execute-action').click(function (e) {
@@ -32,8 +34,8 @@ require(['/Scripts/app/main.js'], function () {
                     url: actionUrl,
                     data: { id: serviceCallId, message: message },
                     success: function () {
-                        parentButton.removeClass("active");
                         changeButtonText(parentButton);
+                        parentButton.removeClass("active");
                         popupWindow.hide();
                     }
                 });
