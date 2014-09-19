@@ -40,6 +40,14 @@ namespace Warranty.Core.DataAccess
                 auditableEntity.CreatedBy = _userSession.GetCurrentUser().UserName;
             }
 
+            var auditCreatedEntity = insertContext.Poco as IAuditCreatedEntity;
+
+            if (auditCreatedEntity != null)
+            {
+                auditCreatedEntity.CreatedDate = DateTime.UtcNow;
+                auditCreatedEntity.CreatedBy = _userSession.GetCurrentUser().UserName;
+            }
+
             return base.OnInserting(insertContext);
         }
 
