@@ -22,6 +22,7 @@ require.config({
         'typeahead': 'lib/typeahead.bundle.min',
         'bloodhound': 'lib/bloodhound.min',
         'handlebars': 'lib/handlebars.min',
+        'responsive.tabs': 'lib/responsive.tabs',
     },
     shim: {
         'jquery.validate': ['jquery'],
