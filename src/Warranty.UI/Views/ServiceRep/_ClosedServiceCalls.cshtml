@@ -16,7 +16,7 @@
                     @Format.NumberOfLineItems(line.NumberOfLineItems)
                 </div>
                 <div class="col-md-10">
-                    @line.HomeownerName<br />@Html.ActionLink(line.Address, "JobSummary", "Job", new {id = line.JobId}, null)
+                    @line.HomeownerName<br />@line.Address
                 </div>
             </div>
             <div class="col-md-2">@Format.Escalated(line.IsEscalated, line.EscalationReason, line.EscalationDate)</div>

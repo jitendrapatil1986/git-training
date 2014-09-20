@@ -272,6 +272,7 @@
     <Content Include="Scripts\app\Admin\ManageAssignments.js" />
     <Content Include="Scripts\app\admin\ManageLookups.js" />
     <Content Include="Scripts\app\ajaxEvents.js" />
+    <Content Include="Scripts\app\responsiveTabs.js" />
     <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\search.js" />
     <Content Include="Scripts\app\servicecall\CallSummary.js" />
