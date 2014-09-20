@@ -1,4 +1,5 @@
 using FluentValidation;
+using Warranty.Core.ActivityLogger;
 using Warranty.Core.ApprovalInfrastructure.Interfaces;
 
 namespace Warranty.UI.Core.Initialization
@@ -32,6 +33,7 @@ namespace Warranty.UI.Core.Initialization
                     scan.AddAllTypesOf((typeof(ICommandHandler<,>)));
                     scan.AddAllTypesOf((typeof(ICommandResultHandler<,>)));
                     scan.AddAllTypesOf((typeof(IApprovalService<>)));
+                    scan.AddAllTypesOf((typeof(IActivityLogger)));
 
                     scan.WithDefaultConventions();
                 });

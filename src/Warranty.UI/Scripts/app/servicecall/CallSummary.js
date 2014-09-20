@@ -1,6 +1,52 @@
 require(['/Scripts/app/main.js'], function () {
     require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData, dropdownData) {
         $(function () {
+
+            $('.btn-action-with-popup').click(function (e) {
+                $(this).addClass("active");
+                $('.popup-action-with-message').hide();
+                var right = ($(window).width() - ($(this).offset().left + $(this).outerWidth()));
+                var actionwithPopup = $(this).data('action-with-popup');
+                $("#" + actionwithPopup).css({
+                    'position': 'absolute',
+                    'right': right,
+                    'top': $(this).offset().top + $(this).height() + 15
+                }).show();
+            });
+            
+            $('.btn-cancel-popup').click(function (e) {
+                var parent = $(this).parent();
+                parent.hide();
+            });
+
+            $('.btn-execute-action').click(function (e) {
+                var popupWindow = $(this).parent();
+                var actionUrl = $(this).data('action-url');
+                var textArea = $(this).prev('textarea');
+                var message = textArea.val();
+                textArea.val('');
+                var serviceCallId = $(this).data('service-call-id');
+                var parentButton = $("#btn_" + popupWindow.attr('id'));
+                $.ajax({
+                    type: "POST",
+                    url: actionUrl,
+                    data: { id: serviceCallId, message: message },
+                    success: function () {
+                        parentButton.removeClass("active");
+                        changeButtonText(parentButton);
+                        popupWindow.hide();
+                    }
+                });
+                
+                function changeButtonText(button) {
+                    var currentText = button.text();
+                    var nextText = button.data('next-text');
+                    button.data('next-text', currentText);
+                    button.text(nextText);
+                }
+            });
+            
+
             $(".approve-button").click(function (e) {
                 e.preventDefault();
                 var serviceCallId = $(this).data("service-call-id");
@@ -35,6 +81,13 @@ require(['/Scripts/app/main.js'], function () {
                 }, 500);
             }
 
+            function clearNoteFields() {
+                $("#addCallNoteDescription").val('');
+                $("#addCallNoteLineReferenceDropDown").val('');
+                self.selectedLineToAttachToNote('');
+                self.noteDescriptionToAdd('');
+            }
+            
             function AllLineItemsViewModel(options) {
                 var self = this;
                 self.serviceCallId = options.serviceCallId;
@@ -78,6 +131,24 @@ require(['/Scripts/app/main.js'], function () {
                     this.problemCode(this.currentProblemCode());
                     this.problemDescription(this.currentProblemDescription());
                 };
+                
+                self.lineNumber = ko.observable(options.lineNumber);
+                
+                self.lineNumberWithProblemCode = ko.computed(function() {
+                    return self.lineNumber() + " - " + self.problemCode();
+                });
+
+            }
+            
+            function CallNotesViewModel(options) {
+                var self = this;
+                self.serviceCallNoteId = options.serviceCallNoteId;
+                self.serviceCallId = options.serviceCallId;
+                self.serviceCallLineItemId = options.serviceCallLineItemId;
+                self.note = options.note;
+                self.createdBy = options.createdBy;
+                self.createdDate = options.createdDate;
+                self.serviceCallCommentTypeId = options.serviceCallCommentTypeId;
             }
 
             function updateServiceCallLineItem(line) {
@@ -86,7 +157,7 @@ require(['/Scripts/app/main.js'], function () {
                 var lineData = ko.toJSON(line);
 
                 $.ajax({
-                    url: "/ServiceCall/EditLineItem", //TODO: Set without hard-code url.
+                    url: urls.ManageServiceCall.EditLineItem,
                     type: "POST",
                     data: lineData,
                     dataType: "json",
@@ -107,12 +178,32 @@ require(['/Scripts/app/main.js'], function () {
                 
                 self.allLineItems = ko.observableArray([]);
                 self.theLookups = dropdownData.availableLookups;  //dropdown list does not need to be observable. Only the actual elements w/i the array do.
+                self.allCallNotes = ko.observableArray([]);
+                self.selectedLineToAttachToNote = ko.observable();
+                self.selectedLineToFilterNotes = ko.observable();
+                self.noteDescriptionToAdd = ko.observable('');
+                self.filteredCallNotes = ko.computed(function() {
+                    var lineIdToFilterNotes = self.selectedLineToFilterNotes();
+                    if (!lineIdToFilterNotes || lineIdToFilterNotes == "") {
+                        return self.allCallNotes();
+                    } else {
+                        return ko.utils.arrayFilter(self.allCallNotes(), function (i) {
+                            return i.serviceCallLineItemId == lineIdToFilterNotes;
+                        });
+                    }
+                });
                 
                 self.addLineItem = function() {
                     self.serviceCallId = $("#addCallLineServiceCallId").val();
                     self.problemCode = $("#addCallLineProblemCode").find('option:selected').text();
                     self.problemCodeId = $("#addCallLineProblemCode").val();
                     self.problemDescription = $("#addCallLineProblemDescription").val();
+                    
+                    var newProblemCode = $("#addCallLineProblemCode");
+                    if (newProblemCode.val() == "") {
+                        $(newProblemCode).parent().addClass("has-error");
+                        return;
+                    }
                     
                     var newProblemDescription = $("#addCallLineProblemDescription");
                     if (newProblemDescription.val() == "") {
@@ -128,7 +219,7 @@ require(['/Scripts/app/main.js'], function () {
                     var lineData = ko.toJSON(newLineItem);
 
                     $.ajax({
-                        url: "/ServiceCall/AddLineItem", //TODO: Set without hard-code url.
+                        url: urls.ManageServiceCall.AddLineItem,
                         type: "POST",
                         data: lineData,
                         dataType: "json",
@@ -141,7 +232,8 @@ require(['/Scripts/app/main.js'], function () {
                         .done(function (response) {
                             self.allLineItems.unshift(new AllLineItemsViewModel({
                                 serviceCallId: self.serviceCallId,
-                                serviceCallLineItemId: response.newServiceLineId,
+                                serviceCallLineItemId: response.ServiceCallLineItemId,
+                                lineNumber: response.LineNumber,
                                 problemCode: self.problemCode,
                                 problemCodeId: self.problemCodeId,
                                 problemDescription: self.problemDescription,
@@ -156,6 +248,63 @@ require(['/Scripts/app/main.js'], function () {
                             self.problemDescription = '';
                         });
                 };
+
+                self.addCallNote = function () {
+                    self.serviceCallId = $("#addCallLineServiceCallId").val();
+                    self.serviceCallLineItemId = $("#addCallNoteLineReferenceDropDown").find('option:selected').val();
+                    self.note = $("#addCallNoteDescription").val();
+
+                    var newNoteDescription = $("#addCallNoteDescription");
+                    if (newNoteDescription.val() == "") {
+                        $(newNoteDescription).parent().addClass("has-error");
+                        return;
+                    }
+                    
+                    var newCallNote = new CallNotesViewModel({
+                        serviceCallId: self.serviceCallId,
+                        serviceCallLineItemId: self.serviceCallLineItemId,
+                        note: self.note,
+                        serviceCallCommentTypeId: self.serviceCallCommentTypeId
+                    });
+                    
+                    var lineNoteData = ko.toJSON(newCallNote);
+
+                    $.ajax({
+                        url: urls.ManageServiceCall.AddNote,
+                        type: "POST",
+                        data: lineNoteData,
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    })
+                        .fail(function (response) {
+                            toastr.error("There was an issue adding the call note. Please try again!");
+                        })
+                        .done(function (response) {
+                            self.allCallNotes.unshift(new CallNotesViewModel({
+                                serviceCallNoteId: response.ServiceCallNoteId,
+                                serviceCallId: self.serviceCallId,
+                                serviceCallLineItemId: self.serviceCallLineItemId,
+                                note: self.note,
+                                serviceCallCommentTypeId: self.serviceCallCommentTypeId,
+                                createdBy: response.CreatedBy,
+                                createdDate: response.CreatedDate
+                            }));
+
+                            toastr.success("Success! Note added.");
+                            highlight($("#allServiceCallNotes").first());
+                            clearNoteFields();
+                        });
+                };
+
+                self.cancelCallNote = function () {
+                    clearNoteFields();
+                };
+                
+                self.resetCallNoteFilter = function () {
+                    $("#filterCallNoteLineReferenceDropDown").val('');
+                    self.selectedLineToFilterNotes('');
+                };
             }
 
             var viewModel = new createServiceCallLineItemViewModel();
@@ -165,6 +314,12 @@ require(['/Scripts/app/main.js'], function () {
                 
             _(persistedAllLineItemsViewModel).each(function(item) {
                 viewModel.allLineItems.push(new AllLineItemsViewModel(item));
+            });
+
+            var persistedAllCallNotesViewModel = modelData.initialServiceNotes;
+
+            _(persistedAllCallNotesViewModel).each(function(note) {
+                viewModel.allCallNotes.push(new CallNotesViewModel(note));
             });
         });
     });

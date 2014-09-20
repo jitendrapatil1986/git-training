@@ -101,17 +101,17 @@ namespace Warranty.Core.Features.JobSummary
                 get { return ServiceCallCalculator.CalculatePercentComplete(NumberOfDaysRemaining); }
             }
 
-            public List<JobServiceCallComment> JobServiceCallComments { get; set; }
+            public List<JobServiceCallNote> JobServiceCallNotes { get; set; }
 
             public string Summary { get; set; }
             public string[] SummaryOfLineItems{get { return Summary.Split('|'); }}
 //NPoco needs prop to be List<> to use FetchOneToMany(). Also need to set to IGNORE if inserting.
 
-            public class JobServiceCallComment
+            public class JobServiceCallNote
             {
-                public Guid ServiceCallCommentId { get; set; }
+                public Guid ServiceCallNoteId { get; set; }
                 public Guid ServiceCallId { get; set; }
-                public string Comment { get; set; }
+                public string Note { get; set; }
             }
         }
     }

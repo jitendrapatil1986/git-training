@@ -8,7 +8,7 @@
     };
 
     return search.init({
-        searchBarId: '#searchBar',
+        searchBarId: '#searchBar, #searchBarMobile',
         endpoints: getEndpoints(window)
     });
 });

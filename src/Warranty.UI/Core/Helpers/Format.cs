@@ -403,5 +403,28 @@ namespace Warranty.UI.Core.Helpers
                                            status);
             return MvcHtmlString.Create(htmlString);
         }
+
+        public static MvcHtmlString ActionwithPopup(string id, string url, Guid serviceCallId)
+        {
+            var html = string.Format(@"<div id='{0}' class='popup-action-with-message'>
+                            <p><small>Reason:</small></p>
+                            <textarea rows='5'></textarea>
+                            <a href='#' class='btn btn-primary btn-sm pull-left btn-execute-action' data-action-url='{1}' data-service-call-id='{2}'>Submit</a>
+                            <a href='#' class='btn-link btn-sm pull-right btn-cancel-popup'>Cancel</a>
+                        </div>", id, url, serviceCallId);
+            return MvcHtmlString.Create(html);
+        }
+
+        public static MvcHtmlString ServiceCallToggleButton(string id, bool shouldToggle, string inactiveText, string activeText)
+        {
+            var currentText = !shouldToggle ? inactiveText : activeText;
+            var nextText = shouldToggle ? inactiveText : activeText;
+
+            return
+                MvcHtmlString.Create(
+                    string.Format(
+                        "<a href='#' class='btn btn-default pull-right btn-action-with-popup' data-action-with-popup='{0}' id='btn_{0}' data-next-text='{1}'>{2}</a>",
+                        id, nextText, currentText));
+        }
     }
 }
