@@ -259,6 +259,8 @@
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetModel.cs" />
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQuery.cs" />
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQueryHandler.cs" />
+    <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetModel.cs" />
+    <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetQuery.cs" />
     <Compile Include="Services\ISendSmtpMailMessage.cs" />
     <Compile Include="Services\SendSmtpMailMessage.cs" />
     <Compile Include="Services\ServiceCallCalculator.cs" />

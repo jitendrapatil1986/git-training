@@ -14,11 +14,18 @@
     }
     @if (User.IsInRole(UserRoles.WarrantyServiceManager) || User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyAdmin))
     {
-        <div class="col-md-8">
-            @Html.Action("ServiceCallsWidget", "Home")
+        <div class="row">
+            <div class="col-md-8">
+                @Html.Action("ServiceCallsWidget", "Home")
+            </div>
+            <div class="col-md-4">
+                @Html.Action("ToDoWidget", "Home")
+            </div>
         </div>
-        <div class="col-md-4">
-        @Html.Action("ToDoWidget", "Home")
-    </div>
+        <div class="row">
+            <div class="col-md-4">
+                @Html.Action("WarrantyDollarsSpentWidget", "Home")
+            </div>
+        </div>
     }
 </div>
