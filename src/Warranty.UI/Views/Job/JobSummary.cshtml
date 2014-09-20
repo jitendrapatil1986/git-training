@@ -67,14 +67,14 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <ul class="nav nav-tabs" role="tablist">
+            <ul class="nav nav-tabs responsive" role="tablist">
                 <li class="active"><a href="#job_service_calls" role="tab" data-toggle="tab">Call History <span class="label label-default">@Model.JobServiceCalls.Count()</span></a></li>
                 <li><a href="#job_selections" role="tab" data-toggle="tab">Options <span class="label label-default">@Model.JobSelections.Count()</span></a></li>
                 <li><a href="#job_vendors" role="tab" data-toggle="tab">Vendors </a></li>
                 <li><a href="#job_payments" role="tab" data-toggle="tab">Payments </a></li>
             </ul>
         
-            <div class="tab-content">
+            <div class="tab-content responsive">
                 <div class="tab-pane active" id="job_service_calls">
                     @foreach (var line in Model.JobServiceCalls.OrderByDescending(x=>x.CreatedDate))
                     {

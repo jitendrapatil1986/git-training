@@ -27,6 +27,7 @@ require.config({
     shim: {
         'jquery.validate': ['jquery'],
         'jquery.unobtrusive': ['jquery.validate'],
+        
         'bootstrap': ['jquery', 'jquery.validate', 'jquery.unobtrusive'],
         'tooltip': { deps: ['bootstrap'], exports: '$.fn.tooltip' },
         'datepicker': { deps: ['bootstrap'], exports: '$.fn.datepicker' },
@@ -34,9 +35,10 @@ require.config({
         'underscore': { exports: '_' },
         'ko': ['underscore'],
         'highcharts': { deps: ['jquery'], exports: 'Highcharts' },
-        "bloodhound": { deps: ["jquery"], exports: "Bloodhound" },
+        'bloodhound': { deps: ['jquery'], exports: 'Bloodhound' },
+        'responsive.tabs': { deps: ['bootstrap'] },
     },
     callback: function () {
-        require(['app/feedbackForm', 'app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields']);
+        require(['app/feedbackForm', 'app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields', 'app/responsiveTabs']);
     }
 });
