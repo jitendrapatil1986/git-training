@@ -289,7 +289,6 @@
     <Content Include="Scripts\lib\handlebars.runtime.min.js" />
     <Content Include="Scripts\lib\bloodhound.js" />
     <Content Include="Scripts\lib\bloodhound.min.js" />
-    <Content Include="Scripts\config\call-search.js" />
     <Content Include="Scripts\config\job-search.js" />
     <Content Include="Scripts\app\customBindings.js" />
     <Content Include="Scripts\app\dates.js" />

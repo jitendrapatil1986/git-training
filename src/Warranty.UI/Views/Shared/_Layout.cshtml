@@ -90,13 +90,10 @@
                     @NavItemHelper(NavItem.Home, Url.Action("Index", "Home"))
                 </ul>
                 <div class="nav nav-extra">
-                    <div class="col-md-3 pull-right">
-                        <div class="input-group">
+                    <div class="pull-right">
+                        <div class="input-group pull-right">
                             <input id="searchBar" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder=""/>
-                            <div class="input-group-btn">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Type <span class="caret"></span></button>
-                                <ul class="dropdown-menu dropdown-menu-right"></ul>
-                            </div>
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
                         </div>
                     </div>
                 </div>
@@ -104,7 +101,7 @@
         </div>
         
         <!--Menu for Mobile view.-->
-        <div class="visible-xs visible-sm subnav subnav-fixed" >
+@*        <div class="visible-xs visible-sm subnav subnav-fixed" >
             <div class="container">
                 <div class="navbar-header">
                     <div class="panel-group" id="accordion">
@@ -120,10 +117,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
 
         <div class="container main-container">
-            <!--Menu for Mobile view.-->
+@*            <!--Menu for Mobile view.-->
             <div class="visible-xs visible-sm">
                 <div id="collapseSubMenuMobile" class="collapse">
                     <div class="col-md-3 pull-right">
@@ -136,7 +133,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>*@
 
             @RenderBody()
         </div>
