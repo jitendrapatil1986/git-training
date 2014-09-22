@@ -157,46 +157,121 @@
                     <ul>
                         <div data-bind="foreach: allLineItems">
                             <div id="allServiceCallLineItems" class="service-call-line edit-line-item">
-                                <li class="row">
-                                    <div class="col-md-12">
-                                        <div class="col-md-9">
-                                            <div class="no-left-right-padding">
-                                                <div class="row">
-                                                    <div class="col-md-9">
-                                                        <div class="editor" data-bind="css: { editing: problemCodeEditing }">
-                                                            <h4>
-                                                                <select class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
-                                                                <small class="text-muted view" data-bind="text: problemCode"></small>
-                                                            </h4>
+                                    <li class="row">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-9">
+                                                    <div class="no-left-right-padding">
+                                                        <div class="row">
+                                                            <div class="col-md-9">
+                                                                <div class="editor" data-bind="css: { editing: problemCodeEditing }"> 
+                                                                    <h4>
+                                                                        <select class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
+                                                                        <small class="text-muted view" data-bind="text: problemCode"></small>
+                                                                    </h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="editor" data-bind="css: { editing: problemDescriptionEditing }"> 
+                                                                    <p class="view" data-bind="text: problemDescription"></p>
+                                                                    <textarea id="updateCallLineProblemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-4 col-xs-12 no-left-right-padding top-buffer bottom-buffer">
+                                                                <div class="editor" data-bind="css: { editing: lineEditing }">
+                                                                    <div class="col-md-3 col-xs-4">
+                                                                        <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges">Save</button>
+                                                                    </div>
+                                                                    <div class="col-md-3 col-xs-4">
+                                                                        <button type="button" class="btn btn-default btn-sm edit" data-bind="click: cancelLineItemChanges">Cancel</button>
+                                                                        @*<a href="#" class="small editable-cancel edit" data-bind="click: cancelLineItemChanges">Cancel</a>*@
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="editor" data-bind="css: { editing: problemDescriptionEditing }">
-                                                            <p class="view" data-bind="text: problemDescription"></p>
-                                                            <textarea id="updateCallLineProblemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-4 col-xs-12 no-left-right-padding top-buffer bottom-buffer">
-                                                        <div class="editor" data-bind="css: { editing: lineEditing }">
-                                                            <div class="col-md-3 col-xs-4">
-                                                                <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges">Save</button>
-                                                            </div>
-                                                            <div class="col-md-3 col-xs-4">
-                                                                <button type="button" class="btn btn-default btn-sm edit" data-bind="click: cancelLineItemChanges">Cancel</button>
-                                                                @*<a href="#" class="small editable-cancel edit" data-bind="click: cancelLineItemChanges">Cancel</a>*@
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <div class="col-md-3 margin-top-13 margin-bottom-3 text-align-right no-right-padding">
+                                                    <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: lineEditing() == false">Edit</button>
+                                                    @* <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show" data-bind="visible: lineEditing() == false">Complete</button>*@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3 margin-top-13 margin-bottom-3 text-align-right no-right-padding">
-                                            <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: lineEditing() == false">Edit</button>
-                                            @* <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show" data-bind="visible: lineEditing() == false">Complete</button>*@
+                                </li>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </ul>
+                </div>
+            </section>
+            
+            <section >
+                <h3 class="col-md-12">Notes
+                    <span>
+                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Note" data-toggle="collapse" data-target="#addCallNote"><span class="glyphicon glyphicon-plus"></span></button>
+                    </span>
+                </h3>
+                <div id="addCallNote" class="collapse">
+                    <div class="panel panel-default no-bottom-margin">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @Html.TextArea("Description", null, new {id="addCallNoteDescription", @class="form-control", data_bind="text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Notes'}", @rows=3})
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @Html.Label("Reference line item (optional)")
+                                    <select id="addCallNoteLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToAttachToNote, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'Select Line Number' "></select>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <button class="btn btn-default" data-bind="click: addCallNote, enable: noteDescriptionToAdd().length > 0">Add</button>
+                                </div>
+                                <div class="col-md-1 btn">
+                                    <a href="#" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <span class="padding-left-15 padding-top-7 pull-left">
+                    Show: 
+                </span>
+                <div class="col-md-3 margin-bottom-10">
+                    <select id="filterCallNoteLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToFilterNotes, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'All' "></select>
+                </div>
+                @*<div class="col-md-1">
+                    <button class="btn btn-default" data-bind="click: resetCallNoteFilter">Reset Filter</button>
+                </div>*@
+                <div class="remove-list-style">
+                    <div class="clearfix"></div>
+                    <br/>
+                    <ul>
+                        <div data-bind="foreach: filteredCallNotes">
+                            <div id="allServiceCallNotes" class="service-call-line edit-line-item">
+                                <li class="row">
+                                    <div class="col-md-12">
+                                        <div class="no-left-right-padding">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <span data-bind="text: createdBy"></span>
+                                                    <span data-bind="text: moment(createdDate).format('L')"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p data-bind="text: note"></p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </li>
@@ -206,25 +281,6 @@
                     </ul>
                 </div>
             </section>
-
-            @*            <section >
-                <h3 class="col-md-12">Notes</h3>
-                <div class="remove-list-style">
-                    <div class="clearfix"></div>
-                    <ul>
-                        @foreach (var line in Model.ServicCallNotes)
-                        {
-                            <li class="row">
-                                <div class="col-md-12">
-                                    <span>@line.CreatedBy</span> <span>@Format.DateMonthDayYear(line.CreatedDate)</span> 
-                                    <div class="float-right-non-xs-screen">Ref: <a href="#">Placeholder</a></div>
-                                    <p>@line.Note</p>
-                                </div>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </section>*@
         </div>
     </div>
 </div>
@@ -237,16 +293,17 @@
 @section modules
 {
     <script>
-        define('modelData', function () {
+        define('modelData', function() {
             return {
-                initialServiceLines: @Html.Raw(Model.ServiceCallLines.ToJson())
-                };
+                initialServiceLines: @Html.Raw(Model.ServiceCallLines.ToJson()),
+                initialServiceNotes: @Html.Raw(Model.ServicCallNotes.ToJson())
+            }
         });
-        
-        define('dropdownData', function () {
+
+        define('dropdownData', function() {
             return {
-                availableLookups: @Html.Raw(Model.AddServiceCallLineItem.ProblemCodes.Select(x => new { problemId = x.Value, problemCode = x.Text }).ToJson())
-                };
+                availableLookups: @Html.Raw(Model.AddServiceCallLineItem.ProblemCodes.Select(x => new {problemId = x.Value, problemCode = x.Text}).ToJson())
+            }
         });
     </script>
-}
+    }

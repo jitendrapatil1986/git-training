@@ -181,6 +181,9 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Features\AddServiceCallNote\AddServiceCallNoteCommand.cs" />
+    <Compile Include="Features\AddServiceCallNote\AddServiceCallNoteCommandHandler.cs" />
+    <Compile Include="Features\AddServiceCallNote\AddServiceCallNoteModel.cs" />
     <Compile Include="Features\AssignWSRs\AssignedEmployee.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRCommand.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRCommandHandler.cs" />

@@ -121,6 +121,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
             const string sql = @"SELECT [ServiceCallNoteId]
                                       ,[ServiceCallId]
                                       ,[ServiceCallNote] as Note
+                                      ,[ServiceCallLineItemId]
                                       ,[CreatedDate]
                                       ,[CreatedBy]     
                                 FROM [ServiceCallNotes]

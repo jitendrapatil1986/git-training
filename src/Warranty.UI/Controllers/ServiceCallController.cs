@@ -9,11 +9,9 @@ namespace Warranty.UI.Controllers
     using Warranty.Core;
     using Warranty.Core.Entities;
     using Warranty.Core.Enumerations;
-    using Warranty.Core.Features.AddServiceCallLineItem;
     using Warranty.Core.Features.CreateServiceCall;
     using Warranty.Core.Features.CreateServiceCallCustomerSearch;
     using Warranty.Core.Features.CreateServiceCallVerifyCustomer;
-    using Warranty.Core.Features.EditServiceCallLineItem;
     using Warranty.Core.Features.ServiceCallSummary;
     using System.Linq;
     using Warranty.Core.Security;
@@ -32,11 +30,6 @@ namespace Warranty.UI.Controllers
         }
 
         public ActionResult Reassign(Guid id)
-        {
-            return View();
-        }
-
-        public ActionResult AddNote(Guid id)
         {
             return View();
         }
@@ -119,28 +112,6 @@ namespace Warranty.UI.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public JsonResult AddLineItem(AddServiceCallLineItemModel model)
-        {
-            var result = _mediator.Send(new AddServiceCallLineItemCommand
-                {
-                    ServiceCallId = model.ServiceCallId, ProblemCode = model.ProblemCode, ProblemDescription = model.ProblemDescription
-                });
-
-            return Json(new {newServiceLineId = result}, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public JsonResult EditLineItem(EditServiceCallLineModel model)
-        {
-            var result = _mediator.Send(new EditServiceCallLineCommand
-            {
-                ServiceCallLineItemId = model.ServiceCallLineItemId, ProblemCode = model.ProblemCode, ProblemDescription = model.ProblemDescription
-            });
-
-            return Json(new { serviceLineItemId = result }, JsonRequestBehavior.AllowGet);
-        }
-
         public ActionResult Approve(Guid id)
         {
             _mediator.Send(new ServiceCallApproveCommand
@@ -171,7 +142,7 @@ namespace Warranty.UI.Controllers
                 ServiceCallId = id,
                 Text = message
             });
-            return RedirectToAction("CallSummary", new { id });
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ToggleEscalate(Guid id, string message)
@@ -181,7 +152,7 @@ namespace Warranty.UI.Controllers
                 ServiceCallId = id,
                 Text = message
             });
-            return RedirectToAction("CallSummary", new { id });
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
     }
 }
