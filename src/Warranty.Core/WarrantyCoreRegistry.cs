@@ -1,4 +1,8 @@
-﻿namespace Warranty.Core
+﻿using FluentValidation;
+using Warranty.Core.ActivityLogger;
+using Warranty.Core.ApprovalInfrastructure.Interfaces;
+
+namespace Warranty.Core
 {
     using DataAccess;
     using Entities;
@@ -14,6 +18,14 @@
                      {
                          x.AssemblyContainingType<IAuditableEntity>();
                          x.AddAllTypesOf<IMap>();
+                         x.AssemblyContainingType<IMediator>();
+                         x.AddAllTypesOf(typeof(IValidator<>));
+                         x.AddAllTypesOf((typeof(IQueryHandler<,>)));
+                         x.AddAllTypesOf((typeof(ICommandHandler<>)));
+                         x.AddAllTypesOf((typeof(ICommandHandler<,>)));
+                         x.AddAllTypesOf((typeof(ICommandResultHandler<,>)));
+                         x.AddAllTypesOf((typeof(IApprovalService<>)));
+                         x.AddAllTypesOf((typeof(IActivityLogger)));
                          x.WithDefaultConventions();
                      });
 

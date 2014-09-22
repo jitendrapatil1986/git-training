@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using FluentValidation.Mvc;
-﻿using Warranty.UI.Mailer;
+using Warranty.Core.ActivityLogger;
+using Warranty.Core.ApprovalInfrastructure.Interfaces;
+using Warranty.UI.Mailer;
 
 namespace Warranty.UI.Core.Initialization
 {

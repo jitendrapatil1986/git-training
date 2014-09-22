@@ -23,20 +23,6 @@ namespace Warranty.UI.Core.Initialization
             {
                 cfg.AddRegistry<WarrantyCoreRegistry>();
                 cfg.AddRegistry<WarrantyWebsiteRegistry>();
-                cfg.Scan(scan =>
-                {
-                    scan.AssemblyContainingType<IMediator>();
-
-                    scan.AddAllTypesOf(typeof(IValidator<>));
-                    scan.AddAllTypesOf((typeof(IQueryHandler<,>)));
-                    scan.AddAllTypesOf((typeof(ICommandHandler<>)));
-                    scan.AddAllTypesOf((typeof(ICommandHandler<,>)));
-                    scan.AddAllTypesOf((typeof(ICommandResultHandler<,>)));
-                    scan.AddAllTypesOf((typeof(IApprovalService<>)));
-                    scan.AddAllTypesOf((typeof(IActivityLogger)));
-
-                    scan.WithDefaultConventions();
-                });
             });
 
             return container;
