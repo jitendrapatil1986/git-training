@@ -168,6 +168,7 @@
                                                                     <h4>
                                                                         <select class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
                                                                         <small class="text-muted view" data-bind="text: problemCode"></small>
+                                                                        <span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
                                                                     </h4>
                                                                 </div>
                                                             </div>
@@ -188,7 +189,6 @@
                                                                     </div>
                                                                     <div class="col-md-3 col-xs-4">
                                                                         <button type="button" class="btn btn-default btn-sm edit" data-bind="click: cancelLineItemChanges">Cancel</button>
-                                                                        @*<a href="#" class="small editable-cancel edit" data-bind="click: cancelLineItemChanges">Cancel</a>*@
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -197,7 +197,7 @@
                                                 </div>
                                                 <div class="col-md-3 margin-top-13 margin-bottom-3 text-align-right no-right-padding">
                                                     <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: lineEditing() == false">Edit</button>
-                                                    @* <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show" data-bind="visible: lineEditing() == false">Complete</button>*@
+                                                     @*<button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show" data-bind="click: completeLine, visible: lineEditing() == false">Complete</button>*@
                                                 </div>
                                             </div>
                                         </div>

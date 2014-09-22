@@ -75,8 +75,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public string CauseDescription { get; set; }
             public string ClassificationNote { get; set; }
             public string LineItemRoot { get; set; }
-            public bool Completed { get; set; }
             public DateTime CreatedDate { get; set; }
+            public ServiceCallLineItemStatus ServiceCallLineItemStatus { get; set; }
         }
 
         public class ServiceCallNote

@@ -101,8 +101,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     li.CauseDescription,
                                     li.ClassificationNote,
                                     li.LineItemRoot,
-                                    li.Completed,
-                                    li.CreatedDate
+                                    li.CreatedDate,
+                                    li.ServiceCallLineItemStatusId as ServiceCallLineItemStatus
                                 FROM ServiceCalls wc
                                 INNER JOIN ServiceCallLineItems li
                                 ON wc.ServiceCallId = li.ServiceCallId

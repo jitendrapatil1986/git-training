@@ -83,6 +83,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Up", "Up", "{20518451-E144-
 		Database\Warranty\Up\0055_AlterServiceCallCommentsToNotes.sql = Database\Warranty\Up\0055_AlterServiceCallCommentsToNotes.sql
 		Database\Warranty\Up\0056_AddServiceCallLineItemToServiceCallNotes.sql = Database\Warranty\Up\0056_AddServiceCallLineItemToServiceCallNotes.sql
 		Database\Warranty\Up\0057_AddActivityLogTable.sql = Database\Warranty\Up\0057_AddActivityLogTable.sql
+		Database\Warranty\Up\0058_CreateServiceCallLineItemStatuses.sql = Database\Warranty\Up\0058_CreateServiceCallLineItemStatuses.sql
+		Database\Warranty\Up\0059_AlterServiceCallLineItemsAddServiceCallLineItemStatusId.sql = Database\Warranty\Up\0059_AlterServiceCallLineItemsAddServiceCallLineItemStatusId.sql
+		Database\Warranty\Up\0060_AlterServiceCallsAddHomeOwnerSignatureDate.sql = Database\Warranty\Up\0060_AlterServiceCallsAddHomeOwnerSignatureDate.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{D0DD7813-D199-44F7-A1F3-EC38DCA342F2}"

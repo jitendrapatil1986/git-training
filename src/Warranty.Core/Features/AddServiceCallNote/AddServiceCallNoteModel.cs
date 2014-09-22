@@ -1,6 +1,7 @@
 ﻿namespace Warranty.Core.Features.AddServiceCallNote
 {
     using System;
+    using Enumerations;
 
     public class AddServiceCallNoteModel
     {
@@ -10,5 +11,6 @@
         public Guid? ServiceCallLineItemId { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string CreatedBy { get; set; }
+        public ServiceCallLineItemStatus ServiceCallLineItemStatus { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 {
     using System;
     using Entities;
+    using Enumerations;
     using NPoco;
 
     public class AddServiceCallLineItemCommandHandler : ICommandHandler<AddServiceCallLineItemCommand, AddServiceCallLineItemModel>
@@ -29,7 +30,8 @@
                         ServiceCallId = message.ServiceCallId,
                         LineNumber = newLine,
                         ProblemCode = message.ProblemCode,
-                        ProblemDescription = message.ProblemDescription
+                        ProblemDescription = message.ProblemDescription,
+                        ServiceCallLineItemStatus = ServiceCallLineItemStatus.Open
                     };
 
                 _database.Insert(newServiceLineItem);
@@ -38,7 +40,8 @@
                     {
                         ServiceCallLineItemId = newServiceLineItem.ServiceCallLineItemId,
                         ServiceCallId = newServiceLineItem.ServiceCallId,
-                        LineNumber = newServiceLineItem.LineNumber
+                        LineNumber = newServiceLineItem.LineNumber,
+                        ServiceCallLineItemStatus = newServiceLineItem.ServiceCallLineItemStatus
                     };
 
                 return model;
