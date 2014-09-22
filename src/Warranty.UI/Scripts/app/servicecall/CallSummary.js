@@ -31,7 +31,7 @@ require(['/Scripts/app/main.js'], function () {
                     type: "POST",
                     url: actionUrl,
                     data: { id: serviceCallId, message: message },
-                    success: function () {
+                    success: function (data) {
                         parentButton.removeClass("active");
                         changeButtonText(parentButton);
                         popupWindow.hide();
