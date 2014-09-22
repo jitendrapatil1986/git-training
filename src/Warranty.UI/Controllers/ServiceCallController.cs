@@ -142,7 +142,7 @@ namespace Warranty.UI.Controllers
                 ServiceCallId = id,
                 Text = message
             });
-            return RedirectToAction("CallSummary", new { id });
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ToggleEscalate(Guid id, string message)
@@ -152,7 +152,7 @@ namespace Warranty.UI.Controllers
                 ServiceCallId = id,
                 Text = message
             });
-            return RedirectToAction("CallSummary", new { id });
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
     }
 }
