@@ -18,7 +18,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            @Html.DisplayFor(x => x.HomeOwnerName)
+                            @Format.HomeOwner(Model.HomeOwnerName, Model.HomeOwnerNumber)
                             <br/>
                             @Html.DisplayFor(x => x.AddressLine)
                             <br/>

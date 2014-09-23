@@ -39,6 +39,7 @@
                                         , j.AddressLine as [Address]
                                         , wc.CreatedDate 
                                         , ho.HomeOwnerName
+                                        , ho.HomeOwnerNumber
                                         , NumberOfLineItems
                                         , ho.HomePhone as PhoneNumber
                                         , e.EmployeeName as AssignedTo

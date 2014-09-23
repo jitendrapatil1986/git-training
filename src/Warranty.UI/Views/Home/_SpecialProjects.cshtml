@@ -30,7 +30,7 @@ else
                                 @Format.NumberOfLineItems(line.NumberOfLineItems)
                             </div>
                             <div class="col-md-10">
-                                @line.HomeownerName<br />@line.Address
+                                @Format.HomeOwner(line.HomeownerName, line.HomeownerNumber)<br />@line.Address
                             </div>
                         </div>
                         <div class="col-md-3">

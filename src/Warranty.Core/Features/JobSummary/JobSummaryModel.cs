@@ -46,6 +46,8 @@ namespace Warranty.Core.Features.JobSummary
         public IEnumerable<JobPayment> JobPayments { get; set; }
         public IEnumerable<JobSelection> JobSelections { get; set; }
 
+        public int HomeOwnerNumber { get; set; }
+
         public class JobSelection
         {
             public Guid JobOptionId { get; set; }

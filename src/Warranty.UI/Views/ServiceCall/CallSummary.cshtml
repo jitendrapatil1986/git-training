@@ -12,7 +12,7 @@
     if (completionDate == null)
     {
     <div class="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(createdDate)">
-        <span class="glyphicon glyphicon-time text-muted"></span>@Format.ServiceCallDaysLeft(numberOfDaysRemaining)<br />
+        <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(numberOfDaysRemaining)<br />
         <div class="progress time-remaining-progress hidden-sm hidden-xs">
             <div class="progress-bar @Css.ServiceCallProgressBar(numberOfDaysRemaining)" role="progressbar" style="width: @percentComplete%">
                 <span class="sr-only">@percentComplete% Complete</span>
@@ -57,17 +57,17 @@
             <div class="panel-heading text-capitalize">
                 <div class="row remove-list-style">
                     <div class="col-md-3 margin-bottom-10">
-                        <h3 class="panel-title text-capitalize">@Model.ServiceCallSummary.HomeownerName</h3>
+                        <h3 class="panel-title text-capitalize">@Format.HomeOwner(Model.ServiceCallSummary.HomeownerName, Model.ServiceCallSummary.HomeownerNumber)</h3>
                         <ul>
-                            <li>@Html.ActionLink(Model.ServiceCallSummary.Address, "JobSummary", "Job", new { id = Model.ServiceCallSummary.JobId }, null)</li>
+                            <li>@Model.ServiceCallSummary.Address</li>
                             <li>@Format.PhoneNumber(Model.ServiceCallSummary.PhoneNumber)</li>
-                            <li><a>@Format.Email(Model.ServiceCallSummary.EmailAddress)</a></li>
+                            <li><a href="mailto:@Model.ServiceCallSummary.EmailAddress?subject=David Weekley Homes Warranty Service Call %23 @Model.ServiceCallSummary.CallNumber">@Format.Email(Model.ServiceCallSummary.EmailAddress)</a></li>
                         </ul>
                         <span>@Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate)</span>
                     </div>
                     <div class="col-md-3">
                         <ul class="border-bottom-1-solid">
-                            <li class="clearfix"><span class="pull-left">Created By:</span><span class="pull-right">Mr. Placeholder</span></li>
+                            <li class="clearfix"><span class="pull-left">Created By:</span><span class="pull-right">@Model.ServiceCallSummary.CreatedBy</span></li>
                             <li class="clearfix"><span class="pull-left">Created On:</span><span class="pull-right">@Format.DateMonthDayYear(Model.ServiceCallSummary.CreatedDate)</span></li>
                             <li class="clearfix"><span class="pull-left">Assignee:</span><span class="pull-right">@Model.ServiceCallSummary.AssignedTo</span></li>
                         </ul>
