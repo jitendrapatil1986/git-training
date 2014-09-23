@@ -31,7 +31,7 @@
                         LineNumber = newLine,
                         ProblemCode = message.ProblemCode,
                         ProblemDescription = message.ProblemDescription,
-                        ServiceCallLineItemStatus = ServiceCallLineItemStatus.Open
+                        ServiceCallLineItemStatus = ServiceCallLineItemStatus.Open,
                     };
 
                 _database.Insert(newServiceLineItem);
@@ -41,7 +41,7 @@
                         ServiceCallLineItemId = newServiceLineItem.ServiceCallLineItemId,
                         ServiceCallId = newServiceLineItem.ServiceCallId,
                         LineNumber = newServiceLineItem.LineNumber,
-                        ServiceCallLineItemStatus = newServiceLineItem.ServiceCallLineItemStatus
+                        ServiceCallLineItemStatus = newServiceLineItem.ServiceCallLineItemStatus,
                     };
 
                 return model;

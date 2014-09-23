@@ -21,7 +21,7 @@
                 var newServiceCallNote = new ServiceCallNote
                     {
                         ServiceCallId = message.ServiceCallId,
-                        Note = message.Note
+                        Note = message.Note,
                     };
 
                 if (message.ServiceCallLineItemId.GetValueOrDefault() != Guid.Empty)
@@ -46,7 +46,7 @@
                         Note = newServiceCallNote.Note,
                         CreatedBy = newServiceCallNote.CreatedBy,
                         CreatedDate = newServiceCallNote.CreatedDate,
-                        ServiceCallLineItemStatus = ServiceCallLineItemStatus.InProgress
+                        ServiceCallLineItemStatus = ServiceCallLineItemStatus.InProgress,
                     };
 
                 return model;
