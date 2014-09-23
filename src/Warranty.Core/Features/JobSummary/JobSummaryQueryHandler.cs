@@ -74,6 +74,7 @@ namespace Warranty.Core.Features.JobSummary
                                 ,j.[UpdatedBy]
                                 ,j.[JdeIdentifier]
                                 ,ho.HomeOwnerName
+                                ,ho.HomeOwnerNumber
                                 ,ho.HomePhone as PhoneNumber
                                 ,ho.OtherPhone as OtherNumber
                                 ,ho.WorkPhone1 as WorkNumber

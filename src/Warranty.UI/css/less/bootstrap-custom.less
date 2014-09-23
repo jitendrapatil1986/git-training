@@ -7,8 +7,6 @@
     background-image: linear-gradient(white, white 50%, #f6f5ee);
     background-repeat: no-repeat;
     border-top: solid 3px #005090;
-    border-radius: 4px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
     min-height: 50px;
     padding: 0 20px;
     margin: 0;
@@ -72,43 +70,91 @@
     height: 50px;
 }
 
-.subnav > .container > .nav > li.divider-vertical {
-    height: 35px;
-    margin: 0;
+.nav {
+    padding-right: 0;
 }
 
-.subnav > .container > .nav > li > a {
-    padding: 7px 10px;
-    color: @BrandColor;
+@media (min-width: 980px)
+{
+    .subnav > .container > .nav > li.divider-vertical
+    {
+        height: 35px;
+        margin: 0;
+    }
+
+    .subnav > .container > .nav > li > a
+    {
+        padding: 7px 10px;
+        color: @BrandColor;
+    }
+
+    div.subnav-fixed
+    {
+        top: 54px;
+    }
+
+    div.subnav
+    {
+        text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .subnav-fixed
+    {
+        border-color: #d5d5d5;
+        border-radius: 0;
+        border-width: 0 0 1px;
+        box-shadow: 0 1px 0 #fff inset, 0 1px 5px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        z-index: 1020;
+    }
+
+    .subnav
+    {
+        background-color: #eeeeee;
+        background-image: linear-gradient(white, white 25%, #f1f0e6);
+        background-repeat: repeat-x;
+        border-bottom: 1px solid #e7e7e5;
+        border-radius: 0;
+        height: 36px;
+        margin-bottom: 60px;
+        width: 100%;
+    }
 }
 
-div.subnav-fixed {
-    top: 54px;
-}
 
-div.subnav {
-    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.2);
+@media (max-width: 979px) {
+    .subnav {
+        margin-top: 60px;
+        top: auto;
+        z-index: auto;
+        width: auto;
+        height: auto;
+        background: #fff; /* whole background property since we use a background-image for gradient */
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+    }
+ 
+    .subnav .nav > li {
+        float: none;
+    }
+ 
+    .subnav .nav > li > a {
+        border: 0;
+    }
+ 
+    .subnav .nav > li + li > a {
+        /*border-top: 1px solid #e5e5e5;*/
+    }
+ 
+    .subnav .nav > li:first-child > a,
+    .subnav .nav > li:first-child > a:hover {
+        /*-webkit-border-radius: 4px 4px 0 0;
+        -moz-border-radius: 4px 4px 0 0;
+        border-radius: 4px 4px 0 0;*/
+    }
 }
-
-.subnav-fixed {
-    border-color: #d5d5d5;
-    border-radius: 0;
-    border-width: 0 0 1px;
-    box-shadow: 0 1px 0 #fff inset, 0 1px 5px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    z-index: 1020;
-}
-
-.subnav {
-    background-color: #eeeeee;
-    background-image: linear-gradient(white, white 25%, #f1f0e6);
-    background-repeat: repeat-x;
-    border: 1px solid #e7e7e5;
-    border-radius: 4px;
-    height: 36px;
-    margin-bottom: 60px;
-    width: 100%;
-}
+ 
 
 .nav-tabs > li {
     font-size: 1.1em;
@@ -246,7 +292,7 @@ div.subnav {
 
 .nav-extra .form-control {
     line-height: 1em;
-    width: 200px;
+    width: 225px;
 }
 
 .nav-extra .input-group {

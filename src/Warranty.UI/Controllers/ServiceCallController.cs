@@ -103,7 +103,10 @@ namespace Warranty.UI.Controllers
                 if (_userSession.GetCurrentUser().IsInRole(UserRoles.WarrantyServiceManager) || _userSession.GetCurrentUser().IsInRole(UserRoles.WarrantyServiceCoordinator))
                 { 
                     var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery { ServiceCallId = newCallId });
-                    _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
+                    if (notificationModel.WarrantyRepresentativeEmployeeEmail != null)
+                    {
+                        _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
+                    }
                 }
 
                 return RedirectToAction("CallSummary", new {id = newCallId} );

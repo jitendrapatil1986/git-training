@@ -12,6 +12,7 @@
 
         public string JobNumber { get; set; }
         public string HomeOwnerName { get; set; }
+        public int HomeOwnerNumber { get; set; }
         public string HomePhone { get; set; }
         public string OtherPhone { get; set; }
         public string WorkPhone1 { get; set; }

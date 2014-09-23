@@ -272,6 +272,7 @@
     <Content Include="Scripts\app\Admin\ManageAssignments.js" />
     <Content Include="Scripts\app\admin\ManageLookups.js" />
     <Content Include="Scripts\app\ajaxEvents.js" />
+    <Content Include="Scripts\app\responsiveTabs.js" />
     <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\search.js" />
     <Content Include="Scripts\app\servicecall\CallSummary.js" />
@@ -288,7 +289,6 @@
     <Content Include="Scripts\lib\handlebars.runtime.min.js" />
     <Content Include="Scripts\lib\bloodhound.js" />
     <Content Include="Scripts\lib\bloodhound.min.js" />
-    <Content Include="Scripts\config\call-search.js" />
     <Content Include="Scripts\config\job-search.js" />
     <Content Include="Scripts\app\customBindings.js" />
     <Content Include="Scripts\app\dates.js" />
@@ -304,6 +304,7 @@
     <Content Include="Scripts\app\shared\confirmMessage.js" />
     <Content Include="Scripts\app\shared\Default.js" />
     <Content Include="Scripts\lib\jquery.color-2.1.0.min.js" />
+    <Content Include="Scripts\lib\responsive.tabs.js" />
     <Content Include="Scripts\lib\text.js" />
     <Content Include="Scripts\templates\call-search-item.html" />
     <Content Include="Scripts\templates\customer-search-item.html" />
@@ -382,6 +383,7 @@
     <Content Include="Views\WarrantyMailer\NewServiceCallAssignedToWsr.cshtml" />
     <Content Include="Views\WarrantyMailer\_Layout.cshtml" />
     <Content Include="Views\Home\_ToDoCommunityEmployeeAssignment.cshtml" />
+    <Content Include="Views\Home\_WarrantyDollarsSpentWidget.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
