@@ -12,7 +12,7 @@
         public string HomePhone { get; set; }
         public string EmailAddress { get; set; }
         public int HomeOwnerNumber { get; set; }
-        public string HomeOwnerNumberWithSuffix {get { return HomeOwnerNumber.AddOrdinalSuffix(); }}
+        public string HomeOwnerNumberWithSuffix {get { return HomeOwnerNumber.ToOrdinalSuffixed(); }}
         public bool NotFirstHomeOwner{get { return HomeOwnerNumber > 1; }}
     }
 }
