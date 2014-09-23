@@ -24,10 +24,12 @@
                         Note = message.Note
                     };
 
-                if (!((message.ServiceCallLineItemId == Guid.Empty) || (message.ServiceCallLineItemId == null)))
+                if (message.ServiceCallLineItemId.GetValueOrDefault() != Guid.Empty)
                 {
                     var updateServiceCallLine = _database.SingleById<ServiceCallLineItem>(message.ServiceCallLineItemId);
-                    updateServiceCallLine.ServiceCallLineItemStatus = ServiceCallLineItemStatus.InProgress;
+                    
+                    if (updateServiceCallLine.ServiceCallLineItemStatus == ServiceCallLineItemStatus.Open)
+                        updateServiceCallLine.ServiceCallLineItemStatus = ServiceCallLineItemStatus.InProgress;
 
                     _database.Update(updateServiceCallLine);
 

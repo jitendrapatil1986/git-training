@@ -1,11 +1,6 @@
 ALTER TABLE [dbo].[ServiceCallLineItems]
 ADD [ServiceCallLineItemStatusId] [tinyint] NULL
 
-ALTER TABLE [dbo].[ServiceCallLineItems]  WITH CHECK ADD  CONSTRAINT [FK_ServiceCallLineItems_ServiceCallLineItemStatusId] FOREIGN KEY([ServiceCallLineItemStatusId])
-REFERENCES [lookups].[ServiceCallLineItemStatuses] ([ServiceCallLineItemStatusId])
-
-ALTER TABLE [dbo].[ServiceCallLineItems] CHECK CONSTRAINT [FK_ServiceCallLineItems_ServiceCallLineItemStatusId]
-
 --Set all non-completed lines initally to Open status.
 UPDATE [ServiceCallLineItems] SET [ServiceCallLineItemStatusId] = 1 WHERE [Completed] <> 1
 
