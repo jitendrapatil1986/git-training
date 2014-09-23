@@ -127,22 +127,20 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     @Html.Label("Problem Code")
-                                    @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select Problem Code", new { id = "addCallLineProblemCode", @class = "form-control" })
+                                    @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select Problem Code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind="value: problemCodeToAdd" })
                                 </div>
                             </div>
                             <br />
                             <div class="row">
                                 <div class="col-md-12">
                                     @Html.Label("Description")
-                                    @*@Html.TextArea("Description", null, new {id="addCallLineProblemDescription", @class="form-control", data_bind="value: problemDescription, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Description'}"})*@
-                                    @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "attr:{placeholder: 'Add Description'}" })
+                                    @Html.TextArea("Description", null, new {id="addCallLineProblemDescription", @class="form-control", data_bind="value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Description'}"})
                                 </div>
                             </div>
                             <br />
                             <div class="row">
                                 <div class="col-md-1">
-                                    @*<button class="btn btn-default" data-bind="click: addLineItem, enable: problemDescription().length > 0">Save</button>*@
-                                    <button class="btn btn-default" data-bind="click: addLineItem">Save</button>
+                                    <button class="btn btn-primary" data-bind="click: addLineItem, enable: problemDescriptionToAdd().length > 0">Add</button>
                                 </div>
                                 <div class="col-md-1 btn">
                                     <a href="#" data-toggle="collapse" data-target="#addCallLineItem">Cancel</a>
@@ -233,7 +231,7 @@
                             <br/>
                             <div class="row">
                                 <div class="col-md-1">
-                                    <button class="btn btn-default" data-bind="click: addCallNote, enable: noteDescriptionToAdd().length > 0">Add</button>
+                                    <button class="btn btn-primary" data-bind="click: addCallNote, enable: noteDescriptionToAdd().length > 0">Add</button>
                                 </div>
                                 <div class="col-md-1 btn">
                                     <a href="#" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</a>
@@ -243,9 +241,9 @@
                     </div>
                 </div>
                 <br />
-                <span class="padding-left-15 padding-top-7 pull-left">
+                <em data-bind="visible: allCallNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">No Notes Available</em>
+                <span data-bind="visible: allCallNotes().length > 1" class="padding-left-15 padding-top-7 pull-left">
                     Show: 
-                    <span data-bind="visible: allCallNotes().length < 1">(No Available Notes)</span>
                 </span>
                 <div class="col-md-3 margin-bottom-10">
                     <select id="filterCallNoteLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToFilterNotes, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'All', visible: allCallNotes().length > 0 "></select>

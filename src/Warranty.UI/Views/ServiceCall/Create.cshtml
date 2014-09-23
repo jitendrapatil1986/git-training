@@ -46,9 +46,9 @@
                                         </div>
                                         <div class="row col-md-10">
                                             @Html.Label("Description")
-                                            @Html.TextArea("Description", null, new {id = "problemDescription", @class = "form-control"})
+                                            @Html.TextArea("Description", null, new {id = "problemDescription", @class = "form-control",  data_bind="text: problemDescriptionToAdd, value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Description'}"})
                                             <br/>
-                                            <button class="btn btn-default" data-bind="click: addLineItem">Add Item</button>
+                                            <button class="btn btn-default" data-bind="click: addLineItem, enable: problemDescriptionToAdd().length > 0">Add Item</button>
                                         </div>
                                         <div class="clearfix"></div>
                                         <br/>

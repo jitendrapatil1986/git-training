@@ -210,6 +210,9 @@ require(['/Scripts/app/main.js'], function () {
                 
                 self.allLineItems = ko.observableArray([]);
                 self.theLookups = dropdownData.availableLookups;  //dropdown list does not need to be observable. Only the actual elements w/i the array do.
+                self.problemDescriptionToAdd = ko.observable('');
+                self.problemCodeToAdd = ko.observable();
+                
                 self.allCallNotes = ko.observableArray([]);
                 self.selectedLineToAttachToNote = ko.observable();
                 self.selectedLineToFilterNotes = ko.observable();
@@ -280,6 +283,9 @@ require(['/Scripts/app/main.js'], function () {
                             $("#addCallLineProblemCode").val('');
                             self.problemDescription = '';
                         });
+                    
+                    $(newProblemCode).parent().removeClass("has-error");
+                    $(newProblemDescription).parent().removeClass("has-error");
                 };
 
                 self.addCallNote = function () {
