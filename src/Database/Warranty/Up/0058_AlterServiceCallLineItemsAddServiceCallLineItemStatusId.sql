@@ -1,6 +1,8 @@
 ALTER TABLE [dbo].[ServiceCallLineItems]
 ADD [ServiceCallLineItemStatusId] [tinyint] NULL
 
+GO
+
 --Set all non-completed lines initally to Open status.
 UPDATE [ServiceCallLineItems] SET [ServiceCallLineItemStatusId] = 1 WHERE [Completed] <> 1
 
