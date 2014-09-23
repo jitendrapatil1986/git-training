@@ -1,5 +1,9 @@
-﻿<strong>{{HomeOwnerName}}</strong><br/>
+﻿<strong>{{HomeOwnerName}}</strong> 
+{{#if NotFirstHomeOwner}}
+    <span class="label label-info">{{HomeOwnerNumberWithSuffix}}</span>
+{{/if}}
+<br/>
 <span class="text-muted">
-{{AddressLine}}<br/>
-{{HomePhone}}
-</span>        
+    {{AddressLine}}<br/>
+    {{HomePhone}}
+</span>

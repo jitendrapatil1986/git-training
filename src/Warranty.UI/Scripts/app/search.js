@@ -1,5 +1,11 @@
 ﻿define(['require', 'jquery', 'underscore', 'app/searchValidate', 'typeahead', 'bloodhound', 'handlebars'],
     function (require, $, _, validate) {
+        Handlebars.registerHelper('if', function(conditional, options) {
+            if (conditional) {
+                return options.fn(this);
+            }
+        });
+    
         var minCharsToSearch = 2,
             init = function (searchConfig) {
                 var searchBar = $(searchConfig.searchBarId),
