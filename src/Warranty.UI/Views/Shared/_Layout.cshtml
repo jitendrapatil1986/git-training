@@ -62,12 +62,12 @@
         @RenderSection("modules", required: false)
     </head>
     <body>
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#"><img src="@Url.Content("~/img/DWH logo_color_233x34.png")" /></a>
                 </div>
-                <ul class="nav navbar-nav navbar-right hidden-xs">
+                <ul class="nav navbar-nav navbar-right hidden-xs hidden-sm">
                     <li class="divider divider-vertical"></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Help <b class="caret"></b></a>
@@ -80,18 +80,18 @@
                     </li>                
                 </ul>
                 <div class="navbar-brand pull-right hidden-xs">Warranty</div>
+
             </div>
         </div>
         
-        <!--Menu for Desktop view.-->
-        <div class="visible-lg visible-md subnav subnav-fixed">
+        <div class="subnav subnav-fixed" role="navigation">
             <div class="container">
-                <ul class="nav navbar-nav no-bottom-margin">
+                <ul class="nav navbar-nav col-xs-6 col-sm-11 col-md-10">
                     @NavItemHelper(NavItem.Home, Url.Action("Index", "Home"))
                 </ul>
-                <div class="nav nav-extra">
+                <div class="nav nav-extra col-xs-6 col-sm-1 col-md-2">
                     <div class="pull-right">
-                        <div class="input-group pull-right">
+                        <div class="input-group">
                             <input id="searchBar" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder=""/>
                             <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
                         </div>
@@ -100,41 +100,7 @@
             </div>
         </div>
         
-        <!--Menu for Mobile view.-->
-@*        <div class="visible-xs visible-sm subnav subnav-fixed" >
-            <div class="container">
-                <div class="navbar-header">
-                    <div class="panel-group" id="accordion">
-                        <div class="panel panel-default">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseSubMenuMobile">
-                                <button type="button" class="navbar-toggle collapsed no-top-margin no-bottom-margin" data-toggle="collapse" data-target="#navbar-collapse-submenu">
-                                    <span class="sr-only">Toggle navigation</span>
-                                    <span class="glyphicon glyphicon-search"></span>
-                                </button>
-                                <a href="@Url.Action("Index", "Home")" class="navbar-brand @(NavItem.Home.DisplayName.Equals(ViewData[Warranty.UI.Core.Filters.CurrentNavSectionAttribute.ViewDataKey]) ? "active" : "")">@NavItem.Home.Title</a>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>*@
-
         <div class="container main-container">
-@*            <!--Menu for Mobile view.-->
-            <div class="visible-xs visible-sm">
-                <div id="collapseSubMenuMobile" class="collapse">
-                    <div class="col-md-3 pull-right">
-                        <div class="input-group">
-                            <input id="searchBarMobile" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder=""/>
-                            <div class="input-group-btn">
-                                <button type="button" class="btn btn-default dropdown-toggle margin-bottom-4" data-toggle="dropdown">Type <span class="caret"></span></button>
-                                <ul class="dropdown-menu dropdown-menu-right"></ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
-
             @RenderBody()
         </div>
 
