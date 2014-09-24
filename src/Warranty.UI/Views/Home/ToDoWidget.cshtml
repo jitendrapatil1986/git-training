@@ -33,11 +33,28 @@
                     @Html.Partial(castedModel.ViewName, castedModel.Model)
                 }
             }
+            if (Model.ToDos.Count() > 5)
+            {
+                <div>
+                    <span class="text-muted">Show:</span> 
+                    <a href="#" class="show-more-todos">5</a>
+                    @if (Model.ToDos.Count() > 5)
+                    {
+                        <span> | <a href="#" class="show-more-todos">10</a></span>
+                    }
+                    @if (Model.ToDos.Count() > 10)
+                    {
+                        <span> | <a href="#" class="show-more-todos">All</a></span>
+                    }
+                </div>
+                <input type="hidden" id="Last_Display_Size" value="5"/>
+            }
         }
         else
         {
             <em>No To Dos Today.</em>
         }
+
     </div>
 </div>
 
