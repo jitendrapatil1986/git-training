@@ -88,5 +88,11 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public DateTime? CreatedDate { get; set; }
             public string CreatedBy { get; set; }
         }
+
+        public class EmployeeViewModel
+        {
+            public string EmployeeNumber { get; set; }
+            public string DisplayName { get; set; }
+        }
     }
 }
