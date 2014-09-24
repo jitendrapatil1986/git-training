@@ -125,9 +125,6 @@ require(['/Scripts/app/main.js'], function () {
                 
                 //save line item changes.
                 self.saveLineItemChanges = function () {
-                    this.problemCodeEditing(false);
-                    this.problemDescriptionEditing(false);
-                    this.lineEditing(false);
                     updateServiceCallLineItem(this);
                 };
                 
@@ -172,7 +169,17 @@ require(['/Scripts/app/main.js'], function () {
             }
 
             function updateServiceCallLineItem(line) {
-                //TODO: Add validations.
+                var updateProblemCode = $("#updateCallLineProblemCode");
+                if (updateProblemCode.val() == "") {
+                    $(updateProblemCode).parent().addClass("has-error");
+                    return;
+                }
+
+                var updateProblemDescription = $("#updateCallLineProblemDescription");
+                if (updateProblemDescription.val() == "") {
+                    $(updateProblemDescription).parent().addClass("has-error");
+                    return;
+                }
 
                 var lineData = ko.toJSON(line);
 
@@ -190,7 +197,15 @@ require(['/Scripts/app/main.js'], function () {
                     .done(function (response) {
                         toastr.success("Success! Item updated.");
                         self.problemCode = line.problemCode;
+                        
+                        //change to non-edit mode once success has occurred.
+                        line.problemCodeEditing(false);
+                        line.problemDescriptionEditing(false);
+                        line.lineEditing(false);
                     });
+                
+                $(updateProblemCode).parent().removeClass("has-error");
+                $(updateProblemDescription).parent().removeClass("has-error");
             }
             
             function completeServiceCallLineItem(line) {

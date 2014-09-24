@@ -214,7 +214,7 @@
                                                             <div class="col-md-9">
                                                                 <div class="editor" data-bind="css: { editing: problemCodeEditing }"> 
                                                                     <h4>
-                                                                        <select class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
+                                                                        <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
                                                                         <small class="text-muted view" data-bind="text: problemCode"></small>
                                                                         <span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
                                                                     </h4>
@@ -233,7 +233,7 @@
                                                             <div class="col-md-4 col-xs-12 no-left-right-padding top-buffer bottom-buffer">
                                                                 <div class="editor" data-bind="css: { editing: lineEditing }">
                                                                     <div class="col-md-3 col-xs-4">
-                                                                        <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges">Save</button>
+                                                                        <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges, enable: problemDescription().length > 0">Save</button>
                                                                     </div>
                                                                     <div class="col-md-3 col-xs-4">
                                                                         <button type="button" class="btn btn-default btn-sm edit" data-bind="click: cancelLineItemChanges">Cancel</button>
