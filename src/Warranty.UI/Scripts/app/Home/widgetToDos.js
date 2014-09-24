@@ -1,5 +1,32 @@
 define(['urls','jquery'], function(urls, $) {
-    $(function() {
+    $(function () {
+        $('.todo:lt(5)').removeClass('hide');
+
+        $('.show-more-todos').click(function () {
+            var value = $(this).text();
+            $("#Last_Display_Size").val(value);
+            hideShowTodos();
+        });
+        
+        function hideShowTodos() {
+            var classToIntersect = "";
+            var selectedTodoType = $("#toDoSelect").find('option:selected').val();
+            
+            if (selectedTodoType) {
+                classToIntersect = "." + selectedTodoType;
+            }
+            
+            var value = $("#Last_Display_Size").val();
+            if (value == 'All') {
+                $('.todo').addClass('hide');
+                $('.todo' + classToIntersect).removeClass('hide');
+            } else {
+                var show = value - 1;
+                $('.todo').addClass('hide');
+                $('.todo' + classToIntersect + ':lt("' + show + '")').removeClass('hide');
+            }
+        }
+        
         $('#toDoSelect').change(function() {
             if ($(this).find('option:selected').text() == 'All') {
                 $('.todo').removeClass('hide');
@@ -8,6 +35,7 @@ define(['urls','jquery'], function(urls, $) {
                 $('.todo').addClass('hide');
                 $('.' + toDoToShow).removeClass('hide');
             }
+            hideShowTodos();
         });
             
         $(".approve-button").click(function (e) {
@@ -30,21 +58,19 @@ define(['urls','jquery'], function(urls, $) {
                 url: url,
                 data: { id: serviceCallId },
                 success: function (result) {
-                    var divToHide = button.parent().parent();
-                    divToHide.addClass('hide');
+                    var divToRemove = button.parent().parent();
+                    divToRemove.remove();
+                    updateTodoWidgetElements();
                 }
             });
         }
         
-
-
         $(".assign-employee-community-button").click(function (e) {
             e.preventDefault();
             var communityId = $(this).data("community-id");
             var employeeNumber = $("#list_assignable_employee_" + communityId).val();
             
             var url = urls.Community.AssignEmployee;
-            var button = $(this);
             
             $.ajax({
                 type: "POST",
@@ -52,10 +78,18 @@ define(['urls','jquery'], function(urls, $) {
                 data: { CommunityId: communityId, EmployeeNumber: employeeNumber },
                 success: function (result) {
                         if (result.success == true) {
-                        $('#community-todo-' + communityId).addClass('hide');
-                    }
+                            $('#community-todo-' + communityId).remove();
+                            updateTodoWidgetElements();
+                        }
                 }
             });
         });
+        
+        function updateTodoWidgetElements() {
+            var nextTodo = $(".todo.hide").first();
+            if (nextTodo) {
+                nextTodo.removeClass("hide");
+            }
+        }
     });
 });

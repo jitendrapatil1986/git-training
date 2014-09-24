@@ -1,7 +1,7 @@
 ﻿@using Warranty.Core.Enumerations
 @using Warranty.UI.Core.Helpers
 @model Warranty.Core.ToDoInfrastructure.Models.ToDoServiceCallApprovalModel
-<div class="todo @Css.ToDoClass(ToDoType.ServiceCallApproval)">
+<div class="todo @Css.ToDoClass(ToDoType.ServiceCallApproval) hide">
     
     <div class="todo-widget-action-buttons">
         <a href="#" data-service-call-id="@Model.ServiceCallId" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
