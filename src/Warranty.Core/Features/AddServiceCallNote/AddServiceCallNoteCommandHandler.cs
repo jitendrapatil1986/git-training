@@ -24,12 +24,16 @@
                         Note = message.Note,
                     };
 
+                ServiceCallLineItemStatus serviceLineStatus = null;
+
                 if (message.ServiceCallLineItemId.GetValueOrDefault() != Guid.Empty)
                 {
                     var updateServiceCallLine = _database.SingleById<ServiceCallLineItem>(message.ServiceCallLineItemId);
                     
                     if (updateServiceCallLine.ServiceCallLineItemStatus == ServiceCallLineItemStatus.Open)
                         updateServiceCallLine.ServiceCallLineItemStatus = ServiceCallLineItemStatus.InProgress;
+
+                    serviceLineStatus = updateServiceCallLine.ServiceCallLineItemStatus;
 
                     _database.Update(updateServiceCallLine);
 
@@ -46,8 +50,10 @@
                         Note = newServiceCallNote.Note,
                         CreatedBy = newServiceCallNote.CreatedBy,
                         CreatedDate = newServiceCallNote.CreatedDate,
-                        ServiceCallLineItemStatus = ServiceCallLineItemStatus.InProgress,
                     };
+
+                if (serviceLineStatus != null)
+                    model.ServiceCallLineItemStatus = serviceLineStatus;
 
                 return model;
             }

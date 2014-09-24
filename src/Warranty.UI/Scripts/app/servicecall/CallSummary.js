@@ -238,7 +238,7 @@ require(['/Scripts/app/main.js'], function () {
 
                 self.areAllLineItemsClosed = function () {
                     var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
-                        return (i.serviceCallLineItemStatus().displayName.toLowerCase() != serviceCallStatusData.HomeownerSigned.DisplayName.toLowerCase());
+                        return (i.serviceCallLineItemStatus().displayName.toLowerCase() != serviceCallStatusData.Closed.DisplayName.toLowerCase());
                     });
 
                     if (anyNonCompletedLineItem)
