@@ -25,6 +25,12 @@ define(['urls','jquery'], function(urls, $) {
                 $('.todo').addClass('hide');
                 $('.todo' + classToIntersect + ':lt("' + show + '")').removeClass('hide');
             }
+            
+            if ($('.todo' + classToIntersect).length >= 5) {
+                $('#ToDo_Display_Size_Controls').show();
+            } else {
+                $('#ToDo_Display_Size_Controls').hide();
+            }
         }
         
         $('#toDoSelect').change(function() {
