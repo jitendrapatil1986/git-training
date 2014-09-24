@@ -249,6 +249,7 @@
     <Content Include="App_Readme\Handlebarsjs_LICENSE" />
     <None Include="css\less\bootstrap-custom.less" />
     <Content Include="App_Readme\Elmah.txt" />
+    <Content Include="css\bootstrap-editable.css" />
     <Content Include="css\bootstrap-theme.css" />
     <Content Include="css\bootstrap-theme.min.css" />
     <Content Include="css\bootstrap.css" />
@@ -260,6 +261,7 @@
     <Content Include="img\alpha.png" />
     <Content Include="img\background_tab.png" />
     <Content Include="img\background_tab_hover.png" />
+    <Content Include="img\clear.png" />
     <Content Include="img\DWH logo_color.png" />
     <Content Include="img\DWH logo_color_233x34.png" />
     <Content Include="img\DWH logo_color_233x34_dev.png" />
@@ -268,6 +270,7 @@
     <Content Include="img\headerWrapper_bg.png" />
     <Content Include="img\hue.png" />
     <Content Include="img\loader.gif" />
+    <Content Include="img\loading.gif" />
     <Content Include="img\saturation.png" />
     <Content Include="Scripts\app\Admin\ManageAssignments.js" />
     <Content Include="Scripts\app\admin\ManageLookups.js" />
@@ -279,6 +282,7 @@
     <Content Include="Scripts\app\servicecall\create.js" />
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
     <Content Include="Scripts\config\customer-search.js" />
+    <Content Include="Scripts\lib\bootstrap-editable.min.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />
     <Content Include="Scripts\lib\handlebars.amd.min.js" />
     <Content Include="Scripts\lib\handlebars.js" />

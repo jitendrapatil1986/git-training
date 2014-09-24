@@ -14,6 +14,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
         public IEnumerable<ServiceCallNote> ServicCallNotes { get; set; }
         public NewServiceCallLineItem AddServiceCallLineItem { get; set; }
         public bool CanApprove { get; set; }
+        public bool CanReassign { get; set; }
 
         public class NewServiceCallLineItem
         {
@@ -89,6 +90,12 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public Guid ServiceCallLineItemId { get; set; }
             public DateTime? CreatedDate { get; set; }
             public string CreatedBy { get; set; }
+        }
+
+        public class EmployeeViewModel
+        {
+            public string EmployeeNumber { get; set; }
+            public string DisplayName { get; set; }
         }
     }
 }

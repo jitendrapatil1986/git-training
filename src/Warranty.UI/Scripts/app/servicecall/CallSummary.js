@@ -1,6 +1,10 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData, dropdownData) {
+    require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', '/Scripts/lib/jquery.color-2.1.0.min.js','x-editable'], function ($, ko, urls, toastr, modelData, dropdownData, xeditable) {
         $(function () {
+            $.fn.editable.defaults.mode = 'inline';
+            $("#Employee_List").editable({
+                type: 'select',
+            });
 
             $('.btn-action-with-popup').click(function (e) {
                 $(this).addClass("active");
