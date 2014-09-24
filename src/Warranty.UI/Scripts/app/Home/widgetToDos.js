@@ -42,24 +42,23 @@ define(['urls','jquery'], function(urls, $) {
             e.preventDefault();
             var serviceCallId = $(this).data("service-call-id");
             var url = urls.ServiceCall.Approve;
-            executeApproval(url, serviceCallId, $(this));
+            executeApproval(url, serviceCallId);
         });
             
         $(".deny-button").click(function (e) {
             e.preventDefault();
             var serviceCallId = $(this).data("service-call-id");
             var url = urls.ServiceCall.Deny;
-            executeApproval(url, serviceCallId, $(this));
+            executeApproval(url, serviceCallId);
         });
             
-        function executeApproval(url, serviceCallId, button) {
+        function executeApproval(url, serviceCallId) {
             $.ajax({
                 type: "POST",
                 url: url,
                 data: { id: serviceCallId },
                 success: function (result) {
-                    var divToRemove = button.parent().parent();
-                    divToRemove.remove();
+                    $('#service-call-approval-todo-' + serviceCallId).remove();
                     updateTodoWidgetElements();
                 }
             });
