@@ -70,11 +70,17 @@
                             <li class="clearfix"><span class="pull-left">Created By:</span><span class="pull-right">@Model.ServiceCallSummary.CreatedBy</span></li>
                             <li class="clearfix"><span class="pull-left">Created On:</span><span class="pull-right">@Format.DateMonthDayYear(Model.ServiceCallSummary.CreatedDate)</span></li>
                             <li class="clearfix">
-                                <div class="inline-reassign-employee">
-                                    <span class="pull-left">Assignee:</span><span class="pull-right">
-                                        <a href="#" id="Employee_List" data-source="@Url.Action("GetEmployees", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId })" data-url="@Url.Action("InlineReassign", "ServiceCall")" data-pk="@Model.ServiceCallSummary.ServiceCallId" data-value="@Model.ServiceCallSummary.AssignedToEmployeeNumber">@Model.ServiceCallSummary.AssignedTo</a>
-                                    </span>
-                                </div>
+                                <span class="pull-left">Assignee:</span>
+                                    @if (Model.CanReassign)
+                                    {
+                                        <div class="inline-reassign-employee pull-right">
+                                            <a href="#" id="Employee_List" data-source="@Url.Action("GetEmployees", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId })" data-url="@Url.Action("InlineReassign", "ServiceCall")" data-pk="@Model.ServiceCallSummary.ServiceCallId" data-value="@Model.ServiceCallSummary.AssignedToEmployeeNumber">@Model.ServiceCallSummary.AssignedTo</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="pull-right">@Model.ServiceCallSummary.AssignedTo</span>
+                                    }
                             </li>
                         </ul>
                     </div>

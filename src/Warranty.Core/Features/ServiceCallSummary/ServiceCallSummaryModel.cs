@@ -14,6 +14,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
         public IEnumerable<ServiceCallNote> ServicCallNotes { get; set; }
         public NewServiceCallLineItem AddServiceCallLineItem { get; set; }
         public bool CanApprove { get; set; }
+        public bool CanReassign { get; set; }
 
         public class NewServiceCallLineItem
         {
