@@ -29,6 +29,7 @@
                             INNER JOIN Cities Ci
                             ON c.CityId = Ci.CityId
                             WHERE CloseDate >= DATEADD(yy, @0, @1)
+                            AND CloseDate <= @1
                             AND Ci.CityCode IN ({0})";
 
                 var sqlPayments = @"SELECT SUM(p.Amount) as TotalDollarsSpent
