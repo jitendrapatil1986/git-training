@@ -1,7 +1,4 @@
-﻿using Warranty.Core.Features.AmountSpentWidget;
-using Warranty.Core.Features.ToDoWidget;
-
-namespace Warranty.UI.Controllers
+﻿namespace Warranty.UI.Controllers
 {
     using System;
     using System.Configuration;
@@ -14,6 +11,8 @@ namespace Warranty.UI.Controllers
     using Newtonsoft.Json.Linq;
     using Warranty.Core;
     using Warranty.Core.Extensions;
+    using Warranty.Core.Features.AmountSpentWidget;
+    using Warranty.Core.Features.ToDoWidget;
     using Warranty.Core.Features.MyServiceTeamWidget;
     using Warranty.Core.Features.SendFeedback;
     using Warranty.Core.Features.ServiceCallsWidget;
