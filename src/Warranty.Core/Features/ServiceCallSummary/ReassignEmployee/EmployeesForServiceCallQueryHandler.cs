@@ -33,10 +33,13 @@
 
                 var serviceCallMarket = _database.Single<string>(sql, query.ServiceCallId);
 
-                var currentEmployees = _database.Fetch<Employee>().Select(x => x.Number);
+                var warrantyEmployees = _database.Fetch<Employee>().Select(x => x.Number);
 
-                return new GetUsersByMarketQuery(serviceCallMarket).Execute().Where(x => currentEmployees.Contains(x.EmployeeNumber))
-                                                                    .Select(x => new ServiceCallSummaryModel.EmployeeViewModel
+                var employeesByServiceCallMarket = new GetUsersByMarketQuery(serviceCallMarket).Execute();
+
+                var employeesAssignableToServiceCall = employeesByServiceCallMarket.Where(x => warrantyEmployees.Contains(x.EmployeeNumber));
+
+                return employeesAssignableToServiceCall.Select(x => new ServiceCallSummaryModel.EmployeeViewModel
                                                                         {
                                                                             DisplayName = x.DisplayName,
                                                                             EmployeeNumber = x.EmployeeNumber
