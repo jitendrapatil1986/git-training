@@ -1,5 +1,5 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', '/Scripts/lib/jquery.color-2.1.0.min.js','x-editable'], function ($, ko, urls, toastr, modelData, dropdownData, xeditable) {
+    require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'enumerations/ServiceCallStatus','/Scripts/lib/jquery.color-2.1.0.min.js','x-editable'], function ($, ko, urls, toastr, modelData, dropdownData, serviceCallStatusData,xeditable) {
         $(function () {
             $.fn.editable.defaults.mode = 'inline';
             $("#Employee_List").editable({
@@ -238,7 +238,7 @@ require(['/Scripts/app/main.js'], function () {
 
                 self.areAllLineItemsClosed = function () {
                     var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
-                        return (i.serviceCallLineItemStatus().displayName.toLowerCase() != "closed");  //TODO: Remove hard-code value
+                        return (i.serviceCallLineItemStatus().displayName.toLowerCase() != serviceCallStatusData.HomeownerSigned.DisplayName.toLowerCase());
                     });
 
                     if (anyNonCompletedLineItem)
@@ -375,14 +375,14 @@ require(['/Scripts/app/main.js'], function () {
                 self.callSummaryServiceCallStatus = ko.observable($("#callSummaryServiceCallStatus").html());
 
                 self.callSummaryStatusClosed = ko.computed(function () {
-                    if (self.callSummaryServiceCallStatus().toLowerCase() == "closed")  //TODO: Remove hard-code value.
+                    if (self.callSummaryServiceCallStatus().toLowerCase() == serviceCallStatusData.Closed.DisplayName.toLowerCase())
                         return true;
                     else
                         return false;
                 });
                 
                 self.callSummaryStatusSigned = ko.computed(function () {
-                    if (self.callSummaryServiceCallStatus().toLowerCase() == "homeowner signed")  //TODO: Remove hard-code value.
+                    if (self.callSummaryServiceCallStatus().toLowerCase() == serviceCallStatusData.HomeownerSigned.DisplayName.toLowerCase())
                         return true;
                     else
                         return false;
