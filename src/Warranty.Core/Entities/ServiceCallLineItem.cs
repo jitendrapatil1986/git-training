@@ -1,6 +1,7 @@
 ﻿namespace Warranty.Core.Entities
 {
     using System;
+    using Enumerations;
 
     public class ServiceCallLineItem : IAuditableEntity
     {
@@ -12,7 +13,7 @@
         public virtual string CauseDescription { get; set; }
         public virtual string ClassificationNote { get; set; }
         public virtual string LineItemRoot { get; set; }
-        public virtual bool Completed { get; set; }
+        public virtual ServiceCallLineItemStatus ServiceCallLineItemStatus { get; set; }
         public virtual DateTime? CreatedDate { get; set; }
         public virtual string CreatedBy { get; set; }
         public virtual DateTime? UpdatedDate { get; set; }

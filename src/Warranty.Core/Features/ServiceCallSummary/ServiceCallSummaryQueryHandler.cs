@@ -47,9 +47,11 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , j.JobId
                                     , j.JobNumber
                                     , wc.CreatedDate
+                                    , wc.CreatedBy
                                     , wc.CompletionDate
                                     , wc.ServiceCallstatusId as ServiceCallStatus
                                     , ho.HomeOwnerName
+                                    , ho.HomeOwnerNumber
                                     , case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
                                     , NumberOfLineItems
                                     , ho.HomePhone as PhoneNumber
@@ -101,8 +103,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     li.CauseDescription,
                                     li.ClassificationNote,
                                     li.LineItemRoot,
-                                    li.Completed,
-                                    li.CreatedDate
+                                    li.CreatedDate,
+                                    li.ServiceCallLineItemStatusId as ServiceCallLineItemStatus
                                 FROM ServiceCalls wc
                                 INNER JOIN ServiceCallLineItems li
                                 ON wc.ServiceCallId = li.ServiceCallId

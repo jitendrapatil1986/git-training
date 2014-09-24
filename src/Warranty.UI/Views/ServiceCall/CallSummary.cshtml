@@ -12,7 +12,7 @@
     if (completionDate == null)
     {
     <div class="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(createdDate)">
-        <span class="glyphicon glyphicon-time text-muted"></span>@Format.ServiceCallDaysLeft(numberOfDaysRemaining)<br />
+        <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(numberOfDaysRemaining)<br />
         <div class="progress time-remaining-progress hidden-sm hidden-xs">
             <div class="progress-bar @Css.ServiceCallProgressBar(numberOfDaysRemaining)" role="progressbar" style="width: @percentComplete%">
                 <span class="sr-only">@percentComplete% Complete</span>
@@ -57,17 +57,17 @@
             <div class="panel-heading text-capitalize">
                 <div class="row remove-list-style">
                     <div class="col-md-3 margin-bottom-10">
-                        <h3 class="panel-title text-capitalize">@Model.ServiceCallSummary.HomeownerName</h3>
+                        <h3 class="panel-title text-capitalize">@Format.HomeOwner(Model.ServiceCallSummary.HomeownerName, Model.ServiceCallSummary.HomeownerNumber)</h3>
                         <ul>
-                            <li>@Html.ActionLink(Model.ServiceCallSummary.Address, "JobSummary", "Job", new { id = Model.ServiceCallSummary.JobId }, null)</li>
+                            <li>@Model.ServiceCallSummary.Address</li>
                             <li>@Format.PhoneNumber(Model.ServiceCallSummary.PhoneNumber)</li>
-                            <li><a>@Format.Email(Model.ServiceCallSummary.EmailAddress)</a></li>
+                            <li><a href="mailto:@Model.ServiceCallSummary.EmailAddress?subject=David Weekley Homes Warranty Service Call %23 @Model.ServiceCallSummary.CallNumber">@Format.Email(Model.ServiceCallSummary.EmailAddress)</a></li>
                         </ul>
                         <span>@Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate)</span>
                     </div>
                     <div class="col-md-3">
                         <ul class="border-bottom-1-solid">
-                            <li class="clearfix"><span class="pull-left">Created By:</span><span class="pull-right">Mr. Placeholder</span></li>
+                            <li class="clearfix"><span class="pull-left">Created By:</span><span class="pull-right">@Model.ServiceCallSummary.CreatedBy</span></li>
                             <li class="clearfix"><span class="pull-left">Created On:</span><span class="pull-right">@Format.DateMonthDayYear(Model.ServiceCallSummary.CreatedDate)</span></li>
                             <li class="clearfix">
                                 <div class="inline-reassign-employee">
@@ -133,22 +133,20 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     @Html.Label("Problem Code")
-                                    @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select Problem Code", new { id = "addCallLineProblemCode", @class = "form-control" })
+                                    @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select Problem Code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind="value: problemCodeToAdd" })
                                 </div>
                             </div>
                             <br />
                             <div class="row">
                                 <div class="col-md-12">
                                     @Html.Label("Description")
-                                    @*@Html.TextArea("Description", null, new {id="addCallLineProblemDescription", @class="form-control", data_bind="value: problemDescription, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Description'}"})*@
-                                    @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "attr:{placeholder: 'Add Description'}" })
+                                    @Html.TextArea("Description", null, new {id="addCallLineProblemDescription", @class="form-control", data_bind="value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Description'}"})
                                 </div>
                             </div>
                             <br />
                             <div class="row">
                                 <div class="col-md-1">
-                                    @*<button class="btn btn-default" data-bind="click: addLineItem, enable: problemDescription().length > 0">Save</button>*@
-                                    <button class="btn btn-default" data-bind="click: addLineItem">Save</button>
+                                    <button class="btn btn-primary" data-bind="click: addLineItem, enable: problemDescriptionToAdd().length > 0">Add</button>
                                 </div>
                                 <div class="col-md-1 btn">
                                     <a href="#" data-toggle="collapse" data-target="#addCallLineItem">Cancel</a>
@@ -174,6 +172,7 @@
                                                                     <h4>
                                                                         <select class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
                                                                         <small class="text-muted view" data-bind="text: problemCode"></small>
+                                                                        <span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
                                                                     </h4>
                                                                 </div>
                                                             </div>
@@ -194,7 +193,6 @@
                                                                     </div>
                                                                     <div class="col-md-3 col-xs-4">
                                                                         <button type="button" class="btn btn-default btn-sm edit" data-bind="click: cancelLineItemChanges">Cancel</button>
-                                                                        @*<a href="#" class="small editable-cancel edit" data-bind="click: cancelLineItemChanges">Cancel</a>*@
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -203,7 +201,7 @@
                                                 </div>
                                                 <div class="col-md-3 margin-top-13 margin-bottom-3 text-align-right no-right-padding">
                                                     <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: lineEditing() == false">Edit</button>
-                                                    @* <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show" data-bind="visible: lineEditing() == false">Complete</button>*@
+                                                     @*<button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show" data-bind="click: completeLine, visible: lineEditing() == false">Complete</button>*@
                                                 </div>
                                             </div>
                                         </div>
@@ -239,7 +237,7 @@
                             <br/>
                             <div class="row">
                                 <div class="col-md-1">
-                                    <button class="btn btn-default" data-bind="click: addCallNote, enable: noteDescriptionToAdd().length > 0">Add</button>
+                                    <button class="btn btn-primary" data-bind="click: addCallNote, enable: noteDescriptionToAdd().length > 0">Add</button>
                                 </div>
                                 <div class="col-md-1 btn">
                                     <a href="#" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</a>
@@ -249,11 +247,12 @@
                     </div>
                 </div>
                 <br />
-                <span class="padding-left-15 padding-top-7 pull-left">
+                <em data-bind="visible: allCallNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">No Notes Available</em>
+                <span data-bind="visible: allCallNotes().length > 1" class="padding-left-15 padding-top-7 pull-left">
                     Show: 
                 </span>
                 <div class="col-md-3 margin-bottom-10">
-                    <select id="filterCallNoteLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToFilterNotes, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'All' "></select>
+                    <select id="filterCallNoteLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToFilterNotes, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'All', visible: allCallNotes().length > 0 "></select>
                 </div>
                 @*<div class="col-md-1">
                     <button class="btn btn-default" data-bind="click: resetCallNoteFilter">Reset Filter</button>

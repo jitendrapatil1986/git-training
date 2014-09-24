@@ -5,6 +5,7 @@ namespace Warranty.UI.Core.Helpers
 {
     using System;
     using System.Web.Mvc;
+    using Warranty.Core.Extensions;
 
     public static class Format
     {
@@ -425,6 +426,15 @@ namespace Warranty.UI.Core.Helpers
                     string.Format(
                         "<a href='#' class='btn btn-default pull-right btn-action-with-popup' data-action-with-popup='{0}' id='btn_{0}' data-next-text='{1}'>{2}</a>",
                         id, nextText, currentText));
+        }
+
+        public static MvcHtmlString HomeOwner(string homeownerName, int homeownerNumber)
+        {
+            if (homeownerNumber == 1)
+                return MvcHtmlString.Create(homeownerName);
+
+            var html = string.Format("{0} <span class='label label-info muted'>{1}</span>", homeownerName, homeownerNumber.ToOrdinalSuffixed());
+            return MvcHtmlString.Create(html);
         }
     }
 }

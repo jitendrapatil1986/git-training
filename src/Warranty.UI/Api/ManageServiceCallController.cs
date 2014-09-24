@@ -1,11 +1,14 @@
 ﻿namespace Warranty.UI.Api
 {
     using System;
+    using System.Web.Http.Results;
     using System.Web.Mvc;
     using Mailer;
     using Warranty.Core;
+    using Warranty.Core.Enumerations;
     using Warranty.Core.Features.AddServiceCallLineItem;
     using Warranty.Core.Features.AddServiceCallNote;
+    using Warranty.Core.Features.CompleteServiceCallLineItem;
     using Warranty.Core.Features.EditServiceCallLineItem;
     using Warranty.Core.Security;
 
@@ -42,6 +45,17 @@
             });
 
             return resultModel;
+        }
+
+        [HttpPost]
+        public ServiceCallLineItemStatus CompleteLineItem(CompleteServiceCallLineItemModel model)
+        {
+            var result = _mediator.Send(new CompleteServiceCallLineItemCommand
+                {
+                    ServiceCallLineItemId = model.ServiceCallLineItemId
+                });
+
+            return result;
         }
 
         [HttpPost]

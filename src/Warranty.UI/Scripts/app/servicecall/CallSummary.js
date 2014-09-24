@@ -139,12 +139,24 @@ require(['/Scripts/app/main.js'], function () {
                     this.problemDescription(this.currentProblemDescription());
                 };
                 
+                //complete line item.
+                self.completeLine = function () {
+                    this.lineEditing(false);
+                    completeServiceCallLineItem(this);
+                };
+                
                 self.lineNumber = ko.observable(options.lineNumber);
                 
                 self.lineNumberWithProblemCode = ko.computed(function() {
                     return self.lineNumber() + " - " + self.problemCode();
                 });
 
+                self.serviceCallLineItemStatus = ko.observable(options.serviceCallLineItemStatus);
+                self.serviceCallLineItemStatusDisplayName = ko.observable(options.serviceCallLineItemStatus ? options.serviceCallLineItemStatus.displayName : '');
+                
+                self.lineItemStatusCSS = ko.computed(function () {
+                    return self.serviceCallLineItemStatusDisplayName() ? 'label label-' + self.serviceCallLineItemStatusDisplayName().toLowerCase() + '-service-line-item' : '';
+                });
             }
             
             function CallNotesViewModel(options) {
@@ -180,11 +192,34 @@ require(['/Scripts/app/main.js'], function () {
                     });
             }
             
+            function completeServiceCallLineItem(line) {
+                var lineData = ko.toJSON(line);
+
+                $.ajax({
+                    url: urls.ManageServiceCall.CompleteLineItem,
+                    type: "POST",
+                    data: lineData,
+                    dataType: "json",
+                    processData: false,
+                    contentType: "application/json; charset=utf-8"
+                })
+                    .fail(function (response) {
+                        toastr.error("There was an issue completing the line item. Please try again!");
+                    })
+                    .done(function (response) {
+                        toastr.success("Success! Item completed.");
+                        self.serviceCallLineItemStatus = response.ServiceCallLineItemStatus;
+                    });
+            }
+
             function createServiceCallLineItemViewModel() {
                 var self = this;
                 
                 self.allLineItems = ko.observableArray([]);
                 self.theLookups = dropdownData.availableLookups;  //dropdown list does not need to be observable. Only the actual elements w/i the array do.
+                self.problemDescriptionToAdd = ko.observable('');
+                self.problemCodeToAdd = ko.observable();
+                
                 self.allCallNotes = ko.observableArray([]);
                 self.selectedLineToAttachToNote = ko.observable();
                 self.selectedLineToFilterNotes = ko.observable();
@@ -244,6 +279,7 @@ require(['/Scripts/app/main.js'], function () {
                                 problemCode: self.problemCode,
                                 problemCodeId: self.problemCodeId,
                                 problemDescription: self.problemDescription,
+                                serviceCallLineItemStatus: response.ServiceCallLineItemStatus,
                                 completed: false
                             }));
 
@@ -254,6 +290,9 @@ require(['/Scripts/app/main.js'], function () {
                             $("#addCallLineProblemCode").val('');
                             self.problemDescription = '';
                         });
+                    
+                    $(newProblemCode).parent().removeClass("has-error");
+                    $(newProblemDescription).parent().removeClass("has-error");
                 };
 
                 self.addCallNote = function () {
@@ -298,6 +337,14 @@ require(['/Scripts/app/main.js'], function () {
                                 createdDate: response.CreatedDate
                             }));
 
+                            var currentLineItem = ko.utils.arrayFirst(self.allLineItems(), function(i) {
+                                return i.serviceCallLineItemId == response.ServiceCallLineItemId;
+                            });
+
+                            if (currentLineItem) {
+                                currentLineItem.serviceCallLineItemStatusDisplayName(response.ServiceCallLineItemStatus.DisplayName);
+                            }
+
                             toastr.success("Success! Note added.");
                             highlight($("#allServiceCallNotes").first());
                             clearNoteFields();
@@ -319,7 +366,7 @@ require(['/Scripts/app/main.js'], function () {
 
             var persistedAllLineItemsViewModel = modelData.initialServiceLines;
                 
-            _(persistedAllLineItemsViewModel).each(function(item) {
+            _(persistedAllLineItemsViewModel).each(function (item) {
                 viewModel.allLineItems.push(new AllLineItemsViewModel(item));
             });
 

@@ -61,6 +61,7 @@ namespace Warranty.Core.Features.CreateServiceCall
                                 LineNumber = line.LineNumber,
                                 ProblemCode = line.ProblemCode,
                                 ProblemDescription = line.ProblemDescription,
+                                ServiceCallLineItemStatus = ServiceCallLineItemStatus.Open,
                             };
 
                         _database.Insert(serviceCallLine);

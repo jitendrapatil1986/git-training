@@ -16,15 +16,7 @@
         {
             using (_database)
             {
-                var model = GetServiceCallDetails(query.JobId);
-
-                return model;
-            }
-        }
-
-        private CreateServiceCallModel GetServiceCallDetails(Guid jobId)
-        {
-            const string sql = @"SELECT  ho.HomeOwnerId
+                const string sql = @"SELECT  ho.HomeOwnerId
                                         ,j.JobId
                                         ,ho.[HomeOwnerNumber]
                                         ,ho.[HomeOwnerName]
@@ -54,8 +46,9 @@
                                 WHERE j.JobId = @0
                                 ORDER BY ho.HomeOwnerName, j.JobNumber";
 
-            var result = _database.Single<CreateServiceCallModel>(sql, jobId);
-            return result;
+                var result = _database.Single<CreateServiceCallModel>(sql, query.JobId);
+                return result;
+            }
         }
     }
 

@@ -2,6 +2,7 @@
 {
     using System;
     using Entities;
+    using Enumerations;
     using NPoco;
 
     public class AddServiceCallNoteCommandHandler: ICommandHandler<AddServiceCallNoteCommand, AddServiceCallNoteModel>
@@ -20,11 +21,18 @@
                 var newServiceCallNote = new ServiceCallNote
                     {
                         ServiceCallId = message.ServiceCallId,
-                        Note = message.Note
+                        Note = message.Note,
                     };
 
-                if (message.ServiceCallLineItemId != Guid.Empty)
+                if (message.ServiceCallLineItemId.GetValueOrDefault() != Guid.Empty)
                 {
+                    var updateServiceCallLine = _database.SingleById<ServiceCallLineItem>(message.ServiceCallLineItemId);
+                    
+                    if (updateServiceCallLine.ServiceCallLineItemStatus == ServiceCallLineItemStatus.Open)
+                        updateServiceCallLine.ServiceCallLineItemStatus = ServiceCallLineItemStatus.InProgress;
+
+                    _database.Update(updateServiceCallLine);
+
                     newServiceCallNote.ServiceCallLineItemId = message.ServiceCallLineItemId;
                 }
                 
@@ -37,7 +45,8 @@
                         ServiceCallLineItemId = newServiceCallNote.ServiceCallLineItemId,
                         Note = newServiceCallNote.Note,
                         CreatedBy = newServiceCallNote.CreatedBy,
-                        CreatedDate = newServiceCallNote.CreatedDate
+                        CreatedDate = newServiceCallNote.CreatedDate,
+                        ServiceCallLineItemStatus = ServiceCallLineItemStatus.InProgress,
                     };
 
                 return model;

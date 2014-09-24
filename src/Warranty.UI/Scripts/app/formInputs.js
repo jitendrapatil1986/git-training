@@ -18,7 +18,7 @@
         .not(function() {
             return $(this).closest('.modal').length > 0;
         })
-        .not('#searchBar, #searchBarMobile')
+        .not('#searchBar')
         .first().focus();
 
     $('a.btn.submit').on('click', function (e) {

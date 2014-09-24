@@ -17,6 +17,7 @@ namespace Warranty.UI.Controllers
     using Warranty.Core.Features.MyServiceTeamWidget;
     using Warranty.Core.Features.SendFeedback;
     using Warranty.Core.Features.ServiceCallsWidget;
+    using Warranty.Core.Features.WarrantyDollarsSpentWidget;
 
     public class HomeController : Controller
     {
@@ -54,7 +55,6 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-//        [WarrantyServiceCoordinatorOnly]
         public ActionResult MyTeamWidget()
         {
             var model = _mediator.Request(new MyServiceTeamWidgetQuery());
@@ -62,7 +62,6 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-//        [WarrantyServiceCoordinatorOnly]
         public ActionResult ServiceCallsWidget()
         {
             var model = _mediator.Request(new ServiceCallsWidgetQuery());
@@ -70,7 +69,6 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-//        [WarrantyServiceRepresentativeOnly]
         public ActionResult WarrantyServiceRepServiceCallsWidget()
         {
             var model = _mediator.Request(new WarrantyServiceRepServiceCallsWidgetQuery());
@@ -78,7 +76,6 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-//        [WarrantyServiceCoordinatorOnly]
         public ActionResult AmountSpentWidget()
         {
             var model = _mediator.Request(new AmountSpentWidgetQuery());
@@ -86,7 +83,13 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-//        [WarrantyServiceCoordinatorOnly]
+        public ActionResult WarrantyDollarsSpentWidget()
+        {
+            var model = _mediator.Request(new WarrantyDollarsSpentWidgetQuery());
+            return PartialView("_WarrantyDollarsSpentWidget", model);
+        }
+
+        [ChildActionOnly]
         public ActionResult ToDoWidget()
         {
             var model = _mediator.Request(new ToDoWidgetQuery());

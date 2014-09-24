@@ -41,8 +41,10 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public string Address { get; set; }
             public string CallNumber { get; set; }
             public DateTime CreatedDate { get; set; }
+            public string CreatedBy { get; set; }
             public DateTime? CompletionDate { get; set; }
             public string HomeownerName { get; set; }
+            public int HomeownerNumber { get; set; }
             public int NumberOfDaysRemaining { get { return ServiceCallCalculator.CalculateNumberOfDaysRemaining(CreatedDate); } }
             public int NumberOfLineItems { get; set; }
             public int DaysOpenedFor { get; set; }
@@ -75,8 +77,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public string CauseDescription { get; set; }
             public string ClassificationNote { get; set; }
             public string LineItemRoot { get; set; }
-            public bool Completed { get; set; }
             public DateTime CreatedDate { get; set; }
+            public ServiceCallLineItemStatus ServiceCallLineItemStatus { get; set; }
         }
 
         public class ServiceCallNote

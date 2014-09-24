@@ -62,6 +62,11 @@
 
 .margin-bottom-15 { margin: 0 0 15px 0;}
 
+.label.label-info.muted {
+    font-weight: normal;
+    background: #84D0E6;
+}
+
 .label, badge {
     &-warranty-one-year {
         background-color: #5cb85c;
@@ -308,20 +313,26 @@
 }
 
 .label, badge {
-    &-open-service-call {
+    &-open-service-call, &-open-service-line-item {
         background-color: #5cb85c;
     }
 }
 
 .label, badge {
-    &-requested-service-call {
+    &-requested-service-call, &-requested-service-line-item {
         background-color: #FFBF00;
     }
 }
 
 .label, badge {
-    &-closed-service-call {
+    &-closed-service-call, &-closed-service-line-item {
         background-color: #d9534f;
+    }
+}
+
+.label, badge {
+    &-in-progress-service-line-item {
+        background-color: #FFBF00;
     }
 }
 

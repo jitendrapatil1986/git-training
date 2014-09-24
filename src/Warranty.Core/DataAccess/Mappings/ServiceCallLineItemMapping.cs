@@ -17,7 +17,7 @@
             Property(x => x.CauseDescription);
             Property(x => x.ClassificationNote);
             Property(x => x.LineItemRoot);
-            Property(x => x.Completed);
+            Property(x => x.ServiceCallLineItemStatus, map => map.Column("ServiceCallLineItemStatusId"));
         }
     }
 }

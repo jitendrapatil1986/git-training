@@ -159,12 +159,14 @@
     <Compile Include="Entities\ServiceCallLineItem.cs" />
     <Compile Include="Enumerations\ActivityType.cs" />
     <Compile Include="Enumerations\ReferenceType.cs" />
+    <Compile Include="Enumerations\ServiceCallLineItemStatus.cs" />
     <Compile Include="Enumerations\UserRoles.cs" />
     <Compile Include="Enumerations\ToDoIcon.cs" />
     <Compile Include="Enumerations\Month.cs" />
     <Compile Include="Enumerations\ServiceCallStatus.cs" />
     <Compile Include="DataAccess\GuidComb.cs" />
     <Compile Include="Extensions\DatabaseExtensions.cs" />
+    <Compile Include="Extensions\IntExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
@@ -197,6 +199,9 @@
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommand.cs" />
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemModel.cs" />
+    <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemCommand.cs" />
+    <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemCommandHandler.cs" />
+    <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemModel.cs" />
     <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationModel.cs" />
     <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationQuery.cs" />
     <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationQueryHandler.cs" />
@@ -277,6 +282,8 @@
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetModel.cs" />
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQuery.cs" />
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQueryHandler.cs" />
+    <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetModel.cs" />
+    <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetQuery.cs" />
     <Compile Include="Services\ISendSmtpMailMessage.cs" />
     <Compile Include="Services\SendSmtpMailMessage.cs" />
     <Compile Include="Services\ServiceCallCalculator.cs" />

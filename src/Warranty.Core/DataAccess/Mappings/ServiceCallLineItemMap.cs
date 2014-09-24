@@ -23,7 +23,7 @@ namespace Warranty.Core.DataAccess.Mappings
                     x.Column(y => y.CauseDescription);
                     x.Column(y => y.ClassificationNote);
                     x.Column(y => y.LineItemRoot);
-                    x.Column(y => y.Completed);
+                    x.Column(y => y.ServiceCallLineItemStatus).WithName("ServiceCallLineItemStatusId");
                 });
         }
     }
