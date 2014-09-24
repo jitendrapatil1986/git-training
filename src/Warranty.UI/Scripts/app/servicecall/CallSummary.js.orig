@@ -1,13 +1,18 @@
 require(['/Scripts/app/main.js'], function () {
     require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', '/Scripts/lib/jquery.color-2.1.0.min.js','x-editable'], function ($, ko, urls, toastr, modelData, dropdownData, xeditable) {
         $(function () {
+<<<<<<< Updated upstream
             $.fn.editable.defaults.mode = 'inline';
             $("#Employee_List").editable({
                 type: 'select',
             });
 
+=======
+            //var currentDate = new Date();
             $(".datepicker-input").datepicker();
-
+            //$(".datepicker").datepicker({ setDate: new Date() });
+            
+>>>>>>> Stashed changes
             $('.btn-action-with-popup').click(function (e) {
                 $(this).addClass("active");
                 $('.popup-action-with-message').hide();
@@ -387,22 +392,9 @@ require(['/Scripts/app/main.js'], function () {
                     else
                         return false;
                 });
-
+                
                 self.homeownerVerificationSignature = ko.observable('');
                 self.homeownerVerificationSignatureDate = ko.observable();
-                
-                self.verifiedHomeownerSignature = ko.observable($("#verifiedHomeownerSignature").val());
-                self.verifiedHomeownerSignatureDate = ko.observable($("#verifiedHomeownerSignatureDate").val());
-                
-                self.verifiedSignature = ko.computed(function () {
-                    var result = 'Verification Signed by ' + self.verifiedHomeownerSignature();
-                    
-                    if (self.verifiedHomeownerSignatureDate()) {
-                        result += ' on ' + moment(self.verifiedHomeownerSignatureDate()).format('L');
-                    }
-
-                    return result;
-                });
                 
                 self.saveVerifiedHomeownerSignature = function () {
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
@@ -440,8 +432,6 @@ require(['/Scripts/app/main.js'], function () {
                         })
                         .done(function (response) {
                             self.callSummaryServiceCallStatus(response.ServiceCallStatus.DisplayName);
-                            self.verifiedHomeownerSignature(response.HomeownerVerificationSignature);
-                            self.verifiedHomeownerSignatureDate(response.HomeownerVerificationSignatureDate);
                             toastr.success("Success! Data saved.");
 
                             $("#homeownerVerificationSignature").val('');
@@ -455,6 +445,13 @@ require(['/Scripts/app/main.js'], function () {
                 };
             }
 
+            ko.bindingHandlers.hidden = {
+                update: function (element, valueAccessor) {
+                    var value = ko.utils.unwrapObservable(valueAccessor());
+                    ko.bindingHandlers.visible.update(element, function () { return !value; });
+                }
+            };
+            
             var viewModel = new serviceCallSummaryItemViewModel();
             ko.applyBindings(viewModel);
 
