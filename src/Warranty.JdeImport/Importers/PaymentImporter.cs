@@ -71,40 +71,40 @@ namespace Warranty.JdeImport.Importers
                                 and p.T5DCTO = vp1.T6DCTO 
                                 and p.T5DOCO = vp1.T6DOCO 
                                 and p.T5SFX = vp1.T6SFX 
-                            and trim(vp1.T6$LIN) = 1
-                            and trim(vp1.T6PDS1) <> ''
-                            and trim(vp1.T6DCTO)  ='$W'
-                        left outer join f58235M vp2 on p.T5MCU = vp2.T6MCU 
-                            and p.T5$OPT = vp2.T6$OPT 
-                            and p.T5SUB = vp2.T6SUB 
-                            and p.T5OBJ = vp2.T6OBJ 
-                            and p.T5DCTO = vp2.T6DCTO 
-                            and p.T5DOCO = vp2.T6DOCO 
-                            and p.T5SFX = vp2.T6SFX 
-                            and trim(vp2.T6$LIN) = 2
-                            and trim(vp2.T6PDS1) <> ''
-                            and trim(vp2.T6DCTO) = '$W'
-                        left outer join f58235M vp3 on p.T5MCU = vp3.T6MCU 
-                            and p.T5$OPT = vp3.T6$OPT 
-                            and p.T5SUB = vp3.T6SUB 
-                            and p.T5OBJ = vp3.T6OBJ 
-                            and p.T5DCTO = vp3.T6DCTO 
-                            and p.T5DOCO = vp3.T6DOCO 
-                            and p.T5SFX = vp3.T6SFX 
-                            and trim(vp3.T6$LIN) = 3
-                            and trim(vp3.T6PDS1) <> ''
-                            and trim(vp3.T6DCTO) = '$W'
-                        left outer join f58235M vp4 on p.T5MCU = vp4.T6MCU 
-                            and p.T5$OPT = vp4.T6$OPT 
-                            and p.T5SUB = vp4.T6SUB 
-                            and p.T5OBJ = vp4.T6OBJ 
-                            and p.T5DCTO = vp4.T6DCTO 
-                            and p.T5DOCO = vp4.T6DOCO 
-                            and p.T5SFX = vp4.T6SFX 
-                            and trim(vp4.T6$LIN) = 4
-                            and trim(vp4.T6PDS1) <> ''
-                            and trim(vp4.T6DCTO) = '$W'
-                            WHERE TRIM(T5OBJ) IN ('9425', '9430', '9435', '9440')";
+                                and trim(vp1.T6$LIN) = 1
+                                and trim(vp1.T6PDS1) <> ''
+                                and trim(vp1.T6DCTO)  ='$W'
+                            left outer join f58235M vp2 on p.T5MCU = vp2.T6MCU 
+                                and p.T5$OPT = vp2.T6$OPT 
+                                and p.T5SUB = vp2.T6SUB 
+                                and p.T5OBJ = vp2.T6OBJ 
+                                and p.T5DCTO = vp2.T6DCTO 
+                                and p.T5DOCO = vp2.T6DOCO 
+                                and p.T5SFX = vp2.T6SFX 
+                                and trim(vp2.T6$LIN) = 2
+                                and trim(vp2.T6PDS1) <> ''
+                                and trim(vp2.T6DCTO) = '$W'
+                            left outer join f58235M vp3 on p.T5MCU = vp3.T6MCU 
+                                and p.T5$OPT = vp3.T6$OPT 
+                                and p.T5SUB = vp3.T6SUB 
+                                and p.T5OBJ = vp3.T6OBJ 
+                                and p.T5DCTO = vp3.T6DCTO 
+                                and p.T5DOCO = vp3.T6DOCO 
+                                and p.T5SFX = vp3.T6SFX 
+                                and trim(vp3.T6$LIN) = 3
+                                and trim(vp3.T6PDS1) <> ''
+                                and trim(vp3.T6DCTO) = '$W'
+                            left outer join f58235M vp4 on p.T5MCU = vp4.T6MCU 
+                                and p.T5$OPT = vp4.T6$OPT 
+                                and p.T5SUB = vp4.T6SUB 
+                                and p.T5OBJ = vp4.T6OBJ 
+                                and p.T5DCTO = vp4.T6DCTO 
+                                and p.T5DOCO = vp4.T6DOCO 
+                                and p.T5SFX = vp4.T6SFX 
+                                and trim(vp4.T6$LIN) = 4
+                                and trim(vp4.T6PDS1) <> ''
+                                and trim(vp4.T6DCTO) = '$W'
+                                WHERE TRIM(T5OBJ) IN ('9425', '9430', '9435', '9440')";
             }
         }
 
