@@ -197,6 +197,7 @@
     <Compile Include="Api\ManageServiceCallController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
+    <Compile Include="Controllers\EnumerationController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
