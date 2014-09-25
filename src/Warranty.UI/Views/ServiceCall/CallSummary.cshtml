@@ -216,7 +216,6 @@
                                                                     <h4>
                                                                         <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
                                                                         <small class="text-muted view" data-bind="text: problemCode"></small>
-                                                                        <span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
                                                                     </h4>
                                                                 </div>
                                                             </div>
@@ -226,6 +225,7 @@
                                                                 <div class="editor" data-bind="css: { editing: problemDescriptionEditing }"> 
                                                                     <p class="view" data-bind="text: problemDescription"></p>
                                                                     <textarea id="updateCallLineProblemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription"></textarea>
+                                                                    <span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
                                                                 </div>
                                                             </div>
                                                         </div>
