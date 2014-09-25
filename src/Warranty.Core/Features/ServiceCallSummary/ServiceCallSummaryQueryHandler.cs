@@ -35,6 +35,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                         AddServiceCallLineItem = new ServiceCallSummaryModel.NewServiceCallLineItem(query.ServiceCallId, SharedQueries.ProblemCodes.GetProblemCodeList(_database)),
                         CanApprove = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
                         CanReassign = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
+                        CanReopenLines = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
                     };
             }
         }

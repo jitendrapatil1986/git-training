@@ -1,6 +1,10 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', '/Scripts/lib/jquery.color-2.1.0.min.js','x-editable'], function ($, ko, urls, toastr, modelData, dropdownData, xeditable) {
+    require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'enumerations/ServiceCallLineItemStatus', 'x-editable', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData, dropdownData, serviceCallLineItemStatusData, xeditable) {
         $(function () {
+            $("#undoLastCompleteLineItem").blur(function () {
+                alert("Handler for .blur() called.");
+            });
+            
             $.fn.editable.defaults.mode = 'inline';
             $("#Employee_List").editable({
                 type: 'select',
@@ -145,6 +149,12 @@ require(['/Scripts/app/main.js'], function () {
                     completeServiceCallLineItem(this);
                 };
                 
+                //reopen line item.
+                self.reopenLine = function() {
+                    this.lineEditing(false);
+                    reopenServiceCallLineItem(this);
+                };
+
                 self.lineNumber = ko.observable(options.lineNumber);
                 
                 self.lineNumberWithProblemCode = ko.computed(function() {
@@ -152,11 +162,25 @@ require(['/Scripts/app/main.js'], function () {
                 });
 
                 self.serviceCallLineItemStatus = ko.observable(options.serviceCallLineItemStatus);
-                self.serviceCallLineItemStatusDisplayName = ko.observable(options.serviceCallLineItemStatus ? options.serviceCallLineItemStatus.displayName : '');
-                
+                //self.serviceCallLineItemStatusDisplayName = ko.observable(options.serviceCallLineItemStatus ? options.serviceCallLineItemStatus.displayName : '');
+                self.serviceCallLineItemStatusDisplayName = ko.observable('');
+                if (options.serviceCallLineItemStatus) {
+                    if (options.serviceCallLineItemStatus.displayName)
+                        self.serviceCallLineItemStatusDisplayName(options.serviceCallLineItemStatus.displayName);  //TODO: displayName works for model passed into js file via toJSON().
+                    if (options.serviceCallLineItemStatus.DisplayName)
+                        self.serviceCallLineItemStatusDisplayName(options.serviceCallLineItemStatus.DisplayName);  //TODO: DisplayName works for model passed from ajax call. Need to keep both similar.
+                }
+
                 self.lineItemStatusCSS = ko.computed(function () {
                     return self.serviceCallLineItemStatusDisplayName() ? 'label label-' + self.serviceCallLineItemStatusDisplayName().toLowerCase() + '-service-line-item' : '';
                 });
+                
+                self.isLineItemClosed = function () {
+                    if (!self.serviceCallLineItemStatusDisplayName())
+                        return false;
+                    
+                    return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Closed.DisplayName.toLowerCase() ? true : false;
+                };
             }
             
             function CallNotesViewModel(options) {
@@ -209,9 +233,43 @@ require(['/Scripts/app/main.js'], function () {
                     .done(function (response) {
                         toastr.success("Success! Item completed.");
                         self.serviceCallLineItemStatus = response.ServiceCallLineItemStatus;
+                        
+                        //if user is not allowed to ALWAYS reopen closed lines at anytime, then allow them to reopen only right after closing a line.
+                        if ($("#userCanReopenCallLinesAnytime").val() == false) {
+                            //Dynamically setting html in js.
+                            //$("#serviceCallMainContainer").append("<div class='alert alert-warning alert-dismissible padding-5 no-bottom-margin z-index-on-top' role='alert' data-bind='visible: !userCanAlwaysReopenCallLines()'>" +
+                            //    "<button type='button' class='close' data-dismiss='alert'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>" +
+                            //    "Line item marked as complete. <a href='' data-bind='click: undoLastCompleteLine'>Undo mark as complete.</a></div>");
+
+                            //ko.applyBindings(viewModel, document.getElementById('serviceCallMainContainer'));
+
+                            $("#undoLastCompleteLineItem").attr('data-service-line-id-to-undo', line.serviceCallLineItemId);
+                            viewModel.lineJustClosed(true);
+                            $("#undoLastCompleteLineItem").focus();
+                        }
                     });
             }
 
+            function reopenServiceCallLineItem(line) {
+                var lineData = ko.toJSON(line);
+
+                $.ajax({
+                    url: urls.ManageServiceCall.ReopenLineItem,
+                    type: "POST",
+                    data: lineData,
+                    dataType: "json",
+                    processData: false,
+                    contentType: "application/json; charset=utf-8"
+                })
+                    .fail(function (response) {
+                        toastr.error("There was an issue reopening the line item. Please try again!");
+                    })
+                    .done(function (response) {
+                        toastr.success("Success! Item reopened.");
+                        self.serviceCallLineItemStatus = response.ServiceCallLineItemStatus;
+                    });
+            }
+            
             function createServiceCallLineItemViewModel() {
                 var self = this;
                 
@@ -234,6 +292,8 @@ require(['/Scripts/app/main.js'], function () {
                         });
                     }
                 });
+
+                self.userCanAlwaysReopenCallLines = ko.observable();
                 
                 self.addLineItem = function() {
                     self.serviceCallId = $("#addCallLineServiceCallId").val();
@@ -358,6 +418,16 @@ require(['/Scripts/app/main.js'], function () {
                 self.resetCallNoteFilter = function () {
                     $("#filterCallNoteLineReferenceDropDown").val('');
                     self.selectedLineToFilterNotes('');
+                };
+
+                self.lineJustClosed = ko.observable();
+                
+                //undo last line item which was completed.
+                self.undoLastCompleteLine = function () {
+                    var lineId = $("#undoLastCompleteLineItem").attr('data-service-line-id-to-undo');
+                    var lineToReopen = {serviceCallLineItemId: lineId};
+                    reopenServiceCallLineItem(lineToReopen);
+                    self.lineJustClosed(false);
                 };
             }
 
