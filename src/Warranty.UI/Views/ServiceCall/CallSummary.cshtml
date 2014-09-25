@@ -204,7 +204,7 @@
                     <div class="clearfix"></div>
                     <ul>
                         <div data-bind="foreach: allLineItems">
-                            <div id="allServiceCallLineItems" class="service-call-line edit-line-item">
+                            <div id="allServiceCallLineItems" class="service-call-line edit-line-item" data-bind="attr: {'data-service-call-line-item': lineNumber()}">
                                     <li class="row">
                                         <div class="col-md-12">
                                             <div class="row">

@@ -169,13 +169,13 @@ require(['/Scripts/app/main.js'], function () {
             }
 
             function updateServiceCallLineItem(line) {
-                var updateProblemCode = $("#updateCallLineProblemCode");
+                var updateProblemCode = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemCode");
                 if (updateProblemCode.val() == "") {
                     $(updateProblemCode).parent().addClass("has-error");
                     return;
                 }
 
-                var updateProblemDescription = $("#updateCallLineProblemDescription");
+                var updateProblemDescription = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemDescription");
                 if (updateProblemDescription.val() == "") {
                     $(updateProblemDescription).parent().addClass("has-error");
                     return;
