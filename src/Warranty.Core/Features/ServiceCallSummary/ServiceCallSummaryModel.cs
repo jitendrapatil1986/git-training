@@ -51,7 +51,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public int DaysOpenedFor { get; set; }
             public int YearsWithinWarranty { get; set; }
             public DateTime WarrantyStartDate { get; set; }
-            public string PhoneNumber { get; set; }
+            public string HomePhone { get; set; }
+            public string OtherPhone { get; set; }
             public string EmailAddress { get; set; }
             public bool IsSpecialProject { get; set; }
             public bool IsEscalated { get; set; }

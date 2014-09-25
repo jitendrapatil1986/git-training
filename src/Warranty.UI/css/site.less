@@ -534,20 +534,30 @@ a.delete-group-item:hover {
 
     .edit-line-item > row > .col-md-12 {
         padding-left: 0;
-    }    
+    }
+
+    .inline-reassign-text .glyphicon {
+        width: 31%;
+        margin: 2px;
+        float: left;
+        padding: 10px;
+        text-align: center;
+        border: 1px solid lightgrey;
+        background: white;
+    }
 }
 
-.inline-reassign-employee .editable-input {
+.inline-reassign-dropdown .editable-input {
     float: right;
     background-color: lightgray; 
     padding: 5px;
 }
 
-.inline-reassign-employee .editable-input select {
+.inline-reassign-dropdown .editable-input select {
     width: 100%;
 }
 
-.inline-reassign-employee .editable-buttons{
+.inline-reassign-dropdown .editable-buttons{
     padding: 5px;
     background-color: lightgray;    
     margin-top: -4px;
@@ -557,6 +567,27 @@ a.delete-group-item:hover {
     z-index: 1;
 }
 
-.inline-reassign-employee .editableform{
+.inline-reassign-dropdown .editableform{
     position: relative;
 }
+
+.inline-reassign-text .editable-empty, .inline-reassign-text .editable-empty, .inline-reassign-text .editable-empty:hover, .inline-reassign-text .editable-empty:focus {
+    font-style: normal;
+    color: #08c;
+}
+
+.inline-reassign-text form {
+    background-color: lightgray; 
+    padding: 5px;
+}
+
+.inline-reassign-text .editableform .form-control {
+    width: 170px;
+    padding-left: 5px;
+}
+
+.inline-reassign-text .editable-buttons{
+    margin-top: 4px;
+}
+
+

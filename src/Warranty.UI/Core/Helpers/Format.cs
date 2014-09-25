@@ -4,6 +4,7 @@ using Warranty.Core.Enumerations;
 namespace Warranty.UI.Core.Helpers
 {
     using System;
+    using System.Linq;
     using System.Web.Mvc;
     using Warranty.Core.Extensions;
 
@@ -360,6 +361,22 @@ namespace Warranty.UI.Core.Helpers
             }
 
             return MvcHtmlString.Create("<span class=\"glyphicon glyphicon-earphone text-muted\"></span> " + phoneNumber);
+        }
+
+        public static MvcHtmlString EditablePhoneNumber(PhoneNumberType phoneNumberType, string phoneNumber, string postUrl, Guid serviceCallId)
+        {
+            var htmlString =
+                string.Format("<div class='inline-reassign-text'><a class='glyphicon glyphicon-{0} text-muted visible-xs' href='tel:{4}'></a><span class='glyphicon glyphicon-{0} text-muted hidden-xs'></span> <a href='#' class='hidden-xs phone-number-with-extension' data-type='text' data-emptytext='Add' id='{1}_Phone' data-url='{2}' data-pk='{3}' data-clear='false' data-value='{4}'>{4}</a></div>", phoneNumberType.Icon, phoneNumberType.DisplayName, postUrl, serviceCallId, phoneNumber);
+
+            return MvcHtmlString.Create(htmlString);
+        }
+
+        public static MvcHtmlString EditableEmail(string email, string postUrl, Guid serviceCallId, string callNumber)
+        {
+            return
+                MvcHtmlString.Create(
+                    string.Format(@"<div class='inline-reassign-text'><a class='glyphicon glyphicon-envelope text-muted' href='mailto:{2}?subject=David Weekley Homes Warranty Service Call %23 {3}'></a> 
+                                    <a href='mailto:{2}?subject=David Weekley Homes Warranty Service Call %23 {3}' class='hidden-xs' data-type='text' data-emptytext='Add' id='Email' data-url='{0}' data-pk='{1}' data-clear='false' data-value='{2}'>{2}</a></div>", postUrl, serviceCallId, email, callNumber));
         }
 
         public static MvcHtmlString CellNumber(string cellNumber)

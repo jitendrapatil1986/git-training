@@ -158,6 +158,7 @@
     <Compile Include="Entities\ServiceCallNote.cs" />
     <Compile Include="Entities\ServiceCallLineItem.cs" />
     <Compile Include="Enumerations\ActivityType.cs" />
+    <Compile Include="Enumerations\PhoneNumberType.cs" />
     <Compile Include="Enumerations\ReferenceType.cs" />
     <Compile Include="Enumerations\ServiceCallLineItemStatus.cs" />
     <Compile Include="Enumerations\UserRoles.cs" />
@@ -241,6 +242,11 @@
     <Compile Include="Features\ServiceCallApproval\ServiceCallDenyCommand.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommand.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommandHandler.cs" />
+    <Compile Include="Features\ServiceCallSummary\ReassignEmployee\AddOrUpdateServiceCallEmailCommand.cs" />
+    <Compile Include="Features\ServiceCallSummary\ReassignEmployee\AddOrUpdateServiceCallEmailCommandHandler.cs" />
+    <Compile Include="Features\ServiceCallSummary\ReassignEmployee\AddOrUpdateServiceCallPhoneNumberCommand.cs" />
+    <Compile Include="Features\ServiceCallSummary\ReassignEmployee\AddOrUpdateServiceCallPhoneNumberCommandHandler.cs" />
+    <Compile Include="Features\ServiceCallSummary\ReassignEmployee\InlineEditCommandBase.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\ReassignEmployeeCommand.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\EmployeesForServiceCallQueryHandler.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\EmployeesForServiceCallQuery.cs" />

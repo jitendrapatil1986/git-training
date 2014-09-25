@@ -1,6 +1,6 @@
 ﻿namespace Warranty.Core.Features.ServiceCallSummary.ReassignEmployee
 {
-    public class ReassignEmployeeCommand : InlineEditCommandBase
+    public class AddOrUpdateServiceCallEmailCommand : InlineEditCommandBase
     {
     }
 }

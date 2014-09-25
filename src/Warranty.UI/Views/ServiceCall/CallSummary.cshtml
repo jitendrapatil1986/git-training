@@ -60,8 +60,15 @@
                         <h3 class="panel-title text-capitalize">@Format.HomeOwner(Model.ServiceCallSummary.HomeownerName, Model.ServiceCallSummary.HomeownerNumber)</h3>
                         <ul>
                             <li>@Model.ServiceCallSummary.Address</li>
-                            <li>@Format.PhoneNumber(Model.ServiceCallSummary.PhoneNumber)</li>
-                            <li><a href="mailto:@Model.ServiceCallSummary.EmailAddress?subject=David Weekley Homes Warranty Service Call %23 @Model.ServiceCallSummary.CallNumber">@Format.Email(Model.ServiceCallSummary.EmailAddress)</a></li>
+                            <li>
+                                @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.ServiceCallSummary.HomePhone,Url.Action("AddOrUpdateServiceCallPhoneNumber","ServiceCall"), Model.ServiceCallSummary.ServiceCallId)
+                            </li>
+                            <li>
+                                @Format.EditablePhoneNumber(PhoneNumberType.Mobile, Model.ServiceCallSummary.OtherPhone,Url.Action("AddOrUpdateServiceCallPhoneNumber","ServiceCall"),Model.ServiceCallSummary.ServiceCallId)
+                            </li>
+                            <li>
+                                @Format.EditableEmail(Model.ServiceCallSummary.EmailAddress, Url.Action("AddOrUpdateServiceCallEmail","ServiceCall"), Model.ServiceCallSummary.ServiceCallId, Model.ServiceCallSummary.CallNumber)
+                            </li>
                         </ul>
                         <span>@Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate)</span>
                     </div>
@@ -73,7 +80,7 @@
                                 <span class="pull-left">Assignee:</span>
                                     @if (Model.CanReassign)
                                     {
-                                        <div class="inline-reassign-employee pull-right">
+                                        <div class="inline-reassign-dropdown pull-right">
                                             <a href="#" id="Employee_List" data-source="@Url.Action("GetEmployees", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId })" data-url="@Url.Action("InlineReassign", "ServiceCall")" data-pk="@Model.ServiceCallSummary.ServiceCallId" data-value="@Model.ServiceCallSummary.AssignedToEmployeeNumber">@Model.ServiceCallSummary.AssignedTo</a>
                                         </div>
                                     }

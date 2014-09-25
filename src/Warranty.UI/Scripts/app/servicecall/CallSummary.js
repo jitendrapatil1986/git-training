@@ -1,9 +1,29 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', '/Scripts/lib/jquery.color-2.1.0.min.js','x-editable'], function ($, ko, urls, toastr, modelData, dropdownData, xeditable) {
+    require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable','enumerations/phone-number-type', 'jquery.maskedinput', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, maskedInput) {
         $(function () {
             $.fn.editable.defaults.mode = 'inline';
+            $.fn.editable.defaults.emptytext = 'Add';
+            $.fn.editableform.buttons =
+                '<button type="submit" class="btn btn-primary editable-submit btn-xs"><i class="icon-ok icon-white"></i>Save</button>';
+            
+
             $("#Employee_List").editable({
                 type: 'select',
+            });
+
+            $("#Home_Phone").editable({
+                params: { phoneNumberTypeValue: phoneNumberTypeEnum.Home.Value }
+            });
+            
+            $("#Mobile_Phone").editable({
+                params: { phoneNumberTypeValue: phoneNumberTypeEnum.Mobile.Value }
+            });
+            
+            $("#Email").editable({
+            });
+
+            $(".phone-number-with-extension").on('shown', function () {
+                $(this).data('editable').input.$input.mask('?(999)-999-9999 x999999');
             });
 
             $('.btn-action-with-popup').click(function (e) {
