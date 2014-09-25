@@ -500,6 +500,25 @@ a.delete-group-item:hover {
     width: 100%;
 }
 
+.dashboard-widget-title{
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.dashboard-widget-number{
+    font-size: 4em;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    line-height: 1em;
+}
+
+.dashboard-widget-footnote{
+    color: #999;
+    text-align: center;
+    margin: 10px 0 5px 0;
+}
+
 @media (max-width: 767px) {
     .float-right-non-xs-screen {
         float: none !important;
@@ -516,4 +535,28 @@ a.delete-group-item:hover {
     .edit-line-item > row > .col-md-12 {
         padding-left: 0;
     }    
+}
+
+.inline-reassign-employee .editable-input {
+    float: right;
+    background-color: lightgray; 
+    padding: 5px;
+}
+
+.inline-reassign-employee .editable-input select {
+    width: 100%;
+}
+
+.inline-reassign-employee .editable-buttons{
+    padding: 5px;
+    background-color: lightgray;    
+    margin-top: -4px;
+    position: absolute;
+    right: 0;
+    top: 39px;
+    z-index: 1;
+}
+
+.inline-reassign-employee .editableform{
+    position: relative;
 }

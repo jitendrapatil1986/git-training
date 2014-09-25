@@ -1,5 +1,12 @@
-﻿@model Warranty.Core.Features.WarrantyDollarsSpentWidget.WarrantyDollarsSpentWidgetModel
+﻿@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.WarrantyDollarsSpentWidget.WarrantyDollarsSpentWidgetModel
 
 <div class="panel panel-info">
-    <h1>@Model.AmountSpent</h1>
+    <div class="panel-heading">
+        <div class="dashboard-widget-title">WARRANTY DOLLARS SPENT</div>
+    </div>
+    <div class="panel-body">
+        <div class="dashboard-widget-number">@Format.MoneyWithoutDecimal(Model.AmountSpentThisMonth)</div>
+        <div class="dashboard-widget-footnote">@Format.MoneyWithoutDecimal(Model.AmountSpentLastMonth) spent last month</div>
+    </div>
 </div>

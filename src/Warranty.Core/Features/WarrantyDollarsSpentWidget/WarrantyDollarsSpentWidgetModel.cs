@@ -2,7 +2,7 @@
 {
     public class WarrantyDollarsSpentWidgetModel
     {
-        public decimal AmountSpent { get; set; }
+        public decimal AmountSpentThisMonth { get; set; }
         public decimal AmountSpentLastMonth { get; set; }
     }
 }

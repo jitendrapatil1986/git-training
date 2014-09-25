@@ -1,8 +1,4 @@
-﻿using Warranty.Core.Features.ServiceCallApproval;
-using Warranty.Core.Features.ServiceCallToggleActions;
-using Warranty.UI.Mailer;
-
-namespace Warranty.UI.Controllers
+﻿namespace Warranty.UI.Controllers
 {
     using System;
     using System.Web.Mvc;
@@ -15,6 +11,10 @@ namespace Warranty.UI.Controllers
     using Warranty.Core.Features.ServiceCallSummary;
     using System.Linq;
     using Warranty.Core.Security;
+    using Warranty.Core.Features.ServiceCallApproval;
+    using Warranty.Core.Features.ServiceCallSummary.ReassignEmployee;
+    using Warranty.Core.Features.ServiceCallToggleActions;
+    using Mailer;
 
     public class ServiceCallController : Controller
     {
@@ -155,6 +155,22 @@ namespace Warranty.UI.Controllers
                 ServiceCallId = id,
                 Text = message
             });
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetEmployees(Guid id)
+        {
+            var employees = _mediator.Request(new EmployeesForServiceCallQuery
+            {
+                ServiceCallId = id
+            });
+
+            return Json(employees.Select(x => new { value = x.EmployeeNumber, text = x.DisplayName }), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult InlineReassign(ReassignEmployeeCommand command)
+        {
+            _mediator.Send(command);
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
     }
