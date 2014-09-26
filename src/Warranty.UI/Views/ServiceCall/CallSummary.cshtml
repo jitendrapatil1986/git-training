@@ -54,20 +54,20 @@
             <div class="clearfix"></div>
         </section>
         <div class="panel panel-default">
-            <div class="panel-heading text-capitalize">
+            <div class="panel-heading">
                 <div class="row remove-list-style">
                     <div class="col-md-3 margin-bottom-10">
                         <h3 class="panel-title text-capitalize">@Format.HomeOwner(Model.ServiceCallSummary.HomeownerName, Model.ServiceCallSummary.HomeownerNumber)</h3>
                         <ul>
-                            <li>@Model.ServiceCallSummary.Address</li>
+                            <li class="text-capitalize">@Model.ServiceCallSummary.Address</li>
                             <li>
-                                @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.ServiceCallSummary.HomePhone,Url.Action("AddOrUpdateServiceCallPhoneNumber","ServiceCall"), Model.ServiceCallSummary.ServiceCallId)
+                                @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.ServiceCallSummary.HomePhone,Url.Action("AddOrUpdatePhoneNumber","Homeowner"), Model.ServiceCallSummary.HomeownerId)
                             </li>
                             <li>
-                                @Format.EditablePhoneNumber(PhoneNumberType.Mobile, Model.ServiceCallSummary.OtherPhone,Url.Action("AddOrUpdateServiceCallPhoneNumber","ServiceCall"),Model.ServiceCallSummary.ServiceCallId)
+                                @Format.EditablePhoneNumber(PhoneNumberType.Mobile, Model.ServiceCallSummary.OtherPhone,Url.Action("AddOrUpdatePhoneNumber","Homeowner"),Model.ServiceCallSummary.HomeownerId)
                             </li>
                             <li>
-                                @Format.EditableEmail(Model.ServiceCallSummary.EmailAddress, Url.Action("AddOrUpdateServiceCallEmail","ServiceCall"), Model.ServiceCallSummary.ServiceCallId, Model.ServiceCallSummary.CallNumber)
+                                @Format.EditableEmailForServiceCall(Model.ServiceCallSummary.EmailAddress, Url.Action("AddOrUpdateEmail","Homeowner"), Model.ServiceCallSummary.HomeownerId, Model.ServiceCallSummary.CallNumber)
                             </li>
                         </ul>
                         <span>@Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate)</span>
@@ -80,7 +80,7 @@
                                 <span class="pull-left">Assignee:</span>
                                     @if (Model.CanReassign)
                                     {
-                                        <div class="inline-reassign-dropdown pull-right">
+                                        <div class="inline-reassign-dropdown pull-right text-capitalize">
                                             <a href="#" id="Employee_List" data-source="@Url.Action("GetEmployees", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId })" data-url="@Url.Action("InlineReassign", "ServiceCall")" data-pk="@Model.ServiceCallSummary.ServiceCallId" data-value="@Model.ServiceCallSummary.AssignedToEmployeeNumber">@Model.ServiceCallSummary.AssignedTo</a>
                                         </div>
                                     }

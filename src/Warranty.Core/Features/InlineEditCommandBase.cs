@@ -1,4 +1,4 @@
-﻿namespace Warranty.Core.Features.ServiceCallSummary.ReassignEmployee
+﻿namespace Warranty.Core.Features
 {
     using System;
 

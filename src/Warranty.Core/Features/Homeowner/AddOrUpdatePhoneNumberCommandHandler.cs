@@ -1,34 +1,26 @@
-﻿namespace Warranty.Core.Features.ServiceCallSummary.ReassignEmployee
+﻿namespace Warranty.Core.Features.Homeowner
 {
     using ActivityLogger;
     using Entities;
     using Enumerations;
     using NPoco;
 
-    public class AddOrUpdateServiceCallPhoneNumberCommandHandler : ICommandHandler<AddOrUpdateServiceCallPhoneNumberCommand>
+    public class AddOrUpdatePhoneNumberCommandHandler : ICommandHandler<AddOrUpdatePhoneNumberCommand>
     {
         private readonly IDatabase _database;
         private readonly IActivityLogger _logger;
 
-        public AddOrUpdateServiceCallPhoneNumberCommandHandler(IDatabase database, IActivityLogger logger)
+        public AddOrUpdatePhoneNumberCommandHandler(IDatabase database, IActivityLogger logger)
         {
             _database = database;
             _logger = logger;
         }
 
-        public void Handle(AddOrUpdateServiceCallPhoneNumberCommand message)
+        public void Handle(AddOrUpdatePhoneNumberCommand message)
         {
             using (_database)
             {
-                const string queryHomeOwner = @"SELECT ho.* 
-                                        FROM [ServiceCalls] wc
-                                        INNER JOIN Jobs j
-                                            ON wc.JobId = j.JobId
-                                        INNER JOIN HomeOwners ho
-                                            ON j.CurrentHomeOwnerId = ho.HomeOwnerId                                
-                                        WHERE wc.ServiceCallId=@0";
-
-                var homeOwner = _database.SingleOrDefault<HomeOwner>(queryHomeOwner, message.Pk);
+                var homeOwner = _database.SingleById<HomeOwner>(message.Pk);
 
                 var phoneNumberType = PhoneNumberType.FromValue(message.PhoneNumberTypeValue);
 
@@ -37,13 +29,13 @@
                 if (phoneNumberType == PhoneNumberType.Home)
                 {
                     oldPhone = homeOwner.HomePhone;
-                    homeOwner.HomePhone = message.Value;
+                    homeOwner.HomePhone = RemoveExtensionIfBlank(message.Value);
 
                 }
                 else if (phoneNumberType == PhoneNumberType.Mobile)
                 {
                     oldPhone = homeOwner.OtherPhone;
-                    homeOwner.OtherPhone = message.Value;
+                    homeOwner.OtherPhone = RemoveExtensionIfBlank(message.Value);
                 }
 
                 _database.Update(homeOwner);
@@ -51,6 +43,16 @@
                 var logDetails = string.Format("Old Phone: {0}, New Phone {1}, Phone Number Type: {2}", oldPhone, message.Value, phoneNumberType.DisplayName);
                 _logger.Write("Homeowner phone change", logDetails, homeOwner.HomeOwnerId, ActivityType.ChangePhone, ReferenceType.Homeowner);
             }
+        }
+
+        private string RemoveExtensionIfBlank(string phoneNumber)
+        {
+            phoneNumber = phoneNumber.ToLower().Trim();
+            if (phoneNumber.EndsWith("x"))
+            {
+                return phoneNumber.Replace("x", string.Empty);
+            }
+            return phoneNumber;
         }
     }
 }

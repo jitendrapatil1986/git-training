@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Warranty.Core.Features.ServiceCallSummary
 {
@@ -55,6 +52,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , ho.HomeOwnerNumber
                                     , case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
                                     , NumberOfLineItems
+                                    , ho.HomeownerId
                                     , ho.HomePhone
                                     , ho.OtherPhone
                                     , ho.EmailAddress

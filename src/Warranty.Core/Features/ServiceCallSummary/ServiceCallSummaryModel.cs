@@ -45,6 +45,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public string CreatedBy { get; set; }
             public DateTime? CompletionDate { get; set; }
             public string HomeownerName { get; set; }
+            public Guid HomeownerId { get; set; }
             public int HomeownerNumber { get; set; }
             public int NumberOfDaysRemaining { get { return ServiceCallCalculator.CalculateNumberOfDaysRemaining(CreatedDate); } }
             public int NumberOfLineItems { get; set; }

@@ -173,17 +173,5 @@
             _mediator.Send(command);
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
-
-        public ActionResult AddOrUpdateServiceCallPhoneNumber(AddOrUpdateServiceCallPhoneNumberCommand command)
-        {
-            _mediator.Send(command);
-            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult AddOrUpdateServiceCallEmail(AddOrUpdateServiceCallEmailCommand command)
-        {
-            _mediator.Send(command);
-            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
-        }
     }
 }
