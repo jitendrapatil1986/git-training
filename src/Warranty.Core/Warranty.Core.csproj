@@ -215,6 +215,9 @@
     <Compile Include="Features\CreateServiceCall\RelatedProblemCode.cs" />
     <Compile Include="Features\CreateServiceCall\RelatedProblemCodeQuery.cs" />
     <Compile Include="Features\InlineEditCommandBase.cs" />
+    <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureServiceCallStatusModel.cs" />
+    <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureServiceCallStatusCommand.cs" />
+    <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureServiceCallStatusCommandHandler.cs" />
     <Compile Include="Features\ManageLookups\CreateLookupItemCommandHandler.cs" />
     <Compile Include="Features\ManageLookups\CreateLookupItemModel.cs" />
     <Compile Include="Features\ManageLookups\CreateLookupItemCommand.cs" />

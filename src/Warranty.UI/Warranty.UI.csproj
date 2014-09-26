@@ -191,13 +191,13 @@
     </Compile>
     <Compile Include="Api\ApiController.cs" />
     <Compile Include="Api\AssignWSRController.cs" />
+    <Compile Include="Api\HomeownerController.cs" />
     <Compile Include="Api\RelatedCallController.cs" />
     <Compile Include="Api\ManageLookupsController.cs" />
     <Compile Include="Api\QuickSearchController.cs" />
     <Compile Include="Api\ManageServiceCallController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
-    <Compile Include="Controllers\HomeownerController.cs" />
     <Compile Include="Controllers\EnumerationController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -256,6 +256,7 @@
     <Content Include="css\bootstrap-theme.min.css" />
     <Content Include="css\bootstrap.css" />
     <Content Include="css\bootstrap.min.css" />
+    <Content Include="css\datepicker.css" />
     <Content Include="css\font\fontawesome-webfont.svg" />
     <Content Include="css\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="favicon.ico" />
@@ -286,6 +287,7 @@
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
     <Content Include="Scripts\config\customer-search.js" />
     <Content Include="Scripts\enumerations\phone-number-type.js" />
+    <Content Include="Scripts\enumerations\ServiceCallStatus.js" />
     <Content Include="Scripts\lib\bootstrap-editable.min.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />
     <Content Include="Scripts\lib\handlebars.amd.min.js" />

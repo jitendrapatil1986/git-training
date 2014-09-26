@@ -68,6 +68,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , d.DivisionName
                                     , p.ProjectName
                                     , cm.CommunityName
+                                    , wc.HomeownerVerificationSignature
+                                    , wc.HomeownerVerificationSignatureDate
                                 FROM [ServiceCalls] wc
                                 INNER JOIN Jobs j
                                 ON wc.JobId = j.JobId

@@ -50,6 +50,7 @@
     <Compile Include="Importers\JobStageImport.cs" />
     <Compile Include="Importers\PaymentImporter.cs" />
     <Compile Include="Importers\ImporterTemplate.cs" />
+    <Compile Include="Importers\WarrantyPaymentImporter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
