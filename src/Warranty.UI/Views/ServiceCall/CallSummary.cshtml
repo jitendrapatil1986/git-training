@@ -80,7 +80,7 @@
                                 <span class="pull-left">Assignee:</span>
                                     @if (Model.CanReassign)
                                     {
-                                        <div class="inline-reassign-dropdown pull-right text-capitalize">
+                                        <div class="inline-editable-dropdown pull-right text-capitalize">
                                             <a href="#" id="Employee_List" data-source="@Url.Action("GetEmployees", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId })" data-url="@Url.Action("InlineReassign", "ServiceCall")" data-pk="@Model.ServiceCallSummary.ServiceCallId" data-value="@Model.ServiceCallSummary.AssignedToEmployeeNumber">@Model.ServiceCallSummary.AssignedTo</a>
                                         </div>
                                     }
