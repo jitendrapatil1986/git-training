@@ -128,14 +128,11 @@
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignature, new { id = "verifiedHomeownerSignature", @class = "form-control" })
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignatureDate, new { id = "verifiedHomeownerSignatureDate", @class = "form-control" })
 
-            @if (!String.IsNullOrEmpty(Model.ServiceCallSummary.HomeownerVerificationSignature))
-            {
-                <section data-bind="visible: callSummaryStatusSigned() || callSummaryStatusClosed()">
-                    <div class="alert alert-success no-bottom-margin" >
-                        <span data-bind="text: verifiedSignature()"></span>
-                    </div>
-                </section>
-            }
+            <section data-bind="visible: verifiedHomeownerSignature() && (callSummaryStatusSigned() || callSummaryStatusClosed())">
+                <div class="alert alert-success no-bottom-margin" >
+                    <span data-bind="text: verifiedSignature()"></span>
+                </div>
+            </section>
 
             <section data-bind="visible: areAllLineItemsClosed() && !callSummaryStatusClosed() && !callSummaryStatusSigned()">
                 <h3 class="col-md-12">Verify Homeowner Signature</h3>
