@@ -18,6 +18,8 @@ namespace Warranty.Core.Entities
         public virtual DateTime? CompletionDate { get; set; }
         public virtual string WorkSummary { get; set; }
         public virtual string HomeOwnerSignature { get; set; }
+        public virtual string HomeownerVerificationSignature { get; set; }
+        public virtual DateTime? HomeownerVerificationSignatureDate { get; set; }
         public virtual DateTime? CreatedDate { get; set; }
         public virtual string CreatedBy { get; set; }
         public virtual DateTime? UpdatedDate { get; set; }

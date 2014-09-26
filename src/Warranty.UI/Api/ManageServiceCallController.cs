@@ -10,6 +10,7 @@
     using Warranty.Core.Features.AddServiceCallNote;
     using Warranty.Core.Features.CompleteServiceCallLineItem;
     using Warranty.Core.Features.EditServiceCallLineItem;
+    using Warranty.Core.Features.EditServiceCallStatus;
     using Warranty.Core.Security;
 
     public class ManageServiceCallController: ApiController
@@ -19,6 +20,20 @@
         public ManageServiceCallController(IMediator mediator, IWarrantyMailer mailer, IUserSession userSession)
         {
             _mediator = mediator;
+        }
+
+        [HttpPost]
+        public VerifyHomeownerSignatureServiceCallStatusModel VerifyHomeownerSignatureServiceCall(VerifyHomeownerSignatureServiceCallStatusModel model)
+        {
+            var resultModel = _mediator.Send(new VerifyHomeownerSignatureServiceCallStatusCommand
+                {
+                    ServiceCallId = model.ServiceCallId,
+                    ServiceCallStatus = model.ServiceCallStatus,
+                    HomeownerVerificationSignature = model.HomeownerVerificationSignature,
+                    HomeownerVerificationSignatureDate = model.HomeownerVerificationSignatureDate,
+                });
+
+            return resultModel;
         }
 
         [HttpPost]

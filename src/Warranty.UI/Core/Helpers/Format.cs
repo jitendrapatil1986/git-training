@@ -397,11 +397,12 @@ namespace Warranty.UI.Core.Helpers
             return city + ", " + state + " " + zip;
         }
 
-        public static MvcHtmlString ServiceCallStatus(ServiceCallStatus serviceCallStatus)
+        public static MvcHtmlString ServiceCallStatus(ServiceCallStatus serviceCallStatus, string id, string dataBind)
         {
             var status = serviceCallStatus.DisplayName;
-            var htmlString = string.Format("<span class='label label-{0}-service-call'>{1}</span>", status.ToLower(),
-                                           status);
+
+            var htmlString = string.Format("<span id='{0}' class='label label-{1}-service-call' data-bind='{2}'>{3}</span>", id, status.Replace(" ", "-").ToLower(),
+                                           dataBind, status);
             return MvcHtmlString.Create(htmlString);
         }
 

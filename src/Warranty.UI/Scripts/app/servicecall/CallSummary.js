@@ -1,10 +1,12 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', '/Scripts/lib/jquery.color-2.1.0.min.js','x-editable'], function ($, ko, urls, toastr, modelData, dropdownData, xeditable) {
+    require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'enumerations/ServiceCallStatus','/Scripts/lib/jquery.color-2.1.0.min.js','x-editable'], function ($, ko, urls, toastr, modelData, dropdownData, serviceCallStatusData,xeditable) {
         $(function () {
             $.fn.editable.defaults.mode = 'inline';
             $("#Employee_List").editable({
                 type: 'select',
             });
+
+            $(".datepicker-input").datepicker();
 
             $('.btn-action-with-popup').click(function (e) {
                 $(this).addClass("active");
@@ -52,7 +54,6 @@ require(['/Scripts/app/main.js'], function () {
                     button.text(nextText);
                 }
             });
-            
 
             $(".approve-button").click(function (e) {
                 e.preventDefault();
@@ -124,9 +125,6 @@ require(['/Scripts/app/main.js'], function () {
                 
                 //save line item changes.
                 self.saveLineItemChanges = function () {
-                    this.problemCodeEditing(false);
-                    this.problemDescriptionEditing(false);
-                    this.lineEditing(false);
                     updateServiceCallLineItem(this);
                 };
                 
@@ -171,7 +169,17 @@ require(['/Scripts/app/main.js'], function () {
             }
 
             function updateServiceCallLineItem(line) {
-                //TODO: Add validations.
+                var updateProblemCode = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemCode");
+                if (updateProblemCode.val() == "") {
+                    $(updateProblemCode).parent().addClass("has-error");
+                    return;
+                }
+
+                var updateProblemDescription = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemDescription");
+                if (updateProblemDescription.val() == "") {
+                    $(updateProblemDescription).parent().addClass("has-error");
+                    return;
+                }
 
                 var lineData = ko.toJSON(line);
 
@@ -189,7 +197,15 @@ require(['/Scripts/app/main.js'], function () {
                     .done(function (response) {
                         toastr.success("Success! Item updated.");
                         self.problemCode = line.problemCode;
+                        
+                        //change to non-edit mode once success has occurred.
+                        line.problemCodeEditing(false);
+                        line.problemDescriptionEditing(false);
+                        line.lineEditing(false);
                     });
+                
+                $(updateProblemCode).parent().removeClass("has-error");
+                $(updateProblemDescription).parent().removeClass("has-error");
             }
             
             function completeServiceCallLineItem(line) {
@@ -212,7 +228,7 @@ require(['/Scripts/app/main.js'], function () {
                     });
             }
 
-            function createServiceCallLineItemViewModel() {
+            function serviceCallSummaryItemViewModel() {
                 var self = this;
                 
                 self.allLineItems = ko.observableArray([]);
@@ -234,9 +250,20 @@ require(['/Scripts/app/main.js'], function () {
                         });
                     }
                 });
-                
+
+                self.areAllLineItemsClosed = function () {
+                    var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
+                        return (i.serviceCallLineItemStatus().displayName.toLowerCase() != serviceCallStatusData.Closed.DisplayName.toLowerCase());
+                    });
+
+                    if (anyNonCompletedLineItem)
+                        return false;
+                    else
+                        return true;
+                };
+
                 self.addLineItem = function() {
-                    self.serviceCallId = $("#addCallLineServiceCallId").val();
+                    self.serviceCallId = $("#callSummaryServiceCallId").val();
                     self.problemCode = $("#addCallLineProblemCode").find('option:selected').text();
                     self.problemCodeId = $("#addCallLineProblemCode").val();
                     self.problemDescription = $("#addCallLineProblemDescription").val();
@@ -296,7 +323,7 @@ require(['/Scripts/app/main.js'], function () {
                 };
 
                 self.addCallNote = function () {
-                    self.serviceCallId = $("#addCallLineServiceCallId").val();
+                    self.serviceCallId = $("#callSummaryServiceCallId").val();
                     self.serviceCallLineItemId = $("#addCallNoteLineReferenceDropDown").find('option:selected').val();
                     self.note = $("#addCallNoteDescription").val();
 
@@ -359,9 +386,91 @@ require(['/Scripts/app/main.js'], function () {
                     $("#filterCallNoteLineReferenceDropDown").val('');
                     self.selectedLineToFilterNotes('');
                 };
+
+                self.callSummaryServiceCallStatus = ko.observable($("#callSummaryServiceCallStatus").html());
+
+                self.callSummaryStatusClosed = ko.computed(function () {
+                    if (self.callSummaryServiceCallStatus().toLowerCase() == serviceCallStatusData.Closed.DisplayName.toLowerCase())
+                        return true;
+                    else
+                        return false;
+                });
+                
+                self.callSummaryStatusSigned = ko.computed(function () {
+                    if (self.callSummaryServiceCallStatus().toLowerCase() == serviceCallStatusData.HomeownerSigned.DisplayName.toLowerCase())
+                        return true;
+                    else
+                        return false;
+                });
+
+                self.homeownerVerificationSignature = ko.observable('');
+                self.homeownerVerificationSignatureDate = ko.observable();
+                
+                self.verifiedHomeownerSignature = ko.observable($("#verifiedHomeownerSignature").val());
+                self.verifiedHomeownerSignatureDate = ko.observable($("#verifiedHomeownerSignatureDate").val());
+                
+                self.verifiedSignature = ko.computed(function () {
+                    var result = 'Verification Signed by ' + self.verifiedHomeownerSignature();
+                    
+                    if (self.verifiedHomeownerSignatureDate()) {
+                        result += ' on ' + moment(self.verifiedHomeownerSignatureDate()).format('L');
+                    }
+
+                    return result;
+                });
+                
+                self.saveVerifiedHomeownerSignature = function () {
+                    self.serviceCallId = $("#callSummaryServiceCallId").val();
+                    self.homeownerVerificationSignature = $("#homeownerVerificationSignature").val();
+                    self.homeownerVerificationSignatureDate = $("#homeownerVerificationSignatureDate").val();
+
+                    var newhomeownerVerificationSignature = $("#homeownerVerificationSignature");
+                    if (newhomeownerVerificationSignature.val() == "") {
+                        $(newhomeownerVerificationSignature).parent().addClass("has-error");
+                        return;
+                    }
+
+                    var newhomeownerVerificationSignatureDate = $("#homeownerVerificationSignatureDate");
+                    if (newhomeownerVerificationSignatureDate.val() == "") {
+                        $(newhomeownerVerificationSignatureDate).parent().addClass("has-error");
+                        return;
+                    }
+
+                    var verifySignatureData = ko.toJSON({
+                        serviceCallId: self.serviceCallId, homeownerVerificationSignature: self.homeownerVerificationSignature,
+                        homeownerVerificationSignatureDate: self.homeownerVerificationSignatureDate
+                    });
+
+                    $.ajax({
+                        url: urls.ManageServiceCall.VerifyHomeownerSignatureServiceCall,
+                        type: "POST",
+                        data: verifySignatureData,
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    })
+                        .fail(function (response) {
+                            alert(JSON.stringify(response));
+                            toastr.error("There was an issue saving the homeowner verification signature. Please try again!");
+                        })
+                        .done(function (response) {
+                            self.callSummaryServiceCallStatus(response.ServiceCallStatus.DisplayName);
+                            self.verifiedHomeownerSignature(response.HomeownerVerificationSignature);
+                            self.verifiedHomeownerSignatureDate(response.HomeownerVerificationSignatureDate);
+                            toastr.success("Success! Data saved.");
+
+                            $("#homeownerVerificationSignature").val('');
+                            $("#homeownerVerificationSignatureDate").val('');
+                            self.homeownerVerificationSignature = '';
+                            self.homeownerVerificationSignatureDate = '';
+                        });
+
+                    $(homeownerVerificationSignature).parent().removeClass("has-error");
+                    $(homeownerVerificationSignatureDate).parent().removeClass("has-error");
+                };
             }
 
-            var viewModel = new createServiceCallLineItemViewModel();
+            var viewModel = new serviceCallSummaryItemViewModel();
             ko.applyBindings(viewModel);
 
             var persistedAllLineItemsViewModel = modelData.initialServiceLines;

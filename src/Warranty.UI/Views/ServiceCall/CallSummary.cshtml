@@ -71,16 +71,16 @@
                             <li class="clearfix"><span class="pull-left">Created On:</span><span class="pull-right">@Format.DateMonthDayYear(Model.ServiceCallSummary.CreatedDate)</span></li>
                             <li class="clearfix">
                                 <span class="pull-left">Assignee:</span>
-                                    @if (Model.CanReassign)
-                                    {
-                                        <div class="inline-reassign-employee pull-right">
-                                            <a href="#" id="Employee_List" data-source="@Url.Action("GetEmployees", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId })" data-url="@Url.Action("InlineReassign", "ServiceCall")" data-pk="@Model.ServiceCallSummary.ServiceCallId" data-value="@Model.ServiceCallSummary.AssignedToEmployeeNumber">@Model.ServiceCallSummary.AssignedTo</a>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <span class="pull-right">@Model.ServiceCallSummary.AssignedTo</span>
-                                    }
+                                @if (Model.CanReassign)
+                                {
+                                    <div class="inline-reassign-employee pull-right">
+                                        <a href="#" id="Employee_List" data-source="@Url.Action("GetEmployees", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId })" data-url="@Url.Action("InlineReassign", "ServiceCall")" data-pk="@Model.ServiceCallSummary.ServiceCallId" data-value="@Model.ServiceCallSummary.AssignedToEmployeeNumber">@Model.ServiceCallSummary.AssignedTo</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="pull-right">@Model.ServiceCallSummary.AssignedTo</span>
+                                }
                             </li>
                         </ul>
                     </div>
@@ -102,7 +102,7 @@
                                 }
                                 else
                                 {
-                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus) </span>
+                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus") </span>
                                 }
                             </div>
                             @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
@@ -125,13 +125,48 @@
                 </div>
             </div>*@
             </div>
+            @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignature, new { id = "verifiedHomeownerSignature", @class = "form-control" })
+            @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignatureDate, new { id = "verifiedHomeownerSignatureDate", @class = "form-control" })
+
+            <section data-bind="visible: verifiedHomeownerSignature() && (callSummaryStatusSigned() || callSummaryStatusClosed())">
+                <div class="alert alert-success no-bottom-margin" >
+                    <span data-bind="text: verifiedSignature()"></span>
+                </div>
+            </section>
+
+            <section data-bind="visible: areAllLineItemsClosed() && !callSummaryStatusClosed() && !callSummaryStatusSigned()">
+                <h3 class="col-md-12">Verify Homeowner Signature</h3>
+                <div id="verifyHomeownerSignature">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.Label("Signature")
+                                    @Html.TextBox("Signature", null, new { id = "homeownerVerificationSignature", @class = "form-control", data_bind = "value: homeownerVerificationSignature, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Signature'}" })
+                                </div>
+                                <div class="col-md-2">
+                                    @Html.Label("Date")
+                                    @Html.TextBox("Date", null, new { id = "homeownerVerificationSignatureDate", @class = "datepicker-input form-control", data_bind="value: homeownerVerificationSignatureDate, attr:{placeholder: 'Select Date'}" })
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <button class="btn btn-primary" data-bind="click: saveVerifiedHomeownerSignature, enable: homeownerVerificationSignature().length > 0">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <section>
                 <h3 class="col-md-12">Line Items
                 <span>
-                    <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Line Item" data-toggle="collapse" data-target="#addCallLineItem"><span class="glyphicon glyphicon-plus"></span></button>
+                    <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Line Item" data-toggle="collapse" data-target="#addCallLineItem" data-bind="visible: !callSummaryStatusClosed() && !callSummaryStatusSigned()"><span class="glyphicon glyphicon-plus"></span></button>
                 </span>
                 </h3>
-                @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallId, new { id = "addCallLineServiceCallId", @class = "form-control" })
+                @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallId, new { id = "callSummaryServiceCallId", @class = "form-control" })
                 <div id="addCallLineItem" class="collapse">
                     <div class="panel panel-default">
                         <div class="panel-heading">Add Line Item</div>
@@ -139,14 +174,14 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     @Html.Label("Problem Code")
-                                    @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select Problem Code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind="value: problemCodeToAdd" })
+                                    @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select Problem Code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemCodeToAdd" })
                                 </div>
                             </div>
                             <br />
                             <div class="row">
                                 <div class="col-md-12">
                                     @Html.Label("Description")
-                                    @Html.TextArea("Description", null, new {id="addCallLineProblemDescription", @class="form-control", data_bind="value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Description'}"})
+                                    @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Description'}" })
                                 </div>
                             </div>
                             <br />
@@ -166,7 +201,7 @@
                     <div class="clearfix"></div>
                     <ul>
                         <div data-bind="foreach: allLineItems">
-                            <div id="allServiceCallLineItems" class="service-call-line edit-line-item">
+                            <div id="allServiceCallLineItems" class="service-call-line edit-line-item" data-bind="attr: {'data-service-call-line-item': lineNumber()}">
                                     <li class="row">
                                         <div class="col-md-12">
                                             <div class="row">
@@ -176,9 +211,8 @@
                                                             <div class="col-md-9">
                                                                 <div class="editor" data-bind="css: { editing: problemCodeEditing }"> 
                                                                     <h4>
-                                                                        <select class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
+                                                                        <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
                                                                         <small class="text-muted view" data-bind="text: problemCode"></small>
-                                                                        <span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
                                                                     </h4>
                                                                 </div>
                                                             </div>
@@ -188,6 +222,7 @@
                                                                 <div class="editor" data-bind="css: { editing: problemDescriptionEditing }"> 
                                                                     <p class="view" data-bind="text: problemDescription"></p>
                                                                     <textarea id="updateCallLineProblemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription"></textarea>
+                                                                    <span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -195,7 +230,7 @@
                                                             <div class="col-md-4 col-xs-12 no-left-right-padding top-buffer bottom-buffer">
                                                                 <div class="editor" data-bind="css: { editing: lineEditing }">
                                                                     <div class="col-md-3 col-xs-4">
-                                                                        <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges">Save</button>
+                                                                        <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges, enable: problemDescription().length > 0">Save</button>
                                                                     </div>
                                                                     <div class="col-md-3 col-xs-4">
                                                                         <button type="button" class="btn btn-default btn-sm edit" data-bind="click: cancelLineItemChanges">Cancel</button>
@@ -206,7 +241,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 margin-top-13 margin-bottom-3 text-align-right no-right-padding">
-                                                    <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: lineEditing() == false">Edit</button>
+                                                    <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: !lineEditing() && !$root.callSummaryStatusClosed() && !$root.callSummaryStatusSigned()">Edit</button>
                                                      @*<button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show" data-bind="click: completeLine, visible: lineEditing() == false">Complete</button>*@
                                                 </div>
                                             </div>
@@ -230,7 +265,7 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    @Html.TextArea("Description", null, new {id="addCallNoteDescription", @class="form-control", data_bind="text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Notes'}", @rows=3})
+                                    @Html.TextArea("Description", null, new { id = "addCallNoteDescription", @class = "form-control", data_bind = "text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Notes'}", @rows = 3 })
                                 </div>
                             </div>
                             <br/>
@@ -254,7 +289,7 @@
                 </div>
                 <br />
                 <em data-bind="visible: allCallNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">No Notes Available</em>
-                <span data-bind="visible: allCallNotes().length > 1" class="padding-left-15 padding-top-7 pull-left">
+                <span data-bind="visible: allCallNotes().length > 0" class="padding-left-15 padding-top-7 pull-left">
                     Show: 
                 </span>
                 <div class="col-md-3 margin-bottom-10">
