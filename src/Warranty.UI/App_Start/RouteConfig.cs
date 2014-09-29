@@ -8,9 +8,10 @@
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
             routes.MapRoute(
                 name: "JavaScriptEnumerations",
-                url: "content/js/enumeration/{id}.js",
+                url: "scripts/enumeration/{id}.js",
                 defaults: new {controller = "Enumeration", action = "Get"}
                 );
 

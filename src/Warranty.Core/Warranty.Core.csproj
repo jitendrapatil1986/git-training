@@ -307,6 +307,9 @@
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetModel.cs" />
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQuery.cs" />
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQueryHandler.cs" />
+    <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemCommand.cs" />
+    <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemCommanHandler.cs" />
+    <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemModel.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetWSRQuery.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetWSRQueryHandler.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetModel.cs" />
