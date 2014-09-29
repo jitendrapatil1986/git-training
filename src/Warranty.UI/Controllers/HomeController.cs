@@ -12,6 +12,8 @@
     using Warranty.Core;
     using Warranty.Core.Extensions;
     using Warranty.Core.Features.AmountSpentWidget;
+    using Warranty.Core.Features.AverageDaysClosedWidget;
+    using Warranty.Core.Features.PercentClosedWithinSevenDaysWidget;
     using Warranty.Core.Features.ToDoWidget;
     using Warranty.Core.Features.MyServiceTeamWidget;
     using Warranty.Core.Features.SendFeedback;
@@ -86,6 +88,41 @@
         {
             var model = _mediator.Request(new WarrantyDollarsSpentWidgetQuery());
             return PartialView("_WarrantyDollarsSpentWidget", model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult AverageDaysClosedWidget()
+        {
+            var model = _mediator.Request(new AverageDaysClosedWidgetQuery());
+            return PartialView("_AverageDaysClosedWidget", model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult PercentClosedWithinSevenDaysWidget()
+        {
+            var model = _mediator.Request(new PercentClosedWithinSevenDaysWidgetQuery());
+            return PartialView("_PercentClosedWithinSevenDaysWidget", model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult WarrantyDollarsSpentWidgetWSR()
+        {
+            var model = _mediator.Request(new WarrantyDollarsSpentWidgetWSRQuery());
+            return PartialView("_WarrantyDollarsSpentWidget", model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult AverageDaysClosedWidgetWSR()
+        {
+            var model = _mediator.Request(new AverageDaysClosedWidgetWSRQuery());
+            return PartialView("_AverageDaysClosedWidget", model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult PercentClosedWithinSevenDaysWidgetWSR()
+        {
+            var model = _mediator.Request(new PercentClosedWithinSevenDaysWidgetWSRQuery());
+            return PartialView("_PercentClosedWithinSevenDaysWidget", model);
         }
 
         [ChildActionOnly]

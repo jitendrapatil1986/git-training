@@ -10,7 +10,9 @@
         public static readonly ActivityType Reassignment = new ActivityType(1, "Reassignment");
         public static readonly ActivityType SpecialProject = new ActivityType(2, "Special Project");
         public static readonly ActivityType Escalation = new ActivityType(3, "Escalation");
-        public static readonly ActivityType Close = new ActivityType(4, "Close");
-        public static readonly ActivityType Reopen = new ActivityType(5, "Reopen");
+        public static readonly ActivityType ChangePhone = new ActivityType(4, "Change Phone");
+        public static readonly ActivityType ChangeEmail = new ActivityType(5, "Change Email");
+        public static readonly ActivityType Close = new ActivityType(6, "Close");
+        public static readonly ActivityType Reopen = new ActivityType(7, "Reopen");
     }
 }

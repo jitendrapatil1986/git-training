@@ -9,23 +9,42 @@
     @if (User.IsInRole(UserRoles.WarrantyServiceRepresentative))
     { 
         <div class="col-md-12">
-            @Html.Action("WarrantyServiceRepServiceCallsWidget", "Home")
+            <div class="row">
+                @Html.Action("WarrantyServiceRepServiceCallsWidget", "Home")
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.Action("WarrantyDollarsSpentWidgetWSR", "Home")
+                </div>
+                <div class="col-md-4">
+                    @Html.Action("AverageDaysClosedWidgetWSR", "Home")
+                </div>
+                <div class="col-md-4">
+                    @Html.Action("PercentClosedWithinSevenDaysWidgetWSR", "Home")
+                </div>
+            </div>
         </div>
     }
     @if (User.IsInRole(UserRoles.WarrantyServiceManager) || User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyAdmin))
     {
-        <div class="row">
             <div class="col-md-8">
-                @Html.Action("ServiceCallsWidget", "Home")
+                <div class="row">
+                    @Html.Action("ServiceCallsWidget", "Home")
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.Action("WarrantyDollarsSpentWidget", "Home")
+                    </div>
+                    <div class="col-md-4">
+                        @Html.Action("AverageDaysClosedWidget", "Home")
+                    </div>
+                    <div class="col-md-4">
+                        @Html.Action("PercentClosedWithinSevenDaysWidget", "Home")
+                    </div>
+                </div>
             </div>
             <div class="col-md-4">
                 @Html.Action("ToDoWidget", "Home")
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                @Html.Action("WarrantyDollarsSpentWidget", "Home")
-            </div>
-        </div>
     }
 </div>

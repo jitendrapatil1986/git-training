@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Warranty.Core.Features.ServiceCallSummary
 {
@@ -56,7 +53,9 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
                                     , case when (datediff(d, wc.ClosedDate, getdate()) <=3) then 'True' else 'False' end CanBeReopened
                                     , NumberOfLineItems
-                                    , ho.HomePhone as PhoneNumber
+                                    , ho.HomeownerId
+                                    , ho.HomePhone
+                                    , ho.OtherPhone
                                     , ho.EmailAddress
                                     , LOWER(e.EmployeeName) as AssignedTo
                                     , e.EmployeeNumber as AssignedToEmployeeNumber
