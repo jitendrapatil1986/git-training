@@ -47,8 +47,17 @@
             @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
             {
                 <div class="service-call-header-buttons">
-                    @Format.ServiceCallToggleButton("escalate", Model.ServiceCallSummary.IsEscalated, "Escalate", "De-escalate")                    
-                    @Format.ServiceCallToggleButton("special_project", Model.ServiceCallSummary.IsSpecialProject, "Special Project", "Not Special Project")
+                    <div data-bind="visible: callSummaryStatusOpen()">
+                        @Format.ServiceCallToggleButton("escalate", Model.ServiceCallSummary.IsEscalated, "Escalate", "De-escalate")
+                        @Format.ServiceCallToggleButton("special_project", Model.ServiceCallSummary.IsSpecialProject, "Special Project", "Not Special Project")
+                    </div>
+                    <div data-bind="visible: callSummaryStatusClosed() && canBeReopened()">
+                        @*<div data-bind="visible: areAllLineItemsClosed() && !callSummaryStatusClosed() && callSummaryStatusSigned()">*@
+                        <a href='#' class='btn btn-default pull-right btn-action-with-popup' data-action-with-popup='reopen' id='btn_reopen'>Reopen</a>
+                    </div>
+                    <div data-bind="visible: canBeClosed()">
+                        <a href='#' class='btn btn-default pull-right' data-action-with-popup='reopen' data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" id='btn_close'>Close</a>
+                    </div>
                 </div>
             }
             <div class="clearfix"></div>
@@ -103,7 +112,7 @@
                                 }
                                 else
                                 {
-                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus") </span>
+                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus") </span>
                                 }
                             </div>
                             @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
@@ -335,6 +344,12 @@
 {
     @Format.ActionwithPopup("special_project", @Url.Action("ToggleSpecialProject", "ServiceCall"), Model.ServiceCallSummary.ServiceCallId)
     @Format.ActionwithPopup("escalate", @Url.Action("ToggleEscalate", "ServiceCall"), Model.ServiceCallSummary.ServiceCallId)
+    <div id='reopen' class='popup-action-with-message'>
+        <p><small>Reason:</small></p>
+        <textarea rows='5'></textarea>
+        <a href='#' id='btn_execute_reopen' class='btn btn-primary btn-sm pull-left' data-action-url='@Url.Action("Reopen", "ServiceCall")' data-service-call-id='@Model.ServiceCallSummary.ServiceCallId'>Submit</a>
+        <a href='#' class='btn-link btn-sm pull-right btn-cancel-popup'>Cancel</a>
+    </div>
 }
 
 @section modules
@@ -343,8 +358,9 @@
         define('modelData', function() {
             return {
                 initialServiceLines: @Html.Raw(Model.ServiceCallLines.ToJson()),
-                initialServiceNotes: @Html.Raw(Model.ServicCallNotes.ToJson())
-            }
+                initialServiceNotes: @Html.Raw(Model.ServicCallNotes.ToJson()),
+                canBeReopened: @Model.ServiceCallSummary.CanBeReopened.ToJson()
+                }
         });
 
         define('dropdownData', function() {

@@ -23,6 +23,7 @@ namespace Warranty.Core.Entities
         public virtual DateTime? CreatedDate { get; set; }
         public virtual string CreatedBy { get; set; }
         public virtual DateTime? UpdatedDate { get; set; }
+        public virtual DateTime? ClosedDate { get; set; }
         public virtual string UpdatedBy { get; set; }
     }
 }

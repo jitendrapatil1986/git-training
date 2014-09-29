@@ -9,6 +9,7 @@ require(['/Scripts/app/main.js'], function () {
             $(".datepicker-input").datepicker();
 
             $('.btn-action-with-popup').click(function (e) {
+                $('.btn-action-with-popup').removeClass('active');
                 $(this).addClass("active");
                 $('.popup-action-with-message').hide();
                 var right = ($(window).width() - ($(this).offset().left + $(this).outerWidth()));
@@ -46,14 +47,59 @@ require(['/Scripts/app/main.js'], function () {
                         popupWindow.hide();
                     }
                 });
-                
-                function changeButtonText(button) {
-                    var currentText = button.text();
-                    var nextText = button.data('next-text');
-                    button.data('next-text', currentText);
-                    button.text(nextText);
-                }
             });
+                
+
+            $('#btn_execute_reopen').click(function (e) {
+                var popupWindow = $(this).parent();
+                var actionUrl = $(this).data('action-url');
+                var textArea = $(this).prev('textarea');
+                var message = textArea.val();
+                textArea.val('');
+                var serviceCallId = $(this).data('service-call-id');
+                var parentButton = $("#btn_" + popupWindow.attr('id'));
+                $.ajax({
+                    type: "POST",
+                    url: actionUrl,
+                    data: { id: serviceCallId, message: message },
+                    success: function (data) {
+                        reOpenServiceCall();
+                        parentButton.removeClass("active");
+                        popupWindow.hide();
+                    }
+                });
+            });
+            
+            $('#btn_close').click(function (e) {
+                var serviceCallId = $(this).data('service-call-id');
+                var url = urls.ServiceCall.Close;
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { id: serviceCallId },
+                    success: function (data) {
+                        closeServiceCall();
+                    }
+                });
+            });
+
+            function reOpenServiceCall() {
+                viewModel.callSummaryServiceCallStatus(serviceCallStatusData.Open.DisplayName);
+                toastr.success("Success! Service Call has been succesfully reopened.");
+            }
+            
+            function closeServiceCall() {
+                viewModel.callSummaryServiceCallStatus(serviceCallStatusData.Closed.DisplayName);
+                toastr.success("Success! Service Call has been succesfully closed.");
+            }
+                
+            function changeButtonText(button) {
+                var currentText = button.text();
+                var nextText = button.data('next-text');
+                button.data('next-text', currentText);
+                button.text(nextText);
+            }
+
 
             $(".approve-button").click(function (e) {
                 e.preventDefault();
@@ -242,6 +288,7 @@ require(['/Scripts/app/main.js'], function () {
                 self.theLookups = dropdownData.availableLookups;  //dropdown list does not need to be observable. Only the actual elements w/i the array do.
                 self.problemDescriptionToAdd = ko.observable('');
                 self.problemCodeToAdd = ko.observable();
+                self.canBeReopened = ko.observable(modelData.canBeReopened);
                 
                 self.allCallNotes = ko.observableArray([]);
                 self.selectedLineToAttachToNote = ko.observable();
@@ -402,9 +449,21 @@ require(['/Scripts/app/main.js'], function () {
                 };
 
                 self.callSummaryServiceCallStatus = ko.observable($("#callSummaryServiceCallStatus").html());
+                
+                self.cssforCallSummaryServiceCallStatus = ko.computed(function () {
+                    var className = self.callSummaryServiceCallStatus().toLowerCase().replace(/\ /g, '-');
+                    return 'label label-' + className + '-service-call';
+                });
 
                 self.callSummaryStatusClosed = ko.computed(function () {
                     if (self.callSummaryServiceCallStatus().toLowerCase() == serviceCallStatusData.Closed.DisplayName.toLowerCase())
+                        return true;
+                    else
+                        return false;
+                });
+                
+                self.callSummaryStatusOpen = ko.computed(function () {
+                    if (self.callSummaryServiceCallStatus().toLowerCase() == serviceCallStatusData.Open.DisplayName.toLowerCase())
                         return true;
                     else
                         return false;
@@ -415,6 +474,10 @@ require(['/Scripts/app/main.js'], function () {
                         return true;
                     else
                         return false;
+                });
+                
+                self.canBeClosed = ko.computed(function () {
+                    return self.areAllLineItemsClosed() && !self.callSummaryStatusClosed() && self.callSummaryStatusSigned();
                 });
 
                 self.homeownerVerificationSignature = ko.observable('');

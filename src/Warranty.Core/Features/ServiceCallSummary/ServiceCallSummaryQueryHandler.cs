@@ -54,6 +54,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , ho.HomeOwnerName
                                     , ho.HomeOwnerNumber
                                     , case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
+                                    , case when (datediff(d, wc.ClosedDate, getdate()) <=3) then 'True' else 'False' end CanBeReopened
                                     , NumberOfLineItems
                                     , ho.HomePhone as PhoneNumber
                                     , ho.EmailAddress
