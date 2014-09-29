@@ -1,6 +1,5 @@
 ﻿namespace Warranty.Core.Features.WarrantyDollarsSpentWidget
 {
-    using System;
     using Extensions;
     using NPoco;
     using Security;
