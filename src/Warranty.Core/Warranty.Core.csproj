@@ -204,6 +204,9 @@
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommand.cs" />
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemModel.cs" />
+    <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetModel.cs" />
+    <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetQuery.cs" />
+    <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetQueryHandler.cs" />
     <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemCommand.cs" />
     <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemCommandHandler.cs" />
     <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemModel.cs" />
@@ -299,6 +302,9 @@
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetModel.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetQuery.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetQueryHandler.cs" />
+    <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetModel.cs" />
+    <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetQuery.cs" />
+    <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetQueryHandler.cs" />
     <Compile Include="Services\ISendSmtpMailMessage.cs" />
     <Compile Include="Services\SendSmtpMailMessage.cs" />
     <Compile Include="Services\ServiceCallCalculator.cs" />
