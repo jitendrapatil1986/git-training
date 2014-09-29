@@ -105,6 +105,27 @@
         }
 
         [ChildActionOnly]
+        public ActionResult WarrantyDollarsSpentWidgetWSR()
+        {
+            var model = _mediator.Request(new WarrantyDollarsSpentWidgetWSRQuery());
+            return PartialView("_WarrantyDollarsSpentWidget", model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult AverageDaysClosedWidgetWSR()
+        {
+            var model = _mediator.Request(new AverageDaysClosedWidgetWSRQuery());
+            return PartialView("_AverageDaysClosedWidget", model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult PercentClosedWithinSevenDaysWidgetWSR()
+        {
+            var model = _mediator.Request(new PercentClosedWithinSevenDaysWidgetWSRQuery());
+            return PartialView("_PercentClosedWithinSevenDaysWidget", model);
+        }
+
+        [ChildActionOnly]
         public ActionResult ToDoWidget()
         {
             var model = _mediator.Request(new ToDoWidgetQuery());

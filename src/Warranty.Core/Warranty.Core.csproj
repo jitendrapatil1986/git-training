@@ -207,6 +207,8 @@
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetModel.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetQuery.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetQueryHandler.cs" />
+    <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQuery.cs" />
+    <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQueryHandler.cs" />
     <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemCommand.cs" />
     <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemCommandHandler.cs" />
     <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemModel.cs" />
@@ -239,6 +241,8 @@
     <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemCommand.cs" />
     <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemCommandHandler.cs" />
     <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemModel.cs" />
+    <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetWSRQuery.cs" />
+    <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetWSRQueryHandler.cs" />
     <Compile Include="Features\ProblemCodes\ProblemCodesQuery.cs" />
     <Compile Include="Features\ProblemCodes\ProblemCodesQueryHandler.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchCallModel.cs" />
@@ -299,6 +303,8 @@
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetModel.cs" />
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQuery.cs" />
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQueryHandler.cs" />
+    <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetWSRQuery.cs" />
+    <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetWSRQueryHandler.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetModel.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetQuery.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetQueryHandler.cs" />
