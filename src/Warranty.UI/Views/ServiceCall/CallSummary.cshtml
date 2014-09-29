@@ -44,7 +44,7 @@
     <div class="col-md-12">
         @Html.HiddenFor(model => model.CanReopenLines, new { id = "userCanReopenCallLinesAnytime", @class = "form-control" , data_bind="value: userCanAlwaysReopenCallLines"})
 
-        <div id="undoLastCompletedLineItem" data-bind="visible: !userCanAlwaysReopenCallLines() && lineJustClosed()" class="undo-alert">
+        <div id="undoLastCompletedLineItem" data-bind="visible: !userCanAlwaysReopenCallLines() && lineJustCompleted()" class="undo-alert">
             <div id="undoLastCompletedLineItemAlert" class="alert alert-warning alert-dismissible padding-5" role="alert">
                 Line item marked as complete. <a href="#" data-bind="click: undoLastCompletedLine">Undo mark as complete.</a>
             </div>
@@ -141,11 +141,7 @@
                 </div>
             </div>*@
             </div>
-            
-            @*<div class="alert alert-warning alert-dismissible" role="alert" data-bind="visible: !userCanAlwaysReopenCallLines()">
-                <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                Line item marked as complete. <a href="#" data-bind="click: undoLastCompletedLine">Undo mark as complete.</a>
-            </div>*@
+ 
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignature, new { id = "verifiedHomeownerSignature", @class = "form-control" })
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignatureDate, new { id = "verifiedHomeownerSignatureDate", @class = "form-control" })
 
@@ -155,7 +151,7 @@
                 </div>
             </section>
 
-            <section data-bind="visible: areAllLineItemsClosed() && !callSummaryStatusClosed() && !callSummaryStatusSigned()">
+            <section data-bind="visible: areAllLineItemsCompleted() && !callSummaryStatusClosed() && !callSummaryStatusSigned()">
                 <h3 class="col-md-12">Verify Homeowner Signature</h3>
                 <div id="verifyHomeownerSignature">
                     <div class="panel panel-default">
@@ -262,11 +258,11 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-3 margin-top-13 margin-bottom-3 text-align-right no-right-padding">
-                                                <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: !lineEditing() && !isLineItemClosed()">Edit</button>
-                                                <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: completeLine, visible: !lineEditing()&& !isLineItemClosed()">Complete</button>
+                                                <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>
+                                                <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: completeLine, visible: !lineEditing()&& !isLineItemCompleted()">Complete</button>
                                                 @if (Model.CanReopenLines)
                                                 {
-                                                    <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: reopenLine, visible: !lineEditing() && isLineItemClosed()">Reopen</button>
+                                                    <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: reopenLine, visible: !lineEditing() && isLineItemCompleted()">Reopen</button>
                                                 }
                                             </div>
                                         </div>

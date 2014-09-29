@@ -197,11 +197,11 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                     return self.serviceCallLineItemStatusDisplayName() ? 'label label-' + self.serviceCallLineItemStatusDisplayName().toLowerCase() + '-service-line-item' : '';
                 });
                 
-                self.isLineItemClosed = function () {
+                self.isLineItemCompleted = function () {
                     if (!self.serviceCallLineItemStatusDisplayName())
                         return false;
                     
-                    return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Closed.DisplayName.toLowerCase() ? true : false;
+                    return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase() ? true : false;
                 };
             }
             
@@ -289,19 +289,12 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                     .done(function (response) {
                         line.serviceCallLineItemStatusDisplayName(response.DisplayName);
                         
-                        //if user is not allowed to ALWAYS reopen closed lines at anytime, then allow them to reopen only right after closing a line.
+                        //if user is not allowed to ALWAYS reopen Completed lines at anytime, then allow them to reopen only right after completing a line.
                         if ($("#userCanReopenCallLinesAnytime").val() == false) {
-                            //Dynamically setting html in js.
-                            //$("#serviceCallMainContainer").append("<div class='alert alert-warning alert-dismissible padding-5 no-bottom-margin z-index-on-top' role='alert' data-bind='visible: !userCanAlwaysReopenCallLines()'>" +
-                            //    "<button type='button' class='close' data-dismiss='alert'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>" +
-                            //    "Line item marked as complete. <a href='' data-bind='click: undoLastCompletedLine'>Undo mark as complete.</a></div>");
-
-                            //ko.applyBindings(viewModel, document.getElementById('serviceCallMainContainer'));  //reapply binding to new element created above.
-
                             $("#undoLastCompletedLineItemAlert").attr('data-service-line-id-to-undo', line.serviceCallLineItemId);
                             $("#undoLastCompletedLineItemAlert").show();
-                            viewModel.lineJustClosed(true);
-                            $("#undoLastCompletedLineItemAlert").attr("tabindex", -1).focus();  //focus only after setting lineJustClosed observable which visibly shows control on form first and then focus.
+                            viewModel.lineJustCompleted(true);
+                            $("#undoLastCompletedLineItemAlert").attr("tabindex", -1).focus();  //focus only after setting lineJustCompleted observable which visibly shows control on form first and then focus.
                         } else {
                             toastr.success("Success! Item completed.");
                         }
@@ -353,7 +346,7 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
 
                 self.userCanAlwaysReopenCallLines = ko.observable();
                 
-                self.areAllLineItemsClosed = function () {
+                self.areAllLineItemsCompleted = function () {
                     var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
                         var displayToCompare = '';
                         if (i.serviceCallLineItemStatus) {
@@ -495,7 +488,7 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                     $("#filterCallNoteLineReferenceDropDown").val('');
                     self.selectedLineToFilterNotes('');
                 };
-                self.lineJustClosed = ko.observable();
+                self.lineJustCompleted = ko.observable();
                 
                 //undo last line item which was completed.
                 self.undoLastCompletedLine = function () {
@@ -503,10 +496,8 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                     var lineToReopen = ko.utils.arrayFirst(self.allLineItems(), function (i) {
                         return (i.serviceCallLineItemId == lineId);
                     });
-                    //var lineToReopen = {serviceCallLineItemId: lineId};
                     reopenServiceCallLineItem(lineToReopen);
-                    self.lineJustClosed(false);
-                    
+                    self.lineJustCompleted(false);
                 };
 
                 self.callSummaryServiceCallStatus = ko.observable($("#callSummaryServiceCallStatus").html());

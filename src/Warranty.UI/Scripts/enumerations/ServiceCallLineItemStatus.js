@@ -1,1 +1,1 @@
-﻿define(function () { return { "Open": { "Value": 1, "DisplayName": "Open" }, "InProgress": { "Value": 2, "DisplayName": "In-Progress" }, "Closed": { "Value": 3, "DisplayName": "Closed" } }; });
+﻿define(function () { return { "Open": { "Value": 1, "DisplayName": "Open" }, "InProgress": { "Value": 2, "DisplayName": "In-Progress" }, "Complete": { "Value": 3, "DisplayName": "Complete" } }; });
