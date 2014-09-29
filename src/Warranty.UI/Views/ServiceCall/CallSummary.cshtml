@@ -43,20 +43,10 @@
 <div class="container">
     <div class="col-md-12">
         @Html.HiddenFor(model => model.CanReopenLines, new { id = "userCanReopenCallLinesAnytime", @class = "form-control" , data_bind="value: userCanAlwaysReopenCallLines"})
-        
-@*        <div class="undo-alert">
-            <div class="container">
-                <div id="test" class="alert alert-warning padding-5 no-bottom-margin text-align-center" role="alert">
-                    Line item marked as complete. <a href="#" data-bind="click: undoLastCompletedLine">Undo mark as complete.</a>
-                </div>
-            </div>
-        </div>*@
 
         <div id="undoLastCompletedLineItem" data-bind="visible: !userCanAlwaysReopenCallLines() && lineJustClosed()" class="undo-alert">
-            <div class="container">
-                <div id="undoLastCompletedLineItemAlert" class="alert alert-warning alert-dismissible padding-5" role="alert" style="width: 375px;">
-                    Line item marked as complete. <a href="#" data-bind="click: undoLastCompletedLine">Undo mark as complete.</a>
-                </div>
+            <div id="undoLastCompletedLineItemAlert" class="alert alert-warning alert-dismissible padding-5" role="alert">
+                Line item marked as complete. <a href="#" data-bind="click: undoLastCompletedLine">Undo mark as complete.</a>
             </div>
         </div>
 
@@ -72,14 +62,21 @@
             <div class="clearfix"></div>
         </section>
         <div class="panel panel-default">
-            <div class="panel-heading text-capitalize">
+            <div class="panel-heading">
                 <div class="row remove-list-style">
                     <div class="col-md-3 margin-bottom-10">
                         <h3 class="panel-title text-capitalize">@Format.HomeOwner(Model.ServiceCallSummary.HomeownerName, Model.ServiceCallSummary.HomeownerNumber)</h3>
                         <ul>
-                            <li>@Model.ServiceCallSummary.Address</li>
-                            <li>@Format.PhoneNumber(Model.ServiceCallSummary.PhoneNumber)</li>
-                            <li><a href="mailto:@Model.ServiceCallSummary.EmailAddress?subject=David Weekley Homes Warranty Service Call %23 @Model.ServiceCallSummary.CallNumber">@Format.Email(Model.ServiceCallSummary.EmailAddress)</a></li>
+                            <li class="text-capitalize">@Model.ServiceCallSummary.Address</li>
+                            <li>
+                                @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.ServiceCallSummary.HomePhone,Url.Action("AddOrUpdatePhoneNumber","Homeowner"), Model.ServiceCallSummary.HomeownerId)
+                            </li>
+                            <li>
+                                @Format.EditablePhoneNumber(PhoneNumberType.Mobile, Model.ServiceCallSummary.OtherPhone,Url.Action("AddOrUpdatePhoneNumber","Homeowner"),Model.ServiceCallSummary.HomeownerId)
+                            </li>
+                            <li>
+                                @Format.EditableEmailForServiceCall(Model.ServiceCallSummary.EmailAddress, Url.Action("AddOrUpdateEmail","Homeowner"), Model.ServiceCallSummary.HomeownerId, Model.ServiceCallSummary.CallNumber)
+                            </li>
                         </ul>
                         <span>@Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate)</span>
                     </div>
@@ -89,16 +86,16 @@
                             <li class="clearfix"><span class="pull-left">Created On:</span><span class="pull-right">@Format.DateMonthDayYear(Model.ServiceCallSummary.CreatedDate)</span></li>
                             <li class="clearfix">
                                 <span class="pull-left">Assignee:</span>
-                                @if (Model.CanReassign)
-                                {
-                                    <div class="inline-reassign-employee pull-right">
-                                        <a href="#" id="Employee_List" data-source="@Url.Action("GetEmployees", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId })" data-url="@Url.Action("InlineReassign", "ServiceCall")" data-pk="@Model.ServiceCallSummary.ServiceCallId" data-value="@Model.ServiceCallSummary.AssignedToEmployeeNumber">@Model.ServiceCallSummary.AssignedTo</a>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <span class="pull-right">@Model.ServiceCallSummary.AssignedTo</span>
-                                }
+                                    @if (Model.CanReassign)
+                                    {
+                                        <div class="inline-editable-dropdown pull-right text-capitalize">
+                                            <a href="#" id="Employee_List" data-source="@Url.Action("GetEmployees", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId })" data-url="@Url.Action("InlineReassign", "ServiceCall")" data-pk="@Model.ServiceCallSummary.ServiceCallId" data-value="@Model.ServiceCallSummary.AssignedToEmployeeNumber">@Model.ServiceCallSummary.AssignedTo</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="pull-right">@Model.ServiceCallSummary.AssignedTo</span>
+                                    }
                             </li>
                         </ul>
                     </div>

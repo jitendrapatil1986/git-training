@@ -38,6 +38,7 @@ require.config({
         'highcharts': { deps: ['jquery'], exports: 'Highcharts' },
         'bloodhound': { deps: ['jquery'], exports: 'Bloodhound' },
         'responsive.tabs': { deps: ['bootstrap'] },
+        'jquery.maskedinput': ['jquery'],
     },
     callback: function () {
         require(['app/feedbackForm', 'app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields', 'app/responsiveTabs']);

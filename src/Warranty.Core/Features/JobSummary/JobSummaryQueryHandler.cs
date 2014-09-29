@@ -73,10 +73,11 @@ namespace Warranty.Core.Features.JobSummary
                                 ,j.[UpdatedDate]
                                 ,j.[UpdatedBy]
                                 ,j.[JdeIdentifier]
+                                ,ho.HomeownerId
                                 ,ho.HomeOwnerName
                                 ,ho.HomeOwnerNumber
-                                ,ho.HomePhone as PhoneNumber
-                                ,ho.OtherPhone as OtherNumber
+                                ,ho.HomePhone as HomePhone
+                                ,ho.OtherPhone as OtherPhone
                                 ,ho.WorkPhone1 as WorkNumber
                                 ,ho.EmailAddress
                                 ,be.EmployeeId as BuilderEmployeeId

@@ -46,13 +46,15 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public string CreatedBy { get; set; }
             public DateTime? CompletionDate { get; set; }
             public string HomeownerName { get; set; }
+            public Guid HomeownerId { get; set; }
             public int HomeownerNumber { get; set; }
             public int NumberOfDaysRemaining { get { return ServiceCallCalculator.CalculateNumberOfDaysRemaining(CreatedDate); } }
             public int NumberOfLineItems { get; set; }
             public int DaysOpenedFor { get; set; }
             public int YearsWithinWarranty { get; set; }
             public DateTime WarrantyStartDate { get; set; }
-            public string PhoneNumber { get; set; }
+            public string HomePhone { get; set; }
+            public string OtherPhone { get; set; }
             public string EmailAddress { get; set; }
             public bool IsSpecialProject { get; set; }
             public bool IsEscalated { get; set; }

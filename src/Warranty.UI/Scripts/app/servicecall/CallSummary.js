@@ -1,5 +1,6 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'enumerations/ServiceCallStatus', 'enumerations/ServiceCallLineItemStatus', 'x-editable', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData, dropdownData, serviceCallStatusData, serviceCallLineItemStatusData, xeditable) {
+require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable','enumerations/phone-number-type', 'jquery.maskedinput', 'enumerations/ServiceCallStatus', 'enumerations/ServiceCallLineItemStatus', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
+
         $(function () {
             $("#undoLastCompletedLineItem").blur(function() {
                 $("#undoLastCompletedLineItem").hide();
@@ -10,8 +11,27 @@ require(['/Scripts/app/main.js'], function () {
             });
             
             $.fn.editable.defaults.mode = 'inline';
+            $.fn.editable.defaults.emptytext = 'Add';
+            $.fn.editableform.buttons =
+                '<button type="submit" class="btn btn-primary editable-submit btn-xs"><i class="icon-ok icon-white"></i>Save</button>';
+
             $("#Employee_List").editable({
                 type: 'select',
+            });
+
+            $("#Home_Phone").editable({
+                params: { phoneNumberTypeValue: phoneNumberTypeEnum.Home.Value }
+            });
+
+            $("#Mobile_Phone").editable({
+                params: { phoneNumberTypeValue: phoneNumberTypeEnum.Mobile.Value }
+            });
+            
+            $("#Email").editable({
+            });
+
+            $(".phone-number-with-extension").on('shown', function () {
+                $(this).data('editable').input.$input.mask('?(999)-999-9999 **********', { placeholder: " " });
             });
 
             $(".datepicker-input").datepicker();
@@ -475,7 +495,6 @@ require(['/Scripts/app/main.js'], function () {
                     $("#filterCallNoteLineReferenceDropDown").val('');
                     self.selectedLineToFilterNotes('');
                 };
-
                 self.lineJustClosed = ko.observable();
                 
                 //undo last line item which was completed.
