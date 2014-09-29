@@ -164,7 +164,7 @@ require(['/Scripts/app/main.js'], function () {
                 });
 
                 self.serviceCallLineItemStatus = ko.observable(options.serviceCallLineItemStatus);
-                //self.serviceCallLineItemStatusDisplayName = ko.observable(options.serviceCallLineItemStatus ? options.serviceCallLineItemStatus.displayName : '');
+                
                 self.serviceCallLineItemStatusDisplayName = ko.observable('');
                 if (options.serviceCallLineItemStatus) {
                     if (options.serviceCallLineItemStatus.displayName)
@@ -267,7 +267,7 @@ require(['/Scripts/app/main.js'], function () {
                         toastr.error("There was an issue completing the line item. Please try again!");
                     })
                     .done(function (response) {
-                        self.serviceCallLineItemStatus = response.ServiceCallLineItemStatus;
+                        line.serviceCallLineItemStatusDisplayName(response.DisplayName);
                         
                         //if user is not allowed to ALWAYS reopen closed lines at anytime, then allow them to reopen only right after closing a line.
                         if ($("#userCanReopenCallLinesAnytime").val() == false) {
@@ -304,7 +304,7 @@ require(['/Scripts/app/main.js'], function () {
                     })
                     .done(function (response) {
                         toastr.success("Success! Item reopened.");
-                        self.serviceCallLineItemStatus = response.ServiceCallLineItemStatus;
+                        line.serviceCallLineItemStatusDisplayName(response.DisplayName);
                     });
             }
             
@@ -326,7 +326,7 @@ require(['/Scripts/app/main.js'], function () {
                         return self.allCallNotes();
                     } else {
                         return ko.utils.arrayFilter(self.allCallNotes(), function (i) {
-                            return i.serviceCallLineItemId == lineIdToFilterNotes;
+                            return i.serviceCallLineItemId() == lineIdToFilterNotes;
                         });
                     }
                 });
@@ -335,7 +335,14 @@ require(['/Scripts/app/main.js'], function () {
                 
                 self.areAllLineItemsClosed = function () {
                     var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
-                        return (i.serviceCallLineItemStatus().displayName.toLowerCase() != serviceCallStatusData.Closed.DisplayName.toLowerCase());
+                        var displayToCompare = '';
+                        if (i.serviceCallLineItemStatus) {
+                            if (i.serviceCallLineItemStatus().displayName)
+                                displayToCompare = i.serviceCallLineItemStatus().displayName;  //TODO: displayName works for model passed into js file via toJSON().
+                            if (i.serviceCallLineItemStatus().DisplayName)
+                                displayToCompare = i.serviceCallLineItemStatus().DisplayName;  //TODO: DisplayName works for model passed from ajax call. Need to keep both similar.
+                        }
+                        return (displayToCompare.toLowerCase() != serviceCallStatusData.Closed.DisplayName.toLowerCase());
                     });
 
                     if (anyNonCompletedLineItem)
@@ -477,6 +484,7 @@ require(['/Scripts/app/main.js'], function () {
                     var lineToReopen = {serviceCallLineItemId: lineId};
                     reopenServiceCallLineItem(lineToReopen);
                     self.lineJustClosed(false);
+                    //find actually line on array list and update status to open.
                 };
 
                 self.callSummaryServiceCallStatus = ko.observable($("#callSummaryServiceCallStatus").html());
