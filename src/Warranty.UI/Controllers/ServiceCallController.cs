@@ -29,16 +29,6 @@
             _userSession = userSession;
         }
 
-        public ActionResult Reassign(Guid id)
-        {
-            return View();
-        }
-
-        public ActionResult Close(Guid id)
-        {
-            return View();
-        }
-
         public ActionResult RequestPayment(Guid id)
         {
             return View();
@@ -171,6 +161,26 @@
         public ActionResult InlineReassign(ReassignEmployeeCommand command)
         {
             _mediator.Send(command);
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Complete(Guid id)
+        {
+            _mediator.Send(new ServiceCallCompleteCommand()
+            {
+                ServiceCallId = id,
+            });
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Reopen(Guid id, string message)
+        {
+            _mediator.Send(new ServiceCallReopenCommand
+            {
+                ServiceCallId = id,
+                Text = message
+                
+            });
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
     }

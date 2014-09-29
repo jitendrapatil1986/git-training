@@ -22,7 +22,7 @@ namespace Warranty.Core.ApprovalInfrastructure.ApprovalServices
 
         public ServiceCall Deny(Guid id)
         {
-            return UpdateServiceCall(id, ServiceCallStatus.Closed);
+            return UpdateServiceCall(id, ServiceCallStatus.Complete);
         }
 
         private ServiceCall UpdateServiceCall(Guid id, ServiceCallStatus newStatus)

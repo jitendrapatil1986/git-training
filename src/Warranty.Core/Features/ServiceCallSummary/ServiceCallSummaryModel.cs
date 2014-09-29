@@ -58,6 +58,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public string EmailAddress { get; set; }
             public bool IsSpecialProject { get; set; }
             public bool IsEscalated { get; set; }
+            public bool CanBeReopened { get; set; }
             public DateTime? EscalationDate { get; set; }
             public string EscalationReason { get; set; }
             public string DivisionName { get; set; }

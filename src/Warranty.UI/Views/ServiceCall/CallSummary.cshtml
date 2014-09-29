@@ -55,8 +55,16 @@
             @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
             {
                 <div class="service-call-header-buttons">
-                    @Format.ServiceCallToggleButton("escalate", Model.ServiceCallSummary.IsEscalated, "Escalate", "De-escalate")                    
-                    @Format.ServiceCallToggleButton("special_project", Model.ServiceCallSummary.IsSpecialProject, "Special Project", "Not Special Project")
+                    <div data-bind="visible: callSummaryStatusOpen()">
+                        @Format.ServiceCallToggleButton("escalate", Model.ServiceCallSummary.IsEscalated, "Escalate", "De-escalate")
+                        @Format.ServiceCallToggleButton("special_project", Model.ServiceCallSummary.IsSpecialProject, "Special Project", "Not Special Project")
+                    </div>
+                    <div data-bind="visible: callSummaryStatusComplete() && canBeReopened()">
+                        <a href='#' class='btn btn-default pull-right btn-action-with-popup' data-action-with-popup='reopen' id='btn_reopen'>Reopen</a>
+                    </div>
+                    <div data-bind="visible: canBeCompleted()">
+                        <a href='#' class='btn btn-default pull-right' data-action-with-popup='reopen' data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" id='btn_complete'>Complete</a>
+                    </div>
                 </div>
             }
             <div class="clearfix"></div>
@@ -118,7 +126,7 @@
                                 }
                                 else
                                 {
-                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus") </span>
+                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus") </span>
                                 }
                             </div>
                             @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
@@ -145,13 +153,13 @@
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignature, new { id = "verifiedHomeownerSignature", @class = "form-control" })
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignatureDate, new { id = "verifiedHomeownerSignatureDate", @class = "form-control" })
 
-            <section data-bind="visible: verifiedHomeownerSignature() && (callSummaryStatusSigned() || callSummaryStatusClosed())">
+            <section data-bind="visible: verifiedHomeownerSignature() && (callSummaryStatusSigned() || callSummaryStatusComplete())">
                 <div class="alert alert-success no-bottom-margin" >
                     <span data-bind="text: verifiedSignature()"></span>
                 </div>
             </section>
 
-            <section data-bind="visible: areAllLineItemsCompleted() && !callSummaryStatusClosed() && !callSummaryStatusSigned()">
+            <section data-bind="visible: areAllLineItemsCompleted() && !callSummaryStatusComplete() && !callSummaryStatusSigned()">
                 <h3 class="col-md-12">Verify Homeowner Signature</h3>
                 <div id="verifyHomeownerSignature">
                     <div class="panel panel-default">
@@ -180,7 +188,7 @@
             <section>
                 <h3 class="col-md-12">Line Items
                     <span>
-                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Line Item" data-toggle="collapse" data-target="#addCallLineItem" data-bind="visible: !callSummaryStatusClosed() && !callSummaryStatusSigned()"><span class="glyphicon glyphicon-plus"></span></button>
+                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Line Item" data-toggle="collapse" data-target="#addCallLineItem" data-bind="visible: !callSummaryStatusComplete() && !callSummaryStatusSigned()"><span class="glyphicon glyphicon-plus"></span></button>
                     </span>
                 </h3>
                 @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallId, new { id = "callSummaryServiceCallId", @class = "form-control" })
@@ -359,6 +367,12 @@
 {
     @Format.ActionwithPopup("special_project", @Url.Action("ToggleSpecialProject", "ServiceCall"), Model.ServiceCallSummary.ServiceCallId)
     @Format.ActionwithPopup("escalate", @Url.Action("ToggleEscalate", "ServiceCall"), Model.ServiceCallSummary.ServiceCallId)
+    <div id='reopen' class='popup-action-with-message'>
+        <p><small>Reason:</small></p>
+        <textarea rows='5'></textarea>
+        <a href='#' id='btn_execute_reopen' class='btn btn-primary btn-sm pull-left' data-action-url='@Url.Action("Reopen", "ServiceCall")' data-service-call-id='@Model.ServiceCallSummary.ServiceCallId'>Submit</a>
+        <a href='#' class='btn-link btn-sm pull-right btn-cancel-popup'>Cancel</a>
+    </div>
 }
 
 @section modules
@@ -367,8 +381,9 @@
         define('modelData', function() {
             return {
                 initialServiceLines: @Html.Raw(Model.ServiceCallLines.ToJson()),
-                initialServiceNotes: @Html.Raw(Model.ServicCallNotes.ToJson())
-            }
+                initialServiceNotes: @Html.Raw(Model.ServicCallNotes.ToJson()),
+                canBeReopened: @Model.ServiceCallSummary.CanBeReopened.ToJson()
+                }
         });
 
         define('dropdownData', function() {
