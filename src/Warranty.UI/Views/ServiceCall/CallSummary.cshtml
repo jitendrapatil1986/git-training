@@ -264,7 +264,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            @*<button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: !lineEditing() && !$root.callSummaryStatusClosed() && !$root.callSummaryStatusSigned()">Edit</button>*@
                                             <div class="col-md-3 margin-top-13 margin-bottom-3 text-align-right no-right-padding">
                                                 <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: !lineEditing() && !isLineItemClosed()">Edit</button>
                                                 <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: completeLine, visible: !lineEditing()&& !isLineItemClosed()">Complete</button>

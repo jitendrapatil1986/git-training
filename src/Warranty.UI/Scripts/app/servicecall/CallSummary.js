@@ -196,7 +196,6 @@ require(['/Scripts/app/main.js'], function () {
                 self.serviceCallCommentTypeId = options.serviceCallCommentTypeId;
 
                 self.noteLineNumberWithProblemCode = ko.computed(function () {
-                    debugger;
                     //return self.lineNumber() + " - " + self.problemCode();
                     var lineIdToFilterNotes = options.serviceCallLineItemId;
                     if (!lineIdToFilterNotes || lineIdToFilterNotes == "") {
@@ -208,6 +207,7 @@ require(['/Scripts/app/main.js'], function () {
                             }
                             return "";
                         });
+                        return "";
                     }
                 });
             }
@@ -481,10 +481,13 @@ require(['/Scripts/app/main.js'], function () {
                 //undo last line item which was completed.
                 self.undoLastCompletedLine = function () {
                     var lineId = $("#undoLastCompletedLineItemAlert").attr('data-service-line-id-to-undo');
-                    var lineToReopen = {serviceCallLineItemId: lineId};
+                    var lineToReopen = ko.utils.arrayFirst(self.allLineItems(), function (i) {
+                        return (i.serviceCallLineItemId == lineId);
+                    });
+                    //var lineToReopen = {serviceCallLineItemId: lineId};
                     reopenServiceCallLineItem(lineToReopen);
                     self.lineJustClosed(false);
-                    //find actually line on array list and update status to open.
+                    
                 };
 
                 self.callSummaryServiceCallStatus = ko.observable($("#callSummaryServiceCallStatus").html());
