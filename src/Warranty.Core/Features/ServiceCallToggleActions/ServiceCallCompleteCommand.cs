@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class ServiceCallCloseCommand : ICommand
+    public class ServiceCallCompleteCommand : ICommand
     {
         public Guid ServiceCallId { get; set; }
     }

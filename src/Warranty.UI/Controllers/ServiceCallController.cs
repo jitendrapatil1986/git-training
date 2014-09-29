@@ -166,7 +166,7 @@
 
         public ActionResult Complete(Guid id)
         {
-            _mediator.Send(new ServiceCallCloseCommand()
+            _mediator.Send(new ServiceCallCompleteCommand()
             {
                 ServiceCallId = id,
             });

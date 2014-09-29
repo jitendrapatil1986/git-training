@@ -6,18 +6,18 @@
     using Enumerations;
     using NPoco;
 
-    public class ServiceCallCloseCommandHandler : ICommandHandler<ServiceCallCloseCommand>
+    public class ServiceCallCompleteCommandHandler : ICommandHandler<ServiceCallCompleteCommand>
     {
         private readonly IDatabase _database;
         private readonly IActivityLogger _logger;
 
-        public ServiceCallCloseCommandHandler(IDatabase database, IActivityLogger logger)
+        public ServiceCallCompleteCommandHandler(IDatabase database, IActivityLogger logger)
         {
             _database = database;
             _logger = logger;
         }
 
-        public void Handle(ServiceCallCloseCommand message)
+        public void Handle(ServiceCallCompleteCommand message)
         {
             using (_database)
             {

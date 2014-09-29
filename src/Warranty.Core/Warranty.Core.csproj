@@ -266,8 +266,8 @@
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\ReassignEmployeeCommandHandler.cs" />
     <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQuery.cs" />
     <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQueryHandler.cs" />
-    <Compile Include="Features\ServiceCallToggleActions\ServiceCallCloseCommand.cs" />
-    <Compile Include="Features\ServiceCallToggleActions\ServiceCallCloseCommandHandler.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallCompleteCommand.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallCompleteCommandHandler.cs" />
     <Compile Include="Features\ServiceCallToggleActions\ServiceCallReopenCommand.cs" />
     <Compile Include="Features\ServiceCallToggleActions\ServiceCallReopenCommandHandler.cs" />
     <Compile Include="Features\ServiceCallToggleActions\ServiceCallToggleEscalateCommand.cs" />
