@@ -25,7 +25,7 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
             });
 
             $(".phone-number-with-extension").on('shown', function () {
-                $(this).data('editable').input.$input.mask('?(999)-999-9999 x999999');
+                $(this).data('editable').input.$input.mask('?(999)-999-9999 **********', { placeholder: " " });
             });
 
             $(".datepicker-input").datepicker();
@@ -409,7 +409,6 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                     $("#filterCallNoteLineReferenceDropDown").val('');
                     self.selectedLineToFilterNotes('');
                 };
-                debugger;
                 self.callSummaryServiceCallStatus = ko.observable($("#callSummaryServiceCallStatus").html());
 
                 self.callSummaryStatusClosed = ko.computed(function () {
