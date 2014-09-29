@@ -23,7 +23,7 @@
             {
                 var serviceCall = _database.SingleOrDefaultById<ServiceCall>(message.ServiceCallId);
                 serviceCall.ServiceCallStatus = ServiceCallStatus.Closed;
-                serviceCall.ClosedDate = DateTime.UtcNow;
+                serviceCall.CompletionDate = DateTime.UtcNow;
                 _database.Update(serviceCall);
 
                 const string activityName = "Service call was closed.";

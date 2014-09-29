@@ -101,7 +101,7 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                     url: url,
                     data: { id: serviceCallId },
                     success: function (data) {
-                        closeServiceCall();
+                        completeServiceCall();
                     }
                 });
             });
@@ -111,9 +111,9 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                 toastr.success("Success! Service Call has been succesfully reopened.");
             }
             
-            function closeServiceCall() {
+            function completeServiceCall() {
                 viewModel.callSummaryServiceCallStatus(serviceCallStatusData.Closed.DisplayName);
-                toastr.success("Success! Service Call has been succesfully closed.");
+                toastr.success("Success! Service Call has been succesfully completed.");
             }
                 
             function changeButtonText(button) {
