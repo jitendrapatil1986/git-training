@@ -28,7 +28,7 @@
 
                 const string activityName = "Service call was closed.";
 
-                _logger.Write(activityName, null, message.ServiceCallId, ActivityType.Close, ReferenceType.ServiceCall);
+                _logger.Write(activityName, null, message.ServiceCallId, ActivityType.Complete, ReferenceType.ServiceCall);
             }
         }
     }
