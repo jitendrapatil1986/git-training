@@ -4,7 +4,6 @@ using Warranty.Core.Enumerations;
 namespace Warranty.UI.Core.Helpers
 {
     using System;
-    using System.Linq;
     using System.Web.Mvc;
     using Warranty.Core.Extensions;
 
@@ -232,7 +231,7 @@ namespace Warranty.UI.Core.Helpers
 
         public static string Percentage(decimal? value)
         {
-            return value.HasValue ? value.Value.ToString("##0.00") + "%" : String.Empty;
+            return value.HasValue ? value.Value.ToString("##0") + "%" : String.Empty;
         }
 
         public static string WrapEmailAddress(string email)
@@ -456,7 +455,7 @@ namespace Warranty.UI.Core.Helpers
 
         public static MvcHtmlString HomeOwner(string homeownerName, int homeownerNumber)
         {
-            if (homeownerNumber == 1)
+            if (homeownerNumber <= 1)
                 return MvcHtmlString.Create(homeownerName);
 
             var html = string.Format("{0} <span class='label label-info muted'>{1}</span>", homeownerName, homeownerNumber.ToOrdinalSuffixed());
