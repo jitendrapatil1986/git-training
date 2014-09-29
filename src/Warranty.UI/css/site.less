@@ -313,7 +313,7 @@
 }
 
 .label, badge {
-    &-open-service-call, &-open-service-line-item {
+    &-open-service-call, &-homeowner-signed-service-call, &-open-service-line-item {
         background-color: #5cb85c;
     }
 }
@@ -465,6 +465,10 @@ a.delete-group-item:hover {
     text-align: right;
 }
 
+.text-align-center {
+    text-align: center;
+}
+
 .no-padding{ padding: 0;}
 .no-top-padding{ padding-top: 0;}
 .no-bottom-padding{ padding-bottom: 0;}
@@ -570,5 +574,13 @@ a.delete-group-item:hover {
 }
 
 .z-index-on-top {
+    z-index: 1;
+}
+
+.undo-alert {
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    top: 95px;
     z-index: 1;
 }

@@ -63,6 +63,9 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public string CommunityName { get; set; }
             public decimal? PaymentAmount { get; set; }
             public ServiceCallStatus ServiceCallStatus { get; set; }
+            public string HomeOwnerSignature { get; set; }
+            public string HomeownerVerificationSignature { get; set; }
+            public DateTime? HomeownerVerificationSignatureDate { get; set; }
             public int PercentComplete
             {
                 get { return ServiceCallCalculator.CalculatePercentComplete(NumberOfDaysRemaining); }

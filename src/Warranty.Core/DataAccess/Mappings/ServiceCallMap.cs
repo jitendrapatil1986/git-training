@@ -21,6 +21,8 @@ namespace Warranty.Core.DataAccess.Mappings
                     x.Column(y => y.CompletionDate);
                     x.Column(y => y.WorkSummary);
                     x.Column(y => y.HomeOwnerSignature);
+                    x.Column(y => y.HomeownerVerificationSignature);
+                    x.Column(y => y.HomeownerVerificationSignatureDate);
                 });
         }
     }

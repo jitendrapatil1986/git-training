@@ -255,6 +255,7 @@
     <Content Include="css\bootstrap-theme.min.css" />
     <Content Include="css\bootstrap.css" />
     <Content Include="css\bootstrap.min.css" />
+    <Content Include="css\datepicker.css" />
     <Content Include="css\font\fontawesome-webfont.svg" />
     <Content Include="css\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="favicon.ico" />
@@ -284,6 +285,7 @@
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
     <Content Include="Scripts\config\customer-search.js" />
     <Content Include="Scripts\enumerations\ServiceCallLineItemStatus.js" />
+    <Content Include="Scripts\enumerations\ServiceCallStatus.js" />
     <Content Include="Scripts\lib\bootstrap-editable.min.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />
     <Content Include="Scripts\lib\handlebars.amd.min.js" />

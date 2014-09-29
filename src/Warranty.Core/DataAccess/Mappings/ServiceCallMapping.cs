@@ -21,6 +21,8 @@ namespace Warranty.Core.DataAccess.Mappings
             Property(x => x.CompletionDate);
             Property(x => x.WorkSummary);
             Property(x => x.HomeOwnerSignature);
+            Property(x => x.HomeownerVerificationSignature);
+            Property(x => x.HomeownerVerificationSignatureDate);
         }
     }
 }
