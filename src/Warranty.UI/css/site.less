@@ -3,6 +3,18 @@
 @highlight-bg: #d4dde3; //#FFF2A8;
 @gray-lighter: #f7f7f7;
 
+h2 {
+    font-size: 28px;
+}
+
+h2, h3 {
+    line-height: 34px;
+}
+
+h2, h3, h4 {
+    margin-top: 0;
+}
+
 .main-container {
     margin-top: 108px;
     padding: 0 10px;
@@ -40,10 +52,35 @@
     margin-top: 10px;
 }
 
+.panel-default {
+    border-bottom: 0;
+}
+
+.panel section {
+    margin-bottom: 15px;
+}
+
+.main-info {
+    line-height: 24px;
+}
+
+.main-info h3{
+    font-weight: bold;
+    line-height: inherit;
+}
+
+.form-submit .btn, .popup-action-with-message .btn {
+   margin-right: 10px;
+}
+
 .service-call-line {
     border-bottom: solid 1px #e7e7e7;
-    padding: 5px 0;
+    padding: 10px 0 0;
     margin: 0;
+}
+
+.service-call-line:first-child {
+    border-top: solid 1px #e7e7e7;
 }
 
     .service-call-line:hover {
@@ -61,6 +98,8 @@
 .no-margin{ margin: 0;}
 
 .margin-bottom-15 { margin: 0 0 15px 0;}
+
+.margin-bottom-20 { margin: 0 0 20px 0;}
 
 .label.label-info.muted {
     font-weight: normal;
@@ -529,6 +568,50 @@ a.delete-group-item:hover {
     color: #999;
     text-align: center;
     margin: 10px 0 5px 0;
+}
+
+@media (max-width: 767px) {
+
+    .container {
+           padding: 0;
+    }
+    
+    h2 {
+      font-size: 20px;
+      margin-bottom: 10px !important;
+    }
+
+    .float-right-non-xs-screen {
+        float: none !important;
+    }
+
+    .text-align-right {
+        text-align: left;
+    }
+
+    .margin-top-13 {
+        margin-top: 0;
+    }
+
+    .edit-line-item > row > .col-md-12 {
+        padding-left: 0;
+    }
+
+    .inline-editable-text .glyphicon {
+        width: 31%;
+        margin: 5px 2px 20px;
+        float: left;
+        padding: 10px;
+        text-align: center;
+        border: 1px solid lightgrey;
+        background: white;
+    }
+
+    .service-call-header-buttons .btn{
+        float: left !important;
+        width: 100%;
+        margin: 0 0 14px 0;
+    }
 }
 
 .inline-editable-dropdown .editable-input {
