@@ -191,6 +191,7 @@
     </Compile>
     <Compile Include="Api\ApiController.cs" />
     <Compile Include="Api\AssignWSRController.cs" />
+    <Compile Include="Api\HomeownerController.cs" />
     <Compile Include="Api\RelatedCallController.cs" />
     <Compile Include="Api\ManageLookupsController.cs" />
     <Compile Include="Api\QuickSearchController.cs" />
@@ -277,6 +278,7 @@
     <Content Include="Scripts\app\Admin\ManageAssignments.js" />
     <Content Include="Scripts\app\admin\ManageLookups.js" />
     <Content Include="Scripts\app\ajaxEvents.js" />
+    <Content Include="Scripts\app\Job\JobSummary.js" />
     <Content Include="Scripts\app\responsiveTabs.js" />
     <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\search.js" />
@@ -284,6 +286,7 @@
     <Content Include="Scripts\app\servicecall\create.js" />
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
     <Content Include="Scripts\config\customer-search.js" />
+    <Content Include="Scripts\enumerations\phone-number-type.js" />
     <Content Include="Scripts\enumerations\ServiceCallStatus.js" />
     <Content Include="Scripts\lib\bootstrap-editable.min.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />

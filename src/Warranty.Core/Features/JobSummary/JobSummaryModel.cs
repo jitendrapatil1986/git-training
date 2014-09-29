@@ -34,11 +34,12 @@ namespace Warranty.Core.Features.JobSummary
         public DateTime? UpdatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public string JdeIdentifier { get; set; }
+        public Guid HomeownerId { get; set; }
         public string HomeOwnerName { get; set; }
-        public string PhoneNumber { get; set; }
-        public string OtherNumber { get; set; }
+        public string HomePhone { get; set; }
+        public string OtherPhone { get; set; }
         public string WorkNumber { get; set; }
-        public string Email { get; set; }
+        public string EmailAddress { get; set; }
         public int YearsWithinWarranty { get; set; }
         public DateTime WarrantyStartDate { get; set; }
 

@@ -534,20 +534,30 @@ a.delete-group-item:hover {
 
     .edit-line-item > row > .col-md-12 {
         padding-left: 0;
-    }    
+    }
+
+    .inline-editable-text .glyphicon {
+        width: 31%;
+        margin: 2px;
+        float: left;
+        padding: 10px;
+        text-align: center;
+        border: 1px solid lightgrey;
+        background: white;
+    }
 }
 
-.inline-reassign-employee .editable-input {
+.inline-editable-dropdown .editable-input {
     float: right;
     background-color: lightgray; 
     padding: 5px;
 }
 
-.inline-reassign-employee .editable-input select {
+.inline-editable-dropdown .editable-input select {
     width: 100%;
 }
 
-.inline-reassign-employee .editable-buttons{
+.inline-editable-dropdown .editable-buttons{
     padding: 5px;
     background-color: lightgray;    
     margin-top: -4px;
@@ -557,6 +567,32 @@ a.delete-group-item:hover {
     z-index: 1;
 }
 
-.inline-reassign-employee .editableform{
+.inline-editable-dropdown .editableform{
     position: relative;
 }
+
+.inline-editable-text .editable-empty, .inline-editable-text .editable-empty, .inline-editable-text .editable-empty:hover, .inline-editable-text .editable-empty:focus {
+    font-style: normal;
+    color: #08c;
+}
+
+.inline-editable-dropdown .editable-empty, .inline-editable-dropdown .editable-empty, .inline-editable-dropdown .editable-empty:hover, .inline-editable-dropdown .editable-empty:focus {
+    font-style: normal;
+    color: #08c;
+}
+
+.inline-editable-text form {
+    background-color: lightgray; 
+    padding: 5px;
+}
+
+.inline-editable-text .editableform .form-control {
+    width: 170px;
+    padding-left: 5px;
+}
+
+.inline-editable-text .editable-buttons{
+    margin-top: 4px;
+}
+
+

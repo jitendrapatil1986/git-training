@@ -161,6 +161,7 @@
     <Compile Include="Entities\ServiceCallNote.cs" />
     <Compile Include="Entities\ServiceCallLineItem.cs" />
     <Compile Include="Enumerations\ActivityType.cs" />
+    <Compile Include="Enumerations\PhoneNumberType.cs" />
     <Compile Include="Enumerations\ReferenceType.cs" />
     <Compile Include="Enumerations\ServiceCallLineItemStatus.cs" />
     <Compile Include="Enumerations\UserRoles.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommandHandler.cs" />
     <Compile Include="Features\CreateServiceCall\RelatedProblemCode.cs" />
     <Compile Include="Features\CreateServiceCall\RelatedProblemCodeQuery.cs" />
+    <Compile Include="Features\InlineEditCommandBase.cs" />
     <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureServiceCallStatusModel.cs" />
     <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureServiceCallStatusCommand.cs" />
     <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureServiceCallStatusCommandHandler.cs" />
@@ -247,6 +249,10 @@
     <Compile Include="Features\ServiceCallApproval\ServiceCallDenyCommand.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommand.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommandHandler.cs" />
+    <Compile Include="Features\Homeowner\AddOrUpdateEmailCommand.cs" />
+    <Compile Include="Features\Homeowner\AddOrUpdateEmailCommandHandler.cs" />
+    <Compile Include="Features\Homeowner\AddOrUpdatePhoneNumberCommand.cs" />
+    <Compile Include="Features\Homeowner\AddOrUpdatePhoneNumberCommandHandler.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\ReassignEmployeeCommand.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\EmployeesForServiceCallQueryHandler.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\EmployeesForServiceCallQuery.cs" />

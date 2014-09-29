@@ -1,0 +1,1 @@
+﻿define(function () { return { "Home": { "Icon": "phone-alt", "Value": 1, "DisplayName": "Home" }, "Mobile": { "Icon": "phone", "Value": 2, "DisplayName": "Mobile" } }; });
