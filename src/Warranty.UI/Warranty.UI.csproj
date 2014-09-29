@@ -286,9 +286,6 @@
     <Content Include="Scripts\app\servicecall\create.js" />
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
     <Content Include="Scripts\config\customer-search.js" />
-    <Content Include="Scripts\enumerations\ServiceCallLineItemStatus.js" />
-    <Content Include="Scripts\enumerations\phone-number-type.js" />
-    <Content Include="Scripts\enumerations\ServiceCallStatus.js" />
     <Content Include="Scripts\lib\bootstrap-editable.min.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />
     <Content Include="Scripts\lib\handlebars.amd.min.js" />

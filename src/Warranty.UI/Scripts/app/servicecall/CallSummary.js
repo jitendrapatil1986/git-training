@@ -1,13 +1,9 @@
 require(['/Scripts/app/main.js'], function () {
-require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable','enumerations/phone-number-type', 'jquery.maskedinput', 'enumerations/ServiceCallStatus', 'enumerations/ServiceCallLineItemStatus', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
+require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable','/Scripts/enumeration/PhoneNumberType.js', 'jquery.maskedinput', '/Scripts/enumeration/ServiceCallStatus.js', '/Scripts/enumeration/ServiceCallLineItemStatus.js', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
 
         $(function () {
-            $("#undoLastCompletedLineItem").blur(function() {
-                $("#undoLastCompletedLineItem").hide();
-            });
-            
-            $("#undoLastCompletedLineItemAlert").blur(function () {
-                $("#undoLastCompletedLineItemAlert").hide();
+            $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
+                $(this).hide();
             });
             
             $.fn.editable.defaults.mode = 'inline';
@@ -216,7 +212,6 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                 self.serviceCallCommentTypeId = options.serviceCallCommentTypeId;
 
                 self.noteLineNumberWithProblemCode = ko.computed(function () {
-                    //return self.lineNumber() + " - " + self.problemCode();
                     var lineIdToFilterNotes = options.serviceCallLineItemId;
                     if (!lineIdToFilterNotes || lineIdToFilterNotes == "") {
                         return "";
