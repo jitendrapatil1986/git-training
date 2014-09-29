@@ -91,6 +91,9 @@
     <Compile Include="ActivityLogger\IActivityLogger.cs" />
     <Compile Include="ApprovalInfrastructure\ApprovalServices\ServiceCallApprovalService.cs" />
     <Compile Include="ApprovalInfrastructure\Interfaces\IApprovalService.cs" />
+    <Compile Include="Configurations\CitiesCollection.cs" />
+    <Compile Include="Configurations\CityConfig.cs" />
+    <Compile Include="Configurations\WarrantyConfigSection.cs" />
     <Compile Include="Configurations\EnumerationDisplayConverter.cs" />
     <Compile Include="Configurations\WarrantyConstants.cs" />
     <Compile Include="Configurations\WarrantyContractResolver.cs" />
