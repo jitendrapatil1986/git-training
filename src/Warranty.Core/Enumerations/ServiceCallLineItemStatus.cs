@@ -9,6 +9,6 @@
 
         public static readonly ServiceCallLineItemStatus Open = new ServiceCallLineItemStatus(1, "Open");
         public static readonly ServiceCallLineItemStatus InProgress = new ServiceCallLineItemStatus(2, "In-Progress");
-        public static readonly ServiceCallLineItemStatus Closed = new ServiceCallLineItemStatus(3, "Closed");
+        public static readonly ServiceCallLineItemStatus Complete = new ServiceCallLineItemStatus(3, "Complete");
     }
 }

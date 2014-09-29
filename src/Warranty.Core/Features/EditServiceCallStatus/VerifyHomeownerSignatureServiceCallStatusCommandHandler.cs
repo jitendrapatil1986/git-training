@@ -21,7 +21,7 @@
                 updateServiceCall.HomeownerVerificationSignature = message.HomeownerVerificationSignature;
                 updateServiceCall.HomeownerVerificationSignatureDate = message.HomeownerVerificationSignatureDate;
 
-                if (updateServiceCall.ServiceCallStatus != ServiceCallStatus.Closed)
+                if (updateServiceCall.ServiceCallStatus != ServiceCallStatus.Complete)
                     updateServiceCall.ServiceCallStatus = ServiceCallStatus.HomeownerSigned;
 
                 _database.Update(updateServiceCall);

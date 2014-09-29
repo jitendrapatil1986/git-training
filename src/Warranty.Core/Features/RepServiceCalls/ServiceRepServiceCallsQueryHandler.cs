@@ -86,7 +86,7 @@ namespace Warranty.Core.Features.RepServiceCalls
 
             var sql = string.Format(SqlTemplate, whereClause, "ORDER BY wc.CompletionDate desc, ho.HomeOwnerName");
 
-            var result = _database.Fetch<ServiceRepServiceCallsModel.ServiceCall>(sql, ServiceCallStatus.Closed.Value, employeeId);
+            var result = _database.Fetch<ServiceRepServiceCallsModel.ServiceCall>(sql, ServiceCallStatus.Complete.Value, employeeId);
             return result;
         }
     }

@@ -364,7 +364,7 @@ h2, h3, h4 {
 }
 
 .label, badge {
-    &-closed-service-call, &-closed-service-line-item {
+    &-complete-service-call, &-complete-service-line-item {
         background-color: #d9534f;
     }
 }
@@ -496,8 +496,16 @@ a.delete-group-item:hover {
     padding-left: 15px;
 }
 
+.padding-5 {
+    padding: 5px;
+}
+
 .text-align-right {
     text-align: right;
+}
+
+.text-align-center {
+    text-align: center;
 }
 
 .no-padding{ padding: 0;}
@@ -630,6 +638,24 @@ a.delete-group-item:hover {
     position: relative;
 }
 
+.position-fixed {
+    position: fixed;
+}
+
+.z-index-on-top {
+    z-index: 1;
+}
+
+.undo-alert {
+    position: fixed;
+    width: 500px;
+    text-align: center;
+    top: 95px;
+    left: 50%;
+    z-index: 2;
+    margin-left: -250px; //half of width.
+}
+
 .inline-editable-text .editable-empty, .inline-editable-text .editable-empty, .inline-editable-text .editable-empty:hover, .inline-editable-text .editable-empty:focus {
     font-style: normal;
     color: #08c;
@@ -654,6 +680,40 @@ a.delete-group-item:hover {
     margin-top: 4px;
 }
 
+@media (max-width: 767px) {
+    .float-right-non-xs-screen {
+        float: none !important;
+    }
 
+    .text-align-right {
+        text-align: left;
+    }
 
+    .margin-top-13 {
+        margin-top: 0;
+    }
 
+    .edit-line-item > row > .col-md-12 {
+        padding-left: 0;
+    }
+
+    .inline-editable-text .glyphicon {
+        width: 31%;
+        margin: 2px;
+        float: left;
+        padding: 10px;
+        text-align: center;
+        border: 1px solid lightgrey;
+        background: white;
+    }
+
+    .main-container {
+        margin-top: 0px;
+    }
+
+    .undo-alert {
+        width: 300px;
+        top: 59px;
+        margin-left: -150px; //half of width.
+    }
+}

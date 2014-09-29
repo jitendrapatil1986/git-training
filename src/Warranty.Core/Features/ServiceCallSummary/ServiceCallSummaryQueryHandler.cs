@@ -32,6 +32,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                         AddServiceCallLineItem = new ServiceCallSummaryModel.NewServiceCallLineItem(query.ServiceCallId, SharedQueries.ProblemCodes.GetProblemCodeList(_database)),
                         CanApprove = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
                         CanReassign = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
+                        CanReopenLines = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
                     };
             }
         }
@@ -51,6 +52,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , ho.HomeOwnerName
                                     , ho.HomeOwnerNumber
                                     , case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
+                                    , case when (datediff(d, wc.CompletionDate, getdate()) <=3) then 1 else 0 end CanBeReopened
                                     , NumberOfLineItems
                                     , ho.HomeownerId
                                     , ho.HomePhone
