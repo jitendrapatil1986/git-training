@@ -164,7 +164,7 @@
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Close(Guid id)
+        public ActionResult Complete(Guid id)
         {
             _mediator.Send(new ServiceCallCloseCommand()
             {

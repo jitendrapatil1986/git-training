@@ -22,11 +22,11 @@
             using (_database)
             {
                 var serviceCall = _database.SingleOrDefaultById<ServiceCall>(message.ServiceCallId);
-                serviceCall.ServiceCallStatus = ServiceCallStatus.Closed;
+                serviceCall.ServiceCallStatus = ServiceCallStatus.Complete;
                 serviceCall.CompletionDate = DateTime.UtcNow;
                 _database.Update(serviceCall);
 
-                const string activityName = "Service call was closed.";
+                const string activityName = "Service call was completed.";
 
                 _logger.Write(activityName, null, message.ServiceCallId, ActivityType.Complete, ReferenceType.ServiceCall);
             }

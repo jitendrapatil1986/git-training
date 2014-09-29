@@ -59,12 +59,11 @@
                         @Format.ServiceCallToggleButton("escalate", Model.ServiceCallSummary.IsEscalated, "Escalate", "De-escalate")
                         @Format.ServiceCallToggleButton("special_project", Model.ServiceCallSummary.IsSpecialProject, "Special Project", "Not Special Project")
                     </div>
-                    <div data-bind="visible: callSummaryStatusClosed() && canBeReopened()">
-                        @*<div data-bind="visible: areAllLineItemsClosed() && !callSummaryStatusClosed() && callSummaryStatusSigned()">*@
+                    <div data-bind="visible: callSummaryStatusComplete() && canBeReopened()">
                         <a href='#' class='btn btn-default pull-right btn-action-with-popup' data-action-with-popup='reopen' id='btn_reopen'>Reopen</a>
                     </div>
-                    <div data-bind="visible: canBeClosed()">
-                        <a href='#' class='btn btn-default pull-right' data-action-with-popup='reopen' data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" id='btn_close'>Complete</a>
+                    <div data-bind="visible: canBeCompleted()">
+                        <a href='#' class='btn btn-default pull-right' data-action-with-popup='reopen' data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" id='btn_complete'>Complete</a>
                     </div>
                 </div>
             }
@@ -154,13 +153,13 @@
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignature, new { id = "verifiedHomeownerSignature", @class = "form-control" })
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignatureDate, new { id = "verifiedHomeownerSignatureDate", @class = "form-control" })
 
-            <section data-bind="visible: verifiedHomeownerSignature() && (callSummaryStatusSigned() || callSummaryStatusClosed())">
+            <section data-bind="visible: verifiedHomeownerSignature() && (callSummaryStatusSigned() || callSummaryStatusComplete())">
                 <div class="alert alert-success no-bottom-margin" >
                     <span data-bind="text: verifiedSignature()"></span>
                 </div>
             </section>
 
-            <section data-bind="visible: areAllLineItemsCompleted() && !callSummaryStatusClosed() && !callSummaryStatusSigned()">
+            <section data-bind="visible: areAllLineItemsCompleted() && !callSummaryStatusComplete() && !callSummaryStatusSigned()">
                 <h3 class="col-md-12">Verify Homeowner Signature</h3>
                 <div id="verifyHomeownerSignature">
                     <div class="panel panel-default">
@@ -189,7 +188,7 @@
             <section>
                 <h3 class="col-md-12">Line Items
                     <span>
-                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Line Item" data-toggle="collapse" data-target="#addCallLineItem" data-bind="visible: !callSummaryStatusClosed() && !callSummaryStatusSigned()"><span class="glyphicon glyphicon-plus"></span></button>
+                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Line Item" data-toggle="collapse" data-target="#addCallLineItem" data-bind="visible: !callSummaryStatusComplete() && !callSummaryStatusSigned()"><span class="glyphicon glyphicon-plus"></span></button>
                     </span>
                 </h3>
                 @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallId, new { id = "callSummaryServiceCallId", @class = "form-control" })

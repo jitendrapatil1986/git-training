@@ -94,9 +94,9 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                 });
             });
             
-            $('#btn_close').click(function (e) {
+            $('#btn_complete').click(function (e) {
                 var serviceCallId = $(this).data('service-call-id');
-                var url = urls.ServiceCall.Close;
+                var url = urls.ServiceCall.Complete;
                 $.ajax({
                     type: "POST",
                     url: url,
@@ -113,7 +113,8 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
             }
             
             function completeServiceCall() {
-                viewModel.callSummaryServiceCallStatus(serviceCallStatusData.Closed.DisplayName);
+                viewModel.callSummaryServiceCallStatus(serviceCallStatusData.Complete.DisplayName);
+                viewModel.canBeReopened(true);
                 toastr.success("Success! Service Call has been succesfully completed.");
             }
                 
@@ -136,7 +137,7 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                 e.preventDefault();
                 var serviceCallId = $(this).data("service-call-id");
                 var url = urls.ServiceCall.Deny;
-                executeApproval(url, serviceCallId, $(this), 'Closed');
+                executeApproval(url, serviceCallId, $(this), 'Completed');
             });
 
             function executeApproval(url, serviceCallId, button, status) {
@@ -389,7 +390,6 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                 self.userCanAlwaysReopenCallLines = ko.observable();
                 
                 self.areAllLineItemsCompleted = function () {
-                    debugger;
                     var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
                         var displayToCompare = '';
                         if (i.serviceCallLineItemStatus) {
@@ -398,7 +398,7 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                             if (i.serviceCallLineItemStatus().DisplayName)
                                 displayToCompare = i.serviceCallLineItemStatus().DisplayName;  //TODO: DisplayName works for model passed from ajax call. Need to keep both similar.
                         }
-                        return (displayToCompare.toLowerCase() != serviceCallStatusData.Closed.DisplayName.toLowerCase());
+                        return (displayToCompare.toLowerCase() != serviceCallStatusData.Complete.DisplayName.toLowerCase());
                     });
 
                     if (anyNonCompletedLineItem)
@@ -550,8 +550,8 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                     return 'label label-' + className + '-service-call';
                 });
 
-                self.callSummaryStatusClosed = ko.computed(function () {
-                    if (self.callSummaryServiceCallStatus().toLowerCase() == serviceCallStatusData.Closed.DisplayName.toLowerCase())
+                self.callSummaryStatusComplete = ko.computed(function () {
+                    if (self.callSummaryServiceCallStatus().toLowerCase() == serviceCallStatusData.Complete.DisplayName.toLowerCase())
                         return true;
                     else
                         return false;
@@ -571,8 +571,8 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                         return false;
                 });
                 
-                self.canBeClosed = ko.computed(function () {
-                    return self.areAllLineItemsClosed() && !self.callSummaryStatusClosed() && self.callSummaryStatusSigned();
+                self.canBeCompleted = ko.computed(function () {
+                    return self.areAllLineItemsCompleted() && !self.callSummaryStatusComplete() && self.callSummaryStatusSigned();
                 });
 
                 self.homeownerVerificationSignature = ko.observable('');

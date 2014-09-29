@@ -22,9 +22,10 @@
             {
                 var serviceCall = _database.SingleOrDefaultById<ServiceCall>(message.ServiceCallId);
                 serviceCall.ServiceCallStatus = ServiceCallStatus.Open;
+                serviceCall.CompletionDate = null;
                 _database.Update(serviceCall);
 
-                const string activityName = "Service call was Reopend.";
+                const string activityName = "Service call was Reopened.";
 
                 _logger.Write(activityName, message.Text, message.ServiceCallId, ActivityType.Reopen, ReferenceType.ServiceCall);
             }
