@@ -1,5 +1,5 @@
 require(['/Scripts/app/main.js'], function () {
-require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable','/Scripts/enumeration/PhoneNumberType.js', 'jquery.maskedinput', '/Scripts/enumeration/ServiceCallStatus.js', '/Scripts/enumeration/ServiceCallLineItemStatus.js', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
+require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable','enumeration/PhoneNumberType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
 
         $(function () {
             $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
@@ -342,6 +342,7 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                 self.userCanAlwaysReopenCallLines = ko.observable();
                 
                 self.areAllLineItemsCompleted = function () {
+                    debugger;
                     var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
                         var displayToCompare = '';
                         if (i.serviceCallLineItemStatus) {
