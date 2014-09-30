@@ -205,6 +205,7 @@
     <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\ServiceCallController.cs" />
     <Compile Include="Controllers\ServiceRepController.cs" />
+    <Compile Include="Controllers\StatsController.cs" />
     <Compile Include="Core\Enumerations\NavHeaderItem.cs" />
     <Compile Include="Core\Enumerations\NavItem.cs" />
     <Compile Include="Core\Enumerations\ToastType.cs" />
@@ -394,6 +395,7 @@
     <Content Include="Views\Home\_WarrantyDollarsSpentWidget.cshtml" />
     <Content Include="Views\Home\_AverageDaysClosedWidget.cshtml" />
     <Content Include="Views\Home\_PercentClosedWithinSevenDaysWidget.cshtml" />
+    <Content Include="Views\Stats\Index.cshtml" />
     <Content Include="Views\WarrantyMailer\ServiceCallEscalated.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,28 @@
+﻿@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.ServiceCallStats.ServiceCallStatsModel
+@{
+    ViewBag.Title = "Service Call Stats";
+}
+<div class="container">
+    <div class="table-responsive">
+        <table class="table table-hover table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Team Member</th>
+                    <th>$ Spent</th>
+                    <th>Avg Days Closed</th>
+                    <th>% Closed</th>
+                </tr>
+            </thead>
+            @foreach (var line in Model.LineItems)
+            {
+                <tr>
+                    <td>@Html.ActionLink(line.EmployeeName, "ServiceCalls", "ServiceRep", new{id=line.EmployeeId}, null)</td>
+                    <td class="text-right">@Format.MoneyWithoutDecimal(line.DollarsSpentPerHome)</td>
+                    <td class="text-right">@line.AverageDaysClosed</td>
+                    <td class="text-right">@Format.Percentage(line.PercentClosedWithinSevenDays)</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
