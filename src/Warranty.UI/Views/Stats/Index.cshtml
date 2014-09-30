@@ -105,7 +105,7 @@
                     }]
                 },
                 tooltip: {
-                    pointFormat: "${point.y:.2f}",
+                    pointFormat: "{point.y} Days",
                 },
                 legend: {
                     layout: 'vertical',
@@ -142,7 +142,9 @@
                     }]
                 },
                 tooltip: {
-                    pointFormat: "${point.y:.2f}",
+                    formatter: function() {
+                        return '<span style="font-size: 10px">' + this.x + '</span><br/>' + Highcharts.numberFormat(this.y, 2) + '%'
+                    },
                 },
                 legend: {
                     layout: 'vertical',
