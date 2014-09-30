@@ -352,10 +352,9 @@
     @Format.ActionwithPopup("special_project", @Url.Action("ToggleSpecialProject", "ServiceCall"), Model.ServiceCallSummary.ServiceCallId)
     @Format.ActionwithPopup("escalate", @Url.Action("ToggleEscalate", "ServiceCall"), Model.ServiceCallSummary.ServiceCallId)
     <div id='reopen' class='popup-action-with-message'>
-        <p><small>Reason:</small></p>
-        <textarea rows='5'></textarea>
-        <a href='#' id='btn_execute_reopen' class='btn btn-primary btn-sm pull-left' data-action-url='@Url.Action("Reopen", "ServiceCall")' data-service-call-id='@Model.ServiceCallSummary.ServiceCallId'>Submit</a>
-        <a href='#' class='btn-link btn-sm pull-right btn-cancel-popup'>Cancel</a>
+        <textarea class="form-control margin-bottom-10" rows="5" placeholder="Enter reason"></textarea>
+        <a href='#' id='btn_execute_reopen' class='btn btn-primary' data-action-url='@Url.Action("Reopen", "ServiceCall")' data-service-call-id='@Model.ServiceCallSummary.ServiceCallId'>Submit</a>
+        <a href='#' class='btn-link btn-cancel-popup'>Cancel</a>
     </div>
 }
 
