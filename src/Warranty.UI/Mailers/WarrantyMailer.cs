@@ -1,6 +1,7 @@
 ﻿namespace Warranty.UI.Mailers
 {
     using Mvc.Mailer;
+    using Warranty.Core.Extensions;
     using Warranty.Core.Features.CreateServiceCall;
     using Warranty.Core.Features.ServiceCallToggleActions;
 
@@ -35,7 +36,7 @@
             {
                 x.Subject = string.Format("Warranty Call # {0} has been escalated.", model.CallNumber);
                 x.ViewName = "ServiceCallEscalated";
-                x.To.Add(string.Join(",", model.Emails));
+                x.To.Add(model.Emails.CommaSeparate());
             });
         }
     }
