@@ -47,7 +47,7 @@
 
         <div id="undoLastCompletedLineItem" data-bind="visible: !userCanAlwaysReopenCallLines() && lineJustCompleted()" class="undo-alert">
             <div id="undoLastCompletedLineItemAlert" class="alert alert-warning alert-dismissible padding-5" role="alert">
-                Line item marked as complete. <a href="#" data-bind="click: undoLastCompletedLine">Undo mark as complete.</a>
+                Line item marked as complete. <a class="cursor-pointer" data-bind="click: undoLastCompletedLine">Undo mark as complete.</a>
             </div>
         </div>
         
@@ -165,11 +165,12 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-4">
-                                    @Html.Label("Signature")
                                     @Html.TextBox("Signature", null, new { id = "homeownerVerificationSignature", @class = "form-control", data_bind = "value: homeownerVerificationSignature, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Signature'}" })
                                 </div>
+                            </div>
+                            <br/>
+                            <div class="row">
                                 <div class="col-md-2">
-                                    @Html.Label("Date")
                                     @Html.TextBox("Date", null, new { id = "homeownerVerificationSignatureDate", @class = "datepicker-input form-control", data_bind="value: homeownerVerificationSignatureDate, attr:{placeholder: 'Select Date'}" })
                                 </div>
                             </div>
@@ -207,7 +208,7 @@
                             <br />
                             <div class="form-submit">
                                     <button class="btn btn-primary" data-bind="click: addLineItem, enable: problemDescriptionToAdd().length > 0">Add</button>
-                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addCallLineItem">Cancel</a>
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addCallLineItem">Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -274,7 +275,6 @@
                 </div>
             </section>
 
-            
             <section >
                 <h3 class="col-md-12">Notes
                     <span>

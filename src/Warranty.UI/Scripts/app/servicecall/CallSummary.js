@@ -389,23 +389,16 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
 
                 self.userCanAlwaysReopenCallLines = ko.observable();
                 
-                self.areAllLineItemsCompleted = function () {
+                self.areAllLineItemsCompleted = ko.computed(function () {
                     var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
-                        var displayToCompare = '';
-                        if (i.serviceCallLineItemStatus) {
-                            if (i.serviceCallLineItemStatus().displayName)
-                                displayToCompare = i.serviceCallLineItemStatus().displayName;  //TODO: displayName works for model passed into js file via toJSON().
-                            if (i.serviceCallLineItemStatus().DisplayName)
-                                displayToCompare = i.serviceCallLineItemStatus().DisplayName;  //TODO: DisplayName works for model passed from ajax call. Need to keep both similar.
-                        }
-                        return (displayToCompare.toLowerCase() != serviceCallStatusData.Complete.DisplayName.toLowerCase());
+                        return (i.serviceCallLineItemStatusDisplayName().toLowerCase() != serviceCallStatusData.Complete.DisplayName.toLowerCase());
                     });
 
                     if (anyNonCompletedLineItem)
                         return false;
                     else
                         return true;
-                };
+                }).extend({notify: 'always'});
 
                 self.addLineItem = function() {
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
