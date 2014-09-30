@@ -1,0 +1,25 @@
+﻿@model Warranty.Core.Features.ServiceCallStats.ServiceCallStatsModel
+@*
+@{
+    ViewBag.Title = "Service Call Stats";
+}
+<div class="container">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#open_service_calls" role="tab" data-toggle="tab">Open <span class="label label-default">@Model.OpenServiceCalls.Count()</span></a></li>
+            <li><a href="#closed_service_calls" role="tab" data-toggle="tab">Closed <span class="label label-default">@Model.ClosedServiceCalls.Count()</span></a></li>
+            <li class="pull-right"><span class="widget-header">Service Calls for @Model.EmployeeName</span></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="open_service_calls">
+                @Html.Partial("_OpenServiceCalls", Model)
+            </div>
+            <div class="tab-pane" id="closed_service_calls">
+                @Html.Partial("_ClosedServiceCalls", Model)
+            </div>
+        </div>
+    </div>
+
+</div>
+*@

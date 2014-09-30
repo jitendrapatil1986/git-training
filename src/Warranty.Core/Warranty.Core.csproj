@@ -260,6 +260,8 @@
     <Compile Include="Features\Homeowner\AddOrUpdateEmailCommandHandler.cs" />
     <Compile Include="Features\Homeowner\AddOrUpdatePhoneNumberCommand.cs" />
     <Compile Include="Features\Homeowner\AddOrUpdatePhoneNumberCommandHandler.cs" />
+    <Compile Include="Features\ServiceCallStats\ServiceCallStatsModel.cs" />
+    <Compile Include="Features\ServiceCallStats\ServiceCallStatsQuery.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\ReassignEmployeeCommand.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\EmployeesForServiceCallQueryHandler.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\EmployeesForServiceCallQuery.cs" />
