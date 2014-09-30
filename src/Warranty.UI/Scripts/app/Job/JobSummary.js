@@ -1,5 +1,5 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'x-editable', 'enumerations/phone-number-type', 'jquery.maskedinput'], function ($, xeditable, phoneNumberTypeEnum) {
+    require(['jquery', 'x-editable', 'enumeration/PhoneNumberType', 'jquery.maskedinput'], function ($, xeditable, phoneNumberTypeEnum) {
         $(function () {
             $.fn.editable.defaults.mode = 'inline';
             $.fn.editable.defaults.emptytext = 'Add';
