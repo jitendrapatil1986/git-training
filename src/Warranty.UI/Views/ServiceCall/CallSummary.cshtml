@@ -132,7 +132,7 @@
                             @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
                         </div>
                 </div>
-                @*<div class="panel-body">
+                <div class="panel-body">
                 <div class="row">
                     <div class="col-md-11"></div>
                     <div class="col-md-1 pull-right">
@@ -146,7 +146,7 @@
                         @EscalationHelper(Model.ServiceCallSummary.IsEscalated, Model.ServiceCallSummary.EscalationDate, Model.ServiceCallSummary.EscalationReason)
                     </h4>
                 </div>
-            </div>*@
+            </div>
             </div>
  
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignature, new { id = "verifiedHomeownerSignature", @class = "form-control" })
@@ -228,7 +228,7 @@
                                                                 <div class="editor" data-bind="css: { editing: problemCodeEditing }"> 
                                                                     <h4>
                                                                         <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
-                                                                        <span data-bind="text: problemCode"></span>
+                                                                        <span data-bind="text: problemCode" class="view"></span>
                                                                     </h4>
                                                                 </div>
                                                             </div>
@@ -250,7 +250,7 @@
                                                                     <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges, enable: problemDescription().length > 0">Save</button>
                                                                 </div>
                                                                 <div class="col-md-3 col-xs-4">
-                                                                    <button type="button" class="btn btn-default btn-sm edit" data-bind="click: cancelLineItemChanges">Cancel</button>
+                                                                    <button class="btn btn-link edit" data-bind="click: cancelLineItemChanges">Cancel</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -297,7 +297,7 @@
                             <br/>
                             <div class="form-submit">
                                     <button class="btn btn-primary" data-bind="click: addCallNote, enable: noteDescriptionToAdd().length > 0">Add</button>
-                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</a>
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</button>
                             </div>
                         </div>
                     </div>
