@@ -394,6 +394,7 @@
     <Content Include="Views\Home\_WarrantyDollarsSpentWidget.cshtml" />
     <Content Include="Views\Home\_AverageDaysClosedWidget.cshtml" />
     <Content Include="Views\Home\_PercentClosedWithinSevenDaysWidget.cshtml" />
+    <Content Include="Views\WarrantyMailer\ServiceCallEscalated.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
