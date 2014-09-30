@@ -433,10 +433,9 @@ namespace Warranty.UI.Core.Helpers
         public static MvcHtmlString ActionwithPopup(string id, string url, Guid serviceCallId)
         {
             var html = string.Format(@"<div id='{0}' class='popup-action-with-message'>
-                            <p><small>Reason:</small></p>
-                            <textarea rows='5'></textarea>
-                            <a href='#' class='btn btn-primary btn-sm pull-left btn-execute-action' data-action-url='{1}' data-service-call-id='{2}'>Submit</a>
-                            <a href='#' class='btn-link btn-sm pull-right btn-cancel-popup'>Cancel</a>
+                            <textarea class='form-control margin-bottom-10' rows='5' placeholder='Enter reason'></textarea>
+                                <a href='#' class='btn btn-primary btn-execute-action' data-action-url='{1}' data-service-call-id='{2}'>Submit</a>
+                                <a href='#' class='btn-link btn-cancel-popup'>Cancel</a>
                         </div>", id, url, serviceCallId);
             return MvcHtmlString.Create(html);
         }

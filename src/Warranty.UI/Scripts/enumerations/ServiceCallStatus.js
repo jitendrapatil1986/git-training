@@ -1,1 +1,0 @@
-﻿define(function () { return { "Requested": { "Value": 1, "DisplayName": "Requested" }, "Open": { "Value": 2, "DisplayName": "Open" }, "Closed": { "Value": 3, "DisplayName": "Closed" }, "HomeownerSigned": { "Value": 4, "DisplayName": "Homeowner Signed" } }; });

@@ -42,21 +42,39 @@
 
 <div class="container">
     <div class="col-md-12">
-        <section>
-            <h2 class="pull-left">Service Call # @Model.ServiceCallSummary.CallNumber</h2>
+
+        @Html.HiddenFor(model => model.CanReopenLines, new { id = "userCanReopenCallLinesAnytime", @class = "form-control" , data_bind="value: userCanAlwaysReopenCallLines"})
+
+        <div id="undoLastCompletedLineItem" data-bind="visible: !userCanAlwaysReopenCallLines() && lineJustCompleted()" class="undo-alert">
+            <div id="undoLastCompletedLineItemAlert" class="alert alert-warning alert-dismissible padding-5" role="alert">
+                Line item marked as complete. <a class="cursor-pointer" data-bind="click: undoLastCompletedLine">Undo mark as complete.</a>
+            </div>
+        </div>
+        
+        <section class="margin-bottom-10">
+            <h2 class="pull-left no-margin">Service Call #@Model.ServiceCallSummary.CallNumber</h2>
+
             @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
             {
                 <div class="service-call-header-buttons">
-                    @Format.ServiceCallToggleButton("escalate", Model.ServiceCallSummary.IsEscalated, "Escalate", "De-escalate")                    
-                    @Format.ServiceCallToggleButton("special_project", Model.ServiceCallSummary.IsSpecialProject, "Special Project", "Not Special Project")
+                    <div data-bind="visible: callSummaryStatusOpen()">
+                        @Format.ServiceCallToggleButton("escalate", Model.ServiceCallSummary.IsEscalated, "Escalate", "De-escalate")
+                        @Format.ServiceCallToggleButton("special_project", Model.ServiceCallSummary.IsSpecialProject, "Special Project", "Not Special Project")
+                    </div>
+                    <div data-bind="visible: callSummaryStatusComplete() && canBeReopened()">
+                        <a href='#' class='btn btn-default pull-right btn-action-with-popup' data-action-with-popup='reopen' id='btn_reopen'>Reopen</a>
+                    </div>
+                    <div data-bind="visible: canBeCompleted()">
+                        <a href='#' class='btn btn-default pull-right' data-action-with-popup='reopen' data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" id='btn_complete'>Complete</a>
+                    </div>
                 </div>
             }
             <div class="clearfix"></div>
         </section>
         <div class="panel panel-default">
-            <div class="panel-heading">
+            <div class="panel-heading margin-bottom-15">
                 <div class="row remove-list-style">
-                    <div class="col-md-3 margin-bottom-10">
+                    <div class="col-md-3 main-info">
                         <h3 class="panel-title text-capitalize">@Format.HomeOwner(Model.ServiceCallSummary.HomeownerName, Model.ServiceCallSummary.HomeownerNumber)</h3>
                         <ul>
                             <li class="text-capitalize">@Model.ServiceCallSummary.Address</li>
@@ -70,7 +88,6 @@
                                 @Format.EditableEmailForServiceCall(Model.ServiceCallSummary.EmailAddress, Url.Action("AddOrUpdateEmail","Homeowner"), Model.ServiceCallSummary.HomeownerId, Model.ServiceCallSummary.CallNumber)
                             </li>
                         </ul>
-                        <span>@Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate)</span>
                     </div>
                     <div class="col-md-3">
                         <ul class="border-bottom-1-solid">
@@ -94,13 +111,12 @@
                     <div class="col-md-3">
                         <ul class="border-bottom-1-solid">
                             <li class="clearfix"><span class="pull-left">Job Number:</span>
-                                <span class="pull-right">@Html.ActionLink(Model.ServiceCallSummary.JobNumber, "JobSummary", "Job", new { id = Model.ServiceCallSummary.JobId }, null)</span></li>
+                                <span class="pull-right">@Html.ActionLink(Model.ServiceCallSummary.JobNumber, "JobSummary", "Job", new { id = Model.ServiceCallSummary.JobId }, null)&nbsp;&nbsp;<span>@Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate)</span></span></li>
                             <li class="clearfix"><span class="pull-left">Payments:</span><span class="pull-right">&nbsp;</span></li>
                             <li class="clearfix"><span class="pull-left">Division:</span><span class="pull-right">@Model.ServiceCallSummary.DivisionName</span></li>
                         </ul>
                     </div>
                     <div class="col-md-3">
-                        <div class="float-right-non-xs-screen">
                             <div id="approveCommands" class="margin-bottom-10">
                                 @if (Model.ServiceCallSummary.ServiceCallStatus == ServiceCallStatus.Requested && Model.CanApprove)
                                 {
@@ -110,12 +126,11 @@
                                 }
                                 else
                                 {
-                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus") </span>
+                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus") </span>
                                 }
                             </div>
                             @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
                         </div>
-                    </div>
                 </div>
                 @*<div class="panel-body">
                 <div class="row">
@@ -133,27 +148,29 @@
                 </div>
             </div>*@
             </div>
+ 
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignature, new { id = "verifiedHomeownerSignature", @class = "form-control" })
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignatureDate, new { id = "verifiedHomeownerSignatureDate", @class = "form-control" })
 
-            <section data-bind="visible: verifiedHomeownerSignature() && (callSummaryStatusSigned() || callSummaryStatusClosed())">
+            <section data-bind="visible: verifiedHomeownerSignature() && (callSummaryStatusSigned() || callSummaryStatusComplete())">
                 <div class="alert alert-success no-bottom-margin" >
                     <span data-bind="text: verifiedSignature()"></span>
                 </div>
             </section>
 
-            <section data-bind="visible: areAllLineItemsClosed() && !callSummaryStatusClosed() && !callSummaryStatusSigned()">
+            <section data-bind="visible: areAllLineItemsCompleted() && !callSummaryStatusComplete() && !callSummaryStatusSigned()">
                 <h3 class="col-md-12">Verify Homeowner Signature</h3>
                 <div id="verifyHomeownerSignature">
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-4">
-                                    @Html.Label("Signature")
                                     @Html.TextBox("Signature", null, new { id = "homeownerVerificationSignature", @class = "form-control", data_bind = "value: homeownerVerificationSignature, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Signature'}" })
                                 </div>
+                            </div>
+                            <br/>
+                            <div class="row">
                                 <div class="col-md-2">
-                                    @Html.Label("Date")
                                     @Html.TextBox("Date", null, new { id = "homeownerVerificationSignatureDate", @class = "datepicker-input form-control", data_bind="value: homeownerVerificationSignatureDate, attr:{placeholder: 'Select Date'}" })
                                 </div>
                             </div>
@@ -170,40 +187,31 @@
 
             <section>
                 <h3 class="col-md-12">Line Items
-                <span>
-                    <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Line Item" data-toggle="collapse" data-target="#addCallLineItem" data-bind="visible: !callSummaryStatusClosed() && !callSummaryStatusSigned()"><span class="glyphicon glyphicon-plus"></span></button>
-                </span>
+                    <span>
+                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Line Item" data-toggle="collapse" data-target="#addCallLineItem" data-bind="visible: !callSummaryStatusComplete() && !callSummaryStatusSigned()"><span class="glyphicon glyphicon-plus"></span></button>
+                    </span>
                 </h3>
                 @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallId, new { id = "callSummaryServiceCallId", @class = "form-control" })
                 <div id="addCallLineItem" class="collapse">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Add Line Item</div>
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    @Html.Label("Problem Code")
-                                    @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select Problem Code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemCodeToAdd" })
+                                    @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select problem code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemCodeToAdd" })
                                 </div>
                             </div>
                             <br />
                             <div class="row">
                                 <div class="col-md-12">
-                                    @Html.Label("Description")
-                                    @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Description'}" })
+                                    @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
                                 </div>
                             </div>
                             <br />
-                            <div class="row">
-                                <div class="col-md-1">
+                            <div class="form-submit">
                                     <button class="btn btn-primary" data-bind="click: addLineItem, enable: problemDescriptionToAdd().length > 0">Add</button>
-                                </div>
-                                <div class="col-md-1 btn">
-                                    <a href="#" data-toggle="collapse" data-target="#addCallLineItem">Cancel</a>
-                                </div>
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addCallLineItem">Cancel</button>
                             </div>
                         </div>
                     </div>
-                </div>
 
                 <div class="remove-list-style">
                     <div class="clearfix"></div>
@@ -220,40 +228,45 @@
                                                                 <div class="editor" data-bind="css: { editing: problemCodeEditing }"> 
                                                                     <h4>
                                                                         <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
-                                                                        <small class="text-muted view" data-bind="text: problemCode"></small>
+                                                                        <span data-bind="text: problemCode"></span>
                                                                     </h4>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="editor" data-bind="css: { editing: problemDescriptionEditing }"> 
-                                                                    <p class="view" data-bind="text: problemDescription"></p>
-                                                                    <textarea id="updateCallLineProblemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription"></textarea>
-                                                                    <span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
-                                                                </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="editor" data-bind="css: { editing: problemDescriptionEditing }"> 
+                                                                <p class="view" data-bind="text: problemDescription"></p>
+                                                                <textarea id="updateCallLineProblemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription"></textarea>
+                                                                <span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
                                                             </div>
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="col-md-4 col-xs-12 no-left-right-padding top-buffer bottom-buffer">
-                                                                <div class="editor" data-bind="css: { editing: lineEditing }">
-                                                                    <div class="col-md-3 col-xs-4">
-                                                                        <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges, enable: problemDescription().length > 0">Save</button>
-                                                                    </div>
-                                                                    <div class="col-md-3 col-xs-4">
-                                                                        <button type="button" class="btn btn-default btn-sm edit" data-bind="click: cancelLineItemChanges">Cancel</button>
-                                                                    </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-xs-12 no-left-right-padding top-buffer bottom-buffer">
+                                                            <div class="editor" data-bind="css: { editing: lineEditing }">
+                                                                <div class="col-md-3 col-xs-4">
+                                                                    <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges, enable: problemDescription().length > 0">Save</button>
+                                                                </div>
+                                                                <div class="col-md-3 col-xs-4">
+                                                                    <button type="button" class="btn btn-default btn-sm edit" data-bind="click: cancelLineItemChanges">Cancel</button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3 margin-top-13 margin-bottom-3 text-align-right no-right-padding">
-                                                    <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: !lineEditing() && !$root.callSummaryStatusClosed() && !$root.callSummaryStatusSigned()">Edit</button>
-                                                     @*<button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show" data-bind="click: completeLine, visible: lineEditing() == false">Complete</button>*@
-                                                </div>
+
+                                                <div class="col-md-3 margin-bottom-3 text-align-right no-right-padding">
+                                                    <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>
+                                                    <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: completeLine, visible: !lineEditing()&& !isLineItemCompleted()">Complete</button>
+                                                    @if (Model.CanReopenLines)
+                                                    {
+                                                        <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: reopenLine, visible: !lineEditing() && isLineItemCompleted()">Reopen</button>
+                                                    }
                                             </div>
                                         </div>
+                                    </div>
                                 </li>
                                 <div class="clearfix"></div>
                             </div>
@@ -261,7 +274,7 @@
                     </ul>
                 </div>
             </section>
-            
+
             <section >
                 <h3 class="col-md-12">Notes
                     <span>
@@ -269,32 +282,25 @@
                     </span>
                 </h3>
                 <div id="addCallNote" class="collapse">
-                    <div class="panel panel-default no-bottom-margin">
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    @Html.TextArea("Description", null, new { id = "addCallNoteDescription", @class = "form-control", data_bind = "text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Notes'}", @rows = 3 })
+                                    @Html.TextArea("Description", null, new { id = "addCallNoteDescription", @class = "form-control", data_bind = "text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
                                 </div>
                             </div>
                             <br/>
                             <div class="row">
                                 <div class="col-md-12">
-                                    @Html.Label("Reference line item (optional)")
-                                    <select id="addCallNoteLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToAttachToNote, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'Select Line Number' "></select>
+                                    <select id="addCallNoteLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToAttachToNote, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'Reference line item (optional)' "></select>
                                 </div>
                             </div>
                             <br/>
-                            <div class="row">
-                                <div class="col-md-1">
+                            <div class="form-submit">
                                     <button class="btn btn-primary" data-bind="click: addCallNote, enable: noteDescriptionToAdd().length > 0">Add</button>
-                                </div>
-                                <div class="col-md-1 btn">
-                                    <a href="#" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</a>
-                                </div>
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</a>
                             </div>
                         </div>
                     </div>
-                </div>
                 <br />
                 <em data-bind="visible: allCallNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">No Notes Available</em>
                 <span data-bind="visible: allCallNotes().length > 0" class="padding-left-15 padding-top-7 pull-left">
@@ -316,9 +322,12 @@
                                     <div class="col-md-12">
                                         <div class="no-left-right-padding">
                                             <div class="row">
-                                                <div class="col-md-12">
+                                                <div class="col-md-11">
                                                     <span data-bind="text: createdBy"></span>
                                                     <span data-bind="text: moment(createdDate).format('L')"></span>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <span data-bind="text: noteLineNumberWithProblemCode()"></span>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -342,6 +351,11 @@
 {
     @Format.ActionwithPopup("special_project", @Url.Action("ToggleSpecialProject", "ServiceCall"), Model.ServiceCallSummary.ServiceCallId)
     @Format.ActionwithPopup("escalate", @Url.Action("ToggleEscalate", "ServiceCall"), Model.ServiceCallSummary.ServiceCallId)
+    <div id='reopen' class='popup-action-with-message'>
+        <textarea class="form-control margin-bottom-10" rows="5" placeholder="Enter reason"></textarea>
+        <a href='#' id='btn_execute_reopen' class='btn btn-primary' data-action-url='@Url.Action("Reopen", "ServiceCall")' data-service-call-id='@Model.ServiceCallSummary.ServiceCallId'>Submit</a>
+        <a href='#' class='btn-link btn-cancel-popup'>Cancel</a>
+    </div>
 }
 
 @section modules
@@ -350,8 +364,9 @@
         define('modelData', function() {
             return {
                 initialServiceLines: @Html.Raw(Model.ServiceCallLines.ToJson()),
-                initialServiceNotes: @Html.Raw(Model.ServicCallNotes.ToJson())
-            }
+                initialServiceNotes: @Html.Raw(Model.ServicCallNotes.ToJson()),
+                canBeReopened: @Model.ServiceCallSummary.CanBeReopened.ToJson()
+                }
         });
 
         define('dropdownData', function() {

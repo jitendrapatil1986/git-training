@@ -1,22 +1,24 @@
 require(['/Scripts/app/main.js'], function () {
-require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable','enumerations/phone-number-type', 'jquery.maskedinput', 'enumerations/ServiceCallStatus', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, maskedInput, serviceCallStatusData) {
+require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable','enumeration/PhoneNumberType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
 
         $(function () {
+            $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
+                $(this).hide();
+            });
+            
             $.fn.editable.defaults.mode = 'inline';
             $.fn.editable.defaults.emptytext = 'Add';
             $.fn.editableform.buttons =
                 '<button type="submit" class="btn btn-primary editable-submit btn-xs"><i class="icon-ok icon-white"></i>Save</button>';
-            
 
             $("#Employee_List").editable({
                 type: 'select',
             });
 
-
             $("#Home_Phone").editable({
                 params: { phoneNumberTypeValue: phoneNumberTypeEnum.Home.Value }
             });
-            
+
             $("#Mobile_Phone").editable({
                 params: { phoneNumberTypeValue: phoneNumberTypeEnum.Mobile.Value }
             });
@@ -30,8 +32,8 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
 
             $(".datepicker-input").datepicker();
 
-
             $('.btn-action-with-popup').click(function (e) {
+                $('.btn-action-with-popup').removeClass('active');
                 $(this).addClass("active");
                 $('.popup-action-with-message').hide();
                 var right = ($(window).width() - ($(this).offset().left + $(this).outerWidth()));
@@ -69,14 +71,60 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                         popupWindow.hide();
                     }
                 });
-                
-                function changeButtonText(button) {
-                    var currentText = button.text();
-                    var nextText = button.data('next-text');
-                    button.data('next-text', currentText);
-                    button.text(nextText);
-                }
             });
+                
+
+            $('#btn_execute_reopen').click(function (e) {
+                var popupWindow = $(this).parent();
+                var actionUrl = $(this).data('action-url');
+                var textArea = $(this).prev('textarea');
+                var message = textArea.val();
+                textArea.val('');
+                var serviceCallId = $(this).data('service-call-id');
+                var parentButton = $("#btn_" + popupWindow.attr('id'));
+                $.ajax({
+                    type: "POST",
+                    url: actionUrl,
+                    data: { id: serviceCallId, message: message },
+                    success: function (data) {
+                        reOpenServiceCall();
+                        parentButton.removeClass("active");
+                        popupWindow.hide();
+                    }
+                });
+            });
+            
+            $('#btn_complete').click(function (e) {
+                var serviceCallId = $(this).data('service-call-id');
+                var url = urls.ServiceCall.Complete;
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { id: serviceCallId },
+                    success: function (data) {
+                        completeServiceCall();
+                    }
+                });
+            });
+
+            function reOpenServiceCall() {
+                viewModel.callSummaryServiceCallStatus(serviceCallStatusData.Open.DisplayName);
+                toastr.success("Success! Service Call has been succesfully reopened.");
+            }
+            
+            function completeServiceCall() {
+                viewModel.callSummaryServiceCallStatus(serviceCallStatusData.Complete.DisplayName);
+                viewModel.canBeReopened(true);
+                toastr.success("Success! Service Call has been succesfully completed.");
+            }
+                
+            function changeButtonText(button) {
+                var currentText = button.text();
+                var nextText = button.data('next-text');
+                button.data('next-text', currentText);
+                button.text(nextText);
+            }
+
 
             $(".approve-button").click(function (e) {
                 e.preventDefault();
@@ -89,7 +137,7 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                 e.preventDefault();
                 var serviceCallId = $(this).data("service-call-id");
                 var url = urls.ServiceCall.Deny;
-                executeApproval(url, serviceCallId, $(this), 'Closed');
+                executeApproval(url, serviceCallId, $(this), 'Completed');
             });
 
             function executeApproval(url, serviceCallId, button, status) {
@@ -166,6 +214,12 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                     completeServiceCallLineItem(this);
                 };
                 
+                //reopen line item.
+                self.reopenLine = function() {
+                    this.lineEditing(false);
+                    reopenServiceCallLineItem(this);
+                };
+
                 self.lineNumber = ko.observable(options.lineNumber);
                 
                 self.lineNumberWithProblemCode = ko.computed(function() {
@@ -181,21 +235,43 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                     if (options.serviceCallLineItemStatus.DisplayName)
                         self.serviceCallLineItemStatusDisplayName(options.serviceCallLineItemStatus.DisplayName);  //TODO: DisplayName works for model passed from ajax call. Need to keep both similar.
                 }
-                
+
                 self.lineItemStatusCSS = ko.computed(function () {
                     return self.serviceCallLineItemStatusDisplayName() ? 'label label-' + self.serviceCallLineItemStatusDisplayName().toLowerCase() + '-service-line-item' : '';
                 });
+                
+                self.isLineItemCompleted = function () {
+                    if (!self.serviceCallLineItemStatusDisplayName())
+                        return false;
+                    
+                    return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase() ? true : false;
+                };
             }
             
             function CallNotesViewModel(options) {
                 var self = this;
                 self.serviceCallNoteId = options.serviceCallNoteId;
                 self.serviceCallId = options.serviceCallId;
-                self.serviceCallLineItemId = options.serviceCallLineItemId;
+                self.serviceCallLineItemId = ko.observable(options.serviceCallLineItemId);
                 self.note = options.note;
                 self.createdBy = options.createdBy;
                 self.createdDate = options.createdDate;
                 self.serviceCallCommentTypeId = options.serviceCallCommentTypeId;
+
+                self.noteLineNumberWithProblemCode = ko.computed(function () {
+                    var lineIdToFilterNotes = options.serviceCallLineItemId;
+                    if (!lineIdToFilterNotes || lineIdToFilterNotes == "") {
+                        return "";
+                    } else {
+                        ko.utils.arrayForEach(viewModel.allLineItems(), function (i) {
+                            if (i.serviceCallLineItemId == lineIdToFilterNotes) {
+                                return i.lineNumber() + " - " + i.problemCode();
+                            }
+                            return "";
+                        });
+                        return "";
+                    }
+                });
             }
 
             function updateServiceCallLineItem(line) {
@@ -253,11 +329,40 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                         toastr.error("There was an issue completing the line item. Please try again!");
                     })
                     .done(function (response) {
-                        toastr.success("Success! Item completed.");
-                        self.serviceCallLineItemStatus = response.ServiceCallLineItemStatus;
+                        line.serviceCallLineItemStatusDisplayName(response.DisplayName);
+                        
+                        //if user is not allowed to ALWAYS reopen Completed lines at anytime, then allow them to reopen only right after completing a line.
+                        if ($("#userCanReopenCallLinesAnytime").val() == false) {
+                            $("#undoLastCompletedLineItemAlert").attr('data-service-line-id-to-undo', line.serviceCallLineItemId);
+                            $("#undoLastCompletedLineItemAlert").show();
+                            viewModel.lineJustCompleted(true);
+                            $("#undoLastCompletedLineItemAlert").attr("tabindex", -1).focus();  //focus only after setting lineJustCompleted observable which visibly shows control on form first and then focus.
+                        } else {
+                            toastr.success("Success! Item completed.");
+                        }
                     });
             }
 
+            function reopenServiceCallLineItem(line) {
+                var lineData = ko.toJSON(line);
+
+                $.ajax({
+                    url: urls.ManageServiceCall.ReopenLineItem,
+                    type: "POST",
+                    data: lineData,
+                    dataType: "json",
+                    processData: false,
+                    contentType: "application/json; charset=utf-8"
+                })
+                    .fail(function (response) {
+                        toastr.error("There was an issue reopening the line item. Please try again!");
+                    })
+                    .done(function (response) {
+                        toastr.success("Success! Item reopened.");
+                        line.serviceCallLineItemStatusDisplayName(response.DisplayName);
+                    });
+            }
+            
             function serviceCallSummaryItemViewModel() {
                 var self = this;
                 
@@ -265,6 +370,7 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                 self.theLookups = dropdownData.availableLookups;  //dropdown list does not need to be observable. Only the actual elements w/i the array do.
                 self.problemDescriptionToAdd = ko.observable('');
                 self.problemCodeToAdd = ko.observable();
+                self.canBeReopened = ko.observable(modelData.canBeReopened);
                 
                 self.allCallNotes = ko.observableArray([]);
                 self.selectedLineToAttachToNote = ko.observable();
@@ -276,28 +382,23 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                         return self.allCallNotes();
                     } else {
                         return ko.utils.arrayFilter(self.allCallNotes(), function (i) {
-                            return i.serviceCallLineItemId == lineIdToFilterNotes;
+                            return i.serviceCallLineItemId() == lineIdToFilterNotes;
                         });
                     }
                 });
 
-                self.areAllLineItemsClosed = function () {
+                self.userCanAlwaysReopenCallLines = ko.observable();
+                
+                self.areAllLineItemsCompleted = ko.computed(function () {
                     var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
-                        var displayToCompare = '';
-                        if (i.serviceCallLineItemStatus) {
-                            if (i.serviceCallLineItemStatus().displayName)
-                                displayToCompare = i.serviceCallLineItemStatus().displayName;  //TODO: displayName works for model passed into js file via toJSON().
-                            if (i.serviceCallLineItemStatus().DisplayName)
-                                displayToCompare = i.serviceCallLineItemStatus().DisplayName;  //TODO: DisplayName works for model passed from ajax call. Need to keep both similar.
-                        }
-                        return (displayToCompare.toLowerCase() != serviceCallStatusData.Closed.DisplayName.toLowerCase());
+                        return (i.serviceCallLineItemStatusDisplayName().toLowerCase() != serviceCallStatusData.Complete.DisplayName.toLowerCase());
                     });
 
                     if (anyNonCompletedLineItem)
                         return false;
                     else
                         return true;
-                };
+                }).extend({notify: 'always'});
 
                 self.addLineItem = function() {
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
@@ -423,10 +524,34 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                     $("#filterCallNoteLineReferenceDropDown").val('');
                     self.selectedLineToFilterNotes('');
                 };
-                self.callSummaryServiceCallStatus = ko.observable($("#callSummaryServiceCallStatus").html());
+                self.lineJustCompleted = ko.observable();
+                
+                //undo last line item which was completed.
+                self.undoLastCompletedLine = function () {
+                    var lineId = $("#undoLastCompletedLineItemAlert").attr('data-service-line-id-to-undo');
+                    var lineToReopen = ko.utils.arrayFirst(self.allLineItems(), function (i) {
+                        return (i.serviceCallLineItemId == lineId);
+                    });
+                    reopenServiceCallLineItem(lineToReopen);
+                    self.lineJustCompleted(false);
+                };
 
-                self.callSummaryStatusClosed = ko.computed(function () {
-                    if (self.callSummaryServiceCallStatus().toLowerCase() == serviceCallStatusData.Closed.DisplayName.toLowerCase())
+                self.callSummaryServiceCallStatus = ko.observable($("#callSummaryServiceCallStatus").html());
+                
+                self.cssforCallSummaryServiceCallStatus = ko.computed(function () {
+                    var className = self.callSummaryServiceCallStatus().toLowerCase().replace(/\ /g, '-');
+                    return 'label label-' + className + '-service-call';
+                });
+
+                self.callSummaryStatusComplete = ko.computed(function () {
+                    if (self.callSummaryServiceCallStatus().toLowerCase() == serviceCallStatusData.Complete.DisplayName.toLowerCase())
+                        return true;
+                    else
+                        return false;
+                });
+                
+                self.callSummaryStatusOpen = ko.computed(function () {
+                    if (self.callSummaryServiceCallStatus().toLowerCase() == serviceCallStatusData.Open.DisplayName.toLowerCase())
                         return true;
                     else
                         return false;
@@ -437,6 +562,10 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                         return true;
                     else
                         return false;
+                });
+                
+                self.canBeCompleted = ko.computed(function () {
+                    return self.areAllLineItemsCompleted() && !self.callSummaryStatusComplete() && self.callSummaryStatusSigned();
                 });
 
                 self.homeownerVerificationSignature = ko.observable('');

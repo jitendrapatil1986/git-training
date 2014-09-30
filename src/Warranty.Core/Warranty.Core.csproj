@@ -35,13 +35,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Common.Security.1.1.57.0\lib\net45\Common.Security.dll</HintPath>
+    </Reference>
     <Reference Include="FluentValidation, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Common.Security.1.1.55.0\lib\net45\Common.Security.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
@@ -268,8 +268,13 @@
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\ReassignEmployeeCommandHandler.cs" />
     <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQuery.cs" />
     <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQueryHandler.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallCompleteCommand.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallCompleteCommandHandler.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallReopenCommand.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallReopenCommandHandler.cs" />
     <Compile Include="Features\ServiceCallToggleActions\ServiceCallToggleEscalateCommand.cs" />
-    <Compile Include="Features\ServiceCallToggleActions\ServiceCallToggleEscalateCommandCommandhandler.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallToggleEscalateCommandHandler.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallToggleEscalateCommandResult.cs" />
     <Compile Include="Features\ServiceCallToggleActions\ServiceCallToggleSpecialProjectCommandhandler.cs" />
     <Compile Include="Features\ServiceCallToggleActions\ServiceCallToggleSpecialProjectCommand.cs" />
     <Compile Include="Features\SharedQueries\PostResponseModel.cs" />
@@ -305,6 +310,9 @@
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetModel.cs" />
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQuery.cs" />
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQueryHandler.cs" />
+    <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemCommand.cs" />
+    <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemCommanHandler.cs" />
+    <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemModel.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetWSRQuery.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetWSRQueryHandler.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetModel.cs" />

@@ -19,7 +19,7 @@
             using (_database)
             {
                 var completeServiceCallLineItem = _database.SingleById<ServiceCallLineItem>(message.ServiceCallLineItemId);
-                completeServiceCallLineItem.ServiceCallLineItemStatus = ServiceCallLineItemStatus.Closed;
+                completeServiceCallLineItem.ServiceCallLineItemStatus = ServiceCallLineItemStatus.Complete;
                 _database.Update(completeServiceCallLineItem);
 
                 return completeServiceCallLineItem.ServiceCallLineItemStatus;
