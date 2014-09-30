@@ -1,9 +1,8 @@
 ﻿namespace Warranty.UI.Api
 {
     using System;
-    using System.Web.Http.Results;
     using System.Web.Mvc;
-    using Mailer;
+    using Mailers;
     using Warranty.Core;
     using Warranty.Core.Enumerations;
     using Warranty.Core.Features.AddServiceCallLineItem;

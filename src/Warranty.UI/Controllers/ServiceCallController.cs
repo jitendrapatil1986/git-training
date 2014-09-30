@@ -2,6 +2,7 @@
 {
     using System;
     using System.Web.Mvc;
+    using Mailers;
     using Warranty.Core;
     using Warranty.Core.Entities;
     using Warranty.Core.Enumerations;
@@ -14,7 +15,6 @@
     using Warranty.Core.Features.ServiceCallApproval;
     using Warranty.Core.Features.ServiceCallSummary.ReassignEmployee;
     using Warranty.Core.Features.ServiceCallToggleActions;
-    using Mailer;
 
     public class ServiceCallController : Controller
     {
@@ -140,11 +140,19 @@
 
         public ActionResult ToggleEscalate(Guid id, string message)
         {
-            _mediator.Send(new ServiceCallToggleEscalateCommand
+            var result = _mediator.Send(new ServiceCallToggleEscalateCommand
             {
                 ServiceCallId = id,
                 Text = message
             });
+
+            if (result.ShouldSendEmail)
+            {
+                var urlHelper = new UrlHelper(this.ControllerContext.RequestContext);
+                var url = urlHelper.Action("CallSummary", "ServiceCall", new { id }, Request.Url.Scheme);
+                result.Url = url;
+                _mailer.ServiceCallEscalated(result).SendAsync();
+            }
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
