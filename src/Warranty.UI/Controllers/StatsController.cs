@@ -2,6 +2,7 @@
 {
     using System.Web.Mvc;
     using Warranty.Core;
+    using Warranty.Core.Enumerations;
     using Warranty.Core.Features.ServiceCallStats;
 
     public class StatsController : Controller
@@ -13,9 +14,9 @@
             _mediator = mediator;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string id)
         {
-            var result = _mediator.Request(new ServiceCallStatsQuery());
+            var result = _mediator.Request(new ServiceCallStatsQuery{ViewId = StatView.FromDisplayNameOrDefault(id)});
             return View(result);
         }
     }

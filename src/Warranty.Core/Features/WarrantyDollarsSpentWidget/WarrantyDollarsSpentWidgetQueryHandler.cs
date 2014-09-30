@@ -31,20 +31,24 @@
                             AND CloseDate <= @1
                             AND Ci.CityCode IN ({0})";
 
-                var sqlPayments = @"SELECT SUM(p.Amount) as TotalDollarsSpent
-                                    FROM Jobs j
-                                    INNER JOIN Communities c
-                                    ON j.CommunityId = c.CommunityId
-                                    INNER JOIN Cities Ci
-                                    ON c.CityId = Ci.CityId
-                                    INNER JOIN Payments p
-                                    ON j.JobNumber = p.JobNumber
-                                    WHERE Ci.CityCode IN ({0}) AND MONTH(p.CreatedDate) = @0 AND YEAR(p.CreatedDate) = @1";
+                var sqlPayments = @"SELECT SUM(Amount) as TotalDollarsSpent
+                                    FROM WarrantyPayments p
+                                        INNER JOIN Jobs j
+                                        ON p.JobNumber = j.JobNumber
+                                        INNER JOIN Communities c
+                                        ON j.CommunityId = c.CommunityId
+                                        INNER JOIN Cities cc
+                                        ON c.CityId = cc.CityId
+                                        INNER JOIN CommunityAssignments ca
+                                        ON c.CommunityId = ca.CommunityId
+                                        INNER JOIN Employees e
+                                        ON ca.EmployeeId = e.EmployeeId
+                                    WHERE PostingMonth = MONTH(@0) AND PostingYear = YEAR(@0) AND CityCode IN ({0})";
 
                 var numberOfHomesThisMonth = _database.ExecuteScalar<int>(string.Format(sqlNumberOfHomes, user.Markets.CommaSeparateWrapWithSingleQuote()), -2, SystemTime.Today);
-                var totalPaymentsThisMonth = _database.ExecuteScalar<decimal>(string.Format(sqlPayments, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today.Month, SystemTime.Today.Year);
+                var totalPaymentsThisMonth = _database.ExecuteScalar<decimal>(string.Format(sqlPayments, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today);
                 var numberOfHomesLastMonth = _database.ExecuteScalar<int>(string.Format(sqlNumberOfHomes, user.Markets.CommaSeparateWrapWithSingleQuote()), -2, SystemTime.Today.ToLastDay().AddMonths(-1));
-                var totalPaymentsLastMonth = _database.ExecuteScalar<decimal>(string.Format(sqlPayments, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today.AddMonths(-1).Month, SystemTime.Today.AddMonths(-1).Year);
+                var totalPaymentsLastMonth = _database.ExecuteScalar<decimal>(string.Format(sqlPayments, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today.AddMonths(-1));
 
                 return new WarrantyDollarsSpentWidgetModel
                            {

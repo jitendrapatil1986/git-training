@@ -1,4 +1,5 @@
-﻿@using Warranty.UI.Core.Helpers
+﻿@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.PercentClosedWithinSevenDaysWidget.PercentClosedWithinSevenDaysWidgetModel
 
 <div class="panel panel-info dashboard-widget">
@@ -6,7 +7,9 @@
         <div class="dashboard-widget-title">% WITHIN 7 DAYS</div>
     </div>
     <div class="panel-body">
-        <div class="dashboard-widget-number">@Format.Percentage(Model.PercentClosedThisMonth)</div>
-        <div class="dashboard-widget-footnote">@Format.Percentage(Model.PercentClosedLastMonth) closed last month</div>
+        <a href="@Url.Action("Index", "Stats", new{id=StatView.PercentClosed.DisplayName})">
+            <div class="dashboard-widget-number">@Format.Percentage(Model.PercentClosedThisMonth)</div>
+            <div class="dashboard-widget-footnote">@Format.Percentage(Model.PercentClosedLastMonth) closed last month</div>
+        </a>
     </div>
 </div>

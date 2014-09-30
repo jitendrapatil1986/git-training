@@ -1,21 +1,68 @@
 ﻿namespace Warranty.Core.Features.ServiceCallStats
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Enumerations;
     using NPoco;
+    using Security;
+    using Extensions;
 
     public class ServiceCallStatsQueryHandler : IQueryHandler<ServiceCallStatsQuery, ServiceCallStatsModel>
     {
         private readonly IDatabase _database;
+        private readonly IUserSession _userSession;
 
-        public ServiceCallStatsQueryHandler(IDatabase database)
+        public ServiceCallStatsQueryHandler(IDatabase database, IUserSession userSession)
         {
             _database = database;
+            _userSession = userSession;
         }
 
         public ServiceCallStatsModel Handle(ServiceCallStatsQuery query)
         {
+            var defaultView = query.ViewId ?? StatView.DollarsSpent;
+            var currentQuarter = Month.FromValue(SystemTime.Today.Month).Quarter;
+            var months = Month.GetAll().Where(x => x.Quarter == currentQuarter);
+
             using (_database)
             {
-                var sql = @"SELECT AverageDaysClosed, PercentClosedWithinSevenDays, TotalDollarsSpent, NumberOfWarrantableHomes, TotalDollarsSpent/NumberOfWarrantableHomes as DollarsSpentPerHome, a.EmployeeId, a.EmployeeName, a.EmployeeNumber, a.CityCode
+                var statList = new List<ServiceCallStatsModel.LineItem>();
+                var currentStats = new List<ServiceCallStatsModel.LineItem>();
+                foreach (var month in months)
+                {
+                    var stats = GetStats(defaultView, new DateTime(SystemTime.Today.Year, month.Value, 1));
+                    if (month.Value == SystemTime.Today.Month)
+                    {
+                        currentStats = stats;
+                    }
+
+                    statList.AddRange(stats);
+                }
+
+                var dollarsSpentSeries = statList.Select(x => x.EmployeeNumber).Distinct().Select(s => new ServiceCallStatsModel.Series<decimal> {Data = statList.Where(y => y.EmployeeNumber == s).Select(x => x.DollarsSpentPerHome).ToList(), Name = statList.First(y => y.EmployeeNumber == s).EmployeeName}).OrderBy(x=>x.Name).ToList();
+                var avgDaysClosedSeries = statList.Select(x => x.EmployeeNumber).Distinct().Select(s => new ServiceCallStatsModel.Series<int> { Data = statList.Where(y => y.EmployeeNumber == s).Select(x => x.AverageDaysClosed).ToList(), Name = statList.First(y => y.EmployeeNumber == s).EmployeeName }).OrderBy(x => x.Name).ToList();
+                var percentClosedSeries = statList.Select(x => x.EmployeeNumber).Distinct().Select(s => new ServiceCallStatsModel.Series<decimal> { Data = statList.Where(y => y.EmployeeNumber == s).Select(x => x.PercentClosedWithinSevenDays).ToList(), Name = statList.First(y => y.EmployeeNumber == s).EmployeeName }).OrderBy(x => x.Name).ToList();
+
+                return new ServiceCallStatsModel
+                {
+                    CurrentQuarter = currentQuarter,
+                    View = defaultView,
+                    Months = months.Select(x => x.Abbreviation).ToArray(),
+                    DollarsSpentSeriesList = dollarsSpentSeries,
+                    AverageDaysClosedSeriesList = avgDaysClosedSeries,
+                    PercentClosedSeriesList = percentClosedSeries,
+                    LineItems = currentStats,
+                };
+            }
+        }
+
+        public List<ServiceCallStatsModel.LineItem> GetStats(StatView defaultView, DateTime date)
+        {
+            var user = _userSession.GetCurrentUser();
+            var isEmployeeSpecific = user.IsInRole(UserRoles.WarrantyServiceRepresentative);
+
+            var sql = @"SELECT AverageDaysClosed, PercentClosedWithinSevenDays, TotalDollarsSpent, NumberOfWarrantableHomes, TotalDollarsSpent/NumberOfWarrantableHomes as DollarsSpentPerHome, a.EmployeeId, a.EmployeeName, a.EmployeeNumber, a.CityCode
                                 FROM
                                 (
                                     SELECT AVG(DATEDIFF(DD, sc.CreatedDate, CompletionDate)) as AverageDaysClosed
@@ -68,13 +115,14 @@
                                     WHERE CloseDate >= DATEADD(yy, @1, @0) AND CloseDate <= @0
                                     GROUP BY e.EmployeeId, EmployeeName, EmployeeNumber, CityCode
                                 ) as c
-                                ON a.EmployeeId = c.EmployeeId";
+                                ON a.EmployeeId = c.EmployeeId
+                                WHERE a.CityCode in ({0}) {3}
+                                ORDER BY {1} {2}, EmployeeName";
 
-                return new ServiceCallStatsModel
-                           {
-                               LineItems = _database.Fetch<ServiceCallStatsModel.LineItem>(sql, SystemTime.Today, -2),
-                           };
-            }
+            var additionalWhereClause = isEmployeeSpecific ? " AND a.EmployeeNumber = '" + user.EmployeeNumber + "'" : "";
+            var completedSql = string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote(), defaultView.OrderByColumnName, defaultView.SortOrder, additionalWhereClause);
+
+            return _database.Fetch<ServiceCallStatsModel.LineItem>(completedSql, date, -2);
         }
     }
 }
