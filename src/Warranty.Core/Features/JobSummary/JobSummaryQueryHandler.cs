@@ -28,7 +28,7 @@ namespace Warranty.Core.Features.JobSummary
             model.JobServiceCalls = GetJobServiceCalls(query.JobId);
             model.JobSelections = GetJobSelections(query.JobId);
             model.JobNotes = GetJobNotes(query.JobId);
-            model.CanAddNotes = user.IsInRole(UserRoles.WarrantyServiceCoordinator);
+            model.CanAddNotes = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager);
             //model.JobPayments = GetJobPayments(query.JobId);
 
             return model;
