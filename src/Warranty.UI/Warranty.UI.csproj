@@ -53,6 +53,9 @@
     <Reference Include="AutoMapper.Net4">
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
+    <Reference Include="CuteWebUI.AjaxUploader">
+      <HintPath>..\..\lib\AjaxUploader\CuteWebUI.AjaxUploader.dll</HintPath>
+    </Reference>
     <Reference Include="dotless.Core, Version=1.4.1.0, Culture=neutral, PublicKeyToken=96b446c9e63eae34, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\dotless.1.4.1.0\lib\dotless.Core.dll</HintPath>
@@ -215,6 +218,7 @@
     <Compile Include="Core\Filters\NavActionFilterAttribute.cs" />
     <Compile Include="Core\Filters\WarrantyServiceManagerOnlyAttribute.cs" />
     <Compile Include="Core\Filters\WarrantyServiceRepresentativeOnlyAttribute.cs" />
+    <Compile Include="Core\Helpers\UploadHelper.cs" />
     <Compile Include="Core\Helpers\ModelBindingHelper.cs" />
     <Compile Include="Core\Helpers\ClientApiHelper.cs" />
     <Compile Include="Core\Helpers\Css.cs" />
@@ -245,6 +249,9 @@
     </Compile>
     <Compile Include="Mailers\WarrantyMailer.cs" />
     <Compile Include="Mailers\IWarrantyMailer.cs" />
+    <Compile Include="UploadHandler.ashx.cs">
+      <DependentUpon>UploadHandler.ashx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -281,6 +288,7 @@
     <Content Include="Scripts\app\Admin\ManageAssignments.js" />
     <Content Include="Scripts\app\admin\ManageLookups.js" />
     <Content Include="Scripts\app\ajaxEvents.js" />
+    <Content Include="Scripts\app\formUploader.js" />
     <Content Include="Scripts\app\Job\JobSummary.js" />
     <Content Include="Scripts\app\responsiveTabs.js" />
     <Content Include="Scripts\app\feedbackForm.js" />
@@ -288,6 +296,7 @@
     <Content Include="Scripts\app\servicecall\CallSummary.js" />
     <Content Include="Scripts\app\servicecall\create.js" />
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
+    <Content Include="Scripts\app\shared\EditorTemplates\FileUpload.js" />
     <Content Include="Scripts\config\customer-search.js" />
     <Content Include="Scripts\lib\bootstrap-editable.min.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />
@@ -399,6 +408,8 @@
     <Content Include="Views\Home\_PercentClosedWithinSevenDaysWidget.cshtml" />
     <Content Include="Views\Stats\Index.cshtml" />
     <Content Include="Views\WarrantyMailer\ServiceCallEscalated.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\FileUpload.cshtml" />
+    <Content Include="UploadHandler.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

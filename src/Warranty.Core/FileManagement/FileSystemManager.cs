@@ -77,7 +77,7 @@
                 }
 
                 var collisionSafeScholarFileName = GetCollisionAndLengthSafeFileName(destinationFilePath, newFileName);
-                correctedFileNames.Add(collisionSafeScholarFileName);
+                correctedFileNames.Add(Path.Combine(destinationFilePath, collisionSafeScholarFileName));
 
                 var temporaryFile = _temporaryFileUploadsService.GetTemporaryFile(fileIds);
                 var fullyQualifiedFilePathAndName = Path.Combine(destinationFilePath, collisionSafeScholarFileName);

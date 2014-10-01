@@ -7,7 +7,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
     using System.Web.Mvc;
     using Services;
 
-    public class ServiceCallSummaryModel
+    public class ServiceCallSummaryModel : UploadAttachmentBaseViewModel
     {
         public ServiceCall ServiceCallSummary { get; set; }
         public IEnumerable<ServiceCallLine> ServiceCallLines { get; set; }

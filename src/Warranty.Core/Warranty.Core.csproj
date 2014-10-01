@@ -91,6 +91,7 @@
     <Compile Include="ActivityLogger\IActivityLogger.cs" />
     <Compile Include="ApprovalInfrastructure\ApprovalServices\ServiceCallApprovalService.cs" />
     <Compile Include="ApprovalInfrastructure\Interfaces\IApprovalService.cs" />
+    <Compile Include="Attributes\CuteUiFileUploadOptionsAttribute.cs" />
     <Compile Include="Configurations\CitiesCollection.cs" />
     <Compile Include="Configurations\CityConfig.cs" />
     <Compile Include="Configurations\WarrantyConfigSection.cs" />
@@ -264,6 +265,8 @@
     <Compile Include="Features\ServiceCallStats\ServiceCallStatsQueryHandler.cs" />
     <Compile Include="Features\ServiceCallStats\ServiceCallStatsModel.cs" />
     <Compile Include="Features\ServiceCallStats\ServiceCallStatsQuery.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallUploadAttachmentCommand.cs" />
+    <Compile Include="Features\UploadAttachmentBaseCommand.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\ReassignEmployeeCommand.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\EmployeesForServiceCallQueryHandler.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\EmployeesForServiceCallQuery.cs" />
@@ -315,6 +318,7 @@
     <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemCommand.cs" />
     <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemCommanHandler.cs" />
     <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemModel.cs" />
+    <Compile Include="Features\UploadAttachmentBaseViewModel.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetWSRQuery.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetWSRQueryHandler.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetModel.cs" />

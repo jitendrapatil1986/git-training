@@ -1,0 +1,110 @@
+﻿@using CuteWebUI
+@using Warranty.Core.Attributes
+@using Warranty.UI.Core.Helpers
+@using Warranty.UI.Core.ModelBinders
+
+@model Warranty.Core.FileManagement.FileUpload
+
+@{
+    var uniqueKeyHack = "_" + Guid.NewGuid().ToString("N");
+
+    var generatedIdPrefix = ModelBindingHelper.ReplaceSpecialChactersWithDotReplacement(ViewData.TemplateInfo.HtmlFieldPrefix);
+    var type = ViewData.ModelMetadata.ContainerType;
+    var propertyInfo = type.GetProperty(ViewData.ModelMetadata.PropertyName);
+    var options = propertyInfo
+        .GetCustomAttributes(typeof (CuteUiFileUploadOptionsAttribute), true)
+        .Cast<CuteUiFileUploadOptionsAttribute>()
+        .FirstOrDefault() ?? new CuteUiFileUploadOptionsAttribute();
+
+    var fileUploaderId = generatedIdPrefix + "." + uniqueKeyHack;
+    var wrapperId = generatedIdPrefix + "_wrapper" + uniqueKeyHack;
+    var cancelId = generatedIdPrefix + "_cancel" + uniqueKeyHack;
+    var browseId = generatedIdPrefix + "_browse" + uniqueKeyHack;
+    var progressPanelId = generatedIdPrefix + "_progress" + uniqueKeyHack;
+    var progressLabelId = generatedIdPrefix + "_progress_label" + uniqueKeyHack;
+
+    var buttonText = options.AllowMultiple ? "Add File(s)" : "Select File";
+}
+
+<div id="@wrapperId">
+    @Html.Hidden(FileUploadsPropertyBinder.FileUploaderIdFieldName, uniqueKeyHack)
+    @Html.ValidationMessageFor(x => x)
+    <div class="previous-uploads">
+        @if (Model.PreviousFiles.Any())
+        {
+            <b>Previously Attached Files</b>
+            <br />
+            <ul style="margin-top: 0;">
+                @foreach (var file in Model.PreviousFiles)
+                {
+                    <li>
+                        @file
+                    </li>
+                }
+                @for (var i = 0; i < Model.PreviousFiles.Count(); i++)
+                {
+                    @Html.HiddenFor(x => x.PreviousFiles[i])
+                }
+            </ul>
+        }
+    </div>
+    <div class="pending-uploads">
+        @if (Model.PendingFiles.Any())
+        {
+            @Html.HiddenFor(x => x.RawPendingUploads)
+            <b>Pending Files</b>
+            <span class="pending-uploads-warning">(will not be saved until you fix the validation errors)</span>
+            <ul style="margin-top: 0;">
+                @foreach (var pendingFile in Model.PendingFiles)
+                {
+                    <li>@pendingFile.FileName</li>
+                }
+            </ul>
+        }
+    </div>
+    <div class="uploader-buttons">
+        <input type="button" id="@browseId" value="@buttonText" />
+        <input type="button" id="@cancelId" value="Cancel" style="visibility: hidden" />
+    </div>
+
+    @if (Model.PendingFiles.Any() && !options.AllowMultiple)
+    {
+        <style type="text/css">
+            .uploader-buttons {
+                display: none;
+            }
+        </style>
+    }
+
+    <div id="@progressPanelId">
+        <label id="@progressLabelId"></label>
+    </div>
+    @using (var uploader = new MvcUploader(HttpContext.Current))
+    {
+        uploader.UploadUrl = Url.Content("~/UploadHandler.ashx");
+        uploader.Name = fileUploaderId;
+        uploader.MultipleFilesUpload = options.AllowMultiple;
+        uploader.ManualStartUpload = true;
+        uploader.InsertButtonID = browseId;
+        uploader.CancelButtonID = cancelId;
+        uploader.ProgressCtrlID = progressPanelId;
+        uploader.ProgressTextID = progressLabelId;
+        uploader.NumFilesShowCancelAll = 999;
+        uploader.MaxSizeKB = options.MaxFileSizeKb;
+
+        if (options.FileTypes != null)
+        {
+            uploader.AllowedFileExtensions = options.FileTypes;
+        }
+
+        @Html.Raw(uploader.Render())
+    }
+    <script>
+        define('formUploadData', function() {
+            return {
+                fileUploaderId: '@fileUploaderId',
+                wrapperId: '@wrapperId',
+            };
+        });
+    </script>
+</div>
