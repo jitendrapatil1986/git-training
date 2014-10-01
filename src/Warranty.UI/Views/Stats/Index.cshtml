@@ -1,0 +1,163 @@
+﻿@using Warranty.Core.Enumerations
+@using Warranty.Core.Extensions
+@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.ServiceCallStats.ServiceCallStatsModel
+@{
+    ViewBag.Title = "Service Call Stats";
+}
+
+<div class="container">
+    <h2>My Team Stats</h2>
+    <h4>Quarter @Model.CurrentQuarter</h4>
+    <div class="@Model.View.ShowChart(StatView.AvgDaysClosed)" id="quarter_perf_avg_days_closed"></div>
+    <div class="@Model.View.ShowChart(StatView.DollarsSpent)" id="quarter_perf_spent"></div>
+    <div class="@Model.View.ShowChart(StatView.PercentClosed)" id="quarter_perf_percent_closed"></div>
+    
+    <ul class="nav nav-pills">
+        <li class="@Model.View.Active(StatView.DollarsSpent)">@Html.ActionLink("$ Spent", "Index", new {id=StatView.DollarsSpent.DisplayName})</li>
+        <li class="@Model.View.Active(StatView.AvgDaysClosed)">@Html.ActionLink("Avg Days Closed", "Index", new {id=StatView.AvgDaysClosed.DisplayName})</li>
+        <li class="@Model.View.Active(StatView.PercentClosed)">@Html.ActionLink("% Closed", "Index", new {id=StatView.PercentClosed.DisplayName})</li>
+    </ul>
+    <br/>
+    <div class="table-responsive">
+        <table class="table table-hover table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Team Member</th>
+                    <th class="@Model.View.Highlight(StatView.DollarsSpent) text-center">$ Spent</th>
+                    <th class="@Model.View.Highlight(StatView.AvgDaysClosed) text-center">Avg Days Closed</th>
+                    <th class="@Model.View.Highlight(StatView.PercentClosed) text-center">% Closed</th>
+                </tr>
+            </thead>
+            @foreach (var line in Model.LineItems)
+            {
+                <tr>
+                    <td>@Html.ActionLink(line.EmployeeName, "ServiceCalls", "ServiceRep", new{id=line.EmployeeId}, null)</td>
+                    <td class="@Model.View.Highlight(StatView.DollarsSpent) text-right">@Format.MoneyWithoutDecimal(line.DollarsSpentPerHome)</td>
+                    <td class="@Model.View.Highlight(StatView.AvgDaysClosed) text-right">@line.AverageDaysClosed</td>
+                    <td class="@Model.View.Highlight(StatView.PercentClosed) text-right">@Format.Percentage(line.PercentClosedWithinSevenDays)</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+
+<script>
+    require(['jquery', 'highcharts'], function($) {
+        $(function() {
+            $('#quarter_perf_spent').highcharts({
+                chart: {
+                    animation: false
+                },
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: @Html.Raw(Model.Months.ToJson())
+                },
+                yAxis: {
+                    title: {
+                        text: 'Dollars Spent'
+                    },
+                    min: 0,
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    pointFormat: "${point.y:.2f}<br/>",
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0,
+                    enabled: @Model.ShowLegend
+                },
+                credits: {
+                    enabled: false
+                },
+                series: @Html.Raw(Model.DollarsSpentSeriesList.ToJson())
+            });
+
+            $('#quarter_perf_avg_days_closed').highcharts({
+                chart: {
+                    animation: false
+                },
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: @Html.Raw(Model.Months.ToJson())
+                },
+                yAxis: {
+                    title: {
+                        text: 'Avg Days Closed'
+                    },
+                    min: 0,
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    pointFormat: "{point.y} Days",
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0,
+                    enabled: @Model.ShowLegend
+                },
+                credits: {
+                    enabled: false
+                },
+                series: @Html.Raw(Model.AverageDaysClosedSeriesList.ToJson())
+            });
+
+            $('#quarter_perf_percent_closed').highcharts({
+                chart: {
+                    animation: false
+                },
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: @Html.Raw(Model.Months.ToJson())
+                },
+                yAxis: {
+                    title: {
+                        text: 'Percent Closed within 7 Days'
+                    },
+                    min: 0,
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    formatter: function() {
+                        return '<span style="font-size: 10px">' + this.x + '</span><br/>' + Highcharts.numberFormat(this.y, 2) + '%'
+                    },
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0,
+                    enabled: @Model.ShowLegend
+                },
+                credits: {
+                    enabled: false
+                },
+                series: @Html.Raw(Model.PercentClosedSeriesList.ToJson())
+            });
+        });
+    });
+</script>

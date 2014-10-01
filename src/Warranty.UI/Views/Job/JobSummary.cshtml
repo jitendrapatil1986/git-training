@@ -1,4 +1,5 @@
-﻿@using Warranty.UI.Core.Helpers
+﻿@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.JobSummary.JobSummaryModel
 
 <div class="container">
@@ -17,16 +18,21 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
-                            @Html.DisplayFor(x => x.HomeOwnerName)
-                            <br/>
-                            @Html.DisplayFor(x => x.AddressLine)
-                            <br/>
-                            @Model.City, @Model.StateCode @Model.PostalCode
-                            <br/>
-                            @Format.PhoneNumber(Model.PhoneNumber)
-                            <br/>
-                            @Format.Email(Model.Email)
+                        <div class="col-md-4 remove-list-style">
+                            <ul>
+                                <li>@Format.HomeOwner(Model.HomeOwnerName, Model.HomeOwnerNumber)</li>
+                                <li>@Html.DisplayFor(x => x.AddressLine)</li>
+                                <li>@Model.City, @Model.StateCode @Model.PostalCode</li>
+                                <li>
+                                    @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.HomePhone,Url.Action("AddOrUpdatePhoneNumber","Homeowner"), Model.HomeownerId)
+                                </li>
+                                <li>
+                                    @Format.EditablePhoneNumber(PhoneNumberType.Mobile, Model.OtherPhone,Url.Action("AddOrUpdatePhoneNumber","Homeowner"),Model.HomeownerId)
+                                </li>
+                                <li>
+                                    @Format.EditableEmailForJob(Model.EmailAddress, Url.Action("AddOrUpdateEmail","Homeowner"), Model.HomeownerId)
+                                </li>
+                            </ul>
                         </div>
                         <div class="col-md-4">
                             @Html.DisplayFor(x => x.PlanTypeDescription)
@@ -67,14 +73,14 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <ul class="nav nav-tabs" role="tablist">
+            <ul class="nav nav-tabs responsive" role="tablist">
                 <li class="active"><a href="#job_service_calls" role="tab" data-toggle="tab">Call History <span class="label label-default">@Model.JobServiceCalls.Count()</span></a></li>
                 <li><a href="#job_selections" role="tab" data-toggle="tab">Options <span class="label label-default">@Model.JobSelections.Count()</span></a></li>
                 <li><a href="#job_vendors" role="tab" data-toggle="tab">Vendors </a></li>
                 <li><a href="#job_payments" role="tab" data-toggle="tab">Payments </a></li>
             </ul>
         
-            <div class="tab-content">
+            <div class="tab-content responsive">
                 <div class="tab-pane active" id="job_service_calls">
                     @foreach (var line in Model.JobServiceCalls.OrderByDescending(x=>x.CreatedDate))
                     {
@@ -97,10 +103,10 @@
                                 @(line.CompletionDate == null ? "Date Added: " + Format.DateMonthDayYear(line.CreatedDate) : "Date Completed: " + Format.DateMonthDayYear(line.CompletionDate))
                             </div>
                             <div class="col-md-2">
-                                @if (line.JobServiceCallComments.Any(x => !string.IsNullOrEmpty(x.Comment))) { 
-                                    <div class="text-center has-bottom-tooltip" title="No. Of Comments">
+                                @if (line.JobServiceCallNotes.Any(x => !string.IsNullOrEmpty(x.Note))) { 
+                                    <div class="text-center has-bottom-tooltip" title="No. Of Notes">
                                         <a data-toggle="collapse" href="#collapseJobCallLineNotes@(line.CallNumber)" class="text-capitalize accordion-toggle collapsed">
-                                            <span class="glyphicon glyphicon-comment"> <u>@line.JobServiceCallComments.Count()</u></span>
+                                            <span class="glyphicon glyphicon-comment"> <u>@line.JobServiceCallNotes.Count()</u></span>
                                         </a>
                                     </div>
                                 }
@@ -123,11 +129,11 @@
                             <div class="row">
                                 <div class="col-md-8 col-md-offset-2">
                                     <div id="collapseJobCallLineNotes@(line.CallNumber)" class="collapse panel-body no-left-right-padding">
-                                        @foreach (var commentLine in line.JobServiceCallComments)
+                                        @foreach (var noteLine in line.JobServiceCallNotes)
                                         {
                                             <div class="service-call-line">
                                                 <small>
-                                                    @Html.DisplayFor(x => commentLine.Comment)
+                                                    @Html.DisplayFor(x => noteLine.Note)
                                                 </small>
                                             </div>
                                         }

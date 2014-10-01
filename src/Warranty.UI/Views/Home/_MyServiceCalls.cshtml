@@ -22,7 +22,7 @@ else
                     @Format.NumberOfLineItems(line.NumberOfLineItems)
                 </div>
                 <div class="col-md-10">
-                    @line.HomeownerName<br />@Html.ActionLink(line.Address, "JobSummary", "Job", new {id=line.JobId}, null)
+                    @Format.HomeOwner(line.HomeownerName, line.HomeownerNumber)<br />@line.Address
                 </div>
             </div>
             <div class="col-md-3">@Format.PhoneNumber(line.PhoneNumber)</div>
@@ -44,14 +44,14 @@ else
     {
         <div>
             <span class="text-muted">Show:</span> 
-            <a href="#" class="show-more">5</a>
+            <a href="#" class="show-more-service-calls">5</a>
             @if (Model.MyServiceCalls.Count() > 5)
             {
-                <span> | <a href="#" class="show-more">10</a></span>
+                <span> | <a href="#" class="show-more-service-calls">10</a></span>
             }
             @if (Model.MyServiceCalls.Count() > 10)
             {
-                <span> | <a href="#" class="show-more">All</a></span>
+                <span> | <a href="#" class="show-more-service-calls">All</a></span>
             }
         </div>
     }

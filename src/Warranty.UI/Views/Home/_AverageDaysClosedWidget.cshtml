@@ -1,0 +1,14 @@
+﻿@using Warranty.Core.Enumerations
+@model Warranty.Core.Features.AverageDaysClosedWidget.AverageDaysClosedWidgetModel
+
+<div class="panel panel-info dashboard-widget">
+    <div class="panel-heading">
+        <div class="dashboard-widget-title">AVG. DAYS TO CLOSED</div>
+    </div>
+    <div class="panel-body">
+        <a href="@Url.Action("Index", "Stats", new{id=StatView.AvgDaysClosed.DisplayName})">
+            <div class="dashboard-widget-number">@Model.AvgDaysClosedThisMonth</div>
+            <div class="dashboard-widget-footnote">@Model.AvgDaysClosedLastMonth avg. to closed last month</div>
+        </a>
+    </div>
+</div>

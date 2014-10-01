@@ -4,10 +4,32 @@
             var self = this;
             self.lineItems = ko.observableArray([]);
             self.relatedCalls = ko.observableArray([]);
+            self.problemCodeToAdd = ko.observable();
+            self.problemDescriptionToAdd = ko.observable('');
 
             self.addLineItem = function () {
+                self.problemCodeToAdd = $("#problemCode").val();
+                self.problemDescriptionToAdd = $("#problemDescription").val();
+
+                var newProblemCode = $("#problemCode");
+                if (newProblemCode.val() == "") {
+                    $(newProblemCode).parent().addClass("has-error");
+                    return;
+                }
+
+                var newProblemDescriptionToAdd = $("#problemDescription");
+                if (newProblemDescriptionToAdd.val() == "") {
+                    $(newProblemDescriptionToAdd).parent().addClass("has-error");
+                    return;
+                }
+                
                 self.lineItems.push(new lineItemViewModel({ problemCode: $("#problemCode").find('option:selected').text(), problemCodeId: $("#problemCode").val(), problemDescription: $("#problemDescription").val() }));
                 $("#problemDescription").val('');
+                $("#problemCode").val('');
+                self.problemDescriptionToAdd = '';
+                self.problemCodeToAdd = '';
+                $(newProblemCode).parent().removeClass("has-error");
+                $(newProblemDescriptionToAdd).parent().removeClass("has-error");
             };
 
             self.removeLineItem = function (lineItem) {
@@ -18,7 +40,6 @@
                 self.loadRelatedCalls();
             });
 
-
             self.loadRelatedCalls = function loadRelatedCalls() {
                 self.relatedCalls.removeAll();
 
@@ -28,12 +49,12 @@
                     data: { jobId: $('#JobId').val(), problemCode: $('#problemCode option:selected').text() },
                     dataType: "json",
                 })
-                .done(function (response) {
-                    $.each(response, function (index, value) {
-                        self.relatedCalls.push(new relatedCallViewModel({ serviceCallId: value.ServiceCallId, callNumber: value.CallNumber, problemDescription: value.ProblemDescription, createdDate: value.CreatedDate }));
+                    .done(function(response) {
+                        $.each(response, function(index, value) {
+                            self.relatedCalls.push(new relatedCallViewModel({ serviceCallId: value.ServiceCallId, callNumber: value.CallNumber, problemDescription: value.ProblemDescription, createdDate: value.CreatedDate }));
+                        });
                     });
-                });
-            }
+            };
         }
         
         function lineItemViewModel(options) {

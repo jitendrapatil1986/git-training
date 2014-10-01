@@ -28,12 +28,14 @@
             {
                 options = new List<string>
                 {
+                    "-wp",
                     "-p",
                     "-j",
                     "-js"
                 };
             }
 
+            if (options.Contains("-wp")) new WarrantyPaymentImporter().CustomImport();
             if (options.Contains("-p")) new PaymentImporter().CustomImport();
             if (options.Contains("-j")) new JobImporter().CustomImport();
             if (options.Contains("-js")) new JobStageImporter().CustomImport();
@@ -48,6 +50,7 @@
             Console.WriteLine("\nRunning the importer with no options will run all importers.");
             Console.WriteLine("Running the importer with -help will show this message.");
             Console.WriteLine("\nEach option needs to be separated by a space and prefixed with a -:");
+            Console.WriteLine("-wp\tWarranty Payments");
             Console.WriteLine("-p\tPayments");
             Console.WriteLine("-j\tJobs");
             Console.WriteLine("-js\tJob Stage History");

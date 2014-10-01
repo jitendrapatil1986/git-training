@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class AddServiceCallLineItemCommand : ICommand<Guid>
+    public class AddServiceCallLineItemCommand : ICommand<AddServiceCallLineItemModel>
     {
         public Guid ServiceCallId { get; set; }
         public string ProblemCode { get; set; }

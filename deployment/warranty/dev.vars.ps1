@@ -17,6 +17,6 @@ $header_image_file_name = "DWH logo_color_233x34_dev.png"
 
 $Warranty_identity_uri = "https://Warrantytest.davidweekleyhomes.com"
 
-$sendFeedbackAddresses = "dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com, imorfey@dwhomes.com, rcarr@dwhomes.com"
+$sendFeedbackAddresses = "dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com, imorfey@dwhomes.com, rcarr@dwhomes.com, mroberts@dwhomes.com"
 $errorReportingEmailAddresses = "dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com, kiet.huynh@headspring.com"
 $errorReportingSubject = "Warranty Exception (test)"

@@ -1,7 +1,4 @@
-﻿using Warranty.Core.Features.AmountSpentWidget;
-using Warranty.Core.Features.ToDoWidget;
-
-namespace Warranty.UI.Controllers
+﻿namespace Warranty.UI.Controllers
 {
     using System;
     using System.Configuration;
@@ -14,9 +11,14 @@ namespace Warranty.UI.Controllers
     using Newtonsoft.Json.Linq;
     using Warranty.Core;
     using Warranty.Core.Extensions;
+    using Warranty.Core.Features.AmountSpentWidget;
+    using Warranty.Core.Features.AverageDaysClosedWidget;
+    using Warranty.Core.Features.PercentClosedWithinSevenDaysWidget;
+    using Warranty.Core.Features.ToDoWidget;
     using Warranty.Core.Features.MyServiceTeamWidget;
     using Warranty.Core.Features.SendFeedback;
     using Warranty.Core.Features.ServiceCallsWidget;
+    using Warranty.Core.Features.WarrantyDollarsSpentWidget;
 
     public class HomeController : Controller
     {
@@ -54,7 +56,6 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-//        [WarrantyServiceCoordinatorOnly]
         public ActionResult MyTeamWidget()
         {
             var model = _mediator.Request(new MyServiceTeamWidgetQuery());
@@ -62,7 +63,6 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-//        [WarrantyServiceCoordinatorOnly]
         public ActionResult ServiceCallsWidget()
         {
             var model = _mediator.Request(new ServiceCallsWidgetQuery());
@@ -70,7 +70,6 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-//        [WarrantyServiceRepresentativeOnly]
         public ActionResult WarrantyServiceRepServiceCallsWidget()
         {
             var model = _mediator.Request(new WarrantyServiceRepServiceCallsWidgetQuery());
@@ -78,7 +77,6 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-//        [WarrantyServiceCoordinatorOnly]
         public ActionResult AmountSpentWidget()
         {
             var model = _mediator.Request(new AmountSpentWidgetQuery());
@@ -86,7 +84,48 @@ namespace Warranty.UI.Controllers
         }
 
         [ChildActionOnly]
-//        [WarrantyServiceCoordinatorOnly]
+        public ActionResult WarrantyDollarsSpentWidget()
+        {
+            var model = _mediator.Request(new WarrantyDollarsSpentWidgetQuery());
+            return PartialView("_WarrantyDollarsSpentWidget", model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult AverageDaysClosedWidget()
+        {
+            var model = _mediator.Request(new AverageDaysClosedWidgetQuery());
+            return PartialView("_AverageDaysClosedWidget", model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult PercentClosedWithinSevenDaysWidget()
+        {
+            var model = _mediator.Request(new PercentClosedWithinSevenDaysWidgetQuery());
+            return PartialView("_PercentClosedWithinSevenDaysWidget", model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult WarrantyDollarsSpentWidgetWSR()
+        {
+            var model = _mediator.Request(new WarrantyDollarsSpentWidgetWSRQuery());
+            return PartialView("_WarrantyDollarsSpentWidget", model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult AverageDaysClosedWidgetWSR()
+        {
+            var model = _mediator.Request(new AverageDaysClosedWidgetWSRQuery());
+            return PartialView("_AverageDaysClosedWidget", model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult PercentClosedWithinSevenDaysWidgetWSR()
+        {
+            var model = _mediator.Request(new PercentClosedWithinSevenDaysWidgetWSRQuery());
+            return PartialView("_PercentClosedWithinSevenDaysWidget", model);
+        }
+
+        [ChildActionOnly]
         public ActionResult ToDoWidget()
         {
             var model = _mediator.Request(new ToDoWidgetQuery());

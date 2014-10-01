@@ -191,17 +191,21 @@
     </Compile>
     <Compile Include="Api\ApiController.cs" />
     <Compile Include="Api\AssignWSRController.cs" />
+    <Compile Include="Api\HomeownerController.cs" />
     <Compile Include="Api\RelatedCallController.cs" />
     <Compile Include="Api\ManageLookupsController.cs" />
     <Compile Include="Api\QuickSearchController.cs" />
+    <Compile Include="Api\ManageServiceCallController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
+    <Compile Include="Controllers\EnumerationController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\ServiceCallController.cs" />
     <Compile Include="Controllers\ServiceRepController.cs" />
+    <Compile Include="Controllers\StatsController.cs" />
     <Compile Include="Core\Enumerations\NavHeaderItem.cs" />
     <Compile Include="Core\Enumerations\NavItem.cs" />
     <Compile Include="Core\Enumerations\ToastType.cs" />
@@ -248,10 +252,12 @@
     <Content Include="App_Readme\Handlebarsjs_LICENSE" />
     <None Include="css\less\bootstrap-custom.less" />
     <Content Include="App_Readme\Elmah.txt" />
+    <Content Include="css\bootstrap-editable.css" />
     <Content Include="css\bootstrap-theme.css" />
     <Content Include="css\bootstrap-theme.min.css" />
     <Content Include="css\bootstrap.css" />
     <Content Include="css\bootstrap.min.css" />
+    <Content Include="css\datepicker.css" />
     <Content Include="css\font\fontawesome-webfont.svg" />
     <Content Include="css\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="favicon.ico" />
@@ -259,6 +265,7 @@
     <Content Include="img\alpha.png" />
     <Content Include="img\background_tab.png" />
     <Content Include="img\background_tab_hover.png" />
+    <Content Include="img\clear.png" />
     <Content Include="img\DWH logo_color.png" />
     <Content Include="img\DWH logo_color_233x34.png" />
     <Content Include="img\DWH logo_color_233x34_dev.png" />
@@ -267,16 +274,20 @@
     <Content Include="img\headerWrapper_bg.png" />
     <Content Include="img\hue.png" />
     <Content Include="img\loader.gif" />
+    <Content Include="img\loading.gif" />
     <Content Include="img\saturation.png" />
     <Content Include="Scripts\app\Admin\ManageAssignments.js" />
     <Content Include="Scripts\app\admin\ManageLookups.js" />
     <Content Include="Scripts\app\ajaxEvents.js" />
+    <Content Include="Scripts\app\Job\JobSummary.js" />
+    <Content Include="Scripts\app\responsiveTabs.js" />
     <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\search.js" />
     <Content Include="Scripts\app\servicecall\CallSummary.js" />
     <Content Include="Scripts\app\servicecall\create.js" />
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
     <Content Include="Scripts\config\customer-search.js" />
+    <Content Include="Scripts\lib\bootstrap-editable.min.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />
     <Content Include="Scripts\lib\handlebars.amd.min.js" />
     <Content Include="Scripts\lib\handlebars.js" />
@@ -287,7 +298,6 @@
     <Content Include="Scripts\lib\handlebars.runtime.min.js" />
     <Content Include="Scripts\lib\bloodhound.js" />
     <Content Include="Scripts\lib\bloodhound.min.js" />
-    <Content Include="Scripts\config\call-search.js" />
     <Content Include="Scripts\config\job-search.js" />
     <Content Include="Scripts\app\customBindings.js" />
     <Content Include="Scripts\app\dates.js" />
@@ -303,6 +313,7 @@
     <Content Include="Scripts\app\shared\confirmMessage.js" />
     <Content Include="Scripts\app\shared\Default.js" />
     <Content Include="Scripts\lib\jquery.color-2.1.0.min.js" />
+    <Content Include="Scripts\lib\responsive.tabs.js" />
     <Content Include="Scripts\lib\text.js" />
     <Content Include="Scripts\templates\call-search-item.html" />
     <Content Include="Scripts\templates\customer-search-item.html" />
@@ -381,6 +392,11 @@
     <Content Include="Views\WarrantyMailer\NewServiceCallAssignedToWsr.cshtml" />
     <Content Include="Views\WarrantyMailer\_Layout.cshtml" />
     <Content Include="Views\Home\_ToDoCommunityEmployeeAssignment.cshtml" />
+    <Content Include="Views\Home\_WarrantyDollarsSpentWidget.cshtml" />
+    <Content Include="Views\Home\_AverageDaysClosedWidget.cshtml" />
+    <Content Include="Views\Home\_PercentClosedWithinSevenDaysWidget.cshtml" />
+    <Content Include="Views\Stats\Index.cshtml" />
+    <Content Include="Views\WarrantyMailer\ServiceCallEscalated.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

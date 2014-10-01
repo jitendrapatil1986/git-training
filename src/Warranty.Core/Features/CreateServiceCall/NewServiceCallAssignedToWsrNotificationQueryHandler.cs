@@ -30,7 +30,7 @@ namespace Warranty.Core.Features.CreateServiceCall
                             ON c.CommunityId = j.CommunityId
                           INNER JOIN HomeOwners ho
                             ON j.CurrentHomeOwnerId = ho.HomeOwnerId
-                          INNER JOIN Employees e
+                          LEFT OUTER JOIN Employees e
                             ON e.EmployeeId = sc.WarrantyRepresentativeEmployeeId 
                           WHERE sc.ServiceCallId = @0";
 
@@ -38,8 +38,8 @@ namespace Warranty.Core.Features.CreateServiceCall
                 model.WarrantyRepresentativeEmployeeEmail = GetEmployeeEmail(model.EmployeeNumber);
 
 
-                const string sqlcomments = @"  SELECT ServiceCallComment 
-                                                FROM ServiceCallComments 
+                const string sqlcomments = @"  SELECT ServiceCallNote 
+                                                FROM ServiceCallNotes 
                                                 WHERE ServiceCallId = @0";
 
                 model.Comments = _database.Fetch<string>(sqlcomments, query.ServiceCallId);
@@ -49,6 +49,9 @@ namespace Warranty.Core.Features.CreateServiceCall
 
         public string GetEmployeeEmail(string employeeNumber)
         {
+            if (employeeNumber == null)
+                return null;
+
             var queryEmail = new Common.Security.Queries.GetEmailByEmployeeNumberQuery();
             return queryEmail.Execute(employeeNumber);
         }

@@ -80,6 +80,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Up", "Up", "{20518451-E144-
 		Database\Warranty\Up\0048_AlterIdentityToClassificationCodes.sql = Database\Warranty\Up\0048_AlterIdentityToClassificationCodes.sql
 		Database\Warranty\Up\0049_AlterIdentityToProblemCodes.sql = Database\Warranty\Up\0049_AlterIdentityToProblemCodes.sql
 		Database\Warranty\Up\0050_AlterIdentityToRootCauses.sql = Database\Warranty\Up\0050_AlterIdentityToRootCauses.sql
+		Database\Warranty\Up\0055_AlterServiceCallCommentsToNotes.sql = Database\Warranty\Up\0055_AlterServiceCallCommentsToNotes.sql
+		Database\Warranty\Up\0056_AddServiceCallLineItemToServiceCallNotes.sql = Database\Warranty\Up\0056_AddServiceCallLineItemToServiceCallNotes.sql
+		Database\Warranty\Up\0057_AddActivityLogTable.sql = Database\Warranty\Up\0057_AddActivityLogTable.sql
+		Database\Warranty\Up\0058_AlterServiceCallLineItemsAddServiceCallLineItemStatusId.sql = Database\Warranty\Up\0058_AlterServiceCallLineItemsAddServiceCallLineItemStatusId.sql
+		Database\Warranty\Up\0059_AlterServiceCallsAddHomeOwnerVerficationSignature.sql = Database\Warranty\Up\0059_AlterServiceCallsAddHomeOwnerVerficationSignature.sql
+		Database\Warranty\Up\0063_InsertServiceCallStatusHomeownerSigned.sql = Database\Warranty\Up\0063_InsertServiceCallStatusHomeownerSigned.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{D0DD7813-D199-44F7-A1F3-EC38DCA342F2}"

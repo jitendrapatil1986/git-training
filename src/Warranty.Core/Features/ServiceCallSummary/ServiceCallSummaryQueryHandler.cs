@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Warranty.Core.Features.ServiceCallSummary
 {
@@ -31,9 +28,11 @@ namespace Warranty.Core.Features.ServiceCallSummary
                     {
                         ServiceCallSummary = GetServiceCallSummary(query.ServiceCallId),
                         ServiceCallLines = GetServiceCallLines(query.ServiceCallId),
-                        ServicCallComments = GetServiceCallComments(query.ServiceCallId),
+                        ServicCallNotes = GetServiceCallNotes(query.ServiceCallId),
                         AddServiceCallLineItem = new ServiceCallSummaryModel.NewServiceCallLineItem(query.ServiceCallId, SharedQueries.ProblemCodes.GetProblemCodeList(_database)),
                         CanApprove = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
+                        CanReassign = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
+                        CanReopenLines = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
                     };
             }
         }
@@ -47,12 +46,17 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , j.JobId
                                     , j.JobNumber
                                     , wc.CreatedDate
+                                    , wc.CreatedBy
                                     , wc.CompletionDate
                                     , wc.ServiceCallstatusId as ServiceCallStatus
                                     , ho.HomeOwnerName
+                                    , ho.HomeOwnerNumber
                                     , case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
+                                    , case when (datediff(d, wc.CompletionDate, getdate()) <=3) then 1 else 0 end CanBeReopened
                                     , NumberOfLineItems
-                                    , ho.HomePhone as PhoneNumber
+                                    , ho.HomeownerId
+                                    , ho.HomePhone
+                                    , ho.OtherPhone
                                     , ho.EmailAddress
                                     , LOWER(e.EmployeeName) as AssignedTo
                                     , e.EmployeeNumber as AssignedToEmployeeNumber
@@ -66,6 +70,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , d.DivisionName
                                     , p.ProjectName
                                     , cm.CommunityName
+                                    , wc.HomeownerVerificationSignature
+                                    , wc.HomeownerVerificationSignatureDate
                                 FROM [ServiceCalls] wc
                                 INNER JOIN Jobs j
                                 ON wc.JobId = j.JobId
@@ -101,13 +107,13 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     li.CauseDescription,
                                     li.ClassificationNote,
                                     li.LineItemRoot,
-                                    li.Completed,
-                                    li.CreatedDate
+                                    li.CreatedDate,
+                                    li.ServiceCallLineItemStatusId as ServiceCallLineItemStatus
                                 FROM ServiceCalls wc
                                 INNER JOIN ServiceCallLineItems li
                                 ON wc.ServiceCallId = li.ServiceCallId
                                 WHERE wc.ServiceCallId = @0
-                                ORDER BY li.LineNumber DESC";
+                                ORDER BY li.ServiceCallLineItemStatusId, li.LineNumber DESC";
 
             var result = _database.Fetch<ServiceCallSummaryModel.ServiceCallLine>(sql, serviceCallId.ToString());
 
@@ -116,17 +122,18 @@ namespace Warranty.Core.Features.ServiceCallSummary
             return result;
         }
 
-        private IEnumerable<ServiceCallSummaryModel.ServicCallComment> GetServiceCallComments(Guid serviceCallId)
+        private IEnumerable<ServiceCallSummaryModel.ServiceCallNote> GetServiceCallNotes(Guid serviceCallId)
         {
-            const string sql = @"SELECT [ServiceCallCommentId]
+            const string sql = @"SELECT [ServiceCallNoteId]
                                       ,[ServiceCallId]
-                                      ,[ServiceCallComment] as Comment
+                                      ,[ServiceCallNote] as Note
+                                      ,[ServiceCallLineItemId]
                                       ,[CreatedDate]
                                       ,[CreatedBy]     
-                                FROM [ServiceCallComments]
+                                FROM [ServiceCallNotes]
                                 WHERE ServiceCallId = @0";
 
-            var result = _database.Fetch<ServiceCallSummaryModel.ServicCallComment>(sql, serviceCallId.ToString());
+            var result = _database.Fetch<ServiceCallSummaryModel.ServiceCallNote>(sql, serviceCallId.ToString());
 
             return result;
         }

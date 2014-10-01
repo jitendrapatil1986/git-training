@@ -5,7 +5,7 @@
 {
     data = data ?? String.Empty;
     <li class="@(navItem.DisplayName.Equals(ViewData[Warranty.UI.Core.Filters.CurrentNavSectionAttribute.ViewDataKey]) ? "active" : "")">
-        <a @data href="@url">@navItem.Title</a>
+            <a @data href="@url">@navItem.Title</a>
     </li>
 }
 
@@ -34,40 +34,41 @@
 <!DOCTYPE html>
 
 <html>
-<head>
-    <title>@ViewBag.Title - Warranty - David Weekley Homes</title>
+    <head>
+        <title>@ViewBag.Title - Warranty - David Weekley Homes</title>
     
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    @Styles.Render("~/css/less/main")
-    @Styles.Render("~/css/extra")
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        @Styles.Render("~/css/less/main")
+        @Styles.Render("~/css/extra")
+        @Styles.Render("~/css/datepicker.css")
     
-    @Html.Partial("_RequireJsConfig")
-    @RenderSection("header", required: false)
+        @Html.Partial("_RequireJsConfig")
+        @RenderSection("header", required: false)
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="/Scripts/lib/html5shiv.js"></script>
-      <script src="/Scripts/lib/respond.min.js"></script>
-    <![endif]-->
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="/Scripts/lib/html5shiv.js"></script>
+            <script src="/Scripts/lib/respond.min.js"></script>
+        <![endif]-->
 
-    @{ Html.RenderAction("GetRequireJSUrl", "Home", new { context = ViewContext });}
-    <script>
-        define('urls', [], function() {
-            return @{ Html.RenderAction("GetApiUrls", "Home");};
-        });
-    </script>
-    @RenderSection("modules", required: false)
-</head>
+        @{ Html.RenderAction("GetRequireJSUrl", "Home", new { context = ViewContext });}
+        <script>
+            define('urls', [], function() {
+                return @{ Html.RenderAction("GetApiUrls", "Home");};
+            });
+        </script>
+        @RenderSection("modules", required: false)
+    </head>
     <body>
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#"><img src="@Url.Content("~/img/DWH logo_color_233x34.png")" /></a>
                 </div>
-                <ul class="nav navbar-nav navbar-right hidden-xs">
+                <ul class="nav navbar-nav navbar-right hidden-xs hidden-sm">
                     <li class="divider divider-vertical"></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Help <b class="caret"></b></a>
@@ -80,31 +81,28 @@
                     </li>                
                 </ul>
                 <div class="navbar-brand pull-right hidden-xs">Warranty</div>
+
             </div>
         </div>
-
-        <div class="subnav subnav-fixed">
+        
+        <div id="subNavMenu" class="subnav subnav-fixed" role="navigation">
             <div class="container">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav col-xs-6 col-sm-11 col-md-10">
                     @NavItemHelper(NavItem.Home, Url.Action("Index", "Home"))
-                    <li class="divider divider-vertical hidden-xs"></li>
                 </ul>
-                <div class="nav nav-extra">
-                    <div class="col-md-3 pull-right">
+                <div class="nav nav-extra col-xs-6 col-sm-1 col-md-2">
+                    <div class="pull-right">
                         <div class="input-group">
                             <input id="searchBar" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder=""/>
-                            <div class="input-group-btn">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Type <span class="caret"></span></button>
-                                <ul class="dropdown-menu dropdown-menu-right"></ul>
-                            </div>
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
+        
         <div class="container main-container">
-            @RenderBody()
+                @RenderBody()
         </div>
 
         <div class="container">

@@ -5,6 +5,7 @@ namespace Warranty.UI.Core.Helpers
 {
     using System;
     using System.Web.Mvc;
+    using Warranty.Core.Extensions;
 
     public static class Format
     {
@@ -230,7 +231,7 @@ namespace Warranty.UI.Core.Helpers
 
         public static string Percentage(decimal? value)
         {
-            return value.HasValue ? value.Value.ToString("##0.00") + "%" : String.Empty;
+            return value.HasValue ? value.Value.ToString("##0") + "%" : String.Empty;
         }
 
         public static string WrapEmailAddress(string email)
@@ -361,6 +362,30 @@ namespace Warranty.UI.Core.Helpers
             return MvcHtmlString.Create("<span class=\"glyphicon glyphicon-earphone text-muted\"></span> " + phoneNumber);
         }
 
+        public static MvcHtmlString EditablePhoneNumber(PhoneNumberType phoneNumberType, string phoneNumber, string postUrl, Guid homeownerId)
+        {
+            var htmlString =
+                string.Format("<div class='inline-editable-text'><a class='glyphicon glyphicon-{0} text-muted visible-xs' href='tel:{4}'></a><span class='glyphicon glyphicon-{0} text-muted hidden-xs'></span> <a href='#' class='hidden-xs phone-number-with-extension' data-type='text' data-emptytext='Add {1}' id='{1}_Phone' data-url='{2}' data-pk='{3}' data-clear='false' data-value='{4}'>{4}</a></div>", phoneNumberType.Icon, phoneNumberType.DisplayName, postUrl, homeownerId, phoneNumber);
+
+            return MvcHtmlString.Create(htmlString);
+        }
+
+        public static MvcHtmlString EditableEmailForServiceCall(string email, string postUrl, Guid homeownerId, string callNumber)
+        {
+            return
+                MvcHtmlString.Create(
+                    string.Format(@"<div class='inline-editable-text'><a class='glyphicon glyphicon-envelope text-muted' href='mailto:{2}?subject=David Weekley Homes Warranty Service Call %23 {3}'></a> 
+                                    <a href='mailto:{2}?subject=David Weekley Homes Warranty Service Call %23 {3}' class='hidden-xs' data-type='text' data-emptytext='Add Email' id='Email' data-url='{0}' data-pk='{1}' data-clear='false' data-value='{2}'>{2}</a></div>", postUrl, homeownerId, email, callNumber));
+        }
+
+        public static MvcHtmlString EditableEmailForJob(string email, string postUrl, Guid homeownerId)
+        {
+            return
+                MvcHtmlString.Create(
+                    string.Format(@"<div class='inline-editable-text'><a class='glyphicon glyphicon-envelope text-muted' href='mailto:{2}?subject=David Weekley Homes Warranty'></a> 
+                                    <a href='mailto:{2}?subject=David Weekley Homes Warranty' class='hidden-xs' data-type='text' data-emptytext='Add' id='Email' data-url='{0}' data-pk='{1}' data-clear='false' data-value='{2}'>{2}</a></div>", postUrl, homeownerId, email));
+        }
+
         public static MvcHtmlString CellNumber(string cellNumber)
         {
             if (string.IsNullOrWhiteSpace(cellNumber))
@@ -396,12 +421,44 @@ namespace Warranty.UI.Core.Helpers
             return city + ", " + state + " " + zip;
         }
 
-        public static MvcHtmlString ServiceCallStatus(ServiceCallStatus serviceCallStatus)
+        public static MvcHtmlString ServiceCallStatus(ServiceCallStatus serviceCallStatus, string id, string dataBind)
         {
             var status = serviceCallStatus.DisplayName;
-            var htmlString = string.Format("<span class='label label-{0}-service-call'>{1}</span>", status.ToLower(),
-                                           status);
+
+            var htmlString = string.Format("<span id='{0}' class='label label-{1}-service-call' data-bind='{2}'>{3}</span>", id, status.Replace(" ", "-").ToLower(),
+                                           dataBind, status);
             return MvcHtmlString.Create(htmlString);
+        }
+
+        public static MvcHtmlString ActionwithPopup(string id, string url, Guid serviceCallId)
+        {
+            var html = string.Format(@"<div id='{0}' class='popup-action-with-message'>
+                            <textarea class='form-control margin-bottom-10' rows='5' placeholder='Enter reason'></textarea>
+                                <a href='#' class='btn btn-primary btn-execute-action' data-action-url='{1}' data-service-call-id='{2}'>Submit</a>
+                                <a href='#' class='btn-link btn-cancel-popup'>Cancel</a>
+                        </div>", id, url, serviceCallId);
+            return MvcHtmlString.Create(html);
+        }
+
+        public static MvcHtmlString ServiceCallToggleButton(string id, bool shouldToggle, string inactiveText, string activeText)
+        {
+            var currentText = !shouldToggle ? inactiveText : activeText;
+            var nextText = shouldToggle ? inactiveText : activeText;
+
+            return
+                MvcHtmlString.Create(
+                    string.Format(
+                        "<a href='#' class='btn btn-default pull-right btn-action-with-popup' data-action-with-popup='{0}' id='btn_{0}' data-next-text='{1}'>{2}</a>",
+                        id, nextText, currentText));
+        }
+
+        public static MvcHtmlString HomeOwner(string homeownerName, int homeownerNumber)
+        {
+            if (homeownerNumber <= 1)
+                return MvcHtmlString.Create(homeownerName);
+
+            var html = string.Format("{0} <span class='label label-info muted'>{1}</span>", homeownerName, homeownerNumber.ToOrdinalSuffixed());
+            return MvcHtmlString.Create(html);
         }
     }
 }

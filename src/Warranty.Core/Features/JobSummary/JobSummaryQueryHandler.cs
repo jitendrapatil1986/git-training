@@ -73,9 +73,11 @@ namespace Warranty.Core.Features.JobSummary
                                 ,j.[UpdatedDate]
                                 ,j.[UpdatedBy]
                                 ,j.[JdeIdentifier]
+                                ,ho.HomeownerId
                                 ,ho.HomeOwnerName
-                                ,ho.HomePhone as PhoneNumber
-                                ,ho.OtherPhone as OtherNumber
+                                ,ho.HomeOwnerNumber
+                                ,ho.HomePhone as HomePhone
+                                ,ho.OtherPhone as OtherPhone
                                 ,ho.WorkPhone1 as WorkNumber
                                 ,ho.EmailAddress
                                 ,be.EmployeeId as BuilderEmployeeId
@@ -119,9 +121,9 @@ namespace Warranty.Core.Features.JobSummary
                                     ,j.CloseDate as WarrantyStartDate
                                     ,wc.EscalationReason
                                     ,wc.EscalationDate
-                                    ,cc.ServiceCallCommentId
+                                    ,cc.ServiceCallNoteId
                                     ,cc.ServiceCallId
-                                    ,cc.ServiceCallComment as Comment
+                                    ,cc.ServiceCallNote as Note
                                 FROM [ServiceCalls] wc
                                 INNER JOIN Jobs j
                                 ON wc.JobId = j.JobId
@@ -131,11 +133,11 @@ namespace Warranty.Core.Features.JobSummary
                                 ON wc.ServiceCallId = li.ServiceCallId
                                 LEFT JOIN Employees e
                                 ON wc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-                                LEFT JOIN ServiceCallComments cc
+                                LEFT JOIN ServiceCallNotes cc
                                 ON wc.ServiceCallId = cc.ServiceCallId
                                 WHERE j.JobId = @0";
 
-            var result = _database.FetchOneToMany<JobSummaryModel.JobServiceCall, JobSummaryModel.JobServiceCall.JobServiceCallComment>(x => x.ServiceCallId, sql, jobId);
+            var result = _database.FetchOneToMany<JobSummaryModel.JobServiceCall, JobSummaryModel.JobServiceCall.JobServiceCallNote>(x => x.ServiceCallId, sql, jobId);
             
             return result;
         }

@@ -10,6 +10,12 @@
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "JavaScriptEnumerations",
+                url: "scripts/enumeration/{id}.js",
+                defaults: new {controller = "Enumeration", action = "Get"}
+                );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

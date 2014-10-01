@@ -3,6 +3,18 @@
 @highlight-bg: #d4dde3; //#FFF2A8;
 @gray-lighter: #f7f7f7;
 
+h2 {
+    font-size: 28px;
+}
+
+h2, h3 {
+    line-height: 34px;
+}
+
+h2, h3, h4 {
+    margin-top: 0;
+}
+
 .main-container {
     margin-top: 108px;
     padding: 0 10px;
@@ -40,15 +52,40 @@
     margin-top: 10px;
 }
 
+.panel-default {
+    border-bottom: 0;
+}
+
+.panel section {
+    margin-bottom: 15px;
+}
+
+.main-info {
+    line-height: 24px;
+}
+
+.main-info h3{
+    font-weight: bold;
+    line-height: inherit;
+}
+
+.form-submit .btn, .popup-action-with-message .btn {
+   margin-right: 10px;
+}
+
 .service-call-line {
     border-bottom: solid 1px #e7e7e7;
-    padding: 5px 0;
+    padding: 10px 0 0;
     margin: 0;
 }
 
-    .service-call-line:hover {
-        background: @gray-lighter;
-    }
+.service-call-line:first-child {
+    border-top: solid 1px #e7e7e7;
+}
+
+.service-call-line:hover {
+    background: @gray-lighter;
+}
 
 .text-red {
     color: #D9534F;
@@ -61,6 +98,13 @@
 .no-margin{ margin: 0;}
 
 .margin-bottom-15 { margin: 0 0 15px 0;}
+
+.margin-bottom-20 { margin: 0 0 20px 0;}
+
+.label.label-info.muted {
+    font-weight: normal;
+    background: #84D0E6;
+}
 
 .label, badge {
     &-warranty-one-year {
@@ -308,20 +352,26 @@
 }
 
 .label, badge {
-    &-open-service-call {
+    &-open-service-call, &-homeowner-signed-service-call, &-open-service-line-item {
         background-color: #5cb85c;
     }
 }
 
 .label, badge {
-    &-requested-service-call {
+    &-requested-service-call, &-requested-service-line-item {
         background-color: #FFBF00;
     }
 }
 
 .label, badge {
-    &-closed-service-call {
+    &-complete-service-call, &-complete-service-line-item {
         background-color: #d9534f;
+    }
+}
+
+.label, badge {
+    &-in-progress-service-line-item {
+        background-color: #FFBF00;
     }
 }
 
@@ -395,7 +445,7 @@ a.delete-group-item:hover {
 }
 
 .edit-line-item:hover, .edit-line-item:focus{
-    background: @highlight-bg;
+    background: @gray-lighter;
 }
 
 .edit-line-item .glyphicon-pencil, .edit-line-item .btn-hover-show{
@@ -426,6 +476,10 @@ a.delete-group-item:hover {
     margin-bottom: 3px;
 }
 
+.margin-bottom-4 { 
+    margin-bottom: 4px;
+}
+
 .margin-right-10 { 
     margin-right: 10px;
 }
@@ -434,8 +488,24 @@ a.delete-group-item:hover {
     padding-bottom: 3px;
 }
 
+.padding-top-7 { 
+    padding-top: 7px;
+}
+
+.padding-left-15 { 
+    padding-left: 15px;
+}
+
+.padding-5 {
+    padding: 5px;
+}
+
 .text-align-right {
     text-align: right;
+}
+
+.text-align-center {
+    text-align: center;
 }
 
 .no-padding{ padding: 0;}
@@ -444,8 +514,178 @@ a.delete-group-item:hover {
 .no-right-padding{ padding-right: 0;}
 .no-left-padding{ padding-left: 0;}
 
+.no-margin{ margin: 0;}
+.no-top-margin{ margin-top: 0;}
+.no-bottom-margin{ margin-bottom: 0;}
+.no-right-margin{ margin-right: 0;}
+.no-left-margin{ margin-left: 0;}
+
 .float-right-non-xs-screen {
     float: right;
+}
+
+.service-call-header-buttons{
+    margin-top:0px;
+}
+
+.service-call-header-buttons .btn{
+    margin-left: 10px;
+}
+
+.popup-action-with-message {
+    background-color: #E6E6E6;
+    width: 300px;
+    display: none;
+    padding: 10px;
+    border-radius: 5px;
+    border: solid ;
+    border-color: lightgray;
+    border-width: 1px;
+}
+
+.popup-action-with-message textarea {
+    width: 100%;
+}
+
+.dashboard-widget {
+    margin: 15px 0;
+}
+
+.dashboard-widget a{
+    text-decoration: none;
+}
+
+.dashboard-widget-title{
+    font-size: 1.1em;
+    text-align: center;
+}
+
+.dashboard-widget-number{
+    font-size: 3.5em;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    line-height: 1em;
+}
+
+.dashboard-widget-footnote{
+    color: #999;
+    text-align: center;
+    margin: 10px 0 5px 0;
+}
+
+@media (max-width: 767px) {
+
+    .container {
+           padding: 0;
+    }
+    
+    h2 {
+      font-size: 20px;
+      margin-bottom: 10px !important;
+    }
+
+    .float-right-non-xs-screen {
+        float: none !important;
+    }
+
+    .text-align-right {
+        text-align: left;
+    }
+
+    .margin-top-13 {
+        margin-top: 0;
+    }
+
+    .edit-line-item > row > .col-md-12 {
+        padding-left: 0;
+    }
+
+    .inline-editable-text .glyphicon {
+        width: 31%;
+        margin: 5px 2px 20px;
+        float: left;
+        padding: 10px;
+        text-align: center;
+        border: 1px solid lightgrey;
+        background: white;
+    }
+
+    .service-call-header-buttons .btn{
+        float: left !important;
+        width: 100%;
+        margin: 0 0 14px 0;
+    }
+}
+
+.inline-editable-dropdown .editable-input {
+    float: right;
+    background-color: lightgray; 
+    padding: 5px;
+}
+
+.inline-editable-dropdown .editable-input select {
+    width: 100%;
+}
+
+.inline-editable-dropdown .editable-buttons{
+    padding: 5px;
+    background-color: lightgray;    
+    margin-top: -4px;
+    position: absolute;
+    right: 0;
+    top: 39px;
+    z-index: 1;
+}
+
+.inline-editable-dropdown .editableform{
+    position: relative;
+}
+
+.position-fixed {
+    position: fixed;
+}
+
+.z-index-on-top {
+    z-index: 1;
+}
+
+.undo-alert {
+    position: fixed;
+    width: 500px;
+    text-align: center;
+    top: 95px;
+    left: 50%;
+    z-index: 2;
+    margin-left: -250px; //half of width.
+}
+
+.inline-editable-text .editable-empty, .inline-editable-text .editable-empty, .inline-editable-text .editable-empty:hover, .inline-editable-text .editable-empty:focus {
+    font-style: normal;
+    color: #08c;
+}
+
+.inline-editable-dropdown .editable-empty, .inline-editable-dropdown .editable-empty, .inline-editable-dropdown .editable-empty:hover, .inline-editable-dropdown .editable-empty:focus {
+    font-style: normal;
+    color: #08c;
+}
+
+.inline-editable-text form {
+    background-color: lightgray; 
+    padding: 5px;
+}
+
+.inline-editable-text .editableform .form-control {
+    width: 170px;
+    padding-left: 5px;
+}
+
+.inline-editable-text .editable-buttons{
+    margin-top: 4px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }
 
 @media (max-width: 767px) {
@@ -463,5 +703,25 @@ a.delete-group-item:hover {
 
     .edit-line-item > row > .col-md-12 {
         padding-left: 0;
+    }
+
+    .inline-editable-text .glyphicon {
+        width: 31%;
+        margin: 2px;
+        float: left;
+        padding: 10px;
+        text-align: center;
+        border: 1px solid lightgrey;
+        background: white;
+    }
+
+    .main-container {
+        margin-top: 0px;
+    }
+
+    .undo-alert {
+        width: 300px;
+        top: 59px;
+        margin-left: -150px; //half of width.
     }
 }

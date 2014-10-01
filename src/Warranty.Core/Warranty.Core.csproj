@@ -35,13 +35,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Common.Security.1.1.57.0\lib\net45\Common.Security.dll</HintPath>
+    </Reference>
     <Reference Include="FluentValidation, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Common.Security.1.1.55.0\lib\net45\Common.Security.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
@@ -87,8 +87,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivityLogger\ActivityLogger.cs" />
+    <Compile Include="ActivityLogger\IActivityLogger.cs" />
     <Compile Include="ApprovalInfrastructure\ApprovalServices\ServiceCallApprovalService.cs" />
     <Compile Include="ApprovalInfrastructure\Interfaces\IApprovalService.cs" />
+    <Compile Include="Configurations\CitiesCollection.cs" />
+    <Compile Include="Configurations\CityConfig.cs" />
+    <Compile Include="Configurations\WarrantyConfigSection.cs" />
     <Compile Include="Configurations\EnumerationDisplayConverter.cs" />
     <Compile Include="Configurations\WarrantyConstants.cs" />
     <Compile Include="Configurations\WarrantyContractResolver.cs" />
@@ -99,8 +104,10 @@
     <Compile Include="DataAccess\Conventions\StringEnumeration.cs" />
     <Compile Include="DataAccess\Conventions\StringEnumerationType.cs" />
     <Compile Include="DataAccess\DbFactory.cs" />
+    <Compile Include="DataAccess\Mappings\ActivityLogMap.cs" />
     <Compile Include="DataAccess\Mappings\AuditableEntityMapping.cs" />
     <Compile Include="DataAccess\ConfigurationFactoryExtensions.cs" />
+    <Compile Include="DataAccess\Mappings\AuditCreatedEntityMap.cs" />
     <Compile Include="DataAccess\Mappings\CityMap.cs" />
     <Compile Include="DataAccess\Mappings\CityMapping.cs" />
     <Compile Include="DataAccess\Mappings\AuditableEntityMap.cs" />
@@ -123,20 +130,22 @@
     <Compile Include="DataAccess\Mappings\ProjectMap.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMapping.cs" />
     <Compile Include="DataAccess\Mappings\EmployeeMapping.cs" />
-    <Compile Include="DataAccess\Mappings\ServiceCallCommentMap.cs" />
-    <Compile Include="DataAccess\Mappings\ServiceCallCommentMapping.cs" />
+    <Compile Include="DataAccess\Mappings\ServiceCallNoteMap.cs" />
+    <Compile Include="DataAccess\Mappings\ServiceCallNoteMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallLineItemMap.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallLineItemMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallMap.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallMapping.cs" />
     <Compile Include="DataAccess\SqlServerDatabase.cs" />
     <Compile Include="DataAccess\SqlServerDatabaseType.cs" />
+    <Compile Include="Entities\ActivityLog.cs" />
     <Compile Include="Entities\City.cs" />
     <Compile Include="Entities\Community.cs" />
     <Compile Include="Entities\CommunityAssignment.cs" />
     <Compile Include="Entities\Division.cs" />
     <Compile Include="Entities\HomeOwner.cs" />
     <Compile Include="Entities\IAuditableEntity.cs" />
+    <Compile Include="Entities\IAuditCreatedEntity.cs" />
     <Compile Include="Entities\IJdeEntity.cs" />
     <Compile Include="Entities\Job.cs" />
     <Compile Include="Entities\JobOption.cs" />
@@ -149,14 +158,21 @@
     <Compile Include="Entities\Project.cs" />
     <Compile Include="Entities\Employee.cs" />
     <Compile Include="Entities\ServiceCall.cs" />
-    <Compile Include="Entities\ServiceCallComment.cs" />
+    <Compile Include="Entities\ServiceCallNote.cs" />
     <Compile Include="Entities\ServiceCallLineItem.cs" />
+    <Compile Include="Enumerations\ActivityType.cs" />
+    <Compile Include="Enumerations\PhoneNumberType.cs" />
+    <Compile Include="Enumerations\ReferenceType.cs" />
+    <Compile Include="Enumerations\ServiceCallLineItemStatus.cs" />
+    <Compile Include="Enumerations\StatView.cs" />
     <Compile Include="Enumerations\UserRoles.cs" />
     <Compile Include="Enumerations\ToDoIcon.cs" />
     <Compile Include="Enumerations\Month.cs" />
     <Compile Include="Enumerations\ServiceCallStatus.cs" />
     <Compile Include="DataAccess\GuidComb.cs" />
     <Compile Include="Extensions\DatabaseExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\IntExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
@@ -173,6 +189,9 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Features\AddServiceCallNote\AddServiceCallNoteCommand.cs" />
+    <Compile Include="Features\AddServiceCallNote\AddServiceCallNoteCommandHandler.cs" />
+    <Compile Include="Features\AddServiceCallNote\AddServiceCallNoteModel.cs" />
     <Compile Include="Features\AssignWSRs\AssignedEmployee.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRCommand.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRCommandHandler.cs" />
@@ -186,6 +205,14 @@
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommand.cs" />
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallLineItem\AddServiceCallLineItemModel.cs" />
+    <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetModel.cs" />
+    <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetQuery.cs" />
+    <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetQueryHandler.cs" />
+    <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQuery.cs" />
+    <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQueryHandler.cs" />
+    <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemCommand.cs" />
+    <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemCommandHandler.cs" />
+    <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemModel.cs" />
     <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationModel.cs" />
     <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationQuery.cs" />
     <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationQueryHandler.cs" />
@@ -196,6 +223,10 @@
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommandHandler.cs" />
     <Compile Include="Features\CreateServiceCall\RelatedProblemCode.cs" />
     <Compile Include="Features\CreateServiceCall\RelatedProblemCodeQuery.cs" />
+    <Compile Include="Features\InlineEditCommandBase.cs" />
+    <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureServiceCallStatusModel.cs" />
+    <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureServiceCallStatusCommand.cs" />
+    <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureServiceCallStatusCommandHandler.cs" />
     <Compile Include="Features\ManageLookups\CreateLookupItemCommandHandler.cs" />
     <Compile Include="Features\ManageLookups\CreateLookupItemModel.cs" />
     <Compile Include="Features\ManageLookups\CreateLookupItemCommand.cs" />
@@ -211,6 +242,8 @@
     <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemCommand.cs" />
     <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemCommandHandler.cs" />
     <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemModel.cs" />
+    <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetWSRQuery.cs" />
+    <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetWSRQueryHandler.cs" />
     <Compile Include="Features\ProblemCodes\ProblemCodesQuery.cs" />
     <Compile Include="Features\ProblemCodes\ProblemCodesQueryHandler.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchCallModel.cs" />
@@ -224,8 +257,28 @@
     <Compile Include="Features\ServiceCallApproval\ServiceCallDenyCommand.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommand.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommandHandler.cs" />
+    <Compile Include="Features\Homeowner\AddOrUpdateEmailCommand.cs" />
+    <Compile Include="Features\Homeowner\AddOrUpdateEmailCommandHandler.cs" />
+    <Compile Include="Features\Homeowner\AddOrUpdatePhoneNumberCommand.cs" />
+    <Compile Include="Features\Homeowner\AddOrUpdatePhoneNumberCommandHandler.cs" />
+    <Compile Include="Features\ServiceCallStats\ServiceCallStatsQueryHandler.cs" />
+    <Compile Include="Features\ServiceCallStats\ServiceCallStatsModel.cs" />
+    <Compile Include="Features\ServiceCallStats\ServiceCallStatsQuery.cs" />
+    <Compile Include="Features\ServiceCallSummary\ReassignEmployee\ReassignEmployeeCommand.cs" />
+    <Compile Include="Features\ServiceCallSummary\ReassignEmployee\EmployeesForServiceCallQueryHandler.cs" />
+    <Compile Include="Features\ServiceCallSummary\ReassignEmployee\EmployeesForServiceCallQuery.cs" />
+    <Compile Include="Features\ServiceCallSummary\ReassignEmployee\ReassignEmployeeCommandHandler.cs" />
     <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQuery.cs" />
     <Compile Include="Features\ServiceCallsWidget\WarrantyServiceRepServiceCallsWidgetQueryHandler.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallCompleteCommand.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallCompleteCommandHandler.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallReopenCommand.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallReopenCommandHandler.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallToggleEscalateCommand.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallToggleEscalateCommandHandler.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallToggleEscalateCommandResult.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallToggleSpecialProjectCommandhandler.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallToggleSpecialProjectCommand.cs" />
     <Compile Include="Features\SharedQueries\PostResponseModel.cs" />
     <Compile Include="Features\SharedQueries\ProblemCodes.cs" />
     <Compile Include="Features\ToDoWidget\ToDoWidgetModel.cs" />
@@ -259,6 +312,17 @@
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetModel.cs" />
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQuery.cs" />
     <Compile Include="Features\AmountSpentWidget\AmountSpentWidgetQueryHandler.cs" />
+    <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemCommand.cs" />
+    <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemCommanHandler.cs" />
+    <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemModel.cs" />
+    <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetWSRQuery.cs" />
+    <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetWSRQueryHandler.cs" />
+    <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetModel.cs" />
+    <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetQuery.cs" />
+    <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetQueryHandler.cs" />
+    <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetModel.cs" />
+    <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetQuery.cs" />
+    <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetQueryHandler.cs" />
     <Compile Include="Services\ISendSmtpMailMessage.cs" />
     <Compile Include="Services\SendSmtpMailMessage.cs" />
     <Compile Include="Services\ServiceCallCalculator.cs" />
@@ -281,6 +345,7 @@
     <Compile Include="Security\IUserSession.cs" />
     <Compile Include="Security\WarrantyUser.cs" />
     <Compile Include="StructureMapValidatorFactory.cs" />
+    <Compile Include="SystemTime.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoCommunityEmployeeAssignment.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoPaymentRequestApproval.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoServiceCallApproval.cs" />

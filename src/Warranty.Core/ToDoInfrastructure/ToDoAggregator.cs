@@ -50,21 +50,22 @@ namespace Warranty.Core.ToDoInfrastructure
         {
             var userMarkets = user.Markets;
             const string sql = @"SELECT
-                                         wc.CreatedDate as [Date]							 
+                                         wc.CreatedDate as [Date]
                                         ,ho.HomeOwnerName
+                                        ,ho.HomeOwnerNumber
                                         ,j.AddressLine
                                         ,wc.ServiceCallId
-                                        ,wc.ServiceCallNumber                                
+                                        ,wc.ServiceCallNumber
                                         ,j.JobId
                                         ,j.JobNumber
                                         ,DATEDIFF(yy, j.CloseDate, wc.CreatedDate) as YearsWithinWarranty
-                                        ,j.CloseDate as WarrantyStartDate							
+                                        ,j.CloseDate as WarrantyStartDate
                                     FROM 
                                         [ServiceCalls] wc
                                     INNER join Jobs j
                                         ON wc.JobId = j.JobId
                                     INNER join HomeOwners ho
-                                        ON j.CurrentHomeOwnerId = ho.HomeOwnerId                                  
+                                        ON j.CurrentHomeOwnerId = ho.HomeOwnerId
                                     INNER join Employees e
                                         ON wc.WarrantyRepresentativeEmployeeId = e.EmployeeId
                                     INNER JOIN Communities cm

@@ -34,17 +34,20 @@ namespace Warranty.Core.Features.JobSummary
         public DateTime? UpdatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public string JdeIdentifier { get; set; }
+        public Guid HomeownerId { get; set; }
         public string HomeOwnerName { get; set; }
-        public string PhoneNumber { get; set; }
-        public string OtherNumber { get; set; }
+        public string HomePhone { get; set; }
+        public string OtherPhone { get; set; }
         public string WorkNumber { get; set; }
-        public string Email { get; set; }
+        public string EmailAddress { get; set; }
         public int YearsWithinWarranty { get; set; }
         public DateTime WarrantyStartDate { get; set; }
 
         public IEnumerable<JobServiceCall> JobServiceCalls { get; set; }
         public IEnumerable<JobPayment> JobPayments { get; set; }
         public IEnumerable<JobSelection> JobSelections { get; set; }
+
+        public int HomeOwnerNumber { get; set; }
 
         public class JobSelection
         {
@@ -101,17 +104,17 @@ namespace Warranty.Core.Features.JobSummary
                 get { return ServiceCallCalculator.CalculatePercentComplete(NumberOfDaysRemaining); }
             }
 
-            public List<JobServiceCallComment> JobServiceCallComments { get; set; }
+            public List<JobServiceCallNote> JobServiceCallNotes { get; set; }
 
             public string Summary { get; set; }
             public string[] SummaryOfLineItems{get { return Summary.Split('|'); }}
 //NPoco needs prop to be List<> to use FetchOneToMany(). Also need to set to IGNORE if inserting.
 
-            public class JobServiceCallComment
+            public class JobServiceCallNote
             {
-                public Guid ServiceCallCommentId { get; set; }
+                public Guid ServiceCallNoteId { get; set; }
                 public Guid ServiceCallId { get; set; }
-                public string Comment { get; set; }
+                public string Note { get; set; }
             }
         }
     }
