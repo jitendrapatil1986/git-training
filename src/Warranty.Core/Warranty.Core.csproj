@@ -120,6 +120,8 @@
     <Compile Include="DataAccess\Mappings\HomeOwnerMap.cs" />
     <Compile Include="DataAccess\Mappings\HomeOwnerMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobMap.cs" />
+    <Compile Include="DataAccess\Mappings\JobNoteMap.cs" />
+    <Compile Include="DataAccess\Mappings\JobNoteMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobOptionMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobStageMap.cs" />
     <Compile Include="DataAccess\Mappings\Lookups\ClassificationCodeMap.cs" />
@@ -148,6 +150,7 @@
     <Compile Include="Entities\IAuditCreatedEntity.cs" />
     <Compile Include="Entities\IJdeEntity.cs" />
     <Compile Include="Entities\Job.cs" />
+    <Compile Include="Entities\JobNote.cs" />
     <Compile Include="Entities\JobOption.cs" />
     <Compile Include="Entities\JobStage.cs" />
     <Compile Include="Entities\Lookups\ClassificationCode.cs" />
