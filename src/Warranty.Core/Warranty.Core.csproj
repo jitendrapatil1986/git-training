@@ -323,6 +323,13 @@
     <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetModel.cs" />
     <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetQuery.cs" />
     <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetQueryHandler.cs" />
+    <Compile Include="FileManagement\FileSystemManager.cs" />
+    <Compile Include="FileManagement\FileUpload.cs" />
+    <Compile Include="FileManagement\TemporaryFileUploadInfo.cs" />
+    <Compile Include="FileManagement\TemporaryFileUploadsService.cs" />
+    <Compile Include="FileManagement\IFileSystemManager.cs" />
+    <Compile Include="FileManagement\ITemporaryFileUploadsService.cs" />
+    <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\ISendSmtpMailMessage.cs" />
     <Compile Include="Services\SendSmtpMailMessage.cs" />
     <Compile Include="Services\ServiceCallCalculator.cs" />

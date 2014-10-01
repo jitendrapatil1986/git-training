@@ -215,6 +215,7 @@
     <Compile Include="Core\Filters\NavActionFilterAttribute.cs" />
     <Compile Include="Core\Filters\WarrantyServiceManagerOnlyAttribute.cs" />
     <Compile Include="Core\Filters\WarrantyServiceRepresentativeOnlyAttribute.cs" />
+    <Compile Include="Core\Helpers\ModelBindingHelper.cs" />
     <Compile Include="Core\Helpers\ClientApiHelper.cs" />
     <Compile Include="Core\Helpers\Css.cs" />
     <Compile Include="Core\Helpers\EnvironmentHelper.cs" />
@@ -232,6 +233,7 @@
     <Compile Include="Core\Initialization\StructureMapDependencyScope.cs" />
     <Compile Include="Core\Initialization\WarrantyWebsiteBootstrapper.cs" />
     <Compile Include="Core\Initialization\WarrantyWebsiteRegistry.cs" />
+    <Compile Include="Core\ModelBinders\FileUploadsPropertyBinder.cs" />
     <Compile Include="Core\ModelBinders\CompositeModelBinder.cs" />
     <Compile Include="Core\ModelBinders\EnumerationCollectionModelBinder.cs" />
     <Compile Include="Core\ModelBinders\EnumerationCollectionPropertyBinder.cs" />
