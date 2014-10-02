@@ -4,14 +4,14 @@
 
     public class JobAttachment : IAuditableEntity
     {
-        public Guid JobAttachmentId { get; set; }
-        public Guid JobId { get; set; }
-        public string FilePath { get; set; }
-        public string DisplayName { get; set; }
-        public bool IsDeleted { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public string UpdatedBy { get; set; }
-        public DateTime? UpdatedDate { get; set; }
+        public virtual Guid JobAttachmentId { get; set; }
+        public virtual Guid JobId { get; set; }
+        public virtual string FilePath { get; set; }
+        public virtual string DisplayName { get; set; }
+        public virtual bool IsDeleted { get; set; }
+        public virtual string CreatedBy { get; set; }
+        public virtual DateTime? CreatedDate { get; set; }
+        public virtual string UpdatedBy { get; set; }
+        public virtual DateTime? UpdatedDate { get; set; }
     }
 }
