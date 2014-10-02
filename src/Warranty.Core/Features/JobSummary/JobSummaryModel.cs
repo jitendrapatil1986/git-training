@@ -42,10 +42,12 @@ namespace Warranty.Core.Features.JobSummary
         public string EmailAddress { get; set; }
         public int YearsWithinWarranty { get; set; }
         public DateTime WarrantyStartDate { get; set; }
+        public bool CanAddNotes { get; set; }
 
         public IEnumerable<JobServiceCall> JobServiceCalls { get; set; }
         public IEnumerable<JobPayment> JobPayments { get; set; }
         public IEnumerable<JobSelection> JobSelections { get; set; }
+        public IEnumerable<JobNote> JobNotes { get; set; } 
 
         public int HomeOwnerNumber { get; set; }
 
@@ -116,6 +118,15 @@ namespace Warranty.Core.Features.JobSummary
                 public Guid ServiceCallId { get; set; }
                 public string Note { get; set; }
             }
+        }
+
+        public class JobNote
+        {
+            public Guid JobNoteId { get; set; }
+            public Guid JobId { get; set; }
+            public string Note { get; set; }
+            public string CreatedBy { get; set; }
+            public DateTime? CreatedDate { get; set; }
         }
     }
 }
