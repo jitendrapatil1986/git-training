@@ -284,21 +284,6 @@ require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdo
                 self.displayName = ko.observable(options.displayName);
                 self.createdBy = options.createdBy;
                 self.createdDate = options.createdDate;
-
-                //self.noteLineNumberWithProblemCode = ko.computed(function () {
-                //    var lineIdToFilterNotes = options.serviceCallLineItemId;
-                //    if (!lineIdToFilterNotes || lineIdToFilterNotes == "") {
-                //        return "";
-                //    } else {
-                //        ko.utils.arrayForEach(viewModel.allLineItems(), function (i) {
-                //            if (i.serviceCallLineItemId == lineIdToFilterNotes) {
-                //                return i.lineNumber() + " - " + i.problemCode();
-                //            }
-                //            return "";
-                //        });
-                //        return "";
-                //    }
-                //});
             }
 
             function updateServiceCallLineItem(line) {
@@ -402,6 +387,7 @@ require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdo
                 self.allCallNotes = ko.observableArray([]);
                 self.allAttachments = ko.observableArray([]);
                 self.selectedLineToAttachToNote = ko.observable();
+                self.selectedLineToAttachToAttachment = ko.observable();
                 self.selectedLineToFilterNotes = ko.observable();
                 self.selectedLineToFilterAttachments = ko.observable();
                 self.noteDescriptionToAdd = ko.observable('');
@@ -440,9 +426,9 @@ require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdo
                         return true;
                 }).extend({ notify: 'always' });
                 
-                self.empData = function (e) {
-                    var element = $('.boxclose[data-attachment-id="' + e.serviceCallAttachmentId + '"]');
-                    var actionUrl = element.data('url');
+                self.removeAttachment = function (e) {
+                    var item = $('.boxclose[data-attachment-id="' + e.serviceCallAttachmentId + '"]');
+                    var actionUrl = item.data('url');
                     var attachmentId = e.serviceCallAttachmentId;
                     $.ajax({
                         type: "POST",
@@ -453,7 +439,7 @@ require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdo
                             toastr.success("Success! Attachment deleted.");
                         }
                     });
-                };//*/
+                };
 
                 self.addLineItem = function () {
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
@@ -714,8 +700,8 @@ require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdo
             
             var persistedAllAttachmentsViewModel = modelData.initialAttachments;
 
-            _(persistedAllAttachmentsViewModel).each(function (note) {
-                viewModel.allAttachments.push(new CallAttachmentsViewModel(note));
+            _(persistedAllAttachmentsViewModel).each(function (attachment) {
+                viewModel.allAttachments.push(new CallAttachmentsViewModel(attachment));
             });
         });
     });

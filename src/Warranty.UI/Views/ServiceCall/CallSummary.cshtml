@@ -349,7 +349,7 @@
             <section>
                 <h3 class="col-md-12">Attachments
                     <span>
-                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Note" data-toggle="collapse" data-target="#addAttachment"><span class="glyphicon glyphicon-plus"></span></button>
+                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Attachments" data-toggle="collapse" data-target="#addAttachment"><span class="glyphicon glyphicon-plus"></span></button>
                     </span>
                 </h3>
                 <div id="addAttachment" class="collapse">
@@ -360,7 +360,7 @@
                                 {
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <select name="ServiceCallLineItemId" id="addCallAttachmentLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToAttachToNote, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'Reference line item (optional)' "></select>
+                                            <select name="ServiceCallLineItemId" id="addCallAttachmentLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToAttachToAttachment, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'Reference line item (optional)' "></select>
                                         </div>
                                     </div>
 
@@ -381,15 +381,12 @@
                 <div class="col-md-3 margin-bottom-10">
                     <select id="filterCallAttachmentLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToFilterAttachments, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'All', visible: allAttachments().length > 0 "></select>
                 </div>
-                @*<div class="col-md-1">
-                    <button class="btn btn-default" data-bind="click: resetCallNoteFilter">Reset Filter</button>
-                </div>*@
                 <div class="remove-list-style attachments row">
                     <div class="clearfix"></div>
                     <br />
                     <ul data-bind="foreach: filteredAttachments">
                         <li class="attached-file">
-                            <span data-url="" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "ServiceCall")    '}, css: 'boxclose', click: $parent.empData.bind($parent)"></span>
+                            <span data-url="" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "ServiceCall")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
                             <span class="glyphicon glyphicon-file"></span>
                             <br />
                             <a href="#" data-bind="editable: displayName, editableOptions: { pk: serviceCallAttachmentId, url: '@Url.Action("RenameAttachment", "ServiceCall")    '}"  class="attached-file-display-name"></a>
