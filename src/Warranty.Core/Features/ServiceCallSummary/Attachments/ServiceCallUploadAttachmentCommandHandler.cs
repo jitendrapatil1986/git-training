@@ -1,6 +1,8 @@
 ﻿namespace Warranty.Core.Features.ServiceCallSummary.Attachments
 {
+    using ActivityLogger;
     using Entities;
+    using Enumerations;
     using FileManagement;
     using NPoco;
 
@@ -8,11 +10,13 @@
     {
         private readonly IDatabase _datatabse;
         private readonly IFileSystemManager<ServiceCall> _serviceCallFileManager;
+        private readonly IActivityLogger _logger;
 
-        public ServiceCallUploadAttachmentCommandHandler(IDatabase datatabse, IFileSystemManager<ServiceCall> serviceCallFileManager)
+        public ServiceCallUploadAttachmentCommandHandler(IDatabase datatabse, IFileSystemManager<ServiceCall> serviceCallFileManager, IActivityLogger logger)
         {
             _datatabse = datatabse;
             _serviceCallFileManager = serviceCallFileManager;
+            _logger = logger;
         }
 
         public void Handle(ServiceCallUploadAttachmentCommand message)
@@ -30,6 +34,7 @@
                             ServiceCallLineItemId = message.ServiceCallLineItemId
                         };
                     _datatabse.Insert(attachment);
+                    _logger.Write("Attachment added to Service Call",string.Format("File name: {0}",attachment.DisplayName),message.ServiceCallId, ActivityType.UploadAttachment, ReferenceType.ServiceCallAttachment);
                 }
             }
         }
