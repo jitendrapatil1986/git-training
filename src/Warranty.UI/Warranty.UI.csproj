@@ -297,7 +297,6 @@
     <Content Include="Scripts\app\servicecall\CallSummary.js" />
     <Content Include="Scripts\app\servicecall\create.js" />
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
-    <Content Include="Scripts\app\shared\EditorTemplates\FileUpload.js" />
     <Content Include="Scripts\config\customer-search.js" />
     <Content Include="Scripts\lib\bootstrap-editable.min.js" />
     <Content Include="Scripts\lib\knockout.x-editable.min.js" />
