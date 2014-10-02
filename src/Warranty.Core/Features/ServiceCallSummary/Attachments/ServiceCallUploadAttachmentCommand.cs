@@ -1,24 +1,10 @@
 ﻿namespace Warranty.Core.Features.ServiceCallSummary.Attachments
 {
-    using Entities;
-    using FileManagement;
+    using System;
 
     public class ServiceCallUploadAttachmentCommand : UploadAttachmentBaseCommand, ICommand
     {
-    }
-
-    public class ServiceCallUploadAttachmentCommandHandler : ICommandHandler<ServiceCallUploadAttachmentCommand>
-    {
-        private readonly IFileSystemManager<ServiceCall> _serviceCallFileManager;
-
-        public ServiceCallUploadAttachmentCommandHandler(IFileSystemManager<ServiceCall> serviceCallFileManager )
-        {
-            _serviceCallFileManager = serviceCallFileManager;
-        }
-
-        public void Handle(ServiceCallUploadAttachmentCommand message)
-        {
-            var correctFileNames = _serviceCallFileManager.MoveFilesToDirectoryAndRenameToAvoidCollisions(message.FileIds);
-        }
+        public Guid ServiceCallId { get; set; }
+        public Guid ServiceCallLineItemId { get; set; }
     }
 }

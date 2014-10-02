@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class JobNote: IAuditableEntity
+    public class JobNote : IAuditableEntity
     {
         public virtual Guid JobNoteId { get; set; }
         public virtual Guid JobId { get; set; }

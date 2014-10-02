@@ -299,6 +299,7 @@
     <Content Include="Scripts\app\shared\EditorTemplates\FileUpload.js" />
     <Content Include="Scripts\config\customer-search.js" />
     <Content Include="Scripts\lib\bootstrap-editable.min.js" />
+    <Content Include="Scripts\lib\knockout.x-editable.min.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />
     <Content Include="Scripts\lib\handlebars.amd.min.js" />
     <Content Include="Scripts\lib\handlebars.js" />

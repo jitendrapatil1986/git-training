@@ -1,5 +1,5 @@
 require(['/Scripts/app/main.js'], function () {
-require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable','enumeration/PhoneNumberType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
+require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable','enumeration/PhoneNumberType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
 
         $(function () {
             $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
@@ -25,6 +25,8 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
             
             $("#Email").editable({
             });
+
+            $(".attached-file-display-name").editable();
 
             $(".phone-number-with-extension").on('shown', function () {
                 $(this).data('editable').input.$input.mask('?(999)-999-9999 **********', { placeholder: " " });
@@ -72,7 +74,7 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                     }
                 });
             });
-                
+             
 
             $('#btn_execute_reopen').click(function (e) {
                 var popupWindow = $(this).parent();
@@ -273,6 +275,31 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                     }
                 });
             }
+            
+            function CallAttachmentsViewModel(options) {
+                var self = this;
+                self.serviceCallAttachmentId = options.serviceCallAttachmentId;
+                self.serviceCallLineItemId = ko.observable(options.serviceCallLineItemId);
+                self.serviceCallId = options.serviceCallId;
+                self.displayName = ko.observable(options.displayName);
+                self.createdBy = options.createdBy;
+                self.createdDate = options.createdDate;
+
+                //self.noteLineNumberWithProblemCode = ko.computed(function () {
+                //    var lineIdToFilterNotes = options.serviceCallLineItemId;
+                //    if (!lineIdToFilterNotes || lineIdToFilterNotes == "") {
+                //        return "";
+                //    } else {
+                //        ko.utils.arrayForEach(viewModel.allLineItems(), function (i) {
+                //            if (i.serviceCallLineItemId == lineIdToFilterNotes) {
+                //                return i.lineNumber() + " - " + i.problemCode();
+                //            }
+                //            return "";
+                //        });
+                //        return "";
+                //    }
+                //});
+            }
 
             function updateServiceCallLineItem(line) {
                 var updateProblemCode = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemCode");
@@ -373,16 +400,29 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                 self.canBeReopened = ko.observable(modelData.canBeReopened);
                 
                 self.allCallNotes = ko.observableArray([]);
+                self.allAttachments = ko.observableArray([]);
                 self.selectedLineToAttachToNote = ko.observable();
                 self.selectedLineToFilterNotes = ko.observable();
+                self.selectedLineToFilterAttachments = ko.observable();
                 self.noteDescriptionToAdd = ko.observable('');
-                self.filteredCallNotes = ko.computed(function() {
+                self.filteredCallNotes = ko.computed(function () {
                     var lineIdToFilterNotes = self.selectedLineToFilterNotes();
                     if (!lineIdToFilterNotes || lineIdToFilterNotes == "") {
                         return self.allCallNotes();
                     } else {
                         return ko.utils.arrayFilter(self.allCallNotes(), function (i) {
                             return i.serviceCallLineItemId() == lineIdToFilterNotes;
+                        });
+                    }
+                });
+                
+                self.filteredAttachments = ko.computed(function () {
+                    var lineIdToFilterAttachments = self.selectedLineToFilterAttachments();
+                    if (!lineIdToFilterAttachments || lineIdToFilterAttachments == "") {
+                        return self.allAttachments();
+                    } else {
+                        return ko.utils.arrayFilter(self.allAttachments(), function (i) {
+                            return i.serviceCallLineItemId() == lineIdToFilterAttachments;
                         });
                     }
                 });
@@ -398,31 +438,46 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                         return false;
                     else
                         return true;
-                }).extend({notify: 'always'});
+                }).extend({ notify: 'always' });
+                
+                self.empData = function (e) {
+                    var element = $('.boxclose[data-attachment-id="' + e.serviceCallAttachmentId + '"]');
+                    var actionUrl = element.data('url');
+                    var attachmentId = e.serviceCallAttachmentId;
+                    $.ajax({
+                        type: "POST",
+                        url: actionUrl,
+                        data: { id: attachmentId },
+                        success: function (data) {
+                            self.allAttachments.remove(e);
+                            toastr.success("Success! Attachment deleted.");
+                        }
+                    });
+                };//*/
 
-                self.addLineItem = function() {
+                self.addLineItem = function () {
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
                     self.problemCode = $("#addCallLineProblemCode").find('option:selected').text();
                     self.problemCodeId = $("#addCallLineProblemCode").val();
                     self.problemDescription = $("#addCallLineProblemDescription").val();
-                    
+
                     var newProblemCode = $("#addCallLineProblemCode");
                     if (newProblemCode.val() == "") {
                         $(newProblemCode).parent().addClass("has-error");
                         return;
                     }
-                    
+
                     var newProblemDescription = $("#addCallLineProblemDescription");
                     if (newProblemDescription.val() == "") {
                         $(newProblemDescription).parent().addClass("has-error");
                         return;
                     }
-                    
+
                     var newLineItem = new AllLineItemsViewModel({
                         serviceCallId: self.serviceCallId, problemCodeId: self.problemCodeId,
                         problemCode: self.problemCode, problemDescription: self.problemDescription
                     });
-                    
+
                     var lineData = ko.toJSON(newLineItem);
 
                     $.ajax({
@@ -450,12 +505,12 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
 
                             toastr.success("Success! Item added.");
                             highlight($("#allServiceCallLineItems").first());
-                            
+
                             $("#addCallLineProblemDescription").val('');
                             $("#addCallLineProblemCode").val('');
                             self.problemDescription = '';
                         });
-                    
+
                     $(newProblemCode).parent().removeClass("has-error");
                     $(newProblemDescription).parent().removeClass("has-error");
                 };
@@ -524,6 +579,13 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                     $("#filterCallNoteLineReferenceDropDown").val('');
                     self.selectedLineToFilterNotes('');
                 };
+                
+                self.resetCallattachmentFilter = function () {
+                    $("#filterCallAttachmentLineReferenceDropDown").val('');
+                    self.selectedLineToFilterAttachments('');
+                };
+                
+
                 self.lineJustCompleted = ko.observable();
                 
                 //undo last line item which was completed.
@@ -646,8 +708,14 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
 
             var persistedAllCallNotesViewModel = modelData.initialServiceNotes;
 
-            _(persistedAllCallNotesViewModel).each(function(note) {
+            _(persistedAllCallNotesViewModel).each(function (note) {
                 viewModel.allCallNotes.push(new CallNotesViewModel(note));
+            });
+            
+            var persistedAllAttachmentsViewModel = modelData.initialAttachments;
+
+            _(persistedAllAttachmentsViewModel).each(function (note) {
+                viewModel.allAttachments.push(new CallAttachmentsViewModel(note));
             });
         });
     });

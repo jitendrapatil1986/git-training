@@ -133,6 +133,8 @@
     <Compile Include="DataAccess\Mappings\ProjectMap.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMapping.cs" />
     <Compile Include="DataAccess\Mappings\EmployeeMapping.cs" />
+    <Compile Include="DataAccess\Mappings\ServiceCallAttachmentMap.cs" />
+    <Compile Include="DataAccess\Mappings\ServiceCallAttachmentMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallNoteMap.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallNoteMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallLineItemMap.cs" />
@@ -162,6 +164,7 @@
     <Compile Include="Entities\Project.cs" />
     <Compile Include="Entities\Employee.cs" />
     <Compile Include="Entities\ServiceCall.cs" />
+    <Compile Include="Entities\ServiceCallAttachment.cs" />
     <Compile Include="Entities\ServiceCallNote.cs" />
     <Compile Include="Entities\ServiceCallLineItem.cs" />
     <Compile Include="Enumerations\ActivityType.cs" />
@@ -268,7 +271,15 @@
     <Compile Include="Features\ServiceCallStats\ServiceCallStatsQueryHandler.cs" />
     <Compile Include="Features\ServiceCallStats\ServiceCallStatsModel.cs" />
     <Compile Include="Features\ServiceCallStats\ServiceCallStatsQuery.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallDeleteAttachmentCommand.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallDeleteAttachmentCommandHandler.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallDownloadAttachmentModel.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallDownloadAttachmentQuery.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallDownloadAttachmentQueryHandler.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallRenameAttachmentCommand.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallRenameAttachmentCommandHandler.cs" />
     <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallUploadAttachmentCommand.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallUploadAttachmentCommandHandler.cs" />
     <Compile Include="Features\UploadAttachmentBaseCommand.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\ReassignEmployeeCommand.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\EmployeesForServiceCallQueryHandler.cs" />

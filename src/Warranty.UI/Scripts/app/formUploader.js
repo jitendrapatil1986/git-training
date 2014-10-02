@@ -15,12 +15,10 @@
             cuteUifileUploaders.push(uploader);
             if (form.data('isCuteUiUploadsHandlerRegistered') != true) {
                 form.data('isCuteUiUploadsHandlerRegistered', true);
-                debugger;
                 var submitButtons = form.find('.trigger-file-uploader');
 
                 submitButtons.bind('click', function(event) {
                     event.preventDefault();
-                    debugger;
                     if (uploadsInProgress) {
                         alert('Your request is already being submitted. Please wait for any file uploads to finish processing ' +
                             ' before leaving this page. Depending on your connection speed this may take up to several minutes.');

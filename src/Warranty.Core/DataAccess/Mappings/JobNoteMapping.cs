@@ -3,7 +3,7 @@
     using Entities;
     using NHibernate.Mapping.ByCode;
 
-    public class JobNoteMapping: AuditableEntityMapping<JobNote>
+    public class JobNoteMapping : AuditableEntityMapping<JobNote>
     {
         public JobNoteMapping()
         {
