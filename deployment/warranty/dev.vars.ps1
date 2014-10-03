@@ -21,4 +21,4 @@ $sendFeedbackAddresses = "dane.schilling@headspring.com, deran@headspring.com, e
 $errorReportingEmailAddresses = "dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com, kiet.huynh@headspring.com"
 $errorReportingSubject = "Warranty Exception (test)"
 
-$documentSharePath = "\\wkcorpdata1\warranty"
+$documentSharePath = "C:\temp\dwh_files\warranty"
