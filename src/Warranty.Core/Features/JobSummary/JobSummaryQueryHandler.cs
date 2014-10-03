@@ -28,7 +28,9 @@ namespace Warranty.Core.Features.JobSummary
             model.JobServiceCalls = GetJobServiceCalls(query.JobId);
             model.JobSelections = GetJobSelections(query.JobId);
             model.JobNotes = GetJobNotes(query.JobId);
+            model.Attachments = GetJobAttachments(query.JobId);
             model.CanAddNotes = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager);
+            model.CanAddAttachments = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager);
             //model.JobPayments = GetJobPayments(query.JobId);
 
             return model;
@@ -158,6 +160,24 @@ namespace Warranty.Core.Features.JobSummary
                                 ORDER BY CreatedDate DESC";
 
             var result = _database.Fetch<JobSummaryModel.JobNote>(sql, jobId);
+
+            return result;
+        }
+
+        private IEnumerable<JobSummaryModel.Attachment> GetJobAttachments(Guid jobId)
+        {
+            const string sql = @"SELECT [JobAttachmentId]
+                                  ,[JobId]
+                                  ,[FilePath]
+                                  ,[DisplayName]
+                                  ,[IsDeleted]
+                                  ,[CreatedBy]
+                                  ,[CreatedDate]
+                                FROM [dbo].[JobAttachments]
+                                WHERE JobId = @0 AND IsDeleted=0
+                                ORDER BY CreatedDate DESC";
+
+            var result = _database.Fetch<JobSummaryModel.Attachment>(sql, jobId);
 
             return result;
         }

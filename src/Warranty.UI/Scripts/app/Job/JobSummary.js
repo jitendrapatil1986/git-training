@@ -1,5 +1,5 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'x-editable', 'ko', 'toastr', 'urls', 'modelData', 'enumeration/PhoneNumberType', 'jquery.maskedinput', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, xeditable, ko, toastr, urls, modelData, phoneNumberTypeEnum, maskedInput) {
+    require(['jquery', 'x-editable', 'ko', 'ko.x-editable', 'toastr', 'urls', 'modelData', 'enumeration/PhoneNumberType', 'jquery.maskedinput', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, xeditable, ko, koxeditable, toastr, urls, modelData, phoneNumberTypeEnum, maskedInput) {
         $(function () {
             $.fn.editable.defaults.mode = 'inline';
             $.fn.editable.defaults.emptytext = 'Add';
@@ -24,6 +24,8 @@ require(['/Scripts/app/main.js'], function () {
             $(".phone-number-with-extension").on('shown', function () {
                 $(this).data('editable').input.$input.mask('?(999)-999-9999 **********', { placeholder: " " });
             });
+            
+            $(".attached-file-display-name").editable();
 
             function highlight(elemId) {
                 var elem = $(elemId);
@@ -91,6 +93,29 @@ require(['/Scripts/app/main.js'], function () {
                 self.cancelJobNote = function() {
                     clearNoteFields();
                 };
+
+                self.userCanAddAttachments = ko.observable(modelData.canAddAttachments);
+                self.allJobAttachments = ko.observableArray([]);
+                
+                self.removeAttachment = function (e) {
+                    var element = $('.boxclose[data-attachment-id="' + e.jobAttachmentId + '"]');
+                    var actionUrl = element.data('url');
+                    var attachmentId = e.jobAttachmentId;
+                    $.ajax({
+                        type: "POST",
+                        url: actionUrl,
+                        data: { id: attachmentId }
+                    })
+                        .fail(function(response) {
+                            alert(JSON.stringify(response));
+                            toastr.error("There was an issue deleting the attachment. Please try again!");
+                        })
+                        .success(function(response) {
+                            self.allJobAttachments.remove(e);
+                            toastr.success("Success! Attachment deleted.");
+                        });
+                };
+                
             }
 
             function JobNotesViewModel(option) {
@@ -103,6 +128,18 @@ require(['/Scripts/app/main.js'], function () {
                 self.createdDate = option.createdDate;
             };
 
+            function JobAttachmentViewModel(option) {
+                var self = this;
+
+                self.jobAttachmentId = option.jobAttachmentId;
+                self.jobId = option.jobId;
+                self.filePath = option.filePath;
+                self.displayName = ko.observable(option.displayName);
+                self.isDeleted = option.isDeleted;
+                self.createdBy = option.createdBy;
+                self.createdDate = option.createdDate;
+            };
+            
             var viewModel = new jobSummaryViewModel();
             ko.applyBindings(viewModel);
 
@@ -110,6 +147,12 @@ require(['/Scripts/app/main.js'], function () {
 
             _(persistedAllJobNotesViewModel).each(function(note) {
                 viewModel.allJobNotes.push(new JobNotesViewModel(note));
+            });
+
+            var persistedAllJobAttachmentsViewModel = modelData.initialJobAttachments;
+
+            _(persistedAllJobAttachmentsViewModel).each(function(attachment) {
+                viewModel.allJobAttachments.push(new JobAttachmentViewModel(attachment));
             });
 
         });
