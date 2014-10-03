@@ -8,20 +8,20 @@
 
     public class ServiceCallUploadAttachmentCommandHandler : ICommandHandler<ServiceCallUploadAttachmentCommand>
     {
-        private readonly IDatabase _datatabse;
+        private readonly IDatabase _database;
         private readonly IFileSystemManager<ServiceCall> _serviceCallFileManager;
         private readonly IActivityLogger _logger;
 
-        public ServiceCallUploadAttachmentCommandHandler(IDatabase datatabse, IFileSystemManager<ServiceCall> serviceCallFileManager, IActivityLogger logger)
+        public ServiceCallUploadAttachmentCommandHandler(IDatabase database, IFileSystemManager<ServiceCall> serviceCallFileManager, IActivityLogger logger)
         {
-            _datatabse = datatabse;
+            _database = database;
             _serviceCallFileManager = serviceCallFileManager;
             _logger = logger;
         }
 
         public void Handle(ServiceCallUploadAttachmentCommand message)
         {
-            using (_datatabse)
+            using (_database)
             {
                 var attachmentsFilePaths = _serviceCallFileManager.MoveFilesToDirectoryAndRenameToAvoidCollisions(message.FileIds);
                 foreach (var filePath in attachmentsFilePaths)
@@ -33,7 +33,7 @@
                             DisplayName = System.IO.Path.GetFileName(filePath),
                             ServiceCallLineItemId = message.ServiceCallLineItemId
                         };
-                    _datatabse.Insert(attachment);
+                    _database.Insert(attachment);
                     _logger.Write("Attachment added to Service Call",string.Format("File name: {0}",attachment.DisplayName),message.ServiceCallId, ActivityType.UploadAttachment, ReferenceType.ServiceCallAttachment);
                 }
             }
