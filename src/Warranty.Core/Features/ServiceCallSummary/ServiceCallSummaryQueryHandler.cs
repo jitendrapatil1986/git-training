@@ -29,6 +29,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                         ServiceCallSummary = GetServiceCallSummary(query.ServiceCallId),
                         ServiceCallLines = GetServiceCallLines(query.ServiceCallId),
                         ServicCallNotes = GetServiceCallNotes(query.ServiceCallId),
+                        Attachments = GetServiceCallAttachments(query.ServiceCallId),
                         AddServiceCallLineItem = new ServiceCallSummaryModel.NewServiceCallLineItem(query.ServiceCallId, SharedQueries.ProblemCodes.GetProblemCodeList(_database)),
                         CanApprove = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
                         CanReassign = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
@@ -134,6 +135,21 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                 WHERE ServiceCallId = @0";
 
             var result = _database.Fetch<ServiceCallSummaryModel.ServiceCallNote>(sql, serviceCallId.ToString());
+
+            return result;
+        }
+
+        private IEnumerable<ServiceCallSummaryModel.Attachment> GetServiceCallAttachments(Guid serviceCallId)
+        {
+            const string sql = @"SELECT [ServiceCallAttachmentId]
+                                        ,[ServiceCallLineItemId]
+                                        ,[DisplayName]
+                                        ,[CreatedDate]
+                                        ,[CreatedBy]
+                                FROM [ServiceCallAttachments]
+                                WHERE ServiceCallId = @0 AND IsDeleted=0";
+
+            var result = _database.Fetch<ServiceCallSummaryModel.Attachment>(sql, serviceCallId.ToString());
 
             return result;
         }
