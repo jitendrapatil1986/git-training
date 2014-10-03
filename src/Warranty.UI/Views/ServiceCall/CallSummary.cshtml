@@ -9,22 +9,23 @@
 
 @helper ServiceCallStatusIconHelper(DateTime? completionDate, DateTime createdDate, int daysOpenedFor, int numberOfDaysRemaining, int percentComplete)
 {
-    if (completionDate == null)
+    if (!Model.ServiceCallSummary.IsSpecialProject)
     {
-    <div class="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(createdDate)">
-        <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(numberOfDaysRemaining)<br />
-        <div class="progress time-remaining-progress hidden-sm hidden-xs">
-            <div class="progress-bar @Css.ServiceCallProgressBar(numberOfDaysRemaining)" role="progressbar" style="width: @percentComplete%">
-                <span class="sr-only">@percentComplete% Complete</span>
+        if (completionDate == null)
+        {
+            <div class="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(createdDate)">
+                <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(numberOfDaysRemaining)<br />
+                <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                    <div class="progress-bar @Css.ServiceCallProgressBar(numberOfDaysRemaining)" role="progressbar" style="width: @percentComplete%">
+                        <span class="sr-only">@percentComplete% Complete</span>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    }
-    else
-    {
-    <div class="float-right-non-xs-screen">
-        @Format.DaysOpenedFor(daysOpenedFor, createdDate, completionDate)
-    </div>
+        }
+        else
+        {
+            @Format.DaysOpenedFor(daysOpenedFor, createdDate, completionDate)
+        }
     }
 }
 
@@ -71,7 +72,7 @@
             }
             <div class="clearfix"></div>
         </section>
-        <div class="panel panel-default">
+        <div id="serviceCallSummaryPage" class="panel panel-default">
             <div class="panel-heading margin-bottom-15">
                 <div class="row remove-list-style">
                     <div class="col-md-3 main-info">
@@ -126,20 +127,12 @@
                                 }
                                 else
                                 {
-                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus") </span>
+                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus",Model.ServiceCallSummary.IsSpecialProject) </span>
                                 }
                             </div>
                             @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
                         </div>
                 </div>
-                <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-11"></div>
-                    <div class="col-md-1 pull-right">
-                        @Format.SpecialProject(Model.ServiceCallSummary.IsSpecialProject)
-                    </div>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-md-12 text-center">
                     <h4>
@@ -161,25 +154,17 @@
             <section data-bind="visible: areAllLineItemsCompleted() && !callSummaryStatusComplete() && !callSummaryStatusSigned()">
                 <h3 class="col-md-12">Verify Homeowner Signature</h3>
                 <div id="verifyHomeownerSignature">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default no-border">
                         <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-4">
+                            <form class="form-inline">
+                                <div class="form-group">
                                     @Html.TextBox("Signature", null, new { id = "homeownerVerificationSignature", @class = "form-control", data_bind = "value: homeownerVerificationSignature, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Signature'}" })
                                 </div>
-                            </div>
-                            <br/>
-                            <div class="row">
-                                <div class="col-md-2">
+                                <div class="form-group">
                                     @Html.TextBox("Date", null, new { id = "homeownerVerificationSignatureDate", @class = "datepicker-input form-control", data_bind="value: homeownerVerificationSignatureDate, attr:{placeholder: 'Select Date'}" })
                                 </div>
-                            </div>
-                            <br/>
-                            <div class="row">
-                                <div class="col-md-1">
-                                    <button class="btn btn-primary" data-bind="click: saveVerifiedHomeownerSignature, enable: homeownerVerificationSignature().length > 0">Save</button>
-                                </div>
-                            </div>
+                                <button class="btn btn-primary" data-bind="click: saveVerifiedHomeownerSignature, enable: homeownerVerificationSignature().length > 0">Save</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -322,9 +307,9 @@
                                     <div class="col-md-12">
                                         <div class="no-left-right-padding">
                                             <div class="row">
-                                                <div class="col-md-11">
-                                                    <span data-bind="text: createdBy"></span>
-                                                    <span data-bind="text: moment(createdDate).format('L')"></span>
+                                                <div class="col-md-11 margin-bottom-5">
+                                                    <strong><small><span data-bind="text: createdBy"></span></strong></small>
+                                                    <small><span data-bind="text: moment(createdDate).format('L')"></span></small>
                                                 </div>
                                                 <div class="col-md-1">
                                                     <span data-bind="text: noteLineNumberWithProblemCode()"></span>

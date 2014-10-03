@@ -489,7 +489,7 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                         contentType: "application/json; charset=utf-8"
                     })
                         .fail(function (response) {
-                            toastr.error("There was an issue adding the call note. Please try again!");
+                            toastr.error("There was a problem adding the call note. Please try again.");
                         })
                         .done(function (response) {
                             self.allCallNotes.unshift(new CallNotesViewModel({
@@ -575,7 +575,7 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                 self.verifiedHomeownerSignatureDate = ko.observable($("#verifiedHomeownerSignatureDate").val());
                 
                 self.verifiedSignature = ko.computed(function () {
-                    var result = 'Verification Signed by ' + self.verifiedHomeownerSignature();
+                    var result = 'Verification signed by ' + self.verifiedHomeownerSignature();
                     
                     if (self.verifiedHomeownerSignatureDate()) {
                         result += ' on ' + moment(self.verifiedHomeownerSignatureDate()).format('L');

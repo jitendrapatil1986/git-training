@@ -3,6 +3,10 @@
 @highlight-bg: #d4dde3; //#FFF2A8;
 @gray-lighter: #f7f7f7;
 
+a {
+   outline: 0;
+}
+
 h2 {
     font-size: 28px;
 }
@@ -13,6 +17,10 @@ h2, h3 {
 
 h2, h3, h4 {
     margin-top: 0;
+}
+
+.alert {
+    border-radius: 0;
 }
 
 .main-container {
@@ -79,7 +87,7 @@ h2, h3, h4 {
     margin: 0;
 }
 
-.service-call-line:first-child {
+#serviceCallSummaryPage .service-call-line:first-child {
     border-top: solid 1px #e7e7e7;
 }
 
@@ -97,9 +105,15 @@ h2, h3, h4 {
 
 .no-margin{ margin: 0;}
 
+.margin-bottom-5 { margin: 0 0 5px 0;}
+
 .margin-bottom-15 { margin: 0 0 15px 0;}
 
 .margin-bottom-20 { margin: 0 0 20px 0;}
+
+.no-border {
+   border: none;
+}
 
 .label.label-info.muted {
     font-weight: normal;
@@ -139,18 +153,22 @@ h2, h3, h4 {
     height: 60px;
 }
 
-.opened-for {
-    border-radius: 10px;
+.opened-for{
+    border-radius: 5px;
     text-align: center;
-    font-size: xx-large;
+    font-size: 10px;
     color: #FFFFFF;
-    height: 60px;
-    width: 60px;
+    padding: 5px;
+    width: 52px;
 }
 
-.opened-for p {
-    font-size: xx-small;
-    color: #FFFFFF;
+    .opened-for div:first-child{
+        font-size: 28px;
+        line-height: 26px;
+    }
+
+    #jobSummaryPage .opened-for{
+        float: right;
 }
 
 .opened-for {
@@ -365,7 +383,7 @@ h2, h3, h4 {
 
 .label, badge {
     &-complete-service-call, &-complete-service-line-item {
-        background-color: #d9534f;
+        background-color: #BDC3C7;
     }
 }
 
