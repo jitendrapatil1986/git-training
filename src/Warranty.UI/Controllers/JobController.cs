@@ -5,6 +5,7 @@ namespace Warranty.UI.Controllers
 {
     using Warranty.Core;
     using Warranty.Core.Features.JobSummary;
+    using Warranty.Core.Features.JobSummary.Attachments;
 
     public class JobController : Controller
     {
@@ -24,5 +25,33 @@ namespace Warranty.UI.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        public ActionResult UploadAttachment(JobSummaryUploadAttachmentCommand model)
+        {
+            _mediator.Send(model);
+            return RedirectToAction("JobSummary", new {id = model.JobId});
+        }
+
+        [HttpPost]
+        public ActionResult RenameAttachment(JobSummaryRenameAttachmentCommand model)
+        {
+            _mediator.Send(model);
+            return Json(new {success = true}, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteAttachment(JobSummaryDeleteAttachmentCommand model)
+        {
+            _mediator.Send(model);
+            return Json(new {success = true}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DownloadAttachment(Guid id)
+        {
+            var model = _mediator.Request(new JobSummaryDownloadAttachmentQuery {JobId = id});
+            return File(model.Bytes, model.MimeMapping, model.FileName);
+        }
+
     }
 }

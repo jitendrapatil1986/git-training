@@ -240,6 +240,15 @@
     <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureServiceCallStatusModel.cs" />
     <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureServiceCallStatusCommand.cs" />
     <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureServiceCallStatusCommandHandler.cs" />
+    <Compile Include="Features\JobSummary\Attachments\JobSummaryDeleteAttachmentCommand.cs" />
+    <Compile Include="Features\JobSummary\Attachments\JobSummaryDeleteAttachmentCommandHandler.cs" />
+    <Compile Include="Features\JobSummary\Attachments\JobSummaryDownloadAttachmentModel.cs" />
+    <Compile Include="Features\JobSummary\Attachments\JobSummaryDownloadAttachmentQuery.cs" />
+    <Compile Include="Features\JobSummary\Attachments\JobSummaryDownloadAttachmentQueryHandler.cs" />
+    <Compile Include="Features\JobSummary\Attachments\JobSummaryRenameAttachmentCommand.cs" />
+    <Compile Include="Features\JobSummary\Attachments\JobSummaryRenameAttachmentCommandHandler.cs" />
+    <Compile Include="Features\JobSummary\Attachments\JobSummaryUploadAttachmentCommand.cs" />
+    <Compile Include="Features\JobSummary\Attachments\JobSummaryUploadAttachmentCommandHandler.cs" />
     <Compile Include="Features\ManageLookups\CreateLookupItemCommandHandler.cs" />
     <Compile Include="Features\ManageLookups\CreateLookupItemModel.cs" />
     <Compile Include="Features\ManageLookups\CreateLookupItemCommand.cs" />
