@@ -69,6 +69,7 @@ Role "Web" -Incremental {
     poke-xml "$web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@realm" $warranty_identity_uri
     poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Environment']/@value" $environment
     poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='sendFeedbackAddresses']/@value" $sendFeedbackAddresses
+    poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='DocumentSharePath']/@value" $documentSharePath
     
     poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
     poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@subject" $errorReportingSubject

@@ -20,3 +20,5 @@ $Warranty_identity_uri = "https://WarrantyTraining.davidweekleyhomes.com"
 $sendFeedbackAddresses = "dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com, imorfey@dwhomes.com, rcarr@dwhomes.com, mroberts@dwhomes.com"
 $errorReportingEmailAddresses = "dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com"
 $errorReportingSubject = "Warranty Exception (Training)"
+
+$documentSharePath = "\\wkcorpdata1\warranty"
