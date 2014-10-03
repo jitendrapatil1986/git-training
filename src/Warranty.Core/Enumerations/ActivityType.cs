@@ -14,5 +14,8 @@
         public static readonly ActivityType ChangeEmail = new ActivityType(5, "Change Email");
         public static readonly ActivityType Complete = new ActivityType(6, "Complete");
         public static readonly ActivityType Reopen = new ActivityType(7, "Reopen");
+        public static readonly ActivityType UploadAttachment = new ActivityType(8, "Upload Attachment");
+        public static readonly ActivityType DeletedAttachment = new ActivityType(9, "Deleted Attachment");
+        public static readonly ActivityType RenamedAttachment = new ActivityType(10, "Renamed Attachment");
     }
 }

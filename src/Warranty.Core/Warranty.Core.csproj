@@ -91,6 +91,7 @@
     <Compile Include="ActivityLogger\IActivityLogger.cs" />
     <Compile Include="ApprovalInfrastructure\ApprovalServices\ServiceCallApprovalService.cs" />
     <Compile Include="ApprovalInfrastructure\Interfaces\IApprovalService.cs" />
+    <Compile Include="Attributes\CuteUiFileUploadOptionsAttribute.cs" />
     <Compile Include="Configurations\CitiesCollection.cs" />
     <Compile Include="Configurations\CityConfig.cs" />
     <Compile Include="Configurations\WarrantyConfigSection.cs" />
@@ -132,6 +133,8 @@
     <Compile Include="DataAccess\Mappings\ProjectMap.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMapping.cs" />
     <Compile Include="DataAccess\Mappings\EmployeeMapping.cs" />
+    <Compile Include="DataAccess\Mappings\ServiceCallAttachmentMap.cs" />
+    <Compile Include="DataAccess\Mappings\ServiceCallAttachmentMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallNoteMap.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallNoteMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallLineItemMap.cs" />
@@ -161,6 +164,7 @@
     <Compile Include="Entities\Project.cs" />
     <Compile Include="Entities\Employee.cs" />
     <Compile Include="Entities\ServiceCall.cs" />
+    <Compile Include="Entities\ServiceCallAttachment.cs" />
     <Compile Include="Entities\ServiceCallNote.cs" />
     <Compile Include="Entities\ServiceCallLineItem.cs" />
     <Compile Include="Enumerations\ActivityType.cs" />
@@ -270,6 +274,16 @@
     <Compile Include="Features\ServiceCallStats\ServiceCallStatsQueryHandler.cs" />
     <Compile Include="Features\ServiceCallStats\ServiceCallStatsModel.cs" />
     <Compile Include="Features\ServiceCallStats\ServiceCallStatsQuery.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallDeleteAttachmentCommand.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallDeleteAttachmentCommandHandler.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallDownloadAttachmentModel.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallDownloadAttachmentQuery.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallDownloadAttachmentQueryHandler.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallRenameAttachmentCommand.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallRenameAttachmentCommandHandler.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallUploadAttachmentCommand.cs" />
+    <Compile Include="Features\ServiceCallSummary\Attachments\ServiceCallUploadAttachmentCommandHandler.cs" />
+    <Compile Include="Features\UploadAttachmentBaseCommand.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\ReassignEmployeeCommand.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\EmployeesForServiceCallQueryHandler.cs" />
     <Compile Include="Features\ServiceCallSummary\ReassignEmployee\EmployeesForServiceCallQuery.cs" />
@@ -321,6 +335,7 @@
     <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemCommand.cs" />
     <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemCommanHandler.cs" />
     <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemModel.cs" />
+    <Compile Include="Features\UploadAttachmentBaseViewModel.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetWSRQuery.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetWSRQueryHandler.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetModel.cs" />
@@ -329,6 +344,13 @@
     <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetModel.cs" />
     <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetQuery.cs" />
     <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetQueryHandler.cs" />
+    <Compile Include="FileManagement\FileSystemManager.cs" />
+    <Compile Include="FileManagement\FileUpload.cs" />
+    <Compile Include="FileManagement\TemporaryFileUploadInfo.cs" />
+    <Compile Include="FileManagement\TemporaryFileUploadsService.cs" />
+    <Compile Include="FileManagement\IFileSystemManager.cs" />
+    <Compile Include="FileManagement\ITemporaryFileUploadsService.cs" />
+    <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\ISendSmtpMailMessage.cs" />
     <Compile Include="Services\SendSmtpMailMessage.cs" />
     <Compile Include="Services\ServiceCallCalculator.cs" />

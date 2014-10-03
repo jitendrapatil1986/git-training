@@ -24,6 +24,7 @@ require.config({
         'handlebars': 'lib/handlebars.min',
         'x-editable': 'lib/bootstrap-editable.min',
         'responsive.tabs': 'lib/responsive.tabs',
+        'ko.x-editable': 'lib/knockout.x-editable.min',
     },
     shim: {
         'jquery.validate': ['jquery'],
@@ -35,12 +36,13 @@ require.config({
         'x-editable': { deps: ['bootstrap'], exports: '$.fn.editable' },
         'underscore': { exports: '_' },
         'ko': ['underscore'],
+        'ko.x-editable': ['ko'],
         'highcharts': { deps: ['jquery'], exports: 'Highcharts' },
         'bloodhound': { deps: ['jquery'], exports: 'Bloodhound' },
         'responsive.tabs': { deps: ['bootstrap'] },
         'jquery.maskedinput': ['jquery'],
     },
     callback: function () {
-        require(['app/feedbackForm', 'app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields', 'app/responsiveTabs']);
+        require(['app/feedbackForm', 'app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields', 'app/responsiveTabs','app/formUploader']);
     }
 });
