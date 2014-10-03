@@ -23,7 +23,7 @@
     var progressPanelId = generatedIdPrefix + "_progress" + uniqueKeyHack;
     var progressLabelId = generatedIdPrefix + "_progress_label" + uniqueKeyHack;
 
-    var buttonText = options.AllowMultiple ? "Add File(s)" : "Select File";
+    var buttonText = options.AllowMultiple ? "Select File(s)" : "Select File";
 }
 
 <div id="@wrapperId">
@@ -63,7 +63,7 @@
         }
     </div>
     <div class="uploader-buttons">
-        <input type="button" id="@browseId" value="@buttonText" />
+        <input class="btn btn-default" type="button" id="@browseId" value="@buttonText" />
         <input type="button" id="@cancelId" value="Cancel" style="visibility: hidden" />
     </div>
 
