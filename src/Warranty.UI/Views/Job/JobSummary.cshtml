@@ -160,6 +160,47 @@
                 </div>
             </div>
             <section >
+                <h3 class="col-md-12 margin-top-10">Attachments
+                    <span>
+                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Attachment" data-toggle="collapse" data-target="#addJobAttachment" data-bind="visible: userCanAddAttachments()"><span class="glyphicon glyphicon-plus"></span></button>
+                    </span>
+                </h3>
+                <div id="addJobAttachment" class="collapse" data-bind="visible: userCanAddAttachments()">
+                    <div class="panel-body no-bottom-padding">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @using (Html.BeginForm("UploadAttachment", "Job"))
+                                {
+                                    @Html.HiddenFor(x => Model.JobId, new { @Name = "JobId" })
+                                    @Html.EditorFor(x => x.TempFiles)
+                                    <input type="submit" class="btn btn-primary trigger-file-uploader" value="Add" />
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addJobAttachment">Cancel</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <em data-bind="visible: allJobAttachments().length < 1" class="padding-left-15 padding-top-7 pull-left">No Attachments Available</em>
+                <div class="remove-list-style attachments row">
+                    <div class="clearfix"></div>
+                    <br/>
+                    <ul data-bind="foreach: allJobAttachments">
+                        <li class="attached-file">
+                            @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                            {
+                                <span data-url="" data-bind="attr: { 'data-attachment-id': jobAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "Job")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
+                            }
+                            <a data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "Job")/' + jobAttachmentId}"><span class="glyphicon glyphicon-download-alt"></span></a>
+                            <a href="#" data-bind="attr: { 'data-attachment-id': jobAttachmentId}, editable: displayName, editableOptions: { pk: jobAttachmentId, url: '@Url.Action("RenameAttachment", "Job")    '}"  class="attached-file-display-name"></a>
+                            <br/>
+                            <span data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section >
                 <h3 class="col-md-12 margin-top-10">Notes
                     <span>
                         <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Note" data-toggle="collapse" data-target="#addJobNote" data-bind="visible: userCanAddNotes()"><span class="glyphicon glyphicon-plus"></span></button>
@@ -207,46 +248,6 @@
                                 <div class="clearfix"></div>
                             </div>
                         </div>
-                    </ul>
-                </div>
-            </section>
-            <section >
-                <h3 class="col-md-12 margin-top-10">Attachments
-                    <span>
-                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Attachment" data-toggle="collapse" data-target="#addJobAttachment" data-bind="visible: userCanAddAttachments()"><span class="glyphicon glyphicon-plus"></span></button>
-                    </span>
-                </h3>
-                <div id="addJobAttachment" class="collapse" data-bind="visible: userCanAddAttachments()">
-                    <div class="panel-body no-bottom-padding">
-                        <div class="row">
-                            <div class="col-md-12">
-                                @using (Html.BeginForm("UploadAttachment", "Job"))
-                                {
-                                    @Html.HiddenFor(x => Model.JobId, new { @Name = "JobId" })
-                                    @Html.EditorFor(x => x.TempFiles)
-                                    <input type="submit" class="btn btn-primary trigger-file-uploader" value="Add" />
-                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addJobAttachment">Cancel</button>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br />
-                <em data-bind="visible: allJobAttachments().length < 1" class="padding-left-15 padding-top-7 pull-left">No Attachments Available</em>
-                <div class="remove-list-style attachments row">
-                    <div class="clearfix"></div>
-                    <br/>
-                    <ul data-bind="foreach: allJobAttachments">
-                        <li class="attached-file">
-                            @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
-                            {
-                                <span data-url="" data-bind="attr: { 'data-attachment-id': jobAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "Job")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
-                            }
-                            <a href="#" data-bind="attr: { 'data-attachment-id': jobAttachmentId}, editable: displayName, editableOptions: { pk: jobAttachmentId, url: '@Url.Action("RenameAttachment", "Job")    '}"  class="attached-file-display-name"></a>
-                            <a data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "Job")/' + jobAttachmentId}"><span class="glyphicon glyphicon-download-alt"></span></a>
-                            <br/>
-                            <span data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></span>
-                        </li>
                     </ul>
                 </div>
             </section>
