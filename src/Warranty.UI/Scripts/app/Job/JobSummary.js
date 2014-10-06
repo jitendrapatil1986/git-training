@@ -98,7 +98,7 @@ require(['/Scripts/app/main.js'], function () {
                 self.allJobAttachments = ko.observableArray([]);
 
                 self.removeAttachment = function(e) {
-                    if (confirm('Are you sure you want to remove this attachment?')) {
+                    if (confirm(modelData.attachmentRemovalMessage)) {
                         var element = $('.boxclose[data-attachment-id="' + e.jobAttachmentId + '"]');
                         var actionUrl = element.data('url');
                         var attachmentId = e.jobAttachmentId;

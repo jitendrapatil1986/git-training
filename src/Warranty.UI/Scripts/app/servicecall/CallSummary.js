@@ -439,7 +439,7 @@ require(['/Scripts/app/main.js'], function () {
                 }).extend({ notify: 'always' });
                 
                 self.removeAttachment = function (e) {
-                    if (confirm('Are you sure you want to remove this attachment?')) {
+                    if (confirm(modelData.attachmentRemovalMessage)) {
                         var item = $('.boxclose[data-attachment-id="' + e.serviceCallAttachmentId + '"]');
                         var actionUrl = item.data('url');
                         var attachmentId = e.serviceCallAttachmentId;
