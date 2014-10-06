@@ -12,10 +12,10 @@ else
 <div class="panel-group" id="specialproject_list">
     @foreach (var employee in Model.RepresentativeWithSpecialProjectCalls)
     {
-        <div class="panel list-group-item no-left-right-padding">
+        <div class="panel list-group-item">
             <a data-toggle="collapse" data-parent="#specialproject_list" href="#collapseSpecialProjectCalls@(employee.EmployeeNumber)" class="text-capitalize accordion-toggle collapsed">@employee.Name</a> <span class="badge">@employee.ServiceCallsCount</span>
 
-            <div id="collapseSpecialProjectCalls@(employee.EmployeeNumber)" class="collapse panel-body no-left-right-padding">
+            <div id="collapseSpecialProjectCalls@(employee.EmployeeNumber)" class="collapse panel-body">
                 @foreach (var line in Model.SpecialProjectServiceCalls.Where(x => x.AssignedToEmployeeNumber == employee.EmployeeNumber))
                 {
                     <div class="service-call-line">
