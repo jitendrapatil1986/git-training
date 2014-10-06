@@ -60,6 +60,10 @@ h2, h3, h4 {
     margin-top: 10px;
 }
 
+#serviceCallSummaryPage section, #jobSummaryPage section {
+    border-bottom: 1px solid #DDD;
+}
+
 .panel-default {
     border-bottom: 0;
 }
@@ -91,8 +95,16 @@ h2, h3, h4 {
     border-top: solid 1px #e7e7e7;
 }
 
+#serviceCallSummaryPage .service-call-line:last-child {
+    border-bottom: 0;
+}
+
 .service-call-line:hover {
     background: @gray-lighter;
+}
+
+#serviceCallSummaryPage select {
+    max-width: 300px;
 }
 
 .text-red {
@@ -711,7 +723,7 @@ a.delete-group-item:hover {
 }
 
 .attachments .attached-file {
-    margin: 10px;
+    margin: 0 10px 10px 0;
     border: 1px lightgray solid;
     border-radius: 5px;
     float: left;
@@ -771,7 +783,6 @@ span.boxclose{
 
 .download-attachment {
     font-size: 21px;
-    margin-left: 10px;
 }
 
 @media (max-width: 767px) {

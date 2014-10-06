@@ -259,6 +259,54 @@
                     </ul>
                 </div>
             </section>
+            <section>
+                <h3 class="col-md-12">Attachments
+                    <span>
+                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Attachments" data-toggle="collapse" data-target="#addAttachment"><span class="glyphicon glyphicon-plus"></span></button>
+                    </span>
+                </h3>
+                <div id="addAttachment" class="collapse">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @using (Html.BeginForm("UploadAttachment", "ServiceCall"))
+                                {
+
+                                    @Html.HiddenFor(x => Model.ServiceCallSummary.ServiceCallId, new { @Name = "ServiceCallId" })
+                                    @Html.EditorFor(x => x.TempFiles)
+                                    <select name="ServiceCallLineItemId" id="addCallAttachmentLineReferenceDropDown" class="dropdown form-control margin-bottom-10" data-bind="options: allLineItems, value: selectedLineToAttachToAttachment, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'Reference line item (optional)' "></select>
+                                    <input type="submit" class="btn btn-primary trigger-file-uploader" value="Add" />
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addAttachment">Cancel</button>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <br />
+                <em data-bind="visible: allAttachments().length < 1" class="padding-left-15 padding-top-7 pull-left">No Attachments Available</em>
+                <span data-bind="visible: allAttachments().length > 0" class="padding-left-15 padding-top-7 pull-left">Show: 
+                </span>
+                <div class="col-md-3 margin-bottom-10">
+                    <select id="filterCallAttachmentLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToFilterAttachments, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'All', visible: allAttachments().length > 0 "></select>
+                </div>
+                <div class="remove-list-style attachments row">
+                    <div class="clearfix"></div>
+                    <br />
+                    <ul data-bind="foreach: filteredAttachments">
+                        <li class="attached-file">
+                            @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                            {
+                                <span data-url="" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "ServiceCall")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
+                            }
+                            <a data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "ServiceCall")/' + serviceCallAttachmentId}"><span class="glyphicon glyphicon-download-alt"></span></a>
+                            <a href="#" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId}, editable: displayName, editableOptions: { pk: serviceCallAttachmentId, url: '@Url.Action("RenameAttachment", "ServiceCall")    '}"  class="attached-file-display-name"></a>
+                            <br/>
+                            <span data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
 
             <section >
                 <h3 class="col-md-12">Notes
@@ -331,58 +379,6 @@
             </section>
 
 
-            <section>
-                <h3 class="col-md-12">Attachments
-                    <span>
-                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Attachments" data-toggle="collapse" data-target="#addAttachment"><span class="glyphicon glyphicon-plus"></span></button>
-                    </span>
-                </h3>
-                <div id="addAttachment" class="collapse">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                @using (Html.BeginForm("UploadAttachment", "ServiceCall"))
-                                {
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <select name="ServiceCallLineItemId" id="addCallAttachmentLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToAttachToAttachment, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'Reference line item (optional)' "></select>
-                                        </div>
-                                    </div>
-
-                                    @Html.HiddenFor(x => Model.ServiceCallSummary.ServiceCallId, new { @Name = "ServiceCallId" })
-                                    @Html.EditorFor(x => x.TempFiles)
-                                    <input type="submit" class="btn btn-primary trigger-file-uploader" value="Add" />
-                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addAttachment">Cancel</button>
-                                }
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <br />
-                <em data-bind="visible: allAttachments().length < 1" class="padding-left-15 padding-top-7 pull-left">No Attachments Available</em>
-                <span data-bind="visible: allAttachments().length > 0" class="padding-left-15 padding-top-7 pull-left">Show: 
-                </span>
-                <div class="col-md-3 margin-bottom-10">
-                    <select id="filterCallAttachmentLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToFilterAttachments, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'All', visible: allAttachments().length > 0 "></select>
-                </div>
-                <div class="remove-list-style attachments row">
-                    <div class="clearfix"></div>
-                    <br />
-                    <ul data-bind="foreach: filteredAttachments">
-                        <li class="attached-file">
-                            @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
-                            {
-                                <span data-url="" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "ServiceCall")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
-                            }
-                            <a href="#" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId}, editable: displayName, editableOptions: { pk: serviceCallAttachmentId, url: '@Url.Action("RenameAttachment", "ServiceCall")    '}"  class="attached-file-display-name"></a>
-                            <a data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "ServiceCall")/' + serviceCallAttachmentId}"><span class="glyphicon glyphicon-download-alt"></span></a>
-                            <br/>
-                            <span data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></span>
-                        </li>
-                    </ul>
-                </div>
-            </section>
         </div>
     </div>
 </div>
