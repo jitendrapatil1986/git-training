@@ -32,13 +32,10 @@
 
 @helper EscalationHelper(bool escalated, DateTime? escalationDate, string escalationReason)
 {
-    if (escalated)
-    {
-    <div class='label label-danger'>
+    <div class='label label-danger' data-bind="visible: isEscalated()">
         <span class='glyphicon glyphicon-fire'></span>
         @Format.DateMonthDayYear(escalationDate) - @escalationReason
     </div>
-    }
 }
 
 <div class="container">
@@ -127,13 +124,13 @@
                                 }
                                 else
                                 {
-                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus",Model.ServiceCallSummary.IsSpecialProject) </span>
+                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus") </span>
                                 }
                             </div>
                             @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
                         </div>
                 </div>
-            <div class="row">
+            <div class="row" >
                 <div class="col-md-12 text-center">
                     <h4>
                         @EscalationHelper(Model.ServiceCallSummary.IsEscalated, Model.ServiceCallSummary.EscalationDate, Model.ServiceCallSummary.EscalationReason)
@@ -401,6 +398,8 @@
                 initialServiceLines: @Html.Raw(Model.ServiceCallLines.ToJson()),
                 initialServiceNotes: @Html.Raw(Model.ServicCallNotes.ToJson()),
                 initialAttachments: @Html.Raw(Model.Attachments.ToJson()),
+                isSpecialProject: @Model.ServiceCallSummary.IsSpecialProject.ToJson(),
+                isEscalated: @Model.ServiceCallSummary.IsEscalated.ToJson(),
                 canBeReopened: @Model.ServiceCallSummary.CanBeReopened.ToJson()
                 }
         });

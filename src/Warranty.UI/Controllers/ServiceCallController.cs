@@ -137,7 +137,7 @@
                 ServiceCallId = id,
                 Text = message
             });
-            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            return Json(new { actionName = ActivityType.SpecialProject.DisplayName }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ToggleEscalate(Guid id, string message)
@@ -155,7 +155,7 @@
                 result.Url = url;
                 _mailer.ServiceCallEscalated(result).SendAsync();
             }
-            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            return Json(new { actionName = ActivityType.Escalation.DisplayName }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetEmployees(Guid id)

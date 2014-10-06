@@ -421,16 +421,12 @@ namespace Warranty.UI.Core.Helpers
             return city + ", " + state + " " + zip;
         }
 
-        public static MvcHtmlString ServiceCallStatus(ServiceCallStatus serviceCallStatus, string id, string dataBind,bool isSpecialProject)
+        public static MvcHtmlString ServiceCallStatus(ServiceCallStatus serviceCallStatus, string id, string dataBind)
         {
             var status = serviceCallStatus.DisplayName;
 
-            var htmlString = string.Format("<span id='{0}' class='label label-{1}-service-call' data-bind='{2}'>{3}</span>", id, status.Replace(" ", "-").ToLower(),
+            var htmlString = string.Format("<span id='{0}' class='label label-{1}-service-call' data-bind='{2}'>{3}</span> <span data-bind='visible: isSpecialProject()' class='label label-info'>Special Project</span>", id, status.Replace(" ", "-").ToLower(),
                                            dataBind, status);
-            if (isSpecialProject)
-            {
-                htmlString += " <span class='label label-info'>Special Project</span>";
-            }
             return MvcHtmlString.Create(htmlString);
         }
 

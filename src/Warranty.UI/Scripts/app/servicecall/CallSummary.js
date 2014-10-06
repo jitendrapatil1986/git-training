@@ -1,5 +1,5 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable','enumeration/PhoneNumberType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
+    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
 
         $(function () {
             $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
@@ -59,17 +59,17 @@ require(['/Scripts/app/main.js'], function () {
                 var actionUrl = $(this).data('action-url');
                 var textArea = $(this).prev('textarea');
                 var message = textArea.val();
-                textArea.val('');
                 var serviceCallId = $(this).data('service-call-id');
                 var parentButton = $("#btn_" + popupWindow.attr('id'));
                 $.ajax({
                     type: "POST",
                     url: actionUrl,
                     data: { id: serviceCallId, message: message },
-
-                    success: function (data) {
+                    success: function (result) {
+                        updateUI(result.actionName);
                         changeButtonText(parentButton);
                         parentButton.removeClass("active");
+                        textArea.val('');
                         popupWindow.hide();
                     }
                 });
@@ -118,6 +118,17 @@ require(['/Scripts/app/main.js'], function () {
                 viewModel.callSummaryServiceCallStatus(serviceCallStatusData.Complete.DisplayName);
                 viewModel.canBeReopened(true);
                 toastr.success("Success! Service Call has been succesfully completed.");
+            }
+            
+            function updateUI(actionName) {
+                if (actionName == activityTypeEnum.Escalation.DisplayName) {
+                    var isEscalated = viewModel.isEscalated();
+                    viewModel.isEscalated(!isEscalated);
+                }
+                else if (actionName == activityTypeEnum.SpecialProject.DisplayName) {
+                    var isSpecialProject = viewModel.isSpecialProject();
+                    viewModel.isSpecialProject(!isSpecialProject);
+                }
             }
                 
             function changeButtonText(button) {
@@ -383,7 +394,8 @@ require(['/Scripts/app/main.js'], function () {
                 self.problemDescriptionToAdd = ko.observable('');
                 self.problemCodeToAdd = ko.observable();
                 self.canBeReopened = ko.observable(modelData.canBeReopened);
-                
+                self.isSpecialProject = ko.observable(modelData.isSpecialProject);
+                self.isEscalated = ko.observable(modelData.isEscalated);
                 self.allCallNotes = ko.observableArray([]);
                 self.allAttachments = ko.observableArray([]);
                 self.selectedLineToAttachToNote = ko.observable();
