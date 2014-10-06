@@ -439,18 +439,20 @@ require(['/Scripts/app/main.js'], function () {
                 }).extend({ notify: 'always' });
                 
                 self.removeAttachment = function (e) {
-                    var item = $('.boxclose[data-attachment-id="' + e.serviceCallAttachmentId + '"]');
-                    var actionUrl = item.data('url');
-                    var attachmentId = e.serviceCallAttachmentId;
-                    $.ajax({
-                        type: "POST",
-                        url: actionUrl,
-                        data: { id: attachmentId },
-                        success: function (data) {
-                            self.allAttachments.remove(e);
-                            toastr.success("Success! Attachment deleted.");
-                        }
-                    });
+                    if (confirm('Are you sure you want to remove this attachment?')) {
+                        var item = $('.boxclose[data-attachment-id="' + e.serviceCallAttachmentId + '"]');
+                        var actionUrl = item.data('url');
+                        var attachmentId = e.serviceCallAttachmentId;
+                        $.ajax({
+                            type: "POST",
+                            url: actionUrl,
+                            data: { id: attachmentId },
+                            success: function (data) {
+                                self.allAttachments.remove(e);
+                                toastr.success("Success! Attachment deleted.");
+                            }
+                        });
+                    }
                 };
 
                 self.addLineItem = function () {
