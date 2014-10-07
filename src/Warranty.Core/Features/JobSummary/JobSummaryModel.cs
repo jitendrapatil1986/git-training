@@ -42,8 +42,6 @@ namespace Warranty.Core.Features.JobSummary
         public string EmailAddress { get; set; }
         public int YearsWithinWarranty { get; set; }
         public DateTime WarrantyStartDate { get; set; }
-        public bool CanAddNotes { get; set; }
-        public bool CanAddAttachments { get; set; }
 
         public IEnumerable<JobServiceCall> JobServiceCalls { get; set; }
         public IEnumerable<JobPayment> JobPayments { get; set; }
