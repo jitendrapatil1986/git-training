@@ -94,6 +94,11 @@ namespace Warranty.UI.Core.Helpers
             return date.Value.ToString("MMMM dd, yyyy");
         }
 
+        public static string DateMonthYear(DateTime? date)
+        {
+            return date == null ? "" : date.Value.ToString("MM/yyyy");
+        }
+
         public static string DateForServiceCallWiget(DateTime? date)
         {
             return String.Format("{0:MMM dd yyyy}", date);

@@ -1,0 +1,390 @@
+﻿@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.WarrantyBonusSummary.WarrantyBonusSummaryModel
+
+@{
+    
+}
+
+<div class="container">
+    <div class ="col-md-12">
+        <h3 class="text-center">Warranty Service Rep. Bonus Summary</h3>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div id="idFilterBonusSummary">
+                <div class="no-bottom-padding">
+                    <div class="col-md-12">
+                        <h4>Report Filters</h4>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            @using (Html.BeginForm())
+                            {
+                                if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || 1 == 1)
+                                {
+                                    <div class="col-md-3">
+                                        @Html.DropDownList("Model.SelectedEmployeeNumber", Model.EmployeeTiedToRepresentatives.Select(c => new SelectListItem {Text = c.EmployeeName, Value = c.EmployeeNumber.ToString()}), "Select Representative", new{@class="form-control text-capitalize"})
+                                    </div>
+                                }
+                                
+                                <div class="col-md-2">
+                                    @Html.TextBox("Model.FilteredDate", null, new { id = "warrantyBonusSummaryDate", @class = "form-control monthpicker-input", data_bind = "attr:{placeholder: 'Select Date'}"})
+                                </div>
+                                <div class="col-md-1">
+                                    @Html.Label("")
+                                    <input type="submit" class="btn btn-primary" value="Run" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            @Html.Label("Employee Name: ")
+            @Html.DisplayFor(model => model.BonusSummaries.FirstOrDefault().EmployeeName)
+        </div>
+        <div class="col-md-6">
+            @Html.Label("Employee Number: ")
+            @Html.DisplayFor(model => model.BonusSummaries.FirstOrDefault().EmployeeNumber)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            @Html.Label("Bonus for Month/Year: ")
+            @Format.DateMonthYear(Model.FilteredDate)
+        </div>
+        <div class="col-md-6">
+            @Html.Label("Division: ")
+            @Html.DisplayFor(model => model.BonusSummaries.FirstOrDefault().DivisionName)
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-md-6">
+            @Html.Label("10% of savings (i.e. Total Warranty Allowances less Total Warranty Expense")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            @Html.Label("$40 = allowance per home under warranty (1-2 years)")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            @Html.Label("$40 = maximum cost control bonus per home under warranty (1-2 years)")
+        </div>
+    </div>
+    <br/>
+    <div class="row small">
+        <div class="col-md-4 text-left">@Html.Label("Community Name")</div>
+        <div class="col-md-1 text-right">@Html.Label("Warrantable Homes")</div>
+        <div class="col-md-1 text-right">@Html.Label("Warranty Material [9425]")</div>
+        <div class="col-md-1 text-right">@Html.Label("Warranty Labor [9430]")</div>
+        <div class="col-md-1 text-right">@Html.Label("Other Warranty Material [9435]")</div>
+        <div class="col-md-1 text-right">@Html.Label("Other Warranty Labor [9440]")</div>
+        <div class="col-md-1 text-right">@Html.Label("Total Warranty Expense")</div>
+        <div class="col-md-1 text-right">@Html.Label("Total Warranty Allowance")</div>
+        <div class="col-md-1 text-right">@Html.Label("Warranty Surplus (Deficit)")</div>
+    </div>
+
+    @foreach (var line in Model.BonusSummaries)
+    {
+        <div class="row small">
+            <div class="col-md-4 text-left">@Html.DisplayFor(model => line.CommunityName)</div>
+            <div class="col-md-1 text-right">@Html.DisplayFor(model => line.NumberOfWarrantableHomes)</div>
+            <div class="col-md-1 text-right">@Format.Money(line.MaterialDollarsSpent)</div>
+            <div class="col-md-1 text-right">@Format.Money(line.LaborDollarsSpent)</div>
+            <div class="col-md-1 text-right">@Format.Money(line.OtherMaterialDollarsSpent)</div>
+            <div class="col-md-1 text-right">@Format.Money(line.OtherLaborDollarsSpent)</div>
+            <div class="col-md-1 text-right">@Format.Money(line.TotalDollarsSpent)</div>
+            <div class="col-md-1 text-right">@Format.Money(line.TotalWarrantyAllowance)</div>
+            <div class="col-md-1 text-right">@Format.Money(line.TotalWarrantyDifference)</div>
+        </div>
+    }
+    <hr/>
+    <div class="row small">
+        <div class="col-md-4 text-left">Total</div>
+        <div class="col-md-1 text-right">@Html.DisplayFor(model => model.TotalNumberOfWarrantableHomes)</div>
+        <div class="col-md-1 text-right">@Format.Money(Model.TotalMaterialDollarsSpent)</div>
+        <div class="col-md-1 text-right">@Format.Money(Model.TotalLaborDollarsSpent)</div>
+        <div class="col-md-1 text-right">@Format.Money(Model.TotalOtherMaterialDollarsSpent)</div>
+        <div class="col-md-1 text-right">@Format.Money(Model.TotalOtherLaborDollarsSpent)</div>
+        <div class="col-md-1 text-right">@Format.Money(Model.TotalDollarsSpent)</div>
+        <div class="col-md-1 text-right">@Format.Money(Model.TotalWarrantyAllowance)</div>
+        <div class="col-md-1 text-right">@Format.Money(Model.TotalWarrantyDifference)</div>
+    </div>
+    <br/>
+    <div class="col-md-12">
+        <div class="pull-right">
+            @Html.Label("Total Cost Control Bonus this Month: ")
+            @if (Model.TotalWarrantyDifference > 0)
+            {
+                @Format.Money(Model.TotalWarrantyDifference);
+            }
+        </div>
+    </div>
+    
+    <hr/>
+
+    <div id="warrantyBonusSummary" class="col-md-10 col-md-offset-1">
+        <h3 class="text-center">Warranty Service Rep. Bonus Summary</h3>
+        <div class="row">
+            <div class="col-md-6">
+                @Html.Label("Employee Name: ")
+                @Html.DisplayFor(model => model.BonusSummaries.FirstOrDefault().EmployeeName)
+            </div>
+            <div class="col-md-6">
+                @Html.Label("Employee Number: ")
+                @Html.DisplayFor(model => model.BonusSummaries.FirstOrDefault().EmployeeNumber)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                @Html.Label("Bonus for Month/Year: ")
+                @Format.DateMonthYear(Model.FilteredDate)
+            </div>
+            <div class="col-md-6">
+                @Html.Label("Division: ")
+                @Html.DisplayFor(model => model.BonusSummaries.FirstOrDefault().DivisionName)
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-md-12">
+                @Html.Label("10% of savings (i.e. Total Warranty Allowances less Total Warranty Expense")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @Html.Label("$40 = allowance per home under warranty (1-2 years)")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @Html.Label("$40 = maximum cost control bonus per home under warranty (1-2 years)")
+            </div>
+        </div>
+        <br/>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped table-bordered text-right table-bonus">
+            <thead>
+                <tr>
+                    <th>Community Name</th>
+                    <th>Warrantable Homes</th>
+                    <th>Warranty Material [9425]</th>
+                    <th>Warranty Labor [9430]</th>
+                    <th>Other Warranty Material [9435]</th>
+                    <th>Other Warranty Labor [9440]</th>
+                    <th>Total Warranty Expense</th>
+                    <th>Total Warranty Allowance</th>
+                    <th>Warranty Surplus (Deficit)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var line in Model.BonusSummaries)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(model => line.CommunityName)</td>
+                        <td>@Html.DisplayFor(model => line.NumberOfWarrantableHomes)</td>
+                        <td>@Format.Money(line.MaterialDollarsSpent)</td>
+                        <td>@Format.Money(line.LaborDollarsSpent)</td>
+                        <td>@Format.Money(line.OtherMaterialDollarsSpent)</td>
+                        <td>@Format.Money(line.OtherLaborDollarsSpent)</td>
+                        <td>@Format.Money(line.TotalDollarsSpent)</td>
+                        <td>@Format.Money(line.TotalWarrantyAllowance)</td>
+                        <td>@Format.Money(line.TotalWarrantyDifference)</td>
+                    </tr>
+                }
+                <tr class="totalLine">
+                    <td>Total</td>
+                    <td>@Html.DisplayFor(model => model.TotalNumberOfWarrantableHomes)</td>
+                    <td>@Format.Money(Model.TotalMaterialDollarsSpent)</td>
+                    <td>@Format.Money(Model.TotalLaborDollarsSpent)</td>
+                    <td>@Format.Money(Model.TotalOtherMaterialDollarsSpent)</td>
+                    <td>@Format.Money(Model.TotalOtherMaterialDollarsSpent)</td>
+                    <td>@Format.Money(Model.TotalDollarsSpent)</td>
+                    <td>@Format.Money(Model.TotalWarrantyAllowance)</td>
+                    <td>@Format.Money(Model.TotalWarrantyDifference)</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="col-md-12">
+            <div class="pull-right">
+                @Html.Label("Total Cost Control Bonus this Month: ")
+                @if (Model.TotalWarrantyDifference > 0)
+                {
+                    @Format.Money(Model.TotalWarrantyDifference);
+                }
+            </div>
+        </div>
+        
+        <section>
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Label("Definitely Would Recommend (11 months)")
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Label("$50 for each response of 'Yes' to 'Def. Would Recommend' on 11 month survey.")
+                </div>
+            </div>
+            <br/>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped table-bordered text-right table-bonus-survey">
+                <thead>
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Job No.</th>
+                        <th>Def. Wld. Rec. (11 mo)</th>
+                        <th>Bonus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var line in Model.DefinitelyWouldRecommendSurveys)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(model => line.CustomerName)</td>
+                            <td>@Html.DisplayFor(model => line.JobName)</td>
+                            <td>@Html.DisplayFor(model => line.DefinitelyWouldRecommend)</td>
+                            <td>@Format.Money(line.BonusAmount)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="col-md-12">
+                <div class="pull-right">
+                    @Html.Label("Definitely Would Recommend (11 mo) Bonus: ")
+                    @if (Model.TotalDefinitelyWouldRecommendSurveyBonusAmount > 0)
+                    {
+                        @Format.Money(Model.TotalDefinitelyWouldRecommendSurveyBonusAmount);
+                    }
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Label("Excellent Warranty (11 months)")
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Label("$50 for each response of 'Yes' to 'Good Warranty' on 11 month survey.")
+                </div>
+            </div>
+            <br/>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped table-bordered text-right table-bonus-survey">
+                <thead>
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Job No.</th>
+                        <th>Excellent Warranty (11 mo)</th>
+                        <th>Bonus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var line in Model.ExcellentWarrantySurveys)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(model => line.CustomerName)</td>
+                            <td>@Html.DisplayFor(model => line.JobName)</td>
+                            <td>@Html.DisplayFor(model => line.ExcellentWarranty)</td>
+                            <td>@Format.Money(line.BonusAmount)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="col-md-12">
+                <div class="pull-right">
+                    @Html.Label("Good Warranty (11 mo) Bonus: ")
+                    @if (Model.TotalExcellentWarrantySurveyBonusAmount > 0)
+                    {
+                        @Format.Money(Model.TotalExcellentWarrantySurveyBonusAmount);
+                    }
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Label("All Items Complete")
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Label("$100 if the community average is >= 85%")
+                </div>
+            </div>
+            <br/>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped table-bordered text-right table-bonus-items-complete">
+                <thead>
+                    <tr>
+                        <th>Community Name</th>
+                        <th>All Items Complete %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var line in Model.AllItemsCompletes)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(model => line.CommunityName)</td>
+                            <td>@Html.DisplayFor(model => line.CompletePercentage)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="col-md-12">
+                <div class="pull-right">
+                    @Html.Label("All Items Complete Bonus: ")
+                    @if (Model.TotalAllItemsCompleteBonusAmount > 0)
+                    {
+                        @Format.Money(Model.TotalAllItemsCompleteBonusAmount);
+                    }
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Label("Miscellaneous Bonus")
+                </div>
+            </div>
+            <br/>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped table-bordered text-right table-bonus-miscellaneous">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Bonus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var line in Model.MiscellaneousBonuses)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(model => line.Description)</td>
+                            <td>@Format.Money(line.BonusAmount)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="col-md-12">
+                <div class="pull-right">
+                    @Html.Label("Sub Total: ")
+                    @if (Model.TotalMiscellaneousBonusAmount > 0)
+                    {
+                        @Format.Money(Model.TotalMiscellaneousBonusAmount);
+                    }
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

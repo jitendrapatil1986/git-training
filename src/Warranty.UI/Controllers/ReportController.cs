@@ -15,11 +15,19 @@ namespace Warranty.UI.Controllers
             _mediator = mediator;
         }
 
-        public ActionResult WarrantyBonusSummaryWSR()
+        public ActionResult WarrantyBonusSummaryWSRReport()
         {
-            var model = _mediator.Request(new WarrantyBonusSummaryWSRQuery());
+            var resultModel = _mediator.Request(new WarrantyBonusSummaryWSRQuery());
 
-            return View(model);
+            return View(resultModel);
+        }
+
+        [HttpPost]
+        public ActionResult WarrantyBonusSummaryWSRReport(WarrantyBonusSummaryModel model)
+        {
+            var resultModel = _mediator.Request(new WarrantyBonusSummaryWSRQuery { queryModel = model });
+
+            return View(resultModel);
         }
 
         public ActionResult WarrantyBonusSummary()
