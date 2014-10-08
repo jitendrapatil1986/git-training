@@ -9,6 +9,7 @@ namespace Warranty.UI.Core.Initialization
     using Security;
     using StructureMap.Configuration.DSL;
     using Warranty.Core;
+    using Warranty.Core.FileManagement;
     using Warranty.Core.Security;
 
     public class WarrantyWebsiteRegistry : Registry
@@ -20,6 +21,7 @@ namespace Warranty.UI.Core.Initialization
             For<HttpRequest>().Use(() => HttpContext.Current.Request);
             For<IUserSession>().Use<WarrantyUserSession>();
             For<IWarrantyMailer>().Use<WarrantyMailer>();
+            For(typeof(IFileSystemManager<>)).Use(typeof(FileSystemManager<>));
         }
     }
 }

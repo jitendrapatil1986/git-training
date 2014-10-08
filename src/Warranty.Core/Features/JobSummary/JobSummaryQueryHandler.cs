@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Warranty.Core.Features.JobSummary
 {
+    using Enumerations;
     using NPoco;
     using Security;
 
@@ -22,9 +23,12 @@ namespace Warranty.Core.Features.JobSummary
 
         public JobSummaryModel Handle(JobSummaryQuery query)
         {
+            var user = _userSession.GetCurrentUser();
             var model = GetJobSummary(query.JobId);
             model.JobServiceCalls = GetJobServiceCalls(query.JobId);
             model.JobSelections = GetJobSelections(query.JobId);
+            model.JobNotes = GetJobNotes(query.JobId);
+            model.Attachments = GetJobAttachments(query.JobId);
             //model.JobPayments = GetJobPayments(query.JobId);
 
             return model;
@@ -139,6 +143,40 @@ namespace Warranty.Core.Features.JobSummary
 
             var result = _database.FetchOneToMany<JobSummaryModel.JobServiceCall, JobSummaryModel.JobServiceCall.JobServiceCallNote>(x => x.ServiceCallId, sql, jobId);
             
+            return result;
+        }
+
+        private IEnumerable<JobSummaryModel.JobNote> GetJobNotes(Guid jobId)
+        {
+            const string sql = @"SELECT [JobNoteId]
+                                  ,[JobId]
+                                  ,[Note]
+                                  ,[CreatedBy]
+                                  ,[CreatedDate]
+                                FROM [dbo].[JobNotes]
+                                WHERE JobId = @0
+                                ORDER BY CreatedDate DESC";
+
+            var result = _database.Fetch<JobSummaryModel.JobNote>(sql, jobId);
+
+            return result;
+        }
+
+        private IEnumerable<JobSummaryModel.Attachment> GetJobAttachments(Guid jobId)
+        {
+            const string sql = @"SELECT [JobAttachmentId]
+                                  ,[JobId]
+                                  ,[FilePath]
+                                  ,[DisplayName]
+                                  ,[IsDeleted]
+                                  ,[CreatedBy]
+                                  ,[CreatedDate]
+                                FROM [dbo].[JobAttachments]
+                                WHERE JobId = @0 AND IsDeleted=0
+                                ORDER BY CreatedDate DESC";
+
+            var result = _database.Fetch<JobSummaryModel.Attachment>(sql, jobId);
+
             return result;
         }
     }

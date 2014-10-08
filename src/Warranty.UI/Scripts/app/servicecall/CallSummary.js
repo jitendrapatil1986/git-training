@@ -1,5 +1,5 @@
 require(['/Scripts/app/main.js'], function () {
-require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable','enumeration/PhoneNumberType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
+    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
 
         $(function () {
             $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
@@ -25,6 +25,8 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
             
             $("#Email").editable({
             });
+
+            $(".attached-file-display-name").editable();
 
             $(".phone-number-with-extension").on('shown', function () {
                 $(this).data('editable').input.$input.mask('?(999)-999-9999 **********', { placeholder: " " });
@@ -57,22 +59,22 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                 var actionUrl = $(this).data('action-url');
                 var textArea = $(this).prev('textarea');
                 var message = textArea.val();
-                textArea.val('');
                 var serviceCallId = $(this).data('service-call-id');
                 var parentButton = $("#btn_" + popupWindow.attr('id'));
                 $.ajax({
                     type: "POST",
                     url: actionUrl,
                     data: { id: serviceCallId, message: message },
-
-                    success: function (data) {
+                    success: function (result) {
+                        updateUI(result.actionName);
                         changeButtonText(parentButton);
                         parentButton.removeClass("active");
+                        textArea.val('');
                         popupWindow.hide();
                     }
                 });
             });
-                
+             
 
             $('#btn_execute_reopen').click(function (e) {
                 var popupWindow = $(this).parent();
@@ -116,6 +118,17 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                 viewModel.callSummaryServiceCallStatus(serviceCallStatusData.Complete.DisplayName);
                 viewModel.canBeReopened(true);
                 toastr.success("Success! Service Call has been succesfully completed.");
+            }
+            
+            function updateUI(actionName) {
+                if (actionName == activityTypeEnum.Escalation.DisplayName) {
+                    var isEscalated = viewModel.isEscalated();
+                    viewModel.isEscalated(!isEscalated);
+                }
+                else if (actionName == activityTypeEnum.SpecialProject.DisplayName) {
+                    var isSpecialProject = viewModel.isSpecialProject();
+                    viewModel.isSpecialProject(!isSpecialProject);
+                }
             }
                 
             function changeButtonText(button) {
@@ -273,6 +286,16 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                     }
                 });
             }
+            
+            function CallAttachmentsViewModel(options) {
+                var self = this;
+                self.serviceCallAttachmentId = options.serviceCallAttachmentId;
+                self.serviceCallLineItemId = ko.observable(options.serviceCallLineItemId);
+                self.serviceCallId = options.serviceCallId;
+                self.displayName = ko.observable(options.displayName);
+                self.createdBy = options.createdBy;
+                self.createdDate = options.createdDate;
+            }
 
             function updateServiceCallLineItem(line) {
                 var updateProblemCode = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemCode");
@@ -371,18 +394,33 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                 self.problemDescriptionToAdd = ko.observable('');
                 self.problemCodeToAdd = ko.observable();
                 self.canBeReopened = ko.observable(modelData.canBeReopened);
-                
+                self.isSpecialProject = ko.observable(modelData.isSpecialProject);
+                self.isEscalated = ko.observable(modelData.isEscalated);
                 self.allCallNotes = ko.observableArray([]);
+                self.allAttachments = ko.observableArray([]);
                 self.selectedLineToAttachToNote = ko.observable();
+                self.selectedLineToAttachToAttachment = ko.observable();
                 self.selectedLineToFilterNotes = ko.observable();
+                self.selectedLineToFilterAttachments = ko.observable();
                 self.noteDescriptionToAdd = ko.observable('');
-                self.filteredCallNotes = ko.computed(function() {
+                self.filteredCallNotes = ko.computed(function () {
                     var lineIdToFilterNotes = self.selectedLineToFilterNotes();
                     if (!lineIdToFilterNotes || lineIdToFilterNotes == "") {
                         return self.allCallNotes();
                     } else {
                         return ko.utils.arrayFilter(self.allCallNotes(), function (i) {
                             return i.serviceCallLineItemId() == lineIdToFilterNotes;
+                        });
+                    }
+                });
+                
+                self.filteredAttachments = ko.computed(function () {
+                    var lineIdToFilterAttachments = self.selectedLineToFilterAttachments();
+                    if (!lineIdToFilterAttachments || lineIdToFilterAttachments == "") {
+                        return self.allAttachments();
+                    } else {
+                        return ko.utils.arrayFilter(self.allAttachments(), function (i) {
+                            return i.serviceCallLineItemId() == lineIdToFilterAttachments;
                         });
                     }
                 });
@@ -398,31 +436,46 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                         return false;
                     else
                         return true;
-                }).extend({notify: 'always'});
+                }).extend({ notify: 'always' });
+                
+                self.removeAttachment = function (e) {
+                    var item = $('.boxclose[data-attachment-id="' + e.serviceCallAttachmentId + '"]');
+                    var actionUrl = item.data('url');
+                    var attachmentId = e.serviceCallAttachmentId;
+                    $.ajax({
+                        type: "POST",
+                        url: actionUrl,
+                        data: { id: attachmentId },
+                        success: function (data) {
+                            self.allAttachments.remove(e);
+                            toastr.success("Success! Attachment deleted.");
+                        }
+                    });
+                };
 
-                self.addLineItem = function() {
+                self.addLineItem = function () {
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
                     self.problemCode = $("#addCallLineProblemCode").find('option:selected').text();
                     self.problemCodeId = $("#addCallLineProblemCode").val();
                     self.problemDescription = $("#addCallLineProblemDescription").val();
-                    
+
                     var newProblemCode = $("#addCallLineProblemCode");
                     if (newProblemCode.val() == "") {
                         $(newProblemCode).parent().addClass("has-error");
                         return;
                     }
-                    
+
                     var newProblemDescription = $("#addCallLineProblemDescription");
                     if (newProblemDescription.val() == "") {
                         $(newProblemDescription).parent().addClass("has-error");
                         return;
                     }
-                    
+
                     var newLineItem = new AllLineItemsViewModel({
                         serviceCallId: self.serviceCallId, problemCodeId: self.problemCodeId,
                         problemCode: self.problemCode, problemDescription: self.problemDescription
                     });
-                    
+
                     var lineData = ko.toJSON(newLineItem);
 
                     $.ajax({
@@ -450,12 +503,12 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
 
                             toastr.success("Success! Item added.");
                             highlight($("#allServiceCallLineItems").first());
-                            
+
                             $("#addCallLineProblemDescription").val('');
                             $("#addCallLineProblemCode").val('');
                             self.problemDescription = '';
                         });
-                    
+
                     $(newProblemCode).parent().removeClass("has-error");
                     $(newProblemDescription).parent().removeClass("has-error");
                 };
@@ -489,7 +542,7 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                         contentType: "application/json; charset=utf-8"
                     })
                         .fail(function (response) {
-                            toastr.error("There was an issue adding the call note. Please try again!");
+                            toastr.error("There was a problem adding the call note. Please try again.");
                         })
                         .done(function (response) {
                             self.allCallNotes.unshift(new CallNotesViewModel({
@@ -524,6 +577,13 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                     $("#filterCallNoteLineReferenceDropDown").val('');
                     self.selectedLineToFilterNotes('');
                 };
+                
+                self.resetCallattachmentFilter = function () {
+                    $("#filterCallAttachmentLineReferenceDropDown").val('');
+                    self.selectedLineToFilterAttachments('');
+                };
+                
+
                 self.lineJustCompleted = ko.observable();
                 
                 //undo last line item which was completed.
@@ -575,7 +635,7 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
                 self.verifiedHomeownerSignatureDate = ko.observable($("#verifiedHomeownerSignatureDate").val());
                 
                 self.verifiedSignature = ko.computed(function () {
-                    var result = 'Verification Signed by ' + self.verifiedHomeownerSignature();
+                    var result = 'Verification signed by ' + self.verifiedHomeownerSignature();
                     
                     if (self.verifiedHomeownerSignatureDate()) {
                         result += ' on ' + moment(self.verifiedHomeownerSignatureDate()).format('L');
@@ -646,8 +706,14 @@ require(['jquery', 'ko', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-edita
 
             var persistedAllCallNotesViewModel = modelData.initialServiceNotes;
 
-            _(persistedAllCallNotesViewModel).each(function(note) {
+            _(persistedAllCallNotesViewModel).each(function (note) {
                 viewModel.allCallNotes.push(new CallNotesViewModel(note));
+            });
+            
+            var persistedAllAttachmentsViewModel = modelData.initialAttachments;
+
+            _(persistedAllAttachmentsViewModel).each(function (attachment) {
+                viewModel.allAttachments.push(new CallAttachmentsViewModel(attachment));
             });
         });
     });

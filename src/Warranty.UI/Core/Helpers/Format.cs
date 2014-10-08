@@ -113,7 +113,7 @@ namespace Warranty.UI.Core.Helpers
 
             var htmlString =
                 string.Format(
-                    @"<div class='opened-for opened-for-{0} has-bottom-tooltip' data-original-title='From {1} to {2}'>{3}<p>{4}</p></div>",
+                    @"<div class='opened-for opened-for-{0} has-bottom-tooltip' data-original-title='From {1} to {2}'><div>{3}</div><div>{4}</div></div>",
                     cssClass,
                     String.Format("{0:MMM dd yyyy}", openedDate),
                     String.Format("{0:MMM dd yyyy}", closedDate),
@@ -146,7 +146,7 @@ namespace Warranty.UI.Core.Helpers
             return MvcHtmlString.Create(htmlString);
         }
 
-        public static MvcHtmlString YearsWithinWarranty(int years, DateTime warrantyStartDate)
+        public static MvcHtmlString YearsWithinWarranty(int years, DateTime closeDate)
         {
             string cssClass;
             if (years <= 1)
@@ -158,17 +158,9 @@ namespace Warranty.UI.Core.Helpers
             else
                 cssClass = "warranty-ten-plus-year";
 
-            var stringYears = years <= 1 ? "Year" : "Years";
-
-            var displayedYears = years == 0 ? "1" : years.ToString(CultureInfo.InvariantCulture);
-
-            var toolTip = string.Format("Warranty Start Date: {0}", String.Format("{0:MMM dd yyyy}", warrantyStartDate));
-
-            var htmlString = string.Format(@"<span class='label label-{0} has-bottom-tooltip' title='{1}'>{2} {3}</span>",
+            var htmlString = string.Format(@"<span class='label label-{0} has-bottom-tooltip' title='Close Date'>{1}</span>",
                                             cssClass, 
-                                            toolTip, 
-                                            displayedYears, 
-                                            stringYears);
+                                            closeDate.ToShortDateString());
 
             return MvcHtmlString.Create(htmlString);
         }
@@ -425,7 +417,7 @@ namespace Warranty.UI.Core.Helpers
         {
             var status = serviceCallStatus.DisplayName;
 
-            var htmlString = string.Format("<span id='{0}' class='label label-{1}-service-call' data-bind='{2}'>{3}</span>", id, status.Replace(" ", "-").ToLower(),
+            var htmlString = string.Format("<span id='{0}' class='label label-{1}-service-call' data-bind='{2}'>{3}</span> <span data-bind='visible: isSpecialProject()' class='label label-info'>Special Project</span>", id, status.Replace(" ", "-").ToLower(),
                                            dataBind, status);
             return MvcHtmlString.Create(htmlString);
         }

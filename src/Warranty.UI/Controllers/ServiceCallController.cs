@@ -1,6 +1,7 @@
 ﻿namespace Warranty.UI.Controllers
 {
     using System;
+    using System.Web;
     using System.Web.Mvc;
     using Mailers;
     using Warranty.Core;
@@ -11,6 +12,7 @@
     using Warranty.Core.Features.CreateServiceCallVerifyCustomer;
     using Warranty.Core.Features.ServiceCallSummary;
     using System.Linq;
+    using Warranty.Core.Features.ServiceCallSummary.Attachments;
     using Warranty.Core.Security;
     using Warranty.Core.Features.ServiceCallApproval;
     using Warranty.Core.Features.ServiceCallSummary.ReassignEmployee;
@@ -135,7 +137,7 @@
                 ServiceCallId = id,
                 Text = message
             });
-            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            return Json(new { actionName = ActivityType.SpecialProject.DisplayName }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ToggleEscalate(Guid id, string message)
@@ -153,7 +155,7 @@
                 result.Url = url;
                 _mailer.ServiceCallEscalated(result).SendAsync();
             }
-            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            return Json(new { actionName = ActivityType.Escalation.DisplayName }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetEmployees(Guid id)
@@ -187,9 +189,36 @@
             {
                 ServiceCallId = id,
                 Text = message
-                
+
             });
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult UploadAttachment(ServiceCallUploadAttachmentCommand model)
+        {
+            _mediator.Send(model);
+            return RedirectToAction("CallSummary", new {id = model.ServiceCallId});
+        }
+
+        [HttpPost]
+        public ActionResult RenameAttachment(ServiceCallRenameAttachmentCommand model)
+        {
+            _mediator.Send(model);
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteAttachment(ServiceCallDeleteAttachmentCommand model)
+        {
+            _mediator.Send(model);
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DownloadAttachment(Guid id)
+        {
+            var model = _mediator.Request(new ServiceCallDownloadAttachmentQuery { Id = id });
+            return File(model.Bytes,model.MimeMapping, model.FileName);
         }
     }
 }

@@ -42,7 +42,7 @@ Role "Nsb" -Incremental {
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_nsb_application_name;"
         
     #Install NSB Service
-    &"$nsb_directory\NServiceBus.Host.exe" "/install" "/serviceName:$nsb_service_name" "/username:dwh\headspring" "/password:spring_1"
+    &"$nsb_directory\NServiceBus.Host.exe" "/install" "/serviceName:$nsb_service_name" "/username:dwh\svc-Warranty-nsb" "/password:O2I(&3J,5`$V1h24"
 
     #Start NSB Service
     Start-Service "$nsb_service_name"
@@ -72,6 +72,7 @@ Role "Web" -Incremental {
     poke-xml "$web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@realm" $warranty_identity_uri
     poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Environment']/@value" $environment
     poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='sendFeedbackAddresses']/@value" $sendFeedbackAddresses
+    poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='DocumentSharePath']/@value" $documentSharePath
     
     poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
     poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@subject" $errorReportingSubject

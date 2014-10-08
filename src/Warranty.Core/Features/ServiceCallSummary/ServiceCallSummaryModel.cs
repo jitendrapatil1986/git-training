@@ -7,11 +7,12 @@ namespace Warranty.Core.Features.ServiceCallSummary
     using System.Web.Mvc;
     using Services;
 
-    public class ServiceCallSummaryModel
+    public class ServiceCallSummaryModel : UploadAttachmentBaseViewModel
     {
         public ServiceCall ServiceCallSummary { get; set; }
         public IEnumerable<ServiceCallLine> ServiceCallLines { get; set; }
         public IEnumerable<ServiceCallNote> ServicCallNotes { get; set; }
+        public IEnumerable<Attachment> Attachments { get; set; }
         public NewServiceCallLineItem AddServiceCallLineItem { get; set; }
         public bool CanApprove { get; set; }
         public bool CanReassign { get; set; }
@@ -95,6 +96,16 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public Guid ServiceCallId { get; set; }
             public string Note { get; set; }
             public Guid ServiceCallLineItemId { get; set; }
+            public DateTime? CreatedDate { get; set; }
+            public string CreatedBy { get; set; }
+        }
+
+        public class Attachment
+        {
+            public Guid ServiceCallId { get; set; }
+            public Guid ServiceCallAttachmentId { get; set; }
+            public Guid ServiceCallLineItemId { get; set; }
+            public string DisplayName { get; set; }
             public DateTime? CreatedDate { get; set; }
             public string CreatedBy { get; set; }
         }
