@@ -113,7 +113,7 @@ namespace Warranty.UI.Core.Helpers
 
             var htmlString =
                 string.Format(
-                    @"<div class='opened-for opened-for-{0} has-bottom-tooltip' data-original-title='From {1} to {2}'>{3}<p>{4}</p></div>",
+                    @"<div class='opened-for opened-for-{0} has-bottom-tooltip' data-original-title='From {1} to {2}'><div>{3}</div><div>{4}</div></div>",
                     cssClass,
                     String.Format("{0:MMM dd yyyy}", openedDate),
                     String.Format("{0:MMM dd yyyy}", closedDate),
@@ -425,7 +425,7 @@ namespace Warranty.UI.Core.Helpers
         {
             var status = serviceCallStatus.DisplayName;
 
-            var htmlString = string.Format("<span id='{0}' class='label label-{1}-service-call' data-bind='{2}'>{3}</span>", id, status.Replace(" ", "-").ToLower(),
+            var htmlString = string.Format("<span id='{0}' class='label label-{1}-service-call' data-bind='{2}'>{3}</span> <span data-bind='visible: isSpecialProject()' class='label label-info'>Special Project</span>", id, status.Replace(" ", "-").ToLower(),
                                            dataBind, status);
             return MvcHtmlString.Create(htmlString);
         }
