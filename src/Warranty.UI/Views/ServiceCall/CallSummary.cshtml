@@ -54,7 +54,7 @@
 
             @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
             {
-                <div class="service-call-header-buttons">
+                <div class="warranty-header-buttons">
                     <div data-bind="visible: callSummaryStatusOpen()">
                         @Format.ServiceCallToggleButton("escalate", Model.ServiceCallSummary.IsEscalated, "Escalate", "De-escalate")
                         @Format.ServiceCallToggleButton("special_project", Model.ServiceCallSummary.IsSpecialProject, "Special Project", "Not Special Project")
