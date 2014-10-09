@@ -375,7 +375,7 @@ namespace Warranty.UI.Core.Helpers
             return
                 MvcHtmlString.Create(
                     string.Format(@"<div class='inline-editable-text'><a class='glyphicon glyphicon-envelope text-muted' href='mailto:{2}?subject=David Weekley Homes Warranty'></a> 
-                                    <a href='mailto:{2}?subject=David Weekley Homes Warranty' class='hidden-xs' data-type='text' data-emptytext='Add' id='Email' data-url='{0}' data-pk='{1}' data-clear='false' data-value='{2}'>{2}</a></div>", postUrl, homeownerId, email));
+                                    <a href='mailto:{2}?subject=David Weekley Homes Warranty' class='hidden-xs' data-type='text' data-emptytext='Add Email' id='Email' data-url='{0}' data-pk='{1}' data-clear='false' data-value='{2}'>{2}</a></div>", postUrl, homeownerId, email));
         }
 
         public static MvcHtmlString CellNumber(string cellNumber)
