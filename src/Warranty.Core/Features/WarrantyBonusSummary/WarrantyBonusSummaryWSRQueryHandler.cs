@@ -12,6 +12,9 @@
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
+        private const decimal costControlBonusPercent = (decimal) 0.10;
+        private const decimal allItemsCompletePercentThreshold = 85;
+        private const decimal allItemsCompleteBonusAmount = 100;
 
         public WarrantyBonusSummaryWSRQueryHandler(IDatabase database, IUserSession userSession)
         {
@@ -43,6 +46,8 @@
                 model.TotalWarrantyDifference += bonusSummary.TotalWarrantyDifference;
             }
 
+            model.TotalCostControlBonusAmount = model.TotalWarrantyDifference * costControlBonusPercent;
+
             foreach (var definitelyWouldRecommendSurvey in model.DefinitelyWouldRecommendSurveys)
             {
                 if (definitelyWouldRecommendSurvey.DefinitelyWouldRecommend)
@@ -68,11 +73,13 @@
             {
                 var totalPercentComplete = model.AllItemsCompletes.Sum(allItemsComplete => allItemsComplete.CompletePercentage);
                 var averagePercentComplete = totalPercentComplete/model.AllItemsCompletes.Count();
-                model.TotalAllItemsCompleteBonusAmount = averagePercentComplete >= 85 ? 100 : 0;
+                model.TotalAllItemsCompleteBonusAmount = averagePercentComplete >= allItemsCompletePercentThreshold ? allItemsCompleteBonusAmount : 0;
             }
 
-            model.TotalRepresentativeBonusAmount = model.TotalWarrantyDifference + model.TotalDefinitelyWouldRecommendSurveyBonusAmount + model.TotalExcellentWarrantySurveyBonusAmount +
+            model.TotalRepresentativeBonusAmount = (model.TotalCostControlBonusAmount > 0 ? model.TotalCostControlBonusAmount : 0) + model.TotalDefinitelyWouldRecommendSurveyBonusAmount + model.TotalExcellentWarrantySurveyBonusAmount +
                                                    model.TotalMiscellaneousBonusAmount + model.TotalAllItemsCompleteBonusAmount;
+
+            model.AnyResults = (model.BonusSummaries.Any() || model.DefinitelyWouldRecommendSurveys.Any() || model.ExcellentWarrantySurveys.Any() || model.AllItemsCompletes.Any() || model.MiscellaneousBonuses.Any());
 
             if (message.queryModel != null)
             {
@@ -164,7 +171,6 @@
                                     ON a.EmployeeId = e.EmployeeId
                                     ORDER BY c.CommunityName";
 
-                //var result = _database.Fetch<WarrantyBonusSummaryModel.BonusSummary>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()), -2, startDate, employeeNumber);
                 var result = _database.Fetch<WarrantyBonusSummaryModel.BonusSummary>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()), -2, startDate, employeeNumber);
 
                 return result;
@@ -174,7 +180,7 @@
         private IEnumerable<WarrantyBonusSummaryModel.EmployeeTiedToRepresentative> GetEmployeesTiedToRepresentatives()
         {
             var user = _userSession.GetCurrentUser();
-
+            
             const string sql = @"SELECT e.EmployeeNumber, a.* FROM Employees e
                                 INNER JOIN
                                 (
@@ -225,7 +231,7 @@
         {
             using (_database)
             {
-                const string sql = @"SELECT 'Test Community' as CommunityName, 90 as CompletePercentage";  //TODO: Replace with real script.
+                const string sql = @"SELECT 'Test Community' as CommunityName, 85 as CompletePercentage";  //TODO: Replace with real script.
 
                 var result = _database.Fetch<WarrantyBonusSummaryModel.ItemsComplete>(sql);
 
@@ -237,7 +243,7 @@
         {
             using (_database)
             {
-                const string sql = @"SELECT 'Test Customer' as CustomerName, 1 as ExcellentWarranty";  //TODO: Replace with real script.
+                const string sql = @"SELECT 'Test Customer' as CustomerName, 1 as ExcellentWarranty, 50 as BonusAmount";  //TODO: Replace with real script.
 
                 var result = _database.Fetch<WarrantyBonusSummaryModel.ExcellentWarrantySurvey>(sql);
 
@@ -249,7 +255,7 @@
         {
             using (_database)
             {
-                const string sql = @"SELECT 'Test Customer' as CustomerName, 1 as DefinitelyWouldRecommend";  //TODO: Replace with real script.
+                const string sql = @"SELECT 'Test Customer' as CustomerName, 0 as DefinitelyWouldRecommend, 0 as BonusAmount";  //TODO: Replace with real script.
 
                 var result = _database.Fetch<WarrantyBonusSummaryModel.DefinitelyWouldRecommendSurvey>(sql);
 

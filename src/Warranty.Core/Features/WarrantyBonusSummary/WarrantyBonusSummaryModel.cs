@@ -15,6 +15,10 @@
 
         public string SelectedEmployeeNumber { get; set; }
         public DateTime? FilteredDate { get; set; }
+        public bool AnyResults { get; set; }
+        public string EmployeeName { get; set; }
+        public string EmployeeNumber { get; set; }
+        public string DivisionName { get; set; }
         public int TotalNumberOfWarrantableHomes { get; set; }
         public decimal TotalMaterialDollarsSpent { get; set; }
         public decimal TotalLaborDollarsSpent { get; set; }
@@ -23,6 +27,7 @@
         public decimal TotalDollarsSpent { get; set; }
         public decimal TotalWarrantyAllowance { get; set; }
         public decimal TotalWarrantyDifference { get; set; }
+        public decimal TotalCostControlBonusAmount { get; set; }
         public decimal TotalDefinitelyWouldRecommendSurveyBonusAmount { get; set; }
         public decimal TotalExcellentWarrantySurveyBonusAmount { get; set; }
         public decimal TotalAllItemsCompleteBonusAmount { get; set; }
@@ -33,8 +38,6 @@
         {
             public string EmployeeName { get; set; }
             public string EmployeeNumber { get; set; }
-            //public int Month { get; set; }
-            //public int Year { get; set; }
             public string DivisionName { get; set; }
             public string CommunityName { get; set; }
             public int NumberOfWarrantableHomes { get; set; }

@@ -818,9 +818,14 @@ span.boxclose{
     font-size: 16px;
 }
 
-#warrantyBonusSummary .table-bonus tr th:first-child, #warrantyBonusSummary .table-bonus tr td:first-child{
+.table-bonus tr th:first-child, .table-bonus tr td:first-child{
     width: 300px;
 }
+
+.table-bonus-survey tr th:first-child, .table-bonus-survey tr td:first-child{
+    width: 500px;
+}
+
 
 @media (max-width: 767px) {
 
@@ -863,5 +868,11 @@ a.boxclose {
         width: 300px;
         top: 59px;
         margin-left: -150px; //half of width.
+    }
+}
+
+@media print {
+    .no-print {
+        display: none;
     }
 }
