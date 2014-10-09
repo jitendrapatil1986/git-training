@@ -104,7 +104,7 @@
 
             if (user.IsInRole(UserRoles.WarrantyServiceRepresentative))
             {
-                whereClause = "AND EmployeeNumber = " + user.EmployeeNumber + "";
+                whereClause += "AND EmployeeNumber = " + user.EmployeeNumber + "";
             }
 
             var result = _database.Fetch<WSRLoadingReportModel.EmployeeTiedToRepresentative>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote(), whereClause));
