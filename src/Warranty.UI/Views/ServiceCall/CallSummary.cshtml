@@ -38,7 +38,7 @@
         @Format.DateMonthDayYear(escalationDate) - @escalationReason
     </div>
 }
-
+<div style="display: none;" data-bind="visible: true">
 <div class="container">
     <div class="col-md-12">
 
@@ -379,6 +379,7 @@
 
         </div>
     </div>
+</div>
 </div>
 @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
 {

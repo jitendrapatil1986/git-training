@@ -57,8 +57,8 @@
 
                 return new WarrantyDollarsSpentWidgetModel
                            {
-                               AmountSpentThisMonth = totalPaymentsThisMonth/numberOfHomesThisMonth,
-                               AmountSpentLastMonth = totalPaymentsLastMonth/numberOfHomesLastMonth,
+                               AmountSpentThisMonth = numberOfHomesThisMonth > 0 ? totalPaymentsThisMonth/numberOfHomesThisMonth : 0,
+                               AmountSpentLastMonth = numberOfHomesLastMonth > 0 ? totalPaymentsLastMonth/numberOfHomesLastMonth : 0,
                            };
             }
         }

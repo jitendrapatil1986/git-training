@@ -72,6 +72,7 @@
             public string AssignedToEmployeeNumber { get; set; }
             public string Address { get; set; }
             public string CallNumber { get; set; }
+            public string JobNumber { get; set; }
             public DateTime CreatedDate { get; set; }
             public string HomeownerName { get; set; }
             public int HomeownerNumber { get; set; }

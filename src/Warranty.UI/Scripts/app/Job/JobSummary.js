@@ -45,7 +45,6 @@ require(['/Scripts/app/main.js'], function () {
                 var self = this;
 
                 self.jobId = ko.observable($("#jobId").val());
-                self.userCanAddNotes = ko.observable(modelData.canAddNotes);
                 self.allJobNotes = ko.observableArray([]);
                 self.jobNoteDescriptionToAdd = ko.observable('');
                 
@@ -94,7 +93,6 @@ require(['/Scripts/app/main.js'], function () {
                     clearNoteFields();
                 };
 
-                self.userCanAddAttachments = ko.observable(modelData.canAddAttachments);
                 self.allJobAttachments = ko.observableArray([]);
 
                 self.removeAttachment = function(e) {

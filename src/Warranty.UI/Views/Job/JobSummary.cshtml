@@ -7,9 +7,7 @@
 <div class="container">
     <div class="col-md-12">
         @Html.HiddenFor(model => model.JobId, new { id = "jobId" })
-        @Html.HiddenFor(model => model.CanAddNotes, new { id = "userCanAddJobNotes", data_bind="value: userCanAddNotes"} )
-        @Html.HiddenFor(model => model.CanAddAttachments, new{ id = "userCanAddJobAttachments", data_bind="value: userCanAddAttachments"})
-            
+
         <section class="margin-bottom-10">
             <h2 class="pull-left no-margin">Job #@Model.JobNumber <small>@Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)</small>
             </h2>
@@ -129,6 +127,98 @@
                                 <div class="clearfix"></div>
                             </div>
                         }
+                        
+                        <section >
+                            <h3 class="col-md-12 margin-top-10">Attachments
+                                <span>
+                                    <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Attachment" data-toggle="collapse" data-target="#addJobAttachment"><span class="glyphicon glyphicon-plus"></span></button>
+                                </span>
+                            </h3>
+                            <div id="addJobAttachment" class="collapse">
+                                <div class="panel-body no-bottom-padding">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            @using (Html.BeginForm("UploadAttachment", "Job"))
+                                            {
+                                                @Html.HiddenFor(x => Model.JobId, new { @Name = "JobId" })
+                                                @Html.EditorFor(x => x.TempFiles)
+                                                <input type="submit" class="btn btn-primary trigger-file-uploader" value="Add" />
+                                                <button class="btn btn-link" data-toggle="collapse" data-target="#addJobAttachment">Cancel</button>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <em data-bind="visible: allJobAttachments().length < 1" class="padding-left-15 padding-top-7 pull-left">No Attachments Available</em>
+                            <div class="remove-list-style attachments row">
+                                <div class="clearfix"></div>
+                                <br/>
+                                <ul data-bind="foreach: allJobAttachments">
+                                    <li class="attached-file">
+                                        @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                                        {
+                                            <span data-url="" data-bind="attr: { 'data-attachment-id': jobAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "Job")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
+                                        }
+                                        <a data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "Job")/' + jobAttachmentId}"><span class="glyphicon glyphicon-download-alt"></span></a>
+                                        <a href="#" data-bind="attr: { 'data-attachment-id': jobAttachmentId}, editable: displayName, editableOptions: { pk: jobAttachmentId, url: '@Url.Action("RenameAttachment", "Job")    '}"  class="attached-file-display-name"></a>
+                                        <br/>
+                                        <span data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section >
+                            <h3 class="col-md-12 margin-top-10">Notes
+                                <span>
+                                    <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Note" data-toggle="collapse" data-target="#addJobNote"><span class="glyphicon glyphicon-plus"></span></button>
+                                </span>
+                            </h3>
+                            <div id="addJobNote" class="collapse">
+                                <div class="panel-body no-bottom-padding">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            @Html.TextArea("Description", null, new {id = "addJobNoteDescription", @class = "form-control", data_bind = "text: jobNoteDescriptionToAdd, value: jobNoteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3})
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class="form-submit">
+                                        <button class="btn btn-primary" data-bind="click: addJobNote, enable: jobNoteDescriptionToAdd().length > 0">Add</button>
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#addJobNote" data-bind="click: cancelJobNote">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <em data-bind="visible: allJobNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">No Notes Available</em>
+                            <div class="remove-list-style">
+                                <div class="clearfix"></div>
+                                <br/>
+                                <ul>
+                                    <div data-bind="foreach: allJobNotes">
+                                        <div id="allJobNotes" class="service-call-line">
+                                            <li class="row">
+                                                <div class="col-md-12">
+                                                    <div class="no-left-right-padding">
+                                                        <div class="row">
+                                                            <div class="col-md-11">
+                                                                <span data-bind="text: createdBy"></span>
+                                                                <span data-bind="text: moment(createdDate).format('L')"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <p data-bind="text: note"></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </ul>
+                            </div>
+                        </section>
                     </div>
                     <div class="tab-pane" id="job_selections">
                         <div class="col-md-12">
@@ -160,99 +250,6 @@
                     </div>
                 </div>
             </div>
-            <section >
-                <h3 class="col-md-12 margin-top-10">Attachments
-                    <span>
-                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Attachment" data-toggle="collapse" data-target="#addJobAttachment" data-bind="visible: userCanAddAttachments()"><span class="glyphicon glyphicon-plus"></span></button>
-                    </span>
-                </h3>
-                <div id="addJobAttachment" class="collapse" data-bind="visible: userCanAddAttachments()">
-                    <div class="panel-body no-bottom-padding">
-                        <div class="row">
-                            <div class="col-md-12">
-                                @using (Html.BeginForm("UploadAttachment", "Job"))
-                                {
-                                    @Html.HiddenFor(x => Model.JobId, new { @Name = "JobId" })
-                                    @Html.EditorFor(x => x.TempFiles)
-                                    <input type="submit" class="btn btn-primary trigger-file-uploader" value="Add" />
-                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addJobAttachment">Cancel</button>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br />
-                <em data-bind="visible: allJobAttachments().length < 1" class="padding-left-15 padding-top-7 pull-left">No Attachments Available</em>
-                <div class="remove-list-style attachments row">
-                    <div class="clearfix"></div>
-                    <br/>
-                    <ul data-bind="foreach: allJobAttachments">
-                        <li class="attached-file">
-                            @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
-                            {
-                                <span data-url="" data-bind="attr: { 'data-attachment-id': jobAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "Job")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
-                            }
-                            <a data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "Job")/' + jobAttachmentId}"><span class="glyphicon glyphicon-download-alt"></span></a>
-                            <a href="#" data-bind="attr: { 'data-attachment-id': jobAttachmentId}, editable: displayName, editableOptions: { pk: jobAttachmentId, url: '@Url.Action("RenameAttachment", "Job")    '}"  class="attached-file-display-name"></a>
-                            <br/>
-                            <span data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></span>
-                        </li>
-                    </ul>
-                </div>
-            </section>
-
-            <section >
-                <h3 class="col-md-12 margin-top-10">Notes
-                    <span>
-                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Note" data-toggle="collapse" data-target="#addJobNote" data-bind="visible: userCanAddNotes()"><span class="glyphicon glyphicon-plus"></span></button>
-                    </span>
-                </h3>
-                <div id="addJobNote" class="collapse" data-bind="visible: userCanAddNotes()">
-                    <div class="panel-body no-bottom-padding">
-                        <div class="row">
-                            <div class="col-md-12">
-                                @Html.TextArea("Description", null, new {id = "addJobNoteDescription", @class = "form-control", data_bind = "text: jobNoteDescriptionToAdd, value: jobNoteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3})
-                            </div>
-                        </div>
-                        <br/>
-                        <div class="form-submit">
-                            <button class="btn btn-primary" data-bind="click: addJobNote, enable: jobNoteDescriptionToAdd().length > 0">Add</button>
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#addJobNote" data-bind="click: cancelJobNote">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-                <br />
-                <em data-bind="visible: allJobNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">No Notes Available</em>
-                <div class="remove-list-style">
-                    <div class="clearfix"></div>
-                    <br/>
-                    <ul>
-                        <div data-bind="foreach: allJobNotes">
-                            <div id="allJobNotes" class="service-call-line">
-                                <li class="row">
-                                    <div class="col-md-12">
-                                        <div class="no-left-right-padding">
-                                            <div class="row">
-                                                <div class="col-md-11">
-                                                    <span data-bind="text: createdBy"></span>
-                                                    <span data-bind="text: moment(createdDate).format('L')"></span>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <p data-bind="text: note"></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-                    </ul>
-                </div>
-            </section>
-
         </div>
     </div>
 </div>
@@ -264,8 +261,6 @@
             return {
                 initialJobNotes: @Html.Raw(Model.JobNotes.ToJson()),
                 initialJobAttachments: @Html.Raw(Model.Attachments.ToJson()),
-                canAddNotes: @Html.Raw(Model.CanAddNotes.ToJson()),
-                canAddAttachments: @Html.Raw(Model.CanAddAttachments.ToJson()),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
             };
         });

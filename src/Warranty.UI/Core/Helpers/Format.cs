@@ -146,7 +146,7 @@ namespace Warranty.UI.Core.Helpers
             return MvcHtmlString.Create(htmlString);
         }
 
-        public static MvcHtmlString YearsWithinWarranty(int years, DateTime warrantyStartDate)
+        public static MvcHtmlString YearsWithinWarranty(int years, DateTime closeDate)
         {
             string cssClass;
             if (years <= 1)
@@ -158,17 +158,9 @@ namespace Warranty.UI.Core.Helpers
             else
                 cssClass = "warranty-ten-plus-year";
 
-            var stringYears = years <= 1 ? "Year" : "Years";
-
-            var displayedYears = years == 0 ? "1" : years.ToString(CultureInfo.InvariantCulture);
-
-            var toolTip = string.Format("Warranty Start Date: {0}", String.Format("{0:MMM dd yyyy}", warrantyStartDate));
-
-            var htmlString = string.Format(@"<span class='label label-{0} has-bottom-tooltip' title='{1}'>{2} {3}</span>",
+            var htmlString = string.Format(@"<span class='label label-{0} has-bottom-tooltip' title='Close Date'>{1}</span>",
                                             cssClass, 
-                                            toolTip, 
-                                            displayedYears, 
-                                            stringYears);
+                                            closeDate.ToShortDateString());
 
             return MvcHtmlString.Create(htmlString);
         }
@@ -383,7 +375,7 @@ namespace Warranty.UI.Core.Helpers
             return
                 MvcHtmlString.Create(
                     string.Format(@"<div class='inline-editable-text'><a class='glyphicon glyphicon-envelope text-muted' href='mailto:{2}?subject=David Weekley Homes Warranty'></a> 
-                                    <a href='mailto:{2}?subject=David Weekley Homes Warranty' class='hidden-xs' data-type='text' data-emptytext='Add' id='Email' data-url='{0}' data-pk='{1}' data-clear='false' data-value='{2}'>{2}</a></div>", postUrl, homeownerId, email));
+                                    <a href='mailto:{2}?subject=David Weekley Homes Warranty' class='hidden-xs' data-type='text' data-emptytext='Add Email' id='Email' data-url='{0}' data-pk='{1}' data-clear='false' data-value='{2}'>{2}</a></div>", postUrl, homeownerId, email));
         }
 
         public static MvcHtmlString CellNumber(string cellNumber)
