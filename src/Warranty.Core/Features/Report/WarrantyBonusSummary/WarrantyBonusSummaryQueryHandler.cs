@@ -1,4 +1,4 @@
-﻿namespace Warranty.Core.Features.WarrantyBonusSummary
+﻿namespace Warranty.Core.Features.Report.WarrantyBonusSummary
 {
     using System.Collections.Generic;
     using Extensions;

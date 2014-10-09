@@ -1,6 +1,5 @@
-﻿namespace Warranty.Core.Features.WarrantyBonusSummary
+﻿namespace Warranty.Core.Features.Report.WarrantyBonusSummary
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Enumerations;

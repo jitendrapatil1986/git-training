@@ -348,11 +348,11 @@
     <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemCommanHandler.cs" />
     <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemModel.cs" />
     <Compile Include="Features\UploadAttachmentBaseViewModel.cs" />
-    <Compile Include="Features\WarrantyBonusSummary\WarrantyBonusSummaryQuery.cs" />
-    <Compile Include="Features\WarrantyBonusSummary\WarrantyBonusSummaryQueryHandler.cs" />
-    <Compile Include="Features\WarrantyBonusSummary\WarrantyBonusSummaryModel.cs" />
-    <Compile Include="Features\WarrantyBonusSummary\WarrantyBonusSummaryWSRQuery.cs" />
-    <Compile Include="Features\WarrantyBonusSummary\WarrantyBonusSummaryWSRQueryHandler.cs" />
+    <Compile Include="Features\Report\WarrantyBonusSummary\WarrantyBonusSummaryQuery.cs" />
+    <Compile Include="Features\Report\WarrantyBonusSummary\WarrantyBonusSummaryQueryHandler.cs" />
+    <Compile Include="Features\Report\WarrantyBonusSummary\WarrantyBonusSummaryModel.cs" />
+    <Compile Include="Features\Report\WarrantyBonusSummary\WarrantyBonusSummaryWSRQuery.cs" />
+    <Compile Include="Features\Report\WarrantyBonusSummary\WarrantyBonusSummaryWSRQueryHandler.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetWSRQuery.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetWSRQueryHandler.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetModel.cs" />

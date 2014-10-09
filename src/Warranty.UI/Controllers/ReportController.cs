@@ -4,7 +4,7 @@ using System.Web.Mvc;
 namespace Warranty.UI.Controllers
 {
     using Warranty.Core;
-    using Warranty.Core.Features.WarrantyBonusSummary;
+    using Warranty.Core.Features.Report.WarrantyBonusSummary;
 
     public class ReportController : Controller
     {
