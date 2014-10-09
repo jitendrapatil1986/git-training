@@ -79,7 +79,7 @@
                                     WHERE CloseDate >= DATEADD(yy, @1, @0) AND CloseDate <= @0
                                     GROUP BY e.EmployeeId, EmployeeName, EmployeeNumber, CityCode
                                 ) as a
-                                INNER JOIN 
+                                LEFT OUTER JOIN 
                                 (
                                     SELECT SUM(Amount) as TotalDollarsSpent
                                          , e.EmployeeId, EmployeeName, EmployeeNumber, CityCode
@@ -98,7 +98,7 @@
                                     GROUP BY e.EmployeeId, EmployeeName, EmployeeNumber, CityCode
                                 ) as b
                                 ON a.EmployeeId = b.EmployeeId
-                                INNER JOIN 
+                                 LEFT OUTER JOIN 
                                 (
                                     SELECT AVG(DATEDIFF(DD, sc.CreatedDate, CompletionDate)) as AverageDaysClosed
                                          , SUM(CASE WHEN DATEDIFF(DD, sc.CreatedDate, CompletionDate) <= 7 THEN 1 ELSE 0 END) * 100.0/COUNT(*) as PercentClosedWithinSevenDays     

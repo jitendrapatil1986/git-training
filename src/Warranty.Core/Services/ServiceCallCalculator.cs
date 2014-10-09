@@ -7,7 +7,7 @@
     {
         public static int CalculatePercentComplete(int numberOfDaysRemaining)
         {
-            if (numberOfDaysRemaining == 0)
+            if (numberOfDaysRemaining <= 0)
                 return 100;
 
             if (numberOfDaysRemaining > WarrantyConstants.NumberOfDaysAllowedToCloseServiceCall)
@@ -23,7 +23,7 @@
                 return WarrantyConstants.NumberOfDaysAllowedToCloseServiceCall;
 
             var numberOfDaysLeft = WarrantyConstants.NumberOfDaysAllowedToCloseServiceCall - (int) (DateTime.Today - startDate.Date).TotalDays;
-            return Math.Max(0, numberOfDaysLeft);
+            return numberOfDaysLeft;
         }
     }
 }

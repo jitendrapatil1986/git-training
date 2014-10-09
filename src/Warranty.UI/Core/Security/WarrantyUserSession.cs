@@ -9,7 +9,8 @@
 
     public class WarrantyUserSession : IUserSession
     {
-        private const string SecurityOrgPrefix = "SEC_Market_";
+        private const string SecMarketPrefix = "SEC_Market_";
+        private const string OrgMarketPrefix = "ORG_Market_";
 
         public IUser GetCurrentUser()
         {
@@ -66,9 +67,9 @@
 
         private static List<string> GetMarkets(IEnumerable<string> roles)
         {
-            var markets = roles.Where(x => x.StartsWith(SecurityOrgPrefix));
+            var markets = roles.Where(x => x.StartsWith(OrgMarketPrefix));
 
-            return markets.Select(x => x.Replace(SecurityOrgPrefix, "")).ToList();
+            return markets.Select(x => x.Replace(OrgMarketPrefix, "")).ToList();
         }
     }
 }
