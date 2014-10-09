@@ -102,7 +102,6 @@
 
             var whereClause = "WHERE EmployeeNumber <> ''";
 
-            //if ((user.IsInRole(UserRoles.WarrantyServiceRepresentative) || user.IsInRole(UserRoles.WarrantyServiceManager)))
             if (user.IsInRole(UserRoles.WarrantyServiceRepresentative))
             {
                 whereClause = "AND EmployeeNumber = " + user.EmployeeNumber + "";
