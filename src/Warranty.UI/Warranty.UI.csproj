@@ -413,6 +413,7 @@
     <Content Include="Views\Shared\EditorTemplates\FileUpload.cshtml" />
     <Content Include="UploadHandler.ashx" />
     <Content Include="Views\Report\WSRLoadingReport.cshtml" />
+    <Content Include="Views\Report\MailMerge.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
