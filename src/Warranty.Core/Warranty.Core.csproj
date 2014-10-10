@@ -279,6 +279,9 @@
     <Compile Include="Features\JobSummary\JobSummaryModel.cs" />
     <Compile Include="Features\JobSummary\JobSummaryQuery.cs" />
     <Compile Include="Features\JobSummary\JobSummaryQueryHandler.cs" />
+    <Compile Include="Features\Report\WSRLoadingReport\WSRLoadingReportModel.cs" />
+    <Compile Include="Features\Report\WSRLoadingReport\WSRLoadingReportQuery.cs" />
+    <Compile Include="Features\Report\WSRLoadingReport\WSRLoadingReportQueryHandler.cs" />
     <Compile Include="Features\Report\MailMerge\MailMergeDownloadAsCsvModel.cs" />
     <Compile Include="Features\Report\MailMerge\MailMergeDownloadAsCsvQuery.cs" />
     <Compile Include="Features\Report\MailMerge\MailMergeDownloadAsCsvQueryHandler.cs" />

@@ -806,6 +806,29 @@ span.boxclose{
     margin-right: 10px;
 }
 
+.table-wsr-loading tr th{
+    text-align: right;
+    vertical-align: middle;
+}
+
+.table-wsr-loading tr th:first-child, .table-wsr-loading tr td:first-child{
+    text-align: left;
+}
+
+.successData{
+    color: #3c763d;
+    font-weight: bold;
+}
+
+.totalLine{
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.table-wsr-loading tr th:first-child, .table-wsr-loading tr td:first-child{
+    width: 800px;
+}
+
 @media (max-width: 767px) {
 
 a.boxclose {
@@ -847,5 +870,11 @@ a.boxclose {
         width: 300px;
         top: 59px;
         margin-left: -150px; //half of width.
+    }
+}
+
+@media print {
+    .no-print {
+        display: none;
     }
 }
