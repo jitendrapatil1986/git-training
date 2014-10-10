@@ -12,21 +12,19 @@ else
     foreach (var line in Model.MyServiceCalls)
     {
         <div class="my-service-call service-call-line cursor-pointer hide" onclick="location.href='@Url.Action("CallSummary", "ServiceCall", new {id=line.ServiceCallId})';">
-            <div class="col-md-1">
+            <div class="col-md-4">
+                <strong>@Format.HomeOwner(line.HomeownerName, line.HomeownerNumber)</strong><br />@line.Address
+            </div>
+            <div class="col-md-2">@Format.PhoneNumber(line.PhoneNumber)</div>
+            <div class="col-md-2">
                 <small class="text-muted">
                     @Html.ActionLink(line.JobNumber, "JobSummary", "Job", new {id = line.JobId}, null)
                 </small><br/>@Format.YearsWithinWarranty(line.YearsWithinWarranty, line.WarrantyStartDate)
             </div>
-            <div class="col-md-3">
-                <div class="col-md-1 hidden-sm hidden-xs">                                        
+            <div class="col-md-1 hidden-sm hidden-xs">                                        
                     @Format.NumberOfLineItems(line.NumberOfLineItems)
-                </div>
-                <div class="col-md-10">
-                    @Format.HomeOwner(line.HomeownerName, line.HomeownerNumber)<br />@line.Address
-                </div>
             </div>
-            <div class="col-md-3">@Format.PhoneNumber(line.PhoneNumber)</div>
-            <div class="col-md-2 pull-right has-bottom-tooltip" title="@Format.DateForServiceCallWiget(line.CreatedDate)">
+            <div class="col-md-3 pull-right has-bottom-tooltip" title="@Format.DateForServiceCallWiget(line.CreatedDate)">
                 <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@line.NumberOfDaysRemaining)<br/>
                 <div class="progress time-remaining-progress hidden-sm hidden-xs">
                     <div class="progress-bar @Css.ServiceCallProgressBar(line.NumberOfDaysRemaining)" role="progressbar" style="width: @line.PercentComplete%">
@@ -34,15 +32,12 @@ else
                     </div>
                 </div>
             </div>
-            <div class="col-md-1 text-center">
-                @Html.ServiceCallActions(line.ServiceCallId)
-            </div>
             <div class="clearfix"></div>
         </div>
     }
     if (Model.MyServiceCalls.Count() > 5)
     {
-        <div>
+        <div class="padding-5">
             <span class="text-muted">Show:</span> 
             <a href="#" class="show-more-service-calls">5</a>
             @if (Model.MyServiceCalls.Count() > 5)

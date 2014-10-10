@@ -5,7 +5,7 @@
 <div class="col-md-12">
     <div class="todo-header">
         <span>To Dos</span>
-        @Html.DropDownList("SelectecToDoType", Model.ToDoTypes.Select(x => new SelectListItem { Text = x.DisplayName, Value = @Css.ToDoClass(x) }), "All", new { id = "toDoSelect" })
+        @Html.DropDownList("SelectecToDoType", Model.ToDoTypes.Select(x => new SelectListItem { Text = x.DisplayName, Value = @Css.ToDoClass(x) }), "All", new { id = "toDoSelect" , @class="dropdown form-control"})
     </div>
     <div class="todo-container">
         @if (Model.ToDos.Any())
