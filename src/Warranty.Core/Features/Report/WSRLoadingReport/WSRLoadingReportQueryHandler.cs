@@ -79,10 +79,7 @@
         {
             var user = _userSession.GetCurrentUser();
 
-            const string sql = @"SELECT e.EmployeeNumber, a.* FROM Employees e
-                                INNER JOIN
-                                (
-                                    SELECT WarrantyRepresentativeEmployeeId
+            const string sql = @"SELECT DISTINCT EmployeeNumber, WarrantyRepresentativeEmployeeId
                                         , LOWER(e.EmployeeName) as EmployeeName
                                     FROM [ServiceCalls] sc
                                     INNER JOIN Employees e
@@ -94,20 +91,18 @@
                                     INNER JOIN Cities ci
                                     ON cm.CityId = ci.CityId
                                     WHERE CityCode IN ({0})
-                                    GROUP BY WarrantyRepresentativeEmployeeId, e.EmployeeName
-                                ) a
-                                ON e.EmployeeId = a.WarrantyRepresentativeEmployeeId
-                                {1} /*WHERE */
-                                ORDER BY e.EmployeeName";
+                                    AND EmployeeNumber <> ''
+                                    {1} /* Additional Where */
+                                    ORDER BY EmployeeName";
 
-            var whereClause = "WHERE EmployeeNumber <> ''";
+            var additionalWhereClause = "";
 
             if (user.IsInRole(UserRoles.WarrantyServiceRepresentative))
             {
-                whereClause += "AND EmployeeNumber = " + user.EmployeeNumber + "";
+                additionalWhereClause += "AND EmployeeNumber = " + user.EmployeeNumber + "";
             }
 
-            var result = _database.Fetch<WSRLoadingReportModel.EmployeeTiedToRepresentative>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote(), whereClause));
+            var result = _database.Fetch<WSRLoadingReportModel.EmployeeTiedToRepresentative>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote(), additionalWhereClause));
 
             return result;
         }
