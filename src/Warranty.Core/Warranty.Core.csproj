@@ -176,7 +176,7 @@
     <Compile Include="Enumerations\ServiceCallLineItemStatus.cs" />
     <Compile Include="Enumerations\StatView.cs" />
     <Compile Include="Enumerations\UserRoles.cs" />
-    <Compile Include="Enumerations\ToDoIcon.cs" />
+    <Compile Include="Enumerations\ToDoType.cs" />
     <Compile Include="Enumerations\Month.cs" />
     <Compile Include="Enumerations\ServiceCallStatus.cs" />
     <Compile Include="DataAccess\GuidComb.cs" />
@@ -395,7 +395,6 @@
     <Compile Include="ToDoInfrastructure\Models\ToDoPaymentRequestApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoServiceCallApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\ToDo.cs" />
-    <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoEscalationApproval.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoEscalationApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\ToDoAggregator.cs" />
     <Compile Include="WarrantyCoreRegistry.cs" />
