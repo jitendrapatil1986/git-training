@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Web.Mvc;
 
 namespace Warranty.UI.Controllers
 {
     using Warranty.Core;
     using Warranty.Core.Features.Report.MailMerge;
+    using Warranty.Core.Features.Report.WSRLoadingReport;
 
     public class ReportController : Controller
     {
@@ -44,6 +45,21 @@ namespace Warranty.UI.Controllers
                 });
 
             return File(result.Bytes, result.MimeMapping, result.FileName);
+        }
+
+		public ActionResult WSRLoadingReport()
+        {
+            var resultModel = _mediator.Request(new WSRLoadingReportQuery());
+
+            return View(resultModel);
+        }
+
+        [HttpPost]
+        public ActionResult WSRLoadingReport(WSRLoadingReportModel model)
+        {
+            var resultModel = _mediator.Request(new WSRLoadingReportQuery { queryModel = model });
+
+            return View(resultModel);
         }
 
     }
