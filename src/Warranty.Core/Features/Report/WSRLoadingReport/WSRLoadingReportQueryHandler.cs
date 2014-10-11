@@ -102,9 +102,12 @@
                 additionalWhereClause += "AND EmployeeNumber = " + user.EmployeeNumber + "";
             }
 
-            var result = _database.Fetch<WSRLoadingReportModel.EmployeeTiedToRepresentative>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote(), additionalWhereClause));
+            using (_database)
+            {
+                var result = _database.Fetch<WSRLoadingReportModel.EmployeeTiedToRepresentative>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote(), additionalWhereClause));
 
-            return result;
+                return result;
+            }
         }
     }
 }
