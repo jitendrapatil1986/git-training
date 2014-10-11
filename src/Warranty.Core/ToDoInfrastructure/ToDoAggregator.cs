@@ -32,14 +32,12 @@ namespace Warranty.Core.ToDoInfrastructure
                 var user = _userSession.GetCurrentUser();
                 var serviceCallApprovalToDos = GetServiceCallApprovalToDos(user, _database);
                 var communityEmployeeAssignmentToDos = GetCommunityEmployeeAssignmentToDos(user, _database);
-                //var escalationApprovalToDos = GetEscalationApprovalToDos();
                 //var paymentRequestApprovalToDos = GetPaymentRequestApprovalToDos();
 
                 var toDos = new List<IToDo>();
 
                 toDos.AddRange(serviceCallApprovalToDos);
                 toDos.AddRange(communityEmployeeAssignmentToDos);
-                //toDos.AddRange(escalationApprovalToDos);
                 //toDos.AddRange(paymentRequestApprovalToDos);
 
                 return toDos.OrderBy(x => x.Date).ToList();
@@ -115,23 +113,6 @@ namespace Warranty.Core.ToDoInfrastructure
 
             return toDos;
         }
-
-        //private IEnumerable<IToDo> GetEscalationApprovalToDos()
-        //{
-        //    //TODO: Not the final query
-        //    var todo = new ToDoEscalationApproval()
-        //    {
-        //        Model = new ToDoEscalationApprovalModel
-        //        {
-        //            HomeOwnerAddress = "Address",
-        //            HomeOwnerName = "Name",
-        //            EscalationRequestedBy = "John S"
-        //        },
-        //        Date = DateTime.Now
-        //    };
-
-        //    yield return todo;
-        //}
 
         //private IEnumerable<IToDo> GetPaymentRequestApprovalToDos()
         //{
