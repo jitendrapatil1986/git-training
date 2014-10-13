@@ -22,3 +22,4 @@ $errorReportingEmailAddresses = "dane.schilling@headspring.com, deran@headspring
 $errorReportingSubject = "Warranty Exception (Training)"
 
 $documentSharePath = "C:\temp\dwh_files\warranty"
+$surveyApiBaseUri = "http://surveytraining.davidweekleyhomes.com/api/"

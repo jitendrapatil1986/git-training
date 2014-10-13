@@ -23,3 +23,4 @@ $errorReportingEmailAddresses = "dane.schilling@headspring.com, deran@headspring
 $errorReportingSubject = "Warranty Exception (prod)"
 
 $documentSharePath = "\\wkcorpdata1\warranty"
+$surveyApiBaseUri = "http://survey.davidweekleyhomes.com/api/"
