@@ -1,34 +1,42 @@
 ﻿namespace Warranty.Core.Features.Report.WarrantyBonusSummary
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Enumerations;
     using Extensions;
     using NPoco;
     using Security;
+    using Survey.Client;
 
     public class WarrantyBonusSummaryWSRQueryHandler : IQueryHandler<WarrantyBonusSummaryWSRQuery, WarrantyBonusSummaryModel>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
+        private readonly ISurveyClient _survey;
         private const decimal costControlBonusPercent = (decimal) 0.10;
         private const decimal allItemsCompletePercentThreshold = 85;
         private const decimal allItemsCompleteBonusAmount = 100;
+        private const string definitelyWillThreshold = "DEFINITELY WILL";
+        private const decimal definitelyWillBonusAmount = 50;
+        private const int excellentWarrantyThreshold = 9;
+        private const decimal excellentWarrantyBonusAmount = 50;
 
-        public WarrantyBonusSummaryWSRQueryHandler(IDatabase database, IUserSession userSession)
+        public WarrantyBonusSummaryWSRQueryHandler(IDatabase database, IUserSession userSession, ISurveyClient survey)
         {
             _database = database;
             _userSession = userSession;
+            _survey = survey;
         }
 
-        public WarrantyBonusSummaryModel Handle(WarrantyBonusSummaryWSRQuery message)
+        public WarrantyBonusSummaryModel Handle(WarrantyBonusSummaryWSRQuery query)
         {
             var model = new WarrantyBonusSummaryModel
                 {
-                    BonusSummaries = GetBonusByEmployeeAndCommunity(message),
+                    BonusSummaries = GetBonusByEmployeeAndCommunity(query),
                     EmployeeTiedToRepresentatives = GetEmployeesTiedToRepresentatives(),
-                    DefinitelyWouldRecommendSurveys = GetDefinitelyWouldRecommendSurveys(),
-                    ExcellentWarrantySurveys = GetExcellentWarrantySurveys(),
+                    DefinitelyWouldRecommendSurveys = GetDefinitelyWouldRecommendSurveys(query),
+                    ExcellentWarrantySurveys = GetExcellentWarrantySurveys(query),
                     AllItemsCompletes = GetAllItemsComplete(),
                     MiscellaneousBonuses = GetMiscellaneousBonuses(),
                 };
@@ -49,17 +57,25 @@
 
             foreach (var definitelyWouldRecommendSurvey in model.DefinitelyWouldRecommendSurveys)
             {
-                if (definitelyWouldRecommendSurvey.DefinitelyWouldRecommend)
+                if (!string.IsNullOrEmpty(definitelyWouldRecommendSurvey.DefinitelyWillRecommend))
                 {
-                    model.TotalDefinitelyWouldRecommendSurveyBonusAmount += definitelyWouldRecommendSurvey.BonusAmount;
+                    if (definitelyWouldRecommendSurvey.DefinitelyWillRecommend.ToUpper() == definitelyWillThreshold)
+                    {
+                        definitelyWouldRecommendSurvey.BonusAmount = definitelyWillBonusAmount;
+                        model.TotalDefinitelyWouldRecommendSurveyBonusAmount += definitelyWillBonusAmount;
+                    }
                 }
             }
 
             foreach (var excellentWarrantySurvey in model.ExcellentWarrantySurveys)
             {
-                if (excellentWarrantySurvey.ExcellentWarranty)
+                if (!string.IsNullOrEmpty(excellentWarrantySurvey.ExcellentWarrantyService))
                 {
-                    model.TotalExcellentWarrantySurveyBonusAmount += excellentWarrantySurvey.BonusAmount;
+                    if (Convert.ToInt16(excellentWarrantySurvey.ExcellentWarrantyService) >= excellentWarrantyThreshold)
+                    {
+                        excellentWarrantySurvey.BonusAmount = excellentWarrantyBonusAmount;
+                        model.TotalExcellentWarrantySurveyBonusAmount += excellentWarrantyBonusAmount;
+                    }
                 }
             }
 
@@ -80,9 +96,9 @@
 
             model.AnyResults = (model.BonusSummaries.Any() || model.DefinitelyWouldRecommendSurveys.Any() || model.ExcellentWarrantySurveys.Any() || model.AllItemsCompletes.Any() || model.MiscellaneousBonuses.Any());
 
-            if (message.queryModel != null)
+            if (query.queryModel != null)
             {
-                model.FilteredDate = message.queryModel.FilteredDate;
+                model.FilteredDate = query.queryModel.FilteredDate;
             }
 
             return model;
@@ -94,7 +110,6 @@
 
             var employeeNumber = user.EmployeeNumber;
 
-            //if (!(user.IsInRole(UserRoles.WarrantyServiceRepresentative) && user.IsInRole(UserRoles.WarrantyServiceManager)))
             if (!user.IsInRole(UserRoles.WarrantyServiceRepresentative))
             {
                 if (message.queryModel != null)
@@ -159,7 +174,7 @@
                                         ON ca.EmployeeId = e.EmployeeId
                                         WHERE CloseDate >= DATEADD(yy, @0, @1)
                                         AND CloseDate <= @1
-        --*****                                AND Ci.CityCode IN ({0})
+                                        AND Ci.CityCode IN ({0})
                                         AND EmployeeNumber=@2
                                         GROUP BY j.CommunityId
                                     ) b
@@ -194,31 +209,34 @@
                                     ON j.CommunityId = cm.CommunityId
                                     INNER JOIN Cities ci
                                     ON cm.CityId = ci.CityId
---*****                                    WHERE CityCode IN ({0})
+                                    WHERE CityCode IN ({0})
+                                    AND EmployeeNumber <> ''
                                     GROUP BY WarrantyRepresentativeEmployeeId, e.EmployeeName
                                 ) a
                                 ON e.EmployeeId = a.WarrantyRepresentativeEmployeeId
                                 {1} /*WHERE */
                                 ORDER BY e.EmployeeName";
 
-            var whereClause = "";
+            var additionalWhereClause = "";
 
-            //if ((user.IsInRole(UserRoles.WarrantyServiceRepresentative) || user.IsInRole(UserRoles.WarrantyServiceManager)))
             if (user.IsInRole(UserRoles.WarrantyServiceRepresentative))
             {
-                whereClause = "WHERE EmployeeNumber = " + user.EmployeeNumber + "";
+                additionalWhereClause += "AND EmployeeNumber = " + user.EmployeeNumber + "";
             }
 
-            var result = _database.Fetch<WarrantyBonusSummaryModel.EmployeeTiedToRepresentative>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote(), whereClause));
+            using (_database)
+            {
+                var result = _database.Fetch<WarrantyBonusSummaryModel.EmployeeTiedToRepresentative>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote(), additionalWhereClause));
 
-            return result;
+                return result;
+            }
         }
 
         private IEnumerable<WarrantyBonusSummaryModel.MiscellaneousBonus> GetMiscellaneousBonuses()
         {
             using (_database)
             {
-                const string sql = @"SELECT 'Test Misc' as Description, 35 as BonusAmount";  //TODO: Replace with real script.
+                const string sql = @"SELECT 'Test Misc' as Description, 35 as BonusAmount WHERE 1 = 0";  //TODO: Replace with real script.
 
                 var result = _database.Fetch<WarrantyBonusSummaryModel.MiscellaneousBonus>(sql);
 
@@ -230,7 +248,7 @@
         {
             using (_database)
             {
-                const string sql = @"SELECT 'Test Community' as CommunityName, 85 as CompletePercentage";  //TODO: Replace with real script.
+                const string sql = @"SELECT 'Test Community' as CommunityName, 85 as CompletePercentage WHERE 1 = 0";  //TODO: Replace with real script.
 
                 var result = _database.Fetch<WarrantyBonusSummaryModel.ItemsComplete>(sql);
 
@@ -238,28 +256,88 @@
             }
         }
 
-        private IEnumerable<WarrantyBonusSummaryModel.ExcellentWarrantySurvey> GetExcellentWarrantySurveys()
+        private IEnumerable<WarrantyBonusSummaryModel.ExcellentWarrantySurvey> GetExcellentWarrantySurveys(WarrantyBonusSummaryWSRQuery query)
         {
-            using (_database)
+            var user = _userSession.GetCurrentUser();
+            var startDate = SystemTime.Today;
+            var endDate = SystemTime.Today;
+
+            if (query.queryModel != null)
             {
-                const string sql = @"SELECT 'Test Customer' as CustomerName, 1 as ExcellentWarranty, 50 as BonusAmount";  //TODO: Replace with real script.
-
-                var result = _database.Fetch<WarrantyBonusSummaryModel.ExcellentWarrantySurvey>(sql);
-
-                return result;
+                if (query.queryModel.FilteredDate != null)
+                {
+                    startDate = query.queryModel.FilteredDate.Value.AddDays(1 - query.queryModel.FilteredDate.Value.Day);
+                    endDate = query.queryModel.FilteredDate.Value.AddMonths(1).AddDays(-query.queryModel.FilteredDate.Value.Day);
+                }
             }
+
+            var employeeNumber = user.EmployeeNumber;
+
+            if (!user.IsInRole(UserRoles.WarrantyServiceRepresentative))
+            {
+                if (query.queryModel != null)
+                {
+                    if (!string.IsNullOrEmpty(query.queryModel.SelectedEmployeeNumber))
+                    {
+                        employeeNumber = query.queryModel.SelectedEmployeeNumber;
+                    }
+                }
+            }
+
+            var surveyData = _survey.Get.ElevenMonthWarrantySurvey(new
+            {
+                StartDate = startDate,
+                EndDate = endDate,
+            });
+
+            IEnumerable<WarrantyBonusSummaryModel.ExcellentWarrantySurvey> results =
+                surveyData.Details.ToObject<List<WarrantyBonusSummaryModel.ExcellentWarrantySurvey>>();
+
+            results = results.Where(x => x.WarrantyServiceRepresentativeEmployeeId == employeeNumber);
+
+            return results;
         }
 
-        private IEnumerable<WarrantyBonusSummaryModel.DefinitelyWouldRecommendSurvey> GetDefinitelyWouldRecommendSurveys()
+        private IEnumerable<WarrantyBonusSummaryModel.DefinitelyWouldRecommendSurvey> GetDefinitelyWouldRecommendSurveys(WarrantyBonusSummaryWSRQuery query)
         {
-            using (_database)
+            var user = _userSession.GetCurrentUser();
+            var startDate = SystemTime.Today;
+            var endDate = SystemTime.Today;
+
+            if (query.queryModel != null)
             {
-                const string sql = @"SELECT 'Test Customer' as CustomerName, 0 as DefinitelyWouldRecommend, 0 as BonusAmount";  //TODO: Replace with real script.
-
-                var result = _database.Fetch<WarrantyBonusSummaryModel.DefinitelyWouldRecommendSurvey>(sql);
-
-                return result;
+                if (query.queryModel.FilteredDate != null)
+                {
+                    startDate = query.queryModel.FilteredDate.Value.AddDays(1 - query.queryModel.FilteredDate.Value.Day);
+                    endDate = query.queryModel.FilteredDate.Value.AddMonths(1).AddDays(-query.queryModel.FilteredDate.Value.Day);
+                }
             }
+
+            var employeeNumber = user.EmployeeNumber;
+
+            if (!user.IsInRole(UserRoles.WarrantyServiceRepresentative))
+            {
+                if (query.queryModel != null)
+                {
+                    if (!string.IsNullOrEmpty(query.queryModel.SelectedEmployeeNumber))
+                    {
+                        employeeNumber = query.queryModel.SelectedEmployeeNumber;
+                    }
+                }
+            }
+
+            var surveyData = _survey.Get.ElevenMonthWarrantySurvey(new
+                {
+                    StartDate = startDate,
+                    EndDate = endDate,
+                });
+
+            IEnumerable<WarrantyBonusSummaryModel.DefinitelyWouldRecommendSurvey> results =
+                surveyData.Details.ToObject<List<WarrantyBonusSummaryModel.DefinitelyWouldRecommendSurvey>>();
+            
+            results = results.Where(x => x.WarrantyServiceRepresentativeEmployeeId == employeeNumber);
+
+            return results;
         }
 
     }

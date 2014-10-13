@@ -7,32 +7,32 @@
 }
 
 <div class="container">
-    <h3>Warranty Service Rep. Bonus Summary</h3>
+    <h3>WSR Bonus Summary</h3>
     <div class="panel panel-default no-print">
         <div class="panel-heading">
             <div id="warrantyBonusSummaryReportFilter">
                 <div class="no-bottom-padding">
-                    <div class="col-md-12">
-                        <h4>Report Filters</h4>
-                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             
-                            @using (Html.BeginForm())
+                            @using (Html.BeginForm("WarrantyBonusSummaryWSRReport", "Report", FormMethod.Post, new { @class = "form-inline" }))
                             {
+                                <div class="form-group margin-right-10">
+                                    <span><strong>Filter by</strong></span>
+                                </div>
+                                
                                 if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || 1 == 1)
                                 {
-                                    <div class="col-md-3">
+                                    <div class="form-group">
                                         @Html.DropDownList("Model.SelectedEmployeeNumber", Model.EmployeeTiedToRepresentatives.Select(c => new SelectListItem {Text = c.EmployeeName, Value = c.EmployeeNumber.ToString()}), "Select Representative", new{@class="form-control text-capitalize"})
                                     </div>
                                 }
                                 
-                                <div class="col-md-2">
-                                    @Html.TextBox("Model.FilteredDate", null, new { id = "warrantyBonusSummaryDate", @class = "form-control monthpicker-input", data_bind = "attr:{placeholder: 'Select Date'}"})
+                                <div class="form-group">
+                                    @Html.TextBox("Model.FilteredDate", null, new { id = "warrantyBonusSummaryDate", @class = "form-control monthpicker-input", placeholder = "Month"})
                                 </div>
-                                <div class="col-md-1">
-                                    @Html.Label("")
-                                    <input type="submit" class="btn btn-primary" value="Run" />
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-primary" value="Apply" />
                                 </div>
                             }
                         </div>
@@ -150,7 +150,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        @Html.Label("$50 for each response of 'Yes' to 'Def Wld Rec' on 11 month survey")
+                        @Html.Label("$50 for each response of 'Definitely Will' to 'Def Wld Rec' on 11 month survey")
                     </div>
                 </div>
                 <br/>
@@ -167,9 +167,9 @@
                         @foreach (var line in Model.DefinitelyWouldRecommendSurveys)
                         {
                             <tr>
-                                <td>@Html.DisplayFor(model => line.CustomerName)</td>
-                                <td>@Html.DisplayFor(model => line.JobName)</td>
-                                <td>@Html.DisplayFor(model => line.DefinitelyWouldRecommend)</td>
+                                <td>@Html.DisplayFor(model => line.HomeownerName)</td>
+                                <td>@Html.DisplayFor(model => line.JobNumber)</td>
+                                <td>@Html.DisplayFor(model => line.DefinitelyWillRecommend)</td>
                                 <td>@Format.Money(line.BonusAmount)</td>
                             </tr>
                         }
@@ -194,7 +194,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        @Html.Label("$50 for each response of 'Yes' to 'Excellent Warranty' on 11 month survey")
+                        @Html.Label("$50 for each response of '9 or 10' to 'Excellent Warranty' on 11 month survey")
                     </div>
                 </div>
                 <br/>
@@ -211,9 +211,9 @@
                         @foreach (var line in Model.ExcellentWarrantySurveys)
                         {
                             <tr>
-                                <td>@Html.DisplayFor(model => line.CustomerName)</td>
-                                <td>@Html.DisplayFor(model => line.JobName)</td>
-                                <td>@Html.DisplayFor(model => line.ExcellentWarranty)</td>
+                                <td>@Html.DisplayFor(model => line.HomeownerName)</td>
+                                <td>@Html.DisplayFor(model => line.JobNumber)</td>
+                                <td>@Html.DisplayFor(model => line.ExcellentWarrantyService)</td>
                                 <td>@Format.Money(line.BonusAmount)</td>
                             </tr>
                         }

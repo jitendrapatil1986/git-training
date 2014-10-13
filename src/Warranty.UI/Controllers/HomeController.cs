@@ -192,10 +192,5 @@
 
             return result;
         }
-
-        public ActionResult WarrantyBonusSummary()
-        {
-            return View();
-        }
     }
 }

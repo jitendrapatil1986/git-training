@@ -77,13 +77,5 @@ namespace Warranty.UI.Controllers
 
             return View(resultModel);
         }
-
-        public ActionResult WarrantyBonusSummary()
-        {
-            var model = _mediator.Request(new WarrantyBonusSummaryQuery());
-
-            return View(model);
-        }
-
     }
 }

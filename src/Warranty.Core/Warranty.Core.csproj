@@ -74,6 +74,9 @@
     <Reference Include="StructureMap">
       <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
     </Reference>
+    <Reference Include="Survey.Client">
+      <HintPath>..\packages\Survey.Client.1.0.0.24\lib\net45\Survey.Client.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -363,8 +366,6 @@
     <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemCommanHandler.cs" />
     <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemModel.cs" />
     <Compile Include="Features\UploadAttachmentBaseViewModel.cs" />
-    <Compile Include="Features\Report\WarrantyBonusSummary\WarrantyBonusSummaryQuery.cs" />
-    <Compile Include="Features\Report\WarrantyBonusSummary\WarrantyBonusSummaryQueryHandler.cs" />
     <Compile Include="Features\Report\WarrantyBonusSummary\WarrantyBonusSummaryModel.cs" />
     <Compile Include="Features\Report\WarrantyBonusSummary\WarrantyBonusSummaryWSRQuery.cs" />
     <Compile Include="Features\Report\WarrantyBonusSummary\WarrantyBonusSummaryWSRQueryHandler.cs" />

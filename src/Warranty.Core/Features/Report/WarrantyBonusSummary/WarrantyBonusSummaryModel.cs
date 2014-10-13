@@ -58,21 +58,25 @@
 
         public class DefinitelyWouldRecommendSurvey
         {
-            public Guid CustomerId { get; set; }
-            public string CustomerName { get; set; }
-            public Guid JobId { get; set; }
-            public string JobName { get; set; }
-            public bool DefinitelyWouldRecommend { get; set; }
+            public int ElevenMonthWarrantySurveyId { get; set; }
+            public string HomeownerName { get; set; }
+            public string JobNumber { get; set; }
+            public DateTime SurveyDate { get; set; }
+            public string WarrantyServiceRepresentativeEmployeeId { get; set; }
+            public string WarrantyServiceRepresentativeName { get; set; }
+            public string DefinitelyWillRecommend { get; set; }
             public decimal BonusAmount { get; set; }
         }
 
         public class ExcellentWarrantySurvey
         {
-            public Guid CustomerId { get; set; }
-            public string CustomerName { get; set; }
-            public Guid JobId { get; set; }
-            public string JobName { get; set; }
-            public bool ExcellentWarranty { get; set; }
+            public int ElevenMonthWarrantySurveyId { get; set; }
+            public string HomeownerName { get; set; }
+            public string JobNumber { get; set; }
+            public DateTime SurveyDate { get; set; }
+            public string WarrantyServiceRepresentativeEmployeeId { get; set; }
+            public string WarrantyServiceRepresentativeName { get; set; }
+            public string ExcellentWarrantyService { get; set; }
             public decimal BonusAmount { get; set; }
         }
 
