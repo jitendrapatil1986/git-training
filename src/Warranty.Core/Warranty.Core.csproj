@@ -39,6 +39,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Common.Security.1.1.57.0\lib\net45\Common.Security.dll</HintPath>
     </Reference>
+    <Reference Include="CsvHelper">
+      <HintPath>..\packages\CsvHelper.2.8.0\lib\net40-client\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="FluentValidation, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
@@ -98,6 +101,8 @@
     <Compile Include="Configurations\EnumerationDisplayConverter.cs" />
     <Compile Include="Configurations\WarrantyConstants.cs" />
     <Compile Include="Configurations\WarrantyContractResolver.cs" />
+    <Compile Include="CsvBuilder\CsvBuilder.cs" />
+    <Compile Include="CsvBuilder\ICsvBuilder.cs" />
     <Compile Include="DataAccess\AuditEventListener.cs" />
     <Compile Include="DataAccess\EnumerationMapper.cs" />
     <Compile Include="DataAccess\Conventions\Int32EnumerationType.cs" />
@@ -176,7 +181,7 @@
     <Compile Include="Enumerations\ServiceCallLineItemStatus.cs" />
     <Compile Include="Enumerations\StatView.cs" />
     <Compile Include="Enumerations\UserRoles.cs" />
-    <Compile Include="Enumerations\ToDoIcon.cs" />
+    <Compile Include="Enumerations\ToDoType.cs" />
     <Compile Include="Enumerations\Month.cs" />
     <Compile Include="Enumerations\ServiceCallStatus.cs" />
     <Compile Include="DataAccess\GuidComb.cs" />
@@ -223,6 +228,7 @@
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetQueryHandler.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQuery.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQueryHandler.cs" />
+    <Compile Include="Features\DownloadFileBase.cs" />
     <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemCommand.cs" />
     <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemCommandHandler.cs" />
     <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemModel.cs" />
@@ -273,6 +279,15 @@
     <Compile Include="Features\JobSummary\JobSummaryModel.cs" />
     <Compile Include="Features\JobSummary\JobSummaryQuery.cs" />
     <Compile Include="Features\JobSummary\JobSummaryQueryHandler.cs" />
+    <Compile Include="Features\Report\WSRLoadingReport\WSRLoadingReportModel.cs" />
+    <Compile Include="Features\Report\WSRLoadingReport\WSRLoadingReportQuery.cs" />
+    <Compile Include="Features\Report\WSRLoadingReport\WSRLoadingReportQueryHandler.cs" />
+    <Compile Include="Features\Report\MailMerge\MailMergeDownloadAsCsvModel.cs" />
+    <Compile Include="Features\Report\MailMerge\MailMergeDownloadAsCsvQuery.cs" />
+    <Compile Include="Features\Report\MailMerge\MailMergeDownloadAsCsvQueryHandler.cs" />
+    <Compile Include="Features\Report\MailMerge\MailMergeQuery.cs" />
+    <Compile Include="Features\Report\MailMerge\MailMergeReport.cs" />
+    <Compile Include="Features\Report\MailMerge\MailMergeQueryHandler.cs" />
     <Compile Include="Features\SendFeedback\SendFeedbackCommand.cs" />
     <Compile Include="Features\SendFeedback\SendFeedbackCommandHandler.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallDenyHandler.cs" />
@@ -400,7 +415,6 @@
     <Compile Include="ToDoInfrastructure\Models\ToDoPaymentRequestApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoServiceCallApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\ToDo.cs" />
-    <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoEscalationApproval.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoEscalationApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\ToDoAggregator.cs" />
     <Compile Include="WarrantyCoreRegistry.cs" />

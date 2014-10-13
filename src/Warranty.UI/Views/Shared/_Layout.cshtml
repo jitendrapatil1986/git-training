@@ -89,6 +89,8 @@
             <div class="container">
                 <ul class="nav navbar-nav col-xs-6 col-sm-11 col-md-10">
                     @NavItemHelper(NavItem.Home, Url.Action("Index", "Home"))
+                    <li class="divider divider-vertical hidden-xs"></li>
+                    @NavItemSectionHelper(NavHeaderItem.Reports.Key)
                 </ul>
                 <div class="nav nav-extra col-xs-6 col-sm-1 col-md-2">
                     <div class="pull-right">

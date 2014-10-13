@@ -123,6 +123,10 @@ h2, h3, h4 {
 
 .margin-bottom-20 { margin: 0 0 20px 0;}
 
+.padding-5 {
+    padding: 5px;
+}
+
 .no-border {
    border: none;
 }
@@ -280,18 +284,17 @@ h2, h3, h4 {
 .todo-header {
     font-size: 1.6em;
     color: #666;
-    padding-left: 5px;
     margin-bottom: 5px;
     border-bottom: none;
 }
 
-.todo-container {
-    border-left: 1px dashed #ddd;
+.todo-header select{
+    margin-top: 10px;
+    max-width: 250px;
 }
 
-.todo-header select {
-    margin-left: 15px;
-    font-size: small;
+.todo-container {
+    border-left: 1px dashed #ddd;
 }
 
 .wrap-text {
@@ -564,11 +567,11 @@ a.delete-group-item:hover {
     float: right;
 }
 
-.service-call-header-buttons{
+.warranty-header-buttons{
     margin-top:0px;
 }
 
-.service-call-header-buttons .btn{
+.warranty-header-buttons .btn{
     margin-left: 10px;
 }
 
@@ -651,7 +654,7 @@ a.delete-group-item:hover {
         background: white;
     }
 
-    .service-call-header-buttons .btn{
+    .warranty-header-buttons .btn{
         float: left !important;
         width: 100%;
         margin: 0 0 14px 0;
@@ -808,6 +811,27 @@ span.boxclose{
     text-align: left;
 }
 
+.table-bonus tr th:first-child, .table-bonus tr td:first-child{
+    width: 300px;
+}
+
+.table-bonus-survey tr th:first-child, .table-bonus-survey tr td:first-child{
+    width: 500px;
+}
+
+.margin-right-10 {
+    margin-right: 10px;
+}
+
+.table-wsr-loading tr th{
+    text-align: right;
+    vertical-align: middle;
+}
+
+.table-wsr-loading tr th:first-child, .table-wsr-loading tr td:first-child{
+    text-align: left;
+}
+
 .successData{
     color: #3c763d;
     font-weight: bold;
@@ -818,14 +842,9 @@ span.boxclose{
     font-size: 16px;
 }
 
-.table-bonus tr th:first-child, .table-bonus tr td:first-child{
-    width: 300px;
+.table-wsr-loading tr th:first-child, .table-wsr-loading tr td:first-child{
+    width: 800px;
 }
-
-.table-bonus-survey tr th:first-child, .table-bonus-survey tr td:first-child{
-    width: 500px;
-}
-
 
 @media (max-width: 767px) {
 
