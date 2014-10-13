@@ -6,18 +6,18 @@
         <div class="panel-heading">
             <div id="wsrLoadingReportFilter">
                 <div class="no-bottom-padding">
-                    <div class="col-md-12">
-                        <h4>Filter By</h4>
-                    </div>
                     <div class="row">
                         <div class="col-md-12">
-                            @using (Html.BeginForm())
+                            @using (Html.BeginForm("WSRLoadingReport", "Report", FormMethod.Post, new { @class = "form-inline" }))
                             {
-                                <div class="col-md-3">
+                                <div class="form-group margin-right-10">
+                                    <span><strong>Filter by</strong></span>
+                                </div>
+                                <div class="form-group">
                                     @Html.DropDownList("Model.SelectedEmployeeNumber", Model.EmployeeTiedToRepresentatives.Select(c => new SelectListItem {Text = c.EmployeeName, Value = c.EmployeeNumber.ToString()}), "Select Representative", new{@class="form-control text-capitalize"})
                                 </div>
-                                <div class="col-md-1">
-                                    <input type="submit" class="btn btn-primary" value="Run" />
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-primary" value="Apply" />
                                 </div>
                             }
                         </div>
