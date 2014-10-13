@@ -4,17 +4,21 @@
     using ActivityLogger;
     using Entities;
     using Enumerations;
+    using InnerMessages;
     using NPoco;
+    using NServiceBus;
 
     public class ReassignEmployeeCommandHandler : ICommandHandler<ReassignEmployeeCommand>
     {
         private readonly IDatabase _database;
         private readonly IActivityLogger _logger;
+        private readonly IBus _bus;
 
-        public ReassignEmployeeCommandHandler(IDatabase database, IActivityLogger logger)
+        public ReassignEmployeeCommandHandler(IDatabase database, IActivityLogger logger, IBus bus)
         {
             _database = database;
             _logger = logger;
+            _bus = bus;
         }
 
         public void Handle(ReassignEmployeeCommand message)
@@ -27,6 +31,11 @@
 
                 serviceCall.WarrantyRepresentativeEmployeeId = employeeModel.EmployeeId;
                 _database.Update(serviceCall);
+
+                _bus.Send<NotifyServiceCallEmployeeUpdated>(x =>
+                    {
+                        x.ServiceCallId = serviceCall.ServiceCallId;
+                    });
                 
                 var logDetails = string.Format("Employee {0} has been assigned to service call #{1}", employeeModel.DisplayName, serviceCall.ServiceCallNumber);
                 _logger.Write("Reassign employee to service call", logDetails, serviceCall.ServiceCallId, ActivityType.Reassignment, ReferenceType.ServiceCall);

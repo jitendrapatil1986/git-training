@@ -77,6 +77,7 @@
       <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
@@ -109,6 +110,15 @@
     <Compile Include="Handlers\Payments\PaymentIdUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentPaymentAmountUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentStatusUpdatedHandler.cs" />
+    <Compile Include="Handlers\ServiceCalls\NotifyServiceCallCompletionUpdatedHandler.cs" />
+    <Compile Include="Handlers\ServiceCalls\NotifyServiceCallCreated.cs" />
+    <Compile Include="Handlers\ServiceCalls\NotifyServiceCallEmployeeUpdated.cs" />
+    <Compile Include="Handlers\ServiceCalls\NotifyServiceCallEscalatedUpdated.cs" />
+    <Compile Include="Handlers\ServiceCalls\NotifyServiceCallHomeownerVerificationSignatureUpdated.cs" />
+    <Compile Include="Handlers\ServiceCalls\NotifyServiceCallLineItemCreatedHandler.cs" />
+    <Compile Include="Handlers\ServiceCalls\NotifyServiceCallLineItemProblemCodeUpdated.cs" />
+    <Compile Include="Handlers\ServiceCalls\NotifyServiceCallLineItemCompletionUpdatedHandler.cs" />
+    <Compile Include="Handlers\ServiceCalls\NotifyServiceCallSpecialProjectUpdated.cs" />
     <Compile Include="Security\WarrantyServerUserSession.cs" />
     <Compile Include="StructureMapConfig.cs" />
     <Compile Include="WarrantyRegistry.cs" />
@@ -125,9 +135,21 @@
       <Project>{991144F8-B588-4604-930B-3224FEC6FF32}</Project>
       <Name>Warranty.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Warranty.Events\Warranty.Events.csproj">
+      <Project>{288B6502-98F6-47E7-8DFF-44F7F8CFF1D1}</Project>
+      <Name>Warranty.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Warranty.InnerMessages\Warranty.InnerMessages.csproj">
+      <Project>{1d13d0d6-bbc3-402a-b140-0330ac3f6627}</Project>
+      <Name>Warranty.InnerMessages</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Warranty.LotusExtract\Warranty.LotusExtract.csproj">
       <Project>{AF1DBB4F-8023-4488-9961-96471C6647F3}</Project>
       <Name>Warranty.LotusExtract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Warranty.UI\Warranty.UI.csproj">
+      <Project>{ECCA9355-3FF0-4C3A-BE4C-9E02B5C8D242}</Project>
+      <Name>Warranty.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

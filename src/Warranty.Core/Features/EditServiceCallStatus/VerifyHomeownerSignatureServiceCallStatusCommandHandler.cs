@@ -2,15 +2,19 @@
 {
     using Entities;
     using Enumerations;
+    using InnerMessages;
     using NPoco;
+    using NServiceBus;
 
     public class VerifyHomeownerSignatureServiceCallStatusCommandHandler : ICommandHandler<VerifyHomeownerSignatureServiceCallStatusCommand, VerifyHomeownerSignatureServiceCallStatusModel>
     {
         private readonly IDatabase _database;
+        private readonly IBus _bus;
 
-        public VerifyHomeownerSignatureServiceCallStatusCommandHandler(IDatabase database)
+        public VerifyHomeownerSignatureServiceCallStatusCommandHandler(IDatabase database, IBus bus)
         {
             _database = database;
+            _bus = bus;
         }
 
         public VerifyHomeownerSignatureServiceCallStatusModel Handle(VerifyHomeownerSignatureServiceCallStatusCommand message)
@@ -25,6 +29,11 @@
                     updateServiceCall.ServiceCallStatus = ServiceCallStatus.HomeownerSigned;
 
                 _database.Update(updateServiceCall);
+                
+                _bus.Send<NotifyServiceCallHomeownerVerificationSignatureUpdated>(x =>
+                    {
+                        x.ServiceCallId = updateServiceCall.ServiceCallId;
+                    });
 
                 var model = new VerifyHomeownerSignatureServiceCallStatusModel
                     {

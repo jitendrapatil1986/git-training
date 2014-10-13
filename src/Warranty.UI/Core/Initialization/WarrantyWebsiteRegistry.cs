@@ -3,9 +3,11 @@ using FluentValidation.Mvc;
 
 namespace Warranty.UI.Core.Initialization
 {
+    using System.Configuration;
     using System.Web;
     using System.Web.Mvc;
     using Mailers;
+    using NServiceBus;
     using Security;
     using StructureMap.Configuration.DSL;
     using Warranty.Core;
