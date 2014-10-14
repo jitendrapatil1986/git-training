@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Entities;
     using Enumerations;
     using Extensions;
     using NPoco;
@@ -21,6 +22,7 @@
         private const decimal definitelyWillBonusAmount = 50;
         private const int excellentWarrantyThreshold = 9;
         private const decimal excellentWarrantyBonusAmount = 50;
+        private const string allItemsCompleteThreshold = "YES";
 
         public WarrantyBonusSummaryWSRQueryHandler(IDatabase database, IUserSession userSession, ISurveyClient survey)
         {
@@ -37,7 +39,7 @@
                     EmployeeTiedToRepresentatives = GetEmployeesTiedToRepresentatives(),
                     DefinitelyWouldRecommendSurveys = GetDefinitelyWouldRecommendSurveys(query),
                     ExcellentWarrantySurveys = GetExcellentWarrantySurveys(query),
-                    AllItemsCompletes = GetAllItemsComplete(),
+                    AllItemsCompletes = GetAllItemsComplete(query),
                     MiscellaneousBonuses = GetMiscellaneousBonuses(),
                 };
 
@@ -87,8 +89,8 @@
             if (model.AllItemsCompletes.Any())
             {
                 var totalPercentComplete = model.AllItemsCompletes.Sum(allItemsComplete => allItemsComplete.CompletePercentage);
-                var averagePercentComplete = totalPercentComplete/model.AllItemsCompletes.Count();
-                model.TotalAllItemsCompleteBonusAmount = averagePercentComplete >= allItemsCompletePercentThreshold ? allItemsCompleteBonusAmount : 0;
+                model.TotalAllItemsCompletePercent = Math.Round(totalPercentComplete/model.AllItemsCompletes.Count(), 2);
+                model.TotalAllItemsCompleteBonusAmount = model.TotalAllItemsCompletePercent >= allItemsCompletePercentThreshold ? allItemsCompleteBonusAmount : 0;
             }
 
             model.TotalRepresentativeBonusAmount = (model.TotalCostControlBonusAmount > 0 ? model.TotalCostControlBonusAmount : 0) + model.TotalDefinitelyWouldRecommendSurveyBonusAmount + model.TotalExcellentWarrantySurveyBonusAmount +
@@ -244,16 +246,67 @@
             }
         }
 
-        private IEnumerable<WarrantyBonusSummaryModel.ItemsComplete> GetAllItemsComplete()
+        private IEnumerable<WarrantyBonusSummaryModel.ItemsComplete> GetAllItemsComplete(WarrantyBonusSummaryWSRQuery query)
         {
+            var user = _userSession.GetCurrentUser();
+            var startDate = SystemTime.Today;
+            var endDate = SystemTime.Today;
+
+            if (query.queryModel != null)
+            {
+                if (query.queryModel.FilteredDate != null)
+                {
+                    startDate = query.queryModel.FilteredDate.Value.AddDays(1 - query.queryModel.FilteredDate.Value.Day);
+                    endDate = query.queryModel.FilteredDate.Value.AddMonths(1).AddDays(-query.queryModel.FilteredDate.Value.Day);
+                }
+            }
+
+            var employeeNumber = user.EmployeeNumber;
+
+            if (!user.IsInRole(UserRoles.WarrantyServiceRepresentative))
+            {
+                if (query.queryModel != null)
+                {
+                    if (!string.IsNullOrEmpty(query.queryModel.SelectedEmployeeNumber))
+                    {
+                        employeeNumber = query.queryModel.SelectedEmployeeNumber;
+                    }
+                }
+            }
+
+            var surveyData = _survey.Get.OneMonthWarrantySurvey(new
+            {
+                StartDate = startDate,
+                EndDate = endDate,
+                EmployeeId = employeeNumber,
+            });
+
+            IEnumerable<WarrantyBonusSummaryModel.ItemsComplete> results =
+                surveyData.Details.ToObject<List<WarrantyBonusSummaryModel.ItemsComplete>>();
+
             using (_database)
             {
-                const string sql = @"SELECT 'Test Community' as CommunityName, 85 as CompletePercentage WHERE 1 = 0";  //TODO: Replace with real script.
+                foreach (var itemsComplete in results)
+                {
+                    const string sql = @"SELECT CommunityName
+                                         FROM Communities c
+                                         INNER JOIN Jobs j
+                                         ON c.CommunityId = j.CommunityId
+                                         WHERE j.JobNumber = @0";
 
-                var result = _database.Fetch<WarrantyBonusSummaryModel.ItemsComplete>(sql);
-
-                return result;
+                    var communityName = _database.SingleOrDefault<string>(sql, itemsComplete.JobNumber);
+                    itemsComplete.CommunityName = communityName;
+                    itemsComplete.CompletePercentage = itemsComplete.ItemsCompleted.ToUpper() == allItemsCompleteThreshold ? 100 : 0;
+                }
             }
+
+            var itemGroup = results.GroupBy(x => x.CommunityName).Select(g => new WarrantyBonusSummaryModel.ItemsComplete
+                {
+                    CommunityName = g.Key,
+                    CompletePercentage = g.Average(y => y.CompletePercentage),
+                }).OrderBy(o => o.CommunityName);
+
+            return itemGroup;
         }
 
         private IEnumerable<WarrantyBonusSummaryModel.ExcellentWarrantySurvey> GetExcellentWarrantySurveys(WarrantyBonusSummaryWSRQuery query)
@@ -288,12 +341,11 @@
             {
                 StartDate = startDate,
                 EndDate = endDate,
+                EmployeeId = employeeNumber,
             });
 
             IEnumerable<WarrantyBonusSummaryModel.ExcellentWarrantySurvey> results =
                 surveyData.Details.ToObject<List<WarrantyBonusSummaryModel.ExcellentWarrantySurvey>>();
-
-            results = results.Where(x => x.WarrantyServiceRepresentativeEmployeeId == employeeNumber);
 
             return results;
         }
@@ -330,12 +382,11 @@
                 {
                     StartDate = startDate,
                     EndDate = endDate,
+                    EmployeeId = employeeNumber,
                 });
 
             IEnumerable<WarrantyBonusSummaryModel.DefinitelyWouldRecommendSurvey> results =
                 surveyData.Details.ToObject<List<WarrantyBonusSummaryModel.DefinitelyWouldRecommendSurvey>>();
-            
-            results = results.Where(x => x.WarrantyServiceRepresentativeEmployeeId == employeeNumber);
 
             return results;
         }

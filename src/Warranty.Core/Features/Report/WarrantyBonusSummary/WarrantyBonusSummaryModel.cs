@@ -29,6 +29,7 @@
         public decimal TotalCostControlBonusAmount { get; set; }
         public decimal TotalDefinitelyWouldRecommendSurveyBonusAmount { get; set; }
         public decimal TotalExcellentWarrantySurveyBonusAmount { get; set; }
+        public decimal TotalAllItemsCompletePercent { get; set; }
         public decimal TotalAllItemsCompleteBonusAmount { get; set; }
         public decimal TotalMiscellaneousBonusAmount { get; set; }
         public decimal TotalRepresentativeBonusAmount { get; set; }
@@ -85,6 +86,10 @@
             public Guid CommunityId { get; set; }
             public string CommunityName { get; set; }
             public decimal CompletePercentage { get; set; }
+            public int ElevenMonthWarrantySurveyId { get; set; }
+            public string JobNumber { get; set; }
+            public DateTime SurveyDate { get; set; }
+            public string ItemsCompleted { get; set; }
         }
 
         public class MiscellaneousBonus

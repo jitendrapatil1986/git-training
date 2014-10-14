@@ -20,14 +20,9 @@
                                 <div class="form-group margin-right-10">
                                     <span><strong>Filter by</strong></span>
                                 </div>
-                                
-                                if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || 1 == 1)
-                                {
-                                    <div class="form-group">
-                                        @Html.DropDownList("Model.SelectedEmployeeNumber", Model.EmployeeTiedToRepresentatives.Select(c => new SelectListItem {Text = c.EmployeeName, Value = c.EmployeeNumber.ToString()}), "Select Representative", new{@class="form-control text-capitalize"})
-                                    </div>
-                                }
-                                
+                                <div class="form-group">
+                                    @Html.DropDownList("Model.SelectedEmployeeNumber", Model.EmployeeTiedToRepresentatives.Select(c => new SelectListItem {Text = c.EmployeeName, Value = c.EmployeeNumber.ToString()}), "Select Representative", new{@class="form-control text-capitalize"})
+                                </div>
                                 <div class="form-group">
                                     @Html.TextBox("Model.FilteredDate", null, new { id = "warrantyBonusSummaryDate", @class = "form-control monthpicker-input", placeholder = "Month"})
                                 </div>
@@ -257,6 +252,10 @@
                                 <td>@Html.DisplayFor(model => line.CompletePercentage)</td>
                             </tr>
                         }
+                        <tr class="totalLine">
+                            <td>Total</td>
+                            <td>@Model.TotalAllItemsCompletePercent.ToString("0.00")</td>
+                        </tr>
                     </tbody>
                 </table>
                 <div class="col-md-12 margin-bottom-10">

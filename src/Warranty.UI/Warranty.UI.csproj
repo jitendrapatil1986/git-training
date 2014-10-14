@@ -413,7 +413,6 @@
     <Content Include="Views\Shared\EditorTemplates\FileUpload.cshtml" />
     <Content Include="UploadHandler.ashx" />
     <Content Include="Views\Report\WarrantyBonusSummaryWSRReport.cshtml" />
-    <Content Include="Views\Report\WarrantyBonusSummary.cshtml" />
     <Content Include="Views\Report\WSRLoadingReport.cshtml" />
     <Content Include="Views\Report\MailMerge.cshtml" />
   </ItemGroup>
