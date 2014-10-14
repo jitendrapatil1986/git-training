@@ -3,7 +3,7 @@
     using System;
     using NServiceBus;
 
-    public class NotifyServiceCallEscalatedUpdated : ICommand
+    public class NotifyServiceCallEscalatedStatusChanged : ICommand
     {
         public Guid ServiceCallId { get; set; }
         public DateTime EscalatedDate { get; set; }

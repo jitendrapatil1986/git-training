@@ -3,7 +3,7 @@
     using System;
     using NServiceBus;
 
-    public class ServiceCallCompletionUpdated : IEvent
+    public class ServiceCallCompleted : IEvent
     {
         public int ServiceCallNumber { get; set; }
         public DateTime? CompletionDate { get; set; }

@@ -3,7 +3,7 @@
     using System;
     using NServiceBus;
 
-    public class ServiceCallSpecialProjectUpdated : IEvent
+    public class ServiceCallSpecialProjectStatusChanged : IEvent
     {
         public int ServiceCallNumber { get; set; }
         public bool SpecialProject { get; set; }

@@ -29,7 +29,7 @@ namespace Warranty.Core.Features.ServiceCallToggleActions
                 var serviceCall = _database.SingleOrDefaultById<ServiceCall>(message.ServiceCallId);
                 serviceCall.IsSpecialProject = !serviceCall.IsSpecialProject;
                 _database.Update(serviceCall);
-                _bus.Send<NotifyServiceCallSpecialProjectUpdated>(x =>
+                _bus.Send<NotifyServiceCallSpecialProjectStatusChanged>(x =>
                     {
                         x.ServiceCallId = serviceCall.ServiceCallId;
                         x.SpecialProjectDate = DateTime.UtcNow;

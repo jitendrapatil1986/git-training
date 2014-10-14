@@ -3,7 +3,7 @@
     using System;
     using NServiceBus;
 
-    public class NotifyServiceCallSpecialProjectUpdated : ICommand
+    public class NotifyServiceCallSpecialProjectStatusChanged : ICommand
     {
         public Guid ServiceCallId { get; set; }
         public DateTime SpecialProjectDate { get; set; }

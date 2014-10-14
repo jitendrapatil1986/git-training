@@ -8,23 +8,23 @@
     using NPoco;
     using NServiceBus;
 
-    public class NotifyServiceCallCompletionUpdatedHandler : IHandleMessages<NotifyServiceCallCompletionUpdated>
+    public class NotifyServiceCallCompletedHandler : IHandleMessages<InnerMessages.NotifyServiceCallCompleted>
     {
         private readonly IBus _bus;
         private readonly IDatabase _database;
 
-        public NotifyServiceCallCompletionUpdatedHandler(IBus bus, IDatabase database)
+        public NotifyServiceCallCompletedHandler(IBus bus, IDatabase database)
         {
             _bus = bus;
             _database = database;
         }
 
-        public void Handle(NotifyServiceCallCompletionUpdated message)
+        public void Handle(InnerMessages.NotifyServiceCallCompleted message)
         {
             using (_database)
             {
                 var serviceCall = _database.SingleById<ServiceCall>(message.ServiceCallId);
-                _bus.Publish<ServiceCallCompletionUpdated>(x =>
+                _bus.Publish<ServiceCallCompleted>(x =>
                     {
                         x.ServiceCallNumber = serviceCall.ServiceCallNumber;
                         x.ServiceCallStatus = ServiceCallStatus.Complete.DisplayName;

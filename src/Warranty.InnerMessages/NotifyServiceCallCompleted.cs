@@ -3,7 +3,7 @@
     using System;
     using NServiceBus;
 
-    public class NotifyServiceCallCompletionUpdated : ICommand
+    public class NotifyServiceCallCompleted : ICommand
     {
         public Guid ServiceCallId { get; set; }
     }

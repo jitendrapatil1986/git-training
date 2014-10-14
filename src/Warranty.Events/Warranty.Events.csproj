@@ -48,15 +48,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ServiceCallCompletionUpdated.cs" />
+    <Compile Include="ServiceCallCompleted.cs" />
     <Compile Include="ServiceCallCreated.cs" />
-    <Compile Include="ServiceCallEmployeeUpdated.cs" />
-    <Compile Include="ServiceCallEscalatedUpdated.cs" />
-    <Compile Include="ServiceCallHomeownerVerificationSignatureUpdated.cs" />
-    <Compile Include="ServiceCallLineItemCompletionUpdated.cs" />
+    <Compile Include="ServiceCallEmployeeReassigned.cs" />
+    <Compile Include="ServiceCallEscalatedStatusChanged.cs" />
+    <Compile Include="ServiceCallHomeownerVerified.cs" />
+    <Compile Include="ServiceCallLineItemCompleted.cs" />
     <Compile Include="ServiceCallLineItemCreated.cs" />
-    <Compile Include="ServiceCallLineItemProblemUpdated.cs" />
-    <Compile Include="ServiceCallSpecialProjectUpdated.cs" />
+    <Compile Include="ServiceCallLineItemProblemChanged.cs" />
+    <Compile Include="ServiceCallSpecialProjectStatusChanged.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

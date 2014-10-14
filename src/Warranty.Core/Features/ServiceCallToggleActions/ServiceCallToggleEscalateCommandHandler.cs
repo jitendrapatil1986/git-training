@@ -32,7 +32,7 @@ namespace Warranty.Core.Features.ServiceCallToggleActions
                 serviceCall.IsEscalated = !serviceCall.IsEscalated;
                 _database.Update(serviceCall);
 
-                _bus.Send<NotifyServiceCallEscalatedUpdated>(x =>
+                _bus.Send<NotifyServiceCallEscalatedStatusChanged>(x =>
                     {
                         x.ServiceCallId = serviceCall.ServiceCallId;
                         x.EscalatedDate = DateTime.UtcNow;

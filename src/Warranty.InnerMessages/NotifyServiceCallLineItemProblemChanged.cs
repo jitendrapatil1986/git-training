@@ -3,7 +3,7 @@
     using System;
     using NServiceBus;
 
-    public class NotifyServiceCallLineItemProblemUpdated : ICommand
+    public class NotifyServiceCallLineItemProblemChanged : ICommand
     {
         public Guid ServiceCallLineItemId { get; set; }
     }

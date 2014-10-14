@@ -7,24 +7,24 @@
     using NPoco;
     using NServiceBus;
 
-    public class NotifyServiceCallEscalatedUpdatedHandler : IHandleMessages<NotifyServiceCallEscalatedUpdated>
+    public class NotifyServiceCallEscalatedStatusChangedHandler : IHandleMessages<NotifyServiceCallEscalatedStatusChanged>
     {
         private readonly IBus _bus;
         private readonly IDatabase _database;
 
-        public NotifyServiceCallEscalatedUpdatedHandler(IBus bus, IDatabase database)
+        public NotifyServiceCallEscalatedStatusChangedHandler(IBus bus, IDatabase database)
         {
             _bus = bus;
             _database = database;
         }
 
-        public void Handle(NotifyServiceCallEscalatedUpdated message)
+        public void Handle(NotifyServiceCallEscalatedStatusChanged message)
         {
             using (_database)
             {
                 var serviceCall = _database.SingleById<ServiceCall>(message.ServiceCallId);
 
-                _bus.Publish<ServiceCallEscalatedUpdated>(x =>
+                _bus.Publish<ServiceCallEscalatedStatusChanged>(x =>
                 {
                     x.ServiceCallNumber = serviceCall.ServiceCallNumber;
                     x.Escalated = serviceCall.IsEscalated;

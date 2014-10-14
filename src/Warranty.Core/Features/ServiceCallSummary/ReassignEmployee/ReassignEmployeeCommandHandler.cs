@@ -32,7 +32,7 @@
                 serviceCall.WarrantyRepresentativeEmployeeId = employeeModel.EmployeeId;
                 _database.Update(serviceCall);
 
-                _bus.Send<NotifyServiceCallEmployeeUpdated>(x =>
+                _bus.Send<NotifyServiceCallEmployeeReassigned>(x =>
                     {
                         x.ServiceCallId = serviceCall.ServiceCallId;
                     });

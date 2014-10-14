@@ -6,25 +6,25 @@
     using NPoco;
     using NServiceBus;
 
-    public class NotifyServiceCallLineItemCompletionUpdatedHandler : IHandleMessages<NotifyServiceCallLineItemCompletionUpdated>
+    public class NotifyServiceCallLineItemCompletedHandler : IHandleMessages<NotifyServiceCallLineItemCompleted>
     {
         private readonly IBus _bus;
         private readonly IDatabase _database;
 
-        public NotifyServiceCallLineItemCompletionUpdatedHandler(IBus bus, IDatabase database)
+        public NotifyServiceCallLineItemCompletedHandler(IBus bus, IDatabase database)
         {
             _bus = bus;
             _database = database;
         }
 
-        public void Handle(NotifyServiceCallLineItemCompletionUpdated message)
+        public void Handle(NotifyServiceCallLineItemCompleted message)
         {
             using (_database)
             {
                 var serviceCallLineItem = _database.SingleById<ServiceCallLineItem>(message.ServiceCallLineItemId);
                 var serviceCall = _database.SingleById<ServiceCall>(serviceCallLineItem.ServiceCallId);
 
-                _bus.Publish<ServiceCallLineItemCompletionUpdated>(x =>
+                _bus.Publish<ServiceCallLineItemCompleted>(x =>
                 {
                     x.ServiceCallNumber = serviceCall.ServiceCallNumber;
                     x.LineNumber = serviceCallLineItem.LineNumber;

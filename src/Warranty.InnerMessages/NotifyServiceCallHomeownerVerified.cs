@@ -3,7 +3,7 @@
     using System;
     using NServiceBus;
 
-    public class NotifyServiceCallHomeownerVerificationSignatureUpdated : ICommand
+    public class NotifyServiceCallHomeownerVerified : ICommand
     {
         public Guid ServiceCallId { get; set; }
     }

@@ -26,7 +26,7 @@
                 completeServiceCallLineItem.ServiceCallLineItemStatus = ServiceCallLineItemStatus.Complete;
                 _database.Update(completeServiceCallLineItem);
 
-                _bus.Send<NotifyServiceCallLineItemCompletionUpdated>(x =>
+                _bus.Send<NotifyServiceCallLineItemCompleted>(x =>
                     {
                         x.ServiceCallLineItemId = completeServiceCallLineItem.ServiceCallLineItemId;
                     });

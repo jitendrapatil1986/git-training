@@ -26,7 +26,7 @@
                 updateServiceCallLine.ProblemDescription = message.ProblemDescription;
                 _database.Update(updateServiceCallLine);
 
-                _bus.Send<NotifyServiceCallLineItemProblemUpdated>(x =>
+                _bus.Send<NotifyServiceCallLineItemProblemChanged>(x =>
                     {
                         x.ServiceCallLineItemId = updateServiceCallLine.ServiceCallLineItemId;
                     });

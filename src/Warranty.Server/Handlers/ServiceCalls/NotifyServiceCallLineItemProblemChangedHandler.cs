@@ -6,25 +6,25 @@
     using NPoco;
     using NServiceBus;
 
-    public class NotifyServiceCallLineItemProblemUpdatedHandler : IHandleMessages<NotifyServiceCallLineItemProblemUpdated>
+    public class NotifyServiceCallLineItemProblemChangedHandler : IHandleMessages<NotifyServiceCallLineItemProblemChanged>
     {
         private readonly IBus _bus;
         private readonly IDatabase _database;
 
-        public NotifyServiceCallLineItemProblemUpdatedHandler(IBus bus, IDatabase database)
+        public NotifyServiceCallLineItemProblemChangedHandler(IBus bus, IDatabase database)
         {
             _bus = bus;
             _database = database;
         }
 
-        public void Handle(NotifyServiceCallLineItemProblemUpdated message)
+        public void Handle(NotifyServiceCallLineItemProblemChanged message)
         {
             using (_database)
             {
                 var serviceCallLineItem = _database.SingleById<ServiceCallLineItem>(message.ServiceCallLineItemId);
                 var serviceCall = _database.SingleById<ServiceCall>(serviceCallLineItem.ServiceCallId);
 
-                _bus.Publish<ServiceCallLineItemProblemUpdated>(x =>
+                _bus.Publish<ServiceCallLineItemProblemChanged>(x =>
                 {
                     x.ServiceCallNumber = serviceCall.ServiceCallNumber;
                     x.LineNumber = serviceCallLineItem.LineNumber;

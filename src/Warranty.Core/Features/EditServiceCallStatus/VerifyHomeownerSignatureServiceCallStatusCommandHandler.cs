@@ -30,7 +30,7 @@
 
                 _database.Update(updateServiceCall);
                 
-                _bus.Send<NotifyServiceCallHomeownerVerificationSignatureUpdated>(x =>
+                _bus.Send<NotifyServiceCallHomeownerVerified>(x =>
                     {
                         x.ServiceCallId = updateServiceCall.ServiceCallId;
                     });

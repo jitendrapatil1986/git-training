@@ -3,7 +3,7 @@
     using System;
     using NServiceBus;
 
-    public class ServiceCallHomeownerVerificationSignatureUpdated : IEvent
+    public class ServiceCallHomeownerVerified : IEvent
     {
         public int ServiceCallNumber { get; set; }
         public string HomeownerVerificationSignature { get; set; }

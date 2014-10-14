@@ -3,7 +3,7 @@
     using System;
     using NServiceBus;
 
-    public class ServiceCallEscalatedUpdated : IEvent
+    public class ServiceCallEscalatedStatusChanged : IEvent
     {
         public int ServiceCallNumber { get; set; }
         public bool Escalated { get; set; }

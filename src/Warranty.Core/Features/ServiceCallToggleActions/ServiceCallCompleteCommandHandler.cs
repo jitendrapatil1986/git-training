@@ -30,7 +30,7 @@
                 serviceCall.CompletionDate = DateTime.UtcNow;
                 _database.Update(serviceCall);
                 
-                _bus.Send<NotifyServiceCallCompletionUpdated>(x =>
+                _bus.Send<NotifyServiceCallCompleted>(x =>
                 {
                     x.ServiceCallId = serviceCall.ServiceCallId;
                 });

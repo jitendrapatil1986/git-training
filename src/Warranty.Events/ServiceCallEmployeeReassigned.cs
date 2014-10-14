@@ -2,7 +2,7 @@
 {
     using NServiceBus;
 
-    public class ServiceCallEmployeeUpdated : IEvent
+    public class ServiceCallEmployeeReassigned : IEvent
     {
         public int ServiceCallNumber { get; set; }
         public string EmployeeNumber { get; set; }
