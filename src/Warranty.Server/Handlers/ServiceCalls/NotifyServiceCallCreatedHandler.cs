@@ -7,6 +7,7 @@
     using InnerMessages;
     using NPoco;
     using NServiceBus;
+    using System.Linq;
 
     public class NotifyServiceCallCreatedHandler : IHandleMessages<NotifyServiceCallCreated>
     {
@@ -30,6 +31,8 @@
                     employee = _database.SingleById<Employee>(serviceCall.WarrantyRepresentativeEmployeeId);
                 }
                 var job = _database.SingleById<Job>(serviceCall.JobId);
+
+                var serviceCallLineItems = _database.Fetch<ServiceCallLineItem>().Where(x => x.ServiceCallId == serviceCall.ServiceCallId);
                 _bus.Publish<ServiceCallCreated>(x =>
                 {
                     x.ServiceCallNumber = serviceCall.ServiceCallNumber;
@@ -40,6 +43,17 @@
                     x.EmployeeName = employee != null ? employee.Name : null;
                     x.EmployeeNumber = employee != null ? employee.Number : null;
                     x.JobNumber = job.JobNumber;
+                    x.ServiceCallLineItems = serviceCallLineItems.Select(y => new ServiceCallCreated.ServiceCallLineItem
+                        {
+                            ServiceCallNumber = serviceCall.ServiceCallNumber,
+                            CauseDescription = y.CauseDescription,
+                            ClassificationNote = y.ClassificationNote,
+                            LineItemRoot = y.LineItemRoot,
+                            LineNumber = y.LineNumber,
+                            ProblemCode = y.ProblemCode,
+                            ProblemDescription = y.ProblemDescription,
+                            ServiceCallLineItemStatus = y.ServiceCallLineItemStatus.DisplayName,
+                        }).ToList();
                 });
             }
         }

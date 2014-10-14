@@ -74,11 +74,6 @@ namespace Warranty.Core.Features.CreateServiceCall
                             };
 
                         _database.Insert(serviceCallLine);
-
-                        _bus.Send<NotifyServiceCallLineItemCreated>(x =>
-                        {
-                            x.ServiceCallLineItemId = serviceCallLine.ServiceCallLineItemId;
-                        });
                     }
                 }
 
