@@ -35,16 +35,10 @@
                     x.ServiceCallNumber = serviceCall.ServiceCallNumber;
                     x.ServiceCallType = serviceCall.ServiceCallType;
                     x.WorkSummary = serviceCall.WorkSummary;
-                    x.SpecialProject = serviceCall.IsSpecialProject;
                     x.ServiceCallStatus = serviceCall.ServiceCallStatus.DisplayName;
-                    x.CompletionDate = serviceCall.CompletionDate;
                     x.Contact = serviceCall.Contact;
                     x.EmployeeName = employee != null ? employee.Name : null;
                     x.EmployeeNumber = employee != null ? employee.Number : null;
-                    x.Escalated = serviceCall.IsEscalated;
-                    x.HomeownerSignature = serviceCall.HomeOwnerSignature;
-                    x.HomeownerVerificationSignature = serviceCall.HomeownerVerificationSignature;
-                    x.HomeownerVerificationSignatureDate = serviceCall.HomeownerVerificationSignatureDate;
                     x.JobNumber = job.JobNumber;
                 });
             }
