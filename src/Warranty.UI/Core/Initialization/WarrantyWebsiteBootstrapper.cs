@@ -41,11 +41,8 @@
 
         private static void InitializeNServiceBus()
         {
-            var dataBusPath = ConfigurationManager.AppSettings["DataBusSharePath"];
-
-            Configure.With()
+           Configure.With()
                      .StructureMapBuilder(IoC.Container)
-                     .FileShareDataBus(dataBusPath)
                      .UseTransport<Msmq>()
                      .UnicastBus()
                      .RunHandlersUnderIncomingPrincipal(false)
