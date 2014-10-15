@@ -8,5 +8,11 @@ namespace Warranty.Core.Extensions
         {
             return new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
         }
+
+        public static DateTime ToFirstDay(this DateTime date)
+        {
+            return new DateTime(date.Year, date.Month, 1);
+        }
+
     }
 }

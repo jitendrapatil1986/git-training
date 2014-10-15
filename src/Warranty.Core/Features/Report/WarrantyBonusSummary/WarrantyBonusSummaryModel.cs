@@ -2,37 +2,90 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using Extensions;
 
     public class WarrantyBonusSummaryModel
     {
+        public WarrantyBonusSummaryModel()
+        {
+            BonusSummaries = new List<BonusSummary>();
+            EmployeeTiedToRepresentatives = new List<EmployeeTiedToRepresentative>();
+            DefinitelyWouldRecommendSurveys = new List<DefinitelyWouldRecommendSurvey>();
+            ExcellentWarrantySurveys = new List<ExcellentWarrantySurvey>();
+            AllItemsCompletes = new List<ItemsComplete>();
+        }
+
         public IEnumerable<BonusSummary> BonusSummaries { get; set; }
         public IEnumerable<EmployeeTiedToRepresentative> EmployeeTiedToRepresentatives { get; set; }
         public IEnumerable<DefinitelyWouldRecommendSurvey> DefinitelyWouldRecommendSurveys { get; set; }
         public IEnumerable<ExcellentWarrantySurvey> ExcellentWarrantySurveys { get; set; }
         public IEnumerable<ItemsComplete> AllItemsCompletes { get; set; }
-        public IEnumerable<MiscellaneousBonus> MiscellaneousBonuses { get; set; }
-
         public string SelectedEmployeeNumber { get; set; }
         public DateTime? FilteredDate { get; set; }
-        public bool AnyResults { get; set; }
+
+        public DateTime StartDate
+        {
+            get
+            {
+                if (FilteredDate.HasValue)
+                    return FilteredDate.Value.ToFirstDay();
+                return DateTime.Today.ToFirstDay();
+            }
+        }
+
+        public DateTime EndDate
+        {
+            get
+            {
+                if (FilteredDate.HasValue)
+                    return FilteredDate.Value.ToLastDay();
+
+                return DateTime.Today.ToLastDay();
+            }
+        }
+
         public string EmployeeName { get; set; }
         public string EmployeeNumber { get; set; }
         public string DivisionName { get; set; }
-        public int TotalNumberOfWarrantableHomes { get; set; }
-        public decimal TotalMaterialDollarsSpent { get; set; }
-        public decimal TotalLaborDollarsSpent { get; set; }
-        public decimal TotalOtherMaterialDollarsSpent { get; set; }
-        public decimal TotalOtherLaborDollarsSpent { get; set; }
-        public decimal TotalDollarsSpent { get; set; }
-        public decimal TotalWarrantyAllowance { get; set; }
-        public decimal TotalWarrantyDifference { get; set; }
-        public decimal TotalCostControlBonusAmount { get; set; }
-        public decimal TotalDefinitelyWouldRecommendSurveyBonusAmount { get; set; }
-        public decimal TotalExcellentWarrantySurveyBonusAmount { get; set; }
-        public decimal TotalAllItemsCompletePercent { get; set; }
-        public decimal TotalAllItemsCompleteBonusAmount { get; set; }
-        public decimal TotalMiscellaneousBonusAmount { get; set; }
-        public decimal TotalRepresentativeBonusAmount { get; set; }
+        public int TotalNumberOfWarrantableHomes { get { return BonusSummaries.Sum(x => x.NumberOfWarrantableHomes); }}
+        public decimal TotalMaterialDollarsSpent { get { return BonusSummaries.Sum(x => x.MaterialDollarsSpent); }}
+        public decimal TotalLaborDollarsSpent { get { return BonusSummaries.Sum(x => x.LaborDollarsSpent); }}
+        public decimal TotalOtherMaterialDollarsSpent { get { return BonusSummaries.Sum(x => x.OtherMaterialDollarsSpent); }}
+        public decimal TotalOtherLaborDollarsSpent { get { return BonusSummaries.Sum(x => x.OtherLaborDollarsSpent); }}
+        public decimal TotalDollarsSpent { get { return BonusSummaries.Sum(x => x.TotalDollarsSpent); }}
+        public decimal TotalWarrantyAllowance { get { return BonusSummaries.Sum(x => x.TotalWarrantyAllowance); }}
+        public decimal TotalWarrantyDifference { get { return BonusSummaries.Sum(x => x.TotalWarrantyDifference); }}
+        public decimal TotalCostControlBonusAmount { get { return TotalWarrantyDifference * WarrantyBonusSummaryConfig.CostControlBonusPercent; }}
+        
+        public decimal TotalDefinitelyWouldRecommendSurveyBonusAmount 
+        {
+            get
+            {
+                return DefinitelyWouldRecommendSurveys.Count(x => x.IsBonusable) * WarrantyBonusSummaryConfig.DefinitelyWillBonusAmount;
+            }
+        }
+        
+        public decimal TotalExcellentWarrantySurveyBonusAmount 
+        { 
+            get
+            {
+            return
+                ExcellentWarrantySurveys.Count(x => x.IsBonusable) * WarrantyBonusSummaryConfig.ExcellentWarrantyBonusAmount;
+            } 
+        }
+
+        public bool AnyResults
+        {
+            get
+            {
+                return BonusSummaries.Any() || DefinitelyWouldRecommendSurveys.Any() || ExcellentWarrantySurveys.Any() || AllItemsCompletes.Any();
+            }
+        }
+
+        public decimal TotalAllItemsCompletePercent { get { return AllItemsCompletes.Any() ? Math.Round(AllItemsCompletes.Sum(x => x.CompletePercentage)/AllItemsCompletes.Count(), 2) : 0; }}
+        public decimal TotalAllItemsCompleteBonusAmount { get { return IsBonusable ? WarrantyBonusSummaryConfig.AllItemsCompleteBonusAmount : 0; }}
+        public bool IsBonusable { get { return TotalAllItemsCompletePercent >= WarrantyBonusSummaryConfig.AllItemsCompletePercentThreshold; }}
 
         public class BonusSummary
         {
@@ -59,43 +112,38 @@
 
         public class DefinitelyWouldRecommendSurvey
         {
-            public int ElevenMonthWarrantySurveyId { get; set; }
             public string HomeownerName { get; set; }
             public string JobNumber { get; set; }
-            public DateTime SurveyDate { get; set; }
-            public string WarrantyServiceRepresentativeEmployeeId { get; set; }
-            public string WarrantyServiceRepresentativeName { get; set; }
             public string DefinitelyWillRecommend { get; set; }
-            public decimal BonusAmount { get; set; }
+            public decimal BonusAmount { get { return  IsBonusable ? WarrantyBonusSummaryConfig.DefinitelyWillBonusAmount : 0; }}
+            public bool IsBonusable 
+            {
+                get
+                {
+                    return string.Equals(DefinitelyWillRecommend, WarrantyBonusSummaryConfig.DefinitelyWillThreshold, StringComparison.CurrentCultureIgnoreCase);
+                }
+            }
         }
 
         public class ExcellentWarrantySurvey
         {
-            public int ElevenMonthWarrantySurveyId { get; set; }
             public string HomeownerName { get; set; }
             public string JobNumber { get; set; }
-            public DateTime SurveyDate { get; set; }
-            public string WarrantyServiceRepresentativeEmployeeId { get; set; }
-            public string WarrantyServiceRepresentativeName { get; set; }
             public string ExcellentWarrantyService { get; set; }
-            public decimal BonusAmount { get; set; }
+            public decimal BonusAmount { get { return IsBonusable ? WarrantyBonusSummaryConfig.ExcellentWarrantyBonusAmount : 0; }}
+            public bool IsBonusable 
+            {
+                get
+                { 
+                    return Convert.ToInt16(ExcellentWarrantyService) >= WarrantyBonusSummaryConfig.ExcellentWarrantyThreshold;
+                }
+            }
         }
 
         public class ItemsComplete
         {
-            public Guid CommunityId { get; set; }
             public string CommunityName { get; set; }
             public decimal CompletePercentage { get; set; }
-            public int ElevenMonthWarrantySurveyId { get; set; }
-            public string JobNumber { get; set; }
-            public DateTime SurveyDate { get; set; }
-            public string ItemsCompleted { get; set; }
-        }
-
-        public class MiscellaneousBonus
-        {
-            public string Description { get; set; }
-            public decimal BonusAmount { get; set; }
         }
     }
 }

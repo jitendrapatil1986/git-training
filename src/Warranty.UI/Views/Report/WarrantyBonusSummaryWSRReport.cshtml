@@ -20,9 +20,12 @@
                                 <div class="form-group margin-right-10">
                                     <span><strong>Filter by</strong></span>
                                 </div>
-                                <div class="form-group">
-                                    @Html.DropDownList("Model.SelectedEmployeeNumber", Model.EmployeeTiedToRepresentatives.Select(c => new SelectListItem {Text = c.EmployeeName, Value = c.EmployeeNumber.ToString()}), "Select Representative", new{@class="form-control text-capitalize"})
-                                </div>
+                                if (!User.IsInRole(UserRoles.WarrantyServiceRepresentative))
+                                {
+                                    <div class="form-group">
+                                        @Html.DropDownList("Model.SelectedEmployeeNumber", Model.EmployeeTiedToRepresentatives.Select(c => new SelectListItem {Text = c.EmployeeName, Value = c.EmployeeNumber.ToString()}), "Select Representative", new {@class = "form-control text-capitalize"})
+                                    </div>
+                                }
                                 <div class="form-group">
                                     @Html.TextBox("Model.FilteredDate", null, new { id = "warrantyBonusSummaryDate", @class = "form-control monthpicker-input", placeholder = "Month"})
                                 </div>
@@ -165,7 +168,7 @@
                                 <td>@Html.DisplayFor(model => line.HomeownerName)</td>
                                 <td>@Html.DisplayFor(model => line.JobNumber)</td>
                                 <td>@Html.DisplayFor(model => line.DefinitelyWillRecommend)</td>
-                                <td>@Format.Money(line.BonusAmount)</td>
+                                <td>@Format.MoneyWithoutZero(line.BonusAmount)</td>
                             </tr>
                         }
                     </tbody>
@@ -175,7 +178,7 @@
                         @Html.Label("Definitely Would Recommend (11 mo) Bonus: ")
                         @if (Model.TotalDefinitelyWouldRecommendSurveyBonusAmount > 0)
                         {
-                            @Format.Money(Model.TotalDefinitelyWouldRecommendSurveyBonusAmount)
+                            @Format.MoneyWithoutZero(Model.TotalDefinitelyWouldRecommendSurveyBonusAmount)
                             ;
                         }
                     </div>
@@ -209,7 +212,7 @@
                                 <td>@Html.DisplayFor(model => line.HomeownerName)</td>
                                 <td>@Html.DisplayFor(model => line.JobNumber)</td>
                                 <td>@Html.DisplayFor(model => line.ExcellentWarrantyService)</td>
-                                <td>@Format.Money(line.BonusAmount)</td>
+                                <td>@Format.MoneyWithoutZero(line.BonusAmount)</td>
                             </tr>
                         }
                     </tbody>
@@ -219,7 +222,7 @@
                         @Html.Label("Excellent Warranty (11 mo) Bonus: ")
                         @if (Model.TotalExcellentWarrantySurveyBonusAmount > 0)
                         {
-                            @Format.Money(Model.TotalExcellentWarrantySurveyBonusAmount)
+                            @Format.MoneyWithoutZero(Model.TotalExcellentWarrantySurveyBonusAmount)
                             ;
                         }
                     </div>
@@ -269,49 +272,6 @@
                     </div>
                 </div>
             </section>
-            <section>
-                <div class="row">
-                    <div class="col-md-12">
-                        @Html.Label("Miscellaneous Bonus")
-                    </div>
-                </div>
-                <br/>
-                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped table-bordered text-right table-bonus-survey">
-                    <thead>
-                        <tr>
-                            <th>Description</th>
-                            <th>Bonus</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var line in Model.MiscellaneousBonuses)
-                        {
-                            <tr>
-                                <td>@Html.DisplayFor(model => line.Description)</td>
-                                <td>@Format.Money(line.BonusAmount)</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-                <div class="col-md-12 margin-bottom-10">
-                    <div class="pull-right">
-                        @Html.Label("Sub Total: ")
-                        @if (Model.TotalMiscellaneousBonusAmount > 0)
-                        {
-                            @Format.Money(Model.TotalMiscellaneousBonusAmount)
-                            ;
-                        }
-                    </div>
-                </div>
-            </section>
-            <div class="col-md-12">
-                @Html.Label("Approved By: ")
-                <div class="pull-right">
-                    @Html.Label("AUG Total Bonus")
-                    @Format.Money(Model.TotalRepresentativeBonusAmount)
-                </div>
-            </div>
-            <hr/>
         </div>
     }
 </div>
