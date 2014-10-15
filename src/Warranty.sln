@@ -127,6 +127,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "runAfterOtherAnytimeScripts
 		Database\Warranty\runAfterOtherAnytimeScripts\9999_AlterImportDataProc.EVERYTIME.sql = Database\Warranty\runAfterOtherAnytimeScripts\9999_AlterImportDataProc.EVERYTIME.sql
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.InnerMessages", "Warranty.InnerMessages\Warranty.InnerMessages.csproj", "{1D13D0D6-BBC3-402A-B140-0330AC3F6627}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.Events", "Warranty.Events\Warranty.Events.csproj", "{288B6502-98F6-47E7-8DFF-44F7F8CFF1D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -165,6 +169,14 @@ Global
 		{0E28943C-3644-4A3C-BBBC-21BDFCC64791}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E28943C-3644-4A3C-BBBC-21BDFCC64791}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E28943C-3644-4A3C-BBBC-21BDFCC64791}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D13D0D6-BBC3-402A-B140-0330AC3F6627}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D13D0D6-BBC3-402A-B140-0330AC3F6627}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D13D0D6-BBC3-402A-B140-0330AC3F6627}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D13D0D6-BBC3-402A-B140-0330AC3F6627}.Release|Any CPU.Build.0 = Release|Any CPU
+		{288B6502-98F6-47E7-8DFF-44F7F8CFF1D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{288B6502-98F6-47E7-8DFF-44F7F8CFF1D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{288B6502-98F6-47E7-8DFF-44F7F8CFF1D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{288B6502-98F6-47E7-8DFF-44F7F8CFF1D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
