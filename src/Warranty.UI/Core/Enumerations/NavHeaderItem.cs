@@ -8,7 +8,8 @@
     public class NavHeaderItem : Enumeration<NavHeaderItem>
     {
         public static NavHeaderItem WsrLoadingReport = new NavHeaderItem(1, Reports.Key, Reports.Display.WsrLoadingReportName, "Report", "WSRLoadingReport");
-        public static NavHeaderItem MailMergeReport = new NavHeaderItem(2, Reports.Key, Reports.Display.MailMergeReportName, "Report", "MailMerge");
+        public static NavHeaderItem WsrBonusSummaryReport = new NavHeaderItem(2, Reports.Key, Reports.Display.WsrBonusSummaryReportName, "Report", "WarrantyBonusSummaryWSRReport");
+        public static NavHeaderItem MailMergeReport = new NavHeaderItem(3, Reports.Key, Reports.Display.MailMergeReportName, "Report", "MailMerge");
 
         protected NavHeaderItem(int value, string key, string displayName, string controller, string action, bool hasDivider = false)
             : base(value, displayName)
@@ -37,6 +38,7 @@
             {
                 public const string WsrLoadingReportName = "WSR Loading Report";
                 public const string MailMergeReportName = "Mail Merge Report";
+                public const string WsrBonusSummaryReportName = "WSR Bonus Summary Report";
             }
         }
     }

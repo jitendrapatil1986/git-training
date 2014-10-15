@@ -16,15 +16,14 @@ namespace Warranty.Core.Configurations
             return (WarrantyConfigSection)ConfigurationManager.GetSection("WarrantyConfigSection");
         }
 
-        public static string GetCity(string cityCode)
+        public static CityConfig GetCity(string cityCode)
         {
             var cityConfig = GetSection()
                                 .Cities
                                 .Cast<CityConfig>()
                                 .SingleOrDefault(x => cityCode == x.City);
 
-            var city = cityConfig != null ? cityConfig.City : "";
-            return city;
+            return cityConfig ?? new CityConfig();
         }
     }
 }

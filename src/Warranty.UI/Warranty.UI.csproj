@@ -292,6 +292,7 @@
     <Content Include="Scripts\app\ajaxEvents.js" />
     <Content Include="Scripts\app\formUploader.js" />
     <Content Include="Scripts\app\Job\JobSummary.js" />
+    <Content Include="Scripts\app\Report\WarrantyBonusSummaryWSR.js" />
     <Content Include="Scripts\app\responsiveTabs.js" />
     <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\search.js" />
@@ -411,6 +412,7 @@
     <Content Include="Views\WarrantyMailer\ServiceCallEscalated.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\FileUpload.cshtml" />
     <Content Include="UploadHandler.ashx" />
+    <Content Include="Views\Report\WarrantyBonusSummaryWSRReport.cshtml" />
     <Content Include="Views\Report\WSRLoadingReport.cshtml" />
     <Content Include="Views\Report\MailMerge.cshtml" />
   </ItemGroup>

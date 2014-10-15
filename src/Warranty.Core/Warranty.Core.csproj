@@ -74,6 +74,10 @@
     <Reference Include="StructureMap">
       <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
     </Reference>
+    <Reference Include="Survey.Client, Version=1.0.0.27, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Survey.Client.1.0.0.27\lib\net45\Survey.Client.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -279,6 +283,7 @@
     <Compile Include="Features\JobSummary\JobSummaryModel.cs" />
     <Compile Include="Features\JobSummary\JobSummaryQuery.cs" />
     <Compile Include="Features\JobSummary\JobSummaryQueryHandler.cs" />
+    <Compile Include="Features\Report\WarrantyBonusSummary\WarrantyBonusSummaryConfig.cs" />
     <Compile Include="Features\Report\WSRLoadingReport\WSRLoadingReportModel.cs" />
     <Compile Include="Features\Report\WSRLoadingReport\WSRLoadingReportQuery.cs" />
     <Compile Include="Features\Report\WSRLoadingReport\WSRLoadingReportQueryHandler.cs" />
@@ -363,6 +368,9 @@
     <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemCommanHandler.cs" />
     <Compile Include="Features\UpdateServiceCallLineItem\UpdateServiceCallLineItemModel.cs" />
     <Compile Include="Features\UploadAttachmentBaseViewModel.cs" />
+    <Compile Include="Features\Report\WarrantyBonusSummary\WarrantyBonusSummaryModel.cs" />
+    <Compile Include="Features\Report\WarrantyBonusSummary\WarrantyBonusSummaryWSRQuery.cs" />
+    <Compile Include="Features\Report\WarrantyBonusSummary\WarrantyBonusSummaryWSRQueryHandler.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetWSRQuery.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetWSRQueryHandler.cs" />
     <Compile Include="Features\WarrantyDollarsSpentWidget\WarrantyDollarsSpentWidgetModel.cs" />
