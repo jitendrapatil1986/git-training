@@ -26,7 +26,7 @@
 
                 _bus.Publish<ServiceCallEscalatedStatusChanged>(x =>
                 {
-                    x.ServiceCallNumber = serviceCall.ServiceCallNumber;
+                    x.ServiceCallId = serviceCall.ServiceCallId;
                     x.Escalated = serviceCall.IsEscalated;
                     x.EscalationDate = message.EscalatedDate;
                     x.EscalationReason = message.EscalatedReason;

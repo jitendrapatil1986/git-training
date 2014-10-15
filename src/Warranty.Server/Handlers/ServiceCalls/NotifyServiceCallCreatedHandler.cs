@@ -35,6 +35,7 @@
                 var serviceCallLineItems = _database.Fetch<ServiceCallLineItem>().Where(x => x.ServiceCallId == serviceCall.ServiceCallId);
                 _bus.Publish<ServiceCallCreated>(x =>
                 {
+                    x.ServiceCallId = serviceCall.ServiceCallId;
                     x.ServiceCallNumber = serviceCall.ServiceCallNumber;
                     x.ServiceCallType = serviceCall.ServiceCallType;
                     x.WorkSummary = serviceCall.WorkSummary;
@@ -45,7 +46,8 @@
                     x.JobNumber = job.JobNumber;
                     x.ServiceCallLineItems = serviceCallLineItems.Select(y => new ServiceCallCreated.ServiceCallLineItem
                         {
-                            ServiceCallNumber = serviceCall.ServiceCallNumber,
+                            ServiceCallId = serviceCall.ServiceCallId,
+                            ServiceCallLineItemId = y.ServiceCallLineItemId,
                             CauseDescription = y.CauseDescription,
                             ClassificationNote = y.ClassificationNote,
                             LineItemRoot = y.LineItemRoot,

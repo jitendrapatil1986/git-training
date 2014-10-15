@@ -6,6 +6,7 @@
 
     public class ServiceCallCreated : IEvent
     {
+        public Guid ServiceCallId { get; set; }
         public int ServiceCallNumber { get; set; }
         public string ServiceCallType { get; set; }
         public string ServiceCallStatus { get; set; }
@@ -19,7 +20,8 @@
 
         public class ServiceCallLineItem
         {
-            public int ServiceCallNumber { get; set; }
+            public Guid ServiceCallLineItemId { get; set; }
+            public Guid ServiceCallId { get; set; }
             public int LineNumber { get; set; }
             public string ProblemCode { get; set; }
             public string ProblemDescription { get; set; }

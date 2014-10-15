@@ -25,7 +25,7 @@
 
                 _bus.Publish<ServiceCallSpecialProjectStatusChanged>(x =>
                 {
-                    x.ServiceCallNumber = serviceCall.ServiceCallNumber;
+                    x.ServiceCallId = serviceCall.ServiceCallId;
                     x.SpecialProject = serviceCall.IsSpecialProject;
                     x.SpecialProjectReason = message.SpecialProjectReason;
                     x.SpecialProjectDate = message.SpecialProjectDate;

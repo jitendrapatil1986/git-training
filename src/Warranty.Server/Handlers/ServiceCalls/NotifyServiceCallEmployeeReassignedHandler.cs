@@ -6,7 +6,7 @@
     using NPoco;
     using NServiceBus;
 
-    public class NotifyServiceCallEmployeeReassignedHandler : IHandleMessages<InnerMessages.NotifyServiceCallEmployeeReassigned>
+    public class NotifyServiceCallEmployeeReassignedHandler : IHandleMessages<NotifyServiceCallEmployeeReassigned>
     {
         private readonly IBus _bus;
         private readonly IDatabase _database;
@@ -26,7 +26,7 @@
 
                 _bus.Publish<ServiceCallEmployeeReassigned>(x =>
                 {
-                    x.ServiceCallNumber = serviceCall.ServiceCallNumber;
+                    x.ServiceCallId = serviceCall.ServiceCallId;
                     x.EmployeeName = employee.Name;
                     x.EmployeeNumber = employee.Number;
                 });

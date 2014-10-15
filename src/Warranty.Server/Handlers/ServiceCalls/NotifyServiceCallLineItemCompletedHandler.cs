@@ -22,12 +22,11 @@
             using (_database)
             {
                 var serviceCallLineItem = _database.SingleById<ServiceCallLineItem>(message.ServiceCallLineItemId);
-                var serviceCall = _database.SingleById<ServiceCall>(serviceCallLineItem.ServiceCallId);
 
                 _bus.Publish<ServiceCallLineItemCompleted>(x =>
                 {
-                    x.ServiceCallNumber = serviceCall.ServiceCallNumber;
-                    x.LineNumber = serviceCallLineItem.LineNumber;
+                    x.ServiceCallId = serviceCallLineItem.ServiceCallId; 
+                    x.ServiceCallLineItemId = serviceCallLineItem.ServiceCallLineItemId;
                     x.ServiceCallLineItemStatus = serviceCallLineItem.ServiceCallLineItemStatus.DisplayName;
                 });
             }

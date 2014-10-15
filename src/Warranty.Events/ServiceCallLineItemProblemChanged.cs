@@ -1,11 +1,12 @@
 ﻿namespace Warranty.Events
 {
+    using System;
     using NServiceBus;
 
     public class ServiceCallLineItemProblemChanged : IEvent
     {
-        public int ServiceCallNumber { get; set; }
-        public int LineNumber { get; set; }
+        public Guid ServiceCallId { get; set; }
+        public Guid ServiceCallLineItemId { get; set; }
         public string ProblemCode { get; set; }
         public string ProbemDescription { get; set; }
     }
