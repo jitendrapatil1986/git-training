@@ -5,8 +5,8 @@
 
     public class ServiceCallLineItemCompleted : IEvent
     {
-        public int ServiceCallNumber { get; set; }
-        public int LineNumber { get; set; }
+        public Guid ServiceCallId { get; set; }
+        public Guid ServiceCallLineItemId { get; set; }
         public string ServiceCallLineItemStatus { get; set; }
     }
 }

@@ -5,7 +5,7 @@
 
     public class ServiceCallSpecialProjectStatusChanged : IEvent
     {
-        public int ServiceCallNumber { get; set; }
+        public Guid ServiceCallId { get; set; }
         public bool SpecialProject { get; set; }
         public string SpecialProjectReason { get; set; }
         public DateTime? SpecialProjectDate { get; set; }

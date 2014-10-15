@@ -25,7 +25,7 @@
 
                 _bus.Publish<ServiceCallHomeownerVerified>(x =>
                 {
-                    x.ServiceCallNumber = serviceCall.ServiceCallNumber;
+                    x.ServiceCallId = serviceCall.ServiceCallId; 
                     x.HomeownerVerificationSignature = serviceCall.HomeownerVerificationSignature;
                     x.HomeownerVerificationSignatureDate = serviceCall.HomeownerVerificationSignatureDate;
                 });
