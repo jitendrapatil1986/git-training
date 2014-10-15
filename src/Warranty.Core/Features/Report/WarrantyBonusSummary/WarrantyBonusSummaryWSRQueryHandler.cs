@@ -26,6 +26,15 @@
         public WarrantyBonusSummaryModel Handle(WarrantyBonusSummaryWSRQuery query)
         {
             var user = _userSession.GetCurrentUser();
+
+            if (!query.Model.FilteredDate.HasValue)
+            {
+                return new WarrantyBonusSummaryModel
+                {
+                    EmployeeTiedToRepresentatives = GetEmployeesTiedToRepresentatives(user),
+                };
+            }
+
             var employeeNumber = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? user.EmployeeNumber : query.Model.SelectedEmployeeNumber;
             var markets = user.Markets.CommaSeparateWrapWithSingleQuote();
 
@@ -52,7 +61,7 @@
 
             if (!string.IsNullOrEmpty(employeeNumber))
             {
-                var dollarsSpent = WarrantyConfigSection.GetCity(markets).WarrantyAmount;
+                var dollarsSpent = WarrantyConfigSection.GetCity(markets.Replace("'", "")).WarrantyAmount;
 
                 using (_database)
                 {
@@ -121,7 +130,7 @@
 
             if (user.IsInRole(UserRoles.WarrantyServiceManager) || user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyAdmin))
             {
-                const string sql = @"SELECT DISTINCT e.EmployeeId as WarrantyRepresentativeEmployeeId, e.EmployeeNumber, e.EmployeeName from CommunityAssignments ca
+                const string sql = @"SELECT DISTINCT e.EmployeeId as WarrantyRepresentativeEmployeeId, e.EmployeeNumber, LOWER(e.EmployeeName) as EmployeeName from CommunityAssignments ca
                                     INNER join Communities c
                                     ON ca.CommunityId = c.CommunityId
                                     INNER join Employees e
