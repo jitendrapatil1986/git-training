@@ -4,18 +4,22 @@ namespace Warranty.Core.Features.CreateServiceCall
 {
     using Entities;
     using Enumerations;
+    using InnerMessages;
     using NPoco;
+    using NServiceBus;
     using Security;
 
     public class CreateServiceCallCommandHandler: ICommandHandler<CreateServiceCallCommand, Guid>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
+        private readonly IBus _bus;
 
-        public CreateServiceCallCommandHandler(IDatabase database, IUserSession userSession)
+        public CreateServiceCallCommandHandler(IDatabase database, IUserSession userSession, IBus bus)
         {
             _database = database;
             _userSession = userSession;
+            _bus = bus;
         }
 
         public Guid Handle(CreateServiceCallCommand message)
@@ -50,6 +54,11 @@ namespace Warranty.Core.Features.CreateServiceCall
                 };
 
                 _database.Insert(serviceCall);
+
+                _bus.Send<NotifyServiceCallCreated>(x =>
+                    {
+                        x.ServiceCallId = serviceCall.ServiceCallId;
+                    });
 
                 if (message.ServiceCallLineItems != null)
                 {

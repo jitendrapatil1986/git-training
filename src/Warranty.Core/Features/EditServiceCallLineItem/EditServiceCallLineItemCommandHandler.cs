@@ -2,15 +2,19 @@
 {
     using System;
     using Entities;
+    using InnerMessages;
     using NPoco;
+    using NServiceBus;
 
     public class EditServiceCallLineCommandHandler : ICommandHandler<EditServiceCallLineCommand, Guid>
     {
         private readonly IDatabase _database;
+        private readonly IBus _bus;
 
-        public EditServiceCallLineCommandHandler(IDatabase database)
+        public EditServiceCallLineCommandHandler(IDatabase database, IBus bus)
         {
             _database = database;
+            _bus = bus;
         }
 
         public Guid Handle(EditServiceCallLineCommand message)
@@ -21,6 +25,11 @@
                 updateServiceCallLine.ProblemCode = message.ProblemCode;
                 updateServiceCallLine.ProblemDescription = message.ProblemDescription;
                 _database.Update(updateServiceCallLine);
+
+                _bus.Send<NotifyServiceCallLineItemProblemChanged>(x =>
+                    {
+                        x.ServiceCallLineItemId = updateServiceCallLine.ServiceCallLineItemId;
+                    });
 
                 return updateServiceCallLine.ServiceCallLineItemId;
             }
