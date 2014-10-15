@@ -14,6 +14,8 @@
     using Warranty.Core.Features.AmountSpentWidget;
     using Warranty.Core.Features.AverageDaysClosedWidget;
     using Warranty.Core.Features.PercentClosedWithinSevenDaysWidget;
+    using Warranty.Core.Features.PercentSurveyExcellentWidget;
+    using Warranty.Core.Features.PercentSurveyRecommendWidget;
     using Warranty.Core.Features.ToDoWidget;
     using Warranty.Core.Features.MyServiceTeamWidget;
     using Warranty.Core.Features.SendFeedback;
@@ -125,6 +127,34 @@
             return PartialView("_PercentClosedWithinSevenDaysWidget", model);
         }
 
+        [ChildActionOnly]
+        public ActionResult PercentSurveyRecommendWidget()
+        {
+            var model = _mediator.Request(new PercentSurveyRecommendWidgetQuery());
+            return PartialView("_PercentSurveyRecommendWidget", model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult PercentSurveyRecommendWidgetWSR()
+        {
+            var model = _mediator.Request(new PercentSurveyRecommendWidgetWSRQuery());
+            return PartialView("_PercentSurveyRecommendWidget", model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult PercentSurveyExcellentWidget()
+        {
+            var model = _mediator.Request(new PercentSurveyExcellentWidgetQuery());
+            return PartialView("_PercentSurveyExcellentWidget", model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult PercentSurveyExcellentWidgetWSR()
+        {
+            var model = _mediator.Request(new PercentSurveyExcellentWidgetWSRQuery());
+            return PartialView("_PercentSurveyExcellentWidget", model);
+        }
+        
         [ChildActionOnly]
         public ActionResult ToDoWidget()
         {

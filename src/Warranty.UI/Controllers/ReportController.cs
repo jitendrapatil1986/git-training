@@ -48,7 +48,7 @@ namespace Warranty.UI.Controllers
             return File(result.Bytes, result.MimeMapping, result.FileName);
         }
 
-		public ActionResult WSRLoadingReport()
+        public ActionResult WSRLoadingReport()
         {
             var resultModel = _mediator.Request(new WSRLoadingReportQuery());
 
@@ -63,7 +63,7 @@ namespace Warranty.UI.Controllers
             return View(resultModel);
         }
 
-		public ActionResult WarrantyBonusSummaryWSRReport()
+        public ActionResult WarrantyBonusSummaryWSRReport()
         {
             var resultModel = _mediator.Request(new WarrantyBonusSummaryWSRQuery());
 
@@ -73,7 +73,7 @@ namespace Warranty.UI.Controllers
         [HttpPost]
         public ActionResult WarrantyBonusSummaryWSRReport(WarrantyBonusSummaryModel model)
         {
-            var resultModel = _mediator.Request(new WarrantyBonusSummaryWSRQuery { queryModel = model });
+            var resultModel = _mediator.Request(new WarrantyBonusSummaryWSRQuery { Model = model });
 
             return View(resultModel);
         }

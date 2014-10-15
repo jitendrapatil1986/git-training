@@ -39,11 +39,11 @@
             </div>
         </div>
     </div>
-    @if (!Model.AnyResults)
+    @if (!Model.AnyResults && Model.SelectedEmployeeNumber != null)
     {
         <p><em>No entries match report criteria.</em></p>
     }
-    else
+    else if (Model.SelectedEmployeeNumber != null)
     {
         <div id="warrantyBonusSummary" class="col-md-12">
             <h3 class="text-center">Warranty Service Rep. Bonus Summary</h3>

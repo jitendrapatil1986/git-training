@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Configurations;
     using Extensions;
 
     public class WarrantyBonusSummaryModel
@@ -56,13 +57,13 @@
         public decimal TotalDollarsSpent { get { return BonusSummaries.Sum(x => x.TotalDollarsSpent); }}
         public decimal TotalWarrantyAllowance { get { return BonusSummaries.Sum(x => x.TotalWarrantyAllowance); }}
         public decimal TotalWarrantyDifference { get { return BonusSummaries.Sum(x => x.TotalWarrantyDifference); }}
-        public decimal TotalCostControlBonusAmount { get { return TotalWarrantyDifference * WarrantyBonusSummaryConfig.CostControlBonusPercent; }}
+        public decimal TotalCostControlBonusAmount { get { return TotalWarrantyDifference * SurveyConstants.CostControlBonusPercent; }}
         
         public decimal TotalDefinitelyWouldRecommendSurveyBonusAmount 
         {
             get
             {
-                return DefinitelyWouldRecommendSurveys.Count(x => x.IsBonusable) * WarrantyBonusSummaryConfig.DefinitelyWillBonusAmount;
+                return DefinitelyWouldRecommendSurveys.Count(x => x.IsBonusable) * SurveyConstants.DefinitelyWillBonusAmount;
             }
         }
         
@@ -71,7 +72,7 @@
             get
             {
             return
-                ExcellentWarrantySurveys.Count(x => x.IsBonusable) * WarrantyBonusSummaryConfig.ExcellentWarrantyBonusAmount;
+                ExcellentWarrantySurveys.Count(x => x.IsBonusable) * SurveyConstants.ExcellentWarrantyBonusAmount;
             } 
         }
 
@@ -84,8 +85,8 @@
         }
 
         public decimal TotalAllItemsCompletePercent { get { return AllItemsCompletes.Any() ? Math.Round(AllItemsCompletes.Sum(x => x.CompletePercentage)/AllItemsCompletes.Count(), 2) : 0; }}
-        public decimal TotalAllItemsCompleteBonusAmount { get { return IsBonusable ? WarrantyBonusSummaryConfig.AllItemsCompleteBonusAmount : 0; }}
-        public bool IsBonusable { get { return TotalAllItemsCompletePercent >= WarrantyBonusSummaryConfig.AllItemsCompletePercentThreshold; }}
+        public decimal TotalAllItemsCompleteBonusAmount { get { return IsBonusable ? SurveyConstants.AllItemsCompleteBonusAmount : 0; }}
+        public bool IsBonusable { get { return TotalAllItemsCompletePercent >= SurveyConstants.AllItemsCompletePercentThreshold; }}
 
         public class BonusSummary
         {
@@ -115,12 +116,12 @@
             public string HomeownerName { get; set; }
             public string JobNumber { get; set; }
             public string DefinitelyWillRecommend { get; set; }
-            public decimal BonusAmount { get { return  IsBonusable ? WarrantyBonusSummaryConfig.DefinitelyWillBonusAmount : 0; }}
+            public decimal BonusAmount { get { return  IsBonusable ? SurveyConstants.DefinitelyWillBonusAmount : 0; }}
             public bool IsBonusable 
             {
                 get
                 {
-                    return string.Equals(DefinitelyWillRecommend, WarrantyBonusSummaryConfig.DefinitelyWillThreshold, StringComparison.CurrentCultureIgnoreCase);
+                    return string.Equals(DefinitelyWillRecommend, SurveyConstants.DefinitelyWillThreshold, StringComparison.CurrentCultureIgnoreCase);
                 }
             }
         }
@@ -130,12 +131,12 @@
             public string HomeownerName { get; set; }
             public string JobNumber { get; set; }
             public string ExcellentWarrantyService { get; set; }
-            public decimal BonusAmount { get { return IsBonusable ? WarrantyBonusSummaryConfig.ExcellentWarrantyBonusAmount : 0; }}
+            public decimal BonusAmount { get { return IsBonusable ? SurveyConstants.ExcellentWarrantyBonusAmount : 0; }}
             public bool IsBonusable 
             {
                 get
                 { 
-                    return Convert.ToInt16(ExcellentWarrantyService) >= WarrantyBonusSummaryConfig.ExcellentWarrantyThreshold;
+                    return Convert.ToInt16(ExcellentWarrantyService) >= SurveyConstants.ExcellentWarrantyThreshold;
                 }
             }
         }
