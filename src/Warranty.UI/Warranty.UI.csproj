@@ -415,6 +415,8 @@
     <Content Include="Views\Report\WarrantyBonusSummaryWSRReport.cshtml" />
     <Content Include="Views\Report\WSRLoadingReport.cshtml" />
     <Content Include="Views\Report\MailMerge.cshtml" />
+    <Content Include="Views\Home\_PercentSurveyRecommendWidget.cshtml" />
+    <Content Include="Views\Home\_PercentSurveyExcellentWidget.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

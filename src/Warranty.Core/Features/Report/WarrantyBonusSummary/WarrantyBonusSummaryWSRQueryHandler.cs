@@ -1,5 +1,6 @@
 ﻿namespace Warranty.Core.Features.Report.WarrantyBonusSummary
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Configurations;
@@ -25,7 +26,7 @@
         public WarrantyBonusSummaryModel Handle(WarrantyBonusSummaryWSRQuery query)
         {
             var user = _userSession.GetCurrentUser();
-            var employeeNumber = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? user.EmployeeNumber : query.queryModel.SelectedEmployeeNumber;
+            var employeeNumber = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? user.EmployeeNumber : query.Model.SelectedEmployeeNumber;
             var markets = user.Markets.CommaSeparateWrapWithSingleQuote();
 
             var surveyData = GetSurveyData(query, employeeNumber);
@@ -39,7 +40,8 @@
                     AllItemsCompletes = GetAllItemsComplete(query, employeeNumber),
                 };
 
-            model.FilteredDate = query.queryModel != null ? query.queryModel.FilteredDate : null;
+            model.SelectedEmployeeNumber = employeeNumber;
+            model.FilteredDate = query.Model != null ? query.Model.FilteredDate : null;
 
             return model;
         }
@@ -106,7 +108,7 @@
                                     ON a.EmployeeId = e.EmployeeId
                                     ORDER BY c.CommunityName";
 
-                    result = _database.Fetch<WarrantyBonusSummaryModel.BonusSummary>(string.Format(sql, markets), -2, query.queryModel.StartDate, employeeNumber, dollarsSpent);
+                    result = _database.Fetch<WarrantyBonusSummaryModel.BonusSummary>(string.Format(sql, markets), -2, query.Model.StartDate, employeeNumber, dollarsSpent);
                 }
             }
 
@@ -119,7 +121,7 @@
 
             if (user.IsInRole(UserRoles.WarrantyServiceManager) || user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyAdmin))
             {
-                const string sql = @"SELECT e.EmployeeId as WarrantyRepresentativeEmployeeId, e.EmployeeNumber, e.EmployeeName from CommunityAssignments ca
+                const string sql = @"SELECT DISTINCT e.EmployeeId as WarrantyRepresentativeEmployeeId, e.EmployeeNumber, e.EmployeeName from CommunityAssignments ca
                                     INNER join Communities c
                                     ON ca.CommunityId = c.CommunityId
                                     INNER join Employees e
@@ -139,20 +141,20 @@
 
         private IEnumerable<SurveyDataResult> GetSurveyData(WarrantyBonusSummaryWSRQuery query, string employeeNumber)
         {
-            var surveyData = _survey.Get.ElevenMonthWarrantySurvey(new { query.queryModel.StartDate, query.queryModel.EndDate, EmployeeId = employeeNumber });
+            var surveyData = _survey.Get.ElevenMonthWarrantySurvey(new { query.Model.StartDate, query.Model.EndDate, EmployeeId = employeeNumber });
             return surveyData.Details.ToObject<List<SurveyDataResult>>();
         }
 
         private IEnumerable<WarrantyBonusSummaryModel.ItemsComplete> GetAllItemsComplete(WarrantyBonusSummaryWSRQuery query, string employeeNumber)
         {
-            var surveyData = _survey.Get.OneMonthWarrantySurvey(new { query.queryModel.StartDate, query.queryModel.EndDate, EmployeeId = employeeNumber });
+            var surveyData = _survey.Get.OneMonthWarrantySurvey(new { query.Model.StartDate, query.Model.EndDate, EmployeeId = employeeNumber });
 
             List<ItemsCompleteResult> itemsCompleteResults = surveyData.Details.ToObject<List<ItemsCompleteResult>>();
             var result = itemsCompleteResults.GroupBy(x => x.CommunityName)
                                              .Select(g => new WarrantyBonusSummaryModel.ItemsComplete
                                              {
                                                  CommunityName = g.Key,
-                                                 CompletePercentage = g.Average(y => y.ItemsCompleted.ToUpper() == WarrantyBonusSummaryConfig.AllItemsCompleteThreshold ? 100m : 0m),
+                                                 CompletePercentage = g.Average(y => string.Equals(y.ItemsCompleted, SurveyConstants.AllItemsCompleteThreshold, StringComparison.CurrentCultureIgnoreCase) ? 100m : 0m),
                                              }).OrderBy(o => o.CommunityName).ToList();
             return result;
         }

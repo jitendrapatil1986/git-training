@@ -1,0 +1,14 @@
+﻿@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.PercentSurveyExcellentWidget.PercentSurveyExcellentWidgetModel
+
+<div class="panel panel-info dashboard-widget">
+    <div class="panel-heading">
+        <div class="dashboard-widget-title">% EXCELLENT SERVICE</div>
+    </div>
+    <div class="panel-body">
+        @*<a href="@Url.Action("Index", "Stats", new{id=StatView.PercentClosed.DisplayName})">*@
+            <div class="dashboard-widget-number">@Format.Percentage(Model.PercentExcellentThisMonth)</div>
+            <div class="dashboard-widget-footnote">@Format.Percentage(Model.PercentExcellentLastMonth) last month</div>
+        @*</a>*@
+    </div>
+</div>

@@ -101,6 +101,7 @@
     <Compile Include="Attributes\CuteUiFileUploadOptionsAttribute.cs" />
     <Compile Include="Configurations\CitiesCollection.cs" />
     <Compile Include="Configurations\CityConfig.cs" />
+    <Compile Include="Configurations\SurveyConstants.cs" />
     <Compile Include="Configurations\WarrantyConfigSection.cs" />
     <Compile Include="Configurations\EnumerationDisplayConverter.cs" />
     <Compile Include="Configurations\WarrantyConstants.cs" />
@@ -232,6 +233,11 @@
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetQueryHandler.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQuery.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQueryHandler.cs" />
+    <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetModel.cs" />
+    <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetQuery.cs" />
+    <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetQueryHandler.cs" />
+    <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetWSRQuery.cs" />
+    <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetWSRQueryHandler.cs" />
     <Compile Include="Features\DownloadFileBase.cs" />
     <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemCommand.cs" />
     <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemCommandHandler.cs" />
@@ -276,6 +282,11 @@
     <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemModel.cs" />
     <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetWSRQuery.cs" />
     <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetWSRQueryHandler.cs" />
+    <Compile Include="Features\PercentSurveyRecommendWidget\PercentSurveyRecommendWidgetModel.cs" />
+    <Compile Include="Features\PercentSurveyRecommendWidget\PercentSurveyRecommendWidgetQuery.cs" />
+    <Compile Include="Features\PercentSurveyRecommendWidget\PercentSurveyRecommendWidgetQueryHandler.cs" />
+    <Compile Include="Features\PercentSurveyRecommendWidget\PercentSurveyRecommendWidgetWSRQuery.cs" />
+    <Compile Include="Features\PercentSurveyRecommendWidget\PercentSurveyRecommendWidgetWSRQueryHandler.cs" />
     <Compile Include="Features\ProblemCodes\ProblemCodesQuery.cs" />
     <Compile Include="Features\ProblemCodes\ProblemCodesQueryHandler.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchCallModel.cs" />
@@ -283,7 +294,6 @@
     <Compile Include="Features\JobSummary\JobSummaryModel.cs" />
     <Compile Include="Features\JobSummary\JobSummaryQuery.cs" />
     <Compile Include="Features\JobSummary\JobSummaryQueryHandler.cs" />
-    <Compile Include="Features\Report\WarrantyBonusSummary\WarrantyBonusSummaryConfig.cs" />
     <Compile Include="Features\Report\WSRLoadingReport\WSRLoadingReportModel.cs" />
     <Compile Include="Features\Report\WSRLoadingReport\WSRLoadingReportQuery.cs" />
     <Compile Include="Features\Report\WSRLoadingReport\WSRLoadingReportQueryHandler.cs" />

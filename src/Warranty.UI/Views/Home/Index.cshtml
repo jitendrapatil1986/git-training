@@ -23,6 +23,14 @@
                     @Html.Action("PercentClosedWithinSevenDaysWidgetWSR", "Home")
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.Action("PercentSurveyRecommendWidgetWSR", "Home")
+                </div>
+                <div class="col-md-6">
+                    @Html.Action("PercentSurveyExcellentWidgetWSR", "Home")
+                </div>
+            </div>
         </div>
     }
     @if (User.IsInRole(UserRoles.WarrantyServiceManager) || User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyAdmin))
@@ -40,6 +48,14 @@
                     </div>
                     <div class="col-md-4">
                         @Html.Action("PercentClosedWithinSevenDaysWidget", "Home")
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.Action("PercentSurveyRecommendWidget", "Home")
+                    </div>
+                    <div class="col-md-6">
+                        @Html.Action("PercentSurveyExcellentWidget", "Home")
                     </div>
                 </div>
             </div>

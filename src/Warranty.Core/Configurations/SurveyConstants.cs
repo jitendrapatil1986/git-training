@@ -1,6 +1,6 @@
-﻿namespace Warranty.Core.Features.Report.WarrantyBonusSummary
+namespace Warranty.Core.Configurations
 {
-    public class WarrantyBonusSummaryConfig
+    public class SurveyConstants
     {
         public const decimal CostControlBonusPercent = 0.10m;
         public const decimal AllItemsCompletePercentThreshold = 85;

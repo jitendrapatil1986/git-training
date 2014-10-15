@@ -2,6 +2,11 @@
 {
     public class WarrantyBonusSummaryWSRQuery : IQuery<WarrantyBonusSummaryModel>
     {
-        public WarrantyBonusSummaryModel queryModel { get; set; }
+        public WarrantyBonusSummaryModel Model { get; set; }
+
+        public WarrantyBonusSummaryWSRQuery()
+        {
+            Model = new WarrantyBonusSummaryModel();
+        }
     }
 }
