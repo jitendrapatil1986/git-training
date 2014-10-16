@@ -36,13 +36,13 @@
             }
 
             var employeeNumber = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? user.EmployeeNumber : query.Model.SelectedEmployeeNumber;
-            var markets = user.Markets.CommaSeparateWrapWithSingleQuote();
+            var market = user.Markets.FirstOrDefault();
 
             var surveyData = GetSurveyData(query, employeeNumber);
 
             var model = new WarrantyBonusSummaryModel
                 {
-                    BonusSummaries = GetBonusByEmployeeAndCommunity(query, employeeNumber, markets),
+                    BonusSummaries = GetBonusByEmployeeAndCommunity(query, employeeNumber, market),
                     EmployeeTiedToRepresentatives = GetEmployeesTiedToRepresentatives(user),
                     DefinitelyWouldRecommendSurveys = surveyData.Select(x=> new WarrantyBonusSummaryModel.DefinitelyWouldRecommendSurvey{DefinitelyWillRecommend = x.DefinitelyWillRecommend, HomeownerName = x.HomeownerName, JobNumber = x.JobNumber}),
                     ExcellentWarrantySurveys = surveyData.Select(x => new WarrantyBonusSummaryModel.ExcellentWarrantySurvey{ExcellentWarrantyService = x.ExcellentWarrantyService, HomeownerName = x.HomeownerName, JobNumber = x.JobNumber}),
@@ -55,13 +55,13 @@
             return model;
         }
 
-        private IEnumerable<WarrantyBonusSummaryModel.BonusSummary> GetBonusByEmployeeAndCommunity(WarrantyBonusSummaryWSRQuery query, string employeeNumber, string markets)
+        private IEnumerable<WarrantyBonusSummaryModel.BonusSummary> GetBonusByEmployeeAndCommunity(WarrantyBonusSummaryWSRQuery query, string employeeNumber, string market)
         {
             var result = new List<WarrantyBonusSummaryModel.BonusSummary>();
 
             if (!string.IsNullOrEmpty(employeeNumber))
             {
-                var dollarsSpent = WarrantyConfigSection.GetCity(markets.Replace("'", "")).WarrantyAmount;
+                var dollarsSpent = WarrantyConfigSection.GetCity(market).WarrantyAmount;
 
                 using (_database)
                 {
@@ -106,7 +106,7 @@
                                         ON ca.EmployeeId = e.EmployeeId
                                         WHERE CloseDate >= DATEADD(yy, @0, @1)
                                         AND CloseDate <= @1
-                                        AND Ci.CityCode IN ({0})
+                                        AND Ci.CityCode = @4
                                         AND EmployeeNumber=@2
                                         GROUP BY j.CommunityId
                                     ) b
@@ -117,7 +117,7 @@
                                     ON a.EmployeeId = e.EmployeeId
                                     ORDER BY c.CommunityName";
 
-                    result = _database.Fetch<WarrantyBonusSummaryModel.BonusSummary>(string.Format(sql, markets), -2, query.Model.StartDate, employeeNumber, dollarsSpent);
+                    result = _database.Fetch<WarrantyBonusSummaryModel.BonusSummary>(sql, -2, query.Model.StartDate, employeeNumber, dollarsSpent, market);
                 }
             }
 
