@@ -137,7 +137,8 @@
                                     ON ca.EmployeeId = e.EmployeeId
                                     INNER JOIN Cities ci
                                     ON c.CityId = ci.CityId
-                                    WHERE CityCode IN ({0})";
+                                    WHERE CityCode IN ({0})
+                                    ORDER BY EmployeeName";
 
                 using (_database)
                 {
