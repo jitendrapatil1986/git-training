@@ -27,13 +27,22 @@
         {
             var user = _userSession.GetCurrentUser();
             var employeeNumber = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? user.EmployeeNumber : query.Model.SelectedEmployeeNumber;
-            var markets = user.Markets.CommaSeparateWrapWithSingleQuote();
+            var market = user.Markets.FirstOrDefault();
 
+            if (!query.Model.FilteredDate.HasValue || String.IsNullOrEmpty(market))
+            {
+                return new WarrantyBonusSummaryModel
+                {
+                    EmployeeTiedToRepresentatives = GetEmployeesTiedToRepresentatives(user),
+                };
+            }
+
+            
             var surveyData = GetSurveyData(query, employeeNumber);
 
             var model = new WarrantyBonusSummaryModel
                 {
-                    BonusSummaries = GetBonusByEmployeeAndCommunity(query, employeeNumber, markets),
+                    BonusSummaries = GetBonusByEmployeeAndCommunity(query, employeeNumber, market),
                     EmployeeTiedToRepresentatives = GetEmployeesTiedToRepresentatives(user),
                     DefinitelyWouldRecommendSurveys = surveyData.Select(x=> new WarrantyBonusSummaryModel.DefinitelyWouldRecommendSurvey{DefinitelyWillRecommend = x.DefinitelyWillRecommend, HomeownerName = x.HomeownerName, JobNumber = x.JobNumber}),
                     ExcellentWarrantySurveys = surveyData.Select(x => new WarrantyBonusSummaryModel.ExcellentWarrantySurvey{ExcellentWarrantyService = x.ExcellentWarrantyService, HomeownerName = x.HomeownerName, JobNumber = x.JobNumber}),
@@ -46,13 +55,13 @@
             return model;
         }
 
-        private IEnumerable<WarrantyBonusSummaryModel.BonusSummary> GetBonusByEmployeeAndCommunity(WarrantyBonusSummaryWSRQuery query, string employeeNumber, string markets)
+        private IEnumerable<WarrantyBonusSummaryModel.BonusSummary> GetBonusByEmployeeAndCommunity(WarrantyBonusSummaryWSRQuery query, string employeeNumber, string market)
         {
             var result = new List<WarrantyBonusSummaryModel.BonusSummary>();
 
             if (!string.IsNullOrEmpty(employeeNumber))
             {
-                var dollarsSpent = WarrantyConfigSection.GetCity(markets).WarrantyAmount;
+                var dollarsSpent = WarrantyConfigSection.GetCity(market).WarrantyAmount;
 
                 using (_database)
                 {
@@ -97,7 +106,7 @@
                                         ON ca.EmployeeId = e.EmployeeId
                                         WHERE CloseDate >= DATEADD(yy, @0, @1)
                                         AND CloseDate <= @1
-                                        AND Ci.CityCode IN ({0})
+                                        AND Ci.CityCode = @4
                                         AND EmployeeNumber=@2
                                         GROUP BY j.CommunityId
                                     ) b
@@ -108,7 +117,7 @@
                                     ON a.EmployeeId = e.EmployeeId
                                     ORDER BY c.CommunityName";
 
-                    result = _database.Fetch<WarrantyBonusSummaryModel.BonusSummary>(string.Format(sql, markets), -2, query.Model.StartDate, employeeNumber, dollarsSpent);
+                    result = _database.Fetch<WarrantyBonusSummaryModel.BonusSummary>(sql, -2, query.Model.StartDate, employeeNumber, dollarsSpent, market);
                 }
             }
 
@@ -121,14 +130,15 @@
 
             if (user.IsInRole(UserRoles.WarrantyServiceManager) || user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyAdmin))
             {
-                const string sql = @"SELECT DISTINCT e.EmployeeId as WarrantyRepresentativeEmployeeId, e.EmployeeNumber, e.EmployeeName from CommunityAssignments ca
+                const string sql = @"SELECT DISTINCT e.EmployeeId as WarrantyRepresentativeEmployeeId, e.EmployeeNumber, LOWER(e.EmployeeName) as EmployeeName from CommunityAssignments ca
                                     INNER join Communities c
                                     ON ca.CommunityId = c.CommunityId
                                     INNER join Employees e
                                     ON ca.EmployeeId = e.EmployeeId
                                     INNER JOIN Cities ci
                                     ON c.CityId = ci.CityId
-                                    WHERE CityCode IN ({0})";
+                                    WHERE CityCode IN ({0})
+                                    ORDER BY EmployeeName";
 
                 using (_database)
                 {
