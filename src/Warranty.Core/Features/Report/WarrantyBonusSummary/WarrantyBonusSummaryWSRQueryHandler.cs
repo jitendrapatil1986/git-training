@@ -26,8 +26,10 @@
         public WarrantyBonusSummaryModel Handle(WarrantyBonusSummaryWSRQuery query)
         {
             var user = _userSession.GetCurrentUser();
+            var employeeNumber = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? user.EmployeeNumber : query.Model.SelectedEmployeeNumber;
+            var market = user.Markets.FirstOrDefault();
 
-            if (!query.Model.FilteredDate.HasValue)
+            if (!query.Model.FilteredDate.HasValue || String.IsNullOrEmpty(market))
             {
                 return new WarrantyBonusSummaryModel
                 {
@@ -35,9 +37,7 @@
                 };
             }
 
-            var employeeNumber = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? user.EmployeeNumber : query.Model.SelectedEmployeeNumber;
-            var market = user.Markets.FirstOrDefault();
-
+            
             var surveyData = GetSurveyData(query, employeeNumber);
 
             var model = new WarrantyBonusSummaryModel
