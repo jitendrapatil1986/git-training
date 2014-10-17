@@ -40,7 +40,7 @@ namespace Warranty.Core.ToDoInfrastructure
                 toDos.AddRange(communityEmployeeAssignmentToDos);
                 //toDos.AddRange(paymentRequestApprovalToDos);
 
-                return toDos.OrderBy(x => x.Date).ToList();
+                return toDos.OrderBy(x=>x.Priority).ThenBy(x => x.Date).ToList();
             }
         }
 

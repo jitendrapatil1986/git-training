@@ -187,6 +187,7 @@
     <Compile Include="Entities\ServiceCallNote.cs" />
     <Compile Include="Entities\ServiceCallLineItem.cs" />
     <Compile Include="Enumerations\ActivityType.cs" />
+    <Compile Include="Enumerations\ToDoPriority.cs" />
     <Compile Include="Enumerations\PhoneNumberType.cs" />
     <Compile Include="Enumerations\ReferenceType.cs" />
     <Compile Include="Enumerations\ServiceCallLineItemStatus.cs" />
