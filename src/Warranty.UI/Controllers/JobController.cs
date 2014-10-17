@@ -6,6 +6,7 @@ namespace Warranty.UI.Controllers
     using Warranty.Core;
     using Warranty.Core.Features.JobSummary;
     using Warranty.Core.Features.JobSummary.Attachments;
+    using Warranty.Core.Features.JobSummary.ChangeHomeowner;
 
     public class JobController : Controller
     {
@@ -53,9 +54,31 @@ namespace Warranty.UI.Controllers
             return File(model.Bytes, model.MimeMapping, model.FileName);
         }
 
+        [HttpGet]
         public ActionResult ChangeHomeowner(Guid id)
         {
-            return View();
+            var model = _mediator.Request(new ChangeHomeownerQuery
+                {
+                    JobId = id,
+                });
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult ChangeHomeowner(ChangeHomeownerModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                _mediator.Send(new ChangeHomeownerCommand
+                    {
+                        Model = model,
+                    });
+
+                return RedirectToAction("JobSummary", new {id = model.JobId});
+            }
+
+            return View(model);
         }
 
     }

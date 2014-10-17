@@ -1,8 +1,71 @@
-﻿@model dynamic
+﻿@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.JobSummary.ChangeHomeowner.ChangeHomeownerModel
 
 <div class="container">
     <section class="margin-bottom-10">
-            <h2 class="pull-left no-margin">Change Homeowner</h2>
-            <div class="clearfix"></div>
-        </section>
+        <h2 class="pull-left no-margin">Change Homeowner</h2>
+        <h3 class="pull-right no-margin">Job #@Model.JobNumber <small>@Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)</small></h3>
+        <div class="clearfix"></div>
+    </section>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                @using (Html.BeginForm())
+                {
+                    @Html.HiddenFor(x => x.JobId)
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-12">
+                                New Homeowner Information
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        @Html.Label("Name")
+                                        <br/>
+                                        @Html.TextBoxFor(x => x.NewHomeownerName, new { @class = "form-control" })
+                                        <br/>
+                                        @Html.Label("Primary Phone Number")
+                                        <br/>
+                                        @Html.TextBoxFor(x => x.NewHomeownerHomePhone, new { @class = "form-control" })
+                                        <br/>
+                                        @Html.Label("Primary E-mail Address")
+                                        <br/>
+                                        @Html.TextBoxFor(x => x.NewHomeownerEmailAddress, new { @class = "form-control" })
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.Label("Current Homeowner Information")
+                                        <br/>
+                                        @Format.HomeOwner(Model.CurrentHomeowner.HomeownerName, Model.CurrentHomeowner.HomeownerNumber)
+                                        @Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)
+                                        <br/>
+                                        @Html.DisplayFor(x => x.AddressLine)
+                                        <br/>
+                                        @Format.CityStateZip(Model.City, Model.StateCode, Model.PostalCode)
+                                        @Format.CellNumber(Model.CurrentHomeowner.HomePhone)
+                                        <br/>
+                                        @Format.HomeNumber(Model.CurrentHomeowner.OtherPhone)
+                                        <br/>
+                                        <a>@Format.Email(Model.CurrentHomeowner.EmailAddress)</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer text-center">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="submit" value="Submit" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>

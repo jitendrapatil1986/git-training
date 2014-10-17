@@ -239,6 +239,11 @@
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetQueryHandler.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQuery.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQueryHandler.cs" />
+    <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerCommand.cs" />
+    <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerCommandHandler.cs" />
+    <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerModel.cs" />
+    <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerQuery.cs" />
+    <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerQueryHandler.cs" />
     <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetModel.cs" />
     <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetQuery.cs" />
     <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetQueryHandler.cs" />
