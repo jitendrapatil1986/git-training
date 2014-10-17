@@ -53,5 +53,10 @@ namespace Warranty.UI.Controllers
             return File(model.Bytes, model.MimeMapping, model.FileName);
         }
 
+        public ActionResult ChangeHomeowner(Guid id)
+        {
+            return View();
+        }
+
     }
 }
