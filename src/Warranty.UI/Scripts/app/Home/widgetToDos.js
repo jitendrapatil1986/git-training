@@ -34,7 +34,6 @@ define(['urls','jquery'], function(urls, $) {
         }
         
         $('#toDoSelect').change(function () {
-            debugger;
             if ($(this).find('option:selected').text() == 'All') {
                 $('.todo').removeClass('hide');
             } else {
@@ -100,7 +99,6 @@ define(['urls','jquery'], function(urls, $) {
         
         $(".complete-task").click(function (e) {
             e.preventDefault();
-            debugger;
             var taskId = $(this).data("task-id");
             var url = urls.Task.Complete;
             $.ajax({
