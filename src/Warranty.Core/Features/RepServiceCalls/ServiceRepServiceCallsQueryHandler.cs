@@ -48,6 +48,7 @@ namespace Warranty.Core.Features.RepServiceCalls
                                         , j.CloseDate as WarrantyStartDate
                                         , wc.EscalationReason
                                         , wc.EscalationDate
+                                        , j.JobNumber
                                      FROM [ServiceCalls] wc
                                      inner join Jobs j
                                        on wc.JobId = j.JobId

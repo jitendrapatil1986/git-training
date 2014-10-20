@@ -40,6 +40,7 @@ namespace Warranty.Core.Features.RepServiceCalls
             public bool IsSpecialProject { get; set; }
             public bool IsEscalated { get; set; }
             public decimal? PaymentAmount { get; set; }
+            public string JobNumber { get; set; }
 
             public int PercentComplete
             {

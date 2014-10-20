@@ -419,6 +419,7 @@
     <Content Include="Views\Home\_PercentSurveyRecommendWidget.cshtml" />
     <Content Include="Views\Home\_PercentSurveyExcellentWidget.cshtml" />
     <Content Include="Views\Job\ChangeHomeowner.cshtml" />
+    <Content Include="Views\Home\_ServiceCallListItem.cshtml" />
     <Content Include="Views\Home\_ToDoJobChangedTask.cshtml" />
   </ItemGroup>
   <ItemGroup>
