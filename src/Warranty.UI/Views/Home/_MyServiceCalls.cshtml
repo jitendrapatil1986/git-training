@@ -11,29 +11,11 @@ else
 {
     foreach (var line in Model.MyServiceCalls)
     {
-        <div class="my-service-call service-call-line cursor-pointer hide" onclick="location.href='@Url.Action("CallSummary", "ServiceCall", new {id=line.ServiceCallId})';">
-            <div class="col-md-4">
-                <strong>@Format.HomeOwner(line.HomeownerName, line.HomeownerNumber)</strong><br />@line.Address
-            </div>
-            <div class="col-md-2">@Format.PhoneNumber(line.PhoneNumber)</div>
-            <div class="col-md-2">
-                <small class="text-muted">
-                    @Html.ActionLink(line.JobNumber, "JobSummary", "Job", new {id = line.JobId}, null)
-                </small><br/>@Format.YearsWithinWarranty(line.YearsWithinWarranty, line.WarrantyStartDate)
-            </div>
-            <div class="col-md-1 hidden-sm hidden-xs">                                        
-                    @Format.NumberOfLineItems(line.NumberOfLineItems)
-            </div>
-            <div class="col-md-3 pull-right has-bottom-tooltip" title="@Format.DateForServiceCallWiget(line.CreatedDate)">
-                <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@line.NumberOfDaysRemaining)<br/>
-                <div class="progress time-remaining-progress hidden-sm hidden-xs">
-                    <div class="progress-bar @Css.ServiceCallProgressBar(line.NumberOfDaysRemaining)" role="progressbar" style="width: @line.PercentComplete%">
-                        <span class="sr-only">@line.PercentComplete% Complete</span>
-                    </div>
-                </div>
-            </div>
-            <div class="clearfix"></div>
+        <div class="my-service-call hide">
+            @Html.Partial("_ServiceCallListItem", line)
         </div>
+
+
     }
     if (Model.MyServiceCalls.Count() > 5)
     {
