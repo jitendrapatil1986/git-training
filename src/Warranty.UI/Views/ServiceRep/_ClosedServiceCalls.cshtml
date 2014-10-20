@@ -23,26 +23,6 @@
             <div class="col-md-1 pull-right">@Format.DaysOpenedFor(line.DaysOpenedFor, line.CreatedDate, line.CompletionDate)</div>
             <div class="clearfix"></div>
         </div>
-    
-        @*<div class="service-call-line">
-            <div class="col-md-1">
-                <small class="text-muted">
-                    @Html.ActionLink(line.CallNumber, "CallSummary", "ServiceCall", new {id = line.ServiceCallId}, null)
-                </small><br/>@Format.YearsWithinWarranty(line.YearsWithinWarranty, line.WarrantyStartDate)
-            </div>
-            <div class="col-md-6">
-                <div class="col-md-1 hidden-sm hidden-xs">
-                    @Format.NumberOfLineItems(line.NumberOfLineItems)
-                </div>
-                <div class="col-md-10">
-                    @Format.HomeOwner(line.HomeownerName, line.HomeownerNumber)<br />@line.Address
-                </div>
-            </div>
-            <div class="col-md-2">@Format.Escalated(line.IsEscalated, line.EscalationReason, line.EscalationDate)</div>
-            <div class="col-md-1 pull-right">@Format.SpecialProject(line.IsSpecialProject)</div>
-            <div class="col-md-1 pull-right">@Format.DaysOpenedFor(line.DaysOpenedFor, line.CreatedDate, line.CompletionDate)</div>
-            <div class="clearfix"></div>
-        </div>*@
     }
 }
 else
