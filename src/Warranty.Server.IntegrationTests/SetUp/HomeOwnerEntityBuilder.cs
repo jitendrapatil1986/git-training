@@ -13,7 +13,8 @@ namespace Warranty.Server.IntegrationTests.SetUp
 
         public override HomeOwner GetSaved(Action<HomeOwner> action)
         {
-            var entity = new HomeOwner{
+            var entity = new HomeOwner
+            {
                 HomeOwnerNumber = 23,
                 HomeOwnerName = "Goodman"
             };

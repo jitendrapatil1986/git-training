@@ -202,6 +202,7 @@
     <Compile Include="Api\ManageServiceCallController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
+    <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\EnumerationController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -419,6 +420,7 @@
     <Content Include="Views\Home\_PercentSurveyExcellentWidget.cshtml" />
     <Content Include="Views\Job\ChangeHomeowner.cshtml" />
     <Content Include="Views\Home\_ServiceCallListItem.cshtml" />
+    <Content Include="Views\Home\_ToDoJobChangedTask.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
