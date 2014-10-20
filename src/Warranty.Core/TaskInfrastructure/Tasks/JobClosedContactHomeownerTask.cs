@@ -25,7 +25,7 @@
                     var task = new Task
                     {
                         EmployeeId = employeeId,
-                        Description = string.Format("Contact homeowner to coordinate warranty orientation. Job # {0}", entity.JobNumber),
+                        Description = "Contact homeowner to coordinate warranty orientation.",
                         ReferenceId = entity.JobId,
                         TaskType = TaskType.JobStageChanged
                     };

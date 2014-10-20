@@ -4,7 +4,7 @@
 <div class="todo @Css.ToDoClass(ToDoType.JobChangedTask) hide" id="task-todo-@Model.TaskId">
 
     <div class="todo-widget-data-container">
-        <div class="service-call-request-icon">
+        <div class="task-icon">
             T
         </div>
 
@@ -14,7 +14,7 @@
         <div class="todo-widget-element">
             <small class="text-muted">@Model.Description</small>
         </div>
-        <div class="todo-widget-element">
+        <div class="todo-widget-element  margin-top-10">
             <small class="text-muted">
                 <strong>Job # </strong>@Html.ActionLink(Model.JobNumber, "JobSummary", "Job", new {id = Model.JobId}, null)
             </small>

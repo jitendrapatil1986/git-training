@@ -27,10 +27,10 @@
                     switch (entity.Stage)
                     {
                         case 3:
-                            description = string.Format("Contact builder to coordinate a warranty introduction. Job # {0}", entity.JobNumber);
+                            description = "Contact builder to coordinate a warranty introduction. Job # {0}";
                             break;
                         case 7:
-                            description = string.Format("Contact builder to coordinate a 244 walk. Job # {0}", entity.JobNumber);
+                            description = "Contact builder to coordinate a 244 walk. Job # {0}";
                             break;
                     }
                     var task = new Task
