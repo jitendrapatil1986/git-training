@@ -33,7 +33,8 @@ define(['urls','jquery'], function(urls, $) {
             }
         }
         
-        $('#toDoSelect').change(function() {
+        $('#toDoSelect').change(function () {
+            debugger;
             if ($(this).find('option:selected').text() == 'All') {
                 $('.todo').removeClass('hide');
             } else {
@@ -96,5 +97,21 @@ define(['urls','jquery'], function(urls, $) {
                 nextTodo.removeClass("hide");
             }
         }
+        
+        $(".complete-task").click(function (e) {
+            e.preventDefault();
+            debugger;
+            var taskId = $(this).data("task-id");
+            var url = urls.Task.Complete;
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { id: taskId },
+                success: function (result) {
+                    $('#task-todo-' + taskId).remove();
+                    updateTodoWidgetElements();
+                }
+            });
+        });
     });
 });
