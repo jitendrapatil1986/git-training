@@ -13,5 +13,6 @@ namespace Warranty.Core.ToDoInfrastructure
 
         public DateTime Date { get; set; }
         public abstract ToDoType Type { get; }
+        public virtual ToDoPriority Priority { get { return ToDoPriority.Low; } }
     }
 }

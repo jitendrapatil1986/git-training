@@ -8,6 +8,7 @@ namespace Warranty.UI.Core.Initialization
     using StructureMap;
     using Warranty.Core;
     using Warranty.Core.CsvBuilder;
+    using Warranty.Core.TaskInfrastructure.Interfaces;
 
     public static class IoC
     {
@@ -36,6 +37,7 @@ namespace Warranty.UI.Core.Initialization
                     scan.AddAllTypesOf((typeof(IApprovalService<>)));
                     scan.AddAllTypesOf((typeof(IActivityLogger)));
                     scan.AddAllTypesOf((typeof(ICsvBuilder)));
+                    scan.AddAllTypesOf((typeof(ITask<>)));
 
                     scan.WithDefaultConventions();
                 });

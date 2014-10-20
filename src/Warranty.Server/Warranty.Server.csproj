@@ -106,6 +106,7 @@
     <Compile Include="Handlers\Jobs\JobResetToDirtHandler.cs" />
     <Compile Include="Handlers\Jobs\JobAddedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobPlanUpdatedHandler.cs" />
+    <Compile Include="Handlers\Jobs\JobStageUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentAddedHandler.cs" />

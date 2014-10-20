@@ -30,17 +30,28 @@ namespace Warranty.Core.ToDoInfrastructure
             using (_database)
             {
                 var user = _userSession.GetCurrentUser();
-                var serviceCallApprovalToDos = GetServiceCallApprovalToDos(user, _database);
-                var communityEmployeeAssignmentToDos = GetCommunityEmployeeAssignmentToDos(user, _database);
-                //var paymentRequestApprovalToDos = GetPaymentRequestApprovalToDos();
-
                 var toDos = new List<IToDo>();
 
-                toDos.AddRange(serviceCallApprovalToDos);
-                toDos.AddRange(communityEmployeeAssignmentToDos);
-                //toDos.AddRange(paymentRequestApprovalToDos);
+                if (ToDoType.ServiceCallApproval.HasAccess(user.Roles))
+                {
+                    var serviceCallApprovalToDos = GetServiceCallApprovalToDos(user, _database);
+                    toDos.AddRange(serviceCallApprovalToDos);
+                }
 
-                return toDos.OrderBy(x => x.Date).ToList();
+                if (ToDoType.CommunityEmployeeAssignment.HasAccess(user.Roles))
+                {
+                    var communityEmployeeAssignmentToDos = GetCommunityEmployeeAssignmentToDos(user, _database);
+                    toDos.AddRange(communityEmployeeAssignmentToDos);
+                }
+
+                if (ToDoType.JobChangedTask.HasAccess(user.Roles))
+                {
+                    var taskJobChangedToDos = GetJobChangedTaskToDos(user, _database, TaskType.JobStageChanged).ToList();
+                    taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobClosed));
+                    toDos.AddRange(taskJobChangedToDos);
+                }
+
+                return toDos.OrderBy(x=>x.Priority).ThenBy(x => x.Date).ToList();
             }
         }
 
@@ -77,6 +88,23 @@ namespace Warranty.Core.ToDoInfrastructure
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
             var toDos = database.Fetch<ToDoServiceCallApproval, ToDoServiceCallApprovalModel>(query, ServiceCallStatus.Requested.Value);
+
+            return toDos;
+        }
+
+        private static IEnumerable<IToDo> GetJobChangedTaskToDos(IUser user, IDatabase database, TaskType taskType)
+        {
+            const string query = @"SELECT t.CreatedDate [Date], Description, TaskId,  j.JobId, j.JobNumber
+                                    FROM 
+                                        [Tasks] t
+                                    INNER join Employees e
+                                        ON e.EmployeeId = t.EmployeeId
+                                    INNER JOIN Jobs j
+                                        ON t.ReferenceId = j.JobId
+                                    where 
+                                        e.EmployeeNumber = @0 and t.TaskType=@1 and t.IsComplete = 0";
+
+            var toDos = database.Fetch<ToDoJobStageChangedTask, ToDoJobChangedTaskModel>(query, user.EmployeeNumber, taskType.Value);
 
             return toDos;
         }
