@@ -54,6 +54,7 @@ h2, h3, h4 {
 
 .progress {
     height: 7px;
+    margin-bottom: 0;
 }
 
 .time-remaining-progress {
@@ -87,7 +88,7 @@ h2, h3, h4 {
 
 .service-call-line {
     border-bottom: solid 1px #e7e7e7;
-    padding: 10px 0 0;
+    padding: 10px 0 10px;
     margin: 0;
 }
 
@@ -175,7 +176,7 @@ h2, h3, h4 {
     font-size: 10px;
     color: #FFFFFF;
     padding: 5px;
-    width: 52px;
+    width: 60px;
 }
 
     .opened-for div:first-child{
@@ -270,8 +271,20 @@ h2, h3, h4 {
     border-left: 1px solid #DDD;
 }
 
+#serviceCallsWidget .panel-body {
+  padding: 0;
+}
+
 #serviceCallsWidget .panel-group {
   margin-bottom: 0;
+}
+
+#collapse-undefined .panel-body {
+    padding: 0;
+}
+
+.collapse div.service-call-line:last-child {
+  border-bottom: 0;
 }
 
 .todo {
@@ -902,6 +915,11 @@ a.boxclose {
 
     .main-container {
         margin-top: 0px;
+    }
+
+    .mobile-margin {
+        margin: 5px 0;
+        display: block;
     }
 
     .undo-alert {

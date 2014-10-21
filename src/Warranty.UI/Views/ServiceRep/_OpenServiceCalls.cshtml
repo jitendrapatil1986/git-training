@@ -10,7 +10,7 @@
             <div class="col-md-3">
                 <strong>@Format.HomeOwner(line.HomeownerName, line.HomeownerNumber)</strong><br />@line.Address
             </div>
-            <div class="col-md-2">@Format.PhoneNumber(line.PhoneNumber)</div>
+            <div class="col-md-2"><a href="#" class="hidden-lg hidden-md">@Format.PhoneNumber(line.PhoneNumber)</a></div>
             <div class="col-md-2">
                 <small class="text-muted">
                     @Html.ActionLink(line.JobNumber, "JobSummary", "Job", new { id = line.JobId }, null)
