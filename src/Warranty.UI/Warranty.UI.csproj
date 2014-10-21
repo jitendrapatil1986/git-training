@@ -292,6 +292,7 @@
     <Content Include="Scripts\app\admin\ManageLookups.js" />
     <Content Include="Scripts\app\ajaxEvents.js" />
     <Content Include="Scripts\app\formUploader.js" />
+    <Content Include="Scripts\app\Job\ChangeHomeowner.js" />
     <Content Include="Scripts\app\Job\JobSummary.js" />
     <Content Include="Scripts\app\Report\WarrantyBonusSummaryWSRReport.js" />
     <Content Include="Scripts\app\responsiveTabs.js" />

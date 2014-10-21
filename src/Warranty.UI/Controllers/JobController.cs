@@ -64,22 +64,5 @@ namespace Warranty.UI.Controllers
             
             return View(model);
         }
-
-        [HttpPost]
-        public ActionResult ChangeHomeowner(ChangeHomeownerModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                _mediator.Send(new ChangeHomeownerCommand
-                    {
-                        Model = model,
-                    });
-
-                return RedirectToAction("JobSummary", new {id = model.JobId});
-            }
-
-            return View(model);
-        }
-
     }
 }

@@ -12,7 +12,11 @@
             <h2 class="pull-left no-margin">Job #@Model.JobNumber <small>@Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)</small>
             </h2>
             <div class="pull-right">
-                @Html.ActionLink("Change Homeowner", "ChangeHomeowner", "Job", new{id=Model.JobId}, new{@class="btn btn-default margin-right-10"})
+                @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                {
+                    @Html.ActionLink("Change Homeowner", "ChangeHomeowner", "Job", new {id = Model.JobId}, new {@class = "btn btn-default margin-right-10"})
+                }
+
                 @Html.ActionLink("Create Call", "Create", "ServiceCall", new{id=Model.JobId}, new{@class="btn btn-default pull-right"})
             </div>
             <div class="clearfix"></div>

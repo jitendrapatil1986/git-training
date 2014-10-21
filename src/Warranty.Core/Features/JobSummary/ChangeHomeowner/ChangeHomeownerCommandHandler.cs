@@ -1,6 +1,5 @@
 ﻿namespace Warranty.Core.Features.JobSummary.ChangeHomeowner
 {
-    using System;
     using Entities;
     using NPoco;
     using Security;
@@ -8,19 +7,17 @@
     public class ChangeHomeownerCommandHandler : ICommandHandler<ChangeHomeownerCommand>
     {
         private readonly IDatabase _database;
-        private readonly IUserSession _userSession;
 
-        public ChangeHomeownerCommandHandler(IDatabase database, IUserSession userSession)
+        public ChangeHomeownerCommandHandler(IDatabase database)
         {
             _database = database;
-            _userSession = userSession;
         }
 
         public void Handle(ChangeHomeownerCommand message)
         {
             using (_database)
             {
-                const string sql = @"SELECT DISTINCT ho.HomeownerNumber
+                const string sql = @"SELECT TOP 1 ho.HomeownerNumber
                                     FROM Jobs j
                                     INNER JOIN HomeOwners ho
                                     ON j.JobId = ho.JobId
@@ -41,11 +38,41 @@
                         EmailAddress = message.Model.NewHomeownerEmailAddress,
                     };
 
+                _database.Insert(newHomeowner);
+
+                if (message.Model.AdditionalPhoneContacts != null)
+                {
+                    foreach (var additionalPhoneContact in message.Model.AdditionalPhoneContacts)
+                    {
+                        var additionalPhoneContacts = new HomeownerContact
+                            {
+                                HomeownerId = newHomeowner.HomeOwnerId,
+                                ContactType = additionalPhoneContact.ContactType,
+                                ContactValue = additionalPhoneContact.ContactValue
+                            };
+
+                        _database.Insert(additionalPhoneContacts);
+                    }
+                }
+
+                if (message.Model.AdditionalEmailContacts != null)
+                {
+                    foreach (var additionalEmailContact in message.Model.AdditionalEmailContacts)
+                    {
+                        var additionalEmailContacts = new HomeownerContact
+                            {
+                                HomeownerId = newHomeowner.HomeOwnerId,
+                                ContactType = additionalEmailContact.ContactType,
+                                ContactValue = additionalEmailContact.ContactValue
+                            };
+
+                        _database.Insert(additionalEmailContacts);
+                    }
+                }
+
                 var job = _database.SingleById<Job>(message.Model.JobId);
                 job.CurrentHomeOwnerId = newHomeowner.HomeOwnerId;
-
                 _database.Update(job);
-                _database.Insert(newHomeowner);
             }
         }
     }

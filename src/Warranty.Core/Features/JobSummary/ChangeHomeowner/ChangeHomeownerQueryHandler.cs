@@ -31,7 +31,7 @@
 
                 var jobDetails = _database.Single<ChangeHomeownerModel>(jobSql, query.JobId);
 
-                const string sql = @"SELECT ho.HomeOwnerName
+                const string sql = @"SELECT TOP 1 ho.HomeOwnerName
                                         ,ho.HomeOwnerNumber
                                         ,ho.HomePhone as HomePhone
                                         ,ho.OtherPhone as OtherPhone
@@ -40,7 +40,8 @@
                                     FROM Jobs j
                                     INNER JOIN HomeOwners ho
                                     ON j.JobId = ho.JobId
-                                    WHERE j.JobId = @0";
+                                    WHERE j.JobId = @0
+                                    ORDER BY ho.HomeownerNumber DESC";
 
                 var currentHomeownerResult = _database.Single<ChangeHomeownerModel.CurrentHomeownerDetail>(sql, query.JobId);
 
