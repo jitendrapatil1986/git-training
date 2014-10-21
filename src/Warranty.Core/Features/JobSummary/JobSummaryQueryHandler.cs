@@ -29,6 +29,7 @@ namespace Warranty.Core.Features.JobSummary
             model.JobSelections = GetJobSelections(query.JobId);
             model.JobNotes = GetJobNotes(query.JobId);
             model.Attachments = GetJobAttachments(query.JobId);
+            model.Homeowners = GetJobHomeowners(query.JobId);
             //model.JobPayments = GetJobPayments(query.JobId);
 
             return model;
@@ -177,6 +178,22 @@ namespace Warranty.Core.Features.JobSummary
                                 ORDER BY CreatedDate DESC";
 
             var result = _database.Fetch<JobSummaryModel.Attachment>(sql, jobId);
+
+            return result;
+        }
+
+        private IEnumerable<JobSummaryModel.Homeowner> GetJobHomeowners(Guid jobId)
+        {
+            const string sql = @"SELECT h.[HomeownerName]
+                                    ,h.[CreatedBy]
+                                    ,h.[CreatedDate]
+                                FROM Homeowners h
+                                INNER JOIN [dbo].[Jobs] j
+                                ON h.JobId = j.JobId
+                                WHERE j.JobId = @0
+                                ORDER BY h.CreatedDate DESC";
+
+            var result = _database.Fetch<JobSummaryModel.Homeowner>(sql, jobId);
 
             return result;
         }
