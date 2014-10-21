@@ -52,7 +52,7 @@ namespace Warranty.Core.Features.JobSummary
 
         private JobSummaryModel GetJobSummary(Guid jobId)
         {
-            const string sql = @"SELECT j.[JobId]
+            const string sql = @"SELECT TOP 1 j.[JobId]
                                 ,j.[JobNumber]
                                 ,j.[CloseDate]
                                 ,j.[AddressLine]
@@ -97,7 +97,8 @@ namespace Warranty.Core.Features.JobSummary
                             ON j.BuilderEmployeeId = be.EmployeeId
                             LEFT JOIN Employees se
                             ON j.SalesConsultantEmployeeId = se.EmployeeId
-                            WHERE j.JobId = @0";
+                            WHERE j.JobId = @0
+                            ORDER BY ho.HomeownerNumber DESC";
 
             var result = _database.Single<JobSummaryModel>(sql, jobId);
             

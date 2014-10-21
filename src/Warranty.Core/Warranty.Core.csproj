@@ -139,6 +139,8 @@
     <Compile Include="DataAccess\Mappings\DivisionMap.cs" />
     <Compile Include="DataAccess\Mappings\DivisionMapping.cs" />
     <Compile Include="DataAccess\Mappings\EmployeeMap.cs" />
+    <Compile Include="DataAccess\Mappings\HomeownerContactMap.cs" />
+    <Compile Include="DataAccess\Mappings\HomeownerContactMapping.cs" />
     <Compile Include="DataAccess\Mappings\HomeOwnerMap.cs" />
     <Compile Include="DataAccess\Mappings\HomeOwnerMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobAttachmentMap.cs" />
@@ -173,6 +175,7 @@
     <Compile Include="Entities\CommunityAssignment.cs" />
     <Compile Include="Entities\Division.cs" />
     <Compile Include="Entities\HomeOwner.cs" />
+    <Compile Include="Entities\HomeownerContact.cs" />
     <Compile Include="Entities\IAuditableEntity.cs" />
     <Compile Include="Entities\IAuditCreatedEntity.cs" />
     <Compile Include="Entities\IJdeEntity.cs" />
@@ -196,6 +199,7 @@
     <Compile Include="Enumerations\ActivityType.cs" />
     <Compile Include="Enumerations\TaskType.cs" />
     <Compile Include="Enumerations\ToDoPriority.cs" />
+    <Compile Include="Enumerations\HomeownerContactType.cs" />
     <Compile Include="Enumerations\PhoneNumberType.cs" />
     <Compile Include="Enumerations\ReferenceType.cs" />
     <Compile Include="Enumerations\ServiceCallLineItemStatus.cs" />
@@ -249,6 +253,11 @@
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetQueryHandler.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQuery.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQueryHandler.cs" />
+    <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerCommand.cs" />
+    <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerCommandHandler.cs" />
+    <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerModel.cs" />
+    <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerQuery.cs" />
+    <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerQueryHandler.cs" />
     <Compile Include="Features\TaskCompletion\TaskCompleteCommand.cs" />
     <Compile Include="Features\TaskCompletion\ServiceCallApproveCommandHandler.cs" />
     <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetModel.cs" />
