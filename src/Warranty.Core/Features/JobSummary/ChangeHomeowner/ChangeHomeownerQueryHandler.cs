@@ -15,7 +15,7 @@
         {
             using (_database)
             {
-                const string jobSql = @"SELECT j.[JobId]
+                const string jobSql = @"SELECT TOP 1 j.[JobId]
                                         ,j.[JobNumber]
                                         ,j.[CloseDate]
                                         ,j.[AddressLine]
@@ -26,39 +26,21 @@
                                         ,j.[WarrantyExpirationDate]
                                         , DATEDIFF(yy, j.CloseDate, getdate()) as YearsWithinWarranty
                                         , j.CloseDate as WarrantyStartDate
-                                    FROM Jobs j
-                                    WHERE j.JobId = @0";
-
-                var jobDetails = _database.Single<ChangeHomeownerModel>(jobSql, query.JobId);
-
-                const string sql = @"SELECT TOP 1 ho.HomeOwnerName
-                                        ,ho.HomeOwnerNumber
-                                        ,ho.HomePhone as HomePhone
-                                        ,ho.OtherPhone as OtherPhone
-                                        ,ho.WorkPhone1 as WorkNumber
-                                        ,ho.EmailAddress
+                                        ,ho.HomeOwnerName as CurrentHomeownerName
+                                        ,ho.HomeOwnerNumber as CurrentHomeownerHomeownerNumber
+                                        ,ho.HomePhone as CurrentHomeownerHomePhone
+                                        ,ho.OtherPhone as CurrentHomeownerOtherPhone
+                                        ,ho.WorkPhone1 as CurrentHomeownerWorkNumber
+                                        ,ho.EmailAddress as CurrentHomeownerEmailAddress
                                     FROM Jobs j
                                     INNER JOIN HomeOwners ho
                                     ON j.JobId = ho.JobId
                                     WHERE j.JobId = @0
                                     ORDER BY ho.HomeownerNumber DESC";
 
-                var currentHomeownerResult = _database.Single<ChangeHomeownerModel.CurrentHomeownerDetail>(sql, query.JobId);
+                var changeHomeownerModel = _database.Single<ChangeHomeownerModel>(jobSql, query.JobId);
 
-                var model = new ChangeHomeownerModel
-                    {
-                        JobId = jobDetails.JobId,
-                        JobNumber = jobDetails.JobNumber,
-                        CloseDate = jobDetails.CloseDate,
-                        AddressLine = jobDetails.AddressLine,
-                        City = jobDetails.City,
-                        StateCode = jobDetails.StateCode,
-                        WarrantyStartDate = jobDetails.WarrantyStartDate,
-                        YearsWithinWarranty = jobDetails.YearsWithinWarranty,
-                        CurrentHomeowner = currentHomeownerResult,
-                    };
-
-                return model;
+                return changeHomeownerModel;
             }
         }
     }

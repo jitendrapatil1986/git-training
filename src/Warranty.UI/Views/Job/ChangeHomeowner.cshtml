@@ -69,17 +69,17 @@
                         </div>
                         <div class="col-md-4">
                             <h4>Current Homeowner Information</h4>
-                            @Format.HomeOwner(Model.CurrentHomeowner.HomeownerName, Model.CurrentHomeowner.HomeownerNumber)
+                            @Format.HomeOwner(Model.CurrentHomeownerName, Model.CurrentHomeownerHomeownerNumber)
                             @Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)
                             <br/>
                             @Html.DisplayFor(x => x.AddressLine)
                             <br/>
                             @Format.CityStateZip(Model.City, Model.StateCode, Model.PostalCode)
-                            @Format.CellNumber(Model.CurrentHomeowner.HomePhone)
+                            @Format.CellNumber(Model.CurrentHomeownerHomePhone)
                             <br/>
-                            @Format.HomeNumber(Model.CurrentHomeowner.OtherPhone)
+                            @Format.HomeNumber(Model.CurrentHomeownerOtherPhone)
                             <br/>
-                            <a>@Format.Email(Model.CurrentHomeowner.EmailAddress)</a>
+                            <a>@Format.Email(Model.CurrentHomeownerEmailAddress)</a>
                         </div>
                     </div>
                 </div>

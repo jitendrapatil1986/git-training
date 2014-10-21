@@ -7,7 +7,6 @@
     public class ChangeHomeownerModel
     {
         public Guid JobId { get; set; }
-        public CurrentHomeownerDetail CurrentHomeowner { get; set; }
         public IEnumerable<AdditionalPhoneContact> AdditionalPhoneContacts { get; set; }
         public IEnumerable<AdditionalEmailContact> AdditionalEmailContacts { get; set; }
 
@@ -20,15 +19,12 @@
         public int YearsWithinWarranty { get; set; }
         public DateTime WarrantyStartDate { get; set; }
 
-        public class CurrentHomeownerDetail
-        {
-            public string HomeownerName { get; set; }
-            public string HomePhone { get; set; }
-            public string OtherPhone { get; set; }
-            public string WorkNumber { get; set; }
-            public string EmailAddress { get; set; }
-            public int HomeownerNumber { get; set; }
-        }
+        public string CurrentHomeownerName { get; set; }
+        public string CurrentHomeownerHomePhone { get; set; }
+        public string CurrentHomeownerOtherPhone { get; set; }
+        public string CurrentHomeownerWorkNumber { get; set; }
+        public string CurrentHomeownerEmailAddress { get; set; }
+        public int CurrentHomeownerHomeownerNumber { get; set; }
 
         public int? NewHomeownerNumber { get; set; }
         public string NewHomeownerName { get; set; }
