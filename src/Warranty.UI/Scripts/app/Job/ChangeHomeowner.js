@@ -81,6 +81,12 @@
                     self.contactValue = ko.observable(option.contactValue);
                 }
 
+                ko.validation.init({
+                    errorElementClass: 'has-error',
+                    errorMessageClass: 'help-block',
+                    decorateElement: true
+                });
+                
                 var viewModel = new changeHomeownerViewModel();
                 viewModel.errors = ko.validation.group(viewModel);
                 ko.applyBindings(viewModel);
