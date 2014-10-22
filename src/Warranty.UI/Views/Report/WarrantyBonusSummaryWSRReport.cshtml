@@ -17,9 +17,6 @@
                             
                             @using (Html.BeginForm("WarrantyBonusSummaryWSRReport", "Report", FormMethod.Post, new { @class = "form-inline" }))
                             {
-                                <div class="form-group margin-right-10">
-                                    <span><strong>Filter by</strong></span>
-                                </div>
                                 if (!User.IsInRole(UserRoles.WarrantyServiceRepresentative))
                                 {
                                     <div class="form-group">
@@ -30,7 +27,7 @@
                                     @Html.TextBox("Model.FilteredDate", null, new { id = "warrantyBonusSummaryDate", @class = "form-control monthpicker-input", placeholder = "Month"})
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" class="btn btn-primary" value="Apply" />
+                                    <input type="submit" class="btn btn-primary" value="Run Report" />
                                 </div>
                             }
                         </div>
@@ -41,7 +38,7 @@
     </div>
     @if (!Model.AnyResults && Model.SelectedEmployeeNumber != null)
     {
-        <p><em>No entries match report criteria.</em></p>
+        <p><em>No entries match report criteria</em></p>
     }
     else if (Model.SelectedEmployeeNumber != null)
     {
