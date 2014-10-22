@@ -1,0 +1,72 @@
+﻿@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.Report.Achievement.AchievementReportModel
+
+<div class="container">
+    <h3 class="no-print">WSR Achievement Report</h3>
+    <div class="panel panel-default no-print">
+        <div class="panel-heading">
+            <div id="wsrLoadingReportFilter">
+                <div class="no-bottom-padding">
+                    <div class="row">
+                        <div class="col-md-12">
+                            @using (Html.BeginForm("AchievementReport", "Report", FormMethod.Post, new { @class = "form-inline" }))
+                            {
+                               <div class="form-group margin-right-10">
+                                    <span><strong>Filter by</strong></span>
+                                </div>
+                                if (!User.IsInRole(UserRoles.WarrantyServiceRepresentative))
+                                {
+                                    <div class="form-group">
+                                        @Html.DropDownList("Model.SelectedEmployeeNumber", Model.EmployeeTiedToRepresentatives.Select(c => new SelectListItem {Text = c.EmployeeName, Value = c.EmployeeNumber.ToString()}), "Select Representative", new {@class = "form-control text-capitalize"})
+                                    </div>
+                                }
+                                <div class="form-group">
+                                    @Html.TextBox("Model.FilteredDate", null, new { id = "warrantyBonusSummaryDate", @class = "form-control monthpicker-input", placeholder = "Month"})
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-primary" value="Apply" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    @if (!Model.AnyResults)
+    {
+        <p><em>No entries match report criteria.</em></p>
+    }
+    else
+    {
+       <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Period</th>
+                    <th class="text-right">Dollars Spent</th>
+                    <th class="text-right">Average Days to Closed</th>
+                    <th class="text-right">% Within 7 Days</th>
+                    <th class="text-right">Def. Would Recomm.</th>
+                    <th class="text-right">Exc. Warr. Service</th>
+                    <th class="text-right">Right The First Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var achievementSummary in Model.AchievementSummaries)
+                {
+                    <tr>
+                        <td>@Month.FromInt32(achievementSummary.Month) @achievementSummary.Year</td>
+                        <td class="text-right">@Format.Money(achievementSummary.AmountSpentPerHome)</td>
+                        <td class="text-right">@achievementSummary.AverageDaysClosing</td>
+                        <td class="text-right">@Format.Percentage(achievementSummary.PercentComplete7Days)</td>
+                        <td class="text-right">@Format.Percentage(achievementSummary.DWR)</td>
+                        <td class="text-right">@Format.Percentage(achievementSummary.EWS)</td>
+                        <td class="text-right">@achievementSummary.RTFT</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
