@@ -1,7 +1,8 @@
 ﻿@model Warranty.Core.Features.Report.WSRLoadingReport.WSRLoadingReportModel
 
 <div class="container">
-    <h3 class="no-print">WSR Loading Report</h3>
+    <h3>WSR Loading Report</h3>
+    <h4 class="margin-bottom-20">Homes Under 2 Years Warranty</h4>
     <div class="panel panel-default no-print">
         <div class="panel-heading">
             <div id="wsrLoadingReportFilter">
@@ -10,14 +11,11 @@
                         <div class="col-md-12">
                             @using (Html.BeginForm("WSRLoadingReport", "Report", FormMethod.Post, new { @class = "form-inline" }))
                             {
-                                <div class="form-group margin-right-10">
-                                    <span><strong>Filter by</strong></span>
-                                </div>
                                 <div class="form-group">
                                     @Html.DropDownList("Model.SelectedEmployeeNumber", Model.EmployeeTiedToRepresentatives.Select(c => new SelectListItem {Text = c.EmployeeName, Value = c.EmployeeNumber.ToString()}), "Select Representative", new{@class="form-control text-capitalize"})
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" class="btn btn-primary" value="Apply" />
+                                    <input type="submit" class="btn btn-primary" value="Run Report" />
                                 </div>
                             }
                         </div>
@@ -29,13 +27,11 @@
     
     @if (!Model.AnyResults)
     {
-        <p><em>No entries match report criteria.</em></p>
+        <p><em>No entries match report criteria</em></p>
     }
     else
     {
         <div id="wsrLoadingSummary" class="col-md-12">
-            <h3 class="text-center">Warranty Service Rep. Loading Report</h3>
-            <h4 class="text-center">Homes Under 2 Years Warranty</h4>
             <div class="row">
                 <div class="col-md-6">
                     @Html.Label("Employee Name: ")
