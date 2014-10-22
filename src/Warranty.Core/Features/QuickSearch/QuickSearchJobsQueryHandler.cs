@@ -16,7 +16,7 @@
             _userSession = userSession;
         }
 
-        public IEnumerable<QuickSearchJobModel> Handle(QuickSearchJobsQuery request)
+        public IEnumerable<QuickSearchJobModel> Handle(QuickSearchJobsQuery query)
         {
             var currentuser = _userSession.GetCurrentUser();
             var markets = currentuser.Markets;
@@ -32,7 +32,7 @@
                                 WHERE CityCode IN ({0}) AND JobNumber+AddressLine+HomeOwnerName+REPLACE(REPLACE(REPLACE(HomePhone, ')', ''), '(', ''), ' ', '')+EmailAddress LIKE '%'+@0+'%'
                                 ORDER BY HomeOwnerName";
 
-            var result = _database.Fetch<QuickSearchJobModel>(string.Format(sqlTemplate, markets.CommaSeparateWrapWithSingleQuote()), request.Query);
+            var result = _database.Fetch<QuickSearchJobModel>(string.Format(sqlTemplate, markets.CommaSeparateWrapWithSingleQuote()), query.Query);
             return result;
         }
     }

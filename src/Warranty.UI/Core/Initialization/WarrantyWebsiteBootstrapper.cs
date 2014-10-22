@@ -1,5 +1,6 @@
 ﻿namespace Warranty.UI.Core.Initialization
 {
+    using System.Configuration;
     using System.Web.Http;
     using System.Web.Mvc;
     using Security;
@@ -40,16 +41,16 @@
 
         private static void InitializeNServiceBus()
         {
-            Configure.With()
-                .StructureMapBuilder()
-                .UseTransport<Msmq>()
-                .UnicastBus()
-                .RunHandlersUnderIncomingPrincipal(false)
-                .MsmqSubscriptionStorage()
-                .CreateBus()
-                .Start(() =>
-                    Configure.Instance.ForInstallationOn<NServiceBus.Installation.Environments.Windows>().Install()
-                    );
+           Configure.With()
+                     .StructureMapBuilder(IoC.Container)
+                     .UseTransport<Msmq>()
+                     .UnicastBus()
+                     .RunHandlersUnderIncomingPrincipal(false)
+                     .MsmqSubscriptionStorage()
+                     .CreateBus()
+                     .Start(
+                         () =>
+                         Configure.Instance.ForInstallationOn<NServiceBus.Installation.Environments.Windows>().Install());
         }
 
         private static void InitializeAutoMapper()

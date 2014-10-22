@@ -1,5 +1,7 @@
-﻿@using Warranty.Core.Enumerations
+﻿@using Warranty.Core.Configurations
+@using Warranty.Core.Enumerations
 @using Warranty.Core.Extensions
+@using Warranty.Core.Features.JobSummary
 @using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.JobSummary.JobSummaryModel
 
@@ -11,7 +13,12 @@
             <h2 class="pull-left no-margin">Job #@Model.JobNumber <small>@Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)</small>
             </h2>
             <div class="pull-right">
-                @Html.ActionLink("Create Call", "Create", "ServiceCall", new{id=Model.JobId}, new{@class="btn btn-default pull-right"})
+                @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                {
+                    @Html.ActionLink("Change Homeowner", "ChangeHomeowner", "Job", new { id = Model.JobId }, new { @class = "btn btn-default margin-right-10" })
+                }
+
+                @Html.ActionLink("Create Call", "Create", "ServiceCall", new { id = Model.JobId }, new { @class = "btn btn-default pull-right" })
             </div>
             <div class="clearfix"></div>
         </section>
@@ -26,13 +33,13 @@
                             <li>@Html.DisplayFor(x => x.AddressLine)</li>
                             <li>@Model.City, @Model.StateCode @Model.PostalCode</li>
                             <li>
-                                @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.HomePhone,Url.Action("AddOrUpdatePhoneNumber","Homeowner"), Model.HomeownerId)
+                                @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.HomePhone, Url.Action("AddOrUpdatePhoneNumber", "Homeowner"), Model.HomeownerId)
                             </li>
                             <li>
-                                @Format.EditablePhoneNumber(PhoneNumberType.Mobile, Model.OtherPhone,Url.Action("AddOrUpdatePhoneNumber","Homeowner"),Model.HomeownerId)
+                                @Format.EditablePhoneNumber(PhoneNumberType.Mobile, Model.OtherPhone, Url.Action("AddOrUpdatePhoneNumber", "Homeowner"), Model.HomeownerId)
                             </li>
                             <li>
-                                @Format.EditableEmailForJob(Model.EmailAddress, Url.Action("AddOrUpdateEmail","Homeowner"), Model.HomeownerId)
+                                @Format.EditableEmailForJob(Model.EmailAddress, Url.Action("AddOrUpdateEmail", "Homeowner"), Model.HomeownerId)
                             </li>
                         </ul>
                     </div>
@@ -64,69 +71,80 @@
         
                 <div class="tab-content responsive">
                     <div class="tab-pane active" id="job_service_calls">
-                        @foreach (var line in Model.JobServiceCalls.OrderByDescending(x=>x.CreatedDate))
+                        @foreach (var line in Model.JobServiceCalls.Union<dynamic>(Model.Homeowners).OrderByDescending(x => x.CreatedDate))
                         {
-                            <div class="service-call-line col-md-12">
-                                <div class="col-md-1">
-                                    <small class="text-muted">
-                                        @Html.ActionLink(line.CallNumber, "CallSummary", "ServiceCall", new {id = line.ServiceCallId}, null)
-                                    </small>
+                            if (line.GetType() == typeof(JobSummaryModel.Homeowner))
+                            {
+                                <div class="service-call-line col-md-12 padding-bottom-10">
+                                    <div class="alert alert-info no-bottom-margin">Homeowner changed on @Format.DateMonthDayYear(line.CreatedDate)</div>
                                 </div>
-                                <div class="col-md-7 text-capitalize small">
-                                    <b>Line Item Problem Descriptions</b>
-                                    <ul>
-                                        @foreach (var summary in line.SummaryOfLineItems)
-                                        {
-                                            <li>@Html.Raw(summary)</li>
+                            }
+                            else
+                            {
+                                var sc = (JobSummaryModel.JobServiceCall) line;
+                                <div class="service-call-line col-md-12">
+                                    <div class="col-md-1">
+                                        <small class="text-muted">
+                                            @Html.ActionLink(sc.CallNumber, "CallSummary", "ServiceCall", new { id = sc.ServiceCallId }, null)
+                                        </small>
+                                    </div>
+                                    <div class="col-md-7 text-capitalize small">
+                                        <b>Line Item Problem Descriptions</b>
+                                        <ul>
+                                            @foreach (var summary in sc.SummaryOfLineItems)
+                                            {
+                                                <li>@Html.Raw(summary)</li>
+                                            }
+                                        </ul>
+                                        Assigned to @Html.DisplayFor(x => sc.AssignedTo)
+                                        <br/>
+                                        @(sc.CompletionDate == null ? "Date Added: " + Format.DateMonthDayYear(sc.CreatedDate) : "Date Completed: " + Format.DateMonthDayYear(sc.CompletionDate))
+                                    </div>
+                                    <div class="col-md-2">
+                                        @if (sc.JobServiceCallNotes.Any(x => !string.IsNullOrEmpty(x.Note)))
+                                        { 
+                                            <div class="text-center has-bottom-tooltip" title="No. Of Notes">
+                                                <a data-toggle="collapse" href="#collapseJobCallLineNotes@(sc.CallNumber)" class="text-capitalize accordion-toggle collapsed">
+                                                    <span class="glyphicon glyphicon-comment"> <u>@sc.JobServiceCallNotes.Count()</u></span>
+                                                </a>
+                                            </div>
                                         }
-                                    </ul>
-                                    Assigned to @Html.DisplayFor(x => line.AssignedTo)
-                                    <br/>
-                                    @(line.CompletionDate == null ? "Date Added: " + Format.DateMonthDayYear(line.CreatedDate) : "Date Completed: " + Format.DateMonthDayYear(line.CompletionDate))
-                                </div>
-                                <div class="col-md-2">
-                                    @if (line.JobServiceCallNotes.Any(x => !string.IsNullOrEmpty(x.Note))) { 
-                                        <div class="text-center has-bottom-tooltip" title="No. Of Notes">
-                                            <a data-toggle="collapse" href="#collapseJobCallLineNotes@(line.CallNumber)" class="text-capitalize accordion-toggle collapsed">
-                                                <span class="glyphicon glyphicon-comment"> <u>@line.JobServiceCallNotes.Count()</u></span>
-                                            </a>
+                                    </div>
+                                    @if (sc.CompletionDate == null)
+                                    {
+                                        <div class="col-md-2 has-bottom-tooltip" title="@Format.DateForServiceCallWiget(sc.CreatedDate)">
+                                            <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@sc.NumberOfDaysRemaining)<br/>
+                                            <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                                                <div class="progress-bar @Css.ServiceCallProgressBar(sc.NumberOfDaysRemaining)" role="progressbar" style="width: @sc.PercentComplete%">
+                                                    <span class="sr-only">@sc.PercentComplete% Complete</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     }
-                                </div>
-                                @if (line.CompletionDate == null)
-                                {
-                                    <div class="col-md-2 has-bottom-tooltip" title="@Format.DateForServiceCallWiget(line.CreatedDate)">
-                                        <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@line.NumberOfDaysRemaining)<br/>
-                                        <div class="progress time-remaining-progress hidden-sm hidden-xs">
-                                            <div class="progress-bar @Css.ServiceCallProgressBar(line.NumberOfDaysRemaining)" role="progressbar" style="width: @line.PercentComplete%">
-                                                <span class="sr-only">@line.PercentComplete% Complete</span>
+                                    else
+                                    {
+                                        <div class="col-md-1 pull-right">@Format.DaysOpenedFor(sc.DaysOpenedFor, sc.CreatedDate, sc.CompletionDate)</div>
+                                    }            
+                                    <div class="row">
+                                        <div class="col-md-8 col-md-offset-2">
+                                            <div id="collapseJobCallLineNotes@(sc.CallNumber)" class="collapse panel-body no-left-right-padding">
+                                                @foreach (var noteLine in sc.JobServiceCallNotes)
+                                                {
+                                                    <div class="service-call-line">
+                                                        <small>
+                                                            @Html.DisplayFor(x => noteLine.Note)
+                                                        </small>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
                                     </div>
-                                }
-                                else
-                                {
-                                    <div class="col-md-1 pull-right">@Format.DaysOpenedFor(line.DaysOpenedFor, line.CreatedDate, line.CompletionDate)</div>
-                                }            
-                                <div class="row">
-                                    <div class="col-md-8 col-md-offset-2">
-                                        <div id="collapseJobCallLineNotes@(line.CallNumber)" class="collapse panel-body no-left-right-padding">
-                                            @foreach (var noteLine in line.JobServiceCallNotes)
-                                            {
-                                                <div class="service-call-line">
-                                                    <small>
-                                                        @Html.DisplayFor(x => noteLine.Note)
-                                                    </small>
-                                                </div>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
                             
-                                <div class="clearfix"></div>
-                            </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            }
                         }
-                        
+
                         <section >
                             <h3 class="col-md-12 margin-top-10">Attachments
                                 <span>
@@ -177,7 +195,7 @@
                                 <div class="panel-body no-bottom-padding">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            @Html.TextArea("Description", null, new {id = "addJobNoteDescription", @class = "form-control", data_bind = "text: jobNoteDescriptionToAdd, value: jobNoteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3})
+                                            @Html.TextArea("Description", null, new { id = "addJobNoteDescription", @class = "form-control", data_bind = "text: jobNoteDescriptionToAdd, value: jobNoteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
                                         </div>
                                     </div>
                                     <br/>
@@ -260,6 +278,7 @@
             return {
                 initialJobNotes: @Html.Raw(Model.JobNotes.ToJson()),
                 initialJobAttachments: @Html.Raw(Model.Attachments.ToJson()),
+                attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
             };
         });
     </script>

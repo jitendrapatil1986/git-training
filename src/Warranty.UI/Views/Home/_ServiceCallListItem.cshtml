@@ -1,0 +1,27 @@
+﻿@using Warranty.UI.Core.Helpers
+
+@model Warranty.Core.Features.ServiceCallsWidget.ServiceCallsWidgetModel.ServiceCall
+
+<div class="service-call-line cursor-pointer" onclick="location.href='@Url.Action("CallSummary", "ServiceCall", new {id=Model.ServiceCallId})';">
+    <div class="col-md-4">
+        <strong>@Format.HomeOwner(Model.HomeownerName, Model.HomeownerNumber)</strong><br />@Model.Address
+    </div>
+    <div class="col-md-2 mobile-margin"><a href="tel:@Model.PhoneNumber" class="hidden-lg hidden-md">@Format.PhoneNumber(Model.PhoneNumber)</a></div>
+    <div class="col-md-2 mobile-margin">
+        <small class="text-muted">
+            @Html.ActionLink(Model.JobNumber, "JobSummary", "Job", new { id = Model.JobId }, null)
+        </small><br />@Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)
+    </div>
+    <div class="col-md-1 hidden-sm hidden-xs">
+        @Format.NumberOfLineItems(Model.NumberOfLineItems)
+    </div>
+    <div class="col-md-3 float-right-non-xs-screen has-bottom-tooltip" title="@Format.DateForServiceCallWiget(Model.CreatedDate)">
+        <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@Model.NumberOfDaysRemaining)<br />
+        <div class="progress time-remaining-progress hidden-sm hidden-xs">
+            <div class="progress-bar @Css.ServiceCallProgressBar(Model.NumberOfDaysRemaining)" role="progressbar" style="width: @Model.PercentComplete%">
+                <span class="sr-only">@Model.PercentComplete% Complete</span>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>

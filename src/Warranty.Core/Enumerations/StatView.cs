@@ -5,6 +5,7 @@
         public static readonly StatView DollarsSpent = new StatView(1, "Spent", "DollarsSpentPerHome", "DESC");
         public static readonly StatView AvgDaysClosed = new StatView(2, "AvgDays", "AverageDaysClosed", "DESC");
         public static readonly StatView PercentClosed = new StatView(3, "PercentClosed", "PercentClosedWithinSevenDays", "ASC");
+        public static readonly StatView PercentDefinitelyRecommend = new StatView(4, "PercentRecommend", "PercentRecommend", "ASC");
 
         private StatView(int value, string displayName, string orderByColumnName, string sortOrder) : base(value, displayName)
         {

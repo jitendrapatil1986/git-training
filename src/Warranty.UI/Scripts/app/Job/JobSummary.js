@@ -94,26 +94,27 @@ require(['/Scripts/app/main.js'], function () {
                 };
 
                 self.allJobAttachments = ko.observableArray([]);
-                
-                self.removeAttachment = function (e) {
-                    var element = $('.boxclose[data-attachment-id="' + e.jobAttachmentId + '"]');
-                    var actionUrl = element.data('url');
-                    var attachmentId = e.jobAttachmentId;
-                    $.ajax({
-                        type: "POST",
-                        url: actionUrl,
-                        data: { id: attachmentId }
-                    })
-                        .fail(function(response) {
-                            alert(JSON.stringify(response));
-                            toastr.error("There was an issue deleting the attachment. Please try again!");
+
+                self.removeAttachment = function(e) {
+                    if (confirm(modelData.attachmentRemovalMessage)) {
+                        var element = $('.boxclose[data-attachment-id="' + e.jobAttachmentId + '"]');
+                        var actionUrl = element.data('url');
+                        var attachmentId = e.jobAttachmentId;
+                        $.ajax({
+                            type: "POST",
+                            url: actionUrl,
+                            data: { id: attachmentId }
                         })
-                        .success(function(response) {
-                            self.allJobAttachments.remove(e);
-                            toastr.success("Success! Attachment deleted.");
-                        });
+                            .fail(function(response) {
+                                alert(JSON.stringify(response));
+                                toastr.error("There was an issue deleting the attachment. Please try again!");
+                            })
+                            .success(function(response) {
+                                self.allJobAttachments.remove(e);
+                                toastr.success("Success! Attachment deleted.");
+                            });
+                    }
                 };
-                
             }
 
             function JobNotesViewModel(option) {

@@ -4,6 +4,12 @@ namespace Warranty.Core.Extensions
 {
     public static class IntExtensions
     {
+        public static int? TryParseNullable(this string text)
+        {
+            int value;
+            return int.TryParse(text, out value) ? (int?)value : null;
+        }
+
         public static string ToOrdinalSuffixed(this int i)
         {
             var suffix = "th";

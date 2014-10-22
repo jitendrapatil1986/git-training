@@ -54,6 +54,7 @@ h2, h3, h4 {
 
 .progress {
     height: 7px;
+    margin-bottom: 0;
 }
 
 .time-remaining-progress {
@@ -87,7 +88,7 @@ h2, h3, h4 {
 
 .service-call-line {
     border-bottom: solid 1px #e7e7e7;
-    padding: 10px 0 0;
+    padding: 10px 0 10px;
     margin: 0;
 }
 
@@ -122,6 +123,10 @@ h2, h3, h4 {
 .margin-bottom-15 { margin: 0 0 15px 0;}
 
 .margin-bottom-20 { margin: 0 0 20px 0;}
+
+.padding-5 {
+    padding: 5px;
+}
 
 .no-border {
    border: none;
@@ -171,7 +176,7 @@ h2, h3, h4 {
     font-size: 10px;
     color: #FFFFFF;
     padding: 5px;
-    width: 52px;
+    width: 60px;
 }
 
     .opened-for div:first-child{
@@ -266,8 +271,20 @@ h2, h3, h4 {
     border-left: 1px solid #DDD;
 }
 
+#serviceCallsWidget .panel-body {
+  padding: 0;
+}
+
 #serviceCallsWidget .panel-group {
   margin-bottom: 0;
+}
+
+#collapse-undefined .panel-body {
+    padding: 0;
+}
+
+.collapse div.service-call-line:last-child {
+  border-bottom: 0;
 }
 
 .todo {
@@ -280,18 +297,17 @@ h2, h3, h4 {
 .todo-header {
     font-size: 1.6em;
     color: #666;
-    padding-left: 5px;
     margin-bottom: 5px;
     border-bottom: none;
 }
 
-.todo-container {
-    border-left: 1px dashed #ddd;
+.todo-header select{
+    margin-top: 10px;
+    max-width: 250px;
 }
 
-.todo-header select {
-    margin-left: 15px;
-    font-size: small;
+.todo-container {
+    border-left: 1px dashed #ddd;
 }
 
 .wrap-text {
@@ -342,6 +358,23 @@ h2, h3, h4 {
 .deny-todo {
     color: #d9534f;
     font-weight: bold;
+}
+
+.complete-todo {
+    color: #5cb85c;
+    font-weight: bold;
+}
+
+.task-icon {
+    background: green;
+    float: left;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    padding-left: -200px;
 }
 
 .service-call-widget-job-number {
@@ -526,6 +559,10 @@ a.delete-group-item:hover {
 
 .padding-bottom-3 { 
     padding-bottom: 3px;
+}
+
+.padding-bottom-10 { 
+    padding-bottom: 10px;
 }
 
 .padding-top-7 { 
@@ -799,8 +836,52 @@ span.boxclose{
     font-size: 21px;
 }
 
+#warrantyBonusSummary table tr th{
+    text-align: right;
+    vertical-align: middle;
+}
+
+#warrantyBonusSummary table tr th:first-child, #warrantyBonusSummary table tr td:first-child{
+    text-align: left;
+}
+
+.table-bonus tr th:first-child, .table-bonus tr td:first-child{
+    width: 300px;
+}
+
+.table-bonus-survey tr th:first-child, .table-bonus-survey tr td:first-child{
+    width: 500px;
+}
+
 .margin-right-10 {
     margin-right: 10px;
+}
+
+.table-wsr-loading tr th{
+    text-align: right;
+    vertical-align: middle;
+}
+
+.table-wsr-loading tr th:first-child, .table-wsr-loading tr td:first-child{
+    text-align: left;
+}
+
+.successData{
+    color: #3c763d;
+    font-weight: bold;
+}
+
+.totalLine{
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.table-wsr-loading tr th:first-child, .table-wsr-loading tr td:first-child{
+    width: 800px;
+}
+
+.validationMessage { 
+    color: Red;
 }
 
 @media (max-width: 767px) {
@@ -840,9 +921,20 @@ a.boxclose {
         margin-top: 0px;
     }
 
+    .mobile-margin {
+        margin: 5px 0;
+        display: block;
+    }
+
     .undo-alert {
         width: 300px;
         top: 59px;
         margin-left: -150px; //half of width.
+    }
+}
+
+@media print {
+    .no-print {
+        display: none;
     }
 }

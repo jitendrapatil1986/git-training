@@ -116,7 +116,9 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web" />
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Http, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -154,7 +156,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.Mvc">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
     </Reference>
@@ -202,12 +204,13 @@
     <Compile Include="Api\ManageServiceCallController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
-    <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\EnumerationController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ServiceCallController.cs" />
     <Compile Include="Controllers\ServiceRepController.cs" />
     <Compile Include="Controllers\StatsController.cs" />
@@ -291,7 +294,9 @@
     <Content Include="Scripts\app\admin\ManageLookups.js" />
     <Content Include="Scripts\app\ajaxEvents.js" />
     <Content Include="Scripts\app\formUploader.js" />
+    <Content Include="Scripts\app\Job\ChangeHomeowner.js" />
     <Content Include="Scripts\app\Job\JobSummary.js" />
+    <Content Include="Scripts\app\Report\WarrantyBonusSummaryWSRReport.js" />
     <Content Include="Scripts\app\responsiveTabs.js" />
     <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\search.js" />
@@ -389,7 +394,6 @@
     <Content Include="Views\Job\Index.cshtml" />
     <Content Include="css\less\toastr.less" />
     <Content Include="Views\Home\ToDoWidget.cshtml" />
-    <Content Include="Views\Home\_ToDoEscalationApproval.cshtml" />
     <Content Include="Views\Home\_ToDoPaymentRequestApproval.cshtml" />
     <Content Include="Views\Home\_ToDoServiceCallApproval.cshtml" />
     <Content Include="Views\ServiceCall\CallSummary.cshtml" />
@@ -412,7 +416,14 @@
     <Content Include="Views\WarrantyMailer\ServiceCallEscalated.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\FileUpload.cshtml" />
     <Content Include="UploadHandler.ashx" />
+    <Content Include="Views\Report\WarrantyBonusSummaryWSRReport.cshtml" />
+    <Content Include="Views\Report\WSRLoadingReport.cshtml" />
     <Content Include="Views\Report\MailMerge.cshtml" />
+    <Content Include="Views\Home\_PercentSurveyRecommendWidget.cshtml" />
+    <Content Include="Views\Home\_PercentSurveyExcellentWidget.cshtml" />
+    <Content Include="Views\Job\ChangeHomeowner.cshtml" />
+    <Content Include="Views\Home\_ServiceCallListItem.cshtml" />
+    <Content Include="Views\Home\_ToDoJobChangedTask.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

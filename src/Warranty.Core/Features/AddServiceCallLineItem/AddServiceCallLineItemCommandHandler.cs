@@ -3,15 +3,19 @@
     using System;
     using Entities;
     using Enumerations;
+    using InnerMessages;
     using NPoco;
+    using NServiceBus;
 
     public class AddServiceCallLineItemCommandHandler : ICommandHandler<AddServiceCallLineItemCommand, AddServiceCallLineItemModel>
     {
         private readonly IDatabase _database;
+        private readonly IBus _bus;
 
-        public AddServiceCallLineItemCommandHandler(IDatabase database)
+        public AddServiceCallLineItemCommandHandler(IDatabase database, IBus bus)
         {
             _database = database;
+            _bus = bus;
         }
 
         public AddServiceCallLineItemModel Handle(AddServiceCallLineItemCommand message)
@@ -35,6 +39,11 @@
                     };
 
                 _database.Insert(newServiceLineItem);
+
+                _bus.Send<NotifyServiceCallLineItemCreated>(x =>
+                    {
+                        x.ServiceCallLineItemId = newServiceLineItem.ServiceCallLineItemId;
+                    });
 
                 var model = new AddServiceCallLineItemModel
                     {
