@@ -75,8 +75,8 @@
                         {
                             if (line.GetType() == typeof(JobSummaryModel.Homeowner))
                             {
-                                <div class="service-call-line col-md-12 padding-bottom-10">
-                                    <div class="alert alert-info no-bottom-margin">Homeowner changed on @Format.DateMonthDayYear(line.CreatedDate)</div>
+                                <div class="service-call-line col-md-12 no-padding">
+                                    <div class="alert alert-info no-bottom-margin"><strong>Homeowner changed</strong> on @Format.DateMonthDayYear(line.CreatedDate)</div>
                                 </div>
                             }
                             else
