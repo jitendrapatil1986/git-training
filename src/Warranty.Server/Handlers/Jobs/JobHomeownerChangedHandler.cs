@@ -24,7 +24,6 @@
             {
                 var job = _database.SingleById<Job>(message.JobId);
                 var homeowner = _database.SingleById<HomeOwner>(job.CurrentHomeOwnerId);
-                var homeownerContacts = _database.Fetch<HomeownerContact>().Where(x => x.HomeownerId == homeowner.HomeOwnerId);
 
                 _bus.Publish<JobHomeownerChanged>(x =>
                     {
@@ -32,16 +31,6 @@
                         x.HomeownerName = homeowner.HomeOwnerName;
                         x.HomeownerHomePhone = homeowner.HomePhone;
                         x.HomeownerEmailAddress = homeowner.EmailAddress;
-                        x.AdditionalPhoneContacts = homeownerContacts.Select(y => new JobHomeownerChanged.AdditionalPhoneContact
-                            {
-                                ContactType = HomeownerContactType.Phone.DisplayName,
-                                ContactValue = y.ContactValue,
-                            }).ToList();
-                        x.AdditionalEmailContacts = homeownerContacts.Select(y => new JobHomeownerChanged.AdditionalEmailContact
-                            {
-                                ContactType = HomeownerContactType.Email.DisplayName,
-                                ContactValue = y.ContactValue,
-                            }).ToList();
                     });
             }
         }
