@@ -884,6 +884,10 @@ span.boxclose{
     color: Red;
 }
 
+.print-only {
+    display: none;
+}
+
 @media (max-width: 767px) {
 
 a.boxclose {
@@ -936,5 +940,22 @@ a.boxclose {
 @media print {
     .no-print {
         display: none;
+    }
+
+    .print-only {
+       display: block;
+    }
+
+     a[href]:after {
+        content: none;
+      }
+
+      #serviceCallSummaryPage{
+        border: 0;
+    }
+
+    #serviceCallSummaryPage .panel-heading{
+        margin:0;
+        border: 0;
     }
 }
