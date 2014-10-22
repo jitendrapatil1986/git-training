@@ -28,14 +28,18 @@ namespace Warranty.Core.Features.ServiceCallToggleActions
         {
             using (_database)
             {
+                var now = DateTime.UtcNow;
                 var serviceCall = _database.SingleOrDefaultById<ServiceCall>(message.ServiceCallId);
                 serviceCall.IsEscalated = !serviceCall.IsEscalated;
+                serviceCall.EscalationReason = (serviceCall.IsEscalated) ? message.Text : string.Empty;
+                serviceCall.EscalationDate = (serviceCall.IsEscalated) ? now : (DateTime?)null;
+ 
                 _database.Update(serviceCall);
 
                 _bus.Send<NotifyServiceCallEscalatedStatusChanged>(x =>
                     {
                         x.ServiceCallId = serviceCall.ServiceCallId;
-                        x.EscalatedDate = DateTime.UtcNow;
+                        x.EscalatedDate = now;
                         x.EscalatedReason = message.Text;
                     });
 

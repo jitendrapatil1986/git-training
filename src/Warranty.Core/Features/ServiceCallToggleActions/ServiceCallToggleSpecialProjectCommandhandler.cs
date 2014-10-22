@@ -1,13 +1,12 @@
-﻿using NPoco;
-using Warranty.Core.ActivityLogger;
-using Warranty.Core.Entities;
-using Warranty.Core.Enumerations;
-
-namespace Warranty.Core.Features.ServiceCallToggleActions
+﻿namespace Warranty.Core.Features.ServiceCallToggleActions
 {
     using System;
     using InnerMessages;
     using NServiceBus;
+    using NPoco;
+    using ActivityLogger;
+    using Entities;
+    using Enumerations;
 
     public class ServiceCallToggleSpecialProjectCommandhandler : ICommandHandler<ServiceCallToggleSpecialProjectCommand>
     {
@@ -26,13 +25,17 @@ namespace Warranty.Core.Features.ServiceCallToggleActions
         {
             using (_database)
             {
+                var now = DateTime.UtcNow;
                 var serviceCall = _database.SingleOrDefaultById<ServiceCall>(message.ServiceCallId);
                 serviceCall.IsSpecialProject = !serviceCall.IsSpecialProject;
+                serviceCall.SpecialProjectReason = (serviceCall.IsSpecialProject) ? message.Text : string.Empty;
+                serviceCall.SpecialProjectDate = (serviceCall.IsSpecialProject) ? now : (DateTime?)null;
+
                 _database.Update(serviceCall);
                 _bus.Send<NotifyServiceCallSpecialProjectStatusChanged>(x =>
                     {
                         x.ServiceCallId = serviceCall.ServiceCallId;
-                        x.SpecialProjectDate = DateTime.UtcNow;
+                        x.SpecialProjectDate = now;
                         x.SpecialProjectReason = message.Text;
                     });
 
