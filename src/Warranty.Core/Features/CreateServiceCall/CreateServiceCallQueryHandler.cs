@@ -16,7 +16,7 @@
         {
             using (_database)
             {
-                const string sql = @"SELECT  ho.HomeOwnerId
+                const string sql = @"SELECT TOP 1 ho.HomeOwnerId
                                         ,j.JobId
                                         ,ho.[HomeOwnerNumber]
                                         ,ho.[HomeOwnerName]
@@ -44,7 +44,7 @@
                                 LEFT JOIN Employees builder
                                 ON j.BuilderEmployeeId = builder.EmployeeId
                                 WHERE j.JobId = @0
-                                ORDER BY ho.HomeOwnerName, j.JobNumber";
+                                ORDER BY ho.HomeownerNumber DESC";
 
                 var result = _database.Single<CreateServiceCallModel>(sql, query.JobId);
                 return result;
