@@ -769,10 +769,6 @@ a.delete-group-item:hover {
     padding-left: 5px;
 }
 
-.inline-editable-text .editable-buttons{
-    margin-top: 4px;
-}
-
 .cursor-pointer {
     cursor: pointer;
 }
@@ -781,19 +777,21 @@ a.delete-group-item:hover {
     margin-left:13px;
 }
 
-.attachments .attached-file {
-    margin: 0 10px 10px 0;
-    border: 1px lightgray solid;
-    border-radius: 5px;
+.attachments ul li{
     float: left;
-    padding: 10px;
+    margin: 0 10px 10px 0;
+    width: 150px;
     text-align: center;
-    background-color:@gray-lighter;
-    min-width: 150px;
+    word-wrap: break-word;
 }
 
-.attachments .editable-buttons {
-    margin-top: 3px;
+.attachments .attached-file {
+    margin: 0 0 5px 0;
+    border: 1px lightgray solid;
+    border-radius: 5px;
+    padding: 10px;
+    background-color:@gray-lighter;
+    display: block;
 }
 
 .attached-file:hover {
@@ -803,7 +801,7 @@ a.delete-group-item:hover {
 span.boxclose{
     float: right;
     margin-top: -18px;
-    margin-right: -18px;
+    margin-right: -20px;
     cursor: pointer;
     color: #fff;
     border-radius: 100px;
@@ -836,8 +834,9 @@ span.boxclose{
 }
 
 .attachment-info {
-    margin-top:50px;
-    font-size: xx-small;
+    margin-top: 5px;
+    font-size: 11px;
+    line-height: 14px;
 }
 
 .download-attachment {
