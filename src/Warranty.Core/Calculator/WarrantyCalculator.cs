@@ -184,11 +184,11 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = (l.Count(x => x.RightFirstTime == "10" || x.ExcellentWarrantyService == "9") / l.Count() * 100 +
-                              l.Count(x => x.RightFirstTime == "8" || x.ExcellentWarrantyService == "7") / l.Count() * 100 +
-                              l.Count(x => x.RightFirstTime == "6" || x.ExcellentWarrantyService == "5") / l.Count() * 100 +
-                              l.Count(x => x.RightFirstTime == "4" || x.ExcellentWarrantyService == "3") / l.Count() * 100 +
-                              l.Count(x => x.RightFirstTime == "2" || x.ExcellentWarrantyService == "1") / l.Count() * 100) / 5,
+                              Amount = (l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9") / l.Count() * 100 +
+                              l.Count(x => x.RightFirstTime == "8" || x.RightFirstTime == "7") / l.Count() * 100 +
+                              l.Count(x => x.RightFirstTime == "6" || x.RightFirstTime == "5") / l.Count() * 100 +
+                              l.Count(x => x.RightFirstTime == "4" || x.RightFirstTime == "3") / l.Count() * 100 +
+                              l.Count(x => x.RightFirstTime == "2" || x.RightFirstTime == "1") / l.Count() * 100) / 5,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year
                           });
