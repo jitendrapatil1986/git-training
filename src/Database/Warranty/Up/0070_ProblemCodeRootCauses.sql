@@ -1,4 +1,5 @@
 ﻿CREATE TABLE [lookups].[ProblemCodeRootCauses](
+
 	[ProblemCodeId] [int] NOT NULL,
 	[RootCauseId] TINYINT NOT NULL,
 	CONSTRAINT [PK_ProblemCodeRootCausess] PRIMARY KEY 
@@ -12,3 +13,4 @@
 	CONSTRAINT [FK_ProblemCodeRootCauses_RootCauseId] 
 		FOREIGN KEY([RootCauseId]) REFERENCES [lookups].[RootCauses] ([RootCauseId])
 );
+
