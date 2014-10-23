@@ -109,6 +109,11 @@
     <Compile Include="ApprovalInfrastructure\ApprovalServices\ServiceCallApprovalService.cs" />
     <Compile Include="ApprovalInfrastructure\Interfaces\IApprovalService.cs" />
     <Compile Include="Attributes\CuteUiFileUploadOptionsAttribute.cs" />
+    <Compile Include="Calculator\CalculatorResult.cs" />
+    <Compile Include="Calculator\IWarrantyCalculator.cs" />
+    <Compile Include="Calculator\MonthYearModel.cs" />
+    <Compile Include="Calculator\SurveyDataResult.cs" />
+    <Compile Include="Calculator\WarrantyCalculator.cs" />
     <Compile Include="Configurations\CitiesCollection.cs" />
     <Compile Include="Configurations\CityConfig.cs" />
     <Compile Include="Configurations\SurveyConstants.cs" />

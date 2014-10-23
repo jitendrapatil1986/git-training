@@ -19,6 +19,27 @@
         public bool HasSearchCriteria { get { return FilteredDate.HasValue; } }
         public DateTime? FilteredDate { get; set; }
 
+        public DateTime StartDate
+        {
+            get
+            {
+                if (FilteredDate.HasValue)
+                    return FilteredDate.Value.ToFirstDay();
+                return DateTime.Today.ToFirstDay();
+            }
+        }
+
+        public DateTime EndDate
+        {
+            get
+            {
+                if (FilteredDate.HasValue)
+                    return FilteredDate.Value.ToLastDay();
+
+                return DateTime.Today.ToLastDay();
+            }
+        }
+
         public class AchievementSummary
         {
             public decimal AmountSpentPerHome { get; set; }
@@ -29,21 +50,6 @@
             public decimal AverageDaysClosing { get; set; }
             public int Month { get; set; }
             public int Year { get; set; }
-        }
-
-        public class AchievementDto
-        {
-            public decimal Amount { get; set; }
-            public int MonthNumber { get; set; }
-            public int YearNumber { get; set; }
-        }
-
-        public class SurveyDataResult
-        {
-            public string DefinitelyWillRecommend { get; set; }
-            public string ExcellentWarrantyService { get; set; }
-            public string RightFirstTime { get; set; }
-            public DateTime SurveyDate { get; set; }
         }
 
         public class EmployeeTiedToRepresentative
