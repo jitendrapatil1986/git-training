@@ -13,6 +13,7 @@
     using Warranty.Core.Features.ServiceCallSummary;
     using System.Linq;
     using Warranty.Core.Features.ServiceCallSummary.Attachments;
+    using Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem;
     using Warranty.Core.Security;
     using Warranty.Core.Features.ServiceCallApproval;
     using Warranty.Core.Features.ServiceCallSummary.ReassignEmployee;
@@ -42,6 +43,16 @@
                 {
                     ServiceCallId = id
                 });
+
+            return View(model);
+        }
+
+        public ActionResult LineItemDetail(Guid id)
+        {
+            var model = _mediator.Request(new ServiceCallLineItemQuery
+            {
+                ServiceCallLineItemId = id,
+            });
 
             return View(model);
         }
