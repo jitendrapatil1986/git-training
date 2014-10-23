@@ -209,7 +209,13 @@
         public ActionResult UploadAttachment(ServiceCallUploadAttachmentCommand model)
         {
             _mediator.Send(model);
-            return RedirectToAction("CallSummary", new {id = model.ServiceCallId});
+
+            if (model.ServiceCallLineItemId == Guid.Empty)
+            {
+                return RedirectToAction("CallSummary", new { id = model.ServiceCallId });
+            }
+
+            return RedirectToAction("LineItemDetail", new { id = model.ServiceCallLineItemId });
         }
 
         [HttpPost]

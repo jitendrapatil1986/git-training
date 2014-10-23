@@ -130,9 +130,10 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                       ,[ServiceCallNote] as Note
                                       ,[ServiceCallLineItemId]
                                       ,[CreatedDate]
-                                      ,[CreatedBy]     
+                                      ,[CreatedBy]
                                 FROM [ServiceCallNotes]
-                                WHERE ServiceCallId = @0";
+                                WHERE ServiceCallId = @0
+                                AND ServiceCallLineItemId IS NULL";
 
             var result = _database.Fetch<ServiceCallSummaryModel.ServiceCallNote>(sql, serviceCallId.ToString());
 
@@ -147,7 +148,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                         ,[CreatedDate]
                                         ,[CreatedBy]
                                 FROM [ServiceCallAttachments]
-                                WHERE ServiceCallId = @0 AND IsDeleted=0";
+                                WHERE ServiceCallId = @0 AND IsDeleted=0
+                                AND ServiceCallLineItemId = CAST(0 AS BINARY)";
 
             var result = _database.Fetch<ServiceCallSummaryModel.Attachment>(sql, serviceCallId.ToString());
 

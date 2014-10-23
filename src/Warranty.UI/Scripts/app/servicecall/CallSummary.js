@@ -517,7 +517,6 @@ require(['/Scripts/app/main.js'], function () {
 
                 self.addCallNote = function () {
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
-                    self.serviceCallLineItemId = $("#addCallNoteLineReferenceDropDown").find('option:selected').val();
                     self.note = $("#addCallNoteDescription").val();
 
                     var newNoteDescription = $("#addCallNoteDescription");
@@ -528,7 +527,6 @@ require(['/Scripts/app/main.js'], function () {
                     
                     var newCallNote = new CallNotesViewModel({
                         serviceCallId: self.serviceCallId,
-                        serviceCallLineItemId: self.serviceCallLineItemId,
                         note: self.note,
                         serviceCallCommentTypeId: self.serviceCallCommentTypeId
                     });

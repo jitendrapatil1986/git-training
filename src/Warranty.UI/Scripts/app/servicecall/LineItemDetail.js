@@ -11,28 +11,11 @@
             $.fn.editableform.buttons =
                 '<button type="submit" class="btn btn-primary editable-submit btn-xs"><i class="icon-ok icon-white"></i>Save</button>';
 
-            $("#Employee_List").editable({
-                type: 'select',
-            });
-
-            $("#Home_Phone").editable({
-                params: { phoneNumberTypeValue: phoneNumberTypeEnum.Home.Value }
-            });
-
-            $("#Mobile_Phone").editable({
-                params: { phoneNumberTypeValue: phoneNumberTypeEnum.Mobile.Value }
-            });
-
-            $("#Email").editable({
-            });
-
             $(".attached-file-display-name").editable();
 
             $(".phone-number-with-extension").on('shown', function () {
                 $(this).data('editable').input.$input.mask('?(999)-999-9999 **********', { placeholder: " " });
             });
-
-            $(".datepicker-input").datepicker();
 
             $('.btn-action-with-popup').click(function (e) {
                 $('.btn-action-with-popup').removeClass('active');
@@ -164,91 +147,7 @@
 
             function clearNoteFields() {
                 $("#addCallNoteDescription").val('');
-                $("#addCallNoteLineReferenceDropDown").val('');
-                self.selectedLineToAttachToNote('');
                 self.noteDescriptionToAdd('');
-            }
-
-            function AllLineItemsViewModel(options) {
-                debugger;
-                var self = this;
-                self.serviceCallId = options.serviceCallId;
-                self.serviceCallLineItemId = options.serviceCallLineItemId;
-                self.completed = options.completed;
-
-                //track line item properties.
-                self.problemCodeId = ko.observable(options.problemCodeId);
-                self.problemCode = ko.observable(options.problemCode);
-                self.problemDescription = ko.observable(options.problemDescription);
-                self.currentProblemCode = ko.observable();
-                self.currentProblemDescription = ko.observable();
-
-                //track editing problem code, desc, and line altogether.
-                self.problemCodeEditing = ko.observable();
-                self.problemDescriptionEditing = ko.observable("");
-                self.lineEditing = ko.observable("");
-
-                //edit line item.
-                self.editLine = function () {
-                    this.problemCodeEditing(true);
-                    this.problemDescriptionEditing(true);
-                    this.lineEditing(true);
-                    this.currentProblemCode(this.problemCode());
-                    this.currentProblemDescription(this.problemDescription());
-                };
-
-                //save line item changes.
-                self.saveLineItemChanges = function () {
-                    updateServiceCallLineItem(this);
-                };
-
-                //cancel line item changes.
-                self.cancelLineItemChanges = function () {
-                    this.problemCodeEditing(false);
-                    this.problemDescriptionEditing(false);
-                    this.lineEditing(false);
-                    this.problemCode(this.currentProblemCode());
-                    this.problemDescription(this.currentProblemDescription());
-                };
-
-                //complete line item.
-                self.completeLine = function () {
-                    this.lineEditing(false);
-                    completeServiceCallLineItem(this);
-                };
-
-                //reopen line item.
-                self.reopenLine = function () {
-                    this.lineEditing(false);
-                    reopenServiceCallLineItem(this);
-                };
-
-                self.lineNumber = ko.observable(options.lineNumber);
-
-                self.lineNumberWithProblemCode = ko.computed(function () {
-                    return self.lineNumber() + " - " + self.problemCode();
-                });
-
-                self.serviceCallLineItemStatus = ko.observable(options.serviceCallLineItemStatus);
-
-                self.serviceCallLineItemStatusDisplayName = ko.observable('');
-                if (options.serviceCallLineItemStatus) {
-                    if (options.serviceCallLineItemStatus.displayName)
-                        self.serviceCallLineItemStatusDisplayName(options.serviceCallLineItemStatus.displayName);  //TODO: displayName works for model passed into js file via toJSON().
-                    if (options.serviceCallLineItemStatus.DisplayName)
-                        self.serviceCallLineItemStatusDisplayName(options.serviceCallLineItemStatus.DisplayName);  //TODO: DisplayName works for model passed from ajax call. Need to keep both similar.
-                }
-
-                self.lineItemStatusCSS = ko.computed(function () {
-                    return self.serviceCallLineItemStatusDisplayName() ? 'label label-' + self.serviceCallLineItemStatusDisplayName().toLowerCase() + '-service-line-item' : '';
-                });
-
-                self.isLineItemCompleted = function () {
-                    if (!self.serviceCallLineItemStatusDisplayName())
-                        return false;
-
-                    return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase() ? true : false;
-                };
             }
 
             function CallNotesViewModel(options) {
@@ -377,7 +276,6 @@
             }
 
             function serviceCallLineItemViewModel() {
-                debugger;
                 var self = this;
 
                 self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
@@ -463,24 +361,9 @@
                 
                 self.allCallNotes = ko.observableArray([]);
                 self.allAttachments = ko.observableArray([]);
-                self.selectedLineToAttachToNote = ko.observable();
-                self.selectedLineToAttachToAttachment = ko.observable();
-                self.selectedLineToFilterNotes = ko.observable();
-                self.selectedLineToFilterAttachments = ko.observable();
                 self.noteDescriptionToAdd = ko.observable('');
 
                 self.userCanAlwaysReopenCallLines = ko.observable();
-
-                self.areAllLineItemsCompleted = ko.computed(function () {
-                    var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
-                        return (i.serviceCallLineItemStatusDisplayName().toLowerCase() != serviceCallStatusData.Complete.DisplayName.toLowerCase());
-                    });
-
-                    if (anyNonCompletedLineItem)
-                        return false;
-                    else
-                        return true;
-                }).extend({ notify: 'always' });
 
                 self.removeAttachment = function (e) {
                     if (confirm(modelData.attachmentRemovalMessage)) {
@@ -519,7 +402,6 @@
 
                     var lineNoteData = ko.toJSON(newCallNote);
 
-                    debugger;
                     $.ajax({
                         url: urls.ManageServiceCall.AddNote,
                         type: "POST",
@@ -557,11 +439,6 @@
 
                 //undo last line item which was completed.
                 self.undoLastCompletedLine = function () {
-                    //var lineId = $("#undoLastCompletedLineItemAlert").attr('data-service-line-id-to-undo');
-                    //var lineToReopen = ko.utils.arrayFirst(self.allLineItems(), function (i) {
-                    //    return (i.serviceCallLineItemId == lineId);
-                    //});
-                    //reopenServiceCallLineItem(lineToReopen);
                     reopenServiceCallLineItem(this);
                     self.lineJustCompleted(false);
                 };
@@ -569,13 +446,6 @@
 
             var viewModel = new serviceCallLineItemViewModel();
             ko.applyBindings(viewModel);
-
-            //var persistedAllLineItemsViewModel = modelData.initialServiceCallLineItem;
-
-            //_(persistedAllLineItemsViewModel).each(function (item) {
-            //    debugger;
-            //    viewModel.allLineItems.push(new AllLineItemsViewModel(item));
-            //});
 
             var persistedAllCallNotesViewModel = modelData.initialServiceCallLineNotes;
 
