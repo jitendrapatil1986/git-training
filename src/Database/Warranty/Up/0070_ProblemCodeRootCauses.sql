@@ -1,4 +1,4 @@
-﻿CREATE TABLE [lookups].[ProblemCodeRootCauses](
+CREATE TABLE [lookups].[ProblemCodeRootCauses](
 	[ProblemCodeId] [int] NOT NULL,
 	[RootCauseId] TINYINT NOT NULL,
 	CONSTRAINT [PK_ProblemCodeRootCausess] PRIMARY KEY 
