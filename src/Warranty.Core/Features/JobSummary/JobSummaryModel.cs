@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Warranty.Core.Features.JobSummary
 {
+    using Enumerations;
     using Services;
 
     public class JobSummaryModel : UploadAttachmentBaseViewModel
@@ -47,7 +48,8 @@ namespace Warranty.Core.Features.JobSummary
         public IEnumerable<JobPayment> JobPayments { get; set; }
         public IEnumerable<JobSelection> JobSelections { get; set; }
         public IEnumerable<JobNote> JobNotes { get; set; }
-        public IEnumerable<Attachment> Attachments { get; set; } 
+        public IEnumerable<Attachment> Attachments { get; set; }
+        public IEnumerable<Homeowner> Homeowners { get; set; }
 
         public int HomeOwnerNumber { get; set; }
 
@@ -135,6 +137,13 @@ namespace Warranty.Core.Features.JobSummary
             public Guid JobId { get; set; }
             public string DisplayName { get; set; }
             public string FilePath { get; set; }
+            public string CreatedBy { get; set; }
+            public DateTime? CreatedDate { get; set; }
+        }
+
+        public class Homeowner
+        {
+            public string HomeownerName { get; set; }
             public string CreatedBy { get; set; }
             public DateTime? CreatedDate { get; set; }
         }

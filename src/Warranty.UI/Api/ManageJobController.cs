@@ -3,6 +3,8 @@
     using System.Web.Mvc;
     using Warranty.Core;
     using Warranty.Core.Features.AddJobNote;
+    using Warranty.Core.Features.JobSummary.ChangeHomeowner;
+    using Warranty.Core.Features.SharedQueries;
 
     public class ManageJobController: ApiController
     {
@@ -23,6 +25,17 @@
                 });
 
             return resultModel;
+        }
+
+        [HttpPost]
+        public PostResponseModel ChangeHomeowner(ChangeHomeownerModel model)
+        {
+            _mediator.Send(new ChangeHomeownerCommand
+            {
+                Model = model,
+            });
+
+            return new PostResponseModel { Success = true };
         }
     }
 }

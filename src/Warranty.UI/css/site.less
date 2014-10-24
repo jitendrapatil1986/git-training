@@ -54,6 +54,7 @@ h2, h3, h4 {
 
 .progress {
     height: 7px;
+    margin-bottom: 0;
 }
 
 .time-remaining-progress {
@@ -62,6 +63,10 @@ h2, h3, h4 {
 
 #serviceCallSummaryPage section, #jobSummaryPage section {
     border-bottom: 1px solid #DDD;
+}
+
+#serviceCallSummaryPage .panel-default  {
+    margin: 15px 0 0 0;
 }
 
 .panel-default {
@@ -85,9 +90,13 @@ h2, h3, h4 {
    margin-right: 10px;
 }
 
+section.line-items {
+    margin-top: 15px;
+}
+
 .service-call-line {
     border-bottom: solid 1px #e7e7e7;
-    padding: 10px 0 0;
+    padding: 10px 0 10px;
     margin: 0;
 }
 
@@ -175,7 +184,7 @@ h2, h3, h4 {
     font-size: 10px;
     color: #FFFFFF;
     padding: 5px;
-    width: 52px;
+    width: 60px;
 }
 
     .opened-for div:first-child{
@@ -270,8 +279,20 @@ h2, h3, h4 {
     border-left: 1px solid #DDD;
 }
 
+#serviceCallsWidget .panel-body {
+  padding: 0;
+}
+
 #serviceCallsWidget .panel-group {
   margin-bottom: 0;
+}
+
+#collapse-undefined .panel-body {
+    padding: 0;
+}
+
+.collapse div.service-call-line:last-child {
+  border-bottom: 0;
 }
 
 .todo {
@@ -548,6 +569,10 @@ a.delete-group-item:hover {
     padding-bottom: 3px;
 }
 
+.padding-bottom-10 { 
+    padding-bottom: 10px;
+}
+
 .padding-top-7 { 
     padding-top: 7px;
 }
@@ -744,10 +769,6 @@ a.delete-group-item:hover {
     padding-left: 5px;
 }
 
-.inline-editable-text .editable-buttons{
-    margin-top: 4px;
-}
-
 .cursor-pointer {
     cursor: pointer;
 }
@@ -756,19 +777,21 @@ a.delete-group-item:hover {
     margin-left:13px;
 }
 
-.attachments .attached-file {
-    margin: 0 10px 10px 0;
-    border: 1px lightgray solid;
-    border-radius: 5px;
+.attachments ul li{
     float: left;
-    padding: 10px;
+    margin: 0 10px 10px 0;
+    width: 150px;
     text-align: center;
-    background-color:@gray-lighter;
-    min-width: 150px;
+    word-wrap: break-word;
 }
 
-.attachments .editable-buttons {
-    margin-top: 3px;
+.attachments .attached-file {
+    margin: 0 0 5px 0;
+    border: 1px lightgray solid;
+    border-radius: 5px;
+    padding: 10px;
+    background-color:@gray-lighter;
+    display: block;
 }
 
 .attached-file:hover {
@@ -778,7 +801,7 @@ a.delete-group-item:hover {
 span.boxclose{
     float: right;
     margin-top: -18px;
-    margin-right: -18px;
+    margin-right: -20px;
     cursor: pointer;
     color: #fff;
     border-radius: 100px;
@@ -811,8 +834,9 @@ span.boxclose{
 }
 
 .attachment-info {
-    margin-top:50px;
-    font-size: xx-small;
+    margin-top: 5px;
+    font-size: 11px;
+    line-height: 14px;
 }
 
 .download-attachment {
@@ -863,6 +887,14 @@ span.boxclose{
     width: 800px;
 }
 
+.validationMessage { 
+    color: Red;
+}
+
+.print-only {
+    display: none;
+}
+
 @media (max-width: 767px) {
 
 a.boxclose {
@@ -900,6 +932,11 @@ a.boxclose {
         margin-top: 0px;
     }
 
+    .mobile-margin {
+        margin: 5px 0;
+        display: block;
+    }
+
     .undo-alert {
         width: 300px;
         top: 59px;
@@ -910,5 +947,22 @@ a.boxclose {
 @media print {
     .no-print {
         display: none;
+    }
+
+    .print-only {
+       display: block;
+    }
+
+     a[href]:after {
+        content: none;
+      }
+
+      #serviceCallSummaryPage{
+        border: 0;
+    }
+
+    #serviceCallSummaryPage .panel-heading{
+        margin:0;
+        border: 0;
     }
 }

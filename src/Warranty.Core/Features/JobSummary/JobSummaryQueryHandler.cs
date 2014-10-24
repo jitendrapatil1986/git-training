@@ -29,6 +29,7 @@ namespace Warranty.Core.Features.JobSummary
             model.JobSelections = GetJobSelections(query.JobId);
             model.JobNotes = GetJobNotes(query.JobId);
             model.Attachments = GetJobAttachments(query.JobId);
+            model.Homeowners = GetJobHomeowners(query.JobId);
             //model.JobPayments = GetJobPayments(query.JobId);
 
             return model;
@@ -52,7 +53,7 @@ namespace Warranty.Core.Features.JobSummary
 
         private JobSummaryModel GetJobSummary(Guid jobId)
         {
-            const string sql = @"SELECT j.[JobId]
+            const string sql = @"SELECT TOP 1 j.[JobId]
                                 ,j.[JobNumber]
                                 ,j.[CloseDate]
                                 ,j.[AddressLine]
@@ -97,7 +98,8 @@ namespace Warranty.Core.Features.JobSummary
                             ON j.BuilderEmployeeId = be.EmployeeId
                             LEFT JOIN Employees se
                             ON j.SalesConsultantEmployeeId = se.EmployeeId
-                            WHERE j.JobId = @0";
+                            WHERE j.JobId = @0
+                            ORDER BY ho.HomeownerNumber DESC";
 
             var result = _database.Single<JobSummaryModel>(sql, jobId);
             
@@ -176,6 +178,23 @@ namespace Warranty.Core.Features.JobSummary
                                 ORDER BY CreatedDate DESC";
 
             var result = _database.Fetch<JobSummaryModel.Attachment>(sql, jobId);
+
+            return result;
+        }
+
+        private IEnumerable<JobSummaryModel.Homeowner> GetJobHomeowners(Guid jobId)
+        {
+            const string sql = @"SELECT h.[HomeownerName]
+                                    ,h.[CreatedBy]
+                                    ,h.[CreatedDate]
+                                FROM Homeowners h
+                                INNER JOIN [dbo].[Jobs] j
+                                ON h.JobId = j.JobId
+                                WHERE j.JobId = @0
+                                AND h.HomeownerNumber > 1
+                                ORDER BY h.CreatedDate DESC";
+
+            var result = _database.Fetch<JobSummaryModel.Homeowner>(sql, jobId);
 
             return result;
         }

@@ -13,7 +13,7 @@
                 @using (Html.BeginForm("MailMergeDownloadAsCsv", "Report"))
                 {
                     @(Html.HiddenFor(x => x.Date))
-                    <button type="submit" class="btn btn-default pull-right margin-botom-10" value="Download as Csv"><span class="glyphicon glyphicon-download-alt"></span> Download as Csv</button>
+                    <button type="submit" class="btn btn-default pull-right margin-botom-10 no-print" value="Download as .csv"><span class="glyphicon glyphicon-download-alt"></span> Download as .csv</button>
                 }
             </div>
         }
@@ -29,15 +29,13 @@
 
                             @using (Html.BeginForm("MailMerge", "Report", FormMethod.Post, new { @class = "form-inline" }))
                             {
-                                <div class="form-group margin-right-10">
-                                    <span><strong>Filter by</strong></span>
-                                </div>
+
                                 
                                 <div class="form-group">
-                                    @Html.TextBoxFor(x => x.Date, new { @class = "form-control monthpicker-input", placeholder = "Month", data_val = "false" })
+                                    @Html.TextBoxFor(x => x.Date, new { @class = "form-control monthpicker-input", placeholder = "Select Month", data_val = "false" })
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" class="btn btn-primary" value="Apply" />
+                                    <input type="submit" class="btn btn-primary" value="Run Report" />
                                 </div>
                             }
                         </div>
@@ -48,7 +46,7 @@
     </div>
     @if (!Model.AnyResults)
     {
-        <p><em>No entries match report criteria.</em></p>
+        <p><em>No entries match report criteria</em></p>
     }
     else
     {
