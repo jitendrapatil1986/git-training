@@ -1,19 +1,17 @@
 ﻿namespace Warranty.Server.Handlers.Jobs
 {
-    using System.Linq;
     using Core.Entities;
-    using Core.Enumerations;
     using Events;
     using InnerMessages;
     using NPoco;
     using NServiceBus;
 
-    public class JobHomeownerChangedHandler : IHandleMessages<NotifyJobHomeownerChanged>
+    public class NotifyJobHomeownerChangedHandler : IHandleMessages<NotifyJobHomeownerChanged>
     {
         private readonly IBus _bus;
         private readonly IDatabase _database;
 
-        public JobHomeownerChangedHandler(IBus bus, IDatabase database )
+        public NotifyJobHomeownerChangedHandler(IBus bus, IDatabase database )
         {
             _bus = bus;
             _database = database;
@@ -27,7 +25,7 @@
 
                 _bus.Publish<JobHomeownerChanged>(x =>
                     {
-                        x.JobId = job.JobId;
+                        x.JobNumber = job.JobNumber;
                         x.HomeownerName = homeowner.HomeOwnerName;
                         x.HomeownerHomePhone = homeowner.HomePhone;
                         x.HomeownerEmailAddress = homeowner.EmailAddress;

@@ -102,7 +102,7 @@
     <Compile Include="Handlers\Jobs\JobElevationUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobClosedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobHomeBuyerNameUpdatedHandler.cs" />
-    <Compile Include="Handlers\Jobs\JobHomeownerChangedHandler.cs" />
+    <Compile Include="Handlers\Jobs\NotifyJobHomeownerChangedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobPrimaryBuilderUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobResetToDirtHandler.cs" />
     <Compile Include="Handlers\Jobs\JobAddedHandler.cs" />
