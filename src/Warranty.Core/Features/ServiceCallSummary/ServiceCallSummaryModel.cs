@@ -89,6 +89,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public string LineItemRoot { get; set; }
             public DateTime CreatedDate { get; set; }
             public ServiceCallLineItemStatus ServiceCallLineItemStatus { get; set; }
+            public int NumberOfAttachments { get; set; }
+            public int NumberOfNotes { get; set; }
         }
 
         public class ServiceCallNote

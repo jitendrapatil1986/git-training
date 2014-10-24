@@ -80,9 +80,9 @@
     <Reference Include="StructureMap">
       <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
     </Reference>
-    <Reference Include="Survey.Client, Version=1.0.0.29, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Survey.Client, Version=1.0.0.33, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Survey.Client.1.0.0.29\lib\net45\Survey.Client.dll</HintPath>
+      <HintPath>..\packages\Survey.Client.1.0.0.33\lib\net45\Survey.Client.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -93,6 +93,8 @@
     <Reference Include="System.Web.Mvc">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
+        <Private>True</Private>
+        <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -110,6 +112,11 @@
     <Compile Include="ApprovalInfrastructure\ApprovalServices\ServiceCallApprovalService.cs" />
     <Compile Include="ApprovalInfrastructure\Interfaces\IApprovalService.cs" />
     <Compile Include="Attributes\CuteUiFileUploadOptionsAttribute.cs" />
+    <Compile Include="Calculator\CalculatorResult.cs" />
+    <Compile Include="Calculator\IWarrantyCalculator.cs" />
+    <Compile Include="Calculator\MonthYearModel.cs" />
+    <Compile Include="Calculator\SurveyDataResult.cs" />
+    <Compile Include="Calculator\WarrantyCalculator.cs" />
     <Compile Include="Configurations\CitiesCollection.cs" />
     <Compile Include="Configurations\CityConfig.cs" />
     <Compile Include="Configurations\SurveyConstants.cs" />
@@ -255,12 +262,18 @@
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQueryHandler.cs" />
     <Compile Include="Features\EditServiceCallLineItem\RootCauseQuery.cs" />
     <Compile Include="Features\EditServiceCallLineItem\RootCauseQueryHandler.cs" />
+    <Compile Include="Features\Report\Achievement\AchievementReportModel.cs" />
+    <Compile Include="Features\Report\Achievement\AchievementReportQuery.cs" />
+    <Compile Include="Features\Report\Achievement\AchievementReportQueryHandler.cs" />
     <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerCommand.cs" />
     <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerCommandHandler.cs" />
     <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerModel.cs" />
     <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerQuery.cs" />
     <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerQueryHandler.cs" />
     <Compile Include="Features\SharedQueries\RootCauses.cs" />
+    <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ServiceCallLineItemModel.cs" />
+    <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ServiceCallLineItemQuery.cs" />
+    <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ServiceCallLineItemQueryHandler.cs" />
     <Compile Include="Features\TaskCompletion\TaskCompleteCommand.cs" />
     <Compile Include="Features\TaskCompletion\ServiceCallApproveCommandHandler.cs" />
     <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetModel.cs" />

@@ -4,6 +4,7 @@ using System.Web.Mvc;
 namespace Warranty.UI.Controllers
 {
     using Warranty.Core;
+    using Warranty.Core.Features.Report.Achievement;
     using Warranty.Core.Features.Report.MailMerge;
     using Warranty.Core.Features.Report.WSRLoadingReport;
     using Warranty.Core.Features.Report.WarrantyBonusSummary;
@@ -74,6 +75,21 @@ namespace Warranty.UI.Controllers
         public ActionResult WarrantyBonusSummaryWSRReport(WarrantyBonusSummaryModel model)
         {
             var resultModel = _mediator.Request(new WarrantyBonusSummaryWSRQuery { Model = model });
+
+            return View(resultModel);
+        }
+
+        public ActionResult AchievementReport()
+        {
+            var resultModel = _mediator.Request(new AchievementReportQuery());
+
+            return View(resultModel);
+        }
+
+        [HttpPost]
+        public ActionResult AchievementReport(AchievementReportModel model)
+        {
+            var resultModel = _mediator.Request(new AchievementReportQuery { queryModel = model });
 
             return View(resultModel);
         }
