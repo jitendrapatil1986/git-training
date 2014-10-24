@@ -36,7 +36,7 @@
             <div class="clearfix"></div>
         </section>
         <div id="serviceCallLineItemDetailPage" class="panel panel-default">
-            <div class="panel-heading no-bottom-padding no-top-padding">
+            <div class="panel-heading no-bottom-padding no-top-padding margin-bottom-15">
                 <div class="row remove-list-style">
                     <div id="allServiceCallLineItems" class="service-call-line edit-line-item" data-bind="attr: {'data-service-call-line-item': lineNumber()}">
                         <div class="col-md-12 main-info">
@@ -84,10 +84,6 @@
 
                                         <div class="col-md-3 margin-bottom-3 text-align-right no-right-padding no-print">
                                             @*<button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>*@
-                                            @if (Model.CanReopenLines)
-                                            {
-                                                <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: reopenLine, visible: !lineEditing() && isLineItemCompleted()">Reopen</button>
-                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -172,12 +168,9 @@
                                     <div class="col-md-12">
                                         <div class="no-left-right-padding">
                                             <div class="row">
-                                                <div class="col-md-11 margin-bottom-5">
+                                                <div class="col-md-12 margin-bottom-5">
                                                     <strong><small><span data-bind="text: createdBy"></span></small></strong>
                                                     <small><span data-bind="text: moment(createdDate).format('L')"></span></small>
-                                                </div>
-                                                <div class="col-md-1">
-                                                    <span data-bind="text: noteLineNumberWithProblemCode()"></span>
                                                 </div>
                                             </div>
                                             <div class="row">

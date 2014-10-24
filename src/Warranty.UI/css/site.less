@@ -61,11 +61,11 @@ h2, h3, h4 {
     margin-top: 10px;
 }
 
-#serviceCallSummaryPage section, #jobSummaryPage section {
+#serviceCallSummaryPage section, #jobSummaryPage section, #serviceCallLineItemDetailPage section {
     border-bottom: 1px solid #DDD;
 }
 
-#serviceCallSummaryPage .panel-default  {
+#serviceCallSummaryPage .panel-default, #serviceCallLineItemDetailPage .panel-default {
     margin: 15px 0 0 0;
 }
 
@@ -100,11 +100,11 @@ section.line-items {
     margin: 0;
 }
 
-#serviceCallSummaryPage .service-call-line:first-child {
+#serviceCallSummaryPage .service-call-line:first-child, #serviceCallLineItemDetailPage .service-call-line:first-child {
     border-top: solid 1px #e7e7e7;
 }
 
-#serviceCallSummaryPage .service-call-line:last-child {
+#serviceCallSummaryPage .service-call-line:last-child, #serviceCallLineItemDetailPage .service-call-line:last-child {
     border-bottom: 0;
 }
 
@@ -112,7 +112,7 @@ section.line-items {
     background: @gray-lighter;
 }
 
-#serviceCallSummaryPage select {
+#serviceCallSummaryPage select, #serviceCallLineItemDetailPage select {
     max-width: 300px;
 }
 
@@ -963,11 +963,11 @@ a.boxclose {
         content: none;
       }
 
-      #serviceCallSummaryPage{
+      #serviceCallSummaryPage, #serviceCallLineItemDetailPage {
         border: 0;
     }
 
-    #serviceCallSummaryPage .panel-heading{
+    #serviceCallSummaryPage .panel-heading, #serviceCallLineItemDetailPage .panel-heading {
         margin:0;
         border: 0;
     }

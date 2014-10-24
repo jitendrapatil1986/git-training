@@ -13,129 +13,6 @@
 
             $(".attached-file-display-name").editable();
 
-            $(".phone-number-with-extension").on('shown', function () {
-                $(this).data('editable').input.$input.mask('?(999)-999-9999 **********', { placeholder: " " });
-            });
-
-            $('.btn-action-with-popup').click(function (e) {
-                $('.btn-action-with-popup').removeClass('active');
-                $(this).addClass("active");
-                $('.popup-action-with-message').hide();
-                var right = ($(window).width() - ($(this).offset().left + $(this).outerWidth()));
-                var actionwithPopup = $(this).data('action-with-popup');
-                $("#" + actionwithPopup).css({
-                    'position': 'absolute',
-                    'right': right,
-                    'top': $(this).offset().top + $(this).height() + 15
-                }).show();
-            });
-
-            $('.btn-cancel-popup').click(function (e) {
-                var popupWindow = $(this).parent();
-                var parentButton = $("#btn_" + popupWindow.attr('id'));
-                parentButton.removeClass("active");
-                popupWindow.hide();
-            });
-
-            $('.btn-execute-action').click(function (e) {
-                var popupWindow = $(this).parent();
-                var actionUrl = $(this).data('action-url');
-                var textArea = $(this).prev('textarea');
-                var message = textArea.val();
-                var serviceCallId = $(this).data('service-call-id');
-                var parentButton = $("#btn_" + popupWindow.attr('id'));
-                $.ajax({
-                    type: "POST",
-                    url: actionUrl,
-                    data: { id: serviceCallId, message: message },
-                    success: function (result) {
-                        updateUI(result.actionName);
-                        changeButtonText(parentButton);
-                        parentButton.removeClass("active");
-                        textArea.val('');
-                        popupWindow.hide();
-                    }
-                });
-            });
-
-
-            $('#btn_execute_reopen').click(function (e) {
-                var popupWindow = $(this).parent();
-                var actionUrl = $(this).data('action-url');
-                var textArea = $(this).prev('textarea');
-                var message = textArea.val();
-                textArea.val('');
-                var serviceCallId = $(this).data('service-call-id');
-                var parentButton = $("#btn_" + popupWindow.attr('id'));
-                $.ajax({
-                    type: "POST",
-                    url: actionUrl,
-                    data: { id: serviceCallId, message: message },
-                    success: function (data) {
-                        reOpenServiceCall();
-                        parentButton.removeClass("active");
-                        popupWindow.hide();
-                    }
-                });
-            });
-
-            $('#btn_complete').click(function (e) {
-                var serviceCallId = $(this).data('service-call-id');
-                var url = urls.ServiceCall.Complete;
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: { id: serviceCallId },
-                    success: function (data) {
-                        completeServiceCall();
-                    }
-                });
-            });
-
-            function updateUI(actionName) {
-                if (actionName == activityTypeEnum.Escalation.DisplayName) {
-                    var isEscalated = viewModel.isEscalated();
-                    viewModel.isEscalated(!isEscalated);
-                }
-                else if (actionName == activityTypeEnum.SpecialProject.DisplayName) {
-                    var isSpecialProject = viewModel.isSpecialProject();
-                    viewModel.isSpecialProject(!isSpecialProject);
-                }
-            }
-
-            function changeButtonText(button) {
-                var currentText = button.text();
-                var nextText = button.data('next-text');
-                button.data('next-text', currentText);
-                button.text(nextText);
-            }
-
-
-            $(".approve-button").click(function (e) {
-                e.preventDefault();
-                var serviceCallId = $(this).data("service-call-id");
-                var url = urls.ServiceCall.Approve;
-                executeApproval(url, serviceCallId, $(this), 'Open');
-            });
-
-            $(".deny-button").click(function (e) {
-                e.preventDefault();
-                var serviceCallId = $(this).data("service-call-id");
-                var url = urls.ServiceCall.Deny;
-                executeApproval(url, serviceCallId, $(this), 'Completed');
-            });
-
-            function executeApproval(url, serviceCallId, button, status) {
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: { id: serviceCallId },
-                    success: function (result) {
-                        button.parent().html('<span>Status: <span class="label label-' + status.toLowerCase() + '-service-call">' + status + '</span></span>');
-                    }
-                });
-            }
-
             function highlight(elemId) {
                 var elem = $(elemId);
                 elem.css("backgroundColor", "#ffffff"); // hack for Safari
@@ -159,21 +36,6 @@
                 self.createdBy = options.createdBy;
                 self.createdDate = options.createdDate;
                 self.serviceCallCommentTypeId = options.serviceCallCommentTypeId;
-
-                self.noteLineNumberWithProblemCode = ko.computed(function () {
-                    var lineIdToFilterNotes = options.serviceCallLineItemId;
-                    if (!lineIdToFilterNotes || lineIdToFilterNotes == "") {
-                        return "";
-                    } else {
-                        ko.utils.arrayForEach(viewModel.allLineItems(), function (i) {
-                            if (i.serviceCallLineItemId == lineIdToFilterNotes) {
-                                return i.lineNumber() + " - " + i.problemCode();
-                            }
-                            return "";
-                        });
-                        return "";
-                    }
-                });
             }
 
             function CallAttachmentsViewModel(options) {
@@ -356,13 +218,10 @@
                     return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase() ? true : false;
                 };
 
-                self.allLineItems = ko.observableArray([]);
                 self.theLookups = dropdownData.availableLookups;  //dropdown list does not need to be observable. Only the actual elements w/i the array do.
-                
                 self.allCallNotes = ko.observableArray([]);
                 self.allAttachments = ko.observableArray([]);
                 self.noteDescriptionToAdd = ko.observable('');
-
                 self.userCanAlwaysReopenCallLines = ko.observable();
 
                 self.removeAttachment = function (e) {

@@ -74,7 +74,6 @@ require(['/Scripts/app/main.js'], function () {
                     }
                 });
             });
-             
 
             $('#btn_execute_reopen').click(function (e) {
                 var popupWindow = $(this).parent();
@@ -138,7 +137,6 @@ require(['/Scripts/app/main.js'], function () {
                 button.text(nextText);
             }
 
-
             $(".approve-button").click(function (e) {
                 e.preventDefault();
                 var serviceCallId = $(this).data("service-call-id");
@@ -175,8 +173,6 @@ require(['/Scripts/app/main.js'], function () {
 
             function clearNoteFields() {
                 $("#addCallNoteDescription").val('');
-                $("#addCallNoteLineReferenceDropDown").val('');
-                self.selectedLineToAttachToNote('');
                 self.noteDescriptionToAdd('');
             }
             
@@ -185,6 +181,8 @@ require(['/Scripts/app/main.js'], function () {
                 self.serviceCallId = options.serviceCallId;
                 self.serviceCallLineItemId = options.serviceCallLineItemId;
                 self.completed = options.completed;
+                self.numberOfAttachments = options.numberOfAttachments;
+                self.numberOfNotes = options.numberOfNotes;
 
                 //track line item properties.
                 self.problemCodeId = ko.observable(options.problemCodeId);
@@ -258,6 +256,15 @@ require(['/Scripts/app/main.js'], function () {
                         return false;
                     
                     return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase() ? true : false;
+                };
+
+                self.jumpToServiceCallLineDetailPage = function() {
+                    window.location.href = urls.ServiceCall.LineItemDetail + '/' + self.serviceCallLineItemId;
+                };
+
+                self.doNotBubbleUpAndJumpToLineDetailPage = function() {
+                    //function used to keep the ddl and textarea from jumping to the detail pg during edit mode b/c those elements are wrapped in <a> tag which would
+                    //normally just jump to the page once you click on the ddl or textarea.
                 };
             }
             
@@ -398,33 +405,7 @@ require(['/Scripts/app/main.js'], function () {
                 self.isEscalated = ko.observable(modelData.isEscalated);
                 self.allCallNotes = ko.observableArray([]);
                 self.allAttachments = ko.observableArray([]);
-                self.selectedLineToAttachToNote = ko.observable();
-                self.selectedLineToAttachToAttachment = ko.observable();
-                self.selectedLineToFilterNotes = ko.observable();
-                self.selectedLineToFilterAttachments = ko.observable();
                 self.noteDescriptionToAdd = ko.observable('');
-                self.filteredCallNotes = ko.computed(function () {
-                    var lineIdToFilterNotes = self.selectedLineToFilterNotes();
-                    if (!lineIdToFilterNotes || lineIdToFilterNotes == "") {
-                        return self.allCallNotes();
-                    } else {
-                        return ko.utils.arrayFilter(self.allCallNotes(), function (i) {
-                            return i.serviceCallLineItemId() == lineIdToFilterNotes;
-                        });
-                    }
-                });
-                
-                self.filteredAttachments = ko.computed(function () {
-                    var lineIdToFilterAttachments = self.selectedLineToFilterAttachments();
-                    if (!lineIdToFilterAttachments || lineIdToFilterAttachments == "") {
-                        return self.allAttachments();
-                    } else {
-                        return ko.utils.arrayFilter(self.allAttachments(), function (i) {
-                            return i.serviceCallLineItemId() == lineIdToFilterAttachments;
-                        });
-                    }
-                });
-
                 self.userCanAlwaysReopenCallLines = ko.observable();
                 
                 self.areAllLineItemsCompleted = ko.computed(function () {
@@ -572,17 +553,6 @@ require(['/Scripts/app/main.js'], function () {
                 self.cancelCallNote = function () {
                     clearNoteFields();
                 };
-                
-                self.resetCallNoteFilter = function () {
-                    $("#filterCallNoteLineReferenceDropDown").val('');
-                    self.selectedLineToFilterNotes('');
-                };
-                
-                self.resetCallattachmentFilter = function () {
-                    $("#filterCallAttachmentLineReferenceDropDown").val('');
-                    self.selectedLineToFilterAttachments('');
-                };
-                
 
                 self.lineJustCompleted = ko.observable();
                 
