@@ -1,14 +1,11 @@
 ﻿namespace Warranty.Core.Features.Report.Achievement
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Calculator;
-    using Enumerations;
     using Extensions;
     using NPoco;
     using Security;
-    using Survey.Client;
 
     public class AchievementReportQueryHandler : IQueryHandler<AchievementReportQuery, AchievementReportModel>
     {
@@ -16,7 +13,7 @@
         private readonly IUserSession _userSession;
         private readonly IWarrantyCalculator _warrantyCalculator;
 
-        public AchievementReportQueryHandler(IDatabase database, IUserSession userSession, ISurveyClient surveyClient, IWarrantyCalculator warrantyCalculator )
+        public AchievementReportQueryHandler(IDatabase database, IUserSession userSession, IWarrantyCalculator warrantyCalculator )
         {
             _database = database;
             _userSession = userSession;
@@ -25,37 +22,31 @@
 
         public AchievementReportModel Handle(AchievementReportQuery query)
         {
-            var user = _userSession.GetCurrentUser();
-
-            if (!query.queryModel.FilteredDate.HasValue)
-            {
-                return new AchievementReportModel
-                {
-                    EmployeeTiedToRepresentatives = GetEmployeesTiedToRepresentatives(),
-                };
-            }
-
             var model = new AchievementReportModel
                 {
-                    AchievementSummaries = GetAchievementSummary(query, user),
+                    AchievementSummaries = GetAchievementSummary(query),
                     EmployeeTiedToRepresentatives = GetEmployeesTiedToRepresentatives(),
                 };
-
             return model;
         }
 
-        private IEnumerable<AchievementReportModel.AchievementSummary> GetAchievementSummary(AchievementReportQuery query, IUser user)
+        private IEnumerable<AchievementReportModel.AchievementSummary> GetAchievementSummary(AchievementReportQuery query)
         {
-            var employeeNumber = GetEmployeeNumber(query, user);
+            if (!query.queryModel.FilteredDate.HasValue)
+                return new List<AchievementReportModel.AchievementSummary>();
 
-            var monthRange = Enumerable.Range(1, 12).Select(query.queryModel.StartDate.AddMonths).TakeWhile(e => e <= query.queryModel.EndDate).Select(e => new MonthYearModel { MonthNumber = Convert.ToInt16(e.ToString("MM")), YearNumber = Convert.ToInt16(e.ToString("yyyy")) });
+            var employeeNumber = query.queryModel.SelectedEmployeeNumber;
+            var startDate = query.queryModel.StartDate;
+            var endDate = query.queryModel.EndDate;
 
-            var excellentService = _warrantyCalculator.GetExcellentWarrantyService(query.queryModel.StartDate, query.queryModel.EndDate, employeeNumber);
-            var definetelyWouldRecommend = _warrantyCalculator.GetDefinetelyWouldRecommend(query.queryModel.StartDate, query.queryModel.EndDate, employeeNumber);
-            var rightTheFirstTime = _warrantyCalculator.GetRightTheFirstTime(query.queryModel.StartDate, query.queryModel.EndDate, employeeNumber);
-            var amountSpent = _warrantyCalculator.GetAmountSpent(query.queryModel.StartDate, query.queryModel.EndDate, employeeNumber);
-            var averageDays = _warrantyCalculator.GetAverageDaysClosed(query.queryModel.StartDate, query.queryModel.EndDate, employeeNumber);
-            var percentClosedWithin7Days = _warrantyCalculator.GetPercentClosedWithin7Days(query.queryModel.StartDate, query.queryModel.EndDate, employeeNumber);
+            var monthRange = Enumerable.Range(1, 12).Select(startDate.AddMonths).TakeWhile(e => e <= endDate).Select(e => new MonthYearModel { MonthNumber = e.Month, YearNumber = e.Year });
+
+            var excellentService = _warrantyCalculator.GetExcellentWarrantyService(startDate, endDate, employeeNumber);
+            var definetelyWouldRecommend = _warrantyCalculator.GetDefinetelyWouldRecommend(startDate, endDate, employeeNumber);
+            var rightTheFirstTime = _warrantyCalculator.GetRightTheFirstTime(startDate, endDate, employeeNumber);
+            var amountSpent = _warrantyCalculator.GetAmountSpent(startDate, endDate, employeeNumber);
+            var averageDays = _warrantyCalculator.GetAverageDaysClosed(startDate, endDate, employeeNumber);
+            var percentClosedWithin7Days = _warrantyCalculator.GetPercentClosedWithin7Days(startDate, endDate, employeeNumber);
 
             return AgregateDataForReport(averageDays, percentClosedWithin7Days, amountSpent, excellentService, definetelyWouldRecommend, rightTheFirstTime, monthRange);
         }
@@ -89,43 +80,28 @@
 
         private IEnumerable<AchievementReportModel.EmployeeTiedToRepresentative> GetEmployeesTiedToRepresentatives()
         {
-            var user = _userSession.GetCurrentUser();
-
-            const string sql = @"SELECT DISTINCT EmployeeNumber, WarrantyRepresentativeEmployeeId
-                                        , LOWER(e.EmployeeName) as EmployeeName
-                                    FROM [ServiceCalls] sc
-                                    INNER JOIN Employees e
-                                    ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-                                    INNER JOIN Jobs j
-                                    ON sc.JobId = j.JobId
-                                    INNER JOIN Communities cm
-                                    ON j.CommunityId = cm.CommunityId
-                                    INNER JOIN Cities ci
-                                    ON cm.CityId = ci.CityId
-                                    WHERE CityCode IN ({0})
-                                    AND EmployeeNumber <> ''
-                                    {1} /* Additional Where */
-                                    ORDER BY EmployeeName";
-
-            var additionalWhereClause = "";
-
-            if (user.IsInRole(UserRoles.WarrantyServiceRepresentative))
-            {
-                additionalWhereClause += "AND EmployeeNumber = " + user.EmployeeNumber + "";
-            }
-
             using (_database)
             {
-                var result = _database.Fetch<AchievementReportModel.EmployeeTiedToRepresentative>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote(), additionalWhereClause));
+                var user = _userSession.GetCurrentUser();
 
+                const string sql = @"SELECT DISTINCT EmployeeNumber, WarrantyRepresentativeEmployeeId
+                                        , LOWER(e.EmployeeName) as EmployeeName
+                                    FROM [ServiceCalls] sc
+                                        INNER JOIN Employees e
+                                    ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+                                        INNER JOIN Jobs j
+                                    ON sc.JobId = j.JobId
+                                        INNER JOIN Communities cm
+                                    ON j.CommunityId = cm.CommunityId
+                                        INNER JOIN Cities ci
+                                    ON cm.CityId = ci.CityId
+                                    WHERE CityCode IN ({0})
+                                        AND EmployeeNumber <> ''
+                                        ORDER BY EmployeeName";
+
+                var result = _database.Fetch<AchievementReportModel.EmployeeTiedToRepresentative>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()));
                 return result;
             }
-        }
-
-        private static string GetEmployeeNumber(AchievementReportQuery query, IUser user)
-        {
-            var employeeNumber = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? user.EmployeeNumber : query.queryModel.SelectedEmployeeNumber;
-            return employeeNumber;
         }
     }
 }
