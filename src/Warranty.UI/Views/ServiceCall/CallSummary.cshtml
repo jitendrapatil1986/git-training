@@ -226,11 +226,11 @@
                                                                 <p class="view" data-bind="text: problemDescription"></p>
                                                                 <textarea id="updateCallLineProblemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription"></textarea>
                                                                 <span class="text-muted view margin-right-10" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
-                                                                <div class="indicator-icon-with-value margin-right-10" data-bind="visible: numberOfAttachments > 0">
-                                                                    <span class="glyphicon glyphicon-paperclip view"></span><span data-bind="text: numberOfAttachments"></span>
+                                                                <div class="indicator-icon-with-value margin-right-10 view" data-bind="visible: numberOfAttachments > 0">
+                                                                    <span class="glyphicon glyphicon-paperclip"></span><span data-bind="text: numberOfAttachments"></span>
                                                                 </div>
-                                                                <div class="indicator-icon-with-value margin-right-10" data-bind="visible: numberOfNotes > 0">
-                                                                    <span class="glyphicon glyphicon-comment view"></span><span data-bind="text: numberOfNotes"></span>
+                                                                <div class="indicator-icon-with-value margin-right-10 view" data-bind="visible: numberOfNotes > 0">
+                                                                    <span class="glyphicon glyphicon-comment"></span><span data-bind="text: numberOfNotes"></span>
                                                                 </div>
                                                             </div>
                                                         </div>
