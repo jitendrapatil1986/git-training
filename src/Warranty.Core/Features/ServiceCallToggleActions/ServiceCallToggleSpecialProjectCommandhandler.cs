@@ -25,18 +25,17 @@
         {
             using (_database)
             {
-                var now = DateTime.UtcNow;
                 var serviceCall = _database.SingleOrDefaultById<ServiceCall>(message.ServiceCallId);
                 serviceCall.IsSpecialProject = !serviceCall.IsSpecialProject;
                 serviceCall.SpecialProjectReason = (serviceCall.IsSpecialProject) ? message.Text : string.Empty;
-                serviceCall.SpecialProjectDate = (serviceCall.IsSpecialProject) ? now : (DateTime?)null;
+                serviceCall.SpecialProjectDate = (serviceCall.IsSpecialProject) ? DateTime.UtcNow : (DateTime?)null;
 
                 _database.Update(serviceCall);
                 _bus.Send<NotifyServiceCallSpecialProjectStatusChanged>(x =>
                     {
                         x.ServiceCallId = serviceCall.ServiceCallId;
-                        x.SpecialProjectDate = now;
-                        x.SpecialProjectReason = message.Text;
+                        x.SpecialProjectDate = serviceCall.SpecialProjectDate;
+                        x.SpecialProjectReason = serviceCall.SpecialProjectReason;
                     });
 
                 var activityName = serviceCall.IsSpecialProject ? "Special Project" : "Not Special Project";
