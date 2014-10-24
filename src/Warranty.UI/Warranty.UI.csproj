@@ -302,6 +302,7 @@
     <Content Include="Scripts\app\search.js" />
     <Content Include="Scripts\app\servicecall\CallSummary.js" />
     <Content Include="Scripts\app\servicecall\create.js" />
+    <Content Include="Scripts\app\servicecall\LineItemDetail.js" />
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
     <Content Include="Scripts\config\customer-search.js" />
     <Content Include="Scripts\lib\bootstrap-editable.min.js" />
@@ -424,6 +425,7 @@
     <Content Include="Views\Job\ChangeHomeowner.cshtml" />
     <Content Include="Views\Home\_ServiceCallListItem.cshtml" />
     <Content Include="Views\Home\_ToDoJobChangedTask.cshtml" />
+    <Content Include="Views\ServiceCall\LineItemDetail.cshtml" />
     <Content Include="Views\Report\AchievementReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
