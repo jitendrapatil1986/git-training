@@ -15,12 +15,13 @@ namespace Warranty.Core.Calculator
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
         private readonly ISurveyClient _surveyClient;
-
+        private readonly string _userMarkets;
         public WarrantyCalculator(IDatabase database, IUserSession userSession, ISurveyClient surveyClient)
         {
             _database = database;
             _userSession = userSession;
             _surveyClient = surveyClient;
+            _userMarkets = userSession.GetCurrentUser().Markets.CommaSeparateWrapWithSingleQuote();
         }
 
         public IEnumerable<CalculatorResult> GetAverageDaysClosed(DateTime startDate, DateTime endDate, string employeeNumber)
@@ -43,9 +44,7 @@ namespace Warranty.Core.Calculator
                                                 AND EmployeeNumber=@2
 									    group by month(completiondate), year(completionDate)";
 
-            var user = _userSession.GetCurrentUser();
-            var userMarkets = user.Markets.CommaSeparateWrapWithSingleQuote();
-            var result = _database.Fetch<CalculatorResult>(string.Format(sql, userMarkets), startDate, endDate, employeeNumber);
+            var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
             return result;
             }
         }
@@ -71,9 +70,7 @@ namespace Warranty.Core.Calculator
                                                 AND EmployeeNumber=@2
 									    group by month(completiondate), year(completionDate)";
 
-                var user = _userSession.GetCurrentUser();
-                var userMarkets = user.Markets.CommaSeparateWrapWithSingleQuote();
-                var result = _database.Fetch<CalculatorResult>(string.Format(sql, userMarkets), startDate, endDate, employeeNumber);
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
                 return result;
             }
         }
@@ -147,9 +144,7 @@ namespace Warranty.Core.Calculator
 					                                        group by DateMonth, DateYear
                                                             order by DateYear, DateMonth;";
 
-                var user = _userSession.GetCurrentUser();
-                var userMarkets = user.Markets.CommaSeparateWrapWithSingleQuote();
-                var result = _database.Fetch<CalculatorResult>(string.Format(sql, userMarkets), startDate, endDate, employeeNumber);
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
                 return result;
             }
         }
@@ -180,9 +175,7 @@ namespace Warranty.Core.Calculator
 							                                    group by month(datePosted), year(dateposted)
 							                                    order by year(dateposted), month(datePosted);";
 
-                var user = _userSession.GetCurrentUser();
-                var userMarkets = user.Markets.CommaSeparateWrapWithSingleQuote();
-                var result = _database.Fetch<CalculatorResult>(string.Format(sql, userMarkets), startDate, endDate, employeeNumber);
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
                 return result;
             }
         }
