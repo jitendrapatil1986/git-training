@@ -258,13 +258,12 @@ require(['/Scripts/app/main.js'], function () {
                     return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase() ? true : false;
                 };
 
-                self.jumpToServiceCallLineDetailPage = function() {
-                    window.location.href = urls.ServiceCall.LineItemDetail + '/' + self.serviceCallLineItemId;
-                };
-
-                self.doNotBubbleUpAndJumpToLineDetailPage = function() {
-                    //function used to keep the ddl and textarea from jumping to the detail pg during edit mode b/c those elements are wrapped in <a> tag which would
-                    //normally just jump to the page once you click on the ddl or textarea.
+                self.jumpToServiceCallLineDetailPage = function () {
+                    //only jump to detail pg when not editing the line. so btns within elements where this fn is called should have clickBubble: false to ensure the btn click
+                    //events do not bubble up and hit the element calling this fn.
+                    if (this.lineEditing() == false) {
+                        window.location.href = urls.ServiceCall.LineItemDetail + '/' + self.serviceCallLineItemId;
+                    }
                 };
             }
             

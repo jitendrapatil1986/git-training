@@ -202,21 +202,18 @@
                     <div class="clearfix"></div>
                     <ul>
                         <div data-bind="foreach: allLineItems">
-                            @*<div id="linkToLineItemDetail" data-bind="attr: {'href': '@Url.Action("LineItemDetail", "ServiceCall")/' + serviceCallLineItemId}">*@
-                            @*<div class="cursor-pointer" onclick="location.href='@Url.Action("LineItemDetail", "ServiceCall")/' + serviceCallLineItemId;">*@
-                            @*<div class="cursor-pointer" onclick="location.href='@Url.Action("LineItemDetail", "ServiceCall")/41066aa6-24aa-4627-b58c-a3cd0025942a';">*@
                             <div class="cursor-pointer" data-bind="click: jumpToServiceCallLineDetailPage">
                                 <div id="allServiceCallLineItems" class="service-call-line edit-line-item" data-bind="attr: {'data-service-call-line-item': lineNumber()}">
                                     <li class="row">
                                         <div class="col-md-12">
-                                            <div class="row">
+                                            <div id="lineDetail" class="row">
                                                 <div class="col-md-9">
                                                     <div class="no-left-right-padding">
                                                         <div class="row">
                                                             <div class="col-md-9">
                                                                 <div class="editor" data-bind="css: { editing: problemCodeEditing }"> 
                                                                     <h4>
-                                                                        <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code', click: function(e) { }, clickBubble: false"></select>
+                                                                        <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code'"></select>
                                                                         <span data-bind="text: problemCode" class="view"></span>
                                                                     </h4>
                                                                 </div>
@@ -227,7 +224,7 @@
                                                         <div class="col-md-12">
                                                             <div class="editor" data-bind="css: { editing: problemDescriptionEditing }"> 
                                                                 <p class="view" data-bind="text: problemDescription"></p>
-                                                                <textarea id="updateCallLineProblemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription, click: doNotBubbleUpAndJumpToLineDetailPage"></textarea>
+                                                                <textarea id="updateCallLineProblemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription"></textarea>
                                                                 <span class="text-muted view margin-right-10" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
                                                                 <span class="glyphicon glyphicon-paperclip view margin-right-10" data-bind="text: numberOfAttachments, visible: numberOfAttachments > 0"></span>
                                                                 <span class="glyphicon glyphicon-comment view margin-right-10" data-bind="text: numberOfNotes, visible: numberOfNotes > 0"></span>
@@ -238,10 +235,10 @@
                                                         <div class="col-md-4 col-xs-12 no-left-right-padding top-buffer bottom-buffer">
                                                             <div class="editor" data-bind="css: { editing: lineEditing }">
                                                                 <div class="col-md-3 col-xs-4">
-                                                                    <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges, enable: problemDescription().length > 0">Save</button>
+                                                                    <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges, clickBubble: false, enable: problemDescription().length > 0">Save</button>
                                                                 </div>
                                                                 <div class="col-md-3 col-xs-4">
-                                                                    <button class="btn btn-link edit" data-bind="click: cancelLineItemChanges">Cancel</button>
+                                                                    <button class="btn btn-link edit" data-bind="click: cancelLineItemChanges, clickBubble: false">Cancel</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -249,13 +246,14 @@
                                                 </div>
 
                                                 <div class="col-md-3 margin-bottom-3 text-align-right no-right-padding no-print">
-                                                    <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>
-                                                    <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: completeLine, visible: !lineEditing()&& !isLineItemCompleted()">Complete</button>
+                                                    <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, clickBubble: false, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>
+                                                    <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: completeLine, clickBubble: false, visible: !lineEditing()&& !isLineItemCompleted()">Complete</button>
                                                     @if (Model.CanReopenLines)
                                                     {
-                                                        <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: reopenLine, visible: !lineEditing() && isLineItemCompleted()">Reopen</button>
+                                                        <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: reopenLine, clickBubble: false, visible: !lineEditing() && isLineItemCompleted()">Reopen</button>
                                                     }
                                                 </div>
+
                                             </div>
                                         </div>
                                     </li>
