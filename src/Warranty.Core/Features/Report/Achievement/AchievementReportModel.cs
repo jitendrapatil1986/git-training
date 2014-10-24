@@ -24,8 +24,8 @@
             get
             {
                 if (FilteredDate.HasValue)
-                    return FilteredDate.Value.ToFirstDay();
-                return DateTime.Today.ToFirstDay();
+                    return FilteredDate.Value.AddYears(-1).ToFirstDay();
+                return DateTime.Today.AddYears(-1).ToFirstDay();
             }
         }
 

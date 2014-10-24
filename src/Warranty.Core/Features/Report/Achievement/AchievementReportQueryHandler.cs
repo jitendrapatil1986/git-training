@@ -46,18 +46,16 @@
 
         private IEnumerable<AchievementReportModel.AchievementSummary> GetAchievementSummary(AchievementReportQuery query, IUser user)
         {
-            var endDate = query.queryModel.FilteredDate.Value;
-            var startDate = endDate.AddYears(-1);
             var employeeNumber = GetEmployeeNumber(query, user);
 
-            var monthRange = Enumerable.Range(1, 12).Select(startDate.AddMonths).TakeWhile(e => e <= endDate).Select(e => new MonthYearModel { MonthNumber = Convert.ToInt16(e.ToString("MM")), YearNumber = Convert.ToInt16(e.ToString("yyyy")) });
+            var monthRange = Enumerable.Range(1, 12).Select(query.queryModel.StartDate.AddMonths).TakeWhile(e => e <= query.queryModel.EndDate).Select(e => new MonthYearModel { MonthNumber = Convert.ToInt16(e.ToString("MM")), YearNumber = Convert.ToInt16(e.ToString("yyyy")) });
 
-            var excellentService = _warrantyCalculator.GetExcellentWarrantyService(startDate, endDate, employeeNumber);
-            var definetelyWouldRecommend = _warrantyCalculator.GetDefinetelyWouldRecommend(startDate, endDate, employeeNumber);
-            var rightTheFirstTime = _warrantyCalculator.GetRightTheFirstTime(startDate, endDate, employeeNumber);
-            var amountSpent = _warrantyCalculator.GetAmountSpent(startDate, endDate, employeeNumber);
-            var averageDays = _warrantyCalculator.GetAverageDaysClosed(startDate, endDate, employeeNumber);
-            var percentClosedWithin7Days = _warrantyCalculator.GetPercentClosedWithin7Days(startDate, endDate, employeeNumber);
+            var excellentService = _warrantyCalculator.GetExcellentWarrantyService(query.queryModel.StartDate, query.queryModel.EndDate, employeeNumber);
+            var definetelyWouldRecommend = _warrantyCalculator.GetDefinetelyWouldRecommend(query.queryModel.StartDate, query.queryModel.EndDate, employeeNumber);
+            var rightTheFirstTime = _warrantyCalculator.GetRightTheFirstTime(query.queryModel.StartDate, query.queryModel.EndDate, employeeNumber);
+            var amountSpent = _warrantyCalculator.GetAmountSpent(query.queryModel.StartDate, query.queryModel.EndDate, employeeNumber);
+            var averageDays = _warrantyCalculator.GetAverageDaysClosed(query.queryModel.StartDate, query.queryModel.EndDate, employeeNumber);
+            var percentClosedWithin7Days = _warrantyCalculator.GetPercentClosedWithin7Days(query.queryModel.StartDate, query.queryModel.EndDate, employeeNumber);
 
             return AgregateDataForReport(averageDays, percentClosedWithin7Days, amountSpent, excellentService, definetelyWouldRecommend, rightTheFirstTime, monthRange);
         }
