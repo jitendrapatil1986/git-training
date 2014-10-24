@@ -1,16 +1,19 @@
 ﻿namespace Warranty.Core.Features.JobSummary.ChangeHomeowner
 {
     using Entities;
+    using InnerMessages;
     using NPoco;
-    using Security;
+    using NServiceBus;
 
     public class ChangeHomeownerCommandHandler : ICommandHandler<ChangeHomeownerCommand>
     {
         private readonly IDatabase _database;
+        private readonly IBus _bus;
 
-        public ChangeHomeownerCommandHandler(IDatabase database)
+        public ChangeHomeownerCommandHandler(IDatabase database, IBus bus)
         {
             _database = database;
+            _bus = bus;
         }
 
         public void Handle(ChangeHomeownerCommand message)
@@ -73,6 +76,8 @@
                 var job = _database.SingleById<Job>(message.Model.JobId);
                 job.CurrentHomeOwnerId = newHomeowner.HomeOwnerId;
                 _database.Update(job);
+
+                _bus.Send<NotifyJobHomeownerChanged>(x => { x.JobId = job.JobId; });
             }
         }
     }
