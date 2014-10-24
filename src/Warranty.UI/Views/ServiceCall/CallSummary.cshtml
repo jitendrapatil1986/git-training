@@ -172,41 +172,42 @@
                 </h3>
                 @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallId, new { id = "callSummaryServiceCallId", @class = "form-control" })
                 <div id="addCallLineItem" class="collapse">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select problem code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemCodeToAdd" })
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-12">
-                                    @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
-                                </div>
-                            </div>
-                            <br />
-                            <div class="form-submit">
-                                    <button class="btn btn-primary" data-bind="click: addLineItem, enable: problemDescriptionToAdd().length > 0">Add</button>
-                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addCallLineItem">Cancel</button>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select problem code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemCodeToAdd" })
                             </div>
                         </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-submit">
+                            <button class="btn btn-primary" data-bind="click: addLineItem, enable: problemDescriptionToAdd().length > 0">Add</button>
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#addCallLineItem">Cancel</button>
+                        </div>
                     </div>
+                </div>
 
                 <div class="remove-list-style">
                     <div class="clearfix"></div>
                     <ul>
                         <div data-bind="foreach: allLineItems">
-                            <div id="allServiceCallLineItems" class="service-call-line edit-line-item" data-bind="attr: {'data-service-call-line-item': lineNumber()}">
+                            <div data-bind="click: jumpToServiceCallLineDetailPage, css: { 'cursor-pointer': lineEditing() == false }">
+                                <div id="allServiceCallLineItems" class="service-call-line edit-line-item" data-bind="attr: {'data-service-call-line-item': lineNumber()}">
                                     <li class="row">
                                         <div class="col-md-12">
-                                            <div class="row">
+                                            <div id="lineDetail" class="row">
                                                 <div class="col-md-9">
                                                     <div class="no-left-right-padding">
                                                         <div class="row">
                                                             <div class="col-md-9">
                                                                 <div class="editor" data-bind="css: { editing: problemCodeEditing }"> 
                                                                     <h4>
-                                                                        <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
+                                                                        <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code'"></select>
                                                                         <span data-bind="text: problemCode" class="view"></span>
                                                                     </h4>
                                                                 </div>
@@ -218,7 +219,13 @@
                                                             <div class="editor" data-bind="css: { editing: problemDescriptionEditing }"> 
                                                                 <p class="view" data-bind="text: problemDescription"></p>
                                                                 <textarea id="updateCallLineProblemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription"></textarea>
-                                                                <span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
+                                                                <span class="text-muted view margin-right-10" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
+                                                                <div class="indicator-icon-with-value margin-right-10 view" data-bind="visible: numberOfAttachments > 0">
+                                                                    <span class="glyphicon glyphicon-paperclip"></span><span data-bind="text: numberOfAttachments"></span>
+                                                                </div>
+                                                                <div class="indicator-icon-with-value margin-right-10 view" data-bind="visible: numberOfNotes > 0">
+                                                                    <span class="glyphicon glyphicon-comment"></span><span data-bind="text: numberOfNotes"></span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -226,10 +233,10 @@
                                                         <div class="col-md-4 col-xs-12 no-left-right-padding top-buffer bottom-buffer">
                                                             <div class="editor" data-bind="css: { editing: lineEditing }">
                                                                 <div class="col-md-3 col-xs-4">
-                                                                    <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges, enable: problemDescription().length > 0">Save</button>
+                                                                    <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges, clickBubble: false, enable: problemDescription().length > 0">Save</button>
                                                                 </div>
                                                                 <div class="col-md-3 col-xs-4">
-                                                                    <button class="btn btn-link edit" data-bind="click: cancelLineItemChanges">Cancel</button>
+                                                                    <button class="btn btn-link edit" data-bind="click: cancelLineItemChanges, clickBubble: false">Cancel</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -237,22 +244,25 @@
                                                 </div>
 
                                                 <div class="col-md-3 margin-bottom-3 text-align-right no-right-padding no-print">
-                                                    <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>
-                                                    <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: completeLine, visible: !lineEditing()&& !isLineItemCompleted()">Complete</button>
+                                                    <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, clickBubble: false, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>
+                                                    <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: completeLine, clickBubble: false, visible: !lineEditing()&& !isLineItemCompleted()">Complete</button>
                                                     @if (Model.CanReopenLines)
                                                     {
-                                                        <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: reopenLine, visible: !lineEditing() && isLineItemCompleted()">Reopen</button>
+                                                        <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: reopenLine, clickBubble: false, visible: !lineEditing() && isLineItemCompleted()">Reopen</button>
                                                     }
+                                                </div>
+
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                                <div class="clearfix"></div>
+                                    </li>
+                                    <div class="clearfix"></div>
+                                </div>
                             </div>
                         </div>
                     </ul>
                 </div>
             </section>
+
             <section>
                 <h3 class="col-md-12">Attachments
                     <span>
@@ -265,10 +275,8 @@
                             <div class="col-md-12">
                                 @using (Html.BeginForm("UploadAttachment", "ServiceCall"))
                                 {
-
                                     @Html.HiddenFor(x => Model.ServiceCallSummary.ServiceCallId, new { @Name = "ServiceCallId" })
                                     @Html.EditorFor(x => x.TempFiles)
-                                    <select name="ServiceCallLineItemId" id="addCallAttachmentLineReferenceDropDown" class="dropdown form-control margin-bottom-10" data-bind="options: allLineItems, value: selectedLineToAttachToAttachment, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'Reference line item (optional)' "></select>
                                     <input type="submit" class="btn btn-primary trigger-file-uploader" value="Add" />
                                     <button class="btn btn-link" data-toggle="collapse" data-target="#addAttachment">Cancel</button>
                                 }
@@ -279,24 +287,21 @@
                 </div>
                 <br />
                 <em data-bind="visible: allAttachments().length < 1" class="padding-left-15 padding-top-7 pull-left">No Attachments Available</em>
-                <span data-bind="visible: allAttachments().length > 0" class="padding-left-15 padding-top-7 pull-left">Show: 
-                </span>
-                <div class="col-md-3 margin-bottom-10">
-                    <select id="filterCallAttachmentLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToFilterAttachments, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'All', visible: allAttachments().length > 0 "></select>
-                </div>
                 <div class="remove-list-style attachments row">
                     <div class="clearfix"></div>
                     <br />
-                    <ul data-bind="foreach: filteredAttachments">
-                        <li class="attached-file">
+                    <ul data-bind="foreach: allAttachments">
+                        <li>
+                            <a class="attached-file" data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "ServiceCall")/' + serviceCallAttachmentId}">
                             @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
                             {
                                 <span data-url="" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "ServiceCall")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
                             }
-                            <a data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "ServiceCall")/' + serviceCallAttachmentId}"><span class="glyphicon glyphicon-download-alt"></span></a>
+                            <span class="download-attachment glyphicon glyphicon-file"></span>
+                            </a>
                             <a href="#" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId}, editable: displayName, editableOptions: { pk: serviceCallAttachmentId, url: '@Url.Action("RenameAttachment", "ServiceCall")    '}"  class="attached-file-display-name"></a>
-                            <br/>
-                            <span data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></span>
+                            <br />
+                            <p data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></p>
                         </li>
                     </ul>
                 </div>
@@ -309,48 +314,32 @@
                     </span>
                 </h3>
                 <div id="addCallNote" class="collapse">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    @Html.TextArea("Description", null, new { id = "addCallNoteDescription", @class = "form-control", data_bind = "text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
-                                </div>
-                            </div>
-                            <br/>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <select id="addCallNoteLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToAttachToNote, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'Reference line item (optional)' "></select>
-                                </div>
-                            </div>
-                            <br/>
-                            <div class="form-submit">
-                                    <button class="btn btn-primary" data-bind="click: addCallNote, enable: noteDescriptionToAdd().length > 0">Add</button>
-                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</button>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.TextArea("Description", null, new { id = "addCallNoteDescription", @class = "form-control", data_bind = "text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
                             </div>
                         </div>
+                        <br/>
+                        <div class="form-submit">
+                            <button class="btn btn-primary" data-bind="click: addCallNote, enable: noteDescriptionToAdd().length > 0">Add</button>
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</button>
+                        </div>
                     </div>
-                <br />
-                <em data-bind="visible: allCallNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">No Notes Available</em>
-                <span data-bind="visible: allCallNotes().length > 0" class="padding-left-15 padding-top-7 pull-left no-print">
-                    Show: 
-                </span>
-                <div class="col-md-3 margin-bottom-10 no-print">
-                    <select id="filterCallNoteLineReferenceDropDown" class="dropdown form-control" data-bind="options: allLineItems, value: selectedLineToFilterNotes, optionsText: 'lineNumberWithProblemCode', optionsValue: 'serviceCallLineItemId', optionsCaption: 'All', visible: allCallNotes().length > 0 "></select>
                 </div>
-                @*<div class="col-md-1">
-                    <button class="btn btn-default" data-bind="click: resetCallNoteFilter">Reset Filter</button>
-                </div>*@
+                <em data-bind="visible: allCallNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">No Notes Available</em>
                 <div class="remove-list-style">
                     <div class="clearfix"></div>
                     <br/>
                     <ul>
-                        <div data-bind="foreach: filteredCallNotes">
+                        <div data-bind="foreach: allCallNotes">
                             <div id="allServiceCallNotes" class="service-call-line edit-line-item">
                                 <li class="row">
                                     <div class="col-md-12">
                                         <div class="no-left-right-padding">
                                             <div class="row">
                                                 <div class="col-md-11 margin-bottom-5">
-                                                    <strong><small><span data-bind="text: createdBy"></span></strong></small>
+                                                    <strong><small><span data-bind="text: createdBy"></span></small></strong>
                                                     <small><span data-bind="text: moment(createdDate).format('L')"></span></small>
                                                 </div>
                                                 <div class="col-md-1">
@@ -371,7 +360,6 @@
                     </ul>
                 </div>
             </section>
-
 
         </div>
     </div>

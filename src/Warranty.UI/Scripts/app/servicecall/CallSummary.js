@@ -9,7 +9,7 @@ require(['/Scripts/app/main.js'], function () {
             $.fn.editable.defaults.mode = 'inline';
             $.fn.editable.defaults.emptytext = 'Add';
             $.fn.editableform.buttons =
-                '<button type="submit" class="btn btn-primary editable-submit btn-xs"><i class="icon-ok icon-white"></i>Save</button>';
+                '<button type="submit" class="btn btn-primary editable-submit btn-sm"><i class="glyphicon glyphicon-ok"></i></button>';
 
             $("#Employee_List").editable({
                 type: 'select',
@@ -74,7 +74,6 @@ require(['/Scripts/app/main.js'], function () {
                     }
                 });
             });
-             
 
             $('#btn_execute_reopen').click(function (e) {
                 var popupWindow = $(this).parent();
@@ -152,7 +151,6 @@ require(['/Scripts/app/main.js'], function () {
                 button.text(nextText);
             }
 
-
             $(".approve-button").click(function (e) {
                 e.preventDefault();
                 var serviceCallId = $(this).data("service-call-id");
@@ -189,8 +187,6 @@ require(['/Scripts/app/main.js'], function () {
 
             function clearNoteFields() {
                 $("#addCallNoteDescription").val('');
-                $("#addCallNoteLineReferenceDropDown").val('');
-                self.selectedLineToAttachToNote('');
                 self.noteDescriptionToAdd('');
             }
             
@@ -199,6 +195,8 @@ require(['/Scripts/app/main.js'], function () {
                 self.serviceCallId = options.serviceCallId;
                 self.serviceCallLineItemId = options.serviceCallLineItemId;
                 self.completed = options.completed;
+                self.numberOfAttachments = options.numberOfAttachments;
+                self.numberOfNotes = options.numberOfNotes;
 
                 //track line item properties.
                 self.problemCodeId = ko.observable(options.problemCodeId);
@@ -272,6 +270,14 @@ require(['/Scripts/app/main.js'], function () {
                         return false;
                     
                     return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase() ? true : false;
+                };
+
+                self.jumpToServiceCallLineDetailPage = function () {
+                    //only jump to detail pg when not editing the line. so btns within elements where this fn is called should have clickBubble: false to ensure the btn click
+                    //events do not bubble up and hit the element calling this fn.
+                    if (this.lineEditing() == false) {
+                        window.location.href = urls.ServiceCall.LineItemDetail + '/' + self.serviceCallLineItemId;
+                    }
                 };
             }
             
@@ -416,33 +422,7 @@ require(['/Scripts/app/main.js'], function () {
                 self.escalationDate = ko.observable(modelData.escalationDate);
                 self.allCallNotes = ko.observableArray([]);
                 self.allAttachments = ko.observableArray([]);
-                self.selectedLineToAttachToNote = ko.observable();
-                self.selectedLineToAttachToAttachment = ko.observable();
-                self.selectedLineToFilterNotes = ko.observable();
-                self.selectedLineToFilterAttachments = ko.observable();
                 self.noteDescriptionToAdd = ko.observable('');
-                self.filteredCallNotes = ko.computed(function () {
-                    var lineIdToFilterNotes = self.selectedLineToFilterNotes();
-                    if (!lineIdToFilterNotes || lineIdToFilterNotes == "") {
-                        return self.allCallNotes();
-                    } else {
-                        return ko.utils.arrayFilter(self.allCallNotes(), function (i) {
-                            return i.serviceCallLineItemId() == lineIdToFilterNotes;
-                        });
-                    }
-                });
-                
-                self.filteredAttachments = ko.computed(function () {
-                    var lineIdToFilterAttachments = self.selectedLineToFilterAttachments();
-                    if (!lineIdToFilterAttachments || lineIdToFilterAttachments == "") {
-                        return self.allAttachments();
-                    } else {
-                        return ko.utils.arrayFilter(self.allAttachments(), function (i) {
-                            return i.serviceCallLineItemId() == lineIdToFilterAttachments;
-                        });
-                    }
-                });
-
                 self.userCanAlwaysReopenCallLines = ko.observable();
                 
                 self.areAllLineItemsCompleted = ko.computed(function () {
@@ -535,7 +515,6 @@ require(['/Scripts/app/main.js'], function () {
 
                 self.addCallNote = function () {
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
-                    self.serviceCallLineItemId = $("#addCallNoteLineReferenceDropDown").find('option:selected').val();
                     self.note = $("#addCallNoteDescription").val();
 
                     var newNoteDescription = $("#addCallNoteDescription");
@@ -546,7 +525,6 @@ require(['/Scripts/app/main.js'], function () {
                     
                     var newCallNote = new CallNotesViewModel({
                         serviceCallId: self.serviceCallId,
-                        serviceCallLineItemId: self.serviceCallLineItemId,
                         note: self.note,
                         serviceCallCommentTypeId: self.serviceCallCommentTypeId
                     });
@@ -592,17 +570,6 @@ require(['/Scripts/app/main.js'], function () {
                 self.cancelCallNote = function () {
                     clearNoteFields();
                 };
-                
-                self.resetCallNoteFilter = function () {
-                    $("#filterCallNoteLineReferenceDropDown").val('');
-                    self.selectedLineToFilterNotes('');
-                };
-                
-                self.resetCallattachmentFilter = function () {
-                    $("#filterCallAttachmentLineReferenceDropDown").val('');
-                    self.selectedLineToFilterAttachments('');
-                };
-                
 
                 self.lineJustCompleted = ko.observable();
                 
