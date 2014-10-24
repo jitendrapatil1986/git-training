@@ -426,6 +426,7 @@
     <Content Include="Views\Home\_ServiceCallListItem.cshtml" />
     <Content Include="Views\Home\_ToDoJobChangedTask.cshtml" />
     <Content Include="Views\ServiceCall\LineItemDetail.cshtml" />
+    <Content Include="Views\Report\AchievementReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
