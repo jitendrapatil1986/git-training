@@ -32,6 +32,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
 
             public Guid ServiceCallId { get; set; }
             public IEnumerable<SelectListItem> ProblemCodes { get; set; }
+            public IEnumerable<SelectListItem> RootCauses { get; set; } 
         }
 
         public class ServiceCall

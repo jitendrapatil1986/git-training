@@ -9,6 +9,7 @@
         public Guid ServiceCallId { get; set; }
         public string ProblemCode { get; set; }
         public string ProblemDescription { get; set; }
+        public string RootCause { get; set; }
         public int LineNumber { get; set; }
         public ServiceCallLineItemStatus ServiceCallLineItemStatus { get; set; }
     }

@@ -88,11 +88,11 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web">
-        <Private>True</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Mvc">
-        <Private>True</Private>
-        <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -253,11 +253,14 @@
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetQueryHandler.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQuery.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQueryHandler.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\RootCauseQuery.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\RootCauseQueryHandler.cs" />
     <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerCommand.cs" />
     <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerCommandHandler.cs" />
     <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerModel.cs" />
     <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerQuery.cs" />
     <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerQueryHandler.cs" />
+    <Compile Include="Features\SharedQueries\RootCauses.cs" />
     <Compile Include="Features\TaskCompletion\TaskCompleteCommand.cs" />
     <Compile Include="Features\TaskCompletion\ServiceCallApproveCommandHandler.cs" />
     <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetModel.cs" />
