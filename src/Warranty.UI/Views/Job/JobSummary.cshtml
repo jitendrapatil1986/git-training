@@ -172,15 +172,17 @@
                                 <div class="clearfix"></div>
                                 <br/>
                                 <ul data-bind="foreach: allJobAttachments">
-                                    <li class="attached-file">
+                                    <li>
+                                        <a class="attached-file" data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "Job")/' + jobAttachmentId}">
                                         @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
                                         {
                                             <span data-url="" data-bind="attr: { 'data-attachment-id': jobAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "Job")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
                                         }
-                                        <a data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "Job")/' + jobAttachmentId}"><span class="glyphicon glyphicon-download-alt"></span></a>
+                                        <span class="glyphicon glyphicon-file"></span>
+                                        </a>
                                         <a href="#" data-bind="attr: { 'data-attachment-id': jobAttachmentId}, editable: displayName, editableOptions: { pk: jobAttachmentId, url: '@Url.Action("RenameAttachment", "Job")    '}"  class="attached-file-display-name"></a>
                                         <br/>
-                                        <span data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></span>
+                                        <p data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></p>
                                     </li>
                                 </ul>
                             </div>

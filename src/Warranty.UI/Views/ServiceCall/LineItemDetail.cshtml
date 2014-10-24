@@ -23,7 +23,7 @@
         
         <section class="margin-bottom-10">
             <h2 class="no-margin">
-                <a class="bread-crumb" href="@Url.Action("CallSummary", "ServiceCall", new {id=Model.ServiceCallId})">Service Call #@Model.ServiceCallNumber /</a>
+                <a class="bread-crumb" href="@Url.Action("CallSummary", "ServiceCall", new {id=Model.ServiceCallId})">Service Call #@Model.ServiceCallNumber</a>
                 @Model.LineNumber - <span data-bind="text: problemCode"></span>
                 <div class="pull-right no-right-padding no-print">
                     <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: completeLine, visible: !lineEditing()&& !isLineItemCompleted()">Complete</button>
@@ -122,15 +122,17 @@
                     <div class="clearfix"></div>
                     <br />
                     <ul data-bind="foreach: allAttachments">
-                        <li class="attached-file">
-                            @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
-                            {
-                                <span data-url="" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "ServiceCall")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
-                            }
-                            <a data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "ServiceCall")/' + serviceCallAttachmentId}"><span class="glyphicon glyphicon-download-alt"></span></a>
+                        <li>
+                            <a class="attached-file" data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "ServiceCall")/' + serviceCallAttachmentId}">
+                                @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                                {
+                                    <span data-url="" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "ServiceCall")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
+                                }
+                                <span class="download-attachment glyphicon glyphicon-file"></span>
+                            </a>
                             <a href="#" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId}, editable: displayName, editableOptions: { pk: serviceCallAttachmentId, url: '@Url.Action("RenameAttachment", "ServiceCall")    '}"  class="attached-file-display-name"></a>
                             <br/>
-                            <span data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></span>
+                            <p data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></p>
                         </li>
                     </ul>
                 </div>

@@ -202,7 +202,7 @@
                     <div class="clearfix"></div>
                     <ul>
                         <div data-bind="foreach: allLineItems">
-                            <div class="cursor-pointer" data-bind="click: jumpToServiceCallLineDetailPage">
+                            <div data-bind="click: jumpToServiceCallLineDetailPage, css: { 'cursor-pointer': lineEditing() == false }">
                                 <div id="allServiceCallLineItems" class="service-call-line edit-line-item" data-bind="attr: {'data-service-call-line-item': lineNumber()}">
                                     <li class="row">
                                         <div class="col-md-12">
@@ -226,8 +226,12 @@
                                                                 <p class="view" data-bind="text: problemDescription"></p>
                                                                 <textarea id="updateCallLineProblemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription"></textarea>
                                                                 <span class="text-muted view margin-right-10" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
-                                                                <span class="glyphicon glyphicon-paperclip view margin-right-10" data-bind="text: numberOfAttachments, visible: numberOfAttachments > 0"></span>
-                                                                <span class="glyphicon glyphicon-comment view margin-right-10" data-bind="text: numberOfNotes, visible: numberOfNotes > 0"></span>
+                                                                <div class="indicator-icon-with-value margin-right-10" data-bind="visible: numberOfAttachments > 0">
+                                                                    <span class="glyphicon glyphicon-paperclip view"></span><span data-bind="text: numberOfAttachments"></span>
+                                                                </div>
+                                                                <div class="indicator-icon-with-value margin-right-10" data-bind="visible: numberOfNotes > 0">
+                                                                    <span class="glyphicon glyphicon-comment view"></span><span data-bind="text: numberOfNotes"></span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -293,15 +297,17 @@
                     <div class="clearfix"></div>
                     <br />
                     <ul data-bind="foreach: allAttachments">
-                        <li class="attached-file">
+                        <li>
+                            <a class="attached-file" data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "ServiceCall")/' + serviceCallAttachmentId}">
                             @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
                             {
                                 <span data-url="" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "ServiceCall")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
                             }
-                            <a data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "ServiceCall")/' + serviceCallAttachmentId}"><span class="glyphicon glyphicon-download-alt"></span></a>
+                            <span class="download-attachment glyphicon glyphicon-file"></span>
+                            </a>
                             <a href="#" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId}, editable: displayName, editableOptions: { pk: serviceCallAttachmentId, url: '@Url.Action("RenameAttachment", "ServiceCall")    '}"  class="attached-file-display-name"></a>
-                            <br/>
-                            <span data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></span>
+                            <br />
+                            <p data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></p>
                         </li>
                     </ul>
                 </div>

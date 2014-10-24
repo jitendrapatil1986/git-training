@@ -9,7 +9,7 @@
             $.fn.editable.defaults.mode = 'inline';
             $.fn.editable.defaults.emptytext = 'Add';
             $.fn.editableform.buttons =
-                '<button type="submit" class="btn btn-primary editable-submit btn-xs"><i class="icon-ok icon-white"></i>Save</button>';
+                '<button type="submit" class="btn btn-primary editable-submit btn-sm"><i class="glyphicon glyphicon-ok"></i></button>';
 
             $(".attached-file-display-name").editable();
 
