@@ -121,7 +121,8 @@ namespace Warranty.Core.Calculator
         private IEnumerable<CalculatorResult> GetDollarSpent(DateTime startDate, DateTime endDate, string employeeNumber)
         {
             const string sql =
-                @";with dollarSpent as (SELECT DatePosted, Amount FROM WarrantyPayments p								
+                @"SELECT COALESCE(SUM(Amount), 0) as Amount, month(datePosted)MonthNumber, year(dateposted) YearNumber
+                                                                    FROM WarrantyPayments p								
                                                                         INNER JOIN Jobs j
                                                                         ON p.JobNumber = j.JobNumber
                                                                         INNER JOIN Communities c
@@ -132,9 +133,8 @@ namespace Warranty.Core.Calculator
                                                                         ON c.CommunityId = ca.CommunityId
                                                                         INNER JOIN Employees e
                                                                         ON ca.EmployeeId = e.EmployeeId                                    
-								                                    AND EmployeeNumber=@2)
-					                                    SELECT COALESCE(SUM(Amount), 0) as Amount, month(datePosted)MonthNumber, year(dateposted) YearNumber
-                                                                    FROM dollarSpent where 
+								                                    AND EmployeeNumber=@2
+                                                                where 
 								                                DatePosted >= @0
 								                                AND DatePosted < @1
 							                                    group by month(datePosted), year(dateposted)
