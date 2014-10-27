@@ -2,6 +2,7 @@ require(['/Scripts/app/main.js'], function () {
     require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
         window.ko = ko; //manually set the global ko property.
         require(['ko.validation'], function () {
+
         $(function () {
             $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
                 $(this).hide();
@@ -177,6 +178,7 @@ require(['/Scripts/app/main.js'], function () {
                     }
                 });
             }
+
 
             function highlight(elemId) {
                 var elem = $(elemId);
