@@ -181,13 +181,23 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select problem code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemCodeToAdd" })
+                                <div class="form-group">
+                                    @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select problem code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemCodeToAdd" })   
+                                </div>
                             </div>
                         </div>
-                        <br />
                         <div class="row">
                             <div class="col-md-12">
-                                @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
+                                <div class="form-group">
+                                    <select id="addCallLineRootCause" class="dropdown form-control" data-bind="options: rootCauses, value: rootCauseToAdd, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Root Cause'"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
+                                </div>
                             </div>
                         </div>
                         <br />
@@ -219,7 +229,19 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="row">
+                                                            <div class="col-md-9">
+                                                                <div class="editor" data-bind="css: { editing: problemCodeEditing }">
+                                                                    <p class="view"><strong data-bind="text: rootCause"></strong></p>
+                                                                    <h4>
+                                                                        <select id="updateCallLineRootCause" class="edit dropdown form-control" data-bind="options: rootCauses, value:currentRootCause, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Root Cause'"></select>
+                                                                        
+                                                                    </h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
+                                                    
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="editor" data-bind="css: { editing: problemDescriptionEditing }"> 

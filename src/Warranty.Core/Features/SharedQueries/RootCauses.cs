@@ -10,9 +10,9 @@
         {
             const string sql = @"SELECT  rc.RootCauseId as Value
                                         ,rc.RootCause as Text
-                                FROM lookups.RootCauses
-                                INNER JOIN ProblemCodeRootCauses prc ON prc.RootCauseId = rc.RootCauseId
-                                INNER JOIN ProblemCode ON pc ON pc.ProblemCodeId = prc.ProblemCodeId
+                                FROM lookups.RootCauses rc
+                                INNER JOIN lookups.ProblemCodeRootCauses prc ON prc.RootCauseId = rc.RootCauseId
+                                INNER JOIN lookups.ProblemCodes pc ON pc.ProblemCodeId = prc.ProblemCodeId
                                 WHERE pc.ProblemCode = @0
                                 ORDER BY RootCause";
 

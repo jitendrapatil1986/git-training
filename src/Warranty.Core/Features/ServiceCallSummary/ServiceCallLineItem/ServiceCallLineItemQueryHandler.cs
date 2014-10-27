@@ -42,7 +42,8 @@
                                     li.[ClassificationNote],
                                     li.[LineItemRoot],
                                     li.[CreatedDate],
-                                    li.[ServiceCallLineItemStatusId] as ServiceCallLineItemStatus
+                                    li.[ServiceCallLineItemStatusId] as ServiceCallLineItemStatus,
+                                    li.[RootCause]
                                 FROM ServiceCallLineItems li
                                 INNER JOIN ServiceCalls sc
                                 ON li.ServiceCallId = sc.ServiceCallId
