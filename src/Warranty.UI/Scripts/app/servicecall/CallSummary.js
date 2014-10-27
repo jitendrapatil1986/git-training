@@ -67,7 +67,7 @@ require(['/Scripts/app/main.js'], function () {
                     url: actionUrl,
                     data: { id: serviceCallId, message: message },
                     success: function (result) {
-                        updateUI(result.actionName);
+                        updateUI(result.actionName, result.actionMessage);
                         changeButtonText(parentButton);
                         parentButton.removeClass("active");
                         textArea.val('');
@@ -119,15 +119,30 @@ require(['/Scripts/app/main.js'], function () {
                 viewModel.canBeReopened(true);
                 toastr.success("Success! Service Call has been succesfully completed.");
             }
+            
+            function updateUI(actionName, actionMessage) {
 
-            function updateUI(actionName) {
                 if (actionName == activityTypeEnum.Escalation.DisplayName) {
                     var isEscalated = viewModel.isEscalated();
                     viewModel.isEscalated(!isEscalated);
+                    if (!viewModel.isEscalated) {
+                        viewModel.escalationReason('');
+                        viewModel.escalationDate('');
+                    } else {
+                        viewModel.escalationReason(actionMessage);
+                        viewModel.escalationDate(moment());
+                    }
                 }
                 else if (actionName == activityTypeEnum.SpecialProject.DisplayName) {
                     var isSpecialProject = viewModel.isSpecialProject();
                     viewModel.isSpecialProject(!isSpecialProject);
+                    if (!viewModel.isSpecialProject) {
+                        viewModel.specialProjectReason('');
+                        viewModel.specialProjectDate('');
+                    } else {
+                        viewModel.specialProjectReason(actionMessage);
+                        viewModel.specialProjectDate(moment());
+                    }
                 }
             }
 
@@ -413,7 +428,11 @@ require(['/Scripts/app/main.js'], function () {
                 self.problemCodeToAdd = ko.observable();
                 self.canBeReopened = ko.observable(modelData.canBeReopened);
                 self.isSpecialProject = ko.observable(modelData.isSpecialProject);
+                self.specialProjectReason = ko.observable(modelData.specialProjectReason);
+                self.specialProjectDate = ko.observable(modelData.specialProjectDate);
                 self.isEscalated = ko.observable(modelData.isEscalated);
+                self.escalationReason = ko.observable(modelData.escalationReason);
+                self.escalationDate = ko.observable(modelData.escalationDate);
                 self.allCallNotes = ko.observableArray([]);
                 self.allAttachments = ko.observableArray([]);
                 self.additionalEmailContacts = ko.observableArray([]);

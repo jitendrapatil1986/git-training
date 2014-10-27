@@ -80,6 +80,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , cm.CommunityName
                                     , wc.HomeownerVerificationSignature
                                     , wc.HomeownerVerificationSignatureDate
+                                    , wc.SpecialProjectReason
+                                    , wc.SpecialProjectDate
                                 FROM [ServiceCalls] wc
                                 INNER JOIN Jobs j
                                 ON wc.JobId = j.JobId
