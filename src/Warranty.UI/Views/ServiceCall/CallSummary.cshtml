@@ -10,34 +10,24 @@
 
 @helper ServiceCallStatusIconHelper(DateTime? completionDate, DateTime createdDate, int daysOpenedFor, int numberOfDaysRemaining, int percentComplete)
 {
-    if (!Model.ServiceCallSummary.IsSpecialProject)
+    if (completionDate == null)
     {
-        if (completionDate == null)
-        {
-            <div class="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(createdDate)">
-                <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(numberOfDaysRemaining)<br />
-                <div class="progress time-remaining-progress hidden-sm hidden-xs">
-                    <div class="progress-bar @Css.ServiceCallProgressBar(numberOfDaysRemaining)" role="progressbar" style="width: @percentComplete%">
-                        <span class="sr-only">@percentComplete% Complete</span>
-                    </div>
+        <div class="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(createdDate)">
+            <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(numberOfDaysRemaining)<br />
+            <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                <div class="progress-bar @Css.ServiceCallProgressBar(numberOfDaysRemaining)" role="progressbar" style="width: @percentComplete%">
+                    <span class="sr-only">@percentComplete% Complete</span>
                 </div>
             </div>
-        }
-        else
-        {
-            @Format.DaysOpenedFor(daysOpenedFor, createdDate, completionDate)
-        }
+        </div>
+    }
+    else
+    {
+        @Format.DaysOpenedFor(daysOpenedFor, createdDate, completionDate)
     }
 }
 
 
-@helper EscalationHelper(bool escalated, DateTime? escalationDate, string escalationReason)
-{
-    <div class='label label-danger' data-bind="visible: isEscalated()">
-        <span class='glyphicon glyphicon-fire'></span>
-        @Format.DateMonthDayYear(escalationDate) - @escalationReason
-    </div>
-}
 <div style="display: none;" data-bind="visible: true">
 <div class="container">
     <div class="col-md-12">
@@ -130,16 +120,11 @@
                                     <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus") </span>
                                 }
                             </div>
+
                             @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
+                            
                         </div>
                 </div>
-            <div class="row" >
-                <div class="col-md-12 text-center">
-                    <h4>
-                        @EscalationHelper(Model.ServiceCallSummary.IsEscalated, Model.ServiceCallSummary.EscalationDate, Model.ServiceCallSummary.EscalationReason)
-                    </h4>
-                </div>
-            </div>
             </div>
  
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignature, new { id = "verifiedHomeownerSignature", @class = "form-control" })
@@ -148,6 +133,16 @@
             <section data-bind="visible: verifiedHomeownerSignature() && (callSummaryStatusSigned() || callSummaryStatusComplete())">
                 <div class="alert alert-success no-bottom-margin" >
                     <span data-bind="text: verifiedSignature()"></span>
+                </div>
+            </section>
+            <section data-bind="visible: isEscalated">
+                <div class="alert alert-danger no-bottom-margin">
+                    <strong>Escalated</strong> <span data-bind="text: escalationDate()!=null ? moment(escalationDate()).format('MM/DD/YYYY') : ''"></span><span data-bind="text: escalationReason() != null ? ' - ' + escalationReason() : ''"></span>    
+                </div>
+            </section>
+            <section data-bind="visible: isSpecialProject">
+                <div class="alert alert-info no-bottom-margin">
+                    <strong>Special Project</strong> <span data-bind="text: specialProjectDate()!=null ? moment(specialProjectDate()).format('MM/DD/YYYY') : ''"></span><span data-bind="text: specialProjectReason() != null ? ' - ' + specialProjectReason(): ''"></span>
                 </div>
             </section>
 
@@ -391,7 +386,11 @@
                 initialServiceNotes: @Html.Raw(Model.ServicCallNotes.ToJson()),
                 initialAttachments: @Html.Raw(Model.Attachments.ToJson()),
                 isSpecialProject: @Model.ServiceCallSummary.IsSpecialProject.ToJson(),
+                specialProjectReason: @Html.Raw(Model.ServiceCallSummary.SpecialProjectReason.ToJson()),
+                specialProjectDate: @Html.Raw(Model.ServiceCallSummary.SpecialProjectDate.ToJson()),
                 isEscalated: @Model.ServiceCallSummary.IsEscalated.ToJson(),
+                escalationReason: @Html.Raw(Model.ServiceCallSummary.EscalationReason.ToJson()),
+                escalationDate: @Html.Raw(Model.ServiceCallSummary.EscalationDate.ToJson()),
                 canBeReopened: @Model.ServiceCallSummary.CanBeReopened.ToJson(),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
                 }

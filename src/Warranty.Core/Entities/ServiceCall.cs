@@ -10,8 +10,12 @@ namespace Warranty.Core.Entities
         public virtual int ServiceCallNumber { get; set; }
         public virtual string ServiceCallType { get; set; }
         public virtual bool IsSpecialProject { get; set; }
+        public virtual string SpecialProjectReason { get; set; }
+        public virtual DateTime? SpecialProjectDate { get; set; }
         public virtual ServiceCallStatus ServiceCallStatus { get; set; }
         public virtual bool IsEscalated { get; set; }
+        public virtual string EscalationReason { get; set; }
+        public virtual DateTime? EscalationDate { get; set; }
         public virtual Guid JobId { get; set; }
         public virtual string Contact { get; set; }
         public virtual Guid? WarrantyRepresentativeEmployeeId { get; set; }

@@ -30,13 +30,16 @@ namespace Warranty.Core.Features.ServiceCallToggleActions
             {
                 var serviceCall = _database.SingleOrDefaultById<ServiceCall>(message.ServiceCallId);
                 serviceCall.IsEscalated = !serviceCall.IsEscalated;
+                serviceCall.EscalationReason = (serviceCall.IsEscalated) ? message.Text : string.Empty;
+                serviceCall.EscalationDate = (serviceCall.IsEscalated) ? DateTime.UtcNow : (DateTime?)null;
+ 
                 _database.Update(serviceCall);
 
                 _bus.Send<NotifyServiceCallEscalatedStatusChanged>(x =>
                     {
                         x.ServiceCallId = serviceCall.ServiceCallId;
-                        x.EscalatedDate = DateTime.UtcNow;
-                        x.EscalatedReason = message.Text;
+                        x.EscalatedDate = serviceCall.EscalationDate;
+                        x.EscalatedReason = serviceCall.EscalationReason;
                     });
 
                 var activityName = serviceCall.IsEscalated ? "Escalate" : "Deescalate";
