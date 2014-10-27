@@ -23,6 +23,10 @@ h2, h3, h4 {
     border-radius: 0;
 }
 
+.small-text {
+    font-size: 12px;
+}
+
 .main-container {
     margin-top: 108px;
     padding: 0 10px;
@@ -71,10 +75,6 @@ h2, h3, h4 {
 
 .panel-default {
     border-bottom: 0;
-}
-
-.panel section {
-    margin-bottom: 15px;
 }
 
 .main-info {
@@ -318,6 +318,10 @@ section.line-items {
     border-left: 1px dashed #ddd;
 }
 
+.todo-widget-element.service-call-line {
+    border-bottom: 0;
+}
+
 .wrap-text {
     overflow-x: hidden;
     word-wrap: break-word;
@@ -350,7 +354,8 @@ section.line-items {
 }
 
 .todo-widget-element {
-    padding-left: 35px;
+    margin-left: 25px;
+    padding-left: 10px;
 }
 
 .todo-widget-action-buttons {
@@ -908,12 +913,24 @@ span.boxclose{
     font-size: 14px;
 }
 
+#addAdditionalcontacts {
+    padding: 10px;
+}
+
+#addAdditionalcontacts div.col-md-6:first-child{
+    padding: 0;
+}
+
 .additional-contacts-heading {
-    background-color: lightgrey;
+    background-color: #ebebeb;
     padding: 10px;
     font-weight: bold;
     margin-top: 0px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
 }
+
+
 
 @media (max-width: 767px) {
 
