@@ -17,20 +17,23 @@
 
         public AdditionalContactsModel Get(Guid homeownerId)
         {
-            const string sql = @"SELECT ContactValue, ContactType
+            using (_database)
+            {
+                const string sql = @"SELECT ContactValue, ContactType
                                 FROM HomeownerContacts
 						        WHERE HomeownerId = @0
                                 ORDER BY CreatedDate";
 
-            var contacts = _database.Fetch<AdditionalContactsModel.AdditionalContact>(sql, homeownerId.ToString());
+                var contacts = _database.Fetch<AdditionalContactsModel.AdditionalContact>(sql, homeownerId.ToString());
 
-            var result = new AdditionalContactsModel
-            {
-                AdditionalEmailContacts = contacts.Where(x => x.ContactType == HomeownerContactType.Email),
-                AdditionalPhoneContacts = contacts.Where(x => x.ContactType == HomeownerContactType.Phone)
-            };
+                var result = new AdditionalContactsModel
+                    {
+                        AdditionalEmailContacts = contacts.Where(x => x.ContactType == HomeownerContactType.Email),
+                        AdditionalPhoneContacts = contacts.Where(x => x.ContactType == HomeownerContactType.Phone)
+                    };
 
-            return result;
+                return result;
+            }
         }
     }
 }
