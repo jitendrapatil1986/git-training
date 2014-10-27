@@ -1,4 +1,6 @@
-﻿namespace Warranty.UI.Controllers
+﻿using System.Configuration;
+
+namespace Warranty.UI.Controllers
 {
     using System;
     using System.Web;
@@ -161,8 +163,9 @@
 
             if (result.ShouldSendEmail)
             {
+                var url = ConfigurationManager.AppSettings["Warranty.BaseUri"];
                 var urlHelper = new UrlHelper(this.ControllerContext.RequestContext);
-                var url = urlHelper.Action("CallSummary", "ServiceCall", new { id }, "http");
+                url += urlHelper.Action("CallSummary", "ServiceCall", new { id });
                 result.Url = url;
                 _mailer.ServiceCallEscalated(result).SendAsync();
             }
