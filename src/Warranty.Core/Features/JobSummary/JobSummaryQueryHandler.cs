@@ -108,8 +108,10 @@ namespace Warranty.Core.Features.JobSummary
 
         private IEnumerable<JobSummaryModel.JobServiceCall> GetJobServiceCalls(Guid jobId)
         {
+            var user = _userSession.GetCurrentUser();
             const string sql = @"SELECT 
                                     wc.ServiceCallId as ServiceCallId
+                                    ,wc.ServiceCallStatusId as ServiceCallStatus
                                     ,Servicecallnumber as CallNumber
                                     ,STUFF((SELECT '| ' + l.ProblemDescription
                                                     FROM ServiceCallLineItems l WHERE l.ServiceCallId = wc.servicecallid
@@ -144,6 +146,12 @@ namespace Warranty.Core.Features.JobSummary
                                 WHERE j.JobId = @0";
 
             var result = _database.FetchOneToMany<JobSummaryModel.JobServiceCall, JobSummaryModel.JobServiceCall.JobServiceCallNote>(x => x.ServiceCallId, sql, jobId);
+            
+            result.ForEach(x =>
+                {
+                    x.CanApprove = user.IsInRole(UserRoles.WarrantyServiceCoordinator) ||
+                                   user.IsInRole(UserRoles.WarrantyServiceManager);
+                });
             
             return result;
         }

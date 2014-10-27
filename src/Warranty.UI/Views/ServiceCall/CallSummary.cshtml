@@ -108,18 +108,19 @@
                         </ul>
                     </div>
                     <div class="col-md-3">
-                        <div id="approveCommands" class="margin-bottom-10">
-                            @if (Model.ServiceCallSummary.ServiceCallStatus == ServiceCallStatus.Requested && Model.CanApprove)
-                            {
-                                <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
-                                <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
-                                @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallStatus, new { id = "callSummaryServiceCallStatus"})
-                            }
-                            else
-                            {
-                                <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus") </span>
-                            }
-                        </div>
+                            <div id="approveCommands" class="margin-bottom-10">
+                                @if (Model.ServiceCallSummary.ServiceCallStatus == ServiceCallStatus.Requested && Model.CanApprove)
+                                {
+                                    <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" data-display-status="true" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
+                                    <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" data-display-status="true" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
+                                    @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallStatus, new { id = "callSummaryServiceCallStatus"})
+                                }
+                                else
+                                {
+                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus") </span>
+                                }
+                            </div>
+
                             @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
                             
                         </div>
