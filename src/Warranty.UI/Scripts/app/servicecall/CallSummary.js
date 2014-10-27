@@ -478,10 +478,10 @@ require(['/Scripts/app/main.js'], function () {
                     })
                         .fail(function (response) {
 
-                            toastr.error("There was an issue changing the homeowner. Please try again!");
+                            toastr.error("There was an issue saving the additional contact info. Please try again!");
                         })
                         .done(function (response) {
-                            toastr.success("Success! Homeowner changed.");
+                            toastr.success("Success! Additional contact info saved.");
                         });
                 };
 
