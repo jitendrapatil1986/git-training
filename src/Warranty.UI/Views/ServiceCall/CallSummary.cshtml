@@ -182,8 +182,10 @@
                                         <li>
                                             <div data-bind="foreach: additionalPhoneContacts">
                                                 <div class="margin-bottom-15 col-md-9">
-                                                    <strong><span data-bind="text: 'Additional Phone Address ' + ($index() + 1)"></span></strong>
-                                                    <input type="text" data-bind="value: contactValue" class="form-control" />
+                                                    <div class="form-group" data-bind="validationElement: contactValue">
+                                                        <label class="control-label" data-bind="text: 'Additional Phone Address ' + ($index() + 1), attr : {'for': 'additionalPhoneNumber' + $index()}"></label>
+                                                        <input type="text" id="" data-bind="value: contactValue, attr: { id: 'additionalPhoneNumber' + $index()}" class="form-control" />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </li>
@@ -197,8 +199,10 @@
                                         <li>
                                             <div data-bind="foreach: additionalEmailContacts">
                                                 <div class="margin-bottom-15 col-md-9">
-                                                    <strong><span data-bind="text: 'Additional Email Address ' + ($index() + 1)"></span></strong>
-                                                    <input type="text" data-bind="value: contactValue" class="form-control" />
+                                                    <div class="form-group" data-bind="validationElement: contactValue">
+                                                        <label class="control-label" data-bind="text: 'Additional Email Address ' + ($index() + 1), attr : {'for': 'additionalEmail' + $index()}"></label>
+                                                        <input type="text" id="" data-bind="value: contactValue, attr: { id: 'additionalEmail' + $index()}" class="form-control" />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </li>
@@ -208,8 +212,12 @@
                             </div>
                         </div>
                         <br/>
-                        <div class="form-submit row col-md-12">
-                            <button class="btn btn-primary" type="submit" data-bind="click: submit">Save Additional Contacts</button>
+                    </div>
+                    <div class="panel-footer text-center">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="submit" value="Submit" class="btn btn-primary" data-bind="click: submit"/>
+                            </div>
                         </div>
                     </div>
                 </div>

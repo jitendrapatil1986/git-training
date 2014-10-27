@@ -28,16 +28,19 @@
 
         private void PersistContacts(Guid homeownerId, IEnumerable<AdditionalContactsModel.AdditionalContact> list, HomeownerContactType type)
         {
-            var contacts = list.Select(x => new HomeownerContact
-                {
-                    ContactType = type,
-                    ContactValue = x.ContactValue,
-                    HomeownerId = homeownerId
-                });
-
-            foreach (var homeownerContact in contacts)
+            if (list != null)
             {
-                _database.Insert(homeownerContact);
+                var contacts = list.Where(x=> !String.IsNullOrEmpty(x.ContactValue)).Select(x => new HomeownerContact
+                    {
+                        ContactType = type,
+                        ContactValue = x.ContactValue,
+                        HomeownerId = homeownerId
+                    });
+
+                foreach (var homeownerContact in contacts)
+                {
+                    _database.Insert(homeownerContact);
+                }
             }
         }
     }
