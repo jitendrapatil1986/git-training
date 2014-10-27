@@ -150,7 +150,7 @@ namespace Warranty.UI.Controllers
                 ServiceCallId = id,
                 Text = message
             });
-            return Json(new { actionName = ActivityType.SpecialProject.DisplayName }, JsonRequestBehavior.AllowGet);
+            return Json(new { actionName = ActivityType.SpecialProject.DisplayName, actionMessage = message }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ToggleEscalate(Guid id, string message)
@@ -169,7 +169,7 @@ namespace Warranty.UI.Controllers
                 result.Url = url;
                 _mailer.ServiceCallEscalated(result).SendAsync();
             }
-            return Json(new { actionName = ActivityType.Escalation.DisplayName }, JsonRequestBehavior.AllowGet);
+            return Json(new { actionName = ActivityType.Escalation.DisplayName, actionMessage = message }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetEmployees(Guid id)

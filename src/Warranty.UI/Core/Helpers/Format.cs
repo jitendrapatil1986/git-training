@@ -422,7 +422,7 @@ namespace Warranty.UI.Core.Helpers
         {
             var status = serviceCallStatus.DisplayName;
 
-            var htmlString = string.Format("<span id='{0}' class='label label-{1}-service-call' data-bind='{2}'>{3}</span> <span data-bind='visible: isSpecialProject()' class='label label-info'>Special Project</span>", id, status.Replace(" ", "-").ToLower(),
+            var htmlString = string.Format("<span id='{0}' class='label label-{1}-service-call' data-bind='{2}'>{3}</span>", id, status.Replace(" ", "-").ToLower(),
                                            dataBind, status);
             return MvcHtmlString.Create(htmlString);
         }
