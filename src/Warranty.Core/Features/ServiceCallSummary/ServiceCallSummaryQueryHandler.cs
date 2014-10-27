@@ -6,16 +6,19 @@ namespace Warranty.Core.Features.ServiceCallSummary
     using Enumerations;
     using NPoco;
     using Security;
+    using Services;
 
     public class ServiceCallSummaryQueryHandler : IQueryHandler<ServiceCallSummaryQuery, ServiceCallSummaryModel>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
+        private readonly IHomeownerAdditionalContactsService _homeownerAdditionalContactsService;
 
-        public ServiceCallSummaryQueryHandler(IDatabase database, IUserSession userSession)
+        public ServiceCallSummaryQueryHandler(IDatabase database, IUserSession userSession, IHomeownerAdditionalContactsService homeownerAdditionalContactsService)
         {
             _database = database;
             _userSession = userSession;
+            _homeownerAdditionalContactsService = homeownerAdditionalContactsService;
         }
 
         public ServiceCallSummaryModel Handle(ServiceCallSummaryQuery query)
@@ -24,7 +27,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
 
             using (_database)
             {
-                return new ServiceCallSummaryModel
+                var result = new ServiceCallSummaryModel
                     {
                         ServiceCallSummary = GetServiceCallSummary(query.ServiceCallId),
                         ServiceCallLines = GetServiceCallLines(query.ServiceCallId),
@@ -35,6 +38,10 @@ namespace Warranty.Core.Features.ServiceCallSummary
                         CanReassign = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
                         CanReopenLines = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
                     };
+
+                result.AdditionalContacts = _homeownerAdditionalContactsService.Get(result.ServiceCallSummary.HomeownerId);
+
+                return result;
             }
         }
 

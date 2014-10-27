@@ -93,8 +93,8 @@
     <Reference Include="System.Web.Mvc">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
-        <Private>True</Private>
-        <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -236,6 +236,7 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Features\AdditionalContactsHandler.cs" />
     <Compile Include="Features\AddJobNote\AddJobNoteCommand.cs" />
     <Compile Include="Features\AddJobNote\AddJobNoteCommandHandler.cs" />
     <Compile Include="Features\AddJobNote\AddJobNoteModel.cs" />
@@ -260,6 +261,7 @@
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetQueryHandler.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQuery.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQueryHandler.cs" />
+    <Compile Include="Features\AdditionalContactsModel.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportModel.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportQuery.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportQueryHandler.cs" />
@@ -435,6 +437,8 @@
     <Compile Include="FileManagement\TemporaryFileUploadsService.cs" />
     <Compile Include="FileManagement\IFileSystemManager.cs" />
     <Compile Include="FileManagement\ITemporaryFileUploadsService.cs" />
+    <Compile Include="Services\HomeownerAdditionalContactsService.cs" />
+    <Compile Include="Services\IHomeownerAdditionalContactsService.cs" />
     <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\ISendSmtpMailMessage.cs" />
     <Compile Include="Services\SendSmtpMailMessage.cs" />

@@ -1,11 +1,13 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/formUploader', 'app/approveServiceCalls', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
+    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
+        window.ko = ko; //manually set the global ko property.
+        require(['ko.validation'], function () {
 
         $(function () {
             $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
                 $(this).hide();
             });
-            
+
             $.fn.editable.defaults.mode = 'inline';
             $.fn.editable.defaults.emptytext = 'Add';
             $.fn.editableform.buttons =
@@ -22,7 +24,7 @@ require(['/Scripts/app/main.js'], function () {
             $("#Mobile_Phone").editable({
                 params: { phoneNumberTypeValue: phoneNumberTypeEnum.Mobile.Value }
             });
-            
+
             $("#Email").editable({
             });
 
@@ -46,7 +48,7 @@ require(['/Scripts/app/main.js'], function () {
                     'top': $(this).offset().top + $(this).height() + 15
                 }).show();
             });
-            
+
             $('.btn-cancel-popup').click(function (e) {
                 var popupWindow = $(this).parent();
                 var parentButton = $("#btn_" + popupWindow.attr('id'));
@@ -94,7 +96,7 @@ require(['/Scripts/app/main.js'], function () {
                     }
                 });
             });
-            
+
             $('#btn_complete').click(function (e) {
                 var serviceCallId = $(this).data('service-call-id');
                 var url = urls.ServiceCall.Complete;
@@ -112,7 +114,7 @@ require(['/Scripts/app/main.js'], function () {
                 viewModel.callSummaryServiceCallStatus(serviceCallStatusData.Open.DisplayName);
                 toastr.success("Success! Service Call has been succesfully reopened.");
             }
-            
+
             function completeServiceCall() {
                 viewModel.callSummaryServiceCallStatus(serviceCallStatusData.Complete.DisplayName);
                 viewModel.canBeReopened(true);
@@ -120,6 +122,7 @@ require(['/Scripts/app/main.js'], function () {
             }
             
             function updateUI(actionName, actionMessage) {
+
                 if (actionName == activityTypeEnum.Escalation.DisplayName) {
                     var isEscalated = viewModel.isEscalated();
                     viewModel.isEscalated(!isEscalated);
@@ -143,14 +146,40 @@ require(['/Scripts/app/main.js'], function () {
                     }
                 }
             }
-                
+
             function changeButtonText(button) {
                 var currentText = button.text();
                 var nextText = button.data('next-text');
                 button.data('next-text', currentText);
                 button.text(nextText);
             }
-            
+
+            $(".approve-button").click(function (e) {
+                e.preventDefault();
+                var serviceCallId = $(this).data("service-call-id");
+                var url = urls.ServiceCall.Approve;
+                executeApproval(url, serviceCallId, $(this), 'Open');
+            });
+
+            $(".deny-button").click(function (e) {
+                e.preventDefault();
+                var serviceCallId = $(this).data("service-call-id");
+                var url = urls.ServiceCall.Deny;
+                executeApproval(url, serviceCallId, $(this), 'Completed');
+            });
+
+            function executeApproval(url, serviceCallId, button, status) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { id: serviceCallId },
+                    success: function (result) {
+                        button.parent().html('<span>Status: <span class="label label-' + status.toLowerCase() + '-service-call">' + status + '</span></span>');
+                    }
+                });
+            }
+
+
             function highlight(elemId) {
                 var elem = $(elemId);
                 elem.css("backgroundColor", "#ffffff"); // hack for Safari
@@ -164,7 +193,7 @@ require(['/Scripts/app/main.js'], function () {
                 $("#addCallNoteDescription").val('');
                 self.noteDescriptionToAdd('');
             }
-            
+
             function AllLineItemsViewModel(options) {
                 var self = this;
                 self.serviceCallId = options.serviceCallId;
@@ -179,26 +208,26 @@ require(['/Scripts/app/main.js'], function () {
                 self.problemDescription = ko.observable(options.problemDescription);
                 self.currentProblemCode = ko.observable();
                 self.currentProblemDescription = ko.observable();
-                
+
                 //track editing problem code, desc, and line altogether.
                 self.problemCodeEditing = ko.observable();
                 self.problemDescriptionEditing = ko.observable("");
                 self.lineEditing = ko.observable("");
-                
+
                 //edit line item.
-                self.editLine = function() {
+                self.editLine = function () {
                     this.problemCodeEditing(true);
                     this.problemDescriptionEditing(true);
                     this.lineEditing(true);
                     this.currentProblemCode(this.problemCode());
                     this.currentProblemDescription(this.problemDescription());
                 };
-                
+
                 //save line item changes.
                 self.saveLineItemChanges = function () {
                     updateServiceCallLineItem(this);
                 };
-                
+
                 //cancel line item changes.
                 self.cancelLineItemChanges = function () {
                     this.problemCodeEditing(false);
@@ -207,27 +236,27 @@ require(['/Scripts/app/main.js'], function () {
                     this.problemCode(this.currentProblemCode());
                     this.problemDescription(this.currentProblemDescription());
                 };
-                
+
                 //complete line item.
                 self.completeLine = function () {
                     this.lineEditing(false);
                     completeServiceCallLineItem(this);
                 };
-                
+
                 //reopen line item.
-                self.reopenLine = function() {
+                self.reopenLine = function () {
                     this.lineEditing(false);
                     reopenServiceCallLineItem(this);
                 };
 
                 self.lineNumber = ko.observable(options.lineNumber);
-                
-                self.lineNumberWithProblemCode = ko.computed(function() {
+
+                self.lineNumberWithProblemCode = ko.computed(function () {
                     return self.lineNumber() + " - " + self.problemCode();
                 });
 
                 self.serviceCallLineItemStatus = ko.observable(options.serviceCallLineItemStatus);
-                
+
                 self.serviceCallLineItemStatusDisplayName = ko.observable('');
                 if (options.serviceCallLineItemStatus) {
                     if (options.serviceCallLineItemStatus.displayName)
@@ -239,11 +268,11 @@ require(['/Scripts/app/main.js'], function () {
                 self.lineItemStatusCSS = ko.computed(function () {
                     return self.serviceCallLineItemStatusDisplayName() ? 'label label-' + self.serviceCallLineItemStatusDisplayName().toLowerCase() + '-service-line-item' : '';
                 });
-                
+
                 self.isLineItemCompleted = function () {
                     if (!self.serviceCallLineItemStatusDisplayName())
                         return false;
-                    
+
                     return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase() ? true : false;
                 };
 
@@ -255,7 +284,7 @@ require(['/Scripts/app/main.js'], function () {
                     }
                 };
             }
-            
+
             function CallNotesViewModel(options) {
                 var self = this;
                 self.serviceCallNoteId = options.serviceCallNoteId;
@@ -281,7 +310,7 @@ require(['/Scripts/app/main.js'], function () {
                     }
                 });
             }
-            
+
             function CallAttachmentsViewModel(options) {
                 var self = this;
                 self.serviceCallAttachmentId = options.serviceCallAttachmentId;
@@ -290,6 +319,17 @@ require(['/Scripts/app/main.js'], function () {
                 self.displayName = ko.observable(options.displayName);
                 self.createdBy = options.createdBy;
                 self.createdDate = options.createdDate;
+            }
+            
+            function AddtionalEmailContactViewModel(options) {
+                var self = this;
+                self.contactValue = ko.observable(options.contactValue).extend({ required: true, email: true });
+            }
+
+            function AddtionalPhoneContactViewModel(options) {
+                var self = this;
+
+                self.contactValue = ko.observable(options.contactValue).extend({ required: true });
             }
 
             function updateServiceCallLineItem(line) {
@@ -321,17 +361,17 @@ require(['/Scripts/app/main.js'], function () {
                     .done(function (response) {
                         toastr.success("Success! Item updated.");
                         self.problemCode = line.problemCode;
-                        
+
                         //change to non-edit mode once success has occurred.
                         line.problemCodeEditing(false);
                         line.problemDescriptionEditing(false);
                         line.lineEditing(false);
                     });
-                
+
                 $(updateProblemCode).parent().removeClass("has-error");
                 $(updateProblemDescription).parent().removeClass("has-error");
             }
-            
+
             function completeServiceCallLineItem(line) {
                 var lineData = ko.toJSON(line);
 
@@ -348,7 +388,7 @@ require(['/Scripts/app/main.js'], function () {
                     })
                     .done(function (response) {
                         line.serviceCallLineItemStatusDisplayName(response.DisplayName);
-                        
+
                         //if user is not allowed to ALWAYS reopen Completed lines at anytime, then allow them to reopen only right after completing a line.
                         if ($("#userCanReopenCallLinesAnytime").val() == false) {
                             $("#undoLastCompletedLineItemAlert").attr('data-service-line-id-to-undo', line.serviceCallLineItemId);
@@ -380,10 +420,10 @@ require(['/Scripts/app/main.js'], function () {
                         line.serviceCallLineItemStatusDisplayName(response.DisplayName);
                     });
             }
-            
+
             function serviceCallSummaryItemViewModel() {
                 var self = this;
-                
+
                 self.allLineItems = ko.observableArray([]);
                 self.theLookups = dropdownData.availableLookups;  //dropdown list does not need to be observable. Only the actual elements w/i the array do.
                 self.problemDescriptionToAdd = ko.observable('');
@@ -397,9 +437,11 @@ require(['/Scripts/app/main.js'], function () {
                 self.escalationDate = ko.observable(modelData.escalationDate);
                 self.allCallNotes = ko.observableArray([]);
                 self.allAttachments = ko.observableArray([]);
+                self.additionalEmailContacts = ko.observableArray([]);
+                self.additionalPhoneContacts = ko.observableArray([]);
                 self.noteDescriptionToAdd = ko.observable('');
                 self.userCanAlwaysReopenCallLines = ko.observable();
-                
+
                 self.areAllLineItemsCompleted = ko.computed(function () {
                     var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
                         return (i.serviceCallLineItemStatusDisplayName().toLowerCase() != serviceCallStatusData.Complete.DisplayName.toLowerCase());
@@ -410,7 +452,7 @@ require(['/Scripts/app/main.js'], function () {
                     else
                         return true;
                 }).extend({ notify: 'always' });
-                
+
                 self.removeAttachment = function (e) {
                     if (confirm(modelData.attachmentRemovalMessage)) {
                         var item = $('.boxclose[data-attachment-id="' + e.serviceCallAttachmentId + '"]');
@@ -426,6 +468,56 @@ require(['/Scripts/app/main.js'], function () {
                             }
                         });
                     }
+                };
+                
+
+                self.submit = function () {
+
+                    if (self.errors().length != 0) {
+                        self.errors.showAllMessages();
+                        return;
+                    }
+
+
+
+                    var addtionalContactInfo =
+                    {
+                        additionalPhoneContacts: self.additionalPhoneContacts,
+                        homeownerId: $("#HomeownerId").val(),
+                        additionalEmailContacts: self.additionalEmailContacts
+                    };
+
+                    var newAddtionalContactInfo = ko.toJSON(addtionalContactInfo);
+
+                    $.ajax({
+                        url: modelData.saveAdditionalContactsUrl,
+                        type: "POST",
+                        data: newAddtionalContactInfo,
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    })
+                        .fail(function (response) {
+
+                            toastr.error("There was an issue saving the additional contact info. Please try again!");
+                        })
+                        .done(function (response) {
+                            toastr.success("Success! Additional contact info saved.");
+                        });
+                };
+
+                self.addEmailContact = function () {
+                    self.additionalEmailContacts.push(new AddtionalEmailContactViewModel({
+                        contactType: homeownerContactTypeEnum.Email.Value,
+                        contactValue: null
+                    }));
+                };
+
+                self.addPhoneContact = function () {
+                    self.additionalPhoneContacts.push(new AddtionalPhoneContactViewModel({
+                        contactType: homeownerContactTypeEnum.Phone.Value,
+                        contactValue: null
+                    }));
                 };
 
                 self.addLineItem = function () {
@@ -497,13 +589,13 @@ require(['/Scripts/app/main.js'], function () {
                         $(newNoteDescription).parent().addClass("has-error");
                         return;
                     }
-                    
+
                     var newCallNote = new CallNotesViewModel({
                         serviceCallId: self.serviceCallId,
                         note: self.note,
                         serviceCallCommentTypeId: self.serviceCallCommentTypeId
                     });
-                    
+
                     var lineNoteData = ko.toJSON(newCallNote);
 
                     $.ajax({
@@ -528,7 +620,7 @@ require(['/Scripts/app/main.js'], function () {
                                 createdDate: response.CreatedDate
                             }));
 
-                            var currentLineItem = ko.utils.arrayFirst(self.allLineItems(), function(i) {
+                            var currentLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
                                 return i.serviceCallLineItemId == response.ServiceCallLineItemId;
                             });
 
@@ -547,7 +639,7 @@ require(['/Scripts/app/main.js'], function () {
                 };
 
                 self.lineJustCompleted = ko.observable();
-                
+
                 //undo last line item which was completed.
                 self.undoLastCompletedLine = function () {
                     var lineId = $("#undoLastCompletedLineItemAlert").attr('data-service-line-id-to-undo');
@@ -559,7 +651,7 @@ require(['/Scripts/app/main.js'], function () {
                 };
 
                 self.callSummaryServiceCallStatus = ko.observable($("#callSummaryServiceCallStatus").html());
-                
+
                 self.cssforCallSummaryServiceCallStatus = ko.computed(function () {
                     var className = self.callSummaryServiceCallStatus().toLowerCase().replace(/\ /g, '-');
                     return 'label label-' + className + '-service-call';
@@ -571,41 +663,41 @@ require(['/Scripts/app/main.js'], function () {
                     else
                         return false;
                 });
-                
+
                 self.callSummaryStatusOpen = ko.computed(function () {
                     if (self.callSummaryServiceCallStatus().toLowerCase() == serviceCallStatusData.Open.DisplayName.toLowerCase())
                         return true;
                     else
                         return false;
                 });
-                
+
                 self.callSummaryStatusSigned = ko.computed(function () {
                     if (self.callSummaryServiceCallStatus().toLowerCase() == serviceCallStatusData.HomeownerSigned.DisplayName.toLowerCase())
                         return true;
                     else
                         return false;
                 });
-                
+
                 self.canBeCompleted = ko.computed(function () {
                     return self.areAllLineItemsCompleted() && !self.callSummaryStatusComplete() && self.callSummaryStatusSigned();
                 });
 
                 self.homeownerVerificationSignature = ko.observable('');
                 self.homeownerVerificationSignatureDate = ko.observable();
-                
+
                 self.verifiedHomeownerSignature = ko.observable($("#verifiedHomeownerSignature").val());
                 self.verifiedHomeownerSignatureDate = ko.observable($("#verifiedHomeownerSignatureDate").val());
-                
+
                 self.verifiedSignature = ko.computed(function () {
                     var result = 'Verification signed by ' + self.verifiedHomeownerSignature();
-                    
+
                     if (self.verifiedHomeownerSignatureDate()) {
                         result += ' on ' + moment(self.verifiedHomeownerSignatureDate()).format('L');
                     }
 
                     return result;
                 });
-                
+
                 self.saveVerifiedHomeownerSignature = function () {
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
                     self.homeownerVerificationSignature = $("#homeownerVerificationSignature").val();
@@ -656,13 +748,19 @@ require(['/Scripts/app/main.js'], function () {
                     $(homeownerVerificationSignatureDate).parent().removeClass("has-error");
                 };
             }
+            ko.validation.init({
+                errorElementClass: 'has-error',
+                errorMessageClass: 'help-block',
+                decorateElement: true
+            });
 
             var viewModel = new serviceCallSummaryItemViewModel();
-            ko.applyBindings(viewModel);
+
 
             var persistedAllLineItemsViewModel = modelData.initialServiceLines;
-                
+
             _(persistedAllLineItemsViewModel).each(function (item) {
+
                 viewModel.allLineItems.push(new AllLineItemsViewModel(item));
             });
 
@@ -671,12 +769,28 @@ require(['/Scripts/app/main.js'], function () {
             _(persistedAllCallNotesViewModel).each(function (note) {
                 viewModel.allCallNotes.push(new CallNotesViewModel(note));
             });
-            
+
             var persistedAllAttachmentsViewModel = modelData.initialAttachments;
 
             _(persistedAllAttachmentsViewModel).each(function (attachment) {
                 viewModel.allAttachments.push(new CallAttachmentsViewModel(attachment));
             });
-        });
+
+            var additionalEmailContacsViewModel = modelData.additionalEmailContacts;
+
+            _(additionalEmailContacsViewModel).each(function (contact) {
+                viewModel.additionalEmailContacts.push(new AddtionalEmailContactViewModel(contact));
+            });
+
+            var additionalPhoneContacsViewModel = modelData.additionalPhoneContacts;
+
+            _(additionalPhoneContacsViewModel).each(function (contact) {
+                viewModel.additionalPhoneContacts.push(new AddtionalPhoneContactViewModel(contact));
+            });
+
+            viewModel.errors = ko.validation.group(viewModel);
+            ko.applyBindings(viewModel);
     });
+});
+});
 });

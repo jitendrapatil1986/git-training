@@ -164,6 +164,60 @@
                     </div>
                 </div>
             </section>
+            
+            <section>
+                <h5 class="col-md-12 additional-contacts-heading" data-toggle="collapse" data-target="#addAdditionalcontacts">Additional Contacts</h5>
+                <div id="addAdditionalcontacts" class="collapse">
+                    <div class="panel-body col-md-12">
+                        @Html.HiddenFor(x=>x.ServiceCallSummary.HomeownerId, new{ id ="HomeownerId"})
+                        <div class="row ">
+                            <div class="col-md-6">
+                                <div class="remove-list-style row">
+                                    <ul>
+                                        <li>
+                                            <div data-bind="foreach: additionalPhoneContacts">
+                                                <div class="margin-bottom-15 col-md-9">
+                                                    <div class="form-group" data-bind="validationElement: contactValue">
+                                                        <label class="control-label" data-bind="text: 'Additional Phone ' + ($index() + 1), attr : {'for': 'additionalPhoneNumber' + $index()}"></label>
+                                                        <input type="text" id="" data-bind="value: contactValue, attr: { id: 'additionalPhoneNumber' + $index()}" class="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <a href="#" data-bind="click: addPhoneContact">+ Add additional phone</a>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="remove-list-style row">
+                                    <ul>
+                                        <li>
+                                            <div data-bind="foreach: additionalEmailContacts">
+                                                <div class="margin-bottom-15 col-md-9">
+                                                    <div class="form-group" data-bind="validationElement: contactValue">
+                                                        <label class="control-label" data-bind="text: 'Additional Email Address ' + ($index() + 1), attr : {'for': 'additionalEmail' + $index()}"></label>
+                                                        <input type="text" id="" data-bind="value: contactValue, attr: { id: 'additionalEmail' + $index()}" class="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <a href="#" data-bind="click: addEmailContact">+ Add additional email address</a>
+                            </div>
+                        </div>
+                        <br/>
+                    </div>
+                    <div class="panel-footer text-center">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="submit" value="Submit" class="btn btn-primary" data-bind="click: submit"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
 
             <section class="line-items">
                 <h3 class="col-md-12">Line Items
@@ -393,6 +447,9 @@
                 escalationDate: @Html.Raw(Model.ServiceCallSummary.EscalationDate.ToJson()),
                 canBeReopened: @Model.ServiceCallSummary.CanBeReopened.ToJson(),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
+                additionalEmailContacts: @Html.Raw(Model.AdditionalContacts.AdditionalEmailContacts.ToJson()),
+                additionalPhoneContacts: @Html.Raw(Model.AdditionalContacts.AdditionalPhoneContacts.ToJson()),
+                saveAdditionalContactsUrl: '@Url.Action("SaveAdditionalContacts","Homeowner")'
                 }
         });
 
