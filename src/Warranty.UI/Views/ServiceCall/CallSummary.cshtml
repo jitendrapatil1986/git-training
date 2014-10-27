@@ -450,6 +450,7 @@
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
                 additionalEmailContacts: @Html.Raw(Model.AdditionalContacts.AdditionalEmailContacts.ToJson()),
                 additionalPhoneContacts: @Html.Raw(Model.AdditionalContacts.AdditionalPhoneContacts.ToJson()),
+                saveAdditionalContactsUrl: '@Url.Action("SaveAdditionalContacts","Homeowner")'
                 }
         });
 

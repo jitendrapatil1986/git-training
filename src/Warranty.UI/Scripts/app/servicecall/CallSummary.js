@@ -469,7 +469,7 @@ require(['/Scripts/app/main.js'], function () {
                     var newAddtionalContactInfo = ko.toJSON(addtionalContactInfo);
 
                     $.ajax({
-                        url: '/Homeowner/SaveAdditionalContacts',
+                        url: modelData.saveAdditionalContactsUrl,
                         type: "POST",
                         data: newAddtionalContactInfo,
                         dataType: "json",
