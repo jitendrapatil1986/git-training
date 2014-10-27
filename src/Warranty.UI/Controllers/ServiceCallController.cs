@@ -126,7 +126,10 @@
             });
 
             var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery { ServiceCallId = id });
-            _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
+            if (notificationModel.WarrantyRepresentativeEmployeeEmail != null)
+            {
+                _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
+            }
 
             return Json (new { success = "true"}, JsonRequestBehavior.AllowGet );
         }

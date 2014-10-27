@@ -1,5 +1,5 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
+    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/formUploader', 'app/approveServiceCalls', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
 
         $(function () {
             $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
@@ -135,31 +135,6 @@ require(['/Scripts/app/main.js'], function () {
                 var nextText = button.data('next-text');
                 button.data('next-text', currentText);
                 button.text(nextText);
-            }
-
-            $(".approve-button").click(function (e) {
-                e.preventDefault();
-                var serviceCallId = $(this).data("service-call-id");
-                var url = urls.ServiceCall.Approve;
-                executeApproval(url, serviceCallId, $(this), 'Open');
-            });
-
-            $(".deny-button").click(function (e) {
-                e.preventDefault();
-                var serviceCallId = $(this).data("service-call-id");
-                var url = urls.ServiceCall.Deny;
-                executeApproval(url, serviceCallId, $(this), 'Completed');
-            });
-
-            function executeApproval(url, serviceCallId, button, status) {
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: { id: serviceCallId },
-                    success: function (result) {
-                        button.parent().html('<span>Status: <span class="label label-' + status.toLowerCase() + '-service-call">' + status + '</span></span>');
-                    }
-                });
             }
             
             function highlight(elemId) {

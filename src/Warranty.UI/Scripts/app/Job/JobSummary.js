@@ -1,5 +1,5 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'x-editable', 'ko', 'ko.x-editable', 'toastr', 'urls', 'modelData', 'enumeration/PhoneNumberType', 'jquery.maskedinput', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, xeditable, ko, koxeditable, toastr, urls, modelData, phoneNumberTypeEnum, maskedInput) {
+    require(['jquery', 'x-editable', 'ko', 'ko.x-editable', 'toastr', 'urls', 'modelData', 'enumeration/PhoneNumberType', 'jquery.maskedinput', 'app/formUploader', 'app/approveServiceCalls', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, xeditable, ko, koxeditable, toastr, urls, modelData, phoneNumberTypeEnum, maskedInput) {
         $(function () {
             $.fn.editable.defaults.mode = 'inline';
             $.fn.editable.defaults.emptytext = 'Add';

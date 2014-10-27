@@ -80,6 +80,8 @@ namespace Warranty.Core.Features.JobSummary
         public class JobServiceCall
         {
             public Guid ServiceCallId { get; set; }
+            public ServiceCallStatus ServiceCallStatus { get; set; }
+            public bool CanApprove { get; set; }
             public string AssignedTo { get; set; }
             public string AssignedToEmployeeNumber { get; set; }
             public string JobNumber { get; set; }
