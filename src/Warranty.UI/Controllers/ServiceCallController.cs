@@ -151,7 +151,7 @@
             if (result.ShouldSendEmail)
             {
                 var urlHelper = new UrlHelper(this.ControllerContext.RequestContext);
-                var url = urlHelper.Action("CallSummary", "ServiceCall", new { id }, Request.Url.Scheme);
+                var url = urlHelper.Action("CallSummary", "ServiceCall", new { id }, "http");
                 result.Url = url;
                 _mailer.ServiceCallEscalated(result).SendAsync();
             }
