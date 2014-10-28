@@ -37,20 +37,20 @@
 
             return new PercentSurveyRecommendWidgetModel
             {
-                PercentRecommendLastMonth = GetPercentage(totalLastMonthSurveysWithRecommend,totalLastMonthSurveys),
+                PercentRecommendLastMonth = GetPercentage(totalLastMonthSurveysWithRecommend, totalLastMonthSurveys),
                 PercentRecommendThisMonth = GetPercentage(totalThisMonthSurveysWithRecommend, totalThisMonthSurveys),
             };
         }
 
-        private int GetPercentage(int totalLastMonthCount, int totalLastMonth )
+        private int GetPercentage(int totalWithRecommend, int total)
         {
-            if (totalLastMonthCount == 0 || totalLastMonth == 0)
+            if (totalWithRecommend == 0 || total == 0)
             {
                 return 0;
             }
-            return totalLastMonthCount * 100  / totalLastMonth;
+            return totalWithRecommend * 100 / total;
         }
-        
+
         internal class ApiResult
         {
             public string WarrantyServiceRepresentativeEmployeeId { get; set; }
