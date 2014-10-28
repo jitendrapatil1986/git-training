@@ -6,6 +6,7 @@
     using Extensions;
     using NPoco;
     using Security;
+    using Services;
     using Survey.Client;
     using System.Linq;
 
@@ -42,8 +43,8 @@
 
             return new PercentSurveyRecommendWidgetModel
             {
-                PercentRecommendLastMonth = totalLastMonthSurveysWithRecommend * 100 / totalLastMonthSurveys,
-                PercentRecommendThisMonth = totalThisMonthSurveysWithRecommend*100/totalThisMonthSurveys,
+                PercentRecommendLastMonth = ServiceCallCalculator.CalculatePercentage(totalLastMonthSurveysWithRecommend, totalLastMonthSurveys),
+                PercentRecommendThisMonth = ServiceCallCalculator.CalculatePercentage(totalThisMonthSurveysWithRecommend, totalThisMonthSurveys),
             };
         }
 
