@@ -9,36 +9,18 @@
     {
         public AchievementReportModel()
         {
-            AchievementSummaries = new List<AchievementSummary>();
+            MonthlyAchievementSummary = new List<AchievementSummary>();
         }
-        public IEnumerable<AchievementSummary> AchievementSummaries { get; set; }
+        public IEnumerable<AchievementSummary> MonthlyAchievementSummary { get; set; }
+        public AchievementSummary PeriodAchievementSummary { get; set; }
         public IEnumerable<EmployeeTiedToRepresentative> EmployeeTiedToRepresentatives { get; set; }
 
         public string SelectedEmployeeNumber { get; set; }
-        public bool AnyResults { get { return AchievementSummaries.Any(); } }
-        public bool HasSearchCriteria { get { return FilteredDate.HasValue; } }
-        public DateTime? FilteredDate { get; set; }
+        public bool AnyResults { get { return MonthlyAchievementSummary.Any(); } }
+        public bool HasSearchCriteria { get { return StartDate.HasValue & EndDate.HasValue; } }
 
-        public DateTime StartDate
-        {
-            get
-            {
-                if (FilteredDate.HasValue)
-                    return FilteredDate.Value.AddYears(-1).ToFirstDay();
-                return DateTime.Today.AddYears(-1).ToFirstDay();
-            }
-        }
-
-        public DateTime EndDate
-        {
-            get
-            {
-                if (FilteredDate.HasValue)
-                    return FilteredDate.Value.ToLastDay();
-
-                return DateTime.Today.ToLastDay();
-            }
-        }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         public class AchievementSummary
         {

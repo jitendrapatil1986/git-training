@@ -23,23 +23,42 @@
         public AchievementReportModel Handle(AchievementReportQuery query)
         {
             var model = new AchievementReportModel
-                {
-                    AchievementSummaries = GetAchievementSummary(query),
-                    EmployeeTiedToRepresentatives = GetEmployeesTiedToRepresentatives(),
-                };
+            {
+                EmployeeTiedToRepresentatives = GetEmployeesTiedToRepresentatives(),
+            };
+
+            if (!query.queryModel.HasSearchCriteria)
+                return model;
+
+            var monthlyAchievementSummary = GetMonthlyAchievementSummary(query);
+            var periodAchievementSummary = GetPeriodAchievementSummary(monthlyAchievementSummary);
+            
+            model.MonthlyAchievementSummary = monthlyAchievementSummary;
+            model.PeriodAchievementSummary = periodAchievementSummary;
+            
             return model;
         }
 
-        private IEnumerable<AchievementReportModel.AchievementSummary> GetAchievementSummary(AchievementReportQuery query)
+        private AchievementReportModel.AchievementSummary GetPeriodAchievementSummary(IEnumerable<AchievementReportModel.AchievementSummary> achievementSummaryByTheMonth)
         {
-            if (!query.queryModel.FilteredDate.HasValue)
-                return new List<AchievementReportModel.AchievementSummary>();
+            return new AchievementReportModel.AchievementSummary
+                {
+                    AmountSpentPerHome = achievementSummaryByTheMonth.Average(x => x.AmountSpentPerHome),
+                    AverageDaysClosing = achievementSummaryByTheMonth.Average(x => x.AverageDaysClosing),
+                    DWR = achievementSummaryByTheMonth.Average(x => x.DWR),
+                    EWS = achievementSummaryByTheMonth.Average(x => x.EWS),
+                    RTFT = achievementSummaryByTheMonth.Average(x => x.RTFT),
+                    PercentComplete7Days = achievementSummaryByTheMonth.Average(x => x.PercentComplete7Days),
+                };
+        }
 
+        private IEnumerable<AchievementReportModel.AchievementSummary> GetMonthlyAchievementSummary(AchievementReportQuery query)
+        {
             var employeeNumber = query.queryModel.SelectedEmployeeNumber;
-            var startDate = query.queryModel.StartDate;
-            var endDate = query.queryModel.EndDate;
+            var startDate = query.queryModel.StartDate.Value;
+            var endDate = query.queryModel.EndDate.Value.ToLastDay();
 
-            var monthRange = Enumerable.Range(1, 12).Select(startDate.AddMonths).TakeWhile(e => e <= endDate).Select(e => new MonthYearModel { MonthNumber = e.Month, YearNumber = e.Year });
+            var monthRange = _warrantyCalculator.GetMonthRange(startDate, endDate);
 
             var excellentService = _warrantyCalculator.GetExcellentWarrantyService(startDate, endDate, employeeNumber);
             var definetelyWouldRecommend = _warrantyCalculator.GetDefinetelyWouldRecommend(startDate, endDate, employeeNumber);
