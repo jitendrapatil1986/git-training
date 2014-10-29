@@ -457,5 +457,10 @@ namespace Warranty.UI.Core.Helpers
             var html = string.Format("{0} <span class='label label-info muted'>{1}</span>", homeownerName, homeownerNumber.ToOrdinalSuffixed());
             return MvcHtmlString.Create(html);
         }
+
+        public static string WithOneDecimal(decimal number)
+        {
+            return decimal.Round(number, 1, MidpointRounding.AwayFromZero).ToString();
+        }
     }
 }
