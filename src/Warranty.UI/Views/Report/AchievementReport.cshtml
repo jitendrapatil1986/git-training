@@ -61,9 +61,9 @@
                         <td class="text-right">@Format.Money(achievementSummary.AmountSpentPerHome)</td>
                         <td class="text-right">@achievementSummary.AverageDaysClosing</td>
                         <td class="text-right">@Format.Percentage(achievementSummary.PercentComplete7Days)</td>
-                        <td class="text-right">@Format.Percentage(achievementSummary.DWR)</td>
-                        <td class="text-right">@Format.Percentage(achievementSummary.EWS)</td>
-                        <td class="text-right">@Format.Percentage(@achievementSummary.RTFT)</td>
+                        <td class="text-right">@Format.Percentage(achievementSummary.DefinetelyWouldRecommend)</td>
+                        <td class="text-right">@Format.Percentage(achievementSummary.ExcellentWarrantyService)</td>
+                        <td class="text-right">@Format.Percentage(@achievementSummary.RightTheFirstTime)</td>
                     </tr>
                 }
                     <tr class="totalLine">
@@ -71,9 +71,9 @@
                         <td class="text-right">@Format.Money(Model.PeriodAchievementSummary.AmountSpentPerHome)</td>
                         <td class="text-right">@Format.WithOneDecimal(Model.PeriodAchievementSummary.AverageDaysClosing)</td>
                         <td class="text-right">@Format.Percentage(Model.PeriodAchievementSummary.PercentComplete7Days)</td>
-                        <td class="text-right">@Format.Percentage(Model.PeriodAchievementSummary.DWR)</td>
-                        <td class="text-right">@Format.Percentage(Model.PeriodAchievementSummary.EWS)</td>
-                        <td class="text-right">@Format.Percentage(@Model.PeriodAchievementSummary.RTFT)</td>
+                        <td class="text-right">@Format.Percentage(Model.PeriodAchievementSummary.DefinetelyWouldRecommend)</td>
+                        <td class="text-right">@Format.Percentage(Model.PeriodAchievementSummary.ExcellentWarrantyService)</td>
+                        <td class="text-right">@Format.Percentage(@Model.PeriodAchievementSummary.RightTheFirstTime)</td>
                     </tr>
             </tbody>
         </table>

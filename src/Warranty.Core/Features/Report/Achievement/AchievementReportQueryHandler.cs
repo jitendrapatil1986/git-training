@@ -45,9 +45,9 @@
                 {
                     AmountSpentPerHome = achievementSummaryByTheMonth.Average(x => x.AmountSpentPerHome),
                     AverageDaysClosing = achievementSummaryByTheMonth.Average(x => x.AverageDaysClosing),
-                    DWR = achievementSummaryByTheMonth.Average(x => x.DWR),
-                    EWS = achievementSummaryByTheMonth.Average(x => x.EWS),
-                    RTFT = achievementSummaryByTheMonth.Average(x => x.RTFT),
+                    DefinetelyWouldRecommend = achievementSummaryByTheMonth.Average(x => x.DefinetelyWouldRecommend),
+                    ExcellentWarrantyService = achievementSummaryByTheMonth.Average(x => x.ExcellentWarrantyService),
+                    RightTheFirstTime = achievementSummaryByTheMonth.Average(x => x.RightTheFirstTime),
                     PercentComplete7Days = achievementSummaryByTheMonth.Average(x => x.PercentComplete7Days),
                 };
         }
@@ -81,9 +81,9 @@
                         AverageDaysClosing = GetValueForMonth(averageDays, range),
                         PercentComplete7Days = GetValueForMonth(percentClosedWithin7Days, range),
                         AmountSpentPerHome = GetValueForMonth(amountSpent, range),
-                        EWS = GetValueForMonth(excellentService, range),
-                        DWR = GetValueForMonth(definetelyWouldRecommend, range),
-                        RTFT = GetValueForMonth(rightTheFirstTime, range),
+                        ExcellentWarrantyService = GetValueForMonth(excellentService, range),
+                        DefinetelyWouldRecommend = GetValueForMonth(definetelyWouldRecommend, range),
+                        RightTheFirstTime = GetValueForMonth(rightTheFirstTime, range),
                         Month = range.MonthNumber,
                         Year = range.YearNumber
                     });
