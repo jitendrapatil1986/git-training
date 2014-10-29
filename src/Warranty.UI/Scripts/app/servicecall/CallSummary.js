@@ -1,5 +1,5 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
+    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'bootbox', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, bootbox) {
         window.ko = ko; //manually set the global ko property.
         require(['ko.validation'], function () {
 
@@ -454,20 +454,22 @@ require(['/Scripts/app/main.js'], function () {
                 }).extend({ notify: 'always' });
 
                 self.removeAttachment = function (e) {
-                    if (confirm(modelData.attachmentRemovalMessage)) {
-                        var item = $('.boxclose[data-attachment-id="' + e.serviceCallAttachmentId + '"]');
-                        var actionUrl = item.data('url');
-                        var attachmentId = e.serviceCallAttachmentId;
-                        $.ajax({
-                            type: "POST",
-                            url: actionUrl,
-                            data: { id: attachmentId },
-                            success: function (data) {
-                                self.allAttachments.remove(e);
-                                toastr.success("Success! Attachment deleted.");
-                            }
-                        });
-                    }
+                    bootbox.confirm(modelData.attachmentRemovalMessage, function(result) {
+                        if (result) {
+                            var item = $('.boxclose[data-attachment-id="' + e.serviceCallAttachmentId + '"]');
+                            var actionUrl = item.data('url');
+                            var attachmentId = e.serviceCallAttachmentId;
+                            $.ajax({
+                                type: "POST",
+                                url: actionUrl,
+                                data: { id: attachmentId },
+                                success: function (data) {
+                                    self.allAttachments.remove(e);
+                                    toastr.success("Success! Attachment deleted.");
+                                }
+                            });
+                        }
+                    });
                 };
                 
 
