@@ -196,6 +196,7 @@
     <Compile Include="Entities\Lookups\ProblemCode.cs" />
     <Compile Include="Entities\Lookups\RootCause.cs" />
     <Compile Include="Entities\Payment.cs" />
+    <Compile Include="Entities\ProblemCode.cs" />
     <Compile Include="Entities\Project.cs" />
     <Compile Include="Entities\Employee.cs" />
     <Compile Include="Entities\ServiceCall.cs" />

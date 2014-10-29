@@ -8,10 +8,10 @@
     {
         public static IEnumerable<SelectListItem> GetProblemCodeList(IDatabase database)
         {
-            const string sql = @"SELECT  ProblemCodeId as Value
-                                        ,ProblemCode as Text
-                                FROM lookups.ProblemCodes
-                                ORDER BY ProblemCode";
+            const string sql = @"SELECT DISTINCT JdeCode as Value
+                                        ,CategoryCode as Text
+                                FROM ProblemCodes
+                                ORDER BY CategoryCode";
 
             return database.Fetch<SelectListItem>(sql);
         }

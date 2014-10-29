@@ -203,7 +203,7 @@ require(['/Scripts/app/main.js'], function () {
                 self.numberOfNotes = options.numberOfNotes;
 
                 //track line item properties.
-                self.problemCodeId = ko.observable(options.problemCodeId);
+                self.problemJdeCode = ko.observable(options.problemJdeCode);
                 self.problemCode = ko.observable(options.problemCode);
                 self.problemDescription = ko.observable(options.problemDescription);
                 self.currentProblemCode = ko.observable();
@@ -213,7 +213,6 @@ require(['/Scripts/app/main.js'], function () {
                 self.problemCodeEditing = ko.observable();
                 self.problemDescriptionEditing = ko.observable("");
                 self.lineEditing = ko.observable("");
-
                 //edit line item.
                 self.editLine = function () {
                     this.problemCodeEditing(true);
@@ -338,6 +337,8 @@ require(['/Scripts/app/main.js'], function () {
                     $(updateProblemCode).parent().addClass("has-error");
                     return;
                 }
+
+                line.problemCode($("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemCode").find('option:selected').text());
 
                 var updateProblemDescription = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemDescription");
                 if (updateProblemDescription.val() == "") {
@@ -523,7 +524,7 @@ require(['/Scripts/app/main.js'], function () {
                 self.addLineItem = function () {
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
                     self.problemCode = $("#addCallLineProblemCode").find('option:selected').text();
-                    self.problemCodeId = $("#addCallLineProblemCode").val();
+                    self.problemJdeCode = $("#addCallLineProblemCode").val();
                     self.problemDescription = $("#addCallLineProblemDescription").val();
 
                     var newProblemCode = $("#addCallLineProblemCode");
@@ -539,7 +540,7 @@ require(['/Scripts/app/main.js'], function () {
                     }
 
                     var newLineItem = new AllLineItemsViewModel({
-                        serviceCallId: self.serviceCallId, problemCodeId: self.problemCodeId,
+                        serviceCallId: self.serviceCallId, problemJdeCode: self.problemJdeCode,
                         problemCode: self.problemCode, problemDescription: self.problemDescription
                     });
 
@@ -562,7 +563,7 @@ require(['/Scripts/app/main.js'], function () {
                                 serviceCallLineItemId: response.ServiceCallLineItemId,
                                 lineNumber: response.LineNumber,
                                 problemCode: self.problemCode,
-                                problemCodeId: self.problemCodeId,
+                                problemJdeCode: self.problemJdeCode,
                                 problemDescription: self.problemDescription,
                                 serviceCallLineItemStatus: response.ServiceCallLineItemStatus,
                                 completed: false

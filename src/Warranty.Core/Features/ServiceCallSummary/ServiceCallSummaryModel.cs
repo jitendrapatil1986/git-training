@@ -86,6 +86,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public Guid ServiceCallId { get; set; }
             public int LineNumber { get; set; }
             public string ProblemCode { get; set; }
+            public string ProblemJdeCode { get; set; }
             public string ProblemDescription { get; set; }
             public string CauseDescription { get; set; }
             public string ClassificationNote { get; set; }
