@@ -136,7 +136,7 @@ namespace Warranty.UI.Core.Helpers
             if (isEscalated)
                 htmlString =
                     string.Format(
-                        @"<div class='has-bottom-tooltip text-center' data-original-title='{0}'><span class='glyphicon glyphicon-fire'></span><br/>{1}</div>",
+                        @"<div><span class='label label-danger'>Escalated</span></div>",
                         reason, DateMonthDayYear(escalatedDate));
 
             return MvcHtmlString.Create(htmlString);
@@ -146,7 +146,7 @@ namespace Warranty.UI.Core.Helpers
         {
             var htmlString = String.Empty;
             if (isSpecialProject)
-                htmlString = @"<div class='special-project has-bottom-tooltip' data-original-title='Special Project'>S</div>";
+                htmlString = @"<div><span class='label label-primary'>Special Project</span></div>";
 
             return MvcHtmlString.Create(htmlString);
         }
