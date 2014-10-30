@@ -913,6 +913,7 @@ span.boxclose{
     font-size: 14px;
 }
 
+<<<<<<< Updated upstream
 #addAdditionalcontacts {
     padding: 10px;
 }
@@ -930,6 +931,8 @@ span.boxclose{
     border-bottom: 1px solid #ddd;
 }
 
+
+=======
 .searchContainer{
     margin-bottom: 20px;
 }
@@ -969,6 +972,7 @@ ul.default_list li{
     text-transform: uppercase;
     margin: 0;
 }
+>>>>>>> Stashed changes
 
 @media (max-width: 767px) {
 

@@ -262,6 +262,9 @@
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQuery.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQueryHandler.cs" />
     <Compile Include="Features\AdditionalContactsModel.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchEmployeesQueryHandler.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchEmployeeModel.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchEmployeesQuery.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportModel.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportQuery.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportQueryHandler.cs" />

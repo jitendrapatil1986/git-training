@@ -266,6 +266,7 @@
     <Content Include="App_Readme\Handlebarsjs_LICENSE" />
     <None Include="css\less\bootstrap-custom.less" />
     <Content Include="App_Readme\Elmah.txt" />
+    <Content Include="css\bootstrap-combobox.css" />
     <Content Include="css\bootstrap-editable.css" />
     <Content Include="css\bootstrap-theme.css" />
     <Content Include="css\bootstrap-theme.min.css" />
@@ -306,7 +307,9 @@
     <Content Include="Scripts\app\servicecall\LineItemDetail.js" />
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
     <Content Include="Scripts\config\customer-search.js" />
+    <Content Include="Scripts\lib\bootstrap-combobox.js" />
     <Content Include="Scripts\lib\bootstrap-editable.min.js" />
+    <Content Include="Scripts\lib\jquery.hideseek.min.js" />
     <Content Include="Scripts\lib\knockout.x-editable.min.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />
     <Content Include="Scripts\lib\handlebars.amd.min.js" />
@@ -428,6 +431,7 @@
     <Content Include="Views\Home\_ToDoJobChangedTask.cshtml" />
     <Content Include="Views\ServiceCall\LineItemDetail.cshtml" />
     <Content Include="Views\Report\AchievementReport.cshtml" />
+    <Content Include="css\less\combobox.less" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
