@@ -13,13 +13,11 @@ namespace Warranty.Core.Calculator
     public class WarrantyCalculator : IWarrantyCalculator
     {
         private readonly IDatabase _database;
-        private readonly IUserSession _userSession;
         private readonly ISurveyClient _surveyClient;
         private readonly string _userMarkets;
         public WarrantyCalculator(IDatabase database, IUserSession userSession, ISurveyClient surveyClient)
         {
             _database = database;
-            _userSession = userSession;
             _surveyClient = surveyClient;
             _userMarkets = userSession.GetCurrentUser().Markets.CommaSeparateWrapWithSingleQuote();
         }
@@ -79,7 +77,7 @@ namespace Warranty.Core.Calculator
         {
             var warrantablehomes = GetWarrantableHomes(startDate, endDate, employeeNumber).ToList();
             var dollarsSpent = GetDollarSpent(startDate, endDate, employeeNumber).ToList();
-            var monthRange = Enumerable.Range(1, 12).Select(startDate.AddMonths).TakeWhile(e => e <= endDate).Select(e => new MonthYearModel { MonthNumber = e.Month, YearNumber = e.Year });
+            var monthRange = GetMonthRange(startDate, endDate);
 
             var list = new List<CalculatorResult>();
             foreach(var month in monthRange)
@@ -226,6 +224,12 @@ namespace Warranty.Core.Calculator
         {
             var surveyData = _surveyClient.Get.ElevenMonthWarrantySurvey(new { startDate, endDate, EmployeeId = employeeNumber });
             return surveyData.Details.ToObject<List<SurveyDataResult>>();
+        }
+
+        public IEnumerable<MonthYearModel> GetMonthRange(DateTime startDate, DateTime endDate)
+        {
+            var numberOfMonths = (endDate.Month - startDate.Month) + 12 * (endDate.Year - startDate.Year) + 1;
+            return Enumerable.Range(0, numberOfMonths).Select(startDate.AddMonths).TakeWhile(e => e <= endDate).Select(e => new MonthYearModel { MonthNumber = e.Month, YearNumber = e.Year });
         }
     }
 }
