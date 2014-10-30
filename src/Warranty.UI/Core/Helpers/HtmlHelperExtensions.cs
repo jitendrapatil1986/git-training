@@ -9,6 +9,7 @@
     using HtmlTags;
     using Microsoft.Practices.ServiceLocation;
     using Warranty.Core;
+    using Warranty.Core.Entities;
     using Warranty.Core.Entities.Lookups;
     using Warranty.Core.Features.ProblemCodes;
     using Yay.Enumerations;
@@ -74,7 +75,7 @@
                     t.Option("Select Problem Code", string.Empty);
                     foreach (var problemCode in problemCodes)
                     {
-                        var htmlTag = t.Option(problemCode.DisplayName, problemCode.Id);
+                        var htmlTag = t.Option(problemCode.CategoryCode, problemCode.JdeCode);
                         if (currentProblemCode == problemCode)
                             htmlTag.Attr("selected");
                     }
