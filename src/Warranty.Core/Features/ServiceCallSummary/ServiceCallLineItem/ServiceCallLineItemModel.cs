@@ -13,6 +13,8 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
         public string ServiceCallNumber { get; set; }
         public int LineNumber { get; set; }
         public string ProblemCode { get; set; }
+        public string ProblemJdeCode { get; set; }
+        public string ProblemDetailCode { get; set; }
         public string RootCause { get; set; }
         public string ProblemDescription { get; set; }
         public string CauseDescription { get; set; }

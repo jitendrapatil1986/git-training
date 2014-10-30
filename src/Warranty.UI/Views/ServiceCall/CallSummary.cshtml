@@ -237,7 +237,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <select id="addCallLineRootCause" class="dropdown form-control" data-bind="options: rootCauses, value: rootCauseToAdd, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Root Cause'"></select>
+                                    <select id="addCallLineProblemDetail" class="dropdown form-control" data-bind="options: problemDetailCodes, value: problemDetailCodeToAdd, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Problem Detail'"></select>
                                 </div>
                             </div>
                         </div>
@@ -280,9 +280,9 @@
                                                         <div class="row">
                                                             <div class="col-md-9">
                                                                 <div class="editor" data-bind="css: { editing: problemCodeEditing }">
-                                                                    <p class="view"><strong data-bind="text: rootCause"></strong></p>
+                                                                    <p class="view"><strong data-bind="text: problemDetailCode"></strong></p>
                                                                     <h4>
-                                                                        <select id="updateCallLineRootCause" class="edit dropdown form-control" data-bind="options: rootCauses, value: editRootCause, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Root Cause'"></select>
+                                                                        <select id="updateCallLineProblemDetail" class="edit dropdown form-control" data-bind="options: problemDetailCodes, value: editProblemDetailCode, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Problem Detail'"></select>
                                                                         
                                                                     </h4>
                                                                 </div>

@@ -147,6 +147,7 @@
                 //track line item properties.
                 self.problemCodeId = ko.observable(modelData.initialServiceCallLineItem.problemCodeId);
                 self.problemCode = ko.observable(modelData.initialServiceCallLineItem.problemCode);
+                self.problemDetailCode = ko.observable(modelData.initialServiceCallLineItem.problemDetailCode);
                 self.problemDescription = ko.observable(modelData.initialServiceCallLineItem.problemDescription);
                 self.currentProblemCode = ko.observable();
                 self.currentProblemDescription = ko.observable();

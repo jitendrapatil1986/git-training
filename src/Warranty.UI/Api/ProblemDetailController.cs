@@ -1,25 +1,24 @@
 ﻿namespace Warranty.UI.Api
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Web.Http;
     using Warranty.Core;
     using Warranty.Core.Features.EditServiceCallLineItem;
 
-    public class RootCauseController : ApiController
+    public class ProblemDetailController : ApiController
     {
         private readonly IMediator _mediator;
 
-        public RootCauseController(IMediator mediator)
+        public ProblemDetailController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [HttpGet]
-        public IEnumerable<System.Web.Mvc.SelectListItem> RootCauses(string problemJdeCode)
+        public IEnumerable<System.Web.Mvc.SelectListItem> ProblemDetails(string problemJdeCode)
         {
 
-            return _mediator.Request(new RootCauseQuery { ProblemJdeCode = problemJdeCode });
+            return _mediator.Request(new ProblemDetailQuery { ProblemJdeCode = problemJdeCode });
         }
     }
 }

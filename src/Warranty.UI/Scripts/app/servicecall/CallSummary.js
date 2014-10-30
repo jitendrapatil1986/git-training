@@ -202,17 +202,17 @@ require(['/Scripts/app/main.js'], function () {
                 self.completed = options.completed;
                 self.numberOfAttachments = options.numberOfAttachments;
                 self.numberOfNotes = options.numberOfNotes;
-                self.rootCauses = ko.observableArray([]);
+                self.problemDetailCodes = ko.observableArray([]);
 
                 //track line item properties.
                 self.problemJdeCode = ko.observable(options.problemJdeCode);
                 self.problemCode = ko.observable(options.problemCode);
-                self.rootCause = ko.observable(options.rootCause);
-                self.editRootCause = ko.observable();
+                self.problemDetailCode = ko.observable(options.problemDetailCode);
+                self.editProblemDetailCode = ko.observable();
                 self.problemDescription = ko.observable(options.problemDescription);
                 self.currentProblemCode = ko.observable();
                 self.currentProblemJdeCode = ko.observable();
-                self.currentRootCause = ko.observable();
+                self.currentProblemDetailCode = ko.observable();
                 self.currentProblemDescription = ko.observable();
 
                 //track editing problem code, desc, and line altogether.
@@ -227,9 +227,9 @@ require(['/Scripts/app/main.js'], function () {
                     this.lineEditing(true);
                     this.currentProblemCode(this.problemCode());
                     this.currentProblemJdeCode(this.problemJdeCode());
-                    this.currentRootCause(this.rootCause());
+                    this.currentProblemDetailCode(this.problemDetailCode());
                     this.currentProblemDescription(this.problemDescription());
-                    getRootCauses(self.problemJdeCode(), self.rootCauses, self.rootCause);
+                    getProblemDetailCodes(self.problemJdeCode(), self.problemDetailCodes, self.problemDetailCode);
                 };
 
                 //save line item changes.
@@ -244,7 +244,7 @@ require(['/Scripts/app/main.js'], function () {
                     this.lineEditing(false);
                     this.problemCode(this.currentProblemCode());
                     this.problemJdeCode(this.currentProblemJdeCode());
-                    this.rootCause(this.currentRootCause());
+                    this.problemDetailCode(this.currentProblemDetailCode());
                     this.problemDescription(this.currentProblemDescription());
                 };
 
@@ -297,19 +297,19 @@ require(['/Scripts/app/main.js'], function () {
 
                 self.problemCode.subscribe(function (newValue) {
                     if(this.lineEditing())
-                        getRootCauses(newValue, self.rootCauses);
+                        getProblemDetailCodes(newValue, self.problemDetailCodes);
                 });
 
-                function getRootCauses(problemJdeCode, rootCauses, rootCause) {
+                function getProblemDetailCodes(problemJdeCode, problemDetailCodes, problemDetailCode) {
                     $.ajax({
-                        url: urls.RootCause.RootCauses + '?problemJdeCode=' + problemJdeCode,
+                        url: urls.ProblemDetail.ProblemDetails + '?problemJdeCode=' + problemJdeCode,
                         type: "GET",
                         dataType: "json",
                         processData: false,
                         contentType: "application/json; charset=utf-8"
                     }).done(function(response) {
-                        rootCauses(response);
-                        self.editRootCause(rootCause());
+                        problemDetailCodes(response);
+                        self.editProblemDetailCode(problemDetailCode());
                     });
                 }
             }
@@ -369,12 +369,12 @@ require(['/Scripts/app/main.js'], function () {
                 }
                 line.problemCode($("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemCode").find('option:selected').text());
 
-                var updateRootCause = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineRootCause");
-                if (updateRootCause.val() == "") {
-                    $(updateRootCause).parent().addClass("has-error");
+                var updateProblemDetailCode = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemDetail");
+                if (updateProblemDetailCode.val() == "") {
+                    $(updateProblemDetailCode).parent().addClass("has-error");
                     return;
                 }
-                line.rootCause($("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineRootCause").find('option:selected').text());
+                line.problemDetailCode($("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemDetail").find('option:selected').text());
 
                 var updateProblemDescription = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemDescription");
                 if (updateProblemDescription.val() == "") {
@@ -465,7 +465,7 @@ require(['/Scripts/app/main.js'], function () {
                 self.theLookups = dropdownData.availableLookups;  //dropdown list does not need to be observable. Only the actual elements w/i the array do.
                 self.problemDescriptionToAdd = ko.observable('');
                 self.problemJdeCodeToAdd = ko.observable();
-                self.rootCauseToAdd = ko.observable();
+                self.problemDetailCodeToAdd = ko.observable();
                 self.canBeReopened = ko.observable(modelData.canBeReopened);
                 self.isSpecialProject = ko.observable(modelData.isSpecialProject);
                 self.specialProjectReason = ko.observable(modelData.specialProjectReason);
@@ -479,7 +479,7 @@ require(['/Scripts/app/main.js'], function () {
                 self.additionalPhoneContacts = ko.observableArray([]);
                 self.noteDescriptionToAdd = ko.observable('');
                 self.userCanAlwaysReopenCallLines = ko.observable();
-                self.rootCauses = ko.observableArray([]);
+                self.problemDetailCodes = ko.observableArray([]);
 
                 self.areAllLineItemsCompleted = ko.computed(function () {
                     var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
@@ -495,23 +495,23 @@ require(['/Scripts/app/main.js'], function () {
                 self.problemJdeCodeToAdd.subscribe(function (newValue) {
                     if (newValue != "") {
                         var problemJdeCode = $("#addCallLineProblemCode").find('option:selected').val();
-                        getRootCauses(problemJdeCode, self.rootCauses);
+                        getproblemDetailCodes(problemJdeCode, self.problemDetailCodes);
                     } else {
-                        self.rootCauses([]);
+                        self.problemDetailCodes([]);
                     }
                     
                     
                 });
 
-                function getRootCauses(problemJdeCode, rootCauses) {
+                function getproblemDetailCodes(problemJdeCode, problemDetailCodes) {
                     $.ajax({
-                        url: urls.RootCause.RootCauses + '?problemJdeCode=' + problemJdeCode,
+                        url: urls.ProblemDetail.ProblemDetails + '?problemJdeCode=' + problemJdeCode,
                         type: "GET",
                         dataType: "json",
                         processData: false,
                         contentType: "application/json; charset=utf-8"
                     }).done(function (response) {
-                        rootCauses(response);
+                        problemDetailCodes(response);
                     });
                 }
                 
@@ -585,7 +585,7 @@ require(['/Scripts/app/main.js'], function () {
                 self.addLineItem = function () {
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
                     self.problemCode = $("#addCallLineProblemCode").find('option:selected').text();
-                    self.rootCause = $("#addCallLineRootCause").find('option:selected').text();
+                    self.problemDetailCode = $("#addCallLineProblemDetail").find('option:selected').text();
                     self.problemJdeCode = $("#addCallLineProblemCode").val();
                     self.problemDescription = $("#addCallLineProblemDescription").val();
 
@@ -595,9 +595,9 @@ require(['/Scripts/app/main.js'], function () {
                         return;
                     }
 
-                    var newRootCause = $("#addCallLineRootCause");
-                    if (newRootCause.val() == "") {
-                        $(newRootCause).parent().addClass("has-error");
+                    var newProblemDetailCode = $("#addCallLineProblemDetail");
+                    if (newProblemDetailCode.val() == "") {
+                        $(newProblemDetailCode).parent().addClass("has-error");
                         return;
                     }
 
@@ -611,7 +611,7 @@ require(['/Scripts/app/main.js'], function () {
 
                         serviceCallId: self.serviceCallId, problemJdeCode: self.problemJdeCode,
                         problemCode: self.problemCode, problemDescription: self.problemDescription,
-                        rootCause: self.rootCause
+                        problemDetailCode: self.problemDetailCode
                     });
 
                     var lineData = ko.toJSON(newLineItem);
@@ -633,7 +633,7 @@ require(['/Scripts/app/main.js'], function () {
                                 serviceCallLineItemId: response.ServiceCallLineItemId,
                                 lineNumber: response.LineNumber,
                                 problemCode: self.problemCode,
-                                rootCause: self.rootCause,
+                                problemDetailCode: self.problemDetailCode,
                                 problemJdeCode: self.problemJdeCode,
                                 problemDescription: self.problemDescription,
                                 serviceCallLineItemStatus: response.ServiceCallLineItemStatus,

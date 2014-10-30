@@ -4,16 +4,16 @@
     using System.Web.Mvc;
     using NPoco;
 
-    public class RootCauseQueryHandler : IQueryHandler<RootCauseQuery, IEnumerable<SelectListItem>>
+    public class ProblemDetailQueryHandler : IQueryHandler<ProblemDetailQuery, IEnumerable<SelectListItem>>
     {
         private readonly IDatabase _database;
 
-        public RootCauseQueryHandler(IDatabase database)
+        public ProblemDetailQueryHandler(IDatabase database)
         {
             _database = database;
         }
 
-        public IEnumerable<SelectListItem> Handle(RootCauseQuery query)
+        public IEnumerable<SelectListItem> Handle(ProblemDetailQuery query)
         {
             const string sql = @"SELECT  DetailCode as Value
                                         ,DetailCode as Text

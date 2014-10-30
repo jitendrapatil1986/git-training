@@ -9,7 +9,6 @@
         public virtual Guid ServiceCallId { get; set; }
         public virtual int LineNumber { get; set; }
         public virtual string ProblemCode { get; set; }
-        public virtual string RootCause { get; set; }
         public virtual string ProblemDescription { get; set; }
         public virtual string CauseDescription { get; set; }
         public virtual string ClassificationNote { get; set; }

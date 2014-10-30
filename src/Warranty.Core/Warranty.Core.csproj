@@ -261,8 +261,8 @@
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetQueryHandler.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQuery.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQueryHandler.cs" />
-    <Compile Include="Features\EditServiceCallLineItem\RootCauseQuery.cs" />
-    <Compile Include="Features\EditServiceCallLineItem\RootCauseQueryHandler.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\ProblemDetailQuery.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\ProblemDetailQueryHandler.cs" />
     <Compile Include="Features\AdditionalContactsModel.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportModel.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportQuery.cs" />

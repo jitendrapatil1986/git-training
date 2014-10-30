@@ -34,7 +34,7 @@
                         ServiceCallId = message.ServiceCallId,
                         LineNumber = newLine,
                         ProblemCode = message.ProblemCode,
-                        RootCause = message.RootCause,
+                        ProblemDetailCode = message.ProblemDetailCode,
                         ProblemJdeCode = message.ProblemJdeCode,
                         ProblemDescription = message.ProblemDescription,
                         ServiceCallLineItemStatus = ServiceCallLineItemStatus.Open,
