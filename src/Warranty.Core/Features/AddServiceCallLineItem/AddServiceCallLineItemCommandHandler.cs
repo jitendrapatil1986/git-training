@@ -35,6 +35,7 @@
                         LineNumber = newLine,
                         ProblemCode = message.ProblemCode,
                         RootCause = message.RootCause,
+                        ProblemJdeCode = message.ProblemJdeCode,
                         ProblemDescription = message.ProblemDescription,
                         ServiceCallLineItemStatus = ServiceCallLineItemStatus.Open,
                     };

@@ -25,5 +25,15 @@
             var numberOfDaysLeft = WarrantyConstants.NumberOfDaysAllowedToCloseServiceCall - (int) (DateTime.Today - startDate.Date).TotalDays;
             return numberOfDaysLeft;
         }
+
+        public static int CalculatePercentage(int value, int total)
+        {
+            if (value == 0 || total == 0)
+            {
+                return 0;
+            }
+            return value * 100 / total;
+        }
+    
     }
 }

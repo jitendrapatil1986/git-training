@@ -81,7 +81,7 @@
                             }
                             else
                             {
-                                var sc = (JobSummaryModel.JobServiceCall) line;
+                                var sc = (JobSummaryModel.JobServiceCall)line;
                                 <div class="service-call-line col-md-12">
                                     <div class="col-md-1">
                                         <small class="text-muted">
@@ -110,9 +110,11 @@
                                             </div>
                                         }
                                     </div>
+ 
+                                    <div class="col-md-2">
                                     @if (sc.CompletionDate == null)
                                     {
-                                        <div class="col-md-2 has-bottom-tooltip" title="@Format.DateForServiceCallWiget(sc.CreatedDate)">
+                                        <div class="has-bottom-tooltip pull-right" style="float:right" title="@Format.DateForServiceCallWiget(sc.CreatedDate)">
                                             <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@sc.NumberOfDaysRemaining)<br/>
                                             <div class="progress time-remaining-progress hidden-sm hidden-xs">
                                                 <div class="progress-bar @Css.ServiceCallProgressBar(sc.NumberOfDaysRemaining)" role="progressbar" style="width: @sc.PercentComplete%">
@@ -123,9 +125,17 @@
                                     }
                                     else
                                     {
-                                        <div class="col-md-1 pull-right">@Format.DaysOpenedFor(sc.DaysOpenedFor, sc.CreatedDate, sc.CompletionDate)</div>
-                                    }            
-                                    <div class="row">
+                                        <div class="pull-right">@Format.DaysOpenedFor(sc.DaysOpenedFor, sc.CreatedDate, sc.CompletionDate)</div>
+                                    } 
+                                    <div id="approveCommands" class="margin-top-10 pull-right">
+                                        @if (sc.ServiceCallStatus == ServiceCallStatus.Requested && sc.CanApprove)
+                                        {
+                                            <a href="#" data-service-call-id="@sc.ServiceCallId" data-display-status="false" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
+                                            <a href="#" data-service-call-id="@sc.ServiceCallId" data-display-status="false" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
+                                        }
+                                    </div>  
+                                    </div>
+                                        <div class="row">
                                         <div class="col-md-8 col-md-offset-2">
                                             <div id="collapseJobCallLineNotes@(sc.CallNumber)" class="collapse panel-body no-left-right-padding">
                                                 @foreach (var noteLine in sc.JobServiceCallNotes)
@@ -167,7 +177,7 @@
                                 </div>
                             </div>
                             <br />
-                            <em data-bind="visible: allJobAttachments().length < 1" class="padding-left-15 padding-top-7 pull-left">No Attachments Available</em>
+                            <em data-bind="visible: allJobAttachments().length < 1" class="padding-left-15 padding-top-7 pull-left">There are no attachments to display</em>
                             <div class="remove-list-style attachments row">
                                 <div class="clearfix"></div>
                                 <br/>
@@ -208,7 +218,7 @@
                                 </div>
                             </div>
                             <br />
-                            <em data-bind="visible: allJobNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">No Notes Available</em>
+                            <em data-bind="visible: allJobNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">There are no notes to display</em>
                             <div class="remove-list-style">
                                 <div class="clearfix"></div>
                                 <br/>

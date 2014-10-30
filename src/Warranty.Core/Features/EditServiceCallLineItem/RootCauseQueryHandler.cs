@@ -15,7 +15,13 @@
 
         public IEnumerable<SelectListItem> Handle(RootCauseQuery query)
         {
-            return SharedQueries.RootCauses.GetRootCauseList(_database, query.ProblemCode);
+            const string sql = @"SELECT  DetailCode as Value
+                                        ,DetailCode as Text
+                                FROM ProblemCodes
+                                WHERE JdeCode = @0
+                                ORDER BY DetailCode";
+
+            return _database.Fetch<SelectListItem>(sql, query.ProblemJdeCode);
         }
     }
 }

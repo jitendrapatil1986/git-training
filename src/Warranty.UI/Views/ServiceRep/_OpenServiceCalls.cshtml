@@ -11,16 +11,16 @@
                 <strong>@Format.HomeOwner(line.HomeownerName, line.HomeownerNumber)</strong><br />@line.Address
             </div>
             <div class="col-md-2"><a href="#" class="hidden-lg hidden-md">@Format.PhoneNumber(line.PhoneNumber)</a></div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 <small class="text-muted">
                     @Html.ActionLink(line.JobNumber, "JobSummary", "Job", new { id = line.JobId }, null)
                 </small><br />@Format.YearsWithinWarranty(line.YearsWithinWarranty, line.WarrantyStartDate)
             </div>
-            <div class="col-md-1 hidden-sm hidden-xs">
+            <div class="col-md-1 hidden-sm hidden-xs text-center">
                 @Format.NumberOfLineItems(line.NumberOfLineItems)
             </div>
             <div class="col-md-1">@Format.Escalated(line.IsEscalated, line.EscalationReason, line.EscalationDate)</div>
-            <div class="col-md-1">@Format.SpecialProject(line.IsSpecialProject)</div>
+            <div class="col-md-2">@Format.SpecialProject(line.IsSpecialProject)</div>
             <div class="col-md-2 pull-right has-bottom-tooltip" title="@Format.DateForServiceCallWiget(line.CreatedDate)">
                 <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@line.NumberOfDaysRemaining)<br />
                 <div class="progress time-remaining-progress hidden-sm hidden-xs">

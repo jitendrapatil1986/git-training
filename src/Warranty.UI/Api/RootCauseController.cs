@@ -16,10 +16,10 @@
         }
 
         [HttpGet]
-        public IEnumerable<System.Web.Mvc.SelectListItem> RootCauses(string problemCode)
+        public IEnumerable<System.Web.Mvc.SelectListItem> RootCauses(string problemJdeCode)
         {
 
-            return _mediator.Request(new RootCauseQuery {ProblemCode = problemCode});
+            return _mediator.Request(new RootCauseQuery { ProblemJdeCode = problemJdeCode });
         }
     }
 }

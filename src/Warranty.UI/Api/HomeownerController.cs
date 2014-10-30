@@ -2,6 +2,7 @@
 {
     using System.Web.Mvc;
     using Warranty.Core;
+    using Warranty.Core.Features;
     using Warranty.Core.Features.Homeowner;
 
     public class HomeownerController : Controller
@@ -26,5 +27,13 @@
             _mediator.Send(command);
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public ActionResult SaveAdditionalContacts(AdditionalContactsModel command)
+        {
+            _mediator.Send(command);
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

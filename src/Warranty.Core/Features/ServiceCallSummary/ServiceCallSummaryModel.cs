@@ -14,6 +14,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
         public IEnumerable<ServiceCallNote> ServicCallNotes { get; set; }
         public IEnumerable<Attachment> Attachments { get; set; }
         public NewServiceCallLineItem AddServiceCallLineItem { get; set; }
+        public AdditionalContactsModel AdditionalContacts { get; set; }
         public bool CanApprove { get; set; }
         public bool CanReassign { get; set; }
         public bool CanReopenLines { get; set; }
@@ -71,6 +72,9 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public string HomeOwnerSignature { get; set; }
             public string HomeownerVerificationSignature { get; set; }
             public DateTime? HomeownerVerificationSignatureDate { get; set; }
+            public string SpecialProjectReason { get; set; }
+            public DateTime? SpecialProjectDate { get; set; }
+
             public int PercentComplete
             {
                 get { return ServiceCallCalculator.CalculatePercentComplete(NumberOfDaysRemaining); }
@@ -84,6 +88,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public int LineNumber { get; set; }
             public string ProblemCode { get; set; }
             public string RootCause { get; set; }
+            public string ProblemJdeCode { get; set; }
             public string ProblemDescription { get; set; }
             public string CauseDescription { get; set; }
             public string ClassificationNote { get; set; }

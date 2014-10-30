@@ -19,6 +19,8 @@
         public virtual string CreatedBy { get; set; }
         public virtual DateTime? UpdatedDate { get; set; }
         public virtual string UpdatedBy { get; set; }
+        public virtual string ProblemJdeCode { get; set; }
+        public virtual string ProblemDetailCode { get; set; }
     }
 }
 

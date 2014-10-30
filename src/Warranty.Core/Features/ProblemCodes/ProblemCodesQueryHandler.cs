@@ -1,7 +1,7 @@
 ﻿namespace Warranty.Core.Features.ProblemCodes
 {
     using System.Collections.Generic;
-    using Entities.Lookups;
+    using Entities;
     using NPoco;
 
     public class ProblemCodesQueryHandler : IQueryHandler<ProblemCodesQuery, IEnumerable<ProblemCode>>

@@ -10,34 +10,24 @@
 
 @helper ServiceCallStatusIconHelper(DateTime? completionDate, DateTime createdDate, int daysOpenedFor, int numberOfDaysRemaining, int percentComplete)
 {
-    if (!Model.ServiceCallSummary.IsSpecialProject)
+    if (completionDate == null)
     {
-        if (completionDate == null)
-        {
-            <div class="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(createdDate)">
-                <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(numberOfDaysRemaining)<br />
-                <div class="progress time-remaining-progress hidden-sm hidden-xs">
-                    <div class="progress-bar @Css.ServiceCallProgressBar(numberOfDaysRemaining)" role="progressbar" style="width: @percentComplete%">
-                        <span class="sr-only">@percentComplete% Complete</span>
-                    </div>
+        <div class="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(createdDate)">
+            <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(numberOfDaysRemaining)<br />
+            <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                <div class="progress-bar @Css.ServiceCallProgressBar(numberOfDaysRemaining)" role="progressbar" style="width: @percentComplete%">
+                    <span class="sr-only">@percentComplete% Complete</span>
                 </div>
             </div>
-        }
-        else
-        {
-            @Format.DaysOpenedFor(daysOpenedFor, createdDate, completionDate)
-        }
+        </div>
+    }
+    else
+    {
+        @Format.DaysOpenedFor(daysOpenedFor, createdDate, completionDate)
     }
 }
 
 
-@helper EscalationHelper(bool escalated, DateTime? escalationDate, string escalationReason)
-{
-    <div class='label label-danger' data-bind="visible: isEscalated()">
-        <span class='glyphicon glyphicon-fire'></span>
-        @Format.DateMonthDayYear(escalationDate) - @escalationReason
-    </div>
-}
 <div style="display: none;" data-bind="visible: true">
 <div class="container">
     <div class="col-md-12">
@@ -121,8 +111,8 @@
                             <div id="approveCommands" class="margin-bottom-10">
                                 @if (Model.ServiceCallSummary.ServiceCallStatus == ServiceCallStatus.Requested && Model.CanApprove)
                                 {
-                                    <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
-                                    <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
+                                    <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" data-display-status="true" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
+                                    <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" data-display-status="true" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
                                     @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallStatus, new { id = "callSummaryServiceCallStatus"})
                                 }
                                 else
@@ -130,17 +120,61 @@
                                     <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus") </span>
                                 }
                             </div>
+
                             @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
+                            
                         </div>
                 </div>
-            <div class="row" >
-                <div class="col-md-12 text-center">
-                    <h4>
-                        @EscalationHelper(Model.ServiceCallSummary.IsEscalated, Model.ServiceCallSummary.EscalationDate, Model.ServiceCallSummary.EscalationReason)
-                    </h4>
+            </div>
+                        <section>
+                <h5 class="col-md-12 additional-contacts-heading" data-toggle="collapse" data-target="#addAdditionalcontacts">Additional contact information</h5>
+                <div id="addAdditionalcontacts" class="collapse">
+                    <div class="col-md-12">
+                        @Html.HiddenFor(x=>x.ServiceCallSummary.HomeownerId, new{ id ="HomeownerId"})
+                        <div class="row ">
+                            <div class="col-md-6">
+                                <div class="remove-list-style row">
+                                    <ul>
+                                        <li>
+                                            <div data-bind="foreach: additionalPhoneContacts">
+                                                <div class="col-md-9">
+                                                    <div class="form-group" data-bind="validationElement: contactValue">
+                                                        <label class="control-label" data-bind="text: 'Additional phone number ' + ($index() + 1), attr : {'for': 'additionalPhoneNumber' + $index()}"></label>
+                                                        <input type="text" id="" data-bind="value: contactValue, attr: { id: 'additionalPhoneNumber' + $index()}" class="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <a href="#" data-bind="click: addPhoneContact">+ Add additional phone number</a>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="remove-list-style row">
+                                    <ul>
+                                        <li>
+                                            <div data-bind="foreach: additionalEmailContacts">
+                                                <div class="col-md-9">
+                                                    <div class="form-group" data-bind="validationElement: contactValue">
+                                                        <label class="control-label" data-bind="text: 'Additional e-mail address ' + ($index() + 1), attr : {'for': 'additionalEmail' + $index()}"></label>
+                                                        <input type="text" id="" data-bind="value: contactValue, attr: { id: 'additionalEmail' + $index()}" class="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <a href="#" data-bind="click: addEmailContact">+ Add additional e-mail address</a>
+                            </div>
+                        </div>
+                        <br/>
+                    </div>
+                    <div>
+                                <input type="submit" value="Save" class="btn btn-primary" data-bind="click: submit"/>
+ 
+                    </div>
                 </div>
-            </div>
-            </div>
+            </section>
  
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignature, new { id = "verifiedHomeownerSignature", @class = "form-control" })
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignatureDate, new { id = "verifiedHomeownerSignatureDate", @class = "form-control" })
@@ -148,6 +182,16 @@
             <section data-bind="visible: verifiedHomeownerSignature() && (callSummaryStatusSigned() || callSummaryStatusComplete())">
                 <div class="alert alert-success no-bottom-margin" >
                     <span data-bind="text: verifiedSignature()"></span>
+                </div>
+            </section>
+            <section data-bind="visible: isEscalated">
+                <div class="alert alert-danger no-bottom-margin">
+                    <strong>Escalated</strong> <span data-bind="text: escalationDate()!=null ? moment(escalationDate()).format('MM/DD/YYYY') : ''"></span><span data-bind="text: escalationReason() != null ? ' - ' + escalationReason() : ''"></span>    
+                </div>
+            </section>
+            <section data-bind="visible: isSpecialProject">
+                <div class="alert alert-info no-bottom-margin">
+                    <strong>Special Project</strong> <span data-bind="text: specialProjectDate()!=null ? moment(specialProjectDate()).format('MM/DD/YYYY') : ''"></span><span data-bind="text: specialProjectReason() != null ? ' - ' + specialProjectReason(): ''"></span>
                 </div>
             </section>
 
@@ -169,8 +213,11 @@
                     </div>
                 </div>
             </section>
+            
 
-            <section class="line-items">
+            
+
+            <section class="line-items margin-bottom-15">
                 <h3 class="col-md-12">Line Items
                     <span>
                         <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Line Item" data-toggle="collapse" data-target="#addCallLineItem" data-bind="visible: !callSummaryStatusComplete() && !callSummaryStatusSigned()"><span class="glyphicon glyphicon-plus"></span></button>
@@ -182,7 +229,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select problem code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemCodeToAdd" })   
+                                    <select id="addCallLineProblemCode" class="form-control" data-bind="options: theLookups, value: problemJdeCodeToAdd, optionsText: 'problemCode', optionsValue: 'problemId', optionsCaption: 'Select Problem Code'"></select>
+                                    @*@Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select problem code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemJdeCodeToAdd" })*@   
                                 </div>
                             </div>
                         </div>
@@ -223,7 +271,7 @@
                                                             <div class="col-md-9">
                                                                 <div class="editor" data-bind="css: { editing: problemCodeEditing }"> 
                                                                     <h4>
-                                                                        <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code'"></select>
+                                                                        <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemJdeCode, optionsText: 'problemCode', optionsValue: 'problemId', optionsCaption: 'Select Problem Code'"></select>
                                                                         <span data-bind="text: problemCode" class="view"></span>
                                                                     </h4>
                                                                 </div>
@@ -234,7 +282,7 @@
                                                                 <div class="editor" data-bind="css: { editing: problemCodeEditing }">
                                                                     <p class="view"><strong data-bind="text: rootCause"></strong></p>
                                                                     <h4>
-                                                                        <select id="updateCallLineRootCause" class="edit dropdown form-control" data-bind="options: rootCauses, value:currentRootCause, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Root Cause'"></select>
+                                                                        <select id="updateCallLineRootCause" class="edit dropdown form-control" data-bind="options: rootCauses, value: editRootCause, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Root Cause'"></select>
                                                                         
                                                                     </h4>
                                                                 </div>
@@ -291,7 +339,7 @@
                 </div>
             </section>
 
-            <section>
+            <section class="margin-bottom-15">
                 <h3 class="col-md-12">Attachments
                     <span>
                         <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Attachments" data-toggle="collapse" data-target="#addAttachment"><span class="glyphicon glyphicon-plus"></span></button>
@@ -314,7 +362,7 @@
                     </div>
                 </div>
                 <br />
-                <em data-bind="visible: allAttachments().length < 1" class="padding-left-15 padding-top-7 pull-left">No Attachments Available</em>
+                <em data-bind="visible: allAttachments().length < 1" class="padding-left-15 padding-top-7 pull-left">There are no attachments to display</em>
                 <div class="remove-list-style attachments row">
                     <div class="clearfix"></div>
                     <br />
@@ -355,7 +403,7 @@
                         </div>
                     </div>
                 </div>
-                <em data-bind="visible: allCallNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">No Notes Available</em>
+                <em data-bind="visible: allCallNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">There are no notes to display</em>
                 <div class="remove-list-style">
                     <div class="clearfix"></div>
                     <br/>
@@ -413,9 +461,16 @@
                 initialServiceNotes: @Html.Raw(Model.ServicCallNotes.ToJson()),
                 initialAttachments: @Html.Raw(Model.Attachments.ToJson()),
                 isSpecialProject: @Model.ServiceCallSummary.IsSpecialProject.ToJson(),
+                specialProjectReason: @Html.Raw(Model.ServiceCallSummary.SpecialProjectReason.ToJson()),
+                specialProjectDate: @Html.Raw(Model.ServiceCallSummary.SpecialProjectDate.ToJson()),
                 isEscalated: @Model.ServiceCallSummary.IsEscalated.ToJson(),
+                escalationReason: @Html.Raw(Model.ServiceCallSummary.EscalationReason.ToJson()),
+                escalationDate: @Html.Raw(Model.ServiceCallSummary.EscalationDate.ToJson()),
                 canBeReopened: @Model.ServiceCallSummary.CanBeReopened.ToJson(),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
+                additionalEmailContacts: @Html.Raw(Model.AdditionalContacts.AdditionalEmailContacts.ToJson()),
+                additionalPhoneContacts: @Html.Raw(Model.AdditionalContacts.AdditionalPhoneContacts.ToJson()),
+                saveAdditionalContactsUrl: '@Url.Action("SaveAdditionalContacts","Homeowner")'
                 }
         });
 

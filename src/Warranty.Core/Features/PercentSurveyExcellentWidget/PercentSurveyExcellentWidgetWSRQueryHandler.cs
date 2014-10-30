@@ -6,6 +6,7 @@
     using Configurations;
     using Extensions;
     using Security;
+    using Services;
     using Survey.Client;
 
     public class PercentSurveyExcellentWidgetWSRQueryHandler : IQueryHandler<PercentSurveyExcellentWidgetWSRQuery, PercentSurveyExcellentWidgetModel>
@@ -37,8 +38,8 @@
 
             return new PercentSurveyExcellentWidgetModel
             {
-                PercentExcellentLastMonth = totalLastMonthSurveysWithRecommend * 100 / totalLastMonthSurveys,
-                PercentExcellentThisMonth = totalThisMonthSurveysWithRecommend * 100 / totalThisMonthSurveys,
+                PercentExcellentLastMonth = ServiceCallCalculator.CalculatePercentage( totalLastMonthSurveysWithRecommend, totalLastMonthSurveys),
+                PercentExcellentThisMonth = ServiceCallCalculator.CalculatePercentage( totalThisMonthSurveysWithRecommend, totalThisMonthSurveys),
             };
         }
 

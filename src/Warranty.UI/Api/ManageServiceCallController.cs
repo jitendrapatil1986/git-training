@@ -44,6 +44,7 @@
                 ServiceCallLineItemId = model.ServiceCallLineItemId,
                 ProblemCode = model.ProblemCode,
                 RootCause = model.RootCause,
+                ProblemJdeCode = model.ProblemJdeCode,
                 ProblemDescription = model.ProblemDescription
             });
 
@@ -58,6 +59,7 @@
                 ServiceCallId = model.ServiceCallId,
                 ProblemCode = model.ProblemCode,
                 RootCause = model.RootCause,
+                ProblemJdeCode = model.ProblemJdeCode,
                 ProblemDescription = model.ProblemDescription
             });
 

@@ -6,6 +6,6 @@ namespace Warranty.Core.Features.EditServiceCallLineItem
 
     public class RootCauseQuery : IQuery<IEnumerable<SelectListItem>>
     {
-        public string ProblemCode { get; set; }
+        public string ProblemJdeCode { get; set; }
     }
 }

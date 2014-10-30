@@ -1,4 +1,6 @@
-﻿namespace Warranty.UI.Controllers
+﻿using System.Configuration;
+
+namespace Warranty.UI.Controllers
 {
     using System;
     using System.Web;
@@ -126,7 +128,10 @@
             });
 
             var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery { ServiceCallId = id });
-            _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
+            if (notificationModel.WarrantyRepresentativeEmployeeEmail != null)
+            {
+                _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
+            }
 
             return Json (new { success = "true"}, JsonRequestBehavior.AllowGet );
         }
@@ -148,7 +153,7 @@
                 ServiceCallId = id,
                 Text = message
             });
-            return Json(new { actionName = ActivityType.SpecialProject.DisplayName }, JsonRequestBehavior.AllowGet);
+            return Json(new { actionName = ActivityType.SpecialProject.DisplayName, actionMessage = message }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ToggleEscalate(Guid id, string message)
@@ -161,12 +166,13 @@
 
             if (result.ShouldSendEmail)
             {
+                var url = ConfigurationManager.AppSettings["Warranty.BaseUri"];
                 var urlHelper = new UrlHelper(this.ControllerContext.RequestContext);
-                var url = urlHelper.Action("CallSummary", "ServiceCall", new { id }, Request.Url.Scheme);
+                url += urlHelper.Action("CallSummary", "ServiceCall", new { id });
                 result.Url = url;
                 _mailer.ServiceCallEscalated(result).SendAsync();
             }
-            return Json(new { actionName = ActivityType.Escalation.DisplayName }, JsonRequestBehavior.AllowGet);
+            return Json(new { actionName = ActivityType.Escalation.DisplayName, actionMessage = message }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetEmployees(Guid id)

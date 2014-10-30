@@ -23,9 +23,18 @@ h2, h3, h4 {
     border-radius: 0;
 }
 
+.small-text {
+    font-size: 12px;
+}
+
 .main-container {
     margin-top: 108px;
     padding: 0 10px;
+}
+
+.main-search {
+    width: 264px;
+    float: right;
 }
 
 .logged-in-user {
@@ -71,10 +80,6 @@ h2, h3, h4 {
 
 .panel-default {
     border-bottom: 0;
-}
-
-.panel section {
-    margin-bottom: 15px;
 }
 
 .main-info {
@@ -318,6 +323,10 @@ section.line-items {
     border-left: 1px dashed #ddd;
 }
 
+.todo-widget-element.service-call-line {
+    border-bottom: 0;
+}
+
 .wrap-text {
     overflow-x: hidden;
     word-wrap: break-word;
@@ -350,7 +359,8 @@ section.line-items {
 }
 
 .todo-widget-element {
-    padding-left: 35px;
+    margin-left: 25px;
+    padding-left: 10px;
 }
 
 .todo-widget-action-buttons {
@@ -664,6 +674,35 @@ a.delete-group-item:hover {
     .container {
            padding: 0;
     }
+
+    .navbar-fixed-top{
+        top: inherit;
+        position: inherit;
+    }
+
+    .navbar-header, .navbar-brand {
+        width: 100%;
+    }
+
+    .navbar-brand img{
+        margin: 0 auto;
+    }
+
+    .subnav {
+        background-color: #eee;
+        background-image: linear-gradient(#fff,#fff 25%,#f1f0e6);
+        background-repeat: repeat-x;
+        border-bottom: 1px solid #e7e7e5;
+        border-radius: 0;
+        height: 36px;
+        margin: 0 0 15px;
+        width: 100%;
+        }
+
+    .main-search {
+        float: none;
+        margin: 0 auto;
+    }
     
     h2 {
       font-size: 20px;
@@ -907,6 +946,25 @@ span.boxclose{
     display: block;
     font-size: 14px;
 }
+
+#addAdditionalcontacts {
+    padding: 10px;
+}
+
+#addAdditionalcontacts div.col-md-6:first-child{
+    padding: 0;
+}
+
+.additional-contacts-heading {
+    background-color: #ebebeb;
+    padding: 10px;
+    font-weight: bold;
+    margin-top: 0px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+}
+
+
 
 @media (max-width: 767px) {
 
