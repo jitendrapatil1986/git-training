@@ -43,7 +43,7 @@
             {
                 ServiceCallLineItemId = model.ServiceCallLineItemId,
                 ProblemCode = model.ProblemCode,
-                ProblemDetailCode = model.ProblemDetail,
+                ProblemDetailCode = model.ProblemDetailCode,
                 ProblemJdeCode = model.ProblemJdeCode,
                 ProblemDescription = model.ProblemDescription
             });
