@@ -159,7 +159,6 @@
     <Compile Include="DataAccess\Mappings\JobStageMap.cs" />
     <Compile Include="DataAccess\Mappings\Lookups\ClassificationCodeMap.cs" />
     <Compile Include="DataAccess\Mappings\Lookups\LookupMap.cs" />
-    <Compile Include="DataAccess\Mappings\Lookups\ProblemCodeMap.cs" />
     <Compile Include="DataAccess\Mappings\Lookups\RootCauseMap.cs" />
     <Compile Include="DataAccess\Mappings\PaymentMap.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMap.cs" />
@@ -193,7 +192,6 @@
     <Compile Include="Entities\JobStage.cs" />
     <Compile Include="Entities\Lookups\ClassificationCode.cs" />
     <Compile Include="Entities\Lookups\LookupEntity.cs" />
-    <Compile Include="Entities\Lookups\ProblemCode.cs" />
     <Compile Include="Entities\Lookups\RootCause.cs" />
     <Compile Include="Entities\Payment.cs" />
     <Compile Include="Entities\ProblemCode.cs" />
