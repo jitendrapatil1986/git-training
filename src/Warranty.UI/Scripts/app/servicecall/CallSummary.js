@@ -481,9 +481,13 @@ require(['/Scripts/app/main.js'], function () {
                             return params;
                         },
                         validate: function (value) {
-                            
-                            if ($.trim(value.contactValue) == '' || value.contactLabel == '') {
-                                return 'Enter a value for both fields';
+                            if ($.trim(value.contactValue) == '') {
+                                if (index.homeownerContactTypeValue == homeownerContactTypeEnum.Phone.Value) {
+                                    return 'Phone is required';
+                                }
+                                else if (index.homeownerContactTypeValue == homeownerContactTypeEnum.Email.Value) {
+                                    return 'Email is required';
+                                }
                             }
                         },
                         type: type,
