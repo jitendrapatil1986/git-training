@@ -36,9 +36,6 @@
                                 @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.HomePhone, Url.Action("AddOrUpdatePhoneNumber", "Homeowner"), Model.HomeownerId)
                             </li>
                             <li>
-                                @Format.EditablePhoneNumber(PhoneNumberType.Mobile, Model.OtherPhone, Url.Action("AddOrUpdatePhoneNumber", "Homeowner"), Model.HomeownerId)
-                            </li>
-                            <li>
                                 @Format.EditableEmailForJob(Model.EmailAddress, Url.Action("AddOrUpdateEmail", "Homeowner"), Model.HomeownerId)
                             </li>
                         </ul>

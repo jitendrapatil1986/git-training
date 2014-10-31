@@ -71,9 +71,6 @@
                                 @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.ServiceCallSummary.HomePhone,Url.Action("AddOrUpdatePhoneNumber","Homeowner"), Model.ServiceCallSummary.HomeownerId)
                             </li>
                             <li>
-                                @Format.EditablePhoneNumber(PhoneNumberType.Mobile, Model.ServiceCallSummary.OtherPhone,Url.Action("AddOrUpdatePhoneNumber","Homeowner"),Model.ServiceCallSummary.HomeownerId)
-                            </li>
-                            <li>
                                 @Format.EditableEmailForServiceCall(Model.ServiceCallSummary.EmailAddress, Url.Action("AddOrUpdateEmail","Homeowner"), Model.ServiceCallSummary.HomeownerId, Model.ServiceCallSummary.CallNumber)
                             </li>
                         </ul>
@@ -163,9 +160,6 @@
                                     </div>
                                 </div>
                             </div>
-                        <br/>
-                    </div>
-                    <div>
                     </div>
                 </div>
             </section>
