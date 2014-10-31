@@ -1,26 +1,30 @@
 require(['/Scripts/app/main.js'], function() {
     require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
         $(function () {
-            $(".phone-number-with-extension").on('shown', function () {
-                $(this).data('editable').input.$input.mask('?(999)-999-9999 **********', { placeholder: " " });
-            });
-            //debugger;
-            var AdditionalContact = function (options) {
-                this.init('additionalContact', options, AdditionalContact.defaults);
+
+            
+            var AdditionalPhoneContact = function (options) {
+                this.init('additionalPhoneContact', options, AdditionalPhoneContact.defaults);
             };
 
             //inherit from Abstract input
-            $.fn.editableutils.inherit(AdditionalContact, $.fn.editabletypes.abstractinput);
+            $.fn.editableutils.inherit(AdditionalPhoneContact, $.fn.editabletypes.abstractinput);
+            
+            var AdditionalEmailContact = function (options) {
+                this.init('additionalEmailContact', options, AdditionalEmailContact.defaults);
+            };
 
-            $.extend(AdditionalContact.prototype, {
+            //inherit from Abstract input
+            $.fn.editableutils.inherit(AdditionalEmailContact, $.fn.editabletypes.abstractinput);
 
+            var defaultMethods = {
                 /**
                 Renders input from tpl
         
                 @method render() 
                 **/
-                render: function () {
-                    ////debugger;
+                render: function() {
+                    //
                     this.$input = this.$tpl.find('input');
                 },
 
@@ -29,8 +33,8 @@ require(['/Scripts/app/main.js'], function() {
                 
                 @method value2html(value, element) 
                 **/
-                value2html: function (value, element) {
-                    //debugger;
+                value2html: function(value, element) {
+                    
                     if (!value) {
                         $(element).empty();
                         return;
@@ -44,8 +48,8 @@ require(['/Scripts/app/main.js'], function() {
                 
                 @method html2value(html) 
                 **/
-                html2value: function (html) {
-                    //debugger;
+                html2value: function(html) {
+                    
                     /*
                       you may write parsing method to get value by element's html
                       e.g. "Moscow, st. Lenina, bld. 15" => {contactValue: "Moscow", contactLabel: "Lenina", building: "15"}
@@ -68,8 +72,8 @@ require(['/Scripts/app/main.js'], function() {
                  
                  @method value2str(value)  
                 **/
-                value2str: function (value) {
-                    //debugger;
+                value2str: function(value) {
+                    
                     var str = '';
                     if (value) {
                         for (var k in value) {
@@ -84,8 +88,8 @@ require(['/Scripts/app/main.js'], function() {
                  
                  @method str2value(str)  
                 */
-                str2value: function (str) {
-                    //debugger;
+                str2value: function(str) {
+                    
                     /*
                     this is mainly for parsing value defined in data-value attribute. 
                     If you will always set value by javascript, no need to overwrite it
@@ -99,8 +103,8 @@ require(['/Scripts/app/main.js'], function() {
                  @method value2input(value) 
                  @param {mixed} value
                 **/
-                value2input: function (value) {
-                    //debugger;
+                value2input: function(value) {
+                    
                     if (!value) {
                         return;
                     }
@@ -113,8 +117,8 @@ require(['/Scripts/app/main.js'], function() {
                  
                  @method input2value() 
                 **/
-                input2value: function () {
-                    //debugger;
+                input2value: function() {
+                    
                     return {
                         contactValue: this.$input.filter('[name="contactValue"]').val(),
                         contactLabel: this.$input.filter('[name="contactLabel"]').val(),
@@ -126,8 +130,8 @@ require(['/Scripts/app/main.js'], function() {
                 
                 @method activate() 
                **/
-                activate: function () {
-                    //debugger;
+                activate: function() {
+                    
                     this.$input.filter('[name="contactValue"]').focus();
                 },
 
@@ -136,23 +140,34 @@ require(['/Scripts/app/main.js'], function() {
                  
                  @method autosubmit() 
                 **/
-                autosubmit: function () {
-                    //debugger;
-                    this.$input.keydown(function (e) {
+                autosubmit: function() {
+                    
+                    this.$input.keydown(function(e) {
                         if (e.which === 13) {
                             $(this).closest('form').submit();
                         }
                     });
                 }
-            });
+            };
+            
+            $.extend(AdditionalPhoneContact.prototype, defaultMethods);
+            $.extend(AdditionalEmailContact.prototype, defaultMethods);
 
-            AdditionalContact.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
-                tpl: '<div class="form-inline"><div class="editable-additionalContact"><input type="text" name="contactValue" class="input-small"></label></div>' +
-                     '<div class="editable-additionalContact"><input type="text" name="contactLabel" class="input-small" placeholder="Label"></label></div></div>',
+            AdditionalPhoneContact.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
+                tpl: '<div class="contact-value"><input type="text" name="contactValue" class="input-small phone-number-with-extension"></label></div>' +
+                     '<div><input type="text" name="contactLabel" class="input-small" placeholder="Label"></label></div>',
+                inputclass: ''
+            });
+            
+            AdditionalEmailContact.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
+                tpl: '<div class="contact-value"><input type="text" name="contactValue" class="input-small"></label></div>' +
+                     '<div><input type="text" name="contactLabel" class="input-small" placeholder="Label"></label></div>',
                 inputclass: ''
             });
 
-            $.fn.editabletypes.additionalContact = AdditionalContact;
+            $.fn.editabletypes.additionalPhoneContact = AdditionalPhoneContact;
+            
+            $.fn.editabletypes.additionalEmailContact = AdditionalEmailContact;
         });
     });
 });

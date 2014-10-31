@@ -8,7 +8,7 @@
             Icon = icon;
         }
 
-        public static readonly PhoneNumberType Home = new PhoneNumberType(1, "Home", "phone-alt");
+        public static readonly PhoneNumberType Home = new PhoneNumberType(1, "Home", "earphone");
         public static readonly PhoneNumberType Mobile = new PhoneNumberType(2, "Mobile", "phone");
 
         public string Icon { get; set; }

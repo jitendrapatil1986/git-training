@@ -19,7 +19,7 @@
         {
             using (_database)
             {
-                const string sql = @"SELECT ContactValue, ContactType, ContactLabel, HomeownerId, HomeownerContactId  
+                const string sql = @"SELECT ContactValue, ContactType, ContactLabel, HomeownerId, HomeownerContactId, ContactType as HomeownerContactTypeValue
                                 FROM HomeownerContacts
 						        WHERE HomeownerId = @0
                                 ORDER BY CreatedDate";
@@ -28,8 +28,8 @@
 
                 var result = new AdditionalContactsModel
                     {
-                        AdditionalEmailContacts = contacts.Where(x => x.ContactType == HomeownerContactType.Email),
-                        AdditionalPhoneContacts = contacts.Where(x => x.ContactType == HomeownerContactType.Phone)
+                        AdditionalEmailContacts = contacts.Where(x => x.HomeownerContactTypeValue == HomeownerContactType.Email.Value),
+                        AdditionalPhoneContacts = contacts.Where(x => x.HomeownerContactTypeValue == HomeownerContactType.Phone.Value)
                     };
 
                 return result;

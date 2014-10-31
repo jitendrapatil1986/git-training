@@ -1,5 +1,5 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/formUploader', 'app/additionalContacts', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
+    require(['jquery', 'ko', 'ko.x-editable', 'bootbox', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/formUploader', 'app/additionalContacts', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, bootbox, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
         window.ko = ko; //manually set the global ko property.
         require(['ko.validation'], function () {
 
@@ -31,9 +31,19 @@ require(['/Scripts/app/main.js'], function () {
 
             $(".attached-file-display-name").editable();
 
+            $(document).on("focus", ".phone-number-with-extension", function () {
+                
+                $(this).mask("(999) 999-9999? x99999", { placeholder: " " });
+            });
+             
             $(".phone-number-with-extension").on('shown', function () {
+                
                 $(this).data('editable').input.$input.mask('?(999)-999-9999 **********', { placeholder: " " });
             });
+
+             $(".editable-container").on('shown', function() {
+                 $(this).siblings('.primary-label').hide();
+             });
 
             $(".datepicker-input").datepicker();
 
@@ -324,16 +334,20 @@ require(['/Scripts/app/main.js'], function () {
             
             function AddtionalEmailContactViewModel(options) {
                 var self = this;
-                self.contactValue = ko.observable(options.contactValue).extend({ required: true, email: true });
+                self.contactValue = options.contactValue;
+                self.contactLabel = options.contactLabel;
+                self.homeownerContactTypeValue = options.homeownerContactTypeValue;
+                self.homeownerId = options.homeownerId;
+                self.homeownerContactId = options.homeownerContactId;
             }
 
             function AddtionalPhoneContactViewModel(options) {
                 var self = this;
-                debugger;
                 self.contactValue = options.contactValue;
                 self.contactLabel = options.contactLabel;
-                self.homeownerContactId = options.homeownerContactId;
+                self.homeownerContactTypeValue = options.homeownerContactTypeValue;
                 self.homeownerId = options.homeownerId;
+                self.homeownerContactId = options.homeownerContactId;
             }
 
             function updateServiceCallLineItem(line) {
@@ -446,6 +460,81 @@ require(['/Scripts/app/main.js'], function () {
                 self.noteDescriptionToAdd = ko.observable('');
                 self.userCanAlwaysReopenCallLines = ko.observable();
 
+                self.afterAdditionalContactRendered = function (element, index, data) {
+
+                    var type;
+                    if (index.homeownerContactTypeValue == homeownerContactTypeEnum.Phone.Value) {
+                        type = 'additionalPhoneContact';
+                    }
+                    else if (index.homeownerContactTypeValue == homeownerContactTypeEnum.Email.Value) {
+                        type = 'additionalEmailContact';
+                    }
+
+                    $(element[1]).find("a").editable({
+                        value: index,
+                        url: urls.Homeowner.AddOrUpdateAdditionalContact,
+                        send: 'always',
+                        params: function (params) {
+                            params.homeownerId = index.homeownerId;
+                            params.homeownerContactTypeValue = index.homeownerContactTypeValue;
+                            params.homeownerContactId = index.homeownerContactId;
+                            return params;
+                        },
+                        validate: function (value) {
+                            
+                            if ($.trim(value.contactValue) == '' || value.contactLabel == '') {
+                                return 'Enter a value for both fields';
+                            }
+                        },
+                        type: type,
+                        success: function (response) {
+                            
+                            if (response.isNew == true) {
+
+                                var newDomelement;
+                                var newElement;
+                                
+                                if (response.homeOwnercontactTypeVlue == homeownerContactTypeEnum.Phone.Value) {
+                                    newDomelement = $('.additional-contact-phone').last();
+                                    newDomelement.parent().addClass('can-remove');
+                                    newElement = self.additionalPhoneContacts()[self.additionalPhoneContacts().length - 1];
+                                    newElement.homeownerContactId = response.homeownerContactId;
+                                    self.addPhoneContact();
+                                } else if (response.homeOwnercontactTypeVlue == homeownerContactTypeEnum.Email.Value) {
+                                    newDomelement = $('.additional-contact-email').last();
+                                    newDomelement.parent().addClass('can-remove');
+                                    newElement = self.additionalEmailContacts()[self.additionalEmailContacts().length - 1];
+                                    newElement.homeownerContactId = response.homeownerContactId;
+                                    self.addEmailContact();
+                                }
+
+                            }
+                        }
+                    });
+                };
+
+                self.removeAdditionalContact = function(e) {
+                    if (confirm(modelData.attachmentRemovalMessage)) {
+                        var homeownerConactId = e.homeownerContactId;
+                        $.ajax({
+                            type: "POST",
+                            url: urls.Homeowner.DeleteAdditionalContact,
+                            data: { id: homeownerConactId },
+                            success: function (data) {
+                                
+                                if (e.homeownerContactTypeValue == homeownerContactTypeEnum.Phone.Value) {
+                                    self.additionalPhoneContacts.remove(e);
+                                }
+                                else if (e.homeownerContactTypeValue == homeownerContactTypeEnum.Email.Value) {
+                                    
+                                    self.additionalEmailContacts.remove(e);
+                                }
+                                toastr.success("Success! Contact deleted.");
+                            }
+                        });
+                    }
+                };
+
                 self.areAllLineItemsCompleted = ko.computed(function () {
                     var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
                         return (i.serviceCallLineItemStatusDisplayName().toLowerCase() != serviceCallStatusData.Complete.DisplayName.toLowerCase());
@@ -513,15 +602,25 @@ require(['/Scripts/app/main.js'], function () {
                 self.addEmailContact = function () {
                     self.additionalEmailContacts.push(new AddtionalEmailContactViewModel({
                         contactValue: null,
+                        homeownerId: $('#HomeownerId').val(),
+                        homeownerContactTypeValue: homeownerContactTypeEnum.Email.Value
                     }));
+                    
+                    var element = $('.additional-contact-email').last();
+                    element.text('+ Add additional email');
+                    element.parent().removeClass('can-remove');
                 };
 
                 self.addPhoneContact = function () {
-                    debugger;
                     self.additionalPhoneContacts.push(new AddtionalPhoneContactViewModel({
-                        contactValue: null
+                        contactValue: null,
+                        homeownerId: $('#HomeownerId').val(),
+                        homeownerContactTypeValue: homeownerContactTypeEnum.Phone.Value
                     }));
-                    $('.additional-contact-phone').last().text('Add Phone');
+                    
+                    var element = $('.additional-contact-phone').last();
+                    element.text('+ Add additional phone number');
+                    element.parent().removeClass('can-remove');
                 };
 
                 self.addLineItem = function () {
@@ -791,10 +890,15 @@ require(['/Scripts/app/main.js'], function () {
             _(additionalPhoneContacsViewModel).each(function (contact) {
                 viewModel.additionalPhoneContacts.push(new AddtionalPhoneContactViewModel(contact));
             });
+             
 
             viewModel.errors = ko.validation.group(viewModel);
             ko.applyBindings(viewModel);
+             
+            viewModel.addPhoneContact();
+            viewModel.addEmailContact();
+
+         });
+        });
     });
-});
-});
 });

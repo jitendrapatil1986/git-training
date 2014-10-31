@@ -7,7 +7,7 @@
     using Enumerations;
     using NPoco;
 
-    public class AddOrUpdateAdditionalContactCommand : ICommand
+    public class AddOrUpdateAdditionalContactCommand : ICommand<Guid>
     {
         public int HomeownerContactTypeValue { get; set; }
         public Guid HomeownerContactId { get; set; }
@@ -20,7 +20,7 @@
         }
     }
 
-    public class AddOrUpdateAdditionalContactCommandHandler : ICommandHandler<AddOrUpdateAdditionalContactCommand>
+    public class AddOrUpdateAdditionalContactCommandHandler : ICommandHandler<AddOrUpdateAdditionalContactCommand, Guid>
     {
         private readonly IDatabase _database;
 
@@ -29,7 +29,7 @@
             _database = database;
         }
 
-        public void Handle(AddOrUpdateAdditionalContactCommand message)
+        public Guid Handle(AddOrUpdateAdditionalContactCommand message)
         {
             using (_database)
             {
@@ -43,13 +43,14 @@
                             HomeownerId = message.HomeownerId
                         };
                     _database.Insert(newcontact);
-                    return;
+                    return newcontact.HomeownerContactId;
                 }
 
                 var contact = _database.SingleById<HomeownerContact>(message.HomeownerContactId);
                 contact.ContactValue = message.Value["contactValue"];
-                contact.ContactValue = message.Value["contactLabel"];
+                contact.ContactLabel = message.Value["contactLabel"];
                 _database.Update(contact);
+                return contact.HomeownerContactId;
             }
         }
     }
