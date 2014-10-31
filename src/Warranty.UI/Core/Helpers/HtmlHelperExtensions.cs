@@ -63,7 +63,7 @@
             return MvcHtmlString.Empty;
         }
 
-        public static HtmlTag ProblemCodeDropdown<T>(this HtmlHelper<T> html, ProblemCode currentProblemCode) where T : class
+        public static HtmlTag ProblemCodeDropdown<T>(this HtmlHelper<T> html, ProblemCode currentProblemCode, string valueObservableName) where T : class
         {
             SelectTag select;
             var mediator = ServiceLocator.Current.GetInstance<IMediator>();
@@ -84,7 +84,7 @@
             select.Id("problemCode");
             select.Attr("name", "SelectProblemCode");
             select.AddClass("form-control");
-
+            select.Attr("data-bind", string.Format("value: {0}",valueObservableName));
             return select;
         }
 
