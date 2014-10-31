@@ -4,16 +4,24 @@
             var self = this;
             self.lineItems = ko.observableArray([]);
             self.relatedCalls = ko.observableArray([]);
-            self.problemCodeToAdd = ko.observable();
             self.problemDescriptionToAdd = ko.observable('');
+            self.problemDetailCodes = ko.observableArray([]);
 
             self.addLineItem = function () {
-                self.problemCodeToAdd = $("#problemCode").val();
-                self.problemDescriptionToAdd = $("#problemDescription").val();
+                var problemJdeCodeToAdd = $("#problemCode").val();
+                var problemCodeToAdd = $("#problemCode").find('option:selected').text();
+                var problemDescriptionToAdd = $("#problemDescription").val();
+                var problemDetailToAdd = $("#problemDetail").val();
 
                 var newProblemCode = $("#problemCode");
                 if (newProblemCode.val() == "") {
                     $(newProblemCode).parent().addClass("has-error");
+                    return;
+                }
+
+                var newProblemDetail = $("#problemDetail");
+                if (newProblemDetail.val() == "") {
+                    $(newProblemDetail).parent().addClass("has-error");
                     return;
                 }
 
@@ -23,12 +31,12 @@
                     return;
                 }
                 
-                self.lineItems.push(new lineItemViewModel({ problemCode: $("#problemCode").find('option:selected').text(), problemCodeId: $("#problemCode").val(), problemDescription: $("#problemDescription").val() }));
+                self.lineItems.push(new lineItemViewModel({ problemCode: problemCodeToAdd, problemJdeCode: problemJdeCodeToAdd, problemDetailCode: problemDetailToAdd, problemDescription: problemDescriptionToAdd }));
                 $("#problemDescription").val('');
                 $("#problemCode").val('');
-                self.problemDescriptionToAdd = '';
-                self.problemCodeToAdd = '';
+                $("#problemDetail").val('');
                 $(newProblemCode).parent().removeClass("has-error");
+                $(newProblemDetail).parent().removeClass("has-error");
                 $(newProblemDescriptionToAdd).parent().removeClass("has-error");
             };
 
@@ -53,15 +61,30 @@
                         $.each(response, function(index, value) {
                             self.relatedCalls.push(new relatedCallViewModel({ serviceCallId: value.ServiceCallId, callNumber: value.CallNumber, problemDescription: value.ProblemDescription, createdDate: value.CreatedDate }));
                         });
+
+                        self.loadProblemDetails();
                     });
+            };
+
+            self.loadProblemDetails = function loadProblemDetails() {
+                $.ajax({
+                    url: urls.ProblemDetail.ProblemDetails + '?problemJdeCode=' + $('#problemCode option:selected').val(),
+                    type: "GET",
+                    dataType: "json",
+                    processData: false,
+                    contentType: "application/json; charset=utf-8"
+                }).done(function (response) {
+                    self.problemDetailCodes(response);
+                });
             };
         }
         
         function lineItemViewModel(options) {
             var self = this;
             self.problemCode = options.problemCode;
-            self.problemCodeId = options.problemCodeId;
+            self.problemJdeCode = options.problemJdeCode;
             self.problemDescription = options.problemDescription;
+            self.problemDetailCode = options.problemDetailCode;
         }
 
         function relatedCallViewModel(options) {

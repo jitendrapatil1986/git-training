@@ -75,8 +75,8 @@
                     t.Option("Select Problem Code", string.Empty);
                     foreach (var problemCode in problemCodes)
                     {
-                        var htmlTag = t.Option(problemCode.CategoryCode, problemCode.JdeCode);
-                        if (currentProblemCode == problemCode)
+                        var htmlTag = t.Option(problemCode.Text, problemCode.Value);
+                        if (currentProblemCode != null && currentProblemCode.JdeCode == problemCode.Value)
                             htmlTag.Attr("selected");
                     }
                 });

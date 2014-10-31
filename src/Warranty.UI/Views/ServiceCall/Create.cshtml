@@ -40,28 +40,49 @@
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-9">
-                                        <div class="row col-md-4">
-                                            @Html.Label("Problem Code")<br/>
-                                            @Html.ProblemCodeDropdown(null)<br/>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Html.Label("Problem Code")
+                                                    @Html.ProblemCodeDropdown(null)
+                                                </div>  
+                                            </div>
                                         </div>
-                                        <div class="row col-md-10">
-                                            @Html.Label("Description")
-                                            @Html.TextArea("Description", null, new {id = "problemDescription", @class = "form-control",  data_bind="text: problemDescriptionToAdd, value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Description'}"})
-                                            <br/>
-                                            <button class="btn btn-default" data-bind="click: addLineItem, enable: problemDescriptionToAdd().length > 0">Add Item</button>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    @Html.Label("Problem Detail")
+                                                    <select id="problemDetail" class="form-control" data-bind="options: problemDetailCodes, optionsValue: 'Value', optionsText: 'Text', optionsCaption: 'Select Problem Detail'"></select>   
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <div class="form-group">
+                                                    @Html.Label("Description")
+                                                    @Html.TextArea("Description", null, new { id = "problemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Description'}" })    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-1">
+                                                <button class="btn btn-default" data-bind="click: addLineItem, enable: problemDescriptionToAdd().length > 0">Add Item</button>
+                                            </div>
                                         </div>
                                         <div class="clearfix"></div>
                                         <br/>
-                                        <div data-bind="visible: lineItems().length > 0">
+                                        <div class="hidden" data-bind="css: {hidden: lineItems().length == 0}">
                                             <h3>Line Items <small class="label label-default" data-bind="text: lineItems().length"></small></h3>
                                             <div id="add_service_call_lines">
                                                 <div data-bind="foreach: lineItems">
                                                     <div class="service-call-line">
                                                         <input type="hidden" data-bind="value: $index() + 1, attr: { name: 'ServiceCallLineItems[' + $index() + '].LineItemNumber' }" />
-                                                        <input type="hidden" data-bind="value: problemCodeId, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemCodeId' }" />
-                                                        <input type="hidden" data-bind="value: problemCode, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemCodeDisplayName' }" />
+                                                        <input type="hidden" data-bind="value: problemJdeCode, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemJdeCode' }" />
+                                                        <input type="hidden" data-bind="value: problemDetailCode, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemDetailCode' }" />
+                                                        <input type="hidden" data-bind="value: problemCode, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemCode' }" />
                                                         <input type="hidden" data-bind="value: problemDescription, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemDescription' }" />
                                                         <h4 data-bind="text: problemCode"></h4>
+                                                        <p><strong data-bind="text: problemDetailCode"></strong></p>
                                                         <span data-bind="text: problemDescription"></span>
                                                         <button data-bind="click: $root.removeLineItem" class="btn btn-default btn-xs pull-right">Delete</button>
                                                     </div>

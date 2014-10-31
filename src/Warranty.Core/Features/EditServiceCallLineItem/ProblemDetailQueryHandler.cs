@@ -20,8 +20,10 @@
                                 FROM ProblemCodes
                                 WHERE JdeCode = @0
                                 ORDER BY DetailCode";
-
-            return _database.Fetch<SelectListItem>(sql, query.ProblemJdeCode);
+            using (_database)
+            {
+                return _database.Fetch<SelectListItem>(sql, query.ProblemJdeCode);    
+            }
         }
     }
 }
