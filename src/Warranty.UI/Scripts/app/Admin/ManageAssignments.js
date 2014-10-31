@@ -1,11 +1,9 @@
 ﻿require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'typeahead', 'bloodhound'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, typeahead, bloodhound) {
+    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'typeahead', 'bloodhound', '/Scripts/lib/jquery.hideseek.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, typeahead, bloodhound) {
         $(function() {
-            //$('#search').hideseek({
-            //    nodata: 'No results found'
-            //});
-
-            //$('.combobox').combobox();
+            $('#search').hideseek({
+                nodata: 'No results found'
+            });
 
             function EmployeeCommunityAssignmentItemViewModel(options) {
                 var self = this;
@@ -25,13 +23,13 @@
                 self.selectedEmployeeId = ko.observable('');
                 self.selectedEmployeeName = ko.observable('');
                 
-                _(options.employees).each(function (item) {  //Employee list tied to the community and NOT just the employee list of all emps.
+                _(options.employees).each(function (item) {  //employees is the submodel, which is employee list tied to the community and not just the regular employee list for all emps.
                     self.communityAssignedEmployees.push(new EmployeeCommunityAssignmentItemViewModel(item));
                     self.communityAssignmentId(item.employeeAssignmentId);
                     self.selectedEmployeeName(item.name);
                 });
 
-                self.assignEmployeeToCommunity = function() {
+                self.assignEmployeeToCommunity = function () {
                     $.ajax({
                         type: 'POST',
                         url: urls.AssignWSR.UpdateAssignment,
@@ -43,7 +41,10 @@
                     }).fail(function () {
                         toastr.error("There was an issue updating the community assignment. Please try again!");
                     }).done(function (response) {
-                        if (response.Success == true) toastr.success("Success! Community assignment updated.");;
+                        if (response.Success == true)
+                            toastr.success("Success! Community assignment updated.");
+                        self.lineEditing(false);
+                        self.assigneeEditing(false);
                     });
                 };
                 
@@ -61,7 +62,6 @@
                         if (response.Success == true) toastr.success("Success! Community has been unassigned.");;
                     });
                 };
-                
 
                 //track editing line altogether.
                 self.assigneeEditing = ko.observable();
@@ -75,19 +75,7 @@
                     this.lineEditing(true);
                     this.currentSelectedEmployeeId(this.selectedEmployeeId());
                     this.currentSelectedEmployeeName(this.selectedEmployeeName());
-                };
-
-                ////save line item changes.
-                //self.saveLineItemChanges = function () {
-                //    updateServiceCallLineItem(this);
-                //};
-
-                //cancel line item changes.
-                self.cancelLineItemChanges = function () {
-                    this.assigneeEditing(false);
-                    this.lineEditing(false);
-                    this.selectedEmployeeId(this.currentSelectedEmployeeId());
-                    this.selectedEmployeeName(this.currentSelectedEmployeeName());
+                    $('#employeeSearch').focus(); //focus on current array element. not working!!!
                 };
             }
 
@@ -97,7 +85,7 @@
                 self.allCommunityAssignments = ko.observableArray([]);
                 self.selectedEmployeeId = ko.observable('');
                 self.selectedEmployeeName = ko.observable('');
-                self.theLookups = dropdownData.availableLookups; //dropdown list does not need to be observable. Only the actual elements w/i the array do.
+                self.theLookups = dropdownData.availableLookups;
             }
 
             var viewModel = new manageCommunityAssignmentsViewModel();
@@ -109,32 +97,14 @@
                 viewModel.allCommunityAssignments.push(new CommunityAssignmentsItemsViewModel(item));
             });
 
-            $("a[data-assignmentId]").on("click", function() {
-                var element = $(this);
 
-                $.ajax({
-                    type: 'POST',
-                    url: urls.AssignWSR.RemoveAssignment,
-                    data: {
-                        assignmentId: $(this).attr("data-assignmentId")
-                    },
-                    dataType: "json"
-                }).fail(function() {
-                    toastr.error("Unable to remove assignment at this time.");
-                }).done(function(response) {
-                    if (response.Success == true) element.parent().hide();
-                });
-            });
-
-
-            //>>Testing twitter typeahead.
+            //Twitter typeahead setup
             var employeeList = dropdownData.availableLookups;
 
-            // constructs the suggestion engine
+            //Constructs the suggestion engine
             var employees = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('employeeName'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
-                // `states` is an array of state names defined in "The Basics"
                 local: $.map(employeeList, function (employee) {
                     return {
                         employeeName: employee.employeeName,
@@ -158,24 +128,34 @@
                 source: employees.ttAdapter()
             }).blur(function () {
                 
-                var currentValue = $(this).val();
+                var currentEmployeeName = $(this).val();
                 var selectionInList = false;
+                var currentEmployeeId = '';
                 
                 _(employees.local).each(function(item) {
-                    if (item.employeeName === currentValue) {
+                    if (item.employeeName === currentEmployeeName) {
                         selectionInList = true;
+                        currentEmployeeId = item.employeeId;
                         return;
                     }
                 });
 
-                if (selectionInList === false) {
-                    $(this).closest('#employeeSearch').val('');
-                    setEmployeeLineDetails(this, '', '');
+                if (selectionInList === true) {
+                    setEmployeeLineDetails(this, currentEmployeeName, currentEmployeeId);
                 }
                 
-            }).on('typeahead:selected typeahead:autocompleted', function (event, data) {
-                setEmployeeLineDetails(this, data.employeeName, data.employeeId);
+                $(this).closest('#employeeSearch').val('');
+                resetEmployeeLineEdit(this);
+
             });
+            
+            function resetEmployeeLineEdit(currentElement) {
+                var communityRow = $(currentElement).closest('.communityDesc');
+                var arrayIndex = communityRow.attr('data-manage-assignment-line-item') - 1;
+
+                viewModel.allCommunityAssignments()[arrayIndex].lineEditing(false);
+                viewModel.allCommunityAssignments()[arrayIndex].assigneeEditing(false);
+            }
             
             function setEmployeeLineDetails(currentElement, theEmployeeName, theEmployeeId) {
                 var communityRow = $(currentElement).closest('.communityDesc');
@@ -183,48 +163,8 @@
 
                 viewModel.allCommunityAssignments()[arrayIndex].selectedEmployeeName(theEmployeeName);
                 viewModel.allCommunityAssignments()[arrayIndex].selectedEmployeeId(theEmployeeId);
+                viewModel.allCommunityAssignments()[arrayIndex].assignEmployeeToCommunity();
             }
-            
-            //<<Testing twitter typeahead.
-
-
-
-                        var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
-              'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
-              'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-              'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-              'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-              'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-              'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
-              'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-              'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-                        ];
-            
-                        // constructs the suggestion engine
-                        var states = new Bloodhound({
-                            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-                            queryTokenizer: Bloodhound.tokenizers.whitespace,
-                            // `states` is an array of state names defined in "The Basics"
-                            local: $.map(states, function (state) { return { value: state }; })
-                        });
-
-                        // kicks off the loading/processing of `local` and `prefetch`
-                        states.initialize();
-
-                        $('#bloodhound .typeahead').typeahead({
-                            hint: true,
-                            highlight: true,
-                            minLength: 1
-                        },
-                        {
-                            name: 'states',
-                            displayKey: 'value',
-                            // `ttAdapter` wraps the suggestion engine in an adapter that
-                            // is compatible with the typeahead jQuery plugin
-                            source: states.ttAdapter()
-                        });
         });
-        
-        
     });
 });
