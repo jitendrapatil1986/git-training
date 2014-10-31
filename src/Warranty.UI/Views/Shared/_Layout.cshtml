@@ -66,7 +66,7 @@
         <div class="navbar navbar-default navbar-fixed-top no-print">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#"><img src="@Url.Content("~/img/DWH logo_color_233x34.png")" /></a>
+                    <a class="navbar-brand" href="/"><img src="@Url.Content("~/img/DWH logo_color_233x34.png")" class="img-responsive" /></a>
                 </div>
                 <ul class="nav navbar-nav navbar-right hidden-xs hidden-sm">
                     <li class="divider divider-vertical"></li>
@@ -87,13 +87,12 @@
         
         <div id="subNavMenu" class="subnav subnav-fixed no-print" role="navigation">
             <div class="container">
-                <ul class="nav navbar-nav col-xs-6 col-sm-11 col-md-10">
+                <ul class="nav navbar-nav hidden-xs">
                     @NavItemHelper(NavItem.Home, Url.Action("Index", "Home"))
                     <li class="divider divider-vertical hidden-xs"></li>
                     @NavItemSectionHelper(NavHeaderItem.Reports.Key)
                 </ul>
-                <div class="nav nav-extra col-xs-6 col-sm-1 col-md-2">
-                    <div class="pull-right">
+                    <div class="main-search nav-extra">
                         <div class="input-group">
                             <input id="searchBar" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder=""/>
                             <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
