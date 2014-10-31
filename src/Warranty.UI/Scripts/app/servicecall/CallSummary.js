@@ -195,7 +195,6 @@ require(['/Scripts/app/main.js'], function () {
             }
 
             function AllLineItemsViewModel(options) {
-                debugger;
                 var self = this;
                 self.serviceCallId = options.serviceCallId;
                 self.serviceCallLineItemId = options.serviceCallLineItemId;
