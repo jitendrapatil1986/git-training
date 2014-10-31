@@ -1,9 +1,10 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
+    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/formUploader', 'app/additionalContacts', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData) {
         window.ko = ko; //manually set the global ko property.
         require(['ko.validation'], function () {
 
-        $(function () {
+         $(function () {
+                
             $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
                 $(this).hide();
             });
@@ -328,8 +329,11 @@ require(['/Scripts/app/main.js'], function () {
 
             function AddtionalPhoneContactViewModel(options) {
                 var self = this;
-
-                self.contactValue = ko.observable(options.contactValue).extend({ required: true });
+                debugger;
+                self.contactValue = options.contactValue;
+                self.contactLabel = options.contactLabel;
+                self.homeownerContactId = options.homeownerContactId;
+                self.homeownerId = options.homeownerId;
             }
 
             function updateServiceCallLineItem(line) {
@@ -508,16 +512,16 @@ require(['/Scripts/app/main.js'], function () {
 
                 self.addEmailContact = function () {
                     self.additionalEmailContacts.push(new AddtionalEmailContactViewModel({
-                        contactType: homeownerContactTypeEnum.Email.Value,
-                        contactValue: null
+                        contactValue: null,
                     }));
                 };
 
                 self.addPhoneContact = function () {
+                    debugger;
                     self.additionalPhoneContacts.push(new AddtionalPhoneContactViewModel({
-                        contactType: homeownerContactTypeEnum.Phone.Value,
                         contactValue: null
                     }));
+                    $('.additional-contact-phone').last().text('Add Phone');
                 };
 
                 self.addLineItem = function () {

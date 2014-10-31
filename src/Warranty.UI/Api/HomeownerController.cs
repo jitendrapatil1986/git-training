@@ -35,5 +35,11 @@
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult AddOrUpdateAdditionalContact(AddOrUpdateAdditionalContactCommand command)
+        {
+            _mediator.Send(command);
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

@@ -138,9 +138,13 @@
                                         <li>
                                             <div data-bind="foreach: additionalPhoneContacts">
                                                 <div class="col-md-9">
-                                                    <div class="form-group" data-bind="validationElement: contactValue">
-                                                        <label class="control-label" data-bind="text: 'Additional phone number ' + ($index() + 1), attr : {'for': 'additionalPhoneNumber' + $index()}"></label>
-                                                        <input type="text" id="" data-bind="value: contactValue, attr: { id: 'additionalPhoneNumber' + $index()}" class="form-control" />
+                                                    <div>
+                                                        
+                                                        <div class='inline-editable-text'>
+                                                            <span class="glyphicon glyphicon-earphone"></span>
+                                                            <a href="#" data-type="additionalContact" data-bind="editable: $data, editableOptions: {emptytext: 'Add Phone', url: '@Url.Action("AddOrUpdateAdditionalContact","Homeowner")    ', send: 'always', params: { homeownerContactId: homeownerContactId, homeownerId : '@Model.ServiceCallSummary.HomeownerId    ', homeownerContactTypeValue: '@HomeownerContactType.Phone.Value    ' }}, attr: { id: 'additionalPhoneNumber' + $index()}"  class="additional-contact-phone"></a>
+                                                        </div>
+                                                            @*<input type="text" id="" data-bind="value: contactValue, attr: { id: 'additionalPhoneNumber' + $index()}" class="form-control" />*@
                                                     </div>
                                                 </div>
                                             </div>
@@ -168,10 +172,6 @@
                             </div>
                         </div>
                         <br/>
-                    </div>
-                    <div>
-                                <input type="submit" value="Save" class="btn btn-primary" data-bind="click: submit"/>
- 
                     </div>
                 </div>
             </section>

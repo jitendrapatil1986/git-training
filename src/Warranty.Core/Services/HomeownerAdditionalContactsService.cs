@@ -19,7 +19,7 @@
         {
             using (_database)
             {
-                const string sql = @"SELECT ContactValue, ContactType
+                const string sql = @"SELECT ContactValue, ContactType, ContactLabel, HomeownerId, HomeownerContactId  
                                 FROM HomeownerContacts
 						        WHERE HomeownerId = @0
                                 ORDER BY CreatedDate";

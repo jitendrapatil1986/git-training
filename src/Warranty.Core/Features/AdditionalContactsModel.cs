@@ -14,6 +14,9 @@ namespace Warranty.Core.Features
         public class AdditionalContact
         {
             public string ContactValue { get; set; }
+            public string ContactLabel { get; set; }
+            public Guid HomeownerContactId { get; set; }
+            public Guid HomeownerId { get; set; }
             public HomeownerContactType ContactType { get; set; }
         }
     }
