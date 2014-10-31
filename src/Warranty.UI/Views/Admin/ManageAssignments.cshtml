@@ -22,7 +22,7 @@
             <div class="row"></div>
             <ul class="default_list row" data-bind="foreach: allCommunityAssignments">
                 <li class="col-md-4">
-                    <div class="itemContainer">
+                    <div class="itemContainer" style="min-height: 120px;">
                         <h3 data-bind="text: communityName"></h3>
                         <div class="communityDesc row" data-bind="attr: {'data-manage-assignment-line-item': $index() + 1}">
                             <div class="col-md-12">
@@ -33,7 +33,7 @@
                                     <a href="#" data-bind="click: editLine, visible: selectedEmployeeName() == ''" class="view">Unassigned</a>
                                 </div>
                                 <div id="employeeList" class="editor" data-bind="css: { editing: assigneeEditing }">
-                                    <input id="employeeSearch" class="typeahead form-control edit" type="text" placeholder="Search Employee">
+                                    <input id="employeeSearch" class="typeahead form-control edit" type="text" placeholder="Search Employee" data-bind="text: selectedEmployeeName()">
                                 </div>
                                 <div id="selectedLineEmployeeId" class="hidden" data-bind="value: selectedEmployeeId"></div>
                             </div>

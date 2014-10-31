@@ -70,12 +70,12 @@
                 self.lineEditing = ko.observable("");
 
                 //edit line item.
-                self.editLine = function () {
+                self.editLine = function (data, event) {
                     this.assigneeEditing(true);
                     this.lineEditing(true);
                     this.currentSelectedEmployeeId(this.selectedEmployeeId());
                     this.currentSelectedEmployeeName(this.selectedEmployeeName());
-                    $('#employeeSearch').focus(); //focus on current array element. not working!!!
+                    $(event.currentTarget).closest(".communityDesc").find(".typeahead").focus();
                 };
             }
 
@@ -127,13 +127,12 @@
                 // is compatible with the typeahead jQuery plugin
                 source: employees.ttAdapter()
             }).blur(function () {
-                
                 var currentEmployeeName = $(this).val();
                 var selectionInList = false;
                 var currentEmployeeId = '';
                 
-                _(employees.local).each(function(item) {
-                    if (item.employeeName === currentEmployeeName) {
+                _(employees.local).each(function (item) {
+                    if ($.trim(item.employeeName) != '' && item.employeeName === currentEmployeeName) {
                         selectionInList = true;
                         currentEmployeeId = item.employeeId;
                         return;
@@ -143,10 +142,10 @@
                 if (selectionInList === true) {
                     setEmployeeLineDetails(this, currentEmployeeName, currentEmployeeId);
                 }
-                
+
+                $('.typeahead').typeahead('val', '');
                 $(this).closest('#employeeSearch').val('');
                 resetEmployeeLineEdit(this);
-
             });
             
             function resetEmployeeLineEdit(currentElement) {

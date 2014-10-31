@@ -29,7 +29,7 @@ namespace Warranty.Core.Features.AssignWSRs
 
                 using (_database)
                 {
-                    model.Communities.AddRange(
+                    var communities = 
                         _database.Fetch<Community>(@"SELECT C.CommunityId, MIN(C.CommunityNumber + '-' + C.CommunityName) AS CommunityName
                                     FROM Communities C
                                     INNER JOIN Cities CT ON
@@ -47,7 +47,24 @@ namespace Warranty.Core.Features.AssignWSRs
                                                 E.EmployeeId = CA.EmployeeId
                                                 AND CA.CommunityId = @0
                                             ORDER BY E.EmployeeName", com.CommunityId).ToList()
-                            }));
+                            });
+
+//                    var test = _database.Fetch<AssignWSRsModel.Community, AssignedEmployee>(@"
+//                        SELECT a.CommunityId as Id, a.CommunityName as Name, ca.EmployeeAssignmentId, e.EmployeeName as Name FROM
+//                        (SELECT C.CommunityId, MIN(C.CommunityNumber + '-' + C.CommunityName) AS CommunityName
+//                        FROM Communities C
+//                        INNER JOIN Cities CT ON
+//                        'CHA' LIKE '%' + CT.CityCode + '%'
+//                        AND CT.CityId = C.CityId
+//                        GROUP BY C.CommunityId
+//                         ) a
+//                         INNER JOIN CommunityAssignments ca
+//                         ON a.CommunityId = ca.CommunityId
+//                         INNER JOIN Employees e
+//                         ON e.EmployeeId = ca.EmployeeId
+//                        ORDER BY CommunityName");
+
+                    model.Communities = communities.OrderBy(x => x.IsAssigned).ThenBy(x => x.Name).ToList();
 
                     model.Employees =
                         _database.Fetch<Employee>("WHERE EmployeeName IS NOT NULL ORDER BY EmployeeName");
