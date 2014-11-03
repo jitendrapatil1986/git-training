@@ -1,9 +1,10 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'bootbox', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, bootbox) {
+    require(['jquery', 'ko', 'ko.x-editable', 'bootbox', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/additionalContacts', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, bootbox, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, additionalContacts) {
         window.ko = ko; //manually set the global ko property.
         require(['ko.validation'], function () {
 
-        $(function () {
+         $(function () {
+                
             $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
                 $(this).hide();
             });
@@ -31,7 +32,7 @@ require(['/Scripts/app/main.js'], function () {
             $(".attached-file-display-name").editable();
 
             $(".phone-number-with-extension").on('shown', function () {
-                $(this).data('editable').input.$input.mask('?(999)-999-9999 **********', { placeholder: " " });
+                $(this).data('editable').input.$input.mask("(999) 999-9999? x99999", { placeholder: " " });s
             });
 
             $(".datepicker-input").datepicker();
@@ -46,7 +47,7 @@ require(['/Scripts/app/main.js'], function () {
                     'position': 'absolute',
                     'right': right,
                     'top': $(this).offset().top + $(this).height() + 15
-                }).show();
+                }).show();  
             });
 
             $('.btn-cancel-popup').click(function (e) {
@@ -320,17 +321,6 @@ require(['/Scripts/app/main.js'], function () {
                 self.createdDate = options.createdDate;
             }
             
-            function AddtionalEmailContactViewModel(options) {
-                var self = this;
-                self.contactValue = ko.observable(options.contactValue).extend({ required: true, email: true });
-            }
-
-            function AddtionalPhoneContactViewModel(options) {
-                var self = this;
-
-                self.contactValue = ko.observable(options.contactValue).extend({ required: true });
-            }
-
             function updateServiceCallLineItem(line) {
                 var updateProblemCode = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemCode");
                 if (updateProblemCode.val() == "") {
@@ -438,8 +428,7 @@ require(['/Scripts/app/main.js'], function () {
                 self.escalationDate = ko.observable(modelData.escalationDate);
                 self.allCallNotes = ko.observableArray([]);
                 self.allAttachments = ko.observableArray([]);
-                self.additionalEmailContacts = ko.observableArray([]);
-                self.additionalPhoneContacts = ko.observableArray([]);
+
                 self.noteDescriptionToAdd = ko.observable('');
                 self.userCanAlwaysReopenCallLines = ko.observable();
 
@@ -471,56 +460,6 @@ require(['/Scripts/app/main.js'], function () {
                             });
                         }
                     });
-                };
-                
-
-                self.submit = function () {
-
-                    if (self.errors().length != 0) {
-                        self.errors.showAllMessages();
-                        return;
-                    }
-
-
-
-                    var addtionalContactInfo =
-                    {
-                        additionalPhoneContacts: self.additionalPhoneContacts,
-                        homeownerId: $("#HomeownerId").val(),
-                        additionalEmailContacts: self.additionalEmailContacts
-                    };
-
-                    var newAddtionalContactInfo = ko.toJSON(addtionalContactInfo);
-
-                    $.ajax({
-                        url: modelData.saveAdditionalContactsUrl,
-                        type: "POST",
-                        data: newAddtionalContactInfo,
-                        dataType: "json",
-                        processData: false,
-                        contentType: "application/json; charset=utf-8"
-                    })
-                        .fail(function (response) {
-
-                            toastr.error("There was an issue saving the additional contact info. Please try again!");
-                        })
-                        .done(function (response) {
-                            toastr.success("Success! Additional contact info saved.");
-                        });
-                };
-
-                self.addEmailContact = function () {
-                    self.additionalEmailContacts.push(new AddtionalEmailContactViewModel({
-                        contactType: homeownerContactTypeEnum.Email.Value,
-                        contactValue: null
-                    }));
-                };
-
-                self.addPhoneContact = function () {
-                    self.additionalPhoneContacts.push(new AddtionalPhoneContactViewModel({
-                        contactType: homeownerContactTypeEnum.Phone.Value,
-                        contactValue: null
-                    }));
                 };
 
                 self.addLineItem = function () {
@@ -759,7 +698,6 @@ require(['/Scripts/app/main.js'], function () {
 
             var viewModel = new serviceCallSummaryItemViewModel();
 
-
             var persistedAllLineItemsViewModel = modelData.initialServiceLines;
 
             _(persistedAllLineItemsViewModel).each(function (item) {
@@ -779,21 +717,9 @@ require(['/Scripts/app/main.js'], function () {
                 viewModel.allAttachments.push(new CallAttachmentsViewModel(attachment));
             });
 
-            var additionalEmailContacsViewModel = modelData.additionalEmailContacts;
-
-            _(additionalEmailContacsViewModel).each(function (contact) {
-                viewModel.additionalEmailContacts.push(new AddtionalEmailContactViewModel(contact));
-            });
-
-            var additionalPhoneContacsViewModel = modelData.additionalPhoneContacts;
-
-            _(additionalPhoneContacsViewModel).each(function (contact) {
-                viewModel.additionalPhoneContacts.push(new AddtionalPhoneContactViewModel(contact));
-            });
-
             viewModel.errors = ko.validation.group(viewModel);
             ko.applyBindings(viewModel);
+         });
+        });
     });
-});
-});
 });

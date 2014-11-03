@@ -9,16 +9,19 @@ namespace Warranty.Core.Features.JobSummary
     using Enumerations;
     using NPoco;
     using Security;
+    using Services;
 
     public class JobSummaryQueryHandler : IQueryHandler<JobSummaryQuery, JobSummaryModel>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
+        private readonly IHomeownerAdditionalContactsService _homeownerAdditionalContactsService;
 
-        public JobSummaryQueryHandler(IDatabase database, IUserSession userSession)
+        public JobSummaryQueryHandler(IDatabase database, IUserSession userSession, IHomeownerAdditionalContactsService homeownerAdditionalContactsService)
         {
             _database = database;
             _userSession = userSession;
+            _homeownerAdditionalContactsService = homeownerAdditionalContactsService;
         }
 
         public JobSummaryModel Handle(JobSummaryQuery query)
@@ -31,7 +34,7 @@ namespace Warranty.Core.Features.JobSummary
             model.Attachments = GetJobAttachments(query.JobId);
             model.Homeowners = GetJobHomeowners(query.JobId);
             //model.JobPayments = GetJobPayments(query.JobId);
-
+            model.AdditionalContacts = _homeownerAdditionalContactsService.Get(model.HomeownerId);
             return model;
         }
 
