@@ -29,45 +29,25 @@ namespace Warranty.Core.Features.AssignWSRs
 
                 using (_database)
                 {
-                    var communities = 
-                        _database.Fetch<Community>(@"SELECT C.CommunityId, MIN(C.CommunityNumber + '-' + C.CommunityName) AS CommunityName
-                                    FROM Communities C
-                                    INNER JOIN Cities CT ON
-                                        @0 LIKE '%' + CT.CityCode + '%'
-                                        AND CT.CityId = C.CityId
-                                    GROUP BY C.CommunityId
-                                    ORDER BY CommunityName", marketList)
-                            .Select(com => new AssignWSRsModel.Community
-                            {
-                                Id = com.CommunityId,
-                                Name = com.CommunityName,
-                                Employees = _database.Fetch<AssignedEmployee>(@"SELECT E.EmployeeName as Name, CA.EmployeeAssignmentId
-                                            FROM Employees E
-                                            INNER JOIN CommunityAssignments CA ON
-                                                E.EmployeeId = CA.EmployeeId
-                                                AND CA.CommunityId = @0
-                                            ORDER BY E.EmployeeName", com.CommunityId).ToList()
-                            });
+                    const string sql = @"SELECT a.CommunityId as Id, a.CommunityName as Name, COALESCE(ca.EmployeeAssignmentId, null) as EmployeeAssignmentId, COALESCE(e.EmployeeName, null) as Name FROM
+                                        (SELECT C.CommunityId, MIN(C.CommunityNumber + '-' + C.CommunityName) AS CommunityName
+                                            FROM Communities C
+                                            INNER JOIN Cities CT ON
+                                            @0 LIKE '%' + CT.CityCode + '%'
+                                            AND CT.CityId = C.CityId
+                                            GROUP BY C.CommunityId
+                                         ) a
+                                         LEFT JOIN CommunityAssignments ca
+                                         ON a.CommunityId = ca.CommunityId
+                                         LEFT JOIN Employees e
+                                         ON e.EmployeeId = ca.EmployeeId
+                                         ORDER BY CommunityName";
 
-//                    var test = _database.Fetch<AssignWSRsModel.Community, AssignedEmployee>(@"
-//                        SELECT a.CommunityId as Id, a.CommunityName as Name, ca.EmployeeAssignmentId, e.EmployeeName as Name FROM
-//                        (SELECT C.CommunityId, MIN(C.CommunityNumber + '-' + C.CommunityName) AS CommunityName
-//                        FROM Communities C
-//                        INNER JOIN Cities CT ON
-//                        'CHA' LIKE '%' + CT.CityCode + '%'
-//                        AND CT.CityId = C.CityId
-//                        GROUP BY C.CommunityId
-//                         ) a
-//                         INNER JOIN CommunityAssignments ca
-//                         ON a.CommunityId = ca.CommunityId
-//                         INNER JOIN Employees e
-//                         ON e.EmployeeId = ca.EmployeeId
-//                        ORDER BY CommunityName");
+                    var communities = _database.FetchOneToMany<AssignWSRsModel.Community, AssignedEmployee>(x => x.Id, sql, marketList);
 
                     model.Communities = communities.OrderBy(x => x.IsAssigned).ThenBy(x => x.Name).ToList();
 
-                    model.Employees =
-                        _database.Fetch<Employee>("WHERE EmployeeName IS NOT NULL ORDER BY EmployeeName");
+                    model.Employees = _database.Fetch<Employee>("WHERE EmployeeName IS NOT NULL ORDER BY EmployeeName");
                 }
 
                 return model;
