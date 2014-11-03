@@ -14,13 +14,16 @@
                         message: 'Must have at least one line item.'
                     }
                 });
+                self.isAdding = ko.observable(false);
                 self.relatedCalls = ko.observableArray([]);
-                self.problemDescriptionToAdd = ko.observable().extend({ required: true });
-                self.problemDetailCodeToAdd = ko.observable().extend({ required: true });
-                self.problemJdeCodeToAdd = ko.observable('').extend({ required: true });
+                self.problemDescriptionToAdd = ko.observable().extend({ required: {onlyIf : function() { return self.isAdding(); } } });
+                self.problemDetailCodeToAdd = ko.observable().extend({ required: { onlyIf: function () { return self.isAdding(); } } });
+                self.problemJdeCodeToAdd = ko.observable('').extend({ required: { onlyIf: function () { return self.isAdding(); } } });
                 self.problemDetailCodes = ko.observableArray([]);
+                
 
                 self.addLineItem = function () {
+                    self.isAdding(true);
                     if (self.errors().length != 0) {
                         self.errors.showAllMessages();
                         return;
@@ -33,9 +36,11 @@
                         problemDetailCode: self.problemDetailCodeToAdd(),
                         problemDescription: self.problemDescriptionToAdd()
                     }));
-                    $("#problemDescription").val('');
-                    $("#problemCode").val('');
-                    $("#problemDetail").val('');
+                    self.isAdding(false);
+                    self.problemDetailCodes([]);
+                    self.problemJdeCodeToAdd('');
+                    self.problemDetailCodeToAdd('');
+                    self.problemDescriptionToAdd('');
                 };
 
                 self.removeLineItem = function (lineItem) {
