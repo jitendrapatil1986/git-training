@@ -524,54 +524,6 @@ require(['/Scripts/app/main.js'], function () {
 
                 
 
-                self.submit = function () {
-
-                    if (self.errors().length != 0) {
-                        self.errors.showAllMessages();
-                        return;
-                    }
-
-                    var addtionalContactInfo =
-                    {
-                        additionalPhoneContacts: self.additionalPhoneContacts,
-                        homeownerId: $("#HomeownerId").val(),
-                        additionalEmailContacts: self.additionalEmailContacts
-                    };
-
-                    var newAddtionalContactInfo = ko.toJSON(addtionalContactInfo);
-
-                    $.ajax({
-                        url: modelData.saveAdditionalContactsUrl,
-                        type: "POST",
-                        data: newAddtionalContactInfo,
-                        dataType: "json",
-                        processData: false,
-                        contentType: "application/json; charset=utf-8"
-                    })
-                        .fail(function (response) {
-
-                            toastr.error("There was an issue saving the additional contact info. Please try again!");
-                        })
-                        .done(function (response) {
-                            toastr.success("Success! Additional contact info saved.");
-                        });
-                };
-
-                self.addEmailContact = function () {
-                    self.additionalEmailContacts.push(new AddtionalEmailContactViewModel({
-                        contactType: homeownerContactTypeEnum.Email.Value,
-                        contactValue: null
-                    }));
-                };
-
-                self.addPhoneContact = function () {
-                    self.additionalPhoneContacts.push(new AddtionalPhoneContactViewModel({
-                        contactType: homeownerContactTypeEnum.Phone.Value,
-                        contactValue: null
-                    }));
-                };
-
-
                 self.addLineItem = function () {
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
                     self.problemCode = $("#addCallLineProblemCode").find('option:selected').text();
