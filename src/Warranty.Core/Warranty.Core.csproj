@@ -265,6 +265,12 @@
     <Compile Include="Features\Homeowner\AddOrUpdateAdditionalContactCommand.cs" />
     <Compile Include="Features\Homeowner\ServiceCallDeleteAdditionalContactCommand.cs" />
     <Compile Include="Features\Homeowner\ServiceCallDeleteAdditionalContactCommandHandler.cs" />
+    <Compile Include="Features\ManageProblemCodeCostCodes\ManageProblemCodeCostCodeModel.cs" />
+    <Compile Include="Features\ManageProblemCodeCostCodes\ManageProblemCodeCostCodeQuery.cs" />
+    <Compile Include="Features\ManageProblemCodeCostCodes\ManageProblemCodeCostCodeQueryHandler.cs" />
+    <Compile Include="Features\ManageProblemCodeCostCodes\ProblemCodeCostCodeModel.cs" />
+    <Compile Include="Features\ManageProblemCodeCostCodes\ProblemCodeCostCodeQuery.cs" />
+    <Compile Include="Features\ManageProblemCodeCostCodes\ProblemCodeCostCodeQueryHandler.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportModel.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportQuery.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportQueryHandler.cs" />

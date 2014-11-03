@@ -1,0 +1,29 @@
+﻿@using Warranty.Core.Extensions
+@model Warranty.Core.Features.ManageProblemCodeCostCodes.ManageProblemCodeCostCodeModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label  for="cities">City:</label>
+                <select class="form-control" id="cities" data-bind="options: cities, value:city, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select a City'"></select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <!-- ko foreach: codes-->
+        <div class="itemContainer"></div>
+        <p data-bind="text: ProblemCode"></p>
+        <!-- /ko -->
+    </div>
+</div>
+@section modules
+{
+    <script>
+        define('modelData', function() {
+            return {
+                cities: @Html.Raw(Model.Cities.ToJson())
+            }
+        });
+    </script>
+}
