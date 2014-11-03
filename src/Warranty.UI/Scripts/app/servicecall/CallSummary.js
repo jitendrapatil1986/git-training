@@ -321,24 +321,6 @@ require(['/Scripts/app/main.js'], function () {
                 self.createdDate = options.createdDate;
             }
             
-            function AddtionalEmailContactViewModel(options) {
-                var self = this;
-                self.contactValue = options.contactValue;
-                self.contactLabel = options.contactLabel;
-                self.homeownerContactTypeValue = options.homeownerContactTypeValue;
-                self.homeownerId = options.homeownerId;
-                self.homeownerContactId = options.homeownerContactId;
-            }
-
-            function AddtionalPhoneContactViewModel(options) {
-                var self = this;
-                self.contactValue = options.contactValue;
-                self.contactLabel = options.contactLabel;
-                self.homeownerContactTypeValue = options.homeownerContactTypeValue;
-                self.homeownerId = options.homeownerId;
-                self.homeownerContactId = options.homeownerContactId;
-            }
-
             function updateServiceCallLineItem(line) {
                 var updateProblemCode = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemCode");
                 if (updateProblemCode.val() == "") {
