@@ -295,6 +295,7 @@
     <Content Include="Scripts\app\admin\ManageLookups.js" />
     <Content Include="Scripts\app\ajaxEvents.js" />
     <Content Include="Scripts\app\approveServiceCalls.js" />
+    <Content Include="Scripts\app\additionalContacts.js" />
     <Content Include="Scripts\app\formUploader.js" />
     <Content Include="Scripts\app\Job\ChangeHomeowner.js" />
     <Content Include="Scripts\app\Job\JobSummary.js" />
@@ -432,6 +433,7 @@
     <Content Include="Views\ServiceCall\LineItemDetail.cshtml" />
     <Content Include="Views\Report\AchievementReport.cshtml" />
     <Content Include="css\less\combobox.less" />
+    <Content Include="Views\Shared\_AdditionalContacts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
