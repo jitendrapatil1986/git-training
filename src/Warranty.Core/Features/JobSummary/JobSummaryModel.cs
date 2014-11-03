@@ -50,6 +50,7 @@ namespace Warranty.Core.Features.JobSummary
         public IEnumerable<JobNote> JobNotes { get; set; }
         public IEnumerable<Attachment> Attachments { get; set; }
         public IEnumerable<Homeowner> Homeowners { get; set; }
+        public AdditionalContactsModel AdditionalContacts { get; set; }
 
         public int HomeOwnerNumber { get; set; }
 

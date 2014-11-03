@@ -123,46 +123,7 @@
                         </div>
                 </div>
             </div>
-                        <section>
-                <h5 class="col-md-12 additional-contacts-heading" data-toggle="collapse" data-target="#addAdditionalcontacts">Additional contact information</h5>
-                <div id="addAdditionalcontacts" class="collapse">
-                    <div class="col-md-12">
-                        @Html.HiddenFor(x=>x.ServiceCallSummary.HomeownerId, new{ id ="HomeownerId"})
-                            <div class="row ">
-                                <div class="col-md-5">
-                                    <div class="remove-list-style row">
-                                        <ul>
-                                            <li>
-                                                <div data-bind="foreach: {data: additionalPhoneContacts, afterRender: afterAdditionalContactRendered}">
-                                                    <div class='inline-editable-text margin-bottom-5 additional-contact can-remove'>
-                                                        <span class="glyphicon glyphicon-earphone additional-contact-icon"></span>
-                                                        <a href="#" class="additional-contact-phone  phone-number-with-extension"></a>
-                                                        <span class="glyphicon glyphicon-trash remove-additional-contact" data-bind="click: $parent.removeAdditionalContact"></span>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="remove-list-style row">
-                                        <ul>
-                                            <li>
-                                                <div data-bind="foreach: {data: additionalEmailContacts, afterRender: afterAdditionalContactRendered}">
-                                                    <div class='inline-editable-text margin-bottom-5 additional-contact can-remove'>
-                                                        <span class="glyphicon glyphicon-envelope additional-contact-icon"></span>
-                                                        <a href="#" class="additional-contact-email"></a>
-                                                        <span class="glyphicon glyphicon-trash remove-additional-contact" data-bind="click: $parent.removeAdditionalContact"></span>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                    </div>
-                </div>
-            </section>
+            @Html.Partial("_AdditionalContacts", Model.ServiceCallSummary.HomeownerId)
  
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignature, new { id = "verifiedHomeownerSignature", @class = "form-control" })
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignatureDate, new { id = "verifiedHomeownerSignatureDate", @class = "form-control" })
@@ -433,10 +394,15 @@
                 escalationDate: @Html.Raw(Model.ServiceCallSummary.EscalationDate.ToJson()),
                 canBeReopened: @Model.ServiceCallSummary.CanBeReopened.ToJson(),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
-                additionalEmailContacts: @Html.Raw(Model.AdditionalContacts.AdditionalEmailContacts.ToJson()),
-                additionalPhoneContacts: @Html.Raw(Model.AdditionalContacts.AdditionalPhoneContacts.ToJson()),
                 saveAdditionalContactsUrl: '@Url.Action("SaveAdditionalContacts","Homeowner")'
             }
+        });
+
+        define('additionalContactsData', function() {
+            return {
+                additionalEmailContacts: @Html.Raw(Model.AdditionalContacts.AdditionalEmailContacts.ToJson()),
+                additionalPhoneContacts: @Html.Raw(Model.AdditionalContacts.AdditionalPhoneContacts.ToJson()),
+            };
         });
 
         define('dropdownData', function() {
