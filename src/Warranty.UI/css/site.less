@@ -964,6 +964,22 @@ span.boxclose{
     border-bottom: 1px solid #ddd;
 }
 
+span.remove-additional-contact{    
+    cursor: pointer;
+    display: none;  
+}
+
+.additional-contact.can-remove:hover span.remove-additional-contact {
+    display: inline-block;
+}
+
+.additional-contact .additional-contact-icon {
+    display:none;
+}
+
+.additional-contact.can-remove .additional-contact-icon {
+    display:inline-block;
+}
 
 
 @media (max-width: 767px) {
@@ -990,7 +1006,7 @@ a.boxclose {
     }
 
     .inline-editable-text .glyphicon {
-        width: 31%;
+        width: 48%;
         margin: 2px;
         float: left;
         padding: 10px;

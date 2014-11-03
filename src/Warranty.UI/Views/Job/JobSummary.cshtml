@@ -36,9 +36,6 @@
                                 @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.HomePhone, Url.Action("AddOrUpdatePhoneNumber", "Homeowner"), Model.HomeownerId)
                             </li>
                             <li>
-                                @Format.EditablePhoneNumber(PhoneNumberType.Mobile, Model.OtherPhone, Url.Action("AddOrUpdatePhoneNumber", "Homeowner"), Model.HomeownerId)
-                            </li>
-                            <li>
                                 @Format.EditableEmailForJob(Model.EmailAddress, Url.Action("AddOrUpdateEmail", "Homeowner"), Model.HomeownerId)
                             </li>
                         </ul>
@@ -60,6 +57,7 @@
                     </div>
                 </div>
             </div>
+                        @Html.Partial("_AdditionalContacts", Model.HomeownerId)
     
             <div class="col-md-12 no-left-right-padding margin-top-10">
                 <ul class="nav nav-tabs responsive" role="tablist">
@@ -68,6 +66,7 @@
                     <li><a href="#job_vendors" role="tab" data-toggle="tab">Vendors </a></li>
                     <li><a href="#job_payments" role="tab" data-toggle="tab">Payments </a></li>
                 </ul>
+
         
                 <div class="tab-content responsive">
                     <div class="tab-pane active" id="job_service_calls">
@@ -286,6 +285,13 @@
 @section modules
 {
     <script>
+        define('additionalContactsData', function() {
+            return {
+                additionalEmailContacts: @Html.Raw(Model.AdditionalContacts.AdditionalEmailContacts.ToJson()),
+                additionalPhoneContacts: @Html.Raw(Model.AdditionalContacts.AdditionalPhoneContacts.ToJson()),
+            };
+        });
+        
         define('modelData', function() {
             return {
                 initialJobNotes: @Html.Raw(Model.JobNotes.ToJson()),

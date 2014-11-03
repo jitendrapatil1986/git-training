@@ -9,6 +9,7 @@
         public virtual Guid HomeownerId { get; set; }
         public virtual HomeownerContactType ContactType { get; set; }
         public virtual string ContactValue { get; set; }
+        public virtual string ContactLabel { get; set; }
         public virtual string CreatedBy { get; set; }
         public virtual DateTime? CreatedDate { get; set; }
         public virtual string UpdatedBy { get; set; }
