@@ -137,6 +137,7 @@
     <Compile Include="DataAccess\Mappings\AuditableEntityMapping.cs" />
     <Compile Include="DataAccess\ConfigurationFactoryExtensions.cs" />
     <Compile Include="DataAccess\Mappings\AuditCreatedEntityMap.cs" />
+    <Compile Include="DataAccess\Mappings\BackchargeMap.cs" />
     <Compile Include="DataAccess\Mappings\CityMap.cs" />
     <Compile Include="DataAccess\Mappings\CityMapping.cs" />
     <Compile Include="DataAccess\Mappings\AuditableEntityMap.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="DataAccess\SqlServerDatabase.cs" />
     <Compile Include="DataAccess\SqlServerDatabaseType.cs" />
     <Compile Include="Entities\ActivityLog.cs" />
+    <Compile Include="Entities\Backcharge.cs" />
     <Compile Include="Entities\City.cs" />
     <Compile Include="Entities\Community.cs" />
     <Compile Include="Entities\CommunityAssignment.cs" />
