@@ -263,6 +263,8 @@
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetQueryHandler.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQuery.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQueryHandler.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\ProblemDetailQuery.cs" />
+    <Compile Include="Features\EditServiceCallLineItem\ProblemDetailQueryHandler.cs" />
     <Compile Include="Features\AdditionalContactsModel.cs" />
     <Compile Include="Features\Homeowner\AddOrUpdateAdditionalContactCommand.cs" />
     <Compile Include="Features\Homeowner\ServiceCallDeleteAdditionalContactCommand.cs" />

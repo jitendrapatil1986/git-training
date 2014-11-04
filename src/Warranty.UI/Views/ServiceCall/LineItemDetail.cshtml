@@ -39,10 +39,10 @@
             <div class="panel-heading no-bottom-padding no-top-padding margin-bottom-15">
                 <div class="row remove-list-style">
                     <div id="allServiceCallLineItems" class="service-call-line edit-line-item" data-bind="attr: {'data-service-call-line-item': lineNumber()}">
+                        <h3 data-bind="text: problemDetailCode"></h3>
                         <div class="col-md-12 main-info">
-                            <h3 class="panel-title text-capitalize">Status:
-                                <span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
-                            </h3>
+                            <p class="panel-title text-capitalize"><strong>Status: </strong><span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
+                            </p>
                         </div>
                         <ul>
                             <li class="row">

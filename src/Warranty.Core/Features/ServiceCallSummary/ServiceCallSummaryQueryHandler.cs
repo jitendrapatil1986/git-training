@@ -122,7 +122,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     li.CreatedDate,
                                     li.ServiceCallLineItemStatusId as ServiceCallLineItemStatus,
                                     (SELECT COUNT(*) FROM ServiceCallNotes WHERE ServiceCallLineItemId = li.ServiceCallLineItemId) as NumberOfNotes,
-                                    (SELECT COUNT(*) FROM ServiceCallAttachments WHERE ServiceCallLineItemId = li.ServiceCallLineItemId AND IsDeleted = 0) as NumberOfAttachments
+                                    (SELECT COUNT(*) FROM ServiceCallAttachments WHERE ServiceCallLineItemId = li.ServiceCallLineItemId AND IsDeleted = 0) as NumberOfAttachments,
+                                    li.ProblemDetailCode
                                 FROM ServiceCalls wc
                                 INNER JOIN ServiceCallLineItems li
                                 ON wc.ServiceCallId = li.ServiceCallId

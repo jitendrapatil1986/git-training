@@ -177,13 +177,24 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select problem code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemCodeToAdd" })
+                                <div class="form-group">
+                                    <select id="addCallLineProblemCode" class="form-control" data-bind="options: theLookups, value: problemJdeCodeToAdd, optionsText: 'problemCode', optionsValue: 'problemId', optionsCaption: 'Select Problem Code'"></select>
+                                    @*@Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select problem code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemJdeCodeToAdd" })*@   
+                                </div>
                             </div>
                         </div>
-                        <br />
                         <div class="row">
                             <div class="col-md-12">
-                                @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
+                                <div class="form-group">
+                                    <select id="addCallLineProblemDetail" class="dropdown form-control" data-bind="options: problemDetailCodes, value: problemDetailCodeToAdd, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Problem Detail'"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
+                                </div>
                             </div>
                         </div>
                         <br />
@@ -215,7 +226,19 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="row">
+                                                            <div class="col-md-9">
+                                                                <div class="editor" data-bind="css: { editing: problemCodeEditing }">
+                                                                    <p class="view"><strong data-bind="text: problemDetailCode"></strong></p>
+                                                                    <h4>
+                                                                        <select id="updateCallLineProblemDetail" class="edit dropdown form-control" data-bind="options: problemDetailCodes, value: editProblemDetailCode, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Problem Detail'"></select>
+                                                                        
+                                                                    </h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
+                                                    
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="editor" data-bind="css: { editing: problemDescriptionEditing }"> 

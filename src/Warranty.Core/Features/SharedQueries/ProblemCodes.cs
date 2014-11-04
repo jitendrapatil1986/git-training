@@ -14,6 +14,8 @@
                                 ORDER BY CategoryCode";
 
             return database.Fetch<SelectListItem>(sql);
+
         }
+
     }
 }
