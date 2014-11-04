@@ -10,12 +10,21 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <!-- ko foreach: codes-->
-        <div class="itemContainer"></div>
-        <p data-bind="text: ProblemCode"></p>
-        <!-- /ko -->
+    
+        <!-- ko foreach: groupedCodes-->
+    <div class="row" data-bind="foreach: $data">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title" data-bind="text: problemCode"></h3>
+                </div>
+                <div class="panel-body">
+                    <input class="form-control" placeholder="Enter Cost Code" type="text" data-bind="value: costCode"/>
+                </div>
+            </div>
+        </div>
     </div>
+    <!-- /ko -->
 </div>
 @section modules
 {

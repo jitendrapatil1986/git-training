@@ -5,6 +5,18 @@
             self.cities = ko.observableArray(modelData.cities);
             self.city = ko.observable();
             self.codes = ko.observableArray([]);
+            self.groupedCodes = ko.computed(function () {
+                var rows = [], current = [];
+                rows.push(current);
+                for (var i = 0; i < self.codes().length; i += 1) {
+                    current.push(self.codes()[i]);
+                    if (((i + 1) % 3) === 0) {
+                        current = [];
+                        rows.push(current);
+                    }
+                }
+                return rows;
+            }, this);
 
             self.city.subscribe(function(cityCode) {
                 $.ajax({
@@ -14,9 +26,19 @@
                     dataType: "json",
                 })
                 .done(function (response) {
-                    self.codes(response);
+                    self.codes([]);
+                    $.each(response, function(index, value) {
+                        self.codes.push(new codeViewModel(value));
+                    });
                 });
             });
+        }
+
+        function codeViewModel(jsonData) {
+            var self = this;
+            self.problemJdeCode = ko.observable(jsonData.ProblemJdeCode);
+            self.problemCode = ko.observable(jsonData.ProblemCode);
+            self.costCode = ko.observable(jsonData.CostCode);
         }
 
 
