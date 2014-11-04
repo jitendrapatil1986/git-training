@@ -1,8 +1,9 @@
 ﻿namespace Warranty.Core.Features.ManageProblemCodeCostCodes
 {
+    using Entities;
     using NPoco;
 
-    public class ProblemCodeCostCodeUpdateCommandHandler : ICommandHandler<ProblemCodeCostCodeUpdateCommand>
+    public class ProblemCodeCostCodeUpdateCommandHandler : ICommandHandler<ProblemCodeCostCodeUpdateCommand, bool>
     {
         private readonly IDatabase _database;
 
@@ -11,24 +12,32 @@
             _database = database;
         }
 
-        public void Handle(ProblemCodeCostCodeUpdateCommand message)
+        public bool Handle(ProblemCodeCostCodeUpdateCommand message)
         {
             using (_database)
             {
-                const string select = @"SELECT COUNT(*) FROM CityCodeProblemCodeCostCodes
+                const string select = @"SELECT * FROM CityCodeProblemCodeCostCodes
                                         WHERE CityCode = @0 AND ProblemJdeCode = @1";
                 
-                var exists = _database.Single<int>(select, message.CityCode, message.ProblemJdeCode);
+                var existing = _database.SingleOrDefault<CityCodeProblemCodeCostCode>(select, message.CityCode, message.ProblemJdeCode);
 
-                if (exists >= 1)
+                if (existing != null)
                 {
-                    //update
+                    existing.CostCode = message.CostCode;
+                    _database.Update(existing);
                 }
                 else
                 {
-                    //insert
+                    var newCode = new CityCodeProblemCodeCostCode()
+                    {
+                        CityCode = message.CityCode,
+                        CostCode = message.CostCode,
+                        ProblemJdeCode = message.ProblemJdeCode
+                    };
+                    _database.Insert(newCode);
                 }
             }
+            return true;
         }
     }
 }

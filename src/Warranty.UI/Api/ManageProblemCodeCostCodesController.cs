@@ -19,5 +19,18 @@
         {
             return _mediator.Request<IEnumerable<ProblemCodeCostCodeModel>>(new ProblemCodeCostCodeQuery() { CityCode = cityCode });
         }
+
+        [HttpPost]
+        public bool UpdateProblemCodeCostCode(ProblemCodeCostCodeUpdateModel model)
+        {
+            var result =
+                _mediator.Send(new ProblemCodeCostCodeUpdateCommand()
+                {
+                    CityCode = model.CityCode,
+                    ProblemJdeCode = model.ProblemJdeCode,
+                    CostCode = model.CostCode
+                });
+            return result;
+        }
     }
 }

@@ -16,7 +16,7 @@
         {
             using (_database)
             {
-                const string sql = @"SELECT CityCode AS Value, CityName AS Text FROM Cities";
+                const string sql = @"SELECT CityCode AS Value, CityName AS Text FROM Cities WHERE CityCode IS NOT NULL AND CityCode <> ''";
                 var cities = _database.Fetch<SelectListItem>(sql);
 
                 return new ManageProblemCodeCostCodeModel()
