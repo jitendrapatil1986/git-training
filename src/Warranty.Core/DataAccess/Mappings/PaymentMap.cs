@@ -15,6 +15,9 @@
                     x.Column(y => y.PaymentStatus);
                     x.Column(y => y.JobNumber);
                     x.Column(y => y.JdeIdentifier);
+                    x.Column(y => y.InvoiceNumber);
+                    x.Column(y => y.HoldComments);
+                    x.Column(y => y.ServiceCallLineItemId);
                 });
         }
     }
