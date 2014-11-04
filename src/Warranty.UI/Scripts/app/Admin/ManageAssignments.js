@@ -1,30 +1,22 @@
 ﻿require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'typeahead', 'bloodhound', '/Scripts/lib/jquery.hideseek.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, typeahead, bloodhound) {
+    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'typeahead', 'bloodhound', 'hideseek'], function ($, ko, koxeditable, urls, toastr, modelData) {
         $(function() {
             $('#search').hideseek({
                 nodata: 'No results found'
             });
 
-            function EmployeeCommunityAssignmentItemViewModel(options) {
-                var self = this;
-
-                self.communityAssignedEmployeeId = ko.observable(options.employeeAssignmentId);
-                self.communityAssignedEmployeeName = ko.observable(options.name);
-            }
-            
             function CommunityAssignmentsItemsViewModel(options) {
                 var self = this;
                 
                 self.communityId = options.id;
                 self.communityName = options.name;
                 self.communityAssignmentId = ko.observable('');
-                self.communityEmployeeLookups = viewModel.theLookups;
                 self.communityAssignedEmployees = ko.observableArray([]);
                 self.selectedEmployeeId = ko.observable('');
                 self.selectedEmployeeName = ko.observable('');
-                
-                _(options.employees).each(function (item) {  //employees is the submodel, which is employee list tied to the community and not just the regular employee list for all emps.
-                    self.communityAssignedEmployees.push(new EmployeeCommunityAssignmentItemViewModel(item));
+
+                //employees is the submodel, which is employee list tied to the community, where a community only has 1 employee assigned to it.
+                _(options.employees).each(function (item) {
                     self.communityAssignmentId(item.employeeAssignmentId);
                     self.selectedEmployeeName(item.name);
                 });
@@ -43,38 +35,16 @@
                     }).done(function (response) {
                         if (response.Success == true)
                             toastr.success("Success! Community assignment updated.");
-                        self.lineEditing(false);
                         self.assigneeEditing(false);
-                    });
-                };
-                
-                self.removeAssignmentFromCommunity = function () {
-                    $.ajax({
-                        type: 'POST',
-                        url: urls.AssignWSR.RemoveAssignment,
-                        data: {
-                            assignmentId: this.selectedCommunityAssignmentId()
-                        },
-                        dataType: "json"
-                    }).fail(function () {
-                        toastr.error("There was an issue unassigning the community. Please try again!");
-                    }).done(function (response) {
-                        if (response.Success == true) toastr.success("Success! Community has been unassigned.");;
                     });
                 };
 
                 //track editing line altogether.
                 self.assigneeEditing = ko.observable();
-                self.currentSelectedEmployeeId = ko.observable();
-                self.currentSelectedEmployeeName = ko.observable();
-                self.lineEditing = ko.observable("");
 
                 //edit line item.
                 self.editLine = function (data, event) {
                     this.assigneeEditing(true);
-                    this.lineEditing(true);
-                    this.currentSelectedEmployeeId(this.selectedEmployeeId());
-                    this.currentSelectedEmployeeName(this.selectedEmployeeName());
                     $(event.currentTarget).closest(".communityDesc").find(".typeahead").focus();
                 };
             }
@@ -85,7 +55,7 @@
                 self.allCommunityAssignments = ko.observableArray([]);
                 self.selectedEmployeeId = ko.observable('');
                 self.selectedEmployeeName = ko.observable('');
-                self.theLookups = dropdownData.availableLookups;
+                self.theLookups = employees;
             }
 
             var viewModel = new manageCommunityAssignmentsViewModel();
@@ -99,18 +69,25 @@
 
 
             //Twitter typeahead setup
-            var employeeList = dropdownData.availableLookups;
-
+            var typeaheadSelectedEmployeeName = '', typeaheadSelectedEmployeeId = '';
+            
             //Constructs the suggestion engine
             var employees = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('employeeName'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
-                local: $.map(employeeList, function (employee) {
-                    return {
-                        employeeName: employee.employeeName,
-                        employeeId: employee.employeeId
-                    };
-                })
+                limit: 20,
+                remote: {
+                    url: urls.QuickSearch.Employees + '?query=%QUERY',
+                    filter: function (list) {
+                        debugger;
+                        return $.map(list, function(employee) {
+                            return {
+                                employeeName: employee.Name,
+                                employeeId: employee.Id
+                            };
+                        });
+                    }
+                }
             });
 
             employees.initialize();
@@ -118,43 +95,30 @@
             $('#employeeList .typeahead').typeahead({
                 hint: true,
                 highlight: true,
-                minLength: 1
+                minLength: 2,
             },
             {
                 name: 'employees',
                 displayKey: 'employeeName',
                 // `ttAdapter` wraps the suggestion engine in an adapter that
-                // is compatible with the typeahead jQuery plugin
+                // is compatible with the typeahead jQuery plugin. used for Bloodhound.
                 source: employees.ttAdapter()
+            }).bind("typeahead:selected typeahead:autocompleted", function (obj, datum) {
+                //keep track of valid employee bc user selected or prefilled with typeahead.
+                typeaheadSelectedEmployeeName = datum.employeeName;
+                typeaheadSelectedEmployeeId = datum.employeeId;
             }).blur(function () {
                 var currentEmployeeName = $(this).val();
-                var selectionInList = false;
-                var currentEmployeeId = '';
                 
-                _(employees.local).each(function (item) {
-                    if ($.trim(item.employeeName) != '' && item.employeeName === currentEmployeeName) {
-                        selectionInList = true;
-                        currentEmployeeId = item.employeeId;
-                        return;
-                    }
-                });
-
-                if (selectionInList === true) {
-                    setEmployeeLineDetails(this, currentEmployeeName, currentEmployeeId);
+                //ensures values selected is a valid employee bc user selected or prefilled with typeahead.
+                if ($.trim(currentEmployeeName) != '' && currentEmployeeName === typeaheadSelectedEmployeeName) {
+                    setEmployeeLineDetails(this, currentEmployeeName, typeaheadSelectedEmployeeId);
                 }
 
                 $('.typeahead').typeahead('val', '');
                 $(this).closest('#employeeSearch').val('');
                 resetEmployeeLineEdit(this);
             });
-            
-            function resetEmployeeLineEdit(currentElement) {
-                var communityRow = $(currentElement).closest('.communityDesc');
-                var arrayIndex = communityRow.attr('data-manage-assignment-line-item') - 1;
-
-                viewModel.allCommunityAssignments()[arrayIndex].lineEditing(false);
-                viewModel.allCommunityAssignments()[arrayIndex].assigneeEditing(false);
-            }
             
             function setEmployeeLineDetails(currentElement, theEmployeeName, theEmployeeId) {
                 var communityRow = $(currentElement).closest('.communityDesc');
@@ -163,6 +127,13 @@
                 viewModel.allCommunityAssignments()[arrayIndex].selectedEmployeeName(theEmployeeName);
                 viewModel.allCommunityAssignments()[arrayIndex].selectedEmployeeId(theEmployeeId);
                 viewModel.allCommunityAssignments()[arrayIndex].assignEmployeeToCommunity();
+            }
+            
+            function resetEmployeeLineEdit(currentElement) {
+                var communityRow = $(currentElement).closest('.communityDesc');
+                var arrayIndex = communityRow.attr('data-manage-assignment-line-item') - 1;
+
+                viewModel.allCommunityAssignments()[arrayIndex].assigneeEditing(false);
             }
         });
     });

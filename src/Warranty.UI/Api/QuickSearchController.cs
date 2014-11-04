@@ -35,5 +35,12 @@
             var results = _mediator.Request(new CreateServiceCallCustomerSearchQuery {Query = query});
             return results;
         }
+
+        [HttpGet]
+        public IEnumerable<QuickSearchEmployeeModel> Employees(string query)
+        {
+            var results = _mediator.Request(new QuickSearchEmployeesQuery {Query = query});
+            return results;
+        }
     }
 }

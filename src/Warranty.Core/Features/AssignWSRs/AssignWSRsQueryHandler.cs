@@ -46,8 +46,6 @@ namespace Warranty.Core.Features.AssignWSRs
                     var communities = _database.FetchOneToMany<AssignWSRsModel.Community, AssignedEmployee>(x => x.Id, sql, marketList);
 
                     model.Communities = communities.OrderBy(x => x.IsAssigned).ThenBy(x => x.Name).ToList();
-
-                    model.Employees = _database.Fetch<Employee>("WHERE EmployeeName IS NOT NULL ORDER BY EmployeeName");
                 }
 
                 return model;

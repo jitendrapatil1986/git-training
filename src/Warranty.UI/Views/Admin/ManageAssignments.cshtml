@@ -54,11 +54,5 @@
                 initialCommunityAssignmentLines: @Html.Raw(Model.Communities.ToJson())
             }
         });
-        
-        define('dropdownData', function() {
-            return {
-                availableLookups: @Html.Raw(Model.Employees.Select(x => new { employeeName = x.Name, employeeId = x.EmployeeId }).ToJson())
-            };
-        });
     </script>
 }

@@ -11,11 +11,9 @@ namespace Warranty.Core.Features.AssignWSRs
         public AssignWSRsModel()
         {
             Communities = new List<Community>();
-            Employees = new List<Employee>();
         }
 
         public List<Community> Communities { get; set; }
-        public List<Employee> Employees { get; set; }
 
         public class Community
         {
