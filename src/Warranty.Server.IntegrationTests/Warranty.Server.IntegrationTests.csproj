@@ -114,7 +114,6 @@
     <Compile Include="Handlers\Payments\PaymentDeletedHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentPaymentAmountUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentStatusUpdatedHandlerTester.cs" />
-    <Compile Include="Headspring\Enumeration.cs" />
     <Compile Include="IntegrationSetUpFixture.cs" />
     <Compile Include="CommandHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentIdUpdatedHandlerTester.cs" />
@@ -147,9 +146,6 @@
       <Project>{C3CDE3C8-278C-44F6-A498-344A6E666454}</Project>
       <Name>Warranty.Tests</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Headspring\LICENSE.txt" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
