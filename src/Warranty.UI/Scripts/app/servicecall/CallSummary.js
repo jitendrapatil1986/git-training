@@ -197,6 +197,7 @@ require(['/Scripts/app/main.js'], function () {
 
             function AllLineItemsViewModel(options) {
                 var self = this;
+                self.lineEditing = ko.observable(false);
                 self.serviceCallId = options.serviceCallId;
                 self.serviceCallLineItemId = options.serviceCallLineItemId;
                 self.completed = options.completed;
@@ -218,7 +219,7 @@ require(['/Scripts/app/main.js'], function () {
                 //track editing problem code, desc, and line altogether.
                 self.problemCodeEditing = ko.observable();
                 self.problemDescriptionEditing = ko.observable("");
-                self.lineEditing = ko.observable("");
+                
 
                 //edit line item.
                 self.editLine = function () {
@@ -295,8 +296,8 @@ require(['/Scripts/app/main.js'], function () {
                     }
                 };
 
-                self.problemCode.subscribe(function (newValue) {
-                    if(this.lineEditing())
+                self.problemJdeCode.subscribe(function (newValue) {
+                    if(self.lineEditing())
                         getProblemDetailCodes(newValue, self.problemDetailCodes);
                 });
 
@@ -309,7 +310,7 @@ require(['/Scripts/app/main.js'], function () {
                         contentType: "application/json; charset=utf-8"
                     }).done(function(response) {
                         problemDetailCodes(response);
-                        self.editProblemDetailCode(problemDetailCode());
+                        self.editProblemDetailCode(self.problemDetailCode());
                     });
                 }
             }
@@ -587,6 +588,7 @@ require(['/Scripts/app/main.js'], function () {
 
                             $("#addCallLineProblemDescription").val('');
                             $("#addCallLineProblemCode").val('');
+                            $("#addCallLineProblemDetail").val('');
                             self.problemDescription = '';
                         });
 
