@@ -115,6 +115,10 @@
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\BackchargeRequestedHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyBackchargeApprovedHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyBackchargeOnHoldHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyPaymentApprovedHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyPaymentOnHoldHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentAddedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentAddressNumberUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentDeletedHandler.cs" />
@@ -164,7 +168,6 @@
       <Name>Warranty.UI</Name>
     </ProjectReference>
   </ItemGroup>
-  
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
