@@ -6,6 +6,8 @@ using Warranty.UI.Core.Filters;
 
 namespace Warranty.UI.Controllers
 {
+    using Warranty.Core.Features.ManageProblemCodeCostCodes;
+
     public class AdminController : Controller
     {
         private readonly IMediator _mediator;
@@ -42,6 +44,13 @@ namespace Warranty.UI.Controllers
         {
             var result = _mediator.Request(new ManageLookupsQuery());
             return View(result);
+        }
+
+        [HttpGet]
+        public ActionResult ManageProblemCodeCostCodes()
+        {
+            var model = _mediator.Request(new ManageProblemCodeCostCodeQuery());
+            return View(model);
         }
     }
 }

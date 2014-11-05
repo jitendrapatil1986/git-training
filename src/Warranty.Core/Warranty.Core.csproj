@@ -137,6 +137,8 @@
     <Compile Include="DataAccess\Mappings\AuditableEntityMapping.cs" />
     <Compile Include="DataAccess\ConfigurationFactoryExtensions.cs" />
     <Compile Include="DataAccess\Mappings\AuditCreatedEntityMap.cs" />
+    <Compile Include="DataAccess\Mappings\CityCodeProblemCodeCostCodeMap.cs" />
+    <Compile Include="DataAccess\Mappings\CityCodeProblemCodeCostCodeMapping.cs" />
     <Compile Include="DataAccess\Mappings\BackchargeMap.cs" />
     <Compile Include="DataAccess\Mappings\CityMap.cs" />
     <Compile Include="DataAccess\Mappings\CityMapping.cs" />
@@ -179,6 +181,7 @@
     <Compile Include="Entities\ActivityLog.cs" />
     <Compile Include="Entities\Backcharge.cs" />
     <Compile Include="Entities\City.cs" />
+    <Compile Include="Entities\CityCodeProblemCodeCostCode.cs" />
     <Compile Include="Entities\Community.cs" />
     <Compile Include="Entities\CommunityAssignment.cs" />
     <Compile Include="Entities\Division.cs" />
@@ -272,6 +275,15 @@
     <Compile Include="Features\QuickSearch\QuickSearchEmployeeModel.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchEmployeesQuery.cs" />
     <Compile Include="Features\QuickSearch\QuickSearchEmployeesQueryHandler.cs" />
+    <Compile Include="Features\ManageProblemCodeCostCodes\ManageProblemCodeCostCodeModel.cs" />
+    <Compile Include="Features\ManageProblemCodeCostCodes\ManageProblemCodeCostCodeQuery.cs" />
+    <Compile Include="Features\ManageProblemCodeCostCodes\ManageProblemCodeCostCodeQueryHandler.cs" />
+    <Compile Include="Features\ManageProblemCodeCostCodes\ProblemCodeCostCodeModel.cs" />
+    <Compile Include="Features\ManageProblemCodeCostCodes\ProblemCodeCostCodeQuery.cs" />
+    <Compile Include="Features\ManageProblemCodeCostCodes\ProblemCodeCostCodeQueryHandler.cs" />
+    <Compile Include="Features\ManageProblemCodeCostCodes\ProblemCodeCostCodeUpdateCommand.cs" />
+    <Compile Include="Features\ManageProblemCodeCostCodes\ProblemCodeCostCodeUpdateCommandHandler.cs" />
+    <Compile Include="Features\ManageProblemCodeCostCodes\ProblemCodeCostCodeUpdateModel.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportModel.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportQuery.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportQueryHandler.cs" />
