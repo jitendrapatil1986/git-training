@@ -53,8 +53,8 @@
                 var self = this;
                 
                 self.allCommunityAssignments = ko.observableArray([]);
-                self.selectedEmployeeId = ko.observable('');
-                self.selectedEmployeeName = ko.observable('');
+                self.typeaheadSelectedEmployeeId = ko.observable('');
+                self.typeaheadSelectedEmployeeName = ko.observable('');
                 self.theLookups = employees;
             }
 
@@ -69,7 +69,6 @@
 
 
             //Twitter typeahead setup
-            var typeaheadSelectedEmployeeName = '', typeaheadSelectedEmployeeId = '';
             
             //Constructs the suggestion engine
             var employees = new Bloodhound({
@@ -79,7 +78,6 @@
                 remote: {
                     url: urls.QuickSearch.Employees + '?query=%QUERY',
                     filter: function (list) {
-                        debugger;
                         return $.map(list, function(employee) {
                             return {
                                 employeeName: employee.Name,
@@ -105,14 +103,14 @@
                 source: employees.ttAdapter()
             }).bind("typeahead:selected typeahead:autocompleted", function (obj, datum) {
                 //keep track of valid employee bc user selected or prefilled with typeahead.
-                typeaheadSelectedEmployeeName = datum.employeeName;
-                typeaheadSelectedEmployeeId = datum.employeeId;
+                viewModel.typeaheadSelectedEmployeeName = datum.employeeName;
+                viewModel.typeaheadSelectedEmployeeId = datum.employeeId;
             }).blur(function () {
                 var currentEmployeeName = $(this).val();
                 
                 //ensures values selected is a valid employee bc user selected or prefilled with typeahead.
-                if ($.trim(currentEmployeeName) != '' && currentEmployeeName === typeaheadSelectedEmployeeName) {
-                    setEmployeeLineDetails(this, currentEmployeeName, typeaheadSelectedEmployeeId);
+                if ($.trim(currentEmployeeName) != '' && currentEmployeeName === viewModel.typeaheadSelectedEmployeeName) {
+                    setEmployeeLineDetails(this, currentEmployeeName, viewModel.typeaheadSelectedEmployeeId);
                 }
 
                 $('.typeahead').typeahead('val', '');
