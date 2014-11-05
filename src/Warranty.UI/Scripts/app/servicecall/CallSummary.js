@@ -32,7 +32,7 @@ require(['/Scripts/app/main.js'], function () {
             $(".attached-file-display-name").editable();
 
             $(".phone-number-with-extension").on('shown', function () {
-                $(this).data('editable').input.$input.mask("(999) 999-9999? x99999", { placeholder: " " });s
+                $(this).data('editable').input.$input.mask("(999) 999-9999? x99999", { placeholder: " " });
             });
 
             $(".datepicker-input").datepicker();
