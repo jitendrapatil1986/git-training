@@ -19,8 +19,8 @@ namespace Warranty.UI.Controllers
             var type = Type.GetType(typeName);
             if (type == null)
                 return "";
-
-            var enumerations = type.GetMembers(BindingFlags.Public | BindingFlags.Static).ToArray();
+             
+            var enumerations = type.GetMembers(BindingFlags.Public | BindingFlags.Static).Where(x=>x.MemberType != MemberTypes.Method).ToArray();
             var props = type.GetMembers(BindingFlags.Public | BindingFlags.Instance).ToArray();
 
             var result = new JObject(

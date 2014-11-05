@@ -2,12 +2,15 @@ using System;
 
 namespace Warranty.Core.Entities
 {
+    using Enumerations;
+
     public class Payment : IAuditableEntity, IJdeEntity
     {
         public Guid PaymentId { get; set; }
         public string VendorNumber { get; set; }
+        public string VendorName { get; set; }
         public decimal Amount { get; set; }
-        public string PaymentStatus { get; set; }
+        public PaymentStatus PaymentStatus { get; set; }
         public string JobNumber { get; set; }
         public string InvoiceNumber { get; set; }
         public string HoldComments { get; set; }

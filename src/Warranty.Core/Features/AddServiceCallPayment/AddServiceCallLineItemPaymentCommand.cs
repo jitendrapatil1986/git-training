@@ -1,22 +1,22 @@
-﻿namespace Warranty.Core.Entities
+﻿namespace Warranty.Core.Features.AddServiceCallPayment
 {
     using System;
 
-    public class Backcharge : IAuditableEntity
+    public class AddServiceCallLineItemPaymentCommand : ICommand<Guid>
     {
-        public Guid BackchargeId { get; set; }
-        public Guid PaymentId { get; set; }
+        public Guid ServiceCallLineItemId { get; set; }
+        public string VendorNumber { get; set; }
+        public string VendorName { get; set; }
         public string BackchargeVendorNumber { get; set; }
         public string BackchargeVendorName { get; set; }
+        public string InvoiceNumber { get; set; }
+        public bool IsBackcharge { get; set; }
+        public decimal Amount { get; set; }
         public decimal BackchargeAmount { get; set; }
         public string BackchargeReason { get; set; }
         public string PersonNotified { get; set; }
         public string PersonNotifiedPhoneNumber { get; set; }
         public DateTime PersonNotifiedDate { get; set; }
         public string BackchargeResponseFromVendor { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public string UpdatedBy { get; set; }
-        public DateTime? UpdatedDate { get; set; }
     }
 }

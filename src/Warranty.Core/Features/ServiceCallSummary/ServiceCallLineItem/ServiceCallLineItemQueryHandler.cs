@@ -25,6 +25,7 @@
             model.ServiceCallLineItemNotes = GetServiceCallLineNotes(query.ServiceCallLineItemId);
             model.ServiceCallLineItemAttachments = GetServiceCallLineAttachments(query.ServiceCallLineItemId);
             model.ProblemCodes = SharedQueries.ProblemCodes.GetProblemCodeList(_database);
+            model.ServiceCallLineItemPayments = GetServiceCallLinePayments(query.ServiceCallLineItemId);
             model.CanReopenLines = user.IsInRole(UserRoles.WarrantyServiceManager) || user.IsInRole(UserRoles.WarrantyServiceCoordinator);
 
             return model;
@@ -67,6 +68,37 @@
                                 WHERE ServiceCallLineItemId = @0 AND IsDeleted=0";
 
             var result = _database.Fetch<ServiceCallLineItemModel.ServiceCallLineItemAttachment>(sql, serviceCallLineItemId.ToString());
+
+            return result;
+        }
+
+        private IEnumerable<ServiceCallLineItemModel.ServiceCallLineItemPayment> GetServiceCallLinePayments(Guid serviceCallLineItemId)
+        {
+            const string sql = @"SELECT 
+                                    p.PaymentId
+                                    , p.VendorNumber
+                                    , p.VendorName
+                                    , p.Amount
+                                    , p.PaymentStatus
+                                    , p.InvoiceNumber
+                                    , p.ServiceCallLineItemId
+                                    , p.CreatedDate as PaymentCreatedDate
+                                    , b.BackchargeVendorNumber
+                                    , b.BackchargeVendorName
+                                    , b.BackchargeReason
+                                    , b.PersonNotified
+                                    , b.PersonNotifiedPhoneNumber
+                                    , b.PersonNotifiedDate
+                                    , b.BackchargeResponseFromVendor
+                                    , CASE WHEN b.BackchargeVendorNumber IS NOT NULL THEN 1 ELSE 0 END AS IsBackcharge
+                                FROM payments p
+                                    LEFT JOIN backcharges b
+	                                   ON p.PaymentId = b.PaymentId
+                                    INNER JOIN ServiceCallLineItems scli
+	                                   ON scli.ServiceCallLineItemId = p.ServiceCallLineItemId
+                                WHERE p.ServiceCallLineItemId = @0 ORDER BY p.CreatedDate desc";
+
+            var result = _database.Fetch<ServiceCallLineItemModel.ServiceCallLineItemPayment>(sql, serviceCallLineItemId);
 
             return result;
         }

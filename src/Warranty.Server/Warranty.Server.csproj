@@ -38,9 +38,9 @@
     <Reference Include="Accounting.Commands">
       <HintPath>..\packages\Accounting.Commands.1.1.853.0\lib\net45\Accounting.Commands.dll</HintPath>
     </Reference>
-    <Reference Include="Accounting.Events, Version=1.1.849.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Accounting.Events, Version=1.1.853.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Accounting.Events.1.1.849.0\lib\net45\Accounting.Events.dll</HintPath>
+      <HintPath>..\packages\Accounting.Events.1.1.853.0\lib\net45\Accounting.Events.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
@@ -164,7 +164,6 @@
       <Name>Warranty.UI</Name>
     </ProjectReference>
   </ItemGroup>
-  
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -35,6 +35,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accounting.Client">
+      <HintPath>..\packages\Accounting.Client.1.1.853.0\lib\net45\Accounting.Client.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Common.Security.1.1.57.0\lib\net45\Common.Security.dll</HintPath>
@@ -52,9 +55,9 @@
     <Reference Include="Microsoft.IdentityModel">
       <HintPath>..\..\..\purchasing\src\Purchasing.UI\bin\Microsoft.IdentityModel.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
@@ -205,6 +208,7 @@
     <Compile Include="Entities\ServiceCallLineItem.cs" />
     <Compile Include="Entities\Task.cs" />
     <Compile Include="Enumerations\ActivityType.cs" />
+    <Compile Include="Enumerations\JdeEnumeration.cs" />
     <Compile Include="Enumerations\PaymentStatus.cs" />
     <Compile Include="Enumerations\TaskType.cs" />
     <Compile Include="Enumerations\ToDoPriority.cs" />
@@ -245,6 +249,10 @@
     <Compile Include="Features\AddServiceCallNote\AddServiceCallNoteCommand.cs" />
     <Compile Include="Features\AddServiceCallNote\AddServiceCallNoteCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallNote\AddServiceCallNoteModel.cs" />
+    <Compile Include="Features\AddServiceCallPayment\AddServiceCallLineItemPaymentCommand.cs" />
+    <Compile Include="Features\AddServiceCallPayment\AddServiceCallLineItemPaymentCommandHandler.cs" />
+    <Compile Include="Features\AddServiceCallPayment\DeleteServiceCallLineItemPaymentCommand.cs" />
+    <Compile Include="Features\AddServiceCallPayment\DeleteServiceCallLineItemPaymentCommandHandler.cs" />
     <Compile Include="Features\AssignWSRs\AssignedEmployee.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRCommand.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRCommandHandler.cs" />
@@ -263,12 +271,13 @@
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetQueryHandler.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQuery.cs" />
     <Compile Include="Features\AverageDaysClosedWidget\AverageDaysClosedWidgetWSRQueryHandler.cs" />
-    <Compile Include="Features\EditServiceCallLineItem\ProblemDetailQuery.cs" />
-    <Compile Include="Features\EditServiceCallLineItem\ProblemDetailQueryHandler.cs" />
     <Compile Include="Features\AdditionalContactsModel.cs" />
     <Compile Include="Features\Homeowner\AddOrUpdateAdditionalContactCommand.cs" />
     <Compile Include="Features\Homeowner\ServiceCallDeleteAdditionalContactCommand.cs" />
     <Compile Include="Features\Homeowner\ServiceCallDeleteAdditionalContactCommandHandler.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchCallVendorModel.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchVendorsQuery.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchVendorsQueryHandler.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportModel.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportQuery.cs" />
     <Compile Include="Features\Report\Achievement\AchievementReportQueryHandler.cs" />
@@ -444,7 +453,9 @@
     <Compile Include="FileManagement\TemporaryFileUploadsService.cs" />
     <Compile Include="FileManagement\IFileSystemManager.cs" />
     <Compile Include="FileManagement\ITemporaryFileUploadsService.cs" />
+    <Compile Include="Services\AccountingService.cs" />
     <Compile Include="Services\HomeownerAdditionalContactsService.cs" />
+    <Compile Include="Services\IAccountingService.cs" />
     <Compile Include="Services\IHomeownerAdditionalContactsService.cs" />
     <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\ISendSmtpMailMessage.cs" />

@@ -5,6 +5,7 @@ using Warranty.Core.ApprovalInfrastructure.Interfaces;
 namespace Warranty.UI.Core.Initialization
 {
     using System;
+    using Accounting.Client;
     using StructureMap;
     using Warranty.Core;
     using Warranty.Core.Calculator;
@@ -29,7 +30,7 @@ namespace Warranty.UI.Core.Initialization
                 cfg.Scan(scan =>
                 {
                     scan.AssemblyContainingType<IMediator>();
-
+                    scan.AssemblyContainingType<IAccountingClient>();
                     scan.AddAllTypesOf(typeof(IValidator<>));
                     scan.AddAllTypesOf((typeof(IQueryHandler<,>)));
                     scan.AddAllTypesOf((typeof(ICommandHandler<>)));
@@ -40,6 +41,7 @@ namespace Warranty.UI.Core.Initialization
                     scan.AddAllTypesOf((typeof(ICsvBuilder)));
                     scan.AddAllTypesOf((typeof(ITask<>)));
                     scan.AddAllTypesOf((typeof(IWarrantyCalculator)));
+                    scan.AddAllTypesOf((typeof(IAccountingClient)));
 
                     scan.WithDefaultConventions();
                 });

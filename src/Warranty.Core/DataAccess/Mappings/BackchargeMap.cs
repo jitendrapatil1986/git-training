@@ -14,6 +14,7 @@
                     x.Column(y => y.BackchargeReason);
                     x.Column(y => y.BackchargeResponseFromVendor);
                     x.Column(y => y.BackchargeVendorNumber);
+                    x.Column(y => y.BackchargeVendorName);
                     x.Column(y => y.PaymentId);
                     x.Column(y => y.PersonNotified);
                     x.Column(y => y.PersonNotifiedDate);
