@@ -198,6 +198,7 @@
     <Compile Include="Api\AssignWSRController.cs" />
     <Compile Include="Api\HomeownerController.cs" />
     <Compile Include="Api\ManageJobController.cs" />
+    <Compile Include="Api\ManageProblemCodeCostCodesController.cs" />
     <Compile Include="Api\RelatedCallController.cs" />
     <Compile Include="Api\ManageLookupsController.cs" />
     <Compile Include="Api\QuickSearchController.cs" />
@@ -293,6 +294,7 @@
     <Content Include="img\saturation.png" />
     <Content Include="Scripts\app\Admin\ManageAssignments.js" />
     <Content Include="Scripts\app\admin\ManageLookups.js" />
+    <Content Include="Scripts\app\Admin\manageProblemCodeCostCodes.js" />
     <Content Include="Scripts\app\ajaxEvents.js" />
     <Content Include="Scripts\app\approveServiceCalls.js" />
     <Content Include="Scripts\app\additionalContacts.js" />
@@ -431,6 +433,7 @@
     <Content Include="Views\ServiceCall\LineItemDetail.cshtml" />
     <Content Include="Views\Report\AchievementReport.cshtml" />
     <Content Include="Views\Shared\_AdditionalContacts.cshtml" />
+    <Content Include="Views\Admin\ManageProblemCodeCostCodes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
