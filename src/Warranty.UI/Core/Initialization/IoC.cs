@@ -7,6 +7,7 @@ namespace Warranty.UI.Core.Initialization
     using System;
     using StructureMap;
     using Warranty.Core;
+    using Warranty.Core.Calculator;
     using Warranty.Core.CsvBuilder;
     using Warranty.Core.TaskInfrastructure.Interfaces;
 
@@ -38,6 +39,7 @@ namespace Warranty.UI.Core.Initialization
                     scan.AddAllTypesOf((typeof(IActivityLogger)));
                     scan.AddAllTypesOf((typeof(ICsvBuilder)));
                     scan.AddAllTypesOf((typeof(ITask<>)));
+                    scan.AddAllTypesOf((typeof(IWarrantyCalculator)));
 
                     scan.WithDefaultConventions();
                 });

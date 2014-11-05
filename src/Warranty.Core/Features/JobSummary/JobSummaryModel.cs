@@ -50,6 +50,7 @@ namespace Warranty.Core.Features.JobSummary
         public IEnumerable<JobNote> JobNotes { get; set; }
         public IEnumerable<Attachment> Attachments { get; set; }
         public IEnumerable<Homeowner> Homeowners { get; set; }
+        public AdditionalContactsModel AdditionalContacts { get; set; }
 
         public int HomeOwnerNumber { get; set; }
 
@@ -80,6 +81,8 @@ namespace Warranty.Core.Features.JobSummary
         public class JobServiceCall
         {
             public Guid ServiceCallId { get; set; }
+            public ServiceCallStatus ServiceCallStatus { get; set; }
+            public bool CanApprove { get; set; }
             public string AssignedTo { get; set; }
             public string AssignedToEmployeeNumber { get; set; }
             public string JobNumber { get; set; }

@@ -198,10 +198,12 @@
     <Compile Include="Api\AssignWSRController.cs" />
     <Compile Include="Api\HomeownerController.cs" />
     <Compile Include="Api\ManageJobController.cs" />
+    <Compile Include="Api\ManageProblemCodeCostCodesController.cs" />
     <Compile Include="Api\RelatedCallController.cs" />
     <Compile Include="Api\ManageLookupsController.cs" />
     <Compile Include="Api\QuickSearchController.cs" />
     <Compile Include="Api\ManageServiceCallController.cs" />
+    <Compile Include="Api\ProblemDetailController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
@@ -292,7 +294,10 @@
     <Content Include="img\saturation.png" />
     <Content Include="Scripts\app\Admin\ManageAssignments.js" />
     <Content Include="Scripts\app\admin\ManageLookups.js" />
+    <Content Include="Scripts\app\Admin\manageProblemCodeCostCodes.js" />
     <Content Include="Scripts\app\ajaxEvents.js" />
+    <Content Include="Scripts\app\approveServiceCalls.js" />
+    <Content Include="Scripts\app\additionalContacts.js" />
     <Content Include="Scripts\app\formUploader.js" />
     <Content Include="Scripts\app\Job\ChangeHomeowner.js" />
     <Content Include="Scripts\app\Job\JobSummary.js" />
@@ -302,6 +307,7 @@
     <Content Include="Scripts\app\search.js" />
     <Content Include="Scripts\app\servicecall\CallSummary.js" />
     <Content Include="Scripts\app\servicecall\create.js" />
+    <Content Include="Scripts\app\servicecall\LineItemDetail.js" />
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
     <Content Include="Scripts\config\customer-search.js" />
     <Content Include="Scripts\lib\bootstrap-editable.min.js" />
@@ -424,6 +430,10 @@
     <Content Include="Views\Job\ChangeHomeowner.cshtml" />
     <Content Include="Views\Home\_ServiceCallListItem.cshtml" />
     <Content Include="Views\Home\_ToDoJobChangedTask.cshtml" />
+    <Content Include="Views\ServiceCall\LineItemDetail.cshtml" />
+    <Content Include="Views\Report\AchievementReport.cshtml" />
+    <Content Include="Views\Shared\_AdditionalContacts.cshtml" />
+    <Content Include="Views\Admin\ManageProblemCodeCostCodes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

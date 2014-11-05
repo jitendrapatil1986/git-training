@@ -173,8 +173,9 @@ namespace Warranty.JdeImport.Importers
                                                                                 VALUES (Number, Name)
                                             WHEN MATCHED THEN UPDATE SET EmployeeName = Name;
 
-                                            ;WITH nonDupEmps AS (SELECT MIN(EmployeeId) EmployeeId, EmployeeNumber FROM employees GROUP BY EmployeeNumber),
-                                                  stage AS (SELECT removeDups.*
+                                            WITH nonDupEmps AS (SELECT MIN(EmployeeId) EmployeeId, EmployeeNumber FROM employees GROUP BY EmployeeNumber)
+                                                , nonDupCom AS (SELECT MIN(CommunityId) as CommunityId, CommunityNumber FROM Communities GROUP BY CommunityNumber)
+                                                , stage AS (SELECT removeDups.*
                                                                     , builder.EmployeeId as BuilderId
                                                                     , sales.EmployeeId as SalesId
                                                                     , COM.CommunityId
@@ -183,11 +184,11 @@ namespace Warranty.JdeImport.Importers
                                                                                     , ROW_NUMBER() OVER (PARTITION BY JdeIdentifier ORDER BY JobStageId DESC) AS rowNum
                                                                             FROM imports.JobStage
                                                                         ) removeDups
-                                                                    INNER JOIN employees builder ON
+                                                                    INNER JOIN nonDupEmps builder ON
                                                                         removeDups.BuilderEmployeeNumber = builder.EmployeeNumber
-                                                                    INNER JOIN employees sales ON
+                                                                    INNER JOIN nonDupEmps sales ON
                                                                         removeDups.SalesConsultantEmployeeNumber = sales.EmployeeNumber
-                                                                    INNER JOIN Communities com ON
+                                                                    INNER JOIN nonDupCom com ON
                                                                         LEFT(removeDups.CommunityNumber, 4) = com.CommunityNumber
                                                             WHERE rowNum = 1)
                                             MERGE INTO Jobs AS TARGET

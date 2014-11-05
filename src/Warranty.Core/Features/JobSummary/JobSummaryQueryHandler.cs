@@ -9,16 +9,19 @@ namespace Warranty.Core.Features.JobSummary
     using Enumerations;
     using NPoco;
     using Security;
+    using Services;
 
     public class JobSummaryQueryHandler : IQueryHandler<JobSummaryQuery, JobSummaryModel>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
+        private readonly IHomeownerAdditionalContactsService _homeownerAdditionalContactsService;
 
-        public JobSummaryQueryHandler(IDatabase database, IUserSession userSession)
+        public JobSummaryQueryHandler(IDatabase database, IUserSession userSession, IHomeownerAdditionalContactsService homeownerAdditionalContactsService)
         {
             _database = database;
             _userSession = userSession;
+            _homeownerAdditionalContactsService = homeownerAdditionalContactsService;
         }
 
         public JobSummaryModel Handle(JobSummaryQuery query)
@@ -31,7 +34,7 @@ namespace Warranty.Core.Features.JobSummary
             model.Attachments = GetJobAttachments(query.JobId);
             model.Homeowners = GetJobHomeowners(query.JobId);
             //model.JobPayments = GetJobPayments(query.JobId);
-
+            model.AdditionalContacts = _homeownerAdditionalContactsService.Get(model.HomeownerId);
             return model;
         }
 
@@ -108,8 +111,10 @@ namespace Warranty.Core.Features.JobSummary
 
         private IEnumerable<JobSummaryModel.JobServiceCall> GetJobServiceCalls(Guid jobId)
         {
+            var user = _userSession.GetCurrentUser();
             const string sql = @"SELECT 
                                     wc.ServiceCallId as ServiceCallId
+                                    ,wc.ServiceCallStatusId as ServiceCallStatus
                                     ,Servicecallnumber as CallNumber
                                     ,STUFF((SELECT '| ' + l.ProblemDescription
                                                     FROM ServiceCallLineItems l WHERE l.ServiceCallId = wc.servicecallid
@@ -144,6 +149,12 @@ namespace Warranty.Core.Features.JobSummary
                                 WHERE j.JobId = @0";
 
             var result = _database.FetchOneToMany<JobSummaryModel.JobServiceCall, JobSummaryModel.JobServiceCall.JobServiceCallNote>(x => x.ServiceCallId, sql, jobId);
+            
+            result.ForEach(x =>
+                {
+                    x.CanApprove = user.IsInRole(UserRoles.WarrantyServiceCoordinator) ||
+                                   user.IsInRole(UserRoles.WarrantyServiceManager);
+                });
             
             return result;
         }
@@ -191,6 +202,7 @@ namespace Warranty.Core.Features.JobSummary
                                 INNER JOIN [dbo].[Jobs] j
                                 ON h.JobId = j.JobId
                                 WHERE j.JobId = @0
+                                AND h.HomeownerNumber > 1
                                 ORDER BY h.CreatedDate DESC";
 
             var result = _database.Fetch<JobSummaryModel.Homeowner>(sql, jobId);

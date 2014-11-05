@@ -23,9 +23,18 @@ h2, h3, h4 {
     border-radius: 0;
 }
 
+.small-text {
+    font-size: 12px;
+}
+
 .main-container {
     margin-top: 108px;
     padding: 0 10px;
+}
+
+.main-search {
+    width: 264px;
+    float: right;
 }
 
 .logged-in-user {
@@ -61,16 +70,16 @@ h2, h3, h4 {
     margin-top: 10px;
 }
 
-#serviceCallSummaryPage section, #jobSummaryPage section {
+#serviceCallSummaryPage section, #jobSummaryPage section, #serviceCallLineItemDetailPage section {
     border-bottom: 1px solid #DDD;
+}
+
+#serviceCallSummaryPage .panel-default, #serviceCallLineItemDetailPage .panel-default {
+    margin: 15px 0 0 0;
 }
 
 .panel-default {
     border-bottom: 0;
-}
-
-.panel section {
-    margin-bottom: 15px;
 }
 
 .main-info {
@@ -86,17 +95,21 @@ h2, h3, h4 {
    margin-right: 10px;
 }
 
+section.line-items {
+    margin-top: 15px;
+}
+
 .service-call-line {
     border-bottom: solid 1px #e7e7e7;
     padding: 10px 0 10px;
     margin: 0;
 }
 
-#serviceCallSummaryPage .service-call-line:first-child {
+#serviceCallSummaryPage .service-call-line:first-child, #serviceCallLineItemDetailPage .service-call-line:first-child {
     border-top: solid 1px #e7e7e7;
 }
 
-#serviceCallSummaryPage .service-call-line:last-child {
+#serviceCallSummaryPage .service-call-line:last-child, #serviceCallLineItemDetailPage .service-call-line:last-child {
     border-bottom: 0;
 }
 
@@ -104,7 +117,7 @@ h2, h3, h4 {
     background: @gray-lighter;
 }
 
-#serviceCallSummaryPage select {
+#serviceCallSummaryPage select, #serviceCallLineItemDetailPage select {
     max-width: 300px;
 }
 
@@ -310,6 +323,10 @@ h2, h3, h4 {
     border-left: 1px dashed #ddd;
 }
 
+.todo-widget-element.service-call-line {
+    border-bottom: 0;
+}
+
 .wrap-text {
     overflow-x: hidden;
     word-wrap: break-word;
@@ -342,7 +359,8 @@ h2, h3, h4 {
 }
 
 .todo-widget-element {
-    padding-left: 35px;
+    margin-left: 25px;
+    padding-left: 10px;
 }
 
 .todo-widget-action-buttons {
@@ -656,6 +674,35 @@ a.delete-group-item:hover {
     .container {
            padding: 0;
     }
+
+    .navbar-fixed-top{
+        top: inherit;
+        position: inherit;
+    }
+
+    .navbar-header, .navbar-brand {
+        width: 100%;
+    }
+
+    .navbar-brand img{
+        margin: 0 auto;
+    }
+
+    .subnav {
+        background-color: #eee;
+        background-image: linear-gradient(#fff,#fff 25%,#f1f0e6);
+        background-repeat: repeat-x;
+        border-bottom: 1px solid #e7e7e5;
+        border-radius: 0;
+        height: 36px;
+        margin: 0 0 15px;
+        width: 100%;
+        }
+
+    .main-search {
+        float: none;
+        margin: 0 auto;
+    }
     
     h2 {
       font-size: 20px;
@@ -697,6 +744,14 @@ a.delete-group-item:hover {
     #serviceCallsWidget .tab-pane{
         min-height: 0;
     }
+}
+
+.indicator-icon-with-value, .indicator-icon-with-value span {
+    display: inline-block;
+}
+
+.indicator-icon-with-value span:first-child{
+    margin-right: 3px;
 }
 
 .inline-editable-dropdown .editable-input {
@@ -761,10 +816,6 @@ a.delete-group-item:hover {
     padding-left: 5px;
 }
 
-.inline-editable-text .editable-buttons{
-    margin-top: 4px;
-}
-
 .cursor-pointer {
     cursor: pointer;
 }
@@ -773,19 +824,21 @@ a.delete-group-item:hover {
     margin-left:13px;
 }
 
-.attachments .attached-file {
-    margin: 0 10px 10px 0;
-    border: 1px lightgray solid;
-    border-radius: 5px;
+.attachments ul li{
     float: left;
-    padding: 10px;
+    margin: 0 10px 10px 0;
+    width: 150px;
     text-align: center;
-    background-color:@gray-lighter;
-    min-width: 150px;
+    word-wrap: break-word;
 }
 
-.attachments .editable-buttons {
-    margin-top: 3px;
+.attachments .attached-file {
+    margin: 0 0 5px 0;
+    border: 1px lightgray solid;
+    border-radius: 5px;
+    padding: 10px;
+    background-color:@gray-lighter;
+    display: block;
 }
 
 .attached-file:hover {
@@ -795,7 +848,7 @@ a.delete-group-item:hover {
 span.boxclose{
     float: right;
     margin-top: -18px;
-    margin-right: -18px;
+    margin-right: -20px;
     cursor: pointer;
     color: #fff;
     border-radius: 100px;
@@ -828,8 +881,9 @@ span.boxclose{
 }
 
 .attachment-info {
-    margin-top:50px;
-    font-size: xx-small;
+    margin-top: 5px;
+    font-size: 11px;
+    line-height: 14px;
 }
 
 .download-attachment {
@@ -884,6 +938,50 @@ span.boxclose{
     color: Red;
 }
 
+.print-only {
+    display: none;
+}
+
+.bread-crumb {
+    display: block;
+    font-size: 14px;
+}
+
+#addAdditionalcontacts {
+    padding: 10px;
+}
+
+#addAdditionalcontacts div.col-md-6:first-child{
+    padding: 0;
+}
+
+.additional-contacts-heading {
+    background-color: #ebebeb;
+    padding: 10px;
+    font-weight: bold;
+    margin-top: 0px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+}
+
+span.remove-additional-contact{    
+    cursor: pointer;
+    display: none;  
+}
+
+.additional-contact.can-remove:hover span.remove-additional-contact {
+    display: inline-block;
+}
+
+.additional-contact .additional-contact-icon {
+    display:none;
+}
+
+.additional-contact.can-remove .additional-contact-icon {
+    display:inline-block;
+}
+
+
 @media (max-width: 767px) {
 
 a.boxclose {
@@ -908,7 +1006,7 @@ a.boxclose {
     }
 
     .inline-editable-text .glyphicon {
-        width: 31%;
+        width: 48%;
         margin: 2px;
         float: left;
         padding: 10px;
@@ -936,5 +1034,47 @@ a.boxclose {
 @media print {
     .no-print {
         display: none;
+    }
+
+    .print-only {
+       display: block;
+    }
+
+     a[href]:after {
+        content: none;
+      }
+
+      #serviceCallSummaryPage, #serviceCallLineItemDetailPage {
+        border: 0;
+    }
+
+    #serviceCallSummaryPage .panel-heading, #serviceCallLineItemDetailPage .panel-heading {
+        margin:0;
+        border: 0;
+    }
+}
+
+.fa-spin-custom, .glyphicon-spin {
+    -webkit-animation: spin 1000ms infinite linear;
+    animation: spin 1000ms infinite linear;
+}
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+@keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
     }
 }

@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.UI", "Warranty.UI\Warranty.UI.csproj", "{ECCA9355-3FF0-4C3A-BE4C-9E02B5C8D242}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.Core", "Warranty.Core\Warranty.Core.csproj", "{991144F8-B588-4604-930B-3224FEC6FF32}"
@@ -89,6 +91,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Up", "Up", "{20518451-E144-
 		Database\Warranty\Up\0064_AddJobNotesTable.sql = Database\Warranty\Up\0064_AddJobNotesTable.sql
 		Database\Warranty\Up\0067_AddJobAttachmentsTable.sql = Database\Warranty\Up\0067_AddJobAttachmentsTable.sql
 		Database\Warranty\Up\0069_AddHomeownerContactsTable.sql = Database\Warranty\Up\0069_AddHomeownerContactsTable.sql
+		Database\Warranty\Up\0070_ProblemCodeRootCauses.sql = Database\Warranty\Up\0070_ProblemCodeRootCauses.sql
+		Database\Warranty\Up\0071_AlterServiceCallSpecialProjectReason.sql = Database\Warranty\Up\0071_AlterServiceCallSpecialProjectReason.sql
+		Database\Warranty\Up\0072_AlterPaymentsAddServiceCallLineItemId.sql = Database\Warranty\Up\0072_AlterPaymentsAddServiceCallLineItemId.sql
+		Database\Warranty\Up\0073_CreateBackchargesTable.sql = Database\Warranty\Up\0073_CreateBackchargesTable.sql
+		Database\Warranty\Up\0074_AlterBackchargesAddPaymentId.sql = Database\Warranty\Up\0074_AlterBackchargesAddPaymentId.sql
+		Database\Warranty\Up\0075_AlterBackchargesAddVendorName.sql = Database\Warranty\Up\0075_AlterBackchargesAddVendorName.sql
+		Database\Warranty\Up\0076_AlterPaymentsAddVendorName.sql = Database\Warranty\Up\0076_AlterPaymentsAddVendorName.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{D0DD7813-D199-44F7-A1F3-EC38DCA342F2}"
@@ -183,15 +192,15 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{82F4160F-9F09-4672-8A85-C6445C801E17} = {A17141C5-B96A-4407-9175-FF9DB67885C9}
-		{0E28943C-3644-4A3C-BBBC-21BDFCC64791} = {A17141C5-B96A-4407-9175-FF9DB67885C9}
 		{C3CDE3C8-278C-44F6-A498-344A6E666454} = {A17141C5-B96A-4407-9175-FF9DB67885C9}
-		{24F01427-4EBA-4038-A8DE-320AC2857484} = {B7EF2C05-783E-411E-BA6B-604D7E44F834}
 		{AF1DBB4F-8023-4488-9961-96471C6647F3} = {B7EF2C05-783E-411E-BA6B-604D7E44F834}
+		{24F01427-4EBA-4038-A8DE-320AC2857484} = {B7EF2C05-783E-411E-BA6B-604D7E44F834}
 		{774F9200-608F-47BB-9529-283346F7A9BB} = {9AE255B5-B3E9-4EAE-9930-4FE345CFE51D}
 		{20518451-E144-488A-9C92-4DF652E04FC8} = {774F9200-608F-47BB-9529-283346F7A9BB}
-		{D76E83FE-4DBA-4953-BCE6-A903B4A99A06} = {774F9200-608F-47BB-9529-283346F7A9BB}
 		{DF34B390-2524-4D04-BAB5-FA2268223006} = {D0DD7813-D199-44F7-A1F3-EC38DCA342F2}
 		{D5835A57-4AEB-4540-8BE4-6511D4E20B32} = {D0DD7813-D199-44F7-A1F3-EC38DCA342F2}
+		{82F4160F-9F09-4672-8A85-C6445C801E17} = {A17141C5-B96A-4407-9175-FF9DB67885C9}
+		{0E28943C-3644-4A3C-BBBC-21BDFCC64791} = {A17141C5-B96A-4407-9175-FF9DB67885C9}
+		{D76E83FE-4DBA-4953-BCE6-A903B4A99A06} = {774F9200-608F-47BB-9529-283346F7A9BB}
 	EndGlobalSection
 EndGlobal

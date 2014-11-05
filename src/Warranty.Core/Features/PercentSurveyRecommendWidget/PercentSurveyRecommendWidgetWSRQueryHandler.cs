@@ -6,6 +6,7 @@
     using Configurations;
     using Extensions;
     using Security;
+    using Services;
     using Survey.Client;
 
     public class PercentSurveyRecommendWidgetWSRQueryHandler : IQueryHandler<PercentSurveyRecommendWidgetWSRQuery, PercentSurveyRecommendWidgetModel>
@@ -37,11 +38,11 @@
 
             return new PercentSurveyRecommendWidgetModel
             {
-                PercentRecommendLastMonth = totalLastMonthSurveysWithRecommend * 100 / totalLastMonthSurveys,
-                PercentRecommendThisMonth = totalThisMonthSurveysWithRecommend*100/totalThisMonthSurveys,
+                PercentRecommendLastMonth = ServiceCallCalculator.CalculatePercentage(totalLastMonthSurveysWithRecommend, totalLastMonthSurveys),
+                PercentRecommendThisMonth = ServiceCallCalculator.CalculatePercentage(totalThisMonthSurveysWithRecommend, totalThisMonthSurveys),
             };
         }
-        
+
         internal class ApiResult
         {
             public string WarrantyServiceRepresentativeEmployeeId { get; set; }

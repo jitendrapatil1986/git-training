@@ -1,4 +1,6 @@
-﻿namespace Warranty.UI.Controllers
+﻿using System.Configuration;
+
+namespace Warranty.UI.Controllers
 {
     using System;
     using System.Web;
@@ -13,6 +15,7 @@
     using Warranty.Core.Features.ServiceCallSummary;
     using System.Linq;
     using Warranty.Core.Features.ServiceCallSummary.Attachments;
+    using Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem;
     using Warranty.Core.Security;
     using Warranty.Core.Features.ServiceCallApproval;
     using Warranty.Core.Features.ServiceCallSummary.ReassignEmployee;
@@ -42,6 +45,16 @@
                 {
                     ServiceCallId = id
                 });
+
+            return View(model);
+        }
+
+        public ActionResult LineItemDetail(Guid id)
+        {
+            var model = _mediator.Request(new ServiceCallLineItemQuery
+            {
+                ServiceCallLineItemId = id,
+            });
 
             return View(model);
         }
@@ -91,7 +104,7 @@
         {
             if (ModelState.IsValid)
             {
-                var newCallId = _mediator.Send(new CreateServiceCallCommand{JobId = model.JobId, ServiceCallLineItems = model.ServiceCallLineItems.ToList().Select(x=>new ServiceCallLineItem{LineNumber = x.LineItemNumber, ProblemCode = x.ProblemCodeDisplayName, ProblemDescription = x.ProblemDescription})});
+                var newCallId = _mediator.Send(new CreateServiceCallCommand{JobId = model.JobId, ServiceCallLineItems = model.ServiceCallLineItems.ToList().Select(x=>new ServiceCallLineItem{LineNumber = x.LineItemNumber, ProblemCode = x.ProblemCode, ProblemJdeCode = x.ProblemJdeCode, ProblemDetailCode = x.ProblemDetailCode, ProblemDescription = x.ProblemDescription})});
                 if (_userSession.GetCurrentUser().IsInRole(UserRoles.WarrantyServiceManager) || _userSession.GetCurrentUser().IsInRole(UserRoles.WarrantyServiceCoordinator))
                 { 
                     var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery { ServiceCallId = newCallId });
@@ -115,7 +128,10 @@
             });
 
             var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery { ServiceCallId = id });
-            _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
+            if (notificationModel.WarrantyRepresentativeEmployeeEmail != null)
+            {
+                _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
+            }
 
             return Json (new { success = "true"}, JsonRequestBehavior.AllowGet );
         }
@@ -137,7 +153,7 @@
                 ServiceCallId = id,
                 Text = message
             });
-            return Json(new { actionName = ActivityType.SpecialProject.DisplayName }, JsonRequestBehavior.AllowGet);
+            return Json(new { actionName = ActivityType.SpecialProject.DisplayName, actionMessage = message }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ToggleEscalate(Guid id, string message)
@@ -150,12 +166,13 @@
 
             if (result.ShouldSendEmail)
             {
+                var url = ConfigurationManager.AppSettings["Warranty.BaseUri"];
                 var urlHelper = new UrlHelper(this.ControllerContext.RequestContext);
-                var url = urlHelper.Action("CallSummary", "ServiceCall", new { id }, Request.Url.Scheme);
+                url += urlHelper.Action("CallSummary", "ServiceCall", new { id });
                 result.Url = url;
                 _mailer.ServiceCallEscalated(result).SendAsync();
             }
-            return Json(new { actionName = ActivityType.Escalation.DisplayName }, JsonRequestBehavior.AllowGet);
+            return Json(new { actionName = ActivityType.Escalation.DisplayName, actionMessage = message }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetEmployees(Guid id)
@@ -198,7 +215,13 @@
         public ActionResult UploadAttachment(ServiceCallUploadAttachmentCommand model)
         {
             _mediator.Send(model);
-            return RedirectToAction("CallSummary", new {id = model.ServiceCallId});
+
+            if (model.ServiceCallLineItemId == Guid.Empty)
+            {
+                return RedirectToAction("CallSummary", new { id = model.ServiceCallId });
+            }
+
+            return RedirectToAction("LineItemDetail", new { id = model.ServiceCallLineItemId });
         }
 
         [HttpPost]

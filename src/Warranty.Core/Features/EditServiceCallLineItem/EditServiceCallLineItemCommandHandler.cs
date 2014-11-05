@@ -23,6 +23,8 @@
             {
                 var updateServiceCallLine = _database.SingleById<ServiceCallLineItem>(message.ServiceCallLineItemId);
                 updateServiceCallLine.ProblemCode = message.ProblemCode;
+                updateServiceCallLine.ProblemDetailCode = message.ProblemDetailCode;
+                updateServiceCallLine.ProblemJdeCode = message.ProblemJdeCode;
                 updateServiceCallLine.ProblemDescription = message.ProblemDescription;
                 _database.Update(updateServiceCallLine);
 
