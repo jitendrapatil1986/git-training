@@ -588,6 +588,7 @@ require(['/Scripts/app/main.js'], function () {
 
                             $("#addCallLineProblemDescription").val('');
                             $("#addCallLineProblemCode").val('');
+                            $("#addCallLineProblemDetail").val('');
                             self.problemDescription = '';
                         });
 
