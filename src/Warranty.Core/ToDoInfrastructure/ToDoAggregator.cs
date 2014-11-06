@@ -51,6 +51,12 @@ namespace Warranty.Core.ToDoInfrastructure
                     toDos.AddRange(taskJobChangedToDos);
                 }
 
+                if (ToDoType.PaymentRequestApproval.HasAccess(user.Roles))
+                {
+                    var paymentRequestApprovalToDos = GetPaymentRequestApprovalToDos(user, _database);
+                    toDos.AddRange(paymentRequestApprovalToDos);
+                }
+
                 return toDos.OrderBy(x=>x.Priority).ThenBy(x => x.Date).ToList();
             }
         }
@@ -142,21 +148,32 @@ namespace Warranty.Core.ToDoInfrastructure
             return toDos;
         }
 
-        //private IEnumerable<IToDo> GetPaymentRequestApprovalToDos()
-        //{
-        //    //TODO: Not the final query
-        //    var todo = new ToDoPaymentRequestApproval()
-        //    {
-        //        Model = new ToDoPaymentRequestApprovalModel()
-        //        {
-        //            HomeOwnerAddress = "Address",
-        //            HomeOwnerName = "Name",
-        //            PaymentAmount = (decimal)150.55
-        //        },
-        //        Date = DateTime.Now
-        //    };
+        private static IEnumerable<IToDo> GetPaymentRequestApprovalToDos(IUser user, IDatabase database)
+        {
+            var userMarkets = user.Markets;
+            
+            const string sql = @"SELECT p.PaymentId, sc.ServiceCallId, sc.ServiceCallNumber, li.ServiceCallLineItemId, p.VendorName, p.InvoiceNumber, p.Amount, 
+                                        p.PaymentStatus, p.HoldComments, p.UpdatedBy, p.UpdatedDate FROM Payments p
+                                INNER JOIN ServiceCallLineItems li
+                                ON p.ServiceCallLineItemId = li.ServiceCallLineItemId
+                                INNER JOIN ServiceCalls sc
+                                ON li.ServiceCallId = sc.ServiceCallId
+                                INNER JOIN Jobs j
+                                ON p.JobNumber = j.JobNumber
+                                INNER JOIN Communities cm
+                                ON j.CommunityId = cm.CommunityId
+                                INNER JOIN Cities c
+                                ON cm.CityId = c.CityId
+                                INNER JOIN Employees e
+                                ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+                                {0} /* WHERE */";
 
-        //    yield return todo;
-        //}
+            var query = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? string.Format(sql, "WHERE c.CityCode IN (" + userMarkets.CommaSeparateWrapWithSingleQuote() + ") AND p.PaymentStatus = " + PaymentStatus.Hold.Value + " AND e.EmployeeNumber = " + user.EmployeeNumber) 
+                                                                               : string.Format(sql, "WHERE c.CityCode IN (" + userMarkets.CommaSeparateWrapWithSingleQuote() + ") AND p.PaymentStatus = " + PaymentStatus.Pending.Value);
+            
+            var toDos = database.Fetch<ToDoPaymentRequestApproval, ToDoPaymentRequestApprovalModel>(query);
+
+            return toDos;
+        }
     }
 }
