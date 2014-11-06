@@ -7,25 +7,23 @@
     using NPoco;
     using NServiceBus;
 
-    public class RequestPaymentHoldResponseHandler : IHandleMessages<RequestPaymentHoldResponse>
+    public class RequestPaymentApprovalResponseHandler : IHandleMessages<RequestPaymentApprovalResponse>
     {
         private readonly IDatabase _database;
 
-        public RequestPaymentHoldResponseHandler(IDatabase database)
+        public RequestPaymentApprovalResponseHandler(IDatabase database)
         {
             _database = database;
         }
 
-        public void Handle(RequestPaymentHoldResponse message)
+        public void Handle(RequestPaymentApprovalResponse message)
         {
             using (_database)
             {
                 var payment = _database.SingleById<Payment>(new Guid(message.PaymentId));
-                payment.PaymentStatus = PaymentStatus.Hold;
+                payment.PaymentStatus = PaymentStatus.Approved;
                 _database.Update(payment);
             }
         }
     }
 }
-
-

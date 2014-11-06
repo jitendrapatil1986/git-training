@@ -129,6 +129,7 @@
     <Compile Include="Handlers\Payments\RequestBackchargeDenialResponseHandler.cs" />
     <Compile Include="Handlers\Payments\RequestBackchargeHoldResponseHandler.cs" />
     <Compile Include="Handlers\Payments\RequestBackchargeResponseHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestPaymentApprovalResponseHandler.cs" />
     <Compile Include="Handlers\Payments\RequestPaymentHoldResponseHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentPaymentAmountUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentRequestedHandler.cs" />
