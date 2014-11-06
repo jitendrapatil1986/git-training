@@ -33,7 +33,7 @@
                     BackchargeJdeIdentifier = backcharge.JdeIdentifier,
                     PaymentJdeIdentifier = payment.JdeIdentifier,
                     BackchargeId = backcharge.BackchargeId.ToString(),
-                    ProgramId = WarrantyConstants.WARRANTY,
+                    ProgramId = WarrantyConstants.ProgramId,
                     DateOnHold = DateTime.Today,
                     OnHoldBy = _userSession.GetCurrentUser().LoginName,
                     OnHoldReason = backcharge.HoldComments

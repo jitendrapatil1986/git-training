@@ -33,7 +33,7 @@
                     PaymentJdeIdentifier = payment.JdeIdentifier,
                     BackchargeJdeIdentifier = backcharge.JdeIdentifier,
                     BackchargeId = backcharge.BackchargeId.ToString(),
-                    ProgramId = WarrantyConstants.WARRANTY,
+                    ProgramId = WarrantyConstants.ProgramId,
                     DateApproved = DateTime.Today,
                     ApprovedBy = _userSession.GetCurrentUser().LoginName
                 };

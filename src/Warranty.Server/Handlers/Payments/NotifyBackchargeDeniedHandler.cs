@@ -33,7 +33,7 @@
                     BackchargeJdeIdentifier = backcharge.JdeIdentifier,
                     PaymentJdeIdentifier = payment.JdeIdentifier,
                     BackchargeId = backcharge.BackchargeId.ToString(),
-                    ProgramId = WarrantyConstants.WARRANTY,
+                    ProgramId = WarrantyConstants.ProgramId,
                     DateDenied = DateTime.Today,
                     DeniedBy = _userSession.GetCurrentUser().LoginName,
                     DeniedReason = backcharge.DenyComments

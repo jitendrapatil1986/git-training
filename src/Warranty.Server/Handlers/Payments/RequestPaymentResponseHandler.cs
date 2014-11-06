@@ -19,12 +19,10 @@ namespace Warranty.Server.Handlers.Payments
         {
             using (_database)
             {
-                var payment = _database.SingleOrDefaultById<Payment>(message.PaymentIdentifier);
-                if (payment != null)
-                {
-                    payment.PaymentStatus = PaymentStatus.Pending;
-                    _database.Update(payment);
-                }
+                var payment = _database.SingleById<Payment>(message.PaymentIdentifier);
+                
+                payment.PaymentStatus = PaymentStatus.Pending;
+                _database.Update(payment);
             }
         }
     }

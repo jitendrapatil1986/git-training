@@ -32,7 +32,7 @@
                 {
                     PaymentJdeIdentifier = payment.JdeIdentifier,
                     PaymentId = payment.PaymentId.ToString(),
-                    ProgramId = WarrantyConstants.WARRANTY,
+                    ProgramId = WarrantyConstants.ProgramId,
                     DateOnHold = DateTime.Today,
                     OnHoldBy = _userSession.GetCurrentUser().LoginName,
                     OnHoldReason = payment.HoldComments

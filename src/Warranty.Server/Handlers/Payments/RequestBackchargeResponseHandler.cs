@@ -19,12 +19,10 @@
         {
             using (_database)
             {
-                var backcharge = _database.SingleOrDefaultById<Backcharge>(message.BackchargeId);
-                if (backcharge != null)
-                {
-                    backcharge.BackchargeStatus = BackchargeStatus.Pending;
-                    _database.Update(backcharge);
-                }
+                var backcharge = _database.SingleById<Backcharge>(message.BackchargeId);
+                
+                backcharge.BackchargeStatus = BackchargeStatus.Pending;
+                _database.Update(backcharge);
             }
         }
     }

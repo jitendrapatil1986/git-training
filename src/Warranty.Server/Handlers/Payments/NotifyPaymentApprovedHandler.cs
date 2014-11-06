@@ -31,7 +31,7 @@
                 {
                     PaymentJdeIdentifier = payment.JdeIdentifier,
                     PaymentId = payment.PaymentId.ToString(),
-                    ProgramId = WarrantyConstants.WARRANTY,
+                    ProgramId = WarrantyConstants.ProgramId,
                     DateApproved = DateTime.Today,
                     ApprovedBy = _userSession.GetCurrentUser().LoginName
                 };
