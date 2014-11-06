@@ -125,9 +125,14 @@
     <Compile Include="Handlers\Payments\PaymentAddressNumberUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentDeletedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentIdUpdatedHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestBackchargeApprovalResponseHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestBackchargeDenialResponseHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestBackchargeHoldResponseHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestPaymentHoldResponseHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentPaymentAmountUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentRequestedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentStatusUpdatedHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestPaymentResponseHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallCompletedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallCreatedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallEmployeeReassignedHandler.cs" />

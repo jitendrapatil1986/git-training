@@ -7,7 +7,6 @@ using Warranty.Server.Extensions;
 
 namespace Warranty.Server.Handlers.Payments
 {
-    using System;
     using Core.Enumerations;
 
     public class PaymentAddedHandler : IHandleMessages<PaymentAdded>
@@ -33,33 +32,10 @@ namespace Warranty.Server.Handlers.Payments
                 {
                     VendorNumber = message.AddressNumber,
                     Amount = message.PaymentAmount,
-                    PaymentStatus = PaymentStatus.FromJdeCode(message.Status),
+                    PaymentStatus = PaymentStatus.Pending,
                     JobNumber = message.CostCenter,
                     JdeIdentifier = message.JDEId,
                 });
-            }
-        }
-    }
-
-    public class RequestPaymentResponseHandler : IHandleMessages<RequestPaymentResponse>
-    {
-        private readonly IDatabase _database;
-
-        public RequestPaymentResponseHandler(IDatabase database)
-        {
-            _database = database;
-        }
-
-        public void Handle(RequestPaymentResponse message)
-        {
-            using (_database)
-            {
-                var payment = _database.SingleOrDefaultById<Payment>(message.PaymentIdentifier);
-                if (payment != null)
-                {
-                    payment.PaymentStatus = PaymentStatus.Pending;
-                    _database.Update(payment);
-                }
             }
         }
     }
