@@ -200,6 +200,7 @@
     </Compile>
     <Compile Include="Api\ApiController.cs" />
     <Compile Include="Api\AssignWSRController.cs" />
+    <Compile Include="Api\ProblemDetailController.cs" />
     <Compile Include="Api\HomeownerController.cs" />
     <Compile Include="Api\ManageJobController.cs" />
     <Compile Include="Api\ManageProblemCodeCostCodesController.cs" />
