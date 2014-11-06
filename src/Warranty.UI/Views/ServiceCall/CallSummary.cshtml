@@ -135,12 +135,12 @@
             </section>
             <section data-bind="visible: isEscalated">
                 <div class="alert alert-danger no-bottom-margin">
-                    <strong>Escalated</strong> <span data-bind="text: escalationDate()!=null ? moment(escalationDate()).format('MM/DD/YYYY') : ''"></span><span data-bind="    text: escalationReason() != null ? ' - ' + escalationReason() : ''"></span>    
+                    <strong>Escalated</strong> <span data-bind="text: escalationDate()!=null ? moment(escalationDate()).format('MM/DD/YYYY') : ''"></span><span data-bind="    text: (escalationReason()) ? ' - ' + escalationReason() : ''"></span>    
                 </div>
             </section>
             <section data-bind="visible: isSpecialProject">
                 <div class="alert alert-info no-bottom-margin">
-                    <strong>Special Project</strong> <span data-bind="text: specialProjectDate()!=null ? moment(specialProjectDate()).format('MM/DD/YYYY') : ''"></span><span data-bind="    text: specialProjectReason() != null ? ' - ' + specialProjectReason(): ''"></span>
+                    <strong>Special Project</strong> <span data-bind="text: specialProjectDate()!=null ? moment(specialProjectDate()).format('MM/DD/YYYY') : ''"></span><span data-bind="    text: (specialProjectReason()) ? ' - ' + specialProjectReason(): ''"></span>
                 </div>
             </section>
 

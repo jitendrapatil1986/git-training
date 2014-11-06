@@ -35,5 +35,12 @@
             var results = _mediator.Request(new CreateServiceCallCustomerSearchQuery {Query = query});
             return results;
         }
+
+        [HttpGet]
+        public IEnumerable<QuickSearchCallVendorModel> Vendors(string query)
+        {
+            var results = _mediator.Request(new QuickSearchVendorsQuery { Query = query });
+            return results;
+        }
     }
 }
