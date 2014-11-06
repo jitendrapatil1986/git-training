@@ -6,6 +6,8 @@ using Warranty.Server.Extensions;
 
 namespace Warranty.Server.Handlers.Payments
 {
+    using Core.Enumerations;
+
     public class PaymentStatusUpdatedHandler : IHandleMessages<PaymentStatusUpdated>
     {
         private readonly IDatabase _database;
@@ -23,7 +25,7 @@ namespace Warranty.Server.Handlers.Payments
                 if (payment == null)
                     return;
 
-                payment.PaymentStatus = message.Status;
+                payment.PaymentStatus = PaymentStatus.FromJdeCode(message.Status);
                 _database.Update(payment);
             }
         }
