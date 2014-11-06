@@ -1,5 +1,6 @@
 namespace Warranty.IntegrationTests.PersistenceTests
 {
+    using Core.Enumerations;
     using NUnit.Framework;
     using Should;
     using Core.Entities;
@@ -18,7 +19,7 @@ namespace Warranty.IntegrationTests.PersistenceTests
                                Amount = .12M,
                                JdeIdentifier = "123",
                                JobNumber = "12",
-                               PaymentStatus = "A",
+                               PaymentStatus = PaymentStatus.Pending,
                                VendorNumber = "1"
                            };
 

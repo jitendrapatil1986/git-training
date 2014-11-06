@@ -11,6 +11,7 @@
                 .Columns(x =>
                 {
                     x.Column(y => y.VendorNumber);
+                    x.Column(y => y.VendorName);
                     x.Column(y => y.Amount);
                     x.Column(y => y.PaymentStatus);
                     x.Column(y => y.JobNumber);

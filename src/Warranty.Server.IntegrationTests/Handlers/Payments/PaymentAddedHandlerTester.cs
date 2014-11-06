@@ -7,6 +7,8 @@ using Warranty.Server.Configuration;
 
 namespace Warranty.Server.IntegrationTests.Handlers.Payments
 {
+    using Core.Enumerations;
+
     [TestFixture]
     public class PaymentAddedHandlerTester : HandlerTester<PaymentAdded>
     {
@@ -19,7 +21,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Payments
                 x.ObjectAccount = WarrantyConstants.LaborObjectAccounts.First();
                 x.PaymentAmount = 1546.35M;
                 x.AddressNumber = "12345";
-                x.Status = "X";
+                x.Status = "A";
                 x.CostCenter = "12341234";
             });
         }
@@ -29,7 +31,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Payments
         {
             var payment = Get<Payment>(Event.JDEId);
             payment.Amount.ShouldEqual(Event.PaymentAmount);
-            payment.PaymentStatus.ShouldEqual(Event.Status);
+            payment.PaymentStatus.ShouldEqual(PaymentStatus.FromJdeCode(Event.Status));
             payment.VendorNumber.ShouldEqual(Event.AddressNumber);
             payment.JobNumber.ShouldEqual(Event.CostCenter);
         }

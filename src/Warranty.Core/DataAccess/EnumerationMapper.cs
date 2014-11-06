@@ -1,6 +1,4 @@
-﻿using System;
-using NPoco;
-using Warranty.Core.Enumerations;
+﻿using NPoco;
 using Warranty.Core.Extensions;
 
 namespace Warranty.Core.DataAccess
