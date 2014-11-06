@@ -31,6 +31,7 @@
                 var command = new Accounting.Commands.Payments.RequestPaymentHold()
                 {
                     PaymentJdeIdentifier = payment.JdeIdentifier,
+                    PaymentId = payment.PaymentId.ToString(),
                     ProgramId = WarrantyConstants.WARRANTY,
                     DateOnHold = DateTime.Today,
                     OnHoldBy = _userSession.GetCurrentUser().LoginName,

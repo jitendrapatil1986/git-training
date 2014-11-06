@@ -19,6 +19,9 @@
                     x.Column(y => y.PersonNotified);
                     x.Column(y => y.PersonNotifiedDate);
                     x.Column(y => y.PersonNotifiedPhoneNumber);
+                    x.Column(y => y.JdeIdentifier);
+                    x.Column(y => y.HoldComments);
+                    x.Column(y => y.DenyComments);
                 });
         }
     }

@@ -1,6 +1,5 @@
 ﻿namespace Warranty.Server.Handlers.Payments
 {
-    using System;
     using Accounting.Commands.Backcharges;
     using Core.Entities;
     using InnerMessages;

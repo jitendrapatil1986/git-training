@@ -30,6 +30,7 @@
                 var command = new Accounting.Commands.Payments.RequestPaymentApproval()
                 {
                     PaymentJdeIdentifier = payment.JdeIdentifier,
+                    PaymentId = payment.PaymentId.ToString(),
                     ProgramId = WarrantyConstants.WARRANTY,
                     DateApproved = DateTime.Today,
                     ApprovedBy = _userSession.GetCurrentUser().LoginName
