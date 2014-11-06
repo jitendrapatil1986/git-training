@@ -37,8 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Events">
-      <HintPath>..\packages\Accounting.Events.1.1.853.0\lib\net45\Accounting.Events.dll</HintPath>
+    <Reference Include="Accounting.Events, Version=1.1.855.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Accounting.Events.1.1.855.0\lib\net45\Accounting.Events.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.3.1.229\lib\net45\FluentAssertions.dll</HintPath>

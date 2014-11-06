@@ -6,6 +6,7 @@
     {
         public static readonly PaymentStatus Paid = new PaymentStatus(1, "Paid", "1");
         public static readonly PaymentStatus Pending = new PaymentStatus(2, "Pending", "P");
+        public static readonly PaymentStatus Requested = new PaymentStatus(3, "Requested", "NoJdeCode-WarrantyModuleStatus");
         public static readonly PaymentStatus Approved = new PaymentStatus(4, "Approved", "A");
         public static readonly PaymentStatus OnHold = new PaymentStatus(5, "On Hold", "H");
         public static readonly PaymentStatus NeverPay = new PaymentStatus(6, "Never Pay", "Z");

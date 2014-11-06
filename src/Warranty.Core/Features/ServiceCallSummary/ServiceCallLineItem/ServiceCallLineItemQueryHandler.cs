@@ -86,6 +86,7 @@
                                     , b.BackchargeVendorNumber
                                     , b.BackchargeVendorName
                                     , b.BackchargeReason
+                                    , b.BackchargeAmount
                                     , b.PersonNotified
                                     , b.PersonNotifiedPhoneNumber
                                     , b.PersonNotifiedDate

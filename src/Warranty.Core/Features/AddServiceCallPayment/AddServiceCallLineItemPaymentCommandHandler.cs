@@ -3,15 +3,19 @@
     using System;
     using Entities;
     using Enumerations;
+    using InnerMessages;
     using NPoco;
+    using NServiceBus;
 
     public class AddServiceCallLineItemPaymentCommandHandler : ICommandHandler<AddServiceCallLineItemPaymentCommand, Guid>
     {
         private readonly IDatabase _database;
+        private readonly IBus _bus;
 
-        public AddServiceCallLineItemPaymentCommandHandler(IDatabase database)
+        public AddServiceCallLineItemPaymentCommandHandler(IDatabase database, IBus bus)
         {
             _database = database;
+            _bus = bus;
         }
 
         public Guid Handle(AddServiceCallLineItemPaymentCommand message)
@@ -23,13 +27,17 @@
                     Amount = message.Amount,
                     InvoiceNumber = message.InvoiceNumber,
                     ServiceCallLineItemId = message.ServiceCallLineItemId,
-                    PaymentStatus = PaymentStatus.Pending,
+                    PaymentStatus = PaymentStatus.Requested,
                     VendorNumber = message.VendorNumber,
                     VendorName = message.VendorName,
                 };
 
                 _database.Insert(payment);
 
+                _bus.Send<NotifyRequestedPayment>(x =>
+                {
+                    x.PaymentId = payment.PaymentId;
+                });
 
                 if (message.IsBackcharge)
                 {
@@ -39,7 +47,7 @@
 
                         BackchargeVendorNumber = message.BackchargeVendorNumber,
                         BackchargeVendorName = message.BackchargeVendorName,
-                        //BackchargeAmount = message.payment
+                        BackchargeAmount = message.BackchargeAmount,
                         BackchargeReason = message.BackchargeReason,
                         PersonNotified = message.PersonNotified,
                         PersonNotifiedPhoneNumber = message.PersonNotifiedPhoneNumber,
@@ -47,6 +55,11 @@
                         BackchargeResponseFromVendor = message.BackchargeResponseFromVendor,
                     };
                     _database.Insert(backcharge);
+
+                    _bus.Send<NotifyRequestedBackcharge>(x =>
+                    {
+                        x.BackchargeId = backcharge.BackchargeId;
+                    });
                 }
 
                 return payment.PaymentId;

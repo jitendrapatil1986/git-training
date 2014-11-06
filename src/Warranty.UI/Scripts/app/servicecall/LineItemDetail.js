@@ -1,6 +1,8 @@
 ﻿require(['/Scripts/app/main.js'], function () {
     require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchBackchargeVendor', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, bootbox) {
+        window.ko = ko;  //manually set the global ko property.
 
+        require(['ko.validation'], function() {
         $(function () {
             $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
                 $(this).hide();
@@ -38,6 +40,7 @@
                 self.backchargeVendorName = options.backchargeVendorName;
                 self.invoiceNumber = options.invoiceNumber;
                 self.amount = options.amount;
+                self.backchargeAmount = options.backchargeAmount;
                 self.isBackcharge = options.isBackcharge;
                 self.backchargeReason = options.backchargeReason;
                 self.personNotified = options.personNotified;
@@ -201,27 +204,55 @@
                 self.problemDescriptionEditing = ko.observable("");
                 self.lineEditing = ko.observable("");
 
-                self.invoiceNumber = ko.observable('');
-                self.amount = ko.observable('');
+                self.invoiceNumber = ko.observable('').extend({ required: true });
+                self.amount = ko.observable('').extend({ required: true });
                 self.isBackcharge = ko.observable(false);
-                self.backchargeReason = ko.observable('');
-                self.personNotified = ko.observable('');
-                self.personNotifiedPhoneNumber = ko.observable('');
-                self.personNotifiedDate = ko.observable('');
-                self.backchargeResponseFromVendor = ko.observable('');
-                self.vendorName = ko.observable('');
-                self.vendorNumber = ko.observable('');
-                self.backchargeVendorName = ko.observable('');
-                self.backchargeVendorNumber = ko.observable('');
+                self.backchargeAmount = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true); }
+                    }
+                });
+                self.backchargeReason = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true); }
+                    }
+                });
+                self.personNotified = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true); }
+                    }
+                });
+                self.personNotifiedPhoneNumber = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true); }
+                    }
+                });
+                self.personNotifiedDate = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true); }
+                    }
+                });
+                self.backchargeResponseFromVendor = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true); }
+                    }
+                });
+                self.vendorName = ko.observable('').extend({ required: true });
+                self.vendorNumber = ko.observable('').extend({ required: true });
+                self.backchargeVendorName = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true); }
+                    }
+                });
+                self.backchargeVendorNumber = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true); }
+                    }
+                });
                 self.allPayments = ko.observableArray([]);
                 
                 self.canAddPayment = ko.computed(function () {
-                    var isValid = self.vendorNumber() != '' && self.invoiceNumber() != '' && self.amount() != '';
-                    if (self.isBackcharge()) {
-                        isValid = isValid && self.backchargeVendorNumber != '' && self.backchargeReason() != '' && self.personNotified() != '' && self.personNotifiedPhoneNumber() != '' && self.personNotifiedDate() != '' && self.backchargeResponseFromVendor() != ''
-                        return isValid;
-                    }
-                    return isValid;
+                    return true;
                 });
 
                 self.clearPaymentFields = function () {
@@ -232,16 +263,17 @@
                     self.backchargeVendorNumber('');
                     self.invoiceNumber('');
                     self.amount('');
+                    self.backchargeAmount('');
                     self.isBackcharge(false);
                     self.backchargeReason('');
                     self.personNotified('');
                     self.personNotifiedPhoneNumber('');
                     self.personNotifiedDate('');
                     self.backchargeResponseFromVendor('');
+                    self.errors.showAllMessages(false);
                 };
                 
                 $(document).on('vendor-number-selected', function () {
-                    
                     var vendorNumber = $('#vendor-search').data('vendor-number');
                     var vendorName = $('#vendor-search').data('vendor-name');
                     self.vendorNumber(vendorNumber);
@@ -256,6 +288,11 @@
                 });
                 
                 self.addPayment = function () {
+                    if (self.errors().length != 0) {
+                        self.errors.showAllMessages();
+                        return;
+                    }
+                    
                     self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
                     self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
                     
@@ -267,13 +304,14 @@
                         backchargeVendorName: self.backchargeVendorName(),
                         invoiceNumber : self.invoiceNumber(),
                         amount : self.amount(),
+                        backchargeAmount: self.backchargeAmount(),
                         isBackcharge : self.isBackcharge(),
                         backchargeReason : self.backchargeReason(),
                         personNotified : self.personNotified(),
                         personNotifiedPhoneNumber : self.personNotifiedPhoneNumber(),
                         personNotifiedDate : self.personNotifiedDate(),
                         backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
-                        paymentStatusDisplayName: paymentStatusEnum.Pending.DisplayName,
+                        paymentStatusDisplayName: paymentStatusEnum.Requested.DisplayName,
                     });
 
                     var paymentData = ko.toJSON(newPayment);
@@ -456,7 +494,14 @@
                 };
             }
             
+            ko.validation.init({
+                errorElementClass: 'has-error',
+                errorMessageClass: 'help-block',
+                decorateElement: true
+            });
+            
             var viewModel = new serviceCallLineItemViewModel();
+            viewModel.errors = ko.validation.group(viewModel);
             ko.applyBindings(viewModel);
 
             var persistedAllCallNotesViewModel = modelData.initialServiceCallLineNotes;
@@ -479,4 +524,5 @@
             });
         });
     });
+});
 });

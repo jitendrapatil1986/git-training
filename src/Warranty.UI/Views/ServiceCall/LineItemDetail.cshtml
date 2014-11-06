@@ -101,26 +101,28 @@
             <section class="margin-bottom-15">
                 <h3 class="col-md-12">Payments
                     <span>
-                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Attachments" data-toggle="collapse" data-target="#addPayment"><span class="glyphicon glyphicon-plus"></span></button>
+                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Payments" data-toggle="collapse" data-target="#addPayment"><span class="glyphicon glyphicon-plus"></span></button>
                     </span> 
                 </h3>
                 <div id="addPayment" class="collapse">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="form-group col-md-4">
-                                <span>Vendor</span>
-                                 <input type="text" id="vendor-search" class="form-control" autocomplete="off" placeholder="Type Vendor Name or Vendor Number" />
+                            <div class="form-group col-md-4"  data-bind="validationElement: vendorNumber, validationOptions: { insertMessages: false}">
+                                @Html.Label("Vendor", new{@class="control-label", @for="vendor-search"})
+                                <input type="text" id="vendor-search" class="form-control" autocomplete="off" placeholder="Type vendor name or vendor number" />
+                                 <span data-bind="validationMessage: vendorNumber" class="help-block"></span>
                             </div>
-                            <div class="form-group col-md-3">
-                                <span>Invoice #</span>
-                                <input type="text" class="form-control" data-bind="value: invoiceNumber"/>
+                            <div class="form-group col-md-3" data-bind="validationElement: invoiceNumber">
+                                @Html.Label("Invoice #", new{@class="control-label", @for="invoiceNumber"})
+                                <input type="text" class="form-control" id="invoiceNumber" data-bind="value: invoiceNumber"/>
                             </div>
-                            <div class="form-group col-md-3">
-                                <span>Amount</span>
+                            <div class="form-group col-md-3" data-bind="validationElement: amount, validationOptions: { insertMessages: false}">
+                                @Html.Label("Amount", new{@class="control-label", @for="amount"})
                                 <div class="input-group">
                                     <span class="input-group-addon">$</span>
-                                    <input type="text" class="form-control numeric" data-bind="value: amount"/>
+                                    <input type="text" class="form-control numeric" data-bind="value: amount" id="amount"/>
                                 </div>
+                                <span data-bind="validationMessage: amount" class="help-block"></span>
                             </div>
                             <div class="form-group col-md-2 margin-top-10">
                                 <div class="checkbox-inline">
@@ -130,32 +132,49 @@
                         </div>
                         <div data-bind="visible: isBackcharge">
                             <div class="row">
-                                <div class="form-group col-md-4">
-                                    <span>Backcharge vendor</span>
-                                    <input type="text" id="backcharge-vendor-search" class="form-control" autocomplete="off" placeholder="Type Vendor Name or Vendor Number" data-vendor-number="0" />
+                                <div class="form-group col-md-4"   data-bind="validationElement: backchargeVendorNumber, validationOptions: { insertMessages: false}">
+                                    @Html.Label("Backcharge vendor", new{@class="control-label", @for="backcharge-vendor-search"})
+                                    <input type="text" id="backcharge-vendor-search" class="form-control" autocomplete="off" placeholder="Type vendor name or vendor number" data-vendor-number="0" />
+                                    <span data-bind="validationMessage: backchargeVendorNumber" class="help-block"></span>
                                 </div>
-                                <div class="form-group col-md-12">
-                                    <span>Reason for backcharge</span>
-                                    <textarea class="form-control" maxlength="255" data-bind="value: backchargeReason"></textarea>
+
+                                <div class="form-group col-md-3" data-bind="validationElement: backchargeAmount, validationOptions: { insertMessages: false}">
+                                    @Html.Label("Backcharge amount", new{@class="control-label", @for="backchargeAmount"})
+                                    <div class="input-group">
+                                        <span class="input-group-addon">$</span>
+                                        <input type="text" class="form-control numeric" data-bind="value: backchargeAmount" id="backchargeAmount"/>
+                                    </div>
+                                    <span data-bind="validationMessage: backchargeAmount" class="help-block"></span>
                                 </div>
+
+                                <div class="form-group col-md-12"   data-bind="validationElement: backchargeReason">
+                                    @Html.Label("Reason for backcharge", new{@class="control-label", @for="backchargeReason"})
+                                    <textarea class="form-control" maxlength="255" data-bind="value: backchargeReason" id="backchargeReason"></textarea>
+                                </div>
+
                             </div>
                             <div class="row">
-                                <div class="form-group col-md-4">
-                                    <span>Person notified</span>
-                                    <input type="text" class="form-control" data-bind="value: personNotified"/>
+                                
+                                <div class="form-group col-md-4" data-bind="validationElement: personNotified">
+                                    @Html.Label("Person notified", new{@class="control-label", @for="personNotified"})
+                                    <input type="text" class="form-control" data-bind="value: personNotified" id="personNotified"/>
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <span>Phone number</span>
-                                    <input type="text" class="form-control phone-number-with-extension" data-bind="value: personNotifiedPhoneNumber"/>
+
+                                <div class="form-group col-md-4" data-bind="validationElement: personNotifiedPhoneNumber">
+                                    @Html.Label("Phone number", new{@class="control-label", @for="personNotifiedPhoneNumber"})
+                                    <input type="text" class="form-control phone-number-with-extension" data-bind="value: personNotifiedPhoneNumber" id="personNotifiedPhoneNumber"/>
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <span>Date notified</span>
-                                    <input id="Person_Notified_Date" type="text" class="form-control" data-bind="value: personNotifiedDate"/>
+
+                                <div class="form-group col-md-4" data-bind="validationElement: personNotifiedDate">
+                                    @Html.Label("Date notified", new{@class="control-label", @for="Person_Notified_Date"})
+                                    <input id="Person_Notified_Date" type="text" data-bind="value: personNotifiedDate" class="form-control" />
                                 </div>
-                                <div class="form-group col-md-12">
-                                    <span>Response from Vendor</span>
-                                    <textarea class="form-control" maxlength="255" data-bind="value: backchargeResponseFromVendor"></textarea>
+
+                                <div class="form-group col-md-12" data-bind="validationElement: backchargeResponseFromVendor">
+                                    @Html.Label("Response from vendor", new{@class="control-label", @for="backchargeResponseFromVendor"})
+                                    <textarea class="form-control" maxlength="255" data-bind="value: backchargeResponseFromVendor" id="backchargeResponseFromVendor"></textarea>
                                 </div>
+
                             </div>
                         </div>
                         <div class="form-submit">
@@ -171,8 +190,8 @@
                     <br />
                     <ul data-bind="foreach: allPayments">
                         <div id="allServiceCallPayments">
-                        <li class="row service-call-line">
-                            <div class="padding-bottom-10 padding-top-7">
+                            <li class="row service-call-line">
+                                <div class="padding-bottom-10 padding-top-7">
                                 <div class="col-md-12 margin-bottom-5">
                                     <div class="no-left-right-padding">
                                         <div class="row payment-line">
@@ -200,23 +219,34 @@
                                     <div class="row" style="margin:5px;background-color: white;">
                                         <div class="collapse" data-bind="attr: { id: 'backcharge-' + paymentId }">
                                             <div class="col-md-12">
-                                                <small>
-                                                    <strong><span data-bind="text: backchargeVendorName"></span></strong><br/>
-                                                    <span data-bind="text: backchargeReason"></span>
-                                                    <br/>
-                                                    <br/>
-                                                    <span data-bind="text: 'Notified ' + personNotified + ' on ' + personNotifiedDate"></span>
-                                                    <br/>
-                                                    <strong>Phone: </strong><span data-bind="text: personNotifiedPhoneNumber"></span><br/><br/>
-                                                    <strong>Response from Vendor: </strong><span data-bind="text: backchargeResponseFromVendor"></span>
-                                                </small>
+                                                <div class="row">
+                                                    <div class="col-md-7">
+                                                        <small>
+                                                            <strong><span data-bind="text: backchargeVendorName"></span></strong><br/>
+                                                            <span data-bind="text: backchargeReason"></span>
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <small>
+                                                            <span><strong>Backcharge Amount: </strong></span> </small><h4 data-bind="currency: backchargeAmount"></h4>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="row margin-top-10">
+                                                    <div class="col-md-12">
+                                                        <small>
+                                                            <span data-bind="text: 'Notified ' + personNotified + ' on ' + personNotifiedDate"></span>
+                                                            <br/>
+                                                            <strong>Phone: </strong><span data-bind="text: personNotifiedPhoneNumber"></span><br/><br/>
+                                                            <strong>Response from Vendor: </strong><span data-bind="text: backchargeResponseFromVendor"></span>
+                                                        </small>
+                                                    </div>
+                                                </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </li>
+                            </li>
                         </div>
                     </ul>
                 </div>
