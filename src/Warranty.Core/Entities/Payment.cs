@@ -12,6 +12,7 @@ namespace Warranty.Core.Entities
         public decimal Amount { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public string JobNumber { get; set; }
+        public string CommunityNumber { get; set; }
         public string InvoiceNumber { get; set; }
         public string HoldComments { get; set; }
         public Guid ServiceCallLineItemId { get; set; }
