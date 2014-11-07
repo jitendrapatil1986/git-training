@@ -164,5 +164,11 @@ define(['knockout', 'jquery', 'moment', 'datepicker'], function (ko, $, moment) 
         }
     };
 
+    ko.bindingHandlers.stopBinding = {
+        init: function () {
+            return { controlsDescendantBindings: true };
+        }
+    };
+
     return ko;
 });

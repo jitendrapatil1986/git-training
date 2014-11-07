@@ -5,6 +5,8 @@ using Warranty.Core.Entities;
 
 namespace Warranty.Server.IntegrationTests.Handlers.Payments
 {
+    using Core.Enumerations;
+
     [TestFixture]
     public class PaymentStatusUpdatedHandlerTester : HandlerTester<PaymentStatusUpdated>
     {
@@ -18,7 +20,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Payments
             Send(x =>
             {
                 x.JDEId = _payment.JdeIdentifier;
-                x.Status = "X";
+                x.Status = "A";
             });
         }
 
@@ -26,7 +28,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Payments
         public void Payment_Status_Should_Be_Updated()
         {
             var payment = Get<Payment>(_payment.PaymentId);
-            payment.PaymentStatus.ShouldEqual(Event.Status);
+            payment.PaymentStatus.ShouldEqual(PaymentStatus.FromJdeCode(Event.Status));
         }
     }
 }

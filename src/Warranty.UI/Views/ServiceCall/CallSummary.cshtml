@@ -71,9 +71,6 @@
                                 @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.ServiceCallSummary.HomePhone,Url.Action("AddOrUpdatePhoneNumber","Homeowner"), Model.ServiceCallSummary.HomeownerId)
                             </li>
                             <li>
-                                @Format.EditablePhoneNumber(PhoneNumberType.Mobile, Model.ServiceCallSummary.OtherPhone,Url.Action("AddOrUpdatePhoneNumber","Homeowner"),Model.ServiceCallSummary.HomeownerId)
-                            </li>
-                            <li>
                                 @Format.EditableEmailForServiceCall(Model.ServiceCallSummary.EmailAddress, Url.Action("AddOrUpdateEmail","Homeowner"), Model.ServiceCallSummary.HomeownerId, Model.ServiceCallSummary.CallNumber)
                             </li>
                         </ul>
@@ -126,55 +123,7 @@
                         </div>
                 </div>
             </div>
-                        <section>
-                <h5 class="col-md-12 additional-contacts-heading" data-toggle="collapse" data-target="#addAdditionalcontacts">Additional contact information</h5>
-                <div id="addAdditionalcontacts" class="collapse">
-                    <div class="col-md-12">
-                        @Html.HiddenFor(x=>x.ServiceCallSummary.HomeownerId, new{ id ="HomeownerId"})
-                        <div class="row ">
-                            <div class="col-md-6">
-                                <div class="remove-list-style row">
-                                    <ul>
-                                        <li>
-                                            <div data-bind="foreach: additionalPhoneContacts">
-                                                <div class="col-md-9">
-                                                    <div class="form-group" data-bind="validationElement: contactValue">
-                                                        <label class="control-label" data-bind="text: 'Additional phone number ' + ($index() + 1), attr : {'for': 'additionalPhoneNumber' + $index()}"></label>
-                                                        <input type="text" id="" data-bind="value: contactValue, attr: { id: 'additionalPhoneNumber' + $index()}" class="form-control" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <a href="#" data-bind="click: addPhoneContact">+ Add additional phone number</a>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="remove-list-style row">
-                                    <ul>
-                                        <li>
-                                            <div data-bind="foreach: additionalEmailContacts">
-                                                <div class="col-md-9">
-                                                    <div class="form-group" data-bind="validationElement: contactValue">
-                                                        <label class="control-label" data-bind="text: 'Additional e-mail address ' + ($index() + 1), attr : {'for': 'additionalEmail' + $index()}"></label>
-                                                        <input type="text" id="" data-bind="value: contactValue, attr: { id: 'additionalEmail' + $index()}" class="form-control" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <a href="#" data-bind="click: addEmailContact">+ Add additional e-mail address</a>
-                            </div>
-                        </div>
-                        <br/>
-                    </div>
-                    <div>
-                                <input type="submit" value="Save" class="btn btn-primary" data-bind="click: submit"/>
- 
-                    </div>
-                </div>
-            </section>
+            @Html.Partial("_AdditionalContacts", Model.ServiceCallSummary.HomeownerId)
  
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignature, new { id = "verifiedHomeownerSignature", @class = "form-control" })
             @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignatureDate, new { id = "verifiedHomeownerSignatureDate", @class = "form-control" })
@@ -186,12 +135,12 @@
             </section>
             <section data-bind="visible: isEscalated">
                 <div class="alert alert-danger no-bottom-margin">
-                    <strong>Escalated</strong> <span data-bind="text: escalationDate()!=null ? moment(escalationDate()).format('MM/DD/YYYY') : ''"></span><span data-bind="text: escalationReason() != null ? ' - ' + escalationReason() : ''"></span>    
+                    <strong>Escalated</strong> <span data-bind="text: escalationDate()!=null ? moment(escalationDate()).format('MM/DD/YYYY') : ''"></span><span data-bind="    text: (escalationReason()) ? ' - ' + escalationReason() : ''"></span>    
                 </div>
             </section>
             <section data-bind="visible: isSpecialProject">
                 <div class="alert alert-info no-bottom-margin">
-                    <strong>Special Project</strong> <span data-bind="text: specialProjectDate()!=null ? moment(specialProjectDate()).format('MM/DD/YYYY') : ''"></span><span data-bind="text: specialProjectReason() != null ? ' - ' + specialProjectReason(): ''"></span>
+                    <strong>Special Project</strong> <span data-bind="text: specialProjectDate()!=null ? moment(specialProjectDate()).format('MM/DD/YYYY') : ''"></span><span data-bind="    text: (specialProjectReason()) ? ' - ' + specialProjectReason(): ''"></span>
                 </div>
             </section>
 
@@ -228,13 +177,24 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select problem code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemCodeToAdd" })
+                                <div class="form-group">
+                                    <select id="addCallLineProblemCode" class="form-control" data-bind="options: theLookups, value: problemJdeCodeToAdd, optionsText: 'problemCode', optionsValue: 'problemId', optionsCaption: 'Select Problem Code'"></select>
+                                    @*@Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select problem code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemJdeCodeToAdd" })*@   
+                                </div>
                             </div>
                         </div>
-                        <br />
                         <div class="row">
                             <div class="col-md-12">
-                                @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
+                                <div class="form-group">
+                                    <select id="addCallLineProblemDetail" class="dropdown form-control" data-bind="options: problemDetailCodes, value: problemDetailCodeToAdd, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Problem Detail'"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
+                                </div>
                             </div>
                         </div>
                         <br />
@@ -260,13 +220,25 @@
                                                             <div class="col-md-9">
                                                                 <div class="editor" data-bind="css: { editing: problemCodeEditing }"> 
                                                                     <h4>
-                                                                        <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code'"></select>
+                                                                        <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemJdeCode, optionsText: 'problemCode', optionsValue: 'problemId', optionsCaption: 'Select Problem Code'"></select>
                                                                         <span data-bind="text: problemCode" class="view"></span>
                                                                     </h4>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="row">
+                                                            <div class="col-md-9">
+                                                                <div class="editor" data-bind="css: { editing: problemCodeEditing }">
+                                                                    <p class="view"><strong data-bind="text: problemDetailCode"></strong></p>
+                                                                    <h4>
+                                                                        <select id="updateCallLineProblemDetail" class="edit dropdown form-control" data-bind="options: problemDetailCodes, value: editProblemDetailCode, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Problem Detail'"></select>
+                                                                        
+                                                                    </h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
+                                                    
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="editor" data-bind="css: { editing: problemDescriptionEditing }"> 
@@ -445,10 +417,15 @@
                 escalationDate: @Html.Raw(Model.ServiceCallSummary.EscalationDate.ToJson()),
                 canBeReopened: @Model.ServiceCallSummary.CanBeReopened.ToJson(),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
+                saveAdditionalContactsUrl: '@Url.Action("SaveAdditionalContacts","Homeowner")'
+            }
+        });
+
+        define('additionalContactsData', function() {
+            return {
                 additionalEmailContacts: @Html.Raw(Model.AdditionalContacts.AdditionalEmailContacts.ToJson()),
                 additionalPhoneContacts: @Html.Raw(Model.AdditionalContacts.AdditionalPhoneContacts.ToJson()),
-                saveAdditionalContactsUrl: '@Url.Action("SaveAdditionalContacts","Homeowner")'
-                }
+            };
         });
 
         define('dropdownData', function() {

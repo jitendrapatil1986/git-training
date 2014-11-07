@@ -82,6 +82,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , wc.HomeownerVerificationSignatureDate
                                     , wc.SpecialProjectReason
                                     , wc.SpecialProjectDate
+                                    
                                 FROM [ServiceCalls] wc
                                 INNER JOIN Jobs j
                                 ON wc.JobId = j.JobId
@@ -113,6 +114,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     li.ServiceCallId,
                                     li.LineNumber,
                                     li.ProblemCode,
+                                    li.ProblemJdeCode,
                                     li.ProblemDescription,
                                     li.CauseDescription,
                                     li.ClassificationNote,
@@ -120,7 +122,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     li.CreatedDate,
                                     li.ServiceCallLineItemStatusId as ServiceCallLineItemStatus,
                                     (SELECT COUNT(*) FROM ServiceCallNotes WHERE ServiceCallLineItemId = li.ServiceCallLineItemId) as NumberOfNotes,
-                                    (SELECT COUNT(*) FROM ServiceCallAttachments WHERE ServiceCallLineItemId = li.ServiceCallLineItemId AND IsDeleted = 0) as NumberOfAttachments
+                                    (SELECT COUNT(*) FROM ServiceCallAttachments WHERE ServiceCallLineItemId = li.ServiceCallLineItemId AND IsDeleted = 0) as NumberOfAttachments,
+                                    li.ProblemDetailCode
                                 FROM ServiceCalls wc
                                 INNER JOIN ServiceCallLineItems li
                                 ON wc.ServiceCallId = li.ServiceCallId

@@ -1,9 +1,10 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'bootbox', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, bootbox) {
+    require(['jquery', 'ko', 'ko.x-editable', 'bootbox', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/additionalContacts', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, bootbox, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, additionalContacts) {
         window.ko = ko; //manually set the global ko property.
         require(['ko.validation'], function () {
 
-        $(function () {
+         $(function () {
+                
             $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
                 $(this).hide();
             });
@@ -31,7 +32,7 @@ require(['/Scripts/app/main.js'], function () {
             $(".attached-file-display-name").editable();
 
             $(".phone-number-with-extension").on('shown', function () {
-                $(this).data('editable').input.$input.mask('?(999)-999-9999 **********', { placeholder: " " });
+                $(this).data('editable').input.$input.mask("(999) 999-9999? x99999", { placeholder: " " });
             });
 
             $(".datepicker-input").datepicker();
@@ -46,7 +47,7 @@ require(['/Scripts/app/main.js'], function () {
                     'position': 'absolute',
                     'right': right,
                     'top': $(this).offset().top + $(this).height() + 15
-                }).show();
+                }).show();  
             });
 
             $('.btn-cancel-popup').click(function (e) {
@@ -196,23 +197,29 @@ require(['/Scripts/app/main.js'], function () {
 
             function AllLineItemsViewModel(options) {
                 var self = this;
+                self.lineEditing = ko.observable(false);
                 self.serviceCallId = options.serviceCallId;
                 self.serviceCallLineItemId = options.serviceCallLineItemId;
                 self.completed = options.completed;
                 self.numberOfAttachments = options.numberOfAttachments;
                 self.numberOfNotes = options.numberOfNotes;
+                self.problemDetailCodes = ko.observableArray([]);
 
                 //track line item properties.
-                self.problemCodeId = ko.observable(options.problemCodeId);
+                self.problemJdeCode = ko.observable(options.problemJdeCode);
                 self.problemCode = ko.observable(options.problemCode);
+                self.problemDetailCode = ko.observable(options.problemDetailCode);
+                self.editProblemDetailCode = ko.observable();
                 self.problemDescription = ko.observable(options.problemDescription);
                 self.currentProblemCode = ko.observable();
+                self.currentProblemJdeCode = ko.observable();
+                self.currentProblemDetailCode = ko.observable();
                 self.currentProblemDescription = ko.observable();
 
                 //track editing problem code, desc, and line altogether.
                 self.problemCodeEditing = ko.observable();
                 self.problemDescriptionEditing = ko.observable("");
-                self.lineEditing = ko.observable("");
+                
 
                 //edit line item.
                 self.editLine = function () {
@@ -220,7 +227,10 @@ require(['/Scripts/app/main.js'], function () {
                     this.problemDescriptionEditing(true);
                     this.lineEditing(true);
                     this.currentProblemCode(this.problemCode());
+                    this.currentProblemJdeCode(this.problemJdeCode());
+                    this.currentProblemDetailCode(this.problemDetailCode());
                     this.currentProblemDescription(this.problemDescription());
+                    getProblemDetailCodes(self.problemJdeCode(), self.problemDetailCodes, self.problemDetailCode);
                 };
 
                 //save line item changes.
@@ -234,6 +244,8 @@ require(['/Scripts/app/main.js'], function () {
                     this.problemDescriptionEditing(false);
                     this.lineEditing(false);
                     this.problemCode(this.currentProblemCode());
+                    this.problemJdeCode(this.currentProblemJdeCode());
+                    this.problemDetailCode(this.currentProblemDetailCode());
                     this.problemDescription(this.currentProblemDescription());
                 };
 
@@ -283,6 +295,24 @@ require(['/Scripts/app/main.js'], function () {
                         window.location.href = urls.ServiceCall.LineItemDetail + '/' + self.serviceCallLineItemId;
                     }
                 };
+
+                self.problemJdeCode.subscribe(function (newValue) {
+                    if(self.lineEditing())
+                        getProblemDetailCodes(newValue, self.problemDetailCodes);
+                });
+
+                function getProblemDetailCodes(problemJdeCode, problemDetailCodes, problemDetailCode) {
+                    $.ajax({
+                        url: urls.ProblemDetail.ProblemDetails + '?problemJdeCode=' + problemJdeCode,
+                        type: "GET",
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    }).done(function(response) {
+                        problemDetailCodes(response);
+                        self.editProblemDetailCode(self.problemDetailCode());
+                    });
+                }
             }
 
             function CallNotesViewModel(options) {
@@ -321,23 +351,20 @@ require(['/Scripts/app/main.js'], function () {
                 self.createdDate = options.createdDate;
             }
             
-            function AddtionalEmailContactViewModel(options) {
-                var self = this;
-                self.contactValue = ko.observable(options.contactValue).extend({ required: true, email: true });
-            }
-
-            function AddtionalPhoneContactViewModel(options) {
-                var self = this;
-
-                self.contactValue = ko.observable(options.contactValue).extend({ required: true });
-            }
-
             function updateServiceCallLineItem(line) {
                 var updateProblemCode = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemCode");
                 if (updateProblemCode.val() == "") {
                     $(updateProblemCode).parent().addClass("has-error");
                     return;
                 }
+                line.problemCode($("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemCode").find('option:selected').text());
+
+                var updateProblemDetailCode = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemDetail");
+                if (updateProblemDetailCode.val() == "") {
+                    $(updateProblemDetailCode).parent().addClass("has-error");
+                    return;
+                }
+                line.problemDetailCode($("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemDetail").find('option:selected').text());
 
                 var updateProblemDescription = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemDescription");
                 if (updateProblemDescription.val() == "") {
@@ -427,7 +454,8 @@ require(['/Scripts/app/main.js'], function () {
                 self.allLineItems = ko.observableArray([]);
                 self.theLookups = dropdownData.availableLookups;  //dropdown list does not need to be observable. Only the actual elements w/i the array do.
                 self.problemDescriptionToAdd = ko.observable('');
-                self.problemCodeToAdd = ko.observable();
+                self.problemJdeCodeToAdd = ko.observable();
+                self.problemDetailCodeToAdd = ko.observable();
                 self.canBeReopened = ko.observable(modelData.canBeReopened);
                 self.isSpecialProject = ko.observable(modelData.isSpecialProject);
                 self.specialProjectReason = ko.observable(modelData.specialProjectReason);
@@ -437,10 +465,10 @@ require(['/Scripts/app/main.js'], function () {
                 self.escalationDate = ko.observable(modelData.escalationDate);
                 self.allCallNotes = ko.observableArray([]);
                 self.allAttachments = ko.observableArray([]);
-                self.additionalEmailContacts = ko.observableArray([]);
-                self.additionalPhoneContacts = ko.observableArray([]);
+
                 self.noteDescriptionToAdd = ko.observable('');
                 self.userCanAlwaysReopenCallLines = ko.observable();
+                self.problemDetailCodes = ko.observableArray([]);
 
                 self.areAllLineItemsCompleted = ko.computed(function () {
                     var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
@@ -453,6 +481,29 @@ require(['/Scripts/app/main.js'], function () {
                         return true;
                 }).extend({ notify: 'always' });
 
+                self.problemJdeCodeToAdd.subscribe(function (newValue) {
+                    if (newValue != "") {
+                        var problemJdeCode = $("#addCallLineProblemCode").find('option:selected').val();
+                        getproblemDetailCodes(problemJdeCode, self.problemDetailCodes);
+                    } else {
+                        self.problemDetailCodes([]);
+                    }
+                    
+                    
+                });
+
+                function getproblemDetailCodes(problemJdeCode, problemDetailCodes) {
+                    $.ajax({
+                        url: urls.ProblemDetail.ProblemDetails + '?problemJdeCode=' + problemJdeCode,
+                        type: "GET",
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    }).done(function (response) {
+                        problemDetailCodes(response);
+                    });
+                }
+                
                 self.removeAttachment = function (e) {
                     bootbox.confirm(modelData.attachmentRemovalMessage, function(result) {
                         if (result) {
@@ -471,66 +522,25 @@ require(['/Scripts/app/main.js'], function () {
                         }
                     });
                 };
+
                 
-
-                self.submit = function () {
-
-                    if (self.errors().length != 0) {
-                        self.errors.showAllMessages();
-                        return;
-                    }
-
-
-
-                    var addtionalContactInfo =
-                    {
-                        additionalPhoneContacts: self.additionalPhoneContacts,
-                        homeownerId: $("#HomeownerId").val(),
-                        additionalEmailContacts: self.additionalEmailContacts
-                    };
-
-                    var newAddtionalContactInfo = ko.toJSON(addtionalContactInfo);
-
-                    $.ajax({
-                        url: modelData.saveAdditionalContactsUrl,
-                        type: "POST",
-                        data: newAddtionalContactInfo,
-                        dataType: "json",
-                        processData: false,
-                        contentType: "application/json; charset=utf-8"
-                    })
-                        .fail(function (response) {
-
-                            toastr.error("There was an issue saving the additional contact info. Please try again!");
-                        })
-                        .done(function (response) {
-                            toastr.success("Success! Additional contact info saved.");
-                        });
-                };
-
-                self.addEmailContact = function () {
-                    self.additionalEmailContacts.push(new AddtionalEmailContactViewModel({
-                        contactType: homeownerContactTypeEnum.Email.Value,
-                        contactValue: null
-                    }));
-                };
-
-                self.addPhoneContact = function () {
-                    self.additionalPhoneContacts.push(new AddtionalPhoneContactViewModel({
-                        contactType: homeownerContactTypeEnum.Phone.Value,
-                        contactValue: null
-                    }));
-                };
 
                 self.addLineItem = function () {
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
                     self.problemCode = $("#addCallLineProblemCode").find('option:selected').text();
-                    self.problemCodeId = $("#addCallLineProblemCode").val();
+                    self.problemDetailCode = $("#addCallLineProblemDetail").find('option:selected').text();
+                    self.problemJdeCode = $("#addCallLineProblemCode").val();
                     self.problemDescription = $("#addCallLineProblemDescription").val();
 
                     var newProblemCode = $("#addCallLineProblemCode");
                     if (newProblemCode.val() == "") {
                         $(newProblemCode).parent().addClass("has-error");
+                        return;
+                    }
+
+                    var newProblemDetailCode = $("#addCallLineProblemDetail");
+                    if (newProblemDetailCode.val() == "") {
+                        $(newProblemDetailCode).parent().addClass("has-error");
                         return;
                     }
 
@@ -541,8 +551,10 @@ require(['/Scripts/app/main.js'], function () {
                     }
 
                     var newLineItem = new AllLineItemsViewModel({
-                        serviceCallId: self.serviceCallId, problemCodeId: self.problemCodeId,
-                        problemCode: self.problemCode, problemDescription: self.problemDescription
+
+                        serviceCallId: self.serviceCallId, problemJdeCode: self.problemJdeCode,
+                        problemCode: self.problemCode, problemDescription: self.problemDescription,
+                        problemDetailCode: self.problemDetailCode
                     });
 
                     var lineData = ko.toJSON(newLineItem);
@@ -564,7 +576,8 @@ require(['/Scripts/app/main.js'], function () {
                                 serviceCallLineItemId: response.ServiceCallLineItemId,
                                 lineNumber: response.LineNumber,
                                 problemCode: self.problemCode,
-                                problemCodeId: self.problemCodeId,
+                                problemDetailCode: self.problemDetailCode,
+                                problemJdeCode: self.problemJdeCode,
                                 problemDescription: self.problemDescription,
                                 serviceCallLineItemStatus: response.ServiceCallLineItemStatus,
                                 completed: false
@@ -575,6 +588,7 @@ require(['/Scripts/app/main.js'], function () {
 
                             $("#addCallLineProblemDescription").val('');
                             $("#addCallLineProblemCode").val('');
+                            $("#addCallLineProblemDetail").val('');
                             self.problemDescription = '';
                         });
 
@@ -758,7 +772,6 @@ require(['/Scripts/app/main.js'], function () {
 
             var viewModel = new serviceCallSummaryItemViewModel();
 
-
             var persistedAllLineItemsViewModel = modelData.initialServiceLines;
 
             _(persistedAllLineItemsViewModel).each(function (item) {
@@ -778,21 +791,9 @@ require(['/Scripts/app/main.js'], function () {
                 viewModel.allAttachments.push(new CallAttachmentsViewModel(attachment));
             });
 
-            var additionalEmailContacsViewModel = modelData.additionalEmailContacts;
-
-            _(additionalEmailContacsViewModel).each(function (contact) {
-                viewModel.additionalEmailContacts.push(new AddtionalEmailContactViewModel(contact));
-            });
-
-            var additionalPhoneContacsViewModel = modelData.additionalPhoneContacts;
-
-            _(additionalPhoneContacsViewModel).each(function (contact) {
-                viewModel.additionalPhoneContacts.push(new AddtionalPhoneContactViewModel(contact));
-            });
-
             viewModel.errors = ko.validation.group(viewModel);
             ko.applyBindings(viewModel);
+         });
+        });
     });
-});
-});
 });

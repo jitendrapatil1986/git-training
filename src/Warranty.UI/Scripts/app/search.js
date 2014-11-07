@@ -54,7 +54,12 @@
                                 suggestion: Handlebars.compile(config.itemTemplate),
                             },
                         }).on('typeahead:selected typeahead:autocompleted', function (e, datum) {
-                            window.location = config.targetUrl + '/' + datum.Id;
+                            if (config.target) {
+                                config.target(datum);
+                            }
+                            if (config.targetUrl) {
+                                window.location = config.targetUrl + '/' + datum.Id;
+                            }
                         });
                     });
                 };

@@ -7,6 +7,7 @@
     using Warranty.Core.Enumerations;
     using Warranty.Core.Features.AddServiceCallLineItem;
     using Warranty.Core.Features.AddServiceCallNote;
+    using Warranty.Core.Features.AddServiceCallPayment;
     using Warranty.Core.Features.CompleteServiceCallLineItem;
     using Warranty.Core.Features.EditServiceCallLineItem;
 	using Warranty.Core.Features.UpdateServiceCallLineItem;
@@ -43,6 +44,8 @@
             {
                 ServiceCallLineItemId = model.ServiceCallLineItemId,
                 ProblemCode = model.ProblemCode,
+                ProblemDetailCode = model.ProblemDetailCode,
+                ProblemJdeCode = model.ProblemJdeCode,
                 ProblemDescription = model.ProblemDescription
             });
 
@@ -56,6 +59,8 @@
             {
                 ServiceCallId = model.ServiceCallId,
                 ProblemCode = model.ProblemCode,
+                ProblemDetailCode = model.ProblemDetailCode,
+                ProblemJdeCode = model.ProblemJdeCode,
                 ProblemDescription = model.ProblemDescription
             });
 
@@ -95,6 +100,19 @@
             });
 
             return resultModel;
+        }
+
+        [HttpPost]
+        public Guid AddPayment(AddServiceCallLineItemPaymentCommand model)
+        {
+            return _mediator.Send(model); ;
+        }
+
+        [HttpDelete]
+        public string DeletePayment(DeleteServiceCallLineItemPaymentCommand model)
+        {
+            _mediator.Send(model);
+            return "success";
         }
     }
 }

@@ -51,7 +51,14 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="NotifyBackchargeApproved.cs" />
+    <Compile Include="NotifyBackchargeDeny.cs" />
+    <Compile Include="NotifyBackchargeOnHold.cs" />
     <Compile Include="NotifyJobHomeownerChanged.cs" />
+    <Compile Include="NotifyPaymentApproved.cs" />
+    <Compile Include="NotifyPaymentOnHold.cs" />
+    <Compile Include="NotifyRequestedBackcharge.cs" />
+    <Compile Include="NotifyRequestedPayment.cs" />
     <Compile Include="NotifyServiceCallCreated.cs" />
     <Compile Include="NotifyServiceCallLineItemCreated.cs" />
     <Compile Include="NotifyServiceCallCompleted.cs" />

@@ -35,8 +35,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Events">
-      <HintPath>..\packages\Accounting.Events.1.1.701.0\lib\net45\Accounting.Events.dll</HintPath>
+    <Reference Include="Accounting.Commands, Version=1.1.857.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Accounting.Commands.1.1.857.0\lib\net45\Accounting.Commands.dll</HintPath>
+    </Reference>
+    <Reference Include="Accounting.Events, Version=1.1.857.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Accounting.Events.1.1.857.0\lib\net45\Accounting.Events.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
@@ -44,9 +49,9 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
@@ -106,12 +111,26 @@
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandler.cs" />
+    <Compile Include="Handlers\Payments\BackchargeRequestedHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyBackchargeApprovedHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyBackchargeDeniedHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyBackchargeOnHoldHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyPaymentApprovedHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyPaymentOnHoldHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentAddedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentAddressNumberUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentDeletedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentIdUpdatedHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestBackchargeApprovalResponseHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestBackchargeDenialResponseHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestBackchargeHoldResponseHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestBackchargeResponseHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestPaymentApprovalResponseHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestPaymentHoldResponseHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentPaymentAmountUpdatedHandler.cs" />
+    <Compile Include="Handlers\Payments\PaymentRequestedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentStatusUpdatedHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestPaymentResponseHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallCompletedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallCreatedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallEmployeeReassignedHandler.cs" />
@@ -154,7 +173,6 @@
       <Name>Warranty.UI</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

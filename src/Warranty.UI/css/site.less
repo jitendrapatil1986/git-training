@@ -964,6 +964,35 @@ span.boxclose{
     border-bottom: 1px solid #ddd;
 }
 
+span.remove-additional-contact{    
+    cursor: pointer;
+    display: none;  
+}
+
+.additional-contact.can-remove:hover span.remove-additional-contact {
+    display: inline-block;
+}
+
+.additional-contact .additional-contact-icon {
+    display:none;
+}
+
+.additional-contact.can-remove .additional-contact-icon {
+    display:inline-block;
+}
+
+.payment-line{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.payment-line .btn-hover-show{
+    opacity: 0;
+}
+
+.payment-line:hover .btn-hover-show{
+    opacity: 1;
+}
 
 
 @media (max-width: 767px) {
@@ -990,7 +1019,7 @@ a.boxclose {
     }
 
     .inline-editable-text .glyphicon {
-        width: 31%;
+        width: 48%;
         margin: 2px;
         float: left;
         padding: 10px;
@@ -1035,5 +1064,30 @@ a.boxclose {
     #serviceCallSummaryPage .panel-heading, #serviceCallLineItemDetailPage .panel-heading {
         margin:0;
         border: 0;
+    }
+}
+
+.fa-spin-custom, .glyphicon-spin {
+    -webkit-animation: spin 1000ms infinite linear;
+    animation: spin 1000ms infinite linear;
+}
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+@keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
     }
 }
