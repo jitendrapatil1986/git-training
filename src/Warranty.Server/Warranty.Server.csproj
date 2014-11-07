@@ -35,12 +35,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Commands">
-      <HintPath>..\packages\Accounting.Commands.1.1.853.0\lib\net45\Accounting.Commands.dll</HintPath>
-    </Reference>
-    <Reference Include="Accounting.Events, Version=1.1.855.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Accounting.Commands, Version=1.1.857.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Accounting.Events.1.1.855.0\lib\net45\Accounting.Events.dll</HintPath>
+      <HintPath>..\packages\Accounting.Commands.1.1.857.0\lib\net45\Accounting.Commands.dll</HintPath>
+    </Reference>
+    <Reference Include="Accounting.Events, Version=1.1.857.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Accounting.Events.1.1.857.0\lib\net45\Accounting.Events.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
@@ -115,10 +116,21 @@
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\BackchargeRequestedHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyBackchargeApprovedHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyBackchargeDeniedHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyBackchargeOnHoldHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyPaymentApprovedHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyPaymentOnHoldHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentAddedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentAddressNumberUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentDeletedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentIdUpdatedHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestBackchargeApprovalResponseHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestBackchargeDenialResponseHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestBackchargeHoldResponseHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestBackchargeResponseHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestPaymentApprovalResponseHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestPaymentHoldResponseHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentPaymentAmountUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentRequestedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentStatusUpdatedHandler.cs" />

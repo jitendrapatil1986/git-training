@@ -1,6 +1,7 @@
 ﻿namespace Warranty.Core.Entities
 {
     using System;
+    using Enumerations;
 
     public class Backcharge : IAuditableEntity
     {
@@ -18,5 +19,9 @@
         public DateTime? CreatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        public string JdeIdentifier { get; set; }
+        public string HoldComments { get; set; }
+        public string DenyComments { get; set; }
+        public BackchargeStatus BackchargeStatus { get; set; }
     }
 }
