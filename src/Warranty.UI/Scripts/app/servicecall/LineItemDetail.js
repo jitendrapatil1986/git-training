@@ -1,10 +1,10 @@
-﻿require(['/Scripts/app/main.js'], function() {
-    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchBackchargeVendor', '/Scripts/lib/jquery.color-2.1.0.min.js'], function($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, bootbox) {
-        window.ko = ko; //manually set the global ko property.
+﻿require(['/Scripts/app/main.js'], function () {
+    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchBackchargeVendor', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, bootbox) {
+        window.ko = ko;  //manually set the global ko property.
 
-        require(['ko.validation'], function() {
-            $(function() {
-                $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function() {
+        require(['ko.validation'], function () {
+            $(function () {
+                $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
                     $(this).hide();
                 });
 
@@ -20,7 +20,7 @@
                     var elem = $(elemId);
                     elem.css("backgroundColor", "#ffffff"); // hack for Safari
                     elem.animate({ backgroundColor: '#d4dde3' }, 500);
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $(elemId).animate({ backgroundColor: "#ffffff" }, 750);
                     }, 500);
                 }
@@ -53,9 +53,9 @@
                         self.paymentStatusDisplayName = options.paymentStatusDisplayName;
                     }
 
-                    self.deletePayment = function() {
+                    self.deletePayment = function () {
                         var payment = this;
-                        bootbox.confirm("Are you sure you want to delete this payment?", function(result) {
+                        bootbox.confirm("Are you sure you want to delete this payment?", function (result) {
 
                             if (result) {
                                 var actionUrl = urls.ManageServiceCall.DeletePayment;
@@ -63,7 +63,7 @@
                                     type: "DELETE",
                                     url: actionUrl,
                                     data: { PaymentId: payment.paymentId },
-                                    success: function() {
+                                    success: function () {
 
                                         viewModel.allPayments.remove(payment);
                                         toastr.success("Success! Payment deleted.");
@@ -95,27 +95,90 @@
                     self.createdDate = options.createdDate;
                 }
 
-                function ConstructionVendorViewModel(options) {
-                    var self = this;
-                    self.vendorName = options.vendorName;
-                    self.vendorNumber = options.vendorNumber;
+                function updateServiceCallLineItem(line) {
+                    var updateProblemCode = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemCode");
+                    if (updateProblemCode.val() == "") {
+                        $(updateProblemCode).parent().addClass("has-error");
+                        return;
+                    }
+
+                    var updateProblemDescription = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemDescription");
+                    if (updateProblemDescription.val() == "") {
+                        $(updateProblemDescription).parent().addClass("has-error");
+                        return;
+                    }
+
+                    var lineData = ko.toJSON(line);
+
+                    $.ajax({
+                        url: urls.ManageServiceCall.EditLineItem,
+                        type: "POST",
+                        data: lineData,
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    })
+                        .fail(function (response) {
+                            toastr.error("There was an issue updating the line item. Please try again!");
+                        })
+                        .done(function (response) {
+                            toastr.success("Success! Item updated.");
+                            self.problemCode = line.problemCode;
+
+                            //change to non-edit mode once success has occurred.
+                            line.problemCodeEditing(false);
+                            line.problemDescriptionEditing(false);
+                            line.lineEditing(false);
+                        });
+
+                    $(updateProblemCode).parent().removeClass("has-error");
+                    $(updateProblemDescription).parent().removeClass("has-error");
+                }
+
+                function completeServiceCallLineItem(line) {
+                    var lineData = ko.toJSON(line);
+
+                    $.ajax({
+                        url: urls.ManageServiceCall.CompleteLineItem,
+                        type: "POST",
+                        data: lineData,
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    })
+                        .fail(function (response) {
+                            toastr.error("There was an issue completing the line item. Please try again!");
+                        })
+                        .done(function (response) {
+                            line.serviceCallLineItemStatusDisplayName(response.DisplayName);
+
+                            //if user is not allowed to ALWAYS reopen Completed lines at anytime, then allow them to reopen only right after completing a line.
+                            if ($("#userCanReopenCallLinesAnytime").val() == false) {
+                                $("#undoLastCompletedLineItemAlert").attr('data-service-line-id-to-undo', line.serviceCallLineItemId);
+                                $("#undoLastCompletedLineItemAlert").show();
+                                viewModel.lineJustCompleted(true);
+                                $("#undoLastCompletedLineItemAlert").attr("tabindex", -1).focus();  //focus only after setting lineJustCompleted observable which visibly shows control on form first and then focus.
+                            } else {
+                                toastr.success("Success! Item completed.");
+                            }
+                        });
                 }
 
                 function reopenServiceCallLineItem(line) {
                     var lineData = ko.toJSON(line);
 
                     $.ajax({
-                            url: urls.ManageServiceCall.ReopenLineItem,
-                            type: "POST",
-                            data: lineData,
-                            dataType: "json",
-                            processData: false,
-                            contentType: "application/json; charset=utf-8"
-                        })
-                        .fail(function(response) {
+                        url: urls.ManageServiceCall.ReopenLineItem,
+                        type: "POST",
+                        data: lineData,
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    })
+                        .fail(function (response) {
                             toastr.error("There was an issue reopening the line item. Please try again!");
                         })
-                        .done(function(response) {
+                        .done(function (response) {
                             toastr.success("Success! Item reopened.");
                             line.serviceCallLineItemStatusDisplayName(response.DisplayName);
                         });
@@ -146,53 +209,53 @@
                     self.isBackcharge = ko.observable(false);
                     self.backchargeAmount = ko.observable('').extend({
                         required: {
-                            onlyIf: function() { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
                     self.backchargeReason = ko.observable('').extend({
                         required: {
-                            onlyIf: function() { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
                     self.personNotified = ko.observable('').extend({
                         required: {
-                            onlyIf: function() { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
                     self.personNotifiedPhoneNumber = ko.observable('').extend({
                         required: {
-                            onlyIf: function() { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
                     self.personNotifiedDate = ko.observable('').extend({
                         required: {
-                            onlyIf: function() { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
                     self.backchargeResponseFromVendor = ko.observable('').extend({
                         required: {
-                            onlyIf: function() { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
                     self.vendorName = ko.observable('').extend({ required: true });
                     self.vendorNumber = ko.observable('').extend({ required: true });
                     self.backchargeVendorName = ko.observable('').extend({
                         required: {
-                            onlyIf: function() { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
                     self.backchargeVendorNumber = ko.observable('').extend({
                         required: {
-                            onlyIf: function() { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
                     self.allPayments = ko.observableArray([]);
 
-                    self.canAddPayment = ko.computed(function() {
+                    self.canAddPayment = ko.computed(function () {
                         return true;
                     });
 
-                    self.clearPaymentFields = function() {
+                    self.clearPaymentFields = function () {
 
                         $('#vendor-search').val('');
                         $('#backcharge-vendor-search').val('');
@@ -210,13 +273,13 @@
                         self.errors.showAllMessages(false);
                     };
 
-                    $(document).on('vendor-number-selected', function() {
+                    $(document).on('vendor-number-selected', function () {
                         var vendorNumber = $('#vendor-search').data('vendor-number');
                         var vendorName = $('#vendor-search').data('vendor-name');
                         self.vendorNumber(vendorNumber);
                         self.vendorName(vendorName);
                     });
-                    $(document).on('backcharge-vendor-number-selected', function() {
+                    $(document).on('backcharge-vendor-number-selected', function () {
                         var vendorNumber = $('#backcharge-vendor-search').data('vendor-number');
                         var vendorName = $('#backcharge-vendor-search').data('vendor-name');
 
@@ -224,7 +287,7 @@
                         self.backchargeVendorName(vendorName);
                     });
 
-                    self.addPayment = function() {
+                    self.addPayment = function () {
                         if (self.errors().length != 0) {
                             self.errors.showAllMessages();
                             return;
@@ -254,17 +317,17 @@
                         var paymentData = ko.toJSON(newPayment);
 
                         $.ajax({
-                                url: urls.ManageServiceCall.AddPayment,
-                                type: "POST",
-                                data: paymentData,
-                                dataType: "json",
-                                processData: false,
-                                contentType: "application/json; charset=utf-8"
-                            })
-                            .fail(function(response) {
+                            url: urls.ManageServiceCall.AddPayment,
+                            type: "POST",
+                            data: paymentData,
+                            dataType: "json",
+                            processData: false,
+                            contentType: "application/json; charset=utf-8"
+                        })
+                            .fail(function (response) {
                                 toastr.error("There was a problem adding the payment. Please try again.");
                             })
-                            .done(function(response) {
+                            .done(function (response) {
 
                                 newPayment.paymentId = response;
                                 self.allPayments.unshift(newPayment);
@@ -278,13 +341,48 @@
                         format: 'm/d/yyyy'
                     });
 
-                    $("#Person_Notified_Date").on('changeDate', function(e) {
+                    $("#Person_Notified_Date").on('changeDate', function (e) {
                         self.personNotifiedDate(moment(e.date).format("L"));
                     });
 
+                    //edit line item.
+                    self.editLine = function () {
+                        this.problemCodeEditing(true);
+                        this.problemDescriptionEditing(true);
+                        this.lineEditing(true);
+                        this.currentProblemCode(this.problemCode());
+                        this.currentProblemDescription(this.problemDescription());
+                    };
+
+                    //save line item changes.
+                    self.saveLineItemChanges = function () {
+                        updateServiceCallLineItem(this);
+                    };
+
+                    //cancel line item changes.
+                    self.cancelLineItemChanges = function () {
+                        this.problemCodeEditing(false);
+                        this.problemDescriptionEditing(false);
+                        this.lineEditing(false);
+                        this.problemCode(this.currentProblemCode());
+                        this.problemDescription(this.currentProblemDescription());
+                    };
+
+                    //complete line item.
+                    self.completeLine = function () {
+                        this.lineEditing(false);
+                        completeServiceCallLineItem(this);
+                    };
+
+                    //reopen line item.
+                    self.reopenLine = function () {
+                        this.lineEditing(false);
+                        reopenServiceCallLineItem(this);
+                    };
+
                     self.lineNumber = ko.observable(modelData.initialServiceCallLineItem.lineNumber);
 
-                    self.lineNumberWithProblemCode = ko.computed(function() {
+                    self.lineNumberWithProblemCode = ko.computed(function () {
                         return self.lineNumber() + " - " + self.problemCode();
                     });
 
@@ -293,30 +391,30 @@
                     self.serviceCallLineItemStatusDisplayName = ko.observable('');
                     if (modelData.initialServiceCallLineItem.serviceCallLineItemStatus) {
                         if (modelData.initialServiceCallLineItem.serviceCallLineItemStatus.displayName)
-                            self.serviceCallLineItemStatusDisplayName(modelData.initialServiceCallLineItem.serviceCallLineItemStatus.displayName); //TODO: displayName works for model passed into js file via toJSON().
+                            self.serviceCallLineItemStatusDisplayName(modelData.initialServiceCallLineItem.serviceCallLineItemStatus.displayName);  //TODO: displayName works for model passed into js file via toJSON().
                         if (modelData.initialServiceCallLineItem.serviceCallLineItemStatus.DisplayName)
-                            self.serviceCallLineItemStatusDisplayName(modelData.initialServiceCallLineItem.serviceCallLineItemStatus.DisplayName); //TODO: DisplayName works for model passed from ajax call. Need to keep both similar.
+                            self.serviceCallLineItemStatusDisplayName(modelData.initialServiceCallLineItem.serviceCallLineItemStatus.DisplayName);  //TODO: DisplayName works for model passed from ajax call. Need to keep both similar.
                     }
 
-                    self.lineItemStatusCSS = ko.computed(function() {
+                    self.lineItemStatusCSS = ko.computed(function () {
                         return self.serviceCallLineItemStatusDisplayName() ? 'label label-' + self.serviceCallLineItemStatusDisplayName().toLowerCase() + '-service-line-item' : '';
                     });
 
-                    self.isLineItemCompleted = function() {
+                    self.isLineItemCompleted = function () {
                         if (!self.serviceCallLineItemStatusDisplayName())
                             return false;
 
                         return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase() ? true : false;
                     };
 
-                    self.theLookups = dropdownData.availableLookups; //dropdown list does not need to be observable. Only the actual elements w/i the array do.
+                    self.theLookups = dropdownData.availableLookups;  //dropdown list does not need to be observable. Only the actual elements w/i the array do.
                     self.allCallNotes = ko.observableArray([]);
                     self.allAttachments = ko.observableArray([]);
                     self.noteDescriptionToAdd = ko.observable('');
                     self.userCanAlwaysReopenCallLines = ko.observable();
 
-                    self.removeAttachment = function(e) {
-                        bootbox.confirm(modelData.attachmentRemovalMessage, function(result) {
+                    self.removeAttachment = function (e) {
+                        bootbox.confirm(modelData.attachmentRemovalMessage, function (result) {
                             if (result) {
                                 var item = $('.boxclose[data-attachment-id="' + e.serviceCallAttachmentId + '"]');
                                 var actionUrl = item.data('url');
@@ -325,7 +423,7 @@
                                     type: "POST",
                                     url: actionUrl,
                                     data: { id: attachmentId },
-                                    success: function(data) {
+                                    success: function (data) {
                                         self.allAttachments.remove(e);
                                         toastr.success("Success! Attachment deleted.");
                                     }
@@ -334,7 +432,7 @@
                         });
                     };
 
-                    self.addCallNote = function() {
+                    self.addCallNote = function () {
                         self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
                         self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
                         self.note = $("#addCallNoteDescription").val();
@@ -355,17 +453,17 @@
                         var lineNoteData = ko.toJSON(newCallNote);
 
                         $.ajax({
-                                url: urls.ManageServiceCall.AddNote,
-                                type: "POST",
-                                data: lineNoteData,
-                                dataType: "json",
-                                processData: false,
-                                contentType: "application/json; charset=utf-8"
-                            })
-                            .fail(function(response) {
+                            url: urls.ManageServiceCall.AddNote,
+                            type: "POST",
+                            data: lineNoteData,
+                            dataType: "json",
+                            processData: false,
+                            contentType: "application/json; charset=utf-8"
+                        })
+                            .fail(function (response) {
                                 toastr.error("There was a problem adding the call note. Please try again.");
                             })
-                            .done(function(response) {
+                            .done(function (response) {
                                 self.allCallNotes.unshift(new CallNotesViewModel({
                                     serviceCallNoteId: response.ServiceCallNoteId,
                                     serviceCallId: self.serviceCallId,
@@ -383,22 +481,17 @@
                             });
                     };
 
-                    self.cancelCallNote = function() {
+                    self.cancelCallNote = function () {
                         clearNoteFields();
                     };
 
                     self.lineJustCompleted = ko.observable();
 
                     //undo last line item which was completed.
-                    self.undoLastCompletedLine = function() {
+                    self.undoLastCompletedLine = function () {
                         reopenServiceCallLineItem(this);
                         self.lineJustCompleted(false);
                     };
-
-                    /*begin construction vendor feature */
-                    self.constructionVendors = ko.observableArray([]);
-
-                    /*end construction vendor feature */
                 }
 
                 ko.validation.init({
@@ -413,24 +506,22 @@
 
                 var persistedAllCallNotesViewModel = modelData.initialServiceCallLineNotes;
 
-                _(persistedAllCallNotesViewModel).each(function(note) {
+                _(persistedAllCallNotesViewModel).each(function (note) {
                     viewModel.allCallNotes.push(new CallNotesViewModel(note));
                 });
 
                 var persistedAllAttachmentsViewModel = modelData.initialServiceCallLineAttachments;
 
-                _(persistedAllAttachmentsViewModel).each(function(attachment) {
+                _(persistedAllAttachmentsViewModel).each(function (attachment) {
                     viewModel.allAttachments.push(new CallAttachmentsViewModel(attachment));
                 });
 
                 var persistedAllPaymentsViewModel = modelData.initialServiceCallLinePayments;
 
-                _(persistedAllPaymentsViewModel).each(function(payment) {
+                _(persistedAllPaymentsViewModel).each(function (payment) {
 
                     viewModel.allPayments.push(new PaymentViewModel(payment));
                 });
-
-                
             });
         });
     });
