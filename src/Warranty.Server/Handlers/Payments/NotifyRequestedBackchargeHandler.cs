@@ -7,13 +7,13 @@
     using NPoco;
     using NServiceBus;
 
-    public class BackchargeRequestedHandler : IHandleMessages<NotifyRequestedBackcharge>
+    public class NotifyRequestedBackchargeHandler : IHandleMessages<NotifyRequestedBackcharge>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
         private readonly IBus _bus;
 
-        public BackchargeRequestedHandler(IBus bus, IDatabase database, IUserSession userSession)
+        public NotifyRequestedBackchargeHandler(IBus bus, IDatabase database, IUserSession userSession)
         {
             _bus = bus;
             _database = database;
