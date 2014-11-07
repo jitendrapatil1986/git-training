@@ -26,6 +26,7 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
         public IEnumerable<SelectListItem> ProblemCodes { get; set; }
         public IEnumerable<ServiceCallLineItemNote> ServiceCallLineItemNotes { get; set; }
         public IEnumerable<ServiceCallLineItemAttachment> ServiceCallLineItemAttachments { get; set; }
+        public IEnumerable<ServiceCallLineItemPayment> ServiceCallLineItemPayments { get; set; }
 
         public class ServiceCallLineItemNote
         {
@@ -45,6 +46,29 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public string DisplayName { get; set; }
             public DateTime? CreatedDate { get; set; }
             public string CreatedBy { get; set; }
+        }
+
+        public class ServiceCallLineItemPayment
+        {
+            public Guid PaymentId { get; set; }
+            public string VendorNumber { get; set; }
+            public decimal Amount { get; set; }
+            public PaymentStatus PaymentStatus { get; set; }
+            public string PaymentStatusDisplayName { get { return PaymentStatus.DisplayName; }}
+            public string InvoiceNumber { get; set; }
+            public Guid ServiceCallLineItemId { get; set; }
+            public DateTime PaymentCreatedDate { get; set; }
+            public Guid BackchargeId { get; set; }
+            public string BackchargeVendorNumber { get; set; }
+            public decimal BackchargeAmount { get; set; }
+            public string BackchargeReason { get; set; }
+            public string PersonNotified { get; set; }
+            public string PersonNotifiedPhoneNumber { get; set; }
+            public DateTime PersonNotifiedDate { get; set; }
+            public string BackchargeResponseFromVendor { get; set; }
+            public string VendorName { get; set; }
+            public string BackchargeVendorName { get; set; }
+            public bool IsBackcharge { get; set; }
         }
 
     }

@@ -1,18 +1,31 @@
 ﻿namespace Warranty.Core.Enumerations
 {
+    using System.Linq;
+
     public class PaymentStatus : Enumeration<PaymentStatus>
     {
-        public PaymentStatus(int value, string displayName) : base(value, displayName)
+        public static readonly PaymentStatus Requested = new PaymentStatus(1, "Requested", "NoJdeCode-WarrantyModuleStatus");
+        public static readonly PaymentStatus Pending = new PaymentStatus(2, "Pending", "P");
+        public static readonly PaymentStatus RequestedApproval = new PaymentStatus(3, "Requested Approval", "NoJdeCode-WarrantyModuleStatus");
+        public static readonly PaymentStatus Approved = new PaymentStatus(4, "Approved", "A");
+        public static readonly PaymentStatus RequestedHold = new PaymentStatus(5, "Requested Hold", "NoJdeCode-WarrantyModuleStatus");
+        public static readonly PaymentStatus Hold = new PaymentStatus(6, "Hold", "H");
+        public static readonly PaymentStatus NeverPay = new PaymentStatus(7, "Never Pay", "Z");
+        public static readonly PaymentStatus Question = new PaymentStatus(8, "Question", "Q");
+        public static readonly PaymentStatus Manual = new PaymentStatus(9, "Manual", "M");
+        public static readonly PaymentStatus Paid = new PaymentStatus(10, "Paid", "1");
+
+        private PaymentStatus(int value, string displayName, string jdeCode)
+            : base(value, displayName)
         {
+            JdeCode = jdeCode;
         }
 
-        public static PaymentStatus Pending = new PaymentStatus(1, "Pending");
-        public static PaymentStatus ManagerOnHold = new PaymentStatus(2, "Manager On Hold");
-        public static PaymentStatus ManagerDenied = new PaymentStatus(3, "Manager Denied");
-        public static PaymentStatus ManagerApproved = new PaymentStatus(4, "Manager Approved");
-        public static PaymentStatus AccountingOnHold = new PaymentStatus(5, "Accounting On Hold");
-        public static PaymentStatus AccountingDenied = new PaymentStatus(6, "Accounting Denied");
-        public static PaymentStatus AccountingApproved = new PaymentStatus(7, "Accounting Approved");
-        public static PaymentStatus Paid = new PaymentStatus(8, "Paid");
+        public string JdeCode { get; set; }
+
+        public static PaymentStatus FromJdeCode(string code)
+        {
+            return GetAll().SingleOrDefault(x => x.JdeCode.Equals(code));
+        }
     }
 }

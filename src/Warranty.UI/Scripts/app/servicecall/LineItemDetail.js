@@ -1,6 +1,8 @@
 ﻿require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'bootbox', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, bootbox) {
+    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchBackchargeVendor', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, bootbox) {
+        window.ko = ko;  //manually set the global ko property.
 
+        require(['ko.validation'], function() {
         $(function () {
             $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
                 $(this).hide();
@@ -14,6 +16,7 @@
             $(".attached-file-display-name").editable();
 
             function highlight(elemId) {
+                
                 var elem = $(elemId);
                 elem.css("backgroundColor", "#ffffff"); // hack for Safari
                 elem.animate({ backgroundColor: '#d4dde3' }, 500);
@@ -25,6 +28,50 @@
             function clearNoteFields() {
                 $("#addCallNoteDescription").val('');
                 self.noteDescriptionToAdd('');
+            }
+            
+            function PaymentViewModel(options) {
+                
+                var self = this;
+                self.serviceCallLineItemId = options.serviceCallLineItemId;
+                self.vendorNumber = options.vendorNumber;
+                self.vendorName = options.vendorName;
+                self.backchargeVendorNumber = options.backchargeVendorNumber;
+                self.backchargeVendorName = options.backchargeVendorName;
+                self.invoiceNumber = options.invoiceNumber;
+                self.amount = options.amount;
+                self.backchargeAmount = options.backchargeAmount;
+                self.isBackcharge = options.isBackcharge;
+                self.backchargeReason = options.backchargeReason;
+                self.personNotified = options.personNotified;
+                self.personNotifiedPhoneNumber = options.personNotifiedPhoneNumber;
+                self.personNotifiedDate = options.personNotifiedDate;
+                self.backchargeResponseFromVendor = options.backchargeResponseFromVendor;
+                self.paymentId = options.paymentId;
+                self.paymentCreatedDate = options.paymentCreatedDate;
+                if (options.paymentStatusDisplayName) {
+                    self.paymentStatusDisplayName = options.paymentStatusDisplayName;
+                }
+                
+                self.deletePayment = function () {
+                    var payment = this;
+                    bootbox.confirm("Are you sure you want to delete this payment?", function (result) {
+                        
+                        if (result) {
+                            var actionUrl = urls.ManageServiceCall.DeletePayment;
+                            $.ajax({
+                                type: "DELETE",
+                                url: actionUrl,
+                                data: { PaymentId: payment.paymentId },
+                                success: function () {
+                                    
+                                    viewModel.allPayments.remove(payment);
+                                    toastr.success("Success! Payment deleted.");
+                                }
+                            });
+                        }
+                    });
+                };
             }
 
             function CallNotesViewModel(options) {
@@ -157,6 +204,147 @@
                 self.problemDescriptionEditing = ko.observable("");
                 self.lineEditing = ko.observable("");
 
+                self.invoiceNumber = ko.observable('').extend({ required: true });
+                self.amount = ko.observable('').extend({ required: true });
+                self.isBackcharge = ko.observable(false);
+                self.backchargeAmount = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true); }
+                    }
+                });
+                self.backchargeReason = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true); }
+                    }
+                });
+                self.personNotified = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true); }
+                    }
+                });
+                self.personNotifiedPhoneNumber = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true); }
+                    }
+                });
+                self.personNotifiedDate = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true); }
+                    }
+                });
+                self.backchargeResponseFromVendor = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true); }
+                    }
+                });
+                self.vendorName = ko.observable('').extend({ required: true });
+                self.vendorNumber = ko.observable('').extend({ required: true });
+                self.backchargeVendorName = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true); }
+                    }
+                });
+                self.backchargeVendorNumber = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true); }
+                    }
+                });
+                self.allPayments = ko.observableArray([]);
+                
+                self.canAddPayment = ko.computed(function () {
+                    return true;
+                });
+
+                self.clearPaymentFields = function () {
+                    
+                    $('#vendor-search').val('');
+                    $('#backcharge-vendor-search').val('');
+                    self.vendorNumber('');
+                    self.backchargeVendorNumber('');
+                    self.invoiceNumber('');
+                    self.amount('');
+                    self.backchargeAmount('');
+                    self.isBackcharge(false);
+                    self.backchargeReason('');
+                    self.personNotified('');
+                    self.personNotifiedPhoneNumber('');
+                    self.personNotifiedDate('');
+                    self.backchargeResponseFromVendor('');
+                    self.errors.showAllMessages(false);
+                };
+                
+                $(document).on('vendor-number-selected', function () {
+                    var vendorNumber = $('#vendor-search').data('vendor-number');
+                    var vendorName = $('#vendor-search').data('vendor-name');
+                    self.vendorNumber(vendorNumber);
+                    self.vendorName(vendorName);
+                });
+                $(document).on('backcharge-vendor-number-selected', function () {
+                    var vendorNumber = $('#backcharge-vendor-search').data('vendor-number');
+                    var vendorName = $('#backcharge-vendor-search').data('vendor-name');
+                    
+                    self.backchargeVendorNumber(vendorNumber);
+                    self.backchargeVendorName(vendorName);
+                });
+                
+                self.addPayment = function () {
+                    if (self.errors().length != 0) {
+                        self.errors.showAllMessages();
+                        return;
+                    }
+                    
+                    self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
+                    self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
+                    
+                    var newPayment = new PaymentViewModel({
+                        serviceCallLineItemId : self.serviceCallLineItemId,
+                        vendorNumber : self.vendorNumber(),
+                        vendorName : self.vendorName(),
+                        backchargeVendorNumber : self.backchargeVendorNumber(),
+                        backchargeVendorName: self.backchargeVendorName(),
+                        invoiceNumber : self.invoiceNumber(),
+                        amount : self.amount(),
+                        backchargeAmount: self.backchargeAmount(),
+                        isBackcharge : self.isBackcharge(),
+                        backchargeReason : self.backchargeReason(),
+                        personNotified : self.personNotified(),
+                        personNotifiedPhoneNumber : self.personNotifiedPhoneNumber(),
+                        personNotifiedDate : self.personNotifiedDate(),
+                        backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
+                        paymentStatusDisplayName: paymentStatusEnum.Requested.DisplayName,
+                    });
+
+                    var paymentData = ko.toJSON(newPayment);
+
+                    $.ajax({
+                        url: urls.ManageServiceCall.AddPayment,
+                        type: "POST",
+                        data: paymentData,
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    })
+                        .fail(function (response) {
+                            toastr.error("There was a problem adding the payment. Please try again.");
+                        })
+                        .done(function (response) {
+                            
+                            newPayment.paymentId = response;
+                            self.allPayments.unshift(newPayment);
+                            toastr.success("Success! Payment added.");
+                            highlight($("#allServiceCallPayments").first());
+                            self.clearPaymentFields();
+                        });
+                };
+                
+                $("#Person_Notified_Date").datepicker({
+                    format: 'm/d/yyyy'
+                });
+                
+                $("#Person_Notified_Date").on('changeDate', function (e) {
+                    self.personNotifiedDate(moment(e.date).format("L"));
+                });
+                
                 //edit line item.
                 self.editLine = function () {
                     this.problemCodeEditing(true);
@@ -226,7 +414,7 @@
                 self.userCanAlwaysReopenCallLines = ko.observable();
 
                 self.removeAttachment = function (e) {
-                    bootbox.confirm(modelData.attachmentRemovalMessage, function(result) {
+                    bootbox.confirm(modelData.attachmentRemovalMessage, function (result) {
                         if (result) {
                             var item = $('.boxclose[data-attachment-id="' + e.serviceCallAttachmentId + '"]');
                             var actionUrl = item.data('url');
@@ -305,8 +493,15 @@
                     self.lineJustCompleted(false);
                 };
             }
-
+            
+            ko.validation.init({
+                errorElementClass: 'has-error',
+                errorMessageClass: 'help-block',
+                decorateElement: true
+            });
+            
             var viewModel = new serviceCallLineItemViewModel();
+            viewModel.errors = ko.validation.group(viewModel);
             ko.applyBindings(viewModel);
 
             var persistedAllCallNotesViewModel = modelData.initialServiceCallLineNotes;
@@ -320,6 +515,14 @@
             _(persistedAllAttachmentsViewModel).each(function (attachment) {
                 viewModel.allAttachments.push(new CallAttachmentsViewModel(attachment));
             });
+            
+            var persistedAllPaymentsViewModel = modelData.initialServiceCallLinePayments;
+
+            _(persistedAllPaymentsViewModel).each(function (payment) {
+                
+                viewModel.allPayments.push(new PaymentViewModel(payment));
+            });
         });
     });
+});
 });
