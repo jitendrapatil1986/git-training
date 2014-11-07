@@ -22,6 +22,13 @@
         {
             using (_database)
             {
+                var jobNumber = _database.Single<string>(@"SELECT j.JobNumber
+                                                            FROM ServiceCallLineItems scli
+                                                            INNER JOIN ServiceCalls sc
+                                                                ON sc.ServiceCallId = scli.ServiceCallId
+                                                            INNER JOIN Jobs j
+                                                                ON J.JobId = sc.JobId
+                                                            WHERE scli.ServiceCallLineItemId = @0", message.ServiceCallLineItemId);
                 var payment = new Payment
                 {
                     Amount = message.Amount,
@@ -30,6 +37,8 @@
                     PaymentStatus = PaymentStatus.Requested,
                     VendorNumber = message.VendorNumber,
                     VendorName = message.VendorName,
+                    JobNumber = jobNumber,
+                    CommunityNumber = string.IsNullOrEmpty(jobNumber) ? "" : jobNumber.Substring(0, 4)
                 };
 
                 _database.Insert(payment);

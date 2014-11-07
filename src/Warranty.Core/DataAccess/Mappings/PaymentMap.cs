@@ -15,6 +15,7 @@
                     x.Column(y => y.Amount);
                     x.Column(y => y.PaymentStatus);
                     x.Column(y => y.JobNumber);
+                    x.Column(y => y.CommunityNumber);
                     x.Column(y => y.JdeIdentifier);
                     x.Column(y => y.InvoiceNumber);
                     x.Column(y => y.HoldComments);

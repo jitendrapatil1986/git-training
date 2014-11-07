@@ -122,6 +122,7 @@
     <Compile Include="Handlers\Payments\PaymentPaymentAmountUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentRequestedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentStatusUpdatedHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestPaymentResponseHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallCompletedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallCreatedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallEmployeeReassignedHandler.cs" />
