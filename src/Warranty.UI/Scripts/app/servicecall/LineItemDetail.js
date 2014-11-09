@@ -3,7 +3,36 @@
         window.ko = ko;  //manually set the global ko property.
 
         require(['ko.validation'], function() {
-        $(function () {
+            $(function () {
+                
+
+
+
+
+
+
+
+
+
+
+                
+                
+                function changeButtonText(button) {
+                    var currentText = button.text();
+                    var nextText = button.data('next-text');
+                    button.data('next-text', currentText);
+                    button.text(nextText);
+                }
+                
+
+
+
+
+
+
+
+
+
             $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
                 $(this).hide();
             });
@@ -50,9 +79,9 @@
                 self.paymentId = options.paymentId;
                 self.paymentCreatedDate = options.paymentCreatedDate;
                 if (options.paymentStatusDisplayName) {
-                    self.paymentStatusDisplayName = options.paymentStatusDisplayName;
+                    self.paymentStatusDisplayName = ko.observable(options.paymentStatusDisplayName);
                 }
-                
+              
                 self.deletePayment = function () {
                     var payment = this;
                     bootbox.confirm("Are you sure you want to delete this payment?", function (result) {
@@ -72,6 +101,83 @@
                         }
                     });
                 };
+
+                self.displayHold = function (item, event) {
+                    debugger;
+                    var button = $(event.target);
+                    $('.btn-action-with-popup').removeClass('active');
+                    button.removeClass('btn-hover-show');
+                    button.addClass("active");
+                    $('.popup-action-with-message').hide();
+                    var right = ($(window).width() - (button.offset().left + button.outerWidth()));
+                    var actionwithPopup = 'hold-' + item.paymentId;
+                    $("#" + actionwithPopup).css({
+                        'position': 'absolute',
+                        'right': right,
+                        'top': button.offset().top + button.height() + 15
+                    }).show();
+
+                };
+
+                self.holdPayment = function(item, event) {
+                    bootbox.confirm("Are you sure you want to put this payment on hold?", function (result) {
+
+                        if (result) {
+                            debugger;
+                            var actionUrl = urls.ManageServiceCall.AddPaymentOnHold;
+                            $.ajax({
+                                type: "POST",
+                                url: actionUrl,
+                                data: { PaymentId: item.paymentId },
+                                success: function () {
+                                    debugger;
+                                    item.paymentStatusDisplayName(paymentStatusEnum.Hold.DisplayName);
+                                    toastr.success("Success! Payment is on hold.");
+                                    closeWindow(event);
+                                }
+                            });
+                        }
+                    });
+
+                };
+                
+                self.shouldDisplayOnHold = ko.computed(function () {
+                    return self.paymentStatusDisplayName() != paymentStatusEnum.Hold.DisplayName;
+                });
+
+                self.cancelPopup = function (item, event) {
+                    closeWindow(event);
+                };
+
+                var closeWindow = function (event) {
+                    var button = $(event.target);
+                    var window = button.parent();
+                    var parentButton = $("#btn_" + window.attr('id'));
+                    parentButton.removeClass("active");
+                    parentButton.addClass('btn-hover-show');
+                    window.hide();
+                };
+
+                //$('.btn-execute-action').click(function (e) {
+                //    var popupWindow = $(this).parent();
+                //    var actionUrl = $(this).data('action-url');
+                //    var textArea = $(this).prev('textarea');
+                //    var message = textArea.val();
+                //    var serviceCallId = $(this).data('service-call-id');
+                //    var parentButton = $("#btn_" + popupWindow.attr('id'));
+                //    $.ajax({
+                //        type: "POST",
+                //        url: actionUrl,
+                //        data: { id: serviceCallId, message: message },
+                //        success: function (result) {
+                //            //updateUI(result.actionName, result.actionMessage);
+                //            changeButtonText(parentButton);
+                //            parentButton.removeClass("active");
+                //            textArea.val('');
+                //            popupWindow.hide();
+                //        }
+                //    });
+                //});
             }
 
             function CallNotesViewModel(options) {
@@ -254,7 +360,7 @@
                 self.canAddPayment = ko.computed(function () {
                     return true;
                 });
-
+                
                 self.clearPaymentFields = function () {
                     
                     $('#vendor-search').val('');

@@ -114,5 +114,12 @@
             _mediator.Send(model);
             return "success";
         }
+
+        [HttpPost]
+        public string AddPaymentOnHold(AddPaymentOnHoldCommand model)
+        {
+            _mediator.Send(model);
+            return "success";
+        }
     }
 }

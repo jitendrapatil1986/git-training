@@ -256,6 +256,8 @@
     <Compile Include="Features\AddServiceCallPayment\AddServiceCallLineItemPaymentCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallPayment\DeleteServiceCallLineItemPaymentCommand.cs" />
     <Compile Include="Features\AddServiceCallPayment\DeleteServiceCallLineItemPaymentCommandHandler.cs" />
+    <Compile Include="Features\AddServiceCallPayment\AddPaymentOnHoldCommand.cs" />
+    <Compile Include="Features\AddServiceCallPayment\AddPaymentOnHoldCommandHandler.cs" />
     <Compile Include="Features\AssignWSRs\AssignedEmployee.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRCommand.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRCommandHandler.cs" />
