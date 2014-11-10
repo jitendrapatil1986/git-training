@@ -4,17 +4,21 @@
     using ActivityLogger;
     using Entities;
     using Enumerations;
+    using InnerMessages;
     using NPoco;
+    using NServiceBus;
 
     public class AddPaymentOnHoldCommandHandler : ICommandHandler<AddPaymentOnHoldCommand, AddPaymentOnHoldCommandHandlerResponse>
     {
         private readonly IDatabase _database;
         private readonly IActivityLogger _activityLogger;
+        private readonly IBus _bus;
 
-        public AddPaymentOnHoldCommandHandler(IDatabase database, IActivityLogger activityLogger)
+        public AddPaymentOnHoldCommandHandler(IDatabase database, IActivityLogger activityLogger, IBus bus)
         {
             _database = database;
             _activityLogger = activityLogger;
+            _bus = bus;
         }
 
         public AddPaymentOnHoldCommandHandlerResponse Handle(AddPaymentOnHoldCommand message)
@@ -31,6 +35,8 @@
                 _database.Update(payment);
 
                 _activityLogger.Write("Payment was requested to be put on hold", message.Message, payment.PaymentId, ActivityType.PaymentOnHold, ReferenceType.Homeowner);
+
+                _bus.Send<NotifyPaymentOnHold>(x => x.PaymentId = payment.PaymentId);
 
                 return new AddPaymentOnHoldCommandHandlerResponse
                         {
