@@ -1,7 +1,6 @@
 ﻿namespace Warranty.Core.Extensions
 {
     using System.IO;
-    using System.Runtime.Serialization.Json;
     using Configurations;
     using Newtonsoft.Json;
 
@@ -25,14 +24,5 @@
 
             return stringWriter.ToString();
         }
-
-        public static T FromJson<T>(this string json)
-        {
-            var js = new DataContractJsonSerializer(typeof(T));
-            var ms = new MemoryStream(System.Text.Encoding.ASCII.GetBytes(json));
-
-            return (T)js.ReadObject(ms);
-        }
-
     }
 }
