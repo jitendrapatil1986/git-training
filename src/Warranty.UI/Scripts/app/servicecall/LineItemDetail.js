@@ -198,6 +198,9 @@
                     self.problemDescription = ko.observable(modelData.initialServiceCallLineItem.problemDescription);
                     self.currentProblemCode = ko.observable();
                     self.currentProblemDescription = ko.observable();
+                    self.jobNumber = ko.observable(modelData.initialServiceCallLineItem.jobNumber);
+                    self.costCode = ko.observable(modelData.initialServiceCallLineItem.costCode);
+                    self.constructionVendors = ko.observableArray([]);
 
                     //track editing problem code, desc, and line altogether.
                     self.problemCodeEditing = ko.observable();
@@ -492,6 +495,18 @@
                         reopenServiceCallLineItem(this);
                         self.lineJustCompleted(false);
                     };
+
+                    
+                    $.ajax({
+                        url: urls.ConstructionVendor.ConstructionVendors + '?jobNumber=' + self.jobNumber() + '&costCode=' + self.costCode(),
+                        type: "GET",
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    }).done(function (response) {
+                        self.constructionVendors(response);
+                    });
+                    
                 }
 
                 ko.validation.init({
