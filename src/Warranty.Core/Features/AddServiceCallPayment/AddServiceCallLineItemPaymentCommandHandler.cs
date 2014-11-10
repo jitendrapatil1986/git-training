@@ -38,7 +38,8 @@
                     VendorNumber = message.VendorNumber,
                     VendorName = message.VendorName,
                     JobNumber = jobNumber,
-                    CommunityNumber = string.IsNullOrEmpty(jobNumber) ? "" : jobNumber.Substring(0, 4)
+                    CommunityNumber = string.IsNullOrEmpty(jobNumber) ? "" : jobNumber.Substring(0, 4),
+                    CostCode = WarrantyCostCode.FromValue(message.SelectedCostCode).CostCode
                 };
 
                 _database.Insert(payment);
@@ -62,6 +63,8 @@
                         PersonNotifiedPhoneNumber = message.PersonNotifiedPhoneNumber,
                         PersonNotifiedDate = message.PersonNotifiedDate,
                         BackchargeResponseFromVendor = message.BackchargeResponseFromVendor,
+                        CostCode = WarrantyCostCode.FromValue(message.SelectedCostCode).CostCode,
+                        BackchargeStatus = BackchargeStatus.Requested
                     };
                     _database.Insert(backcharge);
 
