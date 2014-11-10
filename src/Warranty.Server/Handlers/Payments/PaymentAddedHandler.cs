@@ -7,7 +7,6 @@ using Warranty.Server.Extensions;
 
 namespace Warranty.Server.Handlers.Payments
 {
-    using System;
     using Core.Enumerations;
 
     public class PaymentAddedHandler : IHandleMessages<PaymentAdded>

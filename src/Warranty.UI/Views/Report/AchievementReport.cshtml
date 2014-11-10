@@ -12,17 +12,15 @@
                         <div class="col-md-12">
                             @using (Html.BeginForm("AchievementReport", "Report", FormMethod.Post, new { @class = "form-inline" }))
                             {
-                                <div class="form-group margin-right-10">
-                                    <span><strong>Filter by</strong></span>
-                                </div>
+
                                 <div class="form-group">
                                     @Html.DropDownList("Model.SelectedEmployeeNumber", Model.EmployeeTiedToRepresentatives.Select(c => new SelectListItem { Text = c.EmployeeName, Value = c.EmployeeNumber.ToString() }), "Select Representative", new { @class = "form-control text-capitalize" })
                                 </div>
                                 <div class="form-group">
-                                    @Html.TextBox("Model.StartDate", null, new { @class = "form-control monthpicker-input", placeholder = "Start Month" })
+                                    @Html.TextBox("Model.StartDate", null, new { @class = "form-control monthpicker-input", placeholder = "Select Start Month" })
                                 </div>
                                 <div class="form-group">
-                                    @Html.TextBox("Model.EndDate", null, new { @class = "form-control monthpicker-input", placeholder = "End Month" })
+                                    @Html.TextBox("Model.EndDate", null, new { @class = "form-control monthpicker-input", placeholder = "Select End Month" })
                                 </div>
                                 <div class="form-group">
                                     <input type="submit" class="btn btn-primary" value="Run Report" />

@@ -1,4 +1,4 @@
-namespace Warranty.Server.Handlers.Payments
+﻿namespace Warranty.Server.Handlers.Payments
 {
     using Accounting.Events.Payment;
     using Core.Entities;
@@ -20,7 +20,6 @@ namespace Warranty.Server.Handlers.Payments
             using (_database)
             {
                 var payment = _database.SingleById<Payment>(message.PaymentIdentifier);
-                
                 payment.PaymentStatus = PaymentStatus.Pending;
                 _database.Update(payment);
             }

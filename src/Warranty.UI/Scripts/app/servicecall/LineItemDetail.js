@@ -49,6 +49,7 @@
                     self.backchargeResponseFromVendor = options.backchargeResponseFromVendor;
                     self.paymentId = options.paymentId;
                     self.paymentCreatedDate = options.paymentCreatedDate;
+                    self.selectedCostCode = options.selectedCostCode;
                     if (options.paymentStatusDisplayName) {
                         self.paymentStatusDisplayName = options.paymentStatusDisplayName;
                     }
@@ -210,6 +211,8 @@
                     self.invoiceNumber = ko.observable('').extend({ required: true });
                     self.amount = ko.observable('').extend({ required: true });
                     self.isBackcharge = ko.observable(false);
+                    self.selectedCostCode = ko.observable(undefined).extend({ required: true });
+                    self.warrantyCostCodes = ko.observableArray(modelData.warrantyCostCodes);
                     self.backchargeAmount = ko.observable('').extend({
                         required: {
                             onlyIf: function () { return (self.isBackcharge() === true); }
@@ -273,6 +276,7 @@
                         self.personNotifiedPhoneNumber('');
                         self.personNotifiedDate('');
                         self.backchargeResponseFromVendor('');
+                        self.selectedCostCode(undefined);
                         self.errors.showAllMessages(false);
                     };
 
@@ -315,6 +319,7 @@
                             personNotifiedDate: self.personNotifiedDate(),
                             backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
                             paymentStatusDisplayName: paymentStatusEnum.Requested.DisplayName,
+                            selectedCostCode: self.selectedCostCode
                         });
 
                         var paymentData = ko.toJSON(newPayment);
@@ -496,7 +501,6 @@
                         self.lineJustCompleted(false);
                     };
 
-                    
                     $.ajax({
                         url: urls.ConstructionVendor.ConstructionVendors + '?jobNumber=' + self.jobNumber() + '&costCode=' + self.costCode(),
                         type: "GET",
@@ -506,7 +510,7 @@
                     }).done(function (response) {
                         self.constructionVendors(response);
                     });
-                    
+
                 }
 
                 ko.validation.init({

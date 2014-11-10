@@ -18,5 +18,6 @@
         public string PersonNotifiedPhoneNumber { get; set; }
         public DateTime PersonNotifiedDate { get; set; }
         public string BackchargeResponseFromVendor { get; set; }
+        public int SelectedCostCode { get; set; }
     }
 }

@@ -12,6 +12,7 @@ namespace Warranty.Core.Entities
         public decimal Amount { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public string JobNumber { get; set; }
+        public string CommunityNumber { get; set; }
         public string InvoiceNumber { get; set; }
         public string HoldComments { get; set; }
         public Guid ServiceCallLineItemId { get; set; }
@@ -19,7 +20,7 @@ namespace Warranty.Core.Entities
         public DateTime? CreatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
-
+        public string CostCode { get; set; }
         public string JdeIdentifier { get; set; }
     }
 }
