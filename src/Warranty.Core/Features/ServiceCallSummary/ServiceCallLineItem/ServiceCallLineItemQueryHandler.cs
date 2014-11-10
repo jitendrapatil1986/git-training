@@ -83,6 +83,8 @@
                                     , p.InvoiceNumber
                                     , p.ServiceCallLineItemId
                                     , p.CreatedDate as PaymentCreatedDate
+                                    , p.HoldComments
+                                    , p.HoldDate
                                     , b.BackchargeVendorNumber
                                     , b.BackchargeVendorName
                                     , b.BackchargeReason

@@ -1,38 +1,10 @@
 ﻿require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchBackchargeVendor', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, bootbox) {
+    require(['jquery', 'ko', 'ko.x-editable', 'moment', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchBackchargeVendor', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, moment, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, bootbox) {
         window.ko = ko;  //manually set the global ko property.
 
         require(['ko.validation'], function() {
             $(function () {
                 
-
-
-
-
-
-
-
-
-
-
-                
-                
-                function changeButtonText(button) {
-                    var currentText = button.text();
-                    var nextText = button.data('next-text');
-                    button.data('next-text', currentText);
-                    button.text(nextText);
-                }
-                
-
-
-
-
-
-
-
-
-
             $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
                 $(this).hide();
             });
@@ -60,7 +32,6 @@
             }
             
             function PaymentViewModel(options) {
-                
                 var self = this;
                 self.serviceCallLineItemId = options.serviceCallLineItemId;
                 self.vendorNumber = options.vendorNumber;
@@ -78,14 +49,19 @@
                 self.backchargeResponseFromVendor = options.backchargeResponseFromVendor;
                 self.paymentId = options.paymentId;
                 self.paymentCreatedDate = options.paymentCreatedDate;
+                self.holdComments = ko.observable(options.holdComments);
+                self.holdDate = ko.observable(options.holdDate);
                 if (options.paymentStatusDisplayName) {
                     self.paymentStatusDisplayName = ko.observable(options.paymentStatusDisplayName);
                 }
+
+                self.isHeld = ko.computed(function () {
+                    return self.paymentStatusDisplayName() == paymentStatusEnum.RequestedHold.DisplayName || self.paymentStatusDisplayName() == paymentStatusEnum.Hold.DisplayName;
+                });
               
                 self.deletePayment = function () {
                     var payment = this;
                     bootbox.confirm("Are you sure you want to delete this payment?", function (result) {
-                        
                         if (result) {
                             var actionUrl = urls.ManageServiceCall.DeletePayment;
                             $.ajax({
@@ -93,7 +69,6 @@
                                 url: actionUrl,
                                 data: { PaymentId: payment.paymentId },
                                 success: function () {
-                                    
                                     viewModel.allPayments.remove(payment);
                                     toastr.success("Success! Payment deleted.");
                                 }
@@ -103,47 +78,50 @@
                 };
 
                 self.displayHold = function (item, event) {
-                    debugger;
+                    displayPopoUp('hold', item, event);
+                };
+
+                var displayPopoUp = function(name, item, event) {
                     var button = $(event.target);
                     $('.btn-action-with-popup').removeClass('active');
                     button.removeClass('btn-hover-show');
                     button.addClass("active");
                     $('.popup-action-with-message').hide();
                     var right = ($(window).width() - (button.offset().left + button.outerWidth()));
-                    var actionwithPopup = 'hold-' + item.paymentId;
+                    var actionwithPopup = name + '-' + item.paymentId;
                     $("#" + actionwithPopup).css({
                         'position': 'absolute',
                         'right': right,
                         'top': button.offset().top + button.height() + 15
                     }).show();
-
                 };
 
-                self.holdPayment = function(item, event) {
-                    bootbox.confirm("Are you sure you want to put this payment on hold?", function (result) {
+                self.holdPayment = function (item, event) {
+                    changeStatus("Are you sure you want to put this payment on hold?", urls.ManageServiceCall.AddPaymentOnHold, "Succes! Payment has been put on hold.", item, item.holdComments, event);
+                };
 
+                self.shouldDisplayOnHold = ko.computed(function () {
+                    return self.paymentStatusDisplayName() != paymentStatusEnum.RequestedHold.DisplayName && self.paymentStatusDisplayName() != paymentStatusEnum.RequestedDeny.DisplayName;
+                });
+                
+                var changeStatus = function(confirmMessage, url, succesMessage, item, message, event) {
+                    bootbox.confirm(confirmMessage, function(result) {
                         if (result) {
-                            debugger;
-                            var actionUrl = urls.ManageServiceCall.AddPaymentOnHold;
+                            var actionUrl = url;
                             $.ajax({
                                 type: "POST",
                                 url: actionUrl,
-                                data: { PaymentId: item.paymentId },
-                                success: function () {
-                                    debugger;
-                                    item.paymentStatusDisplayName(paymentStatusEnum.Hold.DisplayName);
-                                    toastr.success("Success! Payment is on hold.");
+                                data: { PaymentId: item.paymentId, message: message },
+                                success: function (response) {
+                                    item.paymentStatusDisplayName(response.NewStatusDisplayName);
+                                    item.holdDate(response.Date);
+                                    toastr.success(succesMessage);
                                     closeWindow(event);
                                 }
                             });
                         }
                     });
-
                 };
-                
-                self.shouldDisplayOnHold = ko.computed(function () {
-                    return self.paymentStatusDisplayName() != paymentStatusEnum.Hold.DisplayName;
-                });
 
                 self.cancelPopup = function (item, event) {
                     closeWindow(event);
@@ -157,27 +135,6 @@
                     parentButton.addClass('btn-hover-show');
                     window.hide();
                 };
-
-                //$('.btn-execute-action').click(function (e) {
-                //    var popupWindow = $(this).parent();
-                //    var actionUrl = $(this).data('action-url');
-                //    var textArea = $(this).prev('textarea');
-                //    var message = textArea.val();
-                //    var serviceCallId = $(this).data('service-call-id');
-                //    var parentButton = $("#btn_" + popupWindow.attr('id'));
-                //    $.ajax({
-                //        type: "POST",
-                //        url: actionUrl,
-                //        data: { id: serviceCallId, message: message },
-                //        success: function (result) {
-                //            //updateUI(result.actionName, result.actionMessage);
-                //            changeButtonText(parentButton);
-                //            parentButton.removeClass("active");
-                //            textArea.val('');
-                //            popupWindow.hide();
-                //        }
-                //    });
-                //});
             }
 
             function CallNotesViewModel(options) {
@@ -625,7 +582,6 @@
             var persistedAllPaymentsViewModel = modelData.initialServiceCallLinePayments;
 
             _(persistedAllPaymentsViewModel).each(function (payment) {
-                
                 viewModel.allPayments.push(new PaymentViewModel(payment));
             });
         });

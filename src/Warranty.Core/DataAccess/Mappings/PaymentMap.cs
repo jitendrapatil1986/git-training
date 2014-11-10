@@ -20,6 +20,7 @@
                     x.Column(y => y.InvoiceNumber);
                     x.Column(y => y.HoldComments);
                     x.Column(y => y.ServiceCallLineItemId);
+                    x.Column(y => y.HoldDate);
                 });
         }
     }

@@ -184,10 +184,9 @@
                     <div class="remove-list-style">
                         <div class="clearfix"></div>
                         <br />
-                        <ul data-bind="foreach: {data: allPayments}">
+                        <ul data-bind="foreach: allPayments">
                             <div id="allServiceCallPayments">
                                 <li class="row service-call-line">
-                                    <div class="padding-bottom-10 padding-top-7">
                                     <div class="col-md-12 margin-bottom-5">
                                         <div class="no-left-right-padding">
                                             <div class="row payment-line">
@@ -212,7 +211,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12" data-bind="visible: isBackcharge">
-                                        <span class="glyphicon glyphicon-warning-sign"></span> <a href="#" data-toggle="collapse" data-bind="attr:{'data-target': '#backcharge-' + paymentId}">Backcharge</a>
+                                        <span class="glyphicon glyphicon-warning-sign"></span> <a data-toggle="collapse" data-bind="attr:{'data-target': '#backcharge-' + paymentId}">Backcharge</a>
                                         <div class="row" style="margin:5px;background-color: white;">
                                             <div class="collapse" data-bind="attr: { id: 'backcharge-' + paymentId }">
                                                 <div class="col-md-12">
@@ -242,6 +241,9 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="col-md-12 alert alert-warning no-bottom-margin" data-bind="visible: isHeld">
+                                        <strong><span data-bind="text: paymentStatusDisplayName"></span></strong> <span data-bind="date: holdDate"></span> - <span data-bind="text: holdComments"></span>
                                     </div>
                                 </li>
                             </div>
@@ -350,10 +352,9 @@
 </div>
 <div data-bind="foreach: allPayments">
     <div data-bind="attr: {id: 'hold-' + paymentId}" class="popup-action-with-message">
-        <textarea class="form-control margin-bottom-10" rows="5" placeholder="Enter reason" data-bind="value: paymentId"></textarea>
+        <textarea class="form-control margin-bottom-10" rows="5" placeholder="Enter reason" data-bind="value: holdComments"></textarea>
         <a href="#" class="btn btn-primary btn-execute-action" data-bind="click: holdPayment">Submit</a>
         <a href="#" class="btn-link btn-cancel-popup" data-bind="click: cancelPopup">Cancel</a>
-    </div>
 </div>
 @section modules
 {

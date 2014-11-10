@@ -116,10 +116,10 @@
         }
 
         [HttpPost]
-        public string AddPaymentOnHold(AddPaymentOnHoldCommand model)
+        public AddPaymentOnHoldCommandHandlerResponse AddPaymentOnHold(AddPaymentOnHoldCommand model)
         {
-            _mediator.Send(model);
-            return "success";
+            var response = _mediator.Send(model);
+            return response;
         }
     }
 }

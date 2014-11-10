@@ -17,5 +17,6 @@
         public static readonly ActivityType UploadAttachment = new ActivityType(8, "Upload Attachment");
         public static readonly ActivityType DeletedAttachment = new ActivityType(9, "Deleted Attachment");
         public static readonly ActivityType RenamedAttachment = new ActivityType(10, "Renamed Attachment");
+        public static readonly ActivityType PaymentOnHold = new ActivityType(11, "Payment On Hold");
     }
 }

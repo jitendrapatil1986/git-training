@@ -20,6 +20,7 @@ namespace Warranty.Core.Entities
         public DateTime? CreatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        public DateTime? HoldDate { get; set; }
 
         public string JdeIdentifier { get; set; }
     }

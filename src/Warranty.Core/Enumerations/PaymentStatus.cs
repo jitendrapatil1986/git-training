@@ -14,6 +14,7 @@
         public static readonly PaymentStatus Question = new PaymentStatus(8, "Question", "Q");
         public static readonly PaymentStatus Manual = new PaymentStatus(9, "Manual", "M");
         public static readonly PaymentStatus Paid = new PaymentStatus(10, "Paid", "1");
+        public static readonly PaymentStatus RequestedDeny = new PaymentStatus(11, "Requested Deny", "NoJdeCode-WarrantyModuleStatus");
 
         private PaymentStatus(int value, string displayName, string jdeCode)
             : base(value, displayName)
