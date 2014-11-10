@@ -34,6 +34,7 @@
                         InvoiceNumber = payment.InvoiceNumber,
                         Username = _userSession.GetCurrentUser().LoginName,
                         VendorNumber = payment.VendorNumber,
+                        CostCode = payment.CostCode,
                     };
 
                 _bus.Send(paymentRequest);

@@ -201,17 +201,18 @@
                                                     <br/>
                                                     <span class="label label-default" data-bind="text: paymentStatusDisplayName"></span>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <span data-bind="text: 'Invoice #' + invoiceNumber"></span>
                                                     <br/>
                                                     <span data-bind="text: 'Date:' + moment(paymentCreatedDate).format('L')"></span>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <h4 data-bind="currency: amount"></h4>
                                                 </div>
-                                                <div class="col-md-2 margin-bottom-3 text-align-right no-right-padding no-print">
-                                                    <button class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click:deletePayment">Delete</button>
+                                                <div class="col-md-4 margin-bottom-3 text-align-right no-right-padding no-print">
+                                                    <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: approvePayment" >Approve</a>
                                                     <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10 btn-action-with-popup" data-bind="visible: shouldDisplayOnHold, attr: {id:'btn_hold-' + paymentId}, click: displayHold" >Hold</a>
+                                                    <button class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click:deletePayment">Delete</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -361,6 +362,7 @@
         <textarea class="form-control margin-bottom-10" rows="5" placeholder="Enter reason" data-bind="value: holdComments"></textarea>
         <a href="#" class="btn btn-primary btn-execute-action" data-bind="click: holdPayment">Submit</a>
         <a href="#" class="btn-link btn-cancel-popup" data-bind="click: cancelPopup">Cancel</a>
+    </div>
 </div>
 @section modules
 {

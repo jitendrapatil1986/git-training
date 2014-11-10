@@ -98,32 +98,38 @@
                 };
 
                 self.holdPayment = function (item, event) {
-                    changeStatus("Are you sure you want to put this payment on hold?", urls.ManageServiceCall.AddPaymentOnHold, "Succes! Payment has been put on hold.", item, item.holdComments, event);
+                    var actionUrl = urls.ManageServiceCall.AddPaymentOnHold;
+                    $.ajax({
+                        type: "POST",
+                        url: actionUrl,
+                        data: { PaymentId: item.paymentId, message: item.holdComments },
+                        success: function (response) {
+                            item.paymentStatusDisplayName(response.NewStatusDisplayName);
+                            item.holdDate(response.Date);
+                            toastr.success("Success! Hold request sent.");
+                            closeWindow(event);
+                        }
+                    });
                 };
 
                 self.shouldDisplayOnHold = ko.computed(function () {
                     return self.paymentStatusDisplayName() != paymentStatusEnum.RequestedHold.DisplayName && self.paymentStatusDisplayName() != paymentStatusEnum.RequestedDeny.DisplayName;
                 });
                 
-                var changeStatus = function(confirmMessage, url, succesMessage, item, message, event) {
-                    bootbox.confirm(confirmMessage, function(result) {
-                        if (result) {
-                            var actionUrl = url;
-                            $.ajax({
-                                type: "POST",
-                                url: actionUrl,
-                                data: { PaymentId: item.paymentId, message: message },
-                                success: function (response) {
-                                    item.paymentStatusDisplayName(response.NewStatusDisplayName);
-                                    item.holdDate(response.Date);
-                                    toastr.success(succesMessage);
-                                    closeWindow(event);
-                                }
-                            });
+                self.approvePayment = function (item, event) {
+                    var actionUrl = urls.ManageServiceCall.ApprovePayment;
+                    $.ajax({
+                        type: "POST",
+                        url: actionUrl,
+                        data: { PaymentId: item.paymentId, message: item.holdComments },
+                        success: function (response) {
+                            item.paymentStatusDisplayName(response);
+                            toastr.success("Success! Approval Request sent.");
+                            closeWindow(event);
                         }
                     });
                 };
-
+                
                 self.cancelPopup = function (item, event) {
                     closeWindow(event);
                 };

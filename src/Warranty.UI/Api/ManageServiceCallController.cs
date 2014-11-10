@@ -116,6 +116,13 @@
         }
 
         [HttpPost]
+        public string ApprovePayment(ApprovePaymentCommand model)
+        {
+            var response = _mediator.Send(model);
+            return response;
+        }
+
+        [HttpPost]
         public AddPaymentOnHoldCommandHandlerResponse AddPaymentOnHold(AddPaymentOnHoldCommand model)
         {
             var response = _mediator.Send(model);

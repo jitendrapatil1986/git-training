@@ -34,15 +34,15 @@
 
                 _database.Update(payment);
 
-                _activityLogger.Write("Payment was requested to be put on hold", message.Message, payment.PaymentId, ActivityType.PaymentOnHold, ReferenceType.Homeowner);
+                _activityLogger.Write("Payment hold requested", message.Message, payment.PaymentId, ActivityType.PaymentOnHold, ReferenceType.LineItem);
 
                 _bus.Send<NotifyPaymentOnHold>(x => x.PaymentId = payment.PaymentId);
 
                 return new AddPaymentOnHoldCommandHandlerResponse
-                        {
-                            NewStatusDisplayName = newStatus.DisplayName,
-                            Date = payment.HoldDate.Value
-                        };
+                {
+                    NewStatusDisplayName = newStatus.DisplayName,
+                    Date = payment.HoldDate.Value
+                };
             }
         }
     }
