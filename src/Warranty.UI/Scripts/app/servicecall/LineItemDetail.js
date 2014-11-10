@@ -51,6 +51,7 @@
                 self.paymentCreatedDate = options.paymentCreatedDate;
                 self.holdComments = ko.observable(options.holdComments);
                 self.holdDate = ko.observable(options.holdDate);
+                self.selectedCostCode = options.selectedCostCode;
                 if (options.paymentStatusDisplayName) {
                     self.paymentStatusDisplayName = ko.observable(options.paymentStatusDisplayName);
                 }
@@ -270,6 +271,8 @@
                 self.invoiceNumber = ko.observable('').extend({ required: true });
                 self.amount = ko.observable('').extend({ required: true });
                 self.isBackcharge = ko.observable(false);
+                self.selectedCostCode = ko.observable(undefined).extend({ required: true });
+                self.warrantyCostCodes = ko.observableArray(modelData.warrantyCostCodes);
                 self.backchargeAmount = ko.observable('').extend({
                     required: {
                         onlyIf: function () { return (self.isBackcharge() === true); }
@@ -333,6 +336,7 @@
                     self.personNotifiedPhoneNumber('');
                     self.personNotifiedDate('');
                     self.backchargeResponseFromVendor('');
+                    self.selectedCostCode(undefined);
                     self.errors.showAllMessages(false);
                 };
                 
@@ -375,6 +379,7 @@
                         personNotifiedDate : self.personNotifiedDate(),
                         backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
                         paymentStatusDisplayName: paymentStatusEnum.Requested.DisplayName,
+                        selectedCostCode: self.selectedCostCode
                     });
 
                     var paymentData = ko.toJSON(newPayment);

@@ -23,6 +23,7 @@
                     x.Column(y => y.HoldComments);
                     x.Column(y => y.DenyComments);
                     x.Column(y => y.BackchargeStatus);
+                    x.Column(y => y.CostCode);
                 });
         }
     }

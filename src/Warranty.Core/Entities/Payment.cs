@@ -21,7 +21,7 @@ namespace Warranty.Core.Entities
         public string UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public DateTime? HoldDate { get; set; }
-
+        public string CostCode { get; set; }
         public string JdeIdentifier { get; set; }
     }
 }

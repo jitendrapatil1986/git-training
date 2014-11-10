@@ -22,6 +22,7 @@
         public string JdeIdentifier { get; set; }
         public string HoldComments { get; set; }
         public string DenyComments { get; set; }
+        public string CostCode { get; set; }
         public BackchargeStatus BackchargeStatus { get; set; }
     }
 }
