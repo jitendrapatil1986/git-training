@@ -253,6 +253,7 @@
     <Compile Include="Features\AddServiceCallNote\AddServiceCallNoteCommand.cs" />
     <Compile Include="Features\AddServiceCallNote\AddServiceCallNoteCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallNote\AddServiceCallNoteModel.cs" />
+    <Compile Include="Features\AddServiceCallPayment\AddPaymentOnHoldCommandHandlerResponse.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddServiceCallLineItemPaymentCommand.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddServiceCallLineItemPaymentCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallPayment\ApprovePaymentCommand.cs" />

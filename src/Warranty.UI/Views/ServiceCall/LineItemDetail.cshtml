@@ -210,7 +210,7 @@
                                                     <h4 data-bind="currency: amount"></h4>
                                                 </div>
                                                 <div class="col-md-4 margin-bottom-3 text-align-right no-right-padding no-print">
-                                                    <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: approvePayment" >Approve</a>
+                                                    <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="visible: shouldDisplayApprove, click: approvePayment" >Approve</a>
                                                     <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10 btn-action-with-popup" data-bind="visible: shouldDisplayOnHold, attr: {id:'btn_hold-' + paymentId}, click: displayHold" >Hold</a>
                                                     <button class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click:deletePayment">Delete</button>
                                                 </div>

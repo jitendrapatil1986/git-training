@@ -113,7 +113,11 @@
                 };
 
                 self.shouldDisplayOnHold = ko.computed(function () {
-                    return self.paymentStatusDisplayName() != paymentStatusEnum.RequestedHold.DisplayName && self.paymentStatusDisplayName() != paymentStatusEnum.RequestedDeny.DisplayName;
+                    return self.paymentStatusDisplayName() == paymentStatusEnum.Pending.DisplayName;
+                });
+                
+                self.shouldDisplayApprove = ko.computed(function () {
+                    return self.paymentStatusDisplayName() == paymentStatusEnum.Pending.DisplayName;
                 });
                 
                 self.approvePayment = function (item, event) {
