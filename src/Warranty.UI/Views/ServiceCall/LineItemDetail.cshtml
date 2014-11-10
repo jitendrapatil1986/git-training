@@ -101,10 +101,14 @@
                 <div class="col-md-4">
                     <strong data-bind="text: VendorName"></strong>
                     <span data-bind="text: VendorEmail"></span>
-                    <!-- ko foreach: VendorPhoneNumbers -->
-                    <span data-bind="text: $data"></span>
+                    <p>
+                        <!-- ko foreach: VendorPhoneNumbers -->
+                         <span data-bind="text: $data"></span>&nbsp;
+                        <!-- /ko -->
+                    </p>
                 </div>
                 <!-- /ko -->
+                <div class="clearfix"></div>
             </section>
             <section class="margin-bottom-15">
                 <h3 class="col-md-12">Payments
