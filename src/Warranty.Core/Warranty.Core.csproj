@@ -301,9 +301,12 @@
     <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerModel.cs" />
     <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerQuery.cs" />
     <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerQueryHandler.cs" />
+    <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ConstructionVendorQueryHandler.cs" />
     <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ServiceCallLineItemModel.cs" />
     <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ServiceCallLineItemQuery.cs" />
     <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ServiceCallLineItemQueryHandler.cs" />
+    <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ConstructionVendorModel.cs" />
+    <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ConstructionVendorQuery.cs" />
     <Compile Include="Features\TaskCompletion\TaskCompleteCommand.cs" />
     <Compile Include="Features\TaskCompletion\ServiceCallApproveCommandHandler.cs" />
     <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetModel.cs" />
