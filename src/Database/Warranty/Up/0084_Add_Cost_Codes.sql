@@ -1,0 +1,4 @@
+ALTER TABLE dbo.[Payments] ADD CostCode VARCHAR(255)  NULL
+GO
+ALTER TABLE dbo.[Backcharges] ADD CostCode VARCHAR(255)  NULL
+GO
