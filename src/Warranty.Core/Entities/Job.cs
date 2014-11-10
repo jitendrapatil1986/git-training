@@ -30,5 +30,13 @@ namespace Warranty.Core.Entities
         public virtual DateTime? UpdatedDate { get; set; }
         public virtual string UpdatedBy { get; set; }
         public string JdeIdentifier { get; set; }
+
+        public bool IsOlderThanTwoYears
+        {
+            get
+            {
+                return CloseDate.HasValue && CloseDate.Value.CompareTo(DateTime.Today.AddYears(-2)) <= 0;
+            }
+        }
     }
 }
