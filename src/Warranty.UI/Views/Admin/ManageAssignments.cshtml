@@ -29,13 +29,13 @@
                                 <div class="hidden" data-bind="text: communityAssignmentId()"></div>
                                 <label>Assignee</label>
                                 <div class="editor" data-bind="css: { editing: assigneeEditing }"> 
-                                    <a href="#" data-bind="text: selectedEmployeeName(), click: editLine, visible: selectedEmployeeName() != ''" class="view"></a>
-                                    <a href="#" data-bind="click: editLine, visible: selectedEmployeeName() == ''" class="view">Unassigned</a>
+                                    <a href="#" data-bind="text: employeeName(), click: editLine, visible: employeeName() != ''" class="view"></a>
+                                    <a href="#" data-bind="click: editLine, visible: employeeName() == ''" class="view">Unassigned</a>
                                 </div>
-                                <div id="employeeList" class="editor" data-bind="css: { editing: assigneeEditing }">
-                                    <input id="employeeSearch" class="typeahead form-control edit" type="text" placeholder="Search Employee" data-bind="text: selectedEmployeeName()">
+                                <div class="editor" data-bind="css: { editing: assigneeEditing }">
+                                    <input type="text" class="form-control edit" data-bind="typeahead: typeaheadOptions, text: employeeName()" placeholder="Search Employee" />
                                 </div>
-                                <div id="selectedLineEmployeeId" class="hidden" data-bind="value: selectedEmployeeId"></div>
+                                <div class="hidden" data-bind="value: employeeId"></div>
                             </div>
                         </div>
                     </div>
