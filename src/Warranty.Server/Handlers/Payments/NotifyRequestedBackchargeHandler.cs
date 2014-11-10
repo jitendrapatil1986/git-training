@@ -26,6 +26,7 @@
             {
                 var backcharge = _database.SingleById<Backcharge>(message.BackchargeId);
                 var payment = _database.SingleById<Payment>(backcharge.PaymentId);
+                var job = _database.Single<Job>("SELECT * FROM Job WHERE JobNumber = @0", payment.JobNumber);
 
                 var backchargeRequest = new RequestBackcharge
                 {
@@ -37,10 +38,15 @@
                     PersonNotified = backcharge.PersonNotified,
                     DateNotified = backcharge.PersonNotifiedDate,
                     PhoneNumber = backcharge.PersonNotifiedPhoneNumber,
-                    PaymentAmount = payment.Amount,
+                    PaymentAmount = backcharge.BackchargeAmount,
                     PaymentInvoiceNumber = payment.InvoiceNumber,
                     Username = _userSession.GetCurrentUser().LoginName,
                     PaymentVendorNumber = payment.VendorNumber,
+                    CostCode = backcharge.CostCode,
+                    ProgramId = Configuration.WarrantyConstants.ProgramId,
+                    ObjectAccount = job.IsOlderThanTwoYears ? Configuration.WarrantyConstants.OverTwoYearLaborCode : Configuration.WarrantyConstants.UnderTwoYearLaborCode,
+                    BuilderNumber = _userSession.GetCurrentUser().EmployeeNumber,
+                    BackchargeIdentifier = backcharge.BackchargeId.ToString()
                 };
 
                 _bus.Send(backchargeRequest);
