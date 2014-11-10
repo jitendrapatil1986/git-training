@@ -34,7 +34,7 @@
                     VendorNumber = g.Key,
                     VendorName = g.First().VendorName,
                     VendorEmail = g.First().VendorEmail,
-                    VendorPhoneNumbers = g.Select(x => string.Format("{0} ({1})", x.VendorPhone, x.PhoneType))
+                    VendorPhoneNumbers = g.Select(x => string.Format("{0} {1}", x.VendorPhone, !string.IsNullOrEmpty(x.PhoneType) ? string.Format("({0})",x.PhoneType): string.Empty))
                 });
         }
 
