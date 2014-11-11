@@ -35,7 +35,7 @@ namespace Warranty.Core.Entities
         {
             get
             {
-                return CloseDate.HasValue && CloseDate.Value.CompareTo(DateTime.Today.AddYears(-2)) <= 0;
+                return CloseDate.GetValueOrDefault().CompareTo(DateTime.Today.AddYears(-2)) <= 0;
             }
         }
     }
