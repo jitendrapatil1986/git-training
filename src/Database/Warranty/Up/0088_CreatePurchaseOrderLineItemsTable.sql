@@ -7,6 +7,7 @@ CREATE TABLE [dbo].[PurchaseOrderLineItems](
 	[UnitCost] [decimal](18, 2) NULL,
 	[Description] [varchar](4000) NULL,
 	[PurchaseOrderLineItemStatusId] [int] NULL,
+	[JdeIdentifier] [varchar](255) NULL,
 	[CreatedDate] [datetime2](7) NULL,
 	[CreatedBy] [varchar](255) NULL,
 	[UpdatedDate] [datetime2](7) NULL,
