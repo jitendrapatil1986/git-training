@@ -43,7 +43,7 @@
                         VarianceCode = Configuration.WarrantyConstants.VarianceCode,
                         PaymentIdentifier = payment.PaymentId.ToString(),
                         ProgramId = Configuration.WarrantyConstants.ProgramId,
-                        ObjectAccount = job.IsOlderThanTwoYears ? Configuration.WarrantyConstants.OverTwoYearLaborCode : Configuration.WarrantyConstants.UnderTwoYearLaborCode,
+                        ObjectAccount = job.IsOutOfWarranty ? Configuration.WarrantyConstants.OverTwoYearLaborCode : Configuration.WarrantyConstants.UnderTwoYearLaborCode,
                         VarianceExplanation = ""
                     };
 

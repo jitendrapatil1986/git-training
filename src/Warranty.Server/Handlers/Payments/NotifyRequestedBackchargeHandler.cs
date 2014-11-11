@@ -38,13 +38,13 @@
                     PersonNotified = backcharge.PersonNotified,
                     DateNotified = backcharge.PersonNotifiedDate,
                     PhoneNumber = backcharge.PersonNotifiedPhoneNumber,
-                    PaymentAmount = backcharge.BackchargeAmount,
+                    PaymentAmount = payment.Amount,
                     PaymentInvoiceNumber = payment.InvoiceNumber,
                     Username = _userSession.GetCurrentUser().LoginName,
                     PaymentVendorNumber = payment.VendorNumber,
                     CostCode = backcharge.CostCode,
                     ProgramId = Configuration.WarrantyConstants.ProgramId,
-                    ObjectAccount = job.IsOlderThanTwoYears ? Configuration.WarrantyConstants.OverTwoYearLaborCode : Configuration.WarrantyConstants.UnderTwoYearLaborCode,
+                    ObjectAccount = job.IsOutOfWarranty ? Configuration.WarrantyConstants.OverTwoYearLaborCode : Configuration.WarrantyConstants.UnderTwoYearLaborCode,
                     BuilderNumber = _userSession.GetCurrentUser().EmployeeNumber,
                     BackchargeIdentifier = backcharge.BackchargeId.ToString()
                 };

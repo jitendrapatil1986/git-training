@@ -31,7 +31,7 @@ namespace Warranty.Core.Entities
         public virtual string UpdatedBy { get; set; }
         public string JdeIdentifier { get; set; }
 
-        public bool IsOlderThanTwoYears
+        public bool IsOutOfWarranty
         {
             get
             {

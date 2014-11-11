@@ -5,7 +5,7 @@
     public class WarrantyConstants
     {
         public static readonly string ProgramId = "WARRANTY";
-        public static readonly string PaymentType = "EO";
+        public static readonly string PaymentType = "E";
         public static readonly string VarianceCode = "W";
 
         public static readonly List<string> LaborObjectAccounts = new List<string> { "9425", "9435" };
