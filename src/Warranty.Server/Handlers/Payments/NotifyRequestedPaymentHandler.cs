@@ -26,8 +26,6 @@
             {
                 
                 var payment = _database.SingleById<Payment>(message.PaymentId);
-                var job = _database.Single<Job>("SELECT * FROM Job WHERE JobNumber = @0", payment.JobNumber);
-
 
                 var paymentRequest = new RequestExtraWorkOrderPayment
                     {
@@ -43,7 +41,7 @@
                         VarianceCode = Configuration.WarrantyConstants.VarianceCode,
                         PaymentIdentifier = payment.PaymentId.ToString(),
                         ProgramId = Configuration.WarrantyConstants.ProgramId,
-                        ObjectAccount = job.IsOutOfWarranty ? Configuration.WarrantyConstants.OverTwoYearLaborCode : Configuration.WarrantyConstants.UnderTwoYearLaborCode,
+                        ObjectAccount = payment.ObjectAccount,
                         VarianceExplanation = ""
                     };
 

@@ -1,0 +1,3 @@
+ALTER TABLE Payments
+ADD [ObjectAccount] VARCHAR(255) NULL
+GO

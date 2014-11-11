@@ -1,6 +1,7 @@
 ﻿namespace Warranty.Core.Features.AddServiceCallPayment
 {
     using System;
+    using Configurations;
     using Entities;
     using Enumerations;
     using InnerMessages;
@@ -22,7 +23,7 @@
         {
             using (_database)
             {
-                var jobNumber = _database.Single<string>(@"SELECT j.JobNumber
+                var job = _database.Single<Job>(@"SELECT j.*
                                                             FROM ServiceCallLineItems scli
                                                             INNER JOIN ServiceCalls sc
                                                                 ON sc.ServiceCallId = scli.ServiceCallId
@@ -37,9 +38,10 @@
                     PaymentStatus = PaymentStatus.Requested,
                     VendorNumber = message.VendorNumber,
                     VendorName = message.VendorName,
-                    JobNumber = jobNumber,
-                    CommunityNumber = string.IsNullOrEmpty(jobNumber) ? "" : jobNumber.Substring(0, 4),
-                    CostCode = WarrantyCostCode.FromValue(message.SelectedCostCode).CostCode
+                    JobNumber = job.JobNumber,
+                    CommunityNumber = string.IsNullOrEmpty(job.JobNumber) ? "" : job.JobNumber.Substring(0, 4),
+                    CostCode = WarrantyCostCode.FromValue(message.SelectedCostCode).CostCode,
+                    ObjectAccount = job.IsOutOfWarranty ? WarrantyConstants.OverTwoYearLaborCode : WarrantyConstants.UnderTwoYearLaborCode,
                 };
 
                 _database.Insert(payment);
