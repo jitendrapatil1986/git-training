@@ -26,6 +26,7 @@
             {
                 var backcharge = _database.SingleById<Backcharge>(message.BackchargeId);
                 var payment = _database.SingleById<Payment>(backcharge.PaymentId);
+                
 
                 var backchargeRequest = new RequestBackcharge
                 {
@@ -41,6 +42,11 @@
                     PaymentInvoiceNumber = payment.InvoiceNumber,
                     Username = _userSession.GetCurrentUser().LoginName,
                     PaymentVendorNumber = payment.VendorNumber,
+                    CostCode = backcharge.CostCode,
+                    ProgramId = Configuration.WarrantyConstants.ProgramId,
+                    ObjectAccount = payment.ObjectAccount,
+                    BuilderNumber = _userSession.GetCurrentUser().EmployeeNumber,
+                    BackchargeIdentifier = backcharge.BackchargeId.ToString()
                 };
 
                 _bus.Send(backchargeRequest);
