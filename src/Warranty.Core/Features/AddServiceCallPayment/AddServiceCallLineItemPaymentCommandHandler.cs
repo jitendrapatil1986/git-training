@@ -41,7 +41,7 @@
                     JobNumber = job.JobNumber,
                     CommunityNumber = string.IsNullOrEmpty(job.JobNumber) ? "" : job.JobNumber.Substring(0, 4),
                     CostCode = WarrantyCostCode.FromValue(message.SelectedCostCode).CostCode,
-                    ObjectAccount = job.IsOutOfWarranty ? WarrantyConstants.OverTwoYearLaborCode : WarrantyConstants.UnderTwoYearLaborCode,
+                    ObjectAccount = job.IsOutOfWarranty ? WarrantyConstants.OutOfWarrantyLaborCode : WarrantyConstants.InWarrantyLaborCode,
                 };
 
                 _database.Insert(payment);
