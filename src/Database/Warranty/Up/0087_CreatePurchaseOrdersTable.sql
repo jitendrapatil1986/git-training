@@ -3,7 +3,7 @@ CREATE TABLE [dbo].[PurchaseOrders](
     [PurchaseOrderId] [uniqueidentifier] NOT NULL,
     [VendorNumber] [varchar](8) NULL,
 	[VendorName] [varchar](255) NULL,
-	[DeliveryInstructions] [varchar](255) NULL,
+	[DeliveryInstructions] [int] NULL,
 	[DeliveryDate] [datetime2](7) NULL,
 	[CostCode] [varchar](255) NULL,
 	[ObjectAccount] [varchar](255) NULL,
