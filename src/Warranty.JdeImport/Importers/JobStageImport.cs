@@ -92,7 +92,10 @@ namespace Warranty.JdeImport.Importers
                 sc.Open();
 
                 using (var cmd = new SqlCommand(mergeScript, sc))
+                {
+                    cmd.CommandTimeout = 6000;
                     cmd.ExecuteNonQuery();
+                }
 
                 using (var cmd = new SqlCommand("TRUNCATE TABLE imports.JobStageImports", sc))
                     cmd.ExecuteNonQuery();

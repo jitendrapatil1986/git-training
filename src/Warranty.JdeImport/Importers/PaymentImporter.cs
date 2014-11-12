@@ -189,6 +189,7 @@ namespace Warranty.JdeImport.Importers
 
                 using (var cmd = new SqlCommand(mergeScript, sc))
                 {
+                    cmd.CommandTimeout = 6000;
                     cmd.ExecuteNonQuery();
                 }
 

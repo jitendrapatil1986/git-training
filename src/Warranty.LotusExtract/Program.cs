@@ -49,6 +49,7 @@
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter("@CityCodeList", markets));
+                    cmd.CommandTimeout = 6000;
                     cmd.ExecuteNonQuery();
                 }
             }
