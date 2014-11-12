@@ -7,6 +7,8 @@ using Warranty.Server.Extensions;
 
 namespace Warranty.Server.Handlers.Payments
 {
+    using Core.Enumerations;
+
     public class PaymentAddedHandler : IHandleMessages<PaymentAdded>
     {
         private readonly IDatabase _database;
@@ -30,7 +32,7 @@ namespace Warranty.Server.Handlers.Payments
                 {
                     VendorNumber = message.AddressNumber,
                     Amount = message.PaymentAmount,
-                    PaymentStatus = message.Status,
+                    PaymentStatus = PaymentStatus.FromJdeCode(message.Status),
                     JobNumber = message.CostCenter,
                     JdeIdentifier = message.JDEId,
                 });

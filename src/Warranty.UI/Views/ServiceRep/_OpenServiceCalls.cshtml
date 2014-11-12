@@ -5,33 +5,29 @@
 {
     foreach (var line in Model.OpenServiceCalls)
     {
-        <div class="service-call-line">
+
+        <div class="service-call-line cursor-pointer" onclick="location.href='@Url.Action("CallSummary", "ServiceCall", new {id=line.ServiceCallId})';">
+            <div class="col-md-3">
+                <strong>@Format.HomeOwner(line.HomeownerName, line.HomeownerNumber)</strong><br />@line.Address
+            </div>
+            <div class="col-md-2"><a href="#" class="hidden-lg hidden-md">@Format.PhoneNumber(line.PhoneNumber)</a></div>
             <div class="col-md-1">
                 <small class="text-muted">
-                    @Html.ActionLink(line.CallNumber, "CallSummary", "ServiceCall", new {id = line.ServiceCallId}, null)
-                </small><br/>@Format.YearsWithinWarranty(line.YearsWithinWarranty, line.WarrantyStartDate)
+                    @Html.ActionLink(line.JobNumber, "JobSummary", "Job", new { id = line.JobId }, null)
+                </small><br />@Format.YearsWithinWarranty(line.YearsWithinWarranty, line.WarrantyStartDate)
             </div>
-            <div class="col-md-4">
-                <div class="col-md-1 hidden-sm hidden-xs">
-                    @Format.NumberOfLineItems(line.NumberOfLineItems)
-                </div>
-                <div class="col-md-10">
-                    @Format.HomeOwner(line.HomeownerName, line.HomeownerNumber)<br />@line.Address
-                </div>
+            <div class="col-md-1 hidden-sm hidden-xs text-center">
+                @Format.NumberOfLineItems(line.NumberOfLineItems)
             </div>
-            <div class="col-md-2">@Format.PhoneNumber(line.PhoneNumber)</div>
             <div class="col-md-1">@Format.Escalated(line.IsEscalated, line.EscalationReason, line.EscalationDate)</div>
-            <div class="col-md-1">@Format.SpecialProject(line.IsSpecialProject)</div>
-            <div class="col-md-2 has-bottom-tooltip" title="@Format.DateForServiceCallWiget(line.CreatedDate)">
+            <div class="col-md-2">@Format.SpecialProject(line.IsSpecialProject)</div>
+            <div class="col-md-2 pull-right has-bottom-tooltip" title="@Format.DateForServiceCallWiget(line.CreatedDate)">
                 <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@line.NumberOfDaysRemaining)<br />
                 <div class="progress time-remaining-progress hidden-sm hidden-xs">
                     <div class="progress-bar @Css.ServiceCallProgressBar(line.NumberOfDaysRemaining)" role="progressbar" style="width: @line.PercentComplete%">
                         <span class="sr-only">@line.PercentComplete% Complete</span>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-1 text-center">
-                @Html.ServiceCallActions(line.ServiceCallId)
             </div>
             <div class="clearfix"></div>
         </div>

@@ -29,4 +29,6 @@
     $('.numeric').numeric();
 
     $('.phone-number').mask('(999)-999-9999');
+    
+    $('.phone-number-with-extension').mask("(999) 999-9999? x99999", { placeholder: " " });
 });

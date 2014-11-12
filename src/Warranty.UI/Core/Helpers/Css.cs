@@ -10,10 +10,6 @@ namespace Warranty.UI.Core.Helpers
         {
             switch (numberOfDaysRemaining)
             {
-                case 0:
-                case 1:
-                case 2:
-                    return "progress-bar-danger";
                 case 3:
                 case 4:
                     return "progress-bar-warning";
@@ -21,10 +17,9 @@ namespace Warranty.UI.Core.Helpers
                 case 6:
                 case 7:
                     return "progress-bar-success";
-
+                default:
+                    return "progress-bar-danger";
             }
-
-            return "";
         }
 
         public static string WarrantySpent(decimal spentAmount)

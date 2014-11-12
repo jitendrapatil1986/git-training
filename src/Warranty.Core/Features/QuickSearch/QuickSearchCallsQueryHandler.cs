@@ -16,7 +16,7 @@ namespace Warranty.Core.Features.QuickSearch
             _userSession = userSession;
         }
 
-        public IEnumerable<QuickSearchCallModel> Handle(QuickSearchCallsQuery request)
+        public IEnumerable<QuickSearchCallModel> Handle(QuickSearchCallsQuery query)
         {
             var currentuser = _userSession.GetCurrentUser();
             var markets = currentuser.Markets;
@@ -38,7 +38,7 @@ namespace Warranty.Core.Features.QuickSearch
                                             WHERE CityCode IN ({0}) AND JobNumber+AddressLine+HomeOwnerName LIKE '%'+@0+'%'
                                             ORDER BY HomeOwnerName";
 
-            var result = _database.Fetch<QuickSearchCallModel>(string.Format(sqlTemplate, markets.CommaSeparateWrapWithSingleQuote()), request.Query);
+            var result = _database.Fetch<QuickSearchCallModel>(string.Format(sqlTemplate, markets.CommaSeparateWrapWithSingleQuote()), query.Query);
             return result;
         }
     }

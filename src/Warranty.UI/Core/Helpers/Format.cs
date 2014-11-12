@@ -94,6 +94,11 @@ namespace Warranty.UI.Core.Helpers
             return date.Value.ToString("MMMM dd, yyyy");
         }
 
+        public static string DateMonthYear(DateTime? date)
+        {
+            return date == null ? "" : date.Value.ToString("MM/yyyy");
+        }
+
         public static string DateForServiceCallWiget(DateTime? date)
         {
             return String.Format("{0:MMM dd yyyy}", date);
@@ -113,7 +118,7 @@ namespace Warranty.UI.Core.Helpers
 
             var htmlString =
                 string.Format(
-                    @"<div class='opened-for opened-for-{0} has-bottom-tooltip' data-original-title='From {1} to {2}'>{3}<p>{4}</p></div>",
+                    @"<div class='opened-for opened-for-{0} has-bottom-tooltip' data-original-title='From {1} to {2}'><div>{3}</div><div>{4}</div></div>",
                     cssClass,
                     String.Format("{0:MMM dd yyyy}", openedDate),
                     String.Format("{0:MMM dd yyyy}", closedDate),
@@ -131,7 +136,7 @@ namespace Warranty.UI.Core.Helpers
             if (isEscalated)
                 htmlString =
                     string.Format(
-                        @"<div class='has-bottom-tooltip text-center' data-original-title='{0}'><span class='glyphicon glyphicon-fire'></span><br/>{1}</div>",
+                        @"<div><span class='label label-danger'>Escalated</span></div>",
                         reason, DateMonthDayYear(escalatedDate));
 
             return MvcHtmlString.Create(htmlString);
@@ -141,12 +146,12 @@ namespace Warranty.UI.Core.Helpers
         {
             var htmlString = String.Empty;
             if (isSpecialProject)
-                htmlString = @"<div class='special-project has-bottom-tooltip' data-original-title='Special Project'>S</div>";
+                htmlString = @"<div><span class='label label-primary'>Special Project</span></div>";
 
             return MvcHtmlString.Create(htmlString);
         }
 
-        public static MvcHtmlString YearsWithinWarranty(int years, DateTime warrantyStartDate)
+        public static MvcHtmlString YearsWithinWarranty(int years, DateTime closeDate)
         {
             string cssClass;
             if (years <= 1)
@@ -158,17 +163,9 @@ namespace Warranty.UI.Core.Helpers
             else
                 cssClass = "warranty-ten-plus-year";
 
-            var stringYears = years <= 1 ? "Year" : "Years";
-
-            var displayedYears = years == 0 ? "1" : years.ToString(CultureInfo.InvariantCulture);
-
-            var toolTip = string.Format("Warranty Start Date: {0}", String.Format("{0:MMM dd yyyy}", warrantyStartDate));
-
-            var htmlString = string.Format(@"<span class='label label-{0} has-bottom-tooltip' title='{1}'>{2} {3}</span>",
+            var htmlString = string.Format(@"<span class='label label-{0} has-bottom-tooltip' title='Close Date'>{1}</span>",
                                             cssClass, 
-                                            toolTip, 
-                                            displayedYears, 
-                                            stringYears);
+                                            closeDate.ToShortDateString());
 
             return MvcHtmlString.Create(htmlString);
         }
@@ -365,7 +362,7 @@ namespace Warranty.UI.Core.Helpers
         public static MvcHtmlString EditablePhoneNumber(PhoneNumberType phoneNumberType, string phoneNumber, string postUrl, Guid homeownerId)
         {
             var htmlString =
-                string.Format("<div class='inline-editable-text'><a class='glyphicon glyphicon-{0} text-muted visible-xs' href='tel:{4}'></a><span class='glyphicon glyphicon-{0} text-muted hidden-xs'></span> <a href='#' class='hidden-xs phone-number-with-extension' data-type='text' data-emptytext='Add {1}' id='{1}_Phone' data-url='{2}' data-pk='{3}' data-clear='false' data-value='{4}'>{4}</a></div>", phoneNumberType.Icon, phoneNumberType.DisplayName, postUrl, homeownerId, phoneNumber);
+                string.Format("<div class='inline-editable-text'><a class='glyphicon glyphicon-{0} text-muted visible-xs' href='tel:{4}'></a><span class='glyphicon glyphicon-{0} text-muted hidden-xs'></span> <a href='#' class='hidden-xs phone-number-with-extension' data-type='text' data-emptytext='Add Primary Phone' id='{1}_Phone' data-url='{2}' data-pk='{3}' data-clear='false' data-value='{4}'>{4}</a><span class='hidden-xs'> (Primary)</span></div>", phoneNumberType.Icon, phoneNumberType.DisplayName, postUrl, homeownerId, phoneNumber);
 
             return MvcHtmlString.Create(htmlString);
         }
@@ -375,7 +372,7 @@ namespace Warranty.UI.Core.Helpers
             return
                 MvcHtmlString.Create(
                     string.Format(@"<div class='inline-editable-text'><a class='glyphicon glyphicon-envelope text-muted' href='mailto:{2}?subject=David Weekley Homes Warranty Service Call %23 {3}'></a> 
-                                    <a href='mailto:{2}?subject=David Weekley Homes Warranty Service Call %23 {3}' class='hidden-xs' data-type='text' data-emptytext='Add Email' id='Email' data-url='{0}' data-pk='{1}' data-clear='false' data-value='{2}'>{2}</a></div>", postUrl, homeownerId, email, callNumber));
+                                    <a href='mailto:{2}?subject=David Weekley Homes Warranty Service Call %23 {3}' class='hidden-xs' data-type='text' data-emptytext='Add Primary Email' id='Email' data-url='{0}' data-pk='{1}' data-clear='false' data-value='{2}'>{2}</a><span class='hidden-xs'> (Primary)</span></div>", postUrl, homeownerId, email, callNumber));
         }
 
         public static MvcHtmlString EditableEmailForJob(string email, string postUrl, Guid homeownerId)
@@ -383,7 +380,7 @@ namespace Warranty.UI.Core.Helpers
             return
                 MvcHtmlString.Create(
                     string.Format(@"<div class='inline-editable-text'><a class='glyphicon glyphicon-envelope text-muted' href='mailto:{2}?subject=David Weekley Homes Warranty'></a> 
-                                    <a href='mailto:{2}?subject=David Weekley Homes Warranty' class='hidden-xs' data-type='text' data-emptytext='Add' id='Email' data-url='{0}' data-pk='{1}' data-clear='false' data-value='{2}'>{2}</a></div>", postUrl, homeownerId, email));
+                                    <a href='mailto:{2}?subject=David Weekley Homes Warranty' class='hidden-xs' data-type='text' data-emptytext='Add Primary Email' id='Email' data-url='{0}' data-pk='{1}' data-clear='false' data-value='{2}'>{2}</a><span class='hidden-xs'> (Primary)</span></div>", postUrl, homeownerId, email));
         }
 
         public static MvcHtmlString CellNumber(string cellNumber)
@@ -459,6 +456,11 @@ namespace Warranty.UI.Core.Helpers
 
             var html = string.Format("{0} <span class='label label-info muted'>{1}</span>", homeownerName, homeownerNumber.ToOrdinalSuffixed());
             return MvcHtmlString.Create(html);
+        }
+
+        public static string WithOneDecimal(decimal number)
+        {
+            return decimal.Round(number, 1, MidpointRounding.AwayFromZero).ToString();
         }
     }
 }

@@ -14,5 +14,10 @@ namespace Warranty.Core.ToDoInfrastructure.ConcreteTodos
         {
             get { return ToDoType.ServiceCallApproval; }
         }
+
+        public override ToDoPriority Priority
+        {
+            get { return ToDoPriority.High; }
+        }
     }
 }

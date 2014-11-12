@@ -6,17 +6,22 @@ using System.Linq;
 
 namespace Warranty.Core.Features.ServiceCallToggleActions
 {
+    using System;
     using System.Collections.Generic;
+    using InnerMessages;
+    using NServiceBus;
 
     public class ServiceCallToggleEscalateCommandHandler : ICommandHandler<ServiceCallToggleEscalateCommand, ServiceCallToggleEscalateCommandResult>
     {
         private readonly IDatabase _database;
         private readonly IActivityLogger _logger;
+        private readonly IBus _bus;
 
-        public ServiceCallToggleEscalateCommandHandler(IDatabase database, IActivityLogger logger)
+        public ServiceCallToggleEscalateCommandHandler(IDatabase database, IActivityLogger logger, IBus bus)
         {
             _database = database;
             _logger = logger;
+            _bus = bus;
         }
 
         public ServiceCallToggleEscalateCommandResult Handle(ServiceCallToggleEscalateCommand message)
@@ -25,7 +30,17 @@ namespace Warranty.Core.Features.ServiceCallToggleActions
             {
                 var serviceCall = _database.SingleOrDefaultById<ServiceCall>(message.ServiceCallId);
                 serviceCall.IsEscalated = !serviceCall.IsEscalated;
+                serviceCall.EscalationReason = (serviceCall.IsEscalated) ? message.Text : string.Empty;
+                serviceCall.EscalationDate = (serviceCall.IsEscalated) ? DateTime.UtcNow : (DateTime?)null;
+ 
                 _database.Update(serviceCall);
+
+                _bus.Send<NotifyServiceCallEscalatedStatusChanged>(x =>
+                    {
+                        x.ServiceCallId = serviceCall.ServiceCallId;
+                        x.EscalatedDate = serviceCall.EscalationDate;
+                        x.EscalatedReason = serviceCall.EscalationReason;
+                    });
 
                 var activityName = serviceCall.IsEscalated ? "Escalate" : "Deescalate";
                 _logger.Write(activityName, message.Text, message.ServiceCallId, ActivityType.SpecialProject, ReferenceType.ServiceCall);

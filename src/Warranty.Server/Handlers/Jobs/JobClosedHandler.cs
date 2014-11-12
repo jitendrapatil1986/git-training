@@ -6,13 +6,17 @@ using Warranty.Server.Extensions;
 
 namespace Warranty.Server.Handlers.Jobs
 {
+    using Core.TaskInfrastructure.Tasks;
+
     public class JobClosedHandler : IHandleMessages<JobClosed>
     {
         private readonly IDatabase _database;
+        private readonly JobClosedContactHomeownerTask _jobClosedContactHomeownerTask;
 
-        public JobClosedHandler(IDatabase database)
+        public JobClosedHandler(IDatabase database, JobClosedContactHomeownerTask jobClosedContactHomeownerTask)
         {
             _database = database;
+            _jobClosedContactHomeownerTask = jobClosedContactHomeownerTask;
         }
 
         public void Handle(JobClosed message)
@@ -23,6 +27,7 @@ namespace Warranty.Server.Handlers.Jobs
 
                 job.CloseDate = message.CloseDate;
                 _database.Update(job);
+                _jobClosedContactHomeownerTask.Create(job);
             }
         }
     }

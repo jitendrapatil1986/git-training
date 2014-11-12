@@ -1,179 +1,303 @@
-﻿@using Warranty.Core.Enumerations
+﻿@using Warranty.Core.Configurations
+@using Warranty.Core.Enumerations
+@using Warranty.Core.Extensions
+@using Warranty.Core.Features.JobSummary
 @using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.JobSummary.JobSummaryModel
 
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <h4>Job # @Html.DisplayFor(x => x.JobNumber)
-                                <small>@Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)</small>
-                            </h4>
-                        </div>
-                        <div class="col-md-4 pull-right">
-                            @Html.ActionLink("Create Call", "Create", "ServiceCall", new{id=Model.JobId}, new{@class="btn btn-default pull-right"})
-                        </div>
+    <div class="col-md-12">
+        @Html.HiddenFor(model => model.JobId, new { id = "jobId" })
+
+        <section class="margin-bottom-10">
+            <h2 class="pull-left no-margin">Job #@Model.JobNumber <small>@Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)</small>
+            </h2>
+            <div class="pull-right">
+                @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                {
+                    @Html.ActionLink("Change Homeowner", "ChangeHomeowner", "Job", new { id = Model.JobId }, new { @class = "btn btn-default margin-right-10" })
+                }
+
+                @Html.ActionLink("Create Call", "Create", "ServiceCall", new { id = Model.JobId }, new { @class = "btn btn-default pull-right" })
+            </div>
+            <div class="clearfix"></div>
+        </section>
+
+        <div id="jobSummaryPage" class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row remove-list-style">
+                    <div class="col-md-4 main-info">
+                        <h3 class="panel-title text-capitalize">@Format.HomeOwner(Model.HomeOwnerName, Model.HomeOwnerNumber)</h3>
+                        <ul>
+                            <li></li>
+                            <li>@Html.DisplayFor(x => x.AddressLine)</li>
+                            <li>@Model.City, @Model.StateCode @Model.PostalCode</li>
+                            <li>
+                                @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.HomePhone, Url.Action("AddOrUpdatePhoneNumber", "Homeowner"), Model.HomeownerId)
+                            </li>
+                            <li>
+                                @Format.EditableEmailForJob(Model.EmailAddress, Url.Action("AddOrUpdateEmail", "Homeowner"), Model.HomeownerId)
+                            </li>
+                        </ul>
                     </div>
-                    <div class="row">
-                        <div class="col-md-4 remove-list-style">
-                            <ul>
-                                <li>@Format.HomeOwner(Model.HomeOwnerName, Model.HomeOwnerNumber)</li>
-                                <li>@Html.DisplayFor(x => x.AddressLine)</li>
-                                <li>@Model.City, @Model.StateCode @Model.PostalCode</li>
-                                <li>
-                                    @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.HomePhone,Url.Action("AddOrUpdatePhoneNumber","Homeowner"), Model.HomeownerId)
-                                </li>
-                                <li>
-                                    @Format.EditablePhoneNumber(PhoneNumberType.Mobile, Model.OtherPhone,Url.Action("AddOrUpdatePhoneNumber","Homeowner"),Model.HomeownerId)
-                                </li>
-                                <li>
-                                    @Format.EditableEmailForJob(Model.EmailAddress, Url.Action("AddOrUpdateEmail","Homeowner"), Model.HomeownerId)
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-md-4">
-                            @Html.DisplayFor(x => x.PlanTypeDescription)
-                            <br/>
-                            @Html.DisplayFor(x => x.PlanName)
-                            <br/>
-                            Elevation: @Html.DisplayFor(x => x.Elevation)
-                            <br/>
-                            Swing: @Html.DisplayFor(x => x.Swing)
-                        </div>
-                        <div class="col-md-4">
-                            Builder: @Html.DisplayFor(x => x.BuilderName)
-                            <br/>
-                            Sales: @Html.DisplayFor(x => x.SalesConsultantName)
-                            <br/>
-                            <br/>
-                            Close Date: <span class="text-danger">@Format.DateMonthDayYear(Model.CloseDate)</span>
-                        </div>
+                    <div class="col-md-4">
+                        <ul class="border-bottom-1-solid">
+                            <li class="clearfix">@Html.DisplayFor(x => x.PlanTypeDescription)</li>
+                            <li class="clearfix">@Html.DisplayFor(x => x.PlanName)</li>
+                            <li class="clearfix">Elevation: @Html.DisplayFor(x => x.Elevation)</li>
+                            <li class="clearfix">Swing: @Html.DisplayFor(x => x.Swing)</li>
+                        </ul>
                     </div>
-                    <br />
-                    @*<div class="row">
-                        <div class="col-md-3">
-                            @Html.DisplayFor(x => x.PlanTypeDescription)
-                        </div>
-                        <div class="col-md-3">
-                            @Html.DisplayFor(x => x.PlanName)
-                        </div>
-                        <div class="col-md-3">
-                            Elevation : @Html.DisplayFor(x => x.Elevation)
-                        </div>
-                        <div class="col-md-3">
-                            Swing : @Html.DisplayFor(x => x.Swing)
-                        </div>
-                    </div>*@
+                    <div class="col-md-4">
+                        <ul class="border-bottom-1-solid">
+                            <li class="clearfix">Builder: @Html.DisplayFor(x => x.BuilderName)</li>
+                            <li class="clearfix">Sales: @Html.DisplayFor(x => x.SalesConsultantName)</li>
+                            <li class="clearfix">Close Date: <span class="text-danger">@Format.DateMonthDayYear(Model.CloseDate)</span></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <ul class="nav nav-tabs responsive" role="tablist">
-                <li class="active"><a href="#job_service_calls" role="tab" data-toggle="tab">Call History <span class="label label-default">@Model.JobServiceCalls.Count()</span></a></li>
-                <li><a href="#job_selections" role="tab" data-toggle="tab">Options <span class="label label-default">@Model.JobSelections.Count()</span></a></li>
-                <li><a href="#job_vendors" role="tab" data-toggle="tab">Vendors </a></li>
-                <li><a href="#job_payments" role="tab" data-toggle="tab">Payments </a></li>
-            </ul>
+                        @Html.Partial("_AdditionalContacts", Model.HomeownerId)
+    
+            <div class="col-md-12 no-left-right-padding margin-top-10">
+                <ul class="nav nav-tabs responsive" role="tablist">
+                    <li class="active"><a href="#job_service_calls" role="tab" data-toggle="tab">Call History <span class="label label-default">@Model.JobServiceCalls.Count()</span></a></li>
+                    <li><a href="#job_selections" role="tab" data-toggle="tab">Options <span class="label label-default">@Model.JobSelections.Count()</span></a></li>
+                    <li><a href="#job_vendors" role="tab" data-toggle="tab">Vendors </a></li>
+                    <li><a href="#job_payments" role="tab" data-toggle="tab">Payments </a></li>
+                </ul>
+
         
-            <div class="tab-content responsive">
-                <div class="tab-pane active" id="job_service_calls">
-                    @foreach (var line in Model.JobServiceCalls.OrderByDescending(x=>x.CreatedDate))
-                    {
-                        <div class="service-call-line col-md-12">
-                            <div class="col-md-1">
-                                <small class="text-muted">
-                                    @Html.ActionLink(line.CallNumber, "CallSummary", "ServiceCall", new {id = line.ServiceCallId}, null)
-                                </small>
-                            </div>
-                            <div class="col-md-7 text-capitalize small">
-                                <b>Line Item Problem Descriptions</b>
-                                <ul>
-                                @foreach (var summary in line.SummaryOfLineItems)
-                                {
-                                    <li>@Html.Raw(summary)</li>
-                                }
-                                </ul>
-                                Assigned to @Html.DisplayFor(x => line.AssignedTo)
-                                <br/>
-                                @(line.CompletionDate == null ? "Date Added: " + Format.DateMonthDayYear(line.CreatedDate) : "Date Completed: " + Format.DateMonthDayYear(line.CompletionDate))
-                            </div>
-                            <div class="col-md-2">
-                                @if (line.JobServiceCallNotes.Any(x => !string.IsNullOrEmpty(x.Note))) { 
-                                    <div class="text-center has-bottom-tooltip" title="No. Of Notes">
-                                        <a data-toggle="collapse" href="#collapseJobCallLineNotes@(line.CallNumber)" class="text-capitalize accordion-toggle collapsed">
-                                            <span class="glyphicon glyphicon-comment"> <u>@line.JobServiceCallNotes.Count()</u></span>
-                                        </a>
-                                    </div>
-                                }
-                            </div>
-                            @if (line.CompletionDate == null)
+                <div class="tab-content responsive">
+                    <div class="tab-pane active" id="job_service_calls">
+                        @foreach (var line in Model.JobServiceCalls.Union<dynamic>(Model.Homeowners).OrderByDescending(x => x.CreatedDate))
+                        {
+                            if (line.GetType() == typeof(JobSummaryModel.Homeowner))
                             {
-                                <div class="col-md-2 has-bottom-tooltip" title="@Format.DateForServiceCallWiget(line.CreatedDate)">
-                                    <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@line.NumberOfDaysRemaining)<br/>
-                                    <div class="progress time-remaining-progress hidden-sm hidden-xs">
-                                        <div class="progress-bar @Css.ServiceCallProgressBar(line.NumberOfDaysRemaining)" role="progressbar" style="width: @line.PercentComplete%">
-                                            <span class="sr-only">@line.PercentComplete% Complete</span>
-                                        </div>
-                                    </div>
+                                <div class="service-call-line col-md-12 no-padding">
+                                    <div class="alert alert-info no-bottom-margin"><strong>Homeowner changed</strong> on @Format.DateMonthDayYear(line.CreatedDate)</div>
                                 </div>
                             }
                             else
                             {
-                                 <div class="col-md-1 pull-right">@Format.DaysOpenedFor(line.DaysOpenedFor, line.CreatedDate, line.CompletionDate)</div>
-                            }            
-                            <div class="row">
-                                <div class="col-md-8 col-md-offset-2">
-                                    <div id="collapseJobCallLineNotes@(line.CallNumber)" class="collapse panel-body no-left-right-padding">
-                                        @foreach (var noteLine in line.JobServiceCallNotes)
-                                        {
-                                            <div class="service-call-line">
-                                                <small>
-                                                    @Html.DisplayFor(x => noteLine.Note)
-                                                </small>
+                                var sc = (JobSummaryModel.JobServiceCall)line;
+                                <div class="service-call-line col-md-12">
+                                    <div class="col-md-1">
+                                        <small class="text-muted">
+                                            @Html.ActionLink(sc.CallNumber, "CallSummary", "ServiceCall", new { id = sc.ServiceCallId }, null)
+                                        </small>
+                                    </div>
+                                    <div class="col-md-7 text-capitalize small">
+                                        <b>Line Item Problem Descriptions</b>
+                                        <ul>
+                                            @foreach (var summary in sc.SummaryOfLineItems)
+                                            {
+                                                <li>@Html.Raw(summary)</li>
+                                            }
+                                        </ul>
+                                        Assigned to @Html.DisplayFor(x => sc.AssignedTo)
+                                        <br/>
+                                        @(sc.CompletionDate == null ? "Date Added: " + Format.DateMonthDayYear(sc.CreatedDate) : "Date Completed: " + Format.DateMonthDayYear(sc.CompletionDate))
+                                    </div>
+                                    <div class="col-md-2">
+                                        @if (sc.JobServiceCallNotes.Any(x => !string.IsNullOrEmpty(x.Note)))
+                                        { 
+                                            <div class="text-center has-bottom-tooltip" title="No. Of Notes">
+                                                <a data-toggle="collapse" href="#collapseJobCallLineNotes@(sc.CallNumber)" class="text-capitalize accordion-toggle collapsed">
+                                                    <span class="glyphicon glyphicon-comment"> <u>@sc.JobServiceCallNotes.Count()</u></span>
+                                                </a>
                                             </div>
                                         }
                                     </div>
+ 
+                                    <div class="col-md-2">
+                                    @if (sc.CompletionDate == null)
+                                    {
+                                        <div class="has-bottom-tooltip pull-right" style="float:right" title="@Format.DateForServiceCallWiget(sc.CreatedDate)">
+                                            <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@sc.NumberOfDaysRemaining)<br/>
+                                            <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                                                <div class="progress-bar @Css.ServiceCallProgressBar(sc.NumberOfDaysRemaining)" role="progressbar" style="width: @sc.PercentComplete%">
+                                                    <span class="sr-only">@sc.PercentComplete% Complete</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="pull-right">@Format.DaysOpenedFor(sc.DaysOpenedFor, sc.CreatedDate, sc.CompletionDate)</div>
+                                    } 
+                                    <div id="approveCommands" class="margin-top-10 pull-right">
+                                        @if (sc.ServiceCallStatus == ServiceCallStatus.Requested && sc.CanApprove)
+                                        {
+                                            <a href="#" data-service-call-id="@sc.ServiceCallId" data-display-status="false" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
+                                            <a href="#" data-service-call-id="@sc.ServiceCallId" data-display-status="false" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
+                                        }
+                                    </div>  
+                                    </div>
+                                        <div class="row">
+                                        <div class="col-md-8 col-md-offset-2">
+                                            <div id="collapseJobCallLineNotes@(sc.CallNumber)" class="collapse panel-body no-left-right-padding">
+                                                @foreach (var noteLine in sc.JobServiceCallNotes)
+                                                {
+                                                    <div class="service-call-line">
+                                                        <small>
+                                                            @Html.DisplayFor(x => noteLine.Note)
+                                                        </small>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                            
+                                    <div class="clearfix"></div>
+                                </div>
+                            }
+                        }
+
+                        <section >
+                            <h3 class="col-md-12 margin-top-10">Attachments
+                                <span>
+                                    <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Attachment" data-toggle="collapse" data-target="#addJobAttachment"><span class="glyphicon glyphicon-plus"></span></button>
+                                </span>
+                            </h3>
+                            <div id="addJobAttachment" class="collapse">
+                                <div class="panel-body no-bottom-padding">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            @using (Html.BeginForm("UploadAttachment", "Job"))
+                                            {
+                                                @Html.HiddenFor(x => Model.JobId, new { @Name = "JobId" })
+                                                @Html.EditorFor(x => x.TempFiles)
+                                                <input type="submit" class="btn btn-primary trigger-file-uploader" value="Add" />
+                                                <button class="btn btn-link" data-toggle="collapse" data-target="#addJobAttachment">Cancel</button>
+                                            }
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            
-                            <div class="clearfix"></div>
-                        </div>
-                    }
-                </div>
-                <div class="tab-pane" id="job_selections">
-                    <div class="col-md-12">
-                    @foreach (var selection in Model.JobSelections)
-                    {
-                        <div class="service-call-line">
-                            <div class="col-md-1">
-                                <small class="text-muted">
-                                    @Html.DisplayFor(x => selection.OptionNumber)
-                                </small>
+                            <br />
+                            <em data-bind="visible: allJobAttachments().length < 1" class="padding-left-15 padding-top-7 pull-left">There are no attachments to display</em>
+                            <div class="remove-list-style attachments row">
+                                <div class="clearfix"></div>
+                                <br/>
+                                <ul data-bind="foreach: allJobAttachments">
+                                    <li>
+                                        <a class="attached-file" data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "Job")/' + jobAttachmentId}">
+                                        @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                                        {
+                                            <span data-url="" data-bind="attr: { 'data-attachment-id': jobAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "Job")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
+                                        }
+                                        <span class="glyphicon glyphicon-file"></span>
+                                        </a>
+                                        <a href="#" data-bind="attr: { 'data-attachment-id': jobAttachmentId}, editable: displayName, editableOptions: { pk: jobAttachmentId, url: '@Url.Action("RenameAttachment", "Job")    '}"  class="attached-file-display-name"></a>
+                                        <br/>
+                                        <p data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></p>
+                                    </li>
+                                </ul>
                             </div>
-                            <div class="col-md-11 text-capitalize small">
-                                @Html.DisplayFor(x => selection.OptionDescription)
+                        </section>
+                        <section >
+                            <h3 class="col-md-12 margin-top-10">Notes
+                                <span>
+                                    <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Note" data-toggle="collapse" data-target="#addJobNote"><span class="glyphicon glyphicon-plus"></span></button>
+                                </span>
+                            </h3>
+                            <div id="addJobNote" class="collapse">
+                                <div class="panel-body no-bottom-padding">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            @Html.TextArea("Description", null, new { id = "addJobNoteDescription", @class = "form-control", data_bind = "text: jobNoteDescriptionToAdd, value: jobNoteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class="form-submit">
+                                        <button class="btn btn-primary" data-bind="click: addJobNote, enable: jobNoteDescriptionToAdd().length > 0">Add</button>
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#addJobNote" data-bind="click: cancelJobNote">Cancel</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="clearfix"></div>
+                            <br />
+                            <em data-bind="visible: allJobNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">There are no notes to display</em>
+                            <div class="remove-list-style">
+                                <div class="clearfix"></div>
+                                <br/>
+                                <ul>
+                                    <div data-bind="foreach: allJobNotes">
+                                        <div id="allJobNotes" class="service-call-line">
+                                            <li class="row">
+                                                <div class="col-md-12">
+                                                    <div class="no-left-right-padding">
+                                                        <div class="row">
+                                                            <div class="col-md-11">
+                                                                <span data-bind="text: createdBy"></span>
+                                                                <span data-bind="text: moment(createdDate).format('L')"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <p data-bind="text: note"></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="tab-pane" id="job_selections">
+                        <div class="col-md-12">
+                            @foreach (var selection in Model.JobSelections)
+                            {
+                                <div class="service-call-line">
+                                    <div class="col-md-1">
+                                        <small class="text-muted">
+                                            @Html.DisplayFor(x => selection.OptionNumber)
+                                        </small>
+                                    </div>
+                                    <div class="col-md-11 text-capitalize small">
+                                        @Html.DisplayFor(x => selection.OptionDescription)
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            }
                         </div>
-                    }
                     </div>
-                </div>
-                <div class="tab-pane" id="job_vendors">
-                    <div class="col-md-12">
-                        Vendor Information - Coming Soon
+                    <div class="tab-pane" id="job_vendors">
+                        <div class="col-md-12">
+                            Vendor Information - Coming Soon
+                        </div>
                     </div>
-                </div>
-                <div class="tab-pane" id="job_payments">
-                    <div class="col-md-12">
-                        Payment Information - Coming Soon
+                    <div class="tab-pane" id="job_payments">
+                        <div class="col-md-12">
+                            Payment Information - Coming Soon
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section modules
+{
+    <script>
+        define('additionalContactsData', function() {
+            return {
+                additionalEmailContacts: @Html.Raw(Model.AdditionalContacts.AdditionalEmailContacts.ToJson()),
+                additionalPhoneContacts: @Html.Raw(Model.AdditionalContacts.AdditionalPhoneContacts.ToJson()),
+            };
+        });
+        
+        define('modelData', function() {
+            return {
+                initialJobNotes: @Html.Raw(Model.JobNotes.ToJson()),
+                initialJobAttachments: @Html.Raw(Model.Attachments.ToJson()),
+                attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
+            };
+        });
+    </script>
+}

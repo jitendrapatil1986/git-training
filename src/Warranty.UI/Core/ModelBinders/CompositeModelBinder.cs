@@ -4,6 +4,7 @@ namespace Warranty.UI.Core.ModelBinders
     using System.ComponentModel;
     using System.Linq;
     using System.Web.Mvc;
+    using Warranty.Core.FileManagement;
     using Yay.Enumerations.MVC.ModelBinders;
 
     public class CompositeModelBinder : DefaultModelBinder
@@ -17,7 +18,8 @@ namespace Warranty.UI.Core.ModelBinders
 			                   	{
 			                   		new EnumerationPropertyBinder(),
 			                   		new EnumerationCollectionPropertyBinder(),
-								};
+                                    new FileUploadsPropertyBinder(new TemporaryFileUploadsService())								
+                                };
 
 			_modelBinders = new IFilteredModelBinder[]
 			                	{

@@ -6,16 +6,19 @@ namespace Warranty.Core.Features.ServiceCallSummary
     using Enumerations;
     using NPoco;
     using Security;
+    using Services;
 
     public class ServiceCallSummaryQueryHandler : IQueryHandler<ServiceCallSummaryQuery, ServiceCallSummaryModel>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
+        private readonly IHomeownerAdditionalContactsService _homeownerAdditionalContactsService;
 
-        public ServiceCallSummaryQueryHandler(IDatabase database, IUserSession userSession)
+        public ServiceCallSummaryQueryHandler(IDatabase database, IUserSession userSession, IHomeownerAdditionalContactsService homeownerAdditionalContactsService)
         {
             _database = database;
             _userSession = userSession;
+            _homeownerAdditionalContactsService = homeownerAdditionalContactsService;
         }
 
         public ServiceCallSummaryModel Handle(ServiceCallSummaryQuery query)
@@ -24,16 +27,21 @@ namespace Warranty.Core.Features.ServiceCallSummary
 
             using (_database)
             {
-                return new ServiceCallSummaryModel
+                var result = new ServiceCallSummaryModel
                     {
                         ServiceCallSummary = GetServiceCallSummary(query.ServiceCallId),
                         ServiceCallLines = GetServiceCallLines(query.ServiceCallId),
                         ServicCallNotes = GetServiceCallNotes(query.ServiceCallId),
+                        Attachments = GetServiceCallAttachments(query.ServiceCallId),
                         AddServiceCallLineItem = new ServiceCallSummaryModel.NewServiceCallLineItem(query.ServiceCallId, SharedQueries.ProblemCodes.GetProblemCodeList(_database)),
                         CanApprove = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
                         CanReassign = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
                         CanReopenLines = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
                     };
+
+                result.AdditionalContacts = _homeownerAdditionalContactsService.Get(result.ServiceCallSummary.HomeownerId);
+
+                return result;
             }
         }
 
@@ -72,6 +80,9 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , cm.CommunityName
                                     , wc.HomeownerVerificationSignature
                                     , wc.HomeownerVerificationSignatureDate
+                                    , wc.SpecialProjectReason
+                                    , wc.SpecialProjectDate
+                                    
                                 FROM [ServiceCalls] wc
                                 INNER JOIN Jobs j
                                 ON wc.JobId = j.JobId
@@ -103,12 +114,16 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     li.ServiceCallId,
                                     li.LineNumber,
                                     li.ProblemCode,
+                                    li.ProblemJdeCode,
                                     li.ProblemDescription,
                                     li.CauseDescription,
                                     li.ClassificationNote,
                                     li.LineItemRoot,
                                     li.CreatedDate,
-                                    li.ServiceCallLineItemStatusId as ServiceCallLineItemStatus
+                                    li.ServiceCallLineItemStatusId as ServiceCallLineItemStatus,
+                                    (SELECT COUNT(*) FROM ServiceCallNotes WHERE ServiceCallLineItemId = li.ServiceCallLineItemId) as NumberOfNotes,
+                                    (SELECT COUNT(*) FROM ServiceCallAttachments WHERE ServiceCallLineItemId = li.ServiceCallLineItemId AND IsDeleted = 0) as NumberOfAttachments,
+                                    li.ProblemDetailCode
                                 FROM ServiceCalls wc
                                 INNER JOIN ServiceCallLineItems li
                                 ON wc.ServiceCallId = li.ServiceCallId
@@ -129,11 +144,28 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                       ,[ServiceCallNote] as Note
                                       ,[ServiceCallLineItemId]
                                       ,[CreatedDate]
-                                      ,[CreatedBy]     
+                                      ,[CreatedBy]
                                 FROM [ServiceCallNotes]
-                                WHERE ServiceCallId = @0";
+                                WHERE ServiceCallId = @0
+                                AND ServiceCallLineItemId IS NULL";
 
             var result = _database.Fetch<ServiceCallSummaryModel.ServiceCallNote>(sql, serviceCallId.ToString());
+
+            return result;
+        }
+
+        private IEnumerable<ServiceCallSummaryModel.Attachment> GetServiceCallAttachments(Guid serviceCallId)
+        {
+            const string sql = @"SELECT [ServiceCallAttachmentId]
+                                        ,[ServiceCallLineItemId]
+                                        ,[DisplayName]
+                                        ,[CreatedDate]
+                                        ,[CreatedBy]
+                                FROM [ServiceCallAttachments]
+                                WHERE ServiceCallId = @0 AND IsDeleted=0
+                                AND ServiceCallLineItemId = CAST(0 AS BINARY)";
+
+            var result = _database.Fetch<ServiceCallSummaryModel.Attachment>(sql, serviceCallId.ToString());
 
             return result;
         }

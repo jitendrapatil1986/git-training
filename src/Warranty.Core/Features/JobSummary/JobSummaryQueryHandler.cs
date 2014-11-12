@@ -6,27 +6,35 @@ using System.Threading.Tasks;
 
 namespace Warranty.Core.Features.JobSummary
 {
+    using Enumerations;
     using NPoco;
     using Security;
+    using Services;
 
     public class JobSummaryQueryHandler : IQueryHandler<JobSummaryQuery, JobSummaryModel>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
+        private readonly IHomeownerAdditionalContactsService _homeownerAdditionalContactsService;
 
-        public JobSummaryQueryHandler(IDatabase database, IUserSession userSession)
+        public JobSummaryQueryHandler(IDatabase database, IUserSession userSession, IHomeownerAdditionalContactsService homeownerAdditionalContactsService)
         {
             _database = database;
             _userSession = userSession;
+            _homeownerAdditionalContactsService = homeownerAdditionalContactsService;
         }
 
         public JobSummaryModel Handle(JobSummaryQuery query)
         {
+            var user = _userSession.GetCurrentUser();
             var model = GetJobSummary(query.JobId);
             model.JobServiceCalls = GetJobServiceCalls(query.JobId);
             model.JobSelections = GetJobSelections(query.JobId);
+            model.JobNotes = GetJobNotes(query.JobId);
+            model.Attachments = GetJobAttachments(query.JobId);
+            model.Homeowners = GetJobHomeowners(query.JobId);
             //model.JobPayments = GetJobPayments(query.JobId);
-
+            model.AdditionalContacts = _homeownerAdditionalContactsService.Get(model.HomeownerId);
             return model;
         }
 
@@ -48,7 +56,7 @@ namespace Warranty.Core.Features.JobSummary
 
         private JobSummaryModel GetJobSummary(Guid jobId)
         {
-            const string sql = @"SELECT j.[JobId]
+            const string sql = @"SELECT TOP 1 j.[JobId]
                                 ,j.[JobNumber]
                                 ,j.[CloseDate]
                                 ,j.[AddressLine]
@@ -93,7 +101,8 @@ namespace Warranty.Core.Features.JobSummary
                             ON j.BuilderEmployeeId = be.EmployeeId
                             LEFT JOIN Employees se
                             ON j.SalesConsultantEmployeeId = se.EmployeeId
-                            WHERE j.JobId = @0";
+                            WHERE j.JobId = @0
+                            ORDER BY ho.HomeownerNumber DESC";
 
             var result = _database.Single<JobSummaryModel>(sql, jobId);
             
@@ -102,8 +111,10 @@ namespace Warranty.Core.Features.JobSummary
 
         private IEnumerable<JobSummaryModel.JobServiceCall> GetJobServiceCalls(Guid jobId)
         {
+            var user = _userSession.GetCurrentUser();
             const string sql = @"SELECT 
                                     wc.ServiceCallId as ServiceCallId
+                                    ,wc.ServiceCallStatusId as ServiceCallStatus
                                     ,Servicecallnumber as CallNumber
                                     ,STUFF((SELECT '| ' + l.ProblemDescription
                                                     FROM ServiceCallLineItems l WHERE l.ServiceCallId = wc.servicecallid
@@ -139,6 +150,63 @@ namespace Warranty.Core.Features.JobSummary
 
             var result = _database.FetchOneToMany<JobSummaryModel.JobServiceCall, JobSummaryModel.JobServiceCall.JobServiceCallNote>(x => x.ServiceCallId, sql, jobId);
             
+            result.ForEach(x =>
+                {
+                    x.CanApprove = user.IsInRole(UserRoles.WarrantyServiceCoordinator) ||
+                                   user.IsInRole(UserRoles.WarrantyServiceManager);
+                });
+            
+            return result;
+        }
+
+        private IEnumerable<JobSummaryModel.JobNote> GetJobNotes(Guid jobId)
+        {
+            const string sql = @"SELECT [JobNoteId]
+                                  ,[JobId]
+                                  ,[Note]
+                                  ,[CreatedBy]
+                                  ,[CreatedDate]
+                                FROM [dbo].[JobNotes]
+                                WHERE JobId = @0
+                                ORDER BY CreatedDate DESC";
+
+            var result = _database.Fetch<JobSummaryModel.JobNote>(sql, jobId);
+
+            return result;
+        }
+
+        private IEnumerable<JobSummaryModel.Attachment> GetJobAttachments(Guid jobId)
+        {
+            const string sql = @"SELECT [JobAttachmentId]
+                                  ,[JobId]
+                                  ,[FilePath]
+                                  ,[DisplayName]
+                                  ,[IsDeleted]
+                                  ,[CreatedBy]
+                                  ,[CreatedDate]
+                                FROM [dbo].[JobAttachments]
+                                WHERE JobId = @0 AND IsDeleted=0
+                                ORDER BY CreatedDate DESC";
+
+            var result = _database.Fetch<JobSummaryModel.Attachment>(sql, jobId);
+
+            return result;
+        }
+
+        private IEnumerable<JobSummaryModel.Homeowner> GetJobHomeowners(Guid jobId)
+        {
+            const string sql = @"SELECT h.[HomeownerName]
+                                    ,h.[CreatedBy]
+                                    ,h.[CreatedDate]
+                                FROM Homeowners h
+                                INNER JOIN [dbo].[Jobs] j
+                                ON h.JobId = j.JobId
+                                WHERE j.JobId = @0
+                                AND h.HomeownerNumber > 1
+                                ORDER BY h.CreatedDate DESC";
+
+            var result = _database.Fetch<JobSummaryModel.Homeowner>(sql, jobId);
+
             return result;
         }
     }

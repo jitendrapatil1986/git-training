@@ -9,6 +9,7 @@
     using HtmlTags;
     using Microsoft.Practices.ServiceLocation;
     using Warranty.Core;
+    using Warranty.Core.Entities;
     using Warranty.Core.Entities.Lookups;
     using Warranty.Core.Features.ProblemCodes;
     using Yay.Enumerations;
@@ -62,7 +63,7 @@
             return MvcHtmlString.Empty;
         }
 
-        public static HtmlTag ProblemCodeDropdown<T>(this HtmlHelper<T> html, ProblemCode currentProblemCode) where T : class
+        public static HtmlTag ProblemCodeDropdown<T>(this HtmlHelper<T> html, ProblemCode currentProblemCode, string valueObservableName) where T : class
         {
             SelectTag select;
             var mediator = ServiceLocator.Current.GetInstance<IMediator>();
@@ -74,8 +75,8 @@
                     t.Option("Select Problem Code", string.Empty);
                     foreach (var problemCode in problemCodes)
                     {
-                        var htmlTag = t.Option(problemCode.DisplayName, problemCode.Id);
-                        if (currentProblemCode == problemCode)
+                        var htmlTag = t.Option(problemCode.Text, problemCode.Value);
+                        if (currentProblemCode != null && currentProblemCode.JdeCode == problemCode.Value)
                             htmlTag.Attr("selected");
                     }
                 });
@@ -83,7 +84,7 @@
             select.Id("problemCode");
             select.Attr("name", "SelectProblemCode");
             select.AddClass("form-control");
-
+            select.Attr("data-bind", string.Format("value: {0}",valueObservableName));
             return select;
         }
 

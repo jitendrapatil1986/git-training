@@ -3,9 +3,10 @@ using System.Collections.Generic;
 
 namespace Warranty.Core.Features.JobSummary
 {
+    using Enumerations;
     using Services;
 
-    public class JobSummaryModel
+    public class JobSummaryModel : UploadAttachmentBaseViewModel
     {
         public Guid JobId { get; set; }
         public string JobNumber { get; set; }
@@ -46,6 +47,10 @@ namespace Warranty.Core.Features.JobSummary
         public IEnumerable<JobServiceCall> JobServiceCalls { get; set; }
         public IEnumerable<JobPayment> JobPayments { get; set; }
         public IEnumerable<JobSelection> JobSelections { get; set; }
+        public IEnumerable<JobNote> JobNotes { get; set; }
+        public IEnumerable<Attachment> Attachments { get; set; }
+        public IEnumerable<Homeowner> Homeowners { get; set; }
+        public AdditionalContactsModel AdditionalContacts { get; set; }
 
         public int HomeOwnerNumber { get; set; }
 
@@ -76,6 +81,8 @@ namespace Warranty.Core.Features.JobSummary
         public class JobServiceCall
         {
             public Guid ServiceCallId { get; set; }
+            public ServiceCallStatus ServiceCallStatus { get; set; }
+            public bool CanApprove { get; set; }
             public string AssignedTo { get; set; }
             public string AssignedToEmployeeNumber { get; set; }
             public string JobNumber { get; set; }
@@ -116,6 +123,32 @@ namespace Warranty.Core.Features.JobSummary
                 public Guid ServiceCallId { get; set; }
                 public string Note { get; set; }
             }
+        }
+
+        public class JobNote
+        {
+            public Guid JobNoteId { get; set; }
+            public Guid JobId { get; set; }
+            public string Note { get; set; }
+            public string CreatedBy { get; set; }
+            public DateTime? CreatedDate { get; set; }
+        }
+
+        public class Attachment
+        {
+            public Guid JobAttachmentId { get; set; }
+            public Guid JobId { get; set; }
+            public string DisplayName { get; set; }
+            public string FilePath { get; set; }
+            public string CreatedBy { get; set; }
+            public DateTime? CreatedDate { get; set; }
+        }
+
+        public class Homeowner
+        {
+            public string HomeownerName { get; set; }
+            public string CreatedBy { get; set; }
+            public DateTime? CreatedDate { get; set; }
         }
     }
 }

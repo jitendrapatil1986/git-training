@@ -1,10 +1,11 @@
 ﻿namespace Warranty.Core.Features.ProblemCodes
 {
     using System.Collections.Generic;
-    using Entities.Lookups;
+    using System.Web.Mvc;
+    using Entities;
     using NPoco;
 
-    public class ProblemCodesQueryHandler : IQueryHandler<ProblemCodesQuery, IEnumerable<ProblemCode>>
+    public class ProblemCodesQueryHandler : IQueryHandler<ProblemCodesQuery, IEnumerable<SelectListItem>>
     {
         private readonly IDatabase _database;
 
@@ -13,11 +14,16 @@
             _database = database;
         }
 
-        public IEnumerable<ProblemCode> Handle(ProblemCodesQuery query)
+        public IEnumerable<SelectListItem> Handle(ProblemCodesQuery query)
         {
             using (_database)
             {
-                return _database.Fetch<ProblemCode>();
+                const string sql = @"SELECT DISTINCT JdeCode as Value
+                                        ,CategoryCode as Text
+                                FROM ProblemCodes
+                                ORDER BY CategoryCode";
+
+                return _database.Fetch<SelectListItem>(sql);
             }
         }
     }
