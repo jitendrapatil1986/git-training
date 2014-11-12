@@ -111,7 +111,7 @@
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandler.cs" />
-    <Compile Include="Handlers\Payments\NotifyRequestedBackchargeHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyBackchargeRequestedHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyBackchargeApprovedHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyBackchargeDeniedHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyBackchargeOnHoldHandler.cs" />
@@ -128,7 +128,7 @@
     <Compile Include="Handlers\Payments\RequestPaymentApprovalResponseHandler.cs" />
     <Compile Include="Handlers\Payments\RequestPaymentHoldResponseHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentPaymentAmountUpdatedHandler.cs" />
-    <Compile Include="Handlers\Payments\NotifyRequestedPaymentHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyPaymentRequestedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentStatusUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\RequestPaymentResponseHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallCompletedHandler.cs" />

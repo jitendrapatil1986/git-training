@@ -7,20 +7,20 @@
     using NPoco;
     using NServiceBus;
 
-    public class NotifyRequestedPaymentHandler : IHandleMessages<NotifyRequestedPayment>
+    public class NotifyPaymentRequestedHandler : IHandleMessages<NotifyPaymentRequested>
     {
         private readonly IDatabase _database;
         private readonly IBus _bus;
         private readonly IUserSession _userSession;
 
-        public NotifyRequestedPaymentHandler(IDatabase database, IBus bus, IUserSession userSession)
+        public NotifyPaymentRequestedHandler(IDatabase database, IBus bus, IUserSession userSession)
         {
             _database = database;
             _bus = bus;
             _userSession = userSession;
         }
 
-        public void Handle(NotifyRequestedPayment message)
+        public void Handle(NotifyPaymentRequested message)
         {
             using (_database)
             {
