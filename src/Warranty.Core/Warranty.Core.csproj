@@ -216,7 +216,9 @@
     <Compile Include="Entities\Task.cs" />
     <Compile Include="Enumerations\ActivityType.cs" />
     <Compile Include="Enumerations\BackchargeStatus.cs" />
+    <Compile Include="Enumerations\DeliveryInstruction.cs" />
     <Compile Include="Enumerations\PaymentStatus.cs" />
+    <Compile Include="Enumerations\PurchaseOrderLineItemStatus.cs" />
     <Compile Include="Enumerations\TaskType.cs" />
     <Compile Include="Enumerations\ToDoPriority.cs" />
     <Compile Include="Enumerations\HomeownerContactType.cs" />

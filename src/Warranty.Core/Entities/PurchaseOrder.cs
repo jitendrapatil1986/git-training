@@ -1,13 +1,14 @@
 ﻿namespace Warranty.Core.Entities
 {
     using System;
+    using Enumerations;
 
     public class PurchaseOrder : IAuditableEntity, IJdeEntity
     {
         public Guid PurchaseOrderId { get; set; }
         public string VendorNumber { get; set; }
         public string VendorName { get; set; }
-        public string DeliveryInstructions { get; set; }
+        public DeliveryInstruction DeliveryInstructions { get; set; }
         public DateTime? DeliveryDate { get; set; }
         public string CostCode { get; set; }
         public string ObjectAccount { get; set; }
