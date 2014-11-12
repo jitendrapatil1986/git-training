@@ -8,14 +8,14 @@
     using NServiceBus;
     using Security;
 
-    public class DeleteServiceCallLineItemPaymentCommandHandler : ICommandHandler<DeleteServiceCallLineItemPaymentCommand>
+    public class DeletePaymentCommandHandler : ICommandHandler<DeletePaymentCommand>
     {
         private readonly IDatabase _database;
         private readonly IActivityLogger _activityLogger;
         private readonly IBus _bus;
         private readonly IUserSession _userSession;
 
-        public DeleteServiceCallLineItemPaymentCommandHandler(IDatabase database, IActivityLogger activityLogger, IBus bus, IUserSession userSession)
+        public DeletePaymentCommandHandler(IDatabase database, IActivityLogger activityLogger, IBus bus, IUserSession userSession)
         {
             _database = database;
             _activityLogger = activityLogger;
@@ -23,7 +23,7 @@
             _userSession = userSession;
         }
 
-        public void Handle(DeleteServiceCallLineItemPaymentCommand message)
+        public void Handle(DeletePaymentCommand message)
         {
             using (_database)
             {

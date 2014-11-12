@@ -103,13 +103,13 @@
         }
 
         [HttpPost]
-        public Guid AddPayment(AddServiceCallLineItemPaymentCommand model)
+        public Guid AddPayment(AddPaymentCommand model)
         {
             return _mediator.Send(model); ;
         }
 
         [HttpDelete]
-        public string DeletePayment(DeleteServiceCallLineItemPaymentCommand model)
+        public string DeletePayment(DeletePaymentCommand model)
         {
             _mediator.Send(model);
             return "success";
@@ -123,7 +123,7 @@
         }
 
         [HttpPost]
-        public AddPaymentOnHoldCommandHandlerResponse AddPaymentOnHold(AddPaymentOnHoldCommand model)
+        public HoldPaymentCommandHandler.HoldPaymentCommandHandlerResponse AddPaymentOnHold(HoldPaymentCommand model)
         {
             var response = _mediator.Send(model);
             return response;

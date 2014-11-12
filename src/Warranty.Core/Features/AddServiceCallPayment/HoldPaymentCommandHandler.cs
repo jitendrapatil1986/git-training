@@ -9,14 +9,14 @@
     using NServiceBus;
     using Security;
 
-    public class AddPaymentOnHoldCommandHandler : ICommandHandler<AddPaymentOnHoldCommand, AddPaymentOnHoldCommandHandlerResponse>
+    public class HoldPaymentCommandHandler : ICommandHandler<HoldPaymentCommand, HoldPaymentCommandHandler.HoldPaymentCommandHandlerResponse>
     {
         private readonly IDatabase _database;
         private readonly IActivityLogger _activityLogger;
         private readonly IBus _bus;
         private readonly IUserSession _userSession;
 
-        public AddPaymentOnHoldCommandHandler(IDatabase database, IActivityLogger activityLogger, IBus bus, IUserSession userSession)
+        public HoldPaymentCommandHandler(IDatabase database, IActivityLogger activityLogger, IBus bus, IUserSession userSession)
         {
             _database = database;
             _activityLogger = activityLogger;
@@ -24,7 +24,7 @@
             _userSession = userSession;
         }
 
-        public AddPaymentOnHoldCommandHandlerResponse Handle(AddPaymentOnHoldCommand message)
+        public HoldPaymentCommandHandlerResponse Handle(HoldPaymentCommand message)
         {
             using (_database)
             {
@@ -45,12 +45,18 @@
                     x.Username = _userSession.GetCurrentUser().LoginName;
                 });
 
-                return new AddPaymentOnHoldCommandHandlerResponse
+                return new HoldPaymentCommandHandlerResponse
                 {
                     NewStatusDisplayName = newStatus.DisplayName,
                     Date = payment.HoldDate.Value
                 };
             }
+        }
+
+        public class HoldPaymentCommandHandlerResponse
+        {
+            public string NewStatusDisplayName { get; set; }
+            public DateTime Date { get; set; }
         }
     }
 }

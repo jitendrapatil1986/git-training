@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class AddPaymentOnHoldCommand : ICommand<AddPaymentOnHoldCommandHandlerResponse>
+    public class HoldPaymentCommand : ICommand<HoldPaymentCommandHandler.HoldPaymentCommandHandlerResponse>
     {
         public Guid PaymentId { get; set; }
         public string Message { get; set; }
