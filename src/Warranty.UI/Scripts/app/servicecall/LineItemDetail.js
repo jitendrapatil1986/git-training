@@ -119,6 +119,10 @@
                     self.shouldDisplayApprove = ko.computed(function () {
                         return self.paymentStatusDisplayName() == paymentStatusEnum.Pending.DisplayName;
                     });
+                    
+                    self.shouldDisplayDelete = ko.computed(function () {
+                        return self.paymentStatusDisplayName() == paymentStatusEnum.Pending.DisplayName;
+                    });
 
                     self.approvePayment = function (item, event) {
                         var actionUrl = urls.ManageServiceCall.ApprovePayment;
@@ -210,7 +214,7 @@
                         url: urls.ManageServiceCall.CompleteLineItem,
                         type: "POST",
                         data: lineData,
-                        dataType: "json",
+                        dataType: "j, IUserSession userSessionson",
                         processData: false,
                         contentType: "application/json; charset=utf-8"
                     })

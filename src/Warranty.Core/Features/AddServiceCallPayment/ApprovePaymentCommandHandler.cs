@@ -6,18 +6,21 @@
     using InnerMessages;
     using NPoco;
     using NServiceBus;
+    using Security;
 
     public class ApprovePaymentCommandHandler : ICommandHandler<ApprovePaymentCommand, string>
     {
         private readonly IDatabase _database;
         private readonly IActivityLogger _activityLogger;
         private readonly IBus _bus;
+        private readonly IUserSession _userSession;
 
-        public ApprovePaymentCommandHandler(IDatabase database, IActivityLogger activityLogger, IBus bus)
+        public ApprovePaymentCommandHandler(IDatabase database, IActivityLogger activityLogger, IBus bus, IUserSession userSession)
         {
             _database = database;
             _activityLogger = activityLogger;
             _bus = bus;
+            _userSession = userSession;
         }
 
         public string Handle(ApprovePaymentCommand message)
@@ -33,7 +36,11 @@
 
                 _activityLogger.Write("Payment approval requested", string.Empty, payment.PaymentId, ActivityType.PaymentOnHold, ReferenceType.LineItem);
 
-                _bus.Send<NotifyPaymentApproved>(x => x.PaymentId = payment.PaymentId);
+                _bus.Send<NotifyPaymentApproved>(x =>
+                    {
+                        x.PaymentId = payment.PaymentId;
+                        x.UserName = _userSession.GetCurrentUser().LoginName;
+                    });
 
                 return payment.PaymentStatus.DisplayName;
             }

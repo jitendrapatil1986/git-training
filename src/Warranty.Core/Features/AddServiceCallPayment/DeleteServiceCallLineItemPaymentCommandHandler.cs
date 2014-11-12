@@ -1,15 +1,26 @@
 ﻿namespace Warranty.Core.Features.AddServiceCallPayment
 {
+    using ActivityLogger;
     using Entities;
+    using Enumerations;
+    using InnerMessages;
     using NPoco;
+    using NServiceBus;
+    using Security;
 
     public class DeleteServiceCallLineItemPaymentCommandHandler : ICommandHandler<DeleteServiceCallLineItemPaymentCommand>
     {
         private readonly IDatabase _database;
+        private readonly IActivityLogger _activityLogger;
+        private readonly IBus _bus;
+        private readonly IUserSession _userSession;
 
-        public DeleteServiceCallLineItemPaymentCommandHandler(IDatabase database)
+        public DeleteServiceCallLineItemPaymentCommandHandler(IDatabase database, IActivityLogger activityLogger, IBus bus, IUserSession userSession)
         {
             _database = database;
+            _activityLogger = activityLogger;
+            _bus = bus;
+            _userSession = userSession;
         }
 
         public void Handle(DeleteServiceCallLineItemPaymentCommand message)
@@ -22,7 +33,16 @@
                 {
                     _database.Delete(backcharge);
                 }
+
                 _database.Delete(payment);
+
+                _activityLogger.Write("Payment deleted", string.Empty, payment.PaymentId, ActivityType.PaymentDelete, ReferenceType.LineItem);
+
+                _bus.Send<NotifyPaymentDeleted>(x =>
+                {
+                    x.PaymentId = payment.PaymentId;
+                    x.UserName = _userSession.GetCurrentUser().LoginName;
+                });
             }
         }
     }

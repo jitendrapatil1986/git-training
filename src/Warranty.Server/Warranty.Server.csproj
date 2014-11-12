@@ -111,6 +111,7 @@
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyPaymentDeletedHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyRequestedBackchargeHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyBackchargeApprovedHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyBackchargeDeniedHandler.cs" />
