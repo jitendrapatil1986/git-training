@@ -214,7 +214,7 @@
                         url: urls.ManageServiceCall.CompleteLineItem,
                         type: "POST",
                         data: lineData,
-                        dataType: "j, IUserSession userSessionson",
+                        dataType: "json",
                         processData: false,
                         contentType: "application/json; charset=utf-8"
                     })
