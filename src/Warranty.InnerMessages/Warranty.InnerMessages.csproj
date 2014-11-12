@@ -56,6 +56,7 @@
     <Compile Include="NotifyBackchargeOnHold.cs" />
     <Compile Include="NotifyJobHomeownerChanged.cs" />
     <Compile Include="NotifyPaymentApproved.cs" />
+    <Compile Include="NotifyPaymentDeleted.cs" />
     <Compile Include="NotifyPaymentOnHold.cs" />
     <Compile Include="NotifyBackchargeRequested.cs" />
     <Compile Include="NotifyPaymentRequested.cs" />

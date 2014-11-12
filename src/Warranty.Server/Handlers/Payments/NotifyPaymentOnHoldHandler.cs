@@ -3,7 +3,6 @@
     using System;
     using Configuration;
     using Core.Entities;
-    using Core.Security;
     using InnerMessages;
     using NPoco;
     using NServiceBus;
@@ -13,13 +12,11 @@
 
         private readonly IBus _bus;
         private readonly IDatabase _database;
-        private readonly IUserSession _userSession;
 
-        public NotifyPaymentOnHoldHandler(IBus bus, IDatabase database, IUserSession userSession)
+        public NotifyPaymentOnHoldHandler(IBus bus, IDatabase database)
         {
             _bus = bus;
             _database = database;
-            _userSession = userSession;
         }
 
         public void Handle(NotifyPaymentOnHold message)
@@ -34,7 +31,7 @@
                     PaymentId = payment.PaymentId.ToString(),
                     ProgramId = WarrantyConstants.ProgramId,
                     DateOnHold = DateTime.Today,
-                    OnHoldBy = _userSession.GetCurrentUser().LoginName,
+                    OnHoldBy = message.Username,
                     OnHoldReason = payment.HoldComments
                 };
                 _bus.Send(command);

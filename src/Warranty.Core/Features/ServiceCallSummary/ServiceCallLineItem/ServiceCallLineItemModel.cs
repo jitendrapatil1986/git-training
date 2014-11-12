@@ -70,6 +70,8 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public string BackchargeResponseFromVendor { get; set; }
             public string VendorName { get; set; }
             public string BackchargeVendorName { get; set; }
+            public string HoldComments { get; set; }
+            public DateTime? HoldDate { get; set; }
             public bool IsBackcharge { get; set; }
         }
 
