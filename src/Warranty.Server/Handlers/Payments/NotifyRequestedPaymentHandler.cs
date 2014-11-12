@@ -24,16 +24,25 @@
         {
             using (_database)
             {
+                
                 var payment = _database.SingleById<Payment>(message.PaymentId);
+
                 var paymentRequest = new RequestExtraWorkOrderPayment
                     {
                         JobNumber = payment.JobNumber,
                         Amount = payment.Amount,
-                        CommunityNumber = string.IsNullOrEmpty(payment.JobNumber) ? "" : payment.JobNumber.Substring(0, 4),  //get first 4 chs. bc it is always the community number for the job.
+                        CommunityNumber = payment.JobNumber,  //accounting pulls the substring
                         InvoiceDate = payment.CreatedDate,
                         InvoiceNumber = payment.InvoiceNumber,
                         Username = _userSession.GetCurrentUser().LoginName,
                         VendorNumber = payment.VendorNumber,
+                        CostCode = payment.CostCode,
+                        PaymentType = Configuration.WarrantyConstants.PaymentType,
+                        VarianceCode = Configuration.WarrantyConstants.VarianceCode,
+                        PaymentIdentifier = payment.PaymentId.ToString(),
+                        ProgramId = Configuration.WarrantyConstants.ProgramId,
+                        ObjectAccount = payment.ObjectAccount,
+                        VarianceExplanation = ""
                     };
 
                 _bus.Send(paymentRequest);

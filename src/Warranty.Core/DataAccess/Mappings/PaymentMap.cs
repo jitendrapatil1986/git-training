@@ -21,6 +21,7 @@
                     x.Column(y => y.HoldComments);
                     x.Column(y => y.ServiceCallLineItemId);
                     x.Column(y => y.CostCode);
+                    x.Column(y => y.ObjectAccount);
                 });
         }
     }
