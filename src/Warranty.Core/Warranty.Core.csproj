@@ -170,6 +170,8 @@
     <Compile Include="DataAccess\Mappings\ProjectMap.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMapping.cs" />
     <Compile Include="DataAccess\Mappings\EmployeeMapping.cs" />
+    <Compile Include="DataAccess\Mappings\PurchaseOrderLineItemMap.cs" />
+    <Compile Include="DataAccess\Mappings\PurchaseOrderMap.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallAttachmentMap.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallAttachmentMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallNoteMap.cs" />
@@ -205,6 +207,8 @@
     <Compile Include="Entities\ProblemCode.cs" />
     <Compile Include="Entities\Project.cs" />
     <Compile Include="Entities\Employee.cs" />
+    <Compile Include="Entities\PurchaseOrder.cs" />
+    <Compile Include="Entities\PurchaseOrderLineItem.cs" />
     <Compile Include="Entities\ServiceCall.cs" />
     <Compile Include="Entities\ServiceCallAttachment.cs" />
     <Compile Include="Entities\ServiceCallNote.cs" />
