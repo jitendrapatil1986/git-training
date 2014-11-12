@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class DeleteServiceCallLineItemPaymentCommand : ICommand
+    public class DeletePaymentCommand : ICommand
     {
         public Guid PaymentId { get; set; }
     }

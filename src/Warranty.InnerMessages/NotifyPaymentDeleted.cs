@@ -3,9 +3,9 @@
     using System;
     using NServiceBus;
 
-    public class NotifyPaymentOnHold : ICommand
+    public class NotifyPaymentDeleted : ICommand
     {
         public Guid PaymentId { get; set; }
-        public string Username { get; set; }
+        public string UserName { get; set; }
     }
 }

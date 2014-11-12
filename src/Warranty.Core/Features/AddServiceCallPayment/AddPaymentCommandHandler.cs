@@ -9,20 +9,20 @@
     using NServiceBus;
     using Security;
 
-    public class AddServiceCallLineItemPaymentCommandHandler : ICommandHandler<AddServiceCallLineItemPaymentCommand, Guid>
+    public class AddPaymentCommandHandler : ICommandHandler<AddPaymentCommand, Guid>
     {
         private readonly IDatabase _database;
         private readonly IBus _bus;
         private readonly IUserSession _userSession;
 
-        public AddServiceCallLineItemPaymentCommandHandler(IDatabase database, IBus bus, IUserSession userSession)
+        public AddPaymentCommandHandler(IDatabase database, IBus bus, IUserSession userSession)
         {
             _database = database;
             _bus = bus;
             _userSession = userSession;
         }
 
-        public Guid Handle(AddServiceCallLineItemPaymentCommand message)
+        public Guid Handle(AddPaymentCommand message)
         {
             using (_database)
             {
