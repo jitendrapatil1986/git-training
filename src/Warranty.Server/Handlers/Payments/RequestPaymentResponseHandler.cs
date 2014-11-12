@@ -20,6 +20,7 @@
             using (_database)
             {
                 var payment = _database.SingleById<Payment>(message.PaymentIdentifier);
+                payment.JdeIdentifier = message.JdeIdentifier;
                 payment.PaymentStatus = PaymentStatus.Pending;
                 _database.Update(payment);
             }
