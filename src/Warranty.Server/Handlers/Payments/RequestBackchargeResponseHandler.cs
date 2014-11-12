@@ -19,9 +19,10 @@
         {
             using (_database)
             {
-                var backcharge = _database.SingleById<Backcharge>(message.BackchargeId);
+                var backcharge = _database.SingleById<Backcharge>(message.BackchargeIdentifier);
                 
                 backcharge.BackchargeStatus = BackchargeStatus.Pending;
+                backcharge.JdeIdentifier = message.JdeIdentifier;
                 _database.Update(backcharge);
             }
         }

@@ -1,6 +1,7 @@
 namespace Warranty.Core.Entities
 {
     using System;
+    using NPoco;
 
     public class Job : IAuditableEntity, IJdeEntity
     {
@@ -30,5 +31,14 @@ namespace Warranty.Core.Entities
         public virtual DateTime? UpdatedDate { get; set; }
         public virtual string UpdatedBy { get; set; }
         public string JdeIdentifier { get; set; }
+
+        [Ignore]
+        public bool IsOutOfWarranty
+        {
+            get
+            {
+                return CloseDate.GetValueOrDefault().CompareTo(DateTime.Today.AddYears(-2)) <= 0;
+            }
+        }
     }
 }

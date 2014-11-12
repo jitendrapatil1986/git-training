@@ -23,5 +23,6 @@ namespace Warranty.Core.Entities
         public DateTime? HoldDate { get; set; }
         public string CostCode { get; set; }
         public string JdeIdentifier { get; set; }
+        public string ObjectAccount { get; set; }
     }
 }
