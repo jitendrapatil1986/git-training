@@ -46,10 +46,20 @@
                                     li.[ServiceCallLineItemStatusId] as ServiceCallLineItemStatus,
                                     li.[RootCause],
                                     li.[ProblemJdeCode],
-                                    li.[ProblemDetailCode]
+                                    li.[ProblemDetailCode],
+									cc.[CostCode],
+                                    job.[JobNumber]
                                 FROM ServiceCallLineItems li
                                 INNER JOIN ServiceCalls sc
-                                ON li.ServiceCallId = sc.ServiceCallId
+									ON li.ServiceCallId = sc.ServiceCallId
+								INNER JOIN Jobs job
+									ON job.JobId = sc.JobId
+								INNER JOIN Communities community
+									ON community.CommunityId = job.CommunityId
+								INNER JOIN Cities city
+									ON city.CityId = community.CityId
+								LEFT JOIN CityCodeProblemCodeCostCodes cc
+									ON cc.CityCode = city.CityCode AND cc.ProblemJdeCode = li.ProblemJDECode
                                 WHERE ServiceCallLineItemId = @0";
 
             var result = _database.Single<ServiceCallLineItemModel>(sql, serviceCallLineItemId);

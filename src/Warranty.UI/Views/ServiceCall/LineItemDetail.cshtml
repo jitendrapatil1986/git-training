@@ -21,6 +21,7 @@
                 </div>
             </div>
         
+
             <section class="margin-bottom-10">
                 <h2 class="no-margin">
                     <a class="bread-crumb" href="@Url.Action("CallSummary", "ServiceCall", new {id=Model.ServiceCallId})">Service Call #@Model.ServiceCallNumber</a>
@@ -57,6 +58,7 @@
                                                                     <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
                                                                 </h4>
                                                             </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -93,6 +95,22 @@
                         <div class="clearfix"></div>
                     </div>
                 </div>
+            <section class="margin-bottom-15">
+                <h3 class="col-md-12">Vendors</h3>
+                <em data-bind="visible: constructionVendors().length < 1" class="padding-left-15 padding-top-7 pull-left">No Vendors Found</em>
+                <!-- ko foreach: constructionVendors -->
+                <div class="col-md-4">
+                    <strong data-bind="text: VendorName"></strong><br/>
+                    <span data-bind="text: VendorEmail"></span>
+                    <p>
+                        <!-- ko foreach: VendorPhoneNumbers -->
+                         <span data-bind="text: $data"></span>&nbsp;
+                        <!-- /ko -->
+                    </p>
+                </div>
+                <!-- /ko -->
+                <div class="clearfix"></div>
+            </section>
             <section class="margin-bottom-15">
                 <h3 class="col-md-12">Payments
                     <span>
