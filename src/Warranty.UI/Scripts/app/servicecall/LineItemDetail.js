@@ -1,11 +1,11 @@
-﻿require(['/Scripts/app/main.js'], function() {
-    require(['jquery', 'ko', 'ko.x-editable', 'moment', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchBackchargeVendor', '/Scripts/lib/jquery.color-2.1.0.min.js'], function($, ko, koxeditable, moment, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, bootbox) {
+﻿require(['/Scripts/app/main.js'], function () {
+    require(['jquery', 'ko', 'ko.x-editable', 'moment', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchBackchargeVendor', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, moment, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, bootbox) {
         window.ko = ko; //manually set the global ko property.
 
-        require(['ko.validation'], function() {
-            $(function() {
+        require(['ko.validation'], function () {
+            $(function () {
 
-                $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function() {
+                $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
                     $(this).hide();
                 });
 
@@ -21,7 +21,7 @@
                     var elem = $(elemId);
                     elem.css("backgroundColor", "#ffffff"); // hack for Safari
                     elem.animate({ backgroundColor: '#d4dde3' }, 500);
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $(elemId).animate({ backgroundColor: "#ffffff" }, 750);
                     }, 500);
                 }
@@ -56,20 +56,20 @@
                         self.paymentStatusDisplayName = ko.observable(options.paymentStatusDisplayName);
                     }
 
-                    self.isHeld = ko.computed(function() {
+                    self.isHeld = ko.computed(function () {
                         return self.paymentStatusDisplayName() == paymentStatusEnum.RequestedHold.DisplayName || self.paymentStatusDisplayName() == paymentStatusEnum.Hold.DisplayName;
                     });
 
-                    self.deletePayment = function() {
+                    self.deletePayment = function () {
                         var payment = this;
-                        bootbox.confirm("Are you sure you want to delete this payment?", function(result) {
+                        bootbox.confirm("Are you sure you want to delete this payment?", function (result) {
                             if (result) {
                                 var actionUrl = urls.ManageServiceCall.DeletePayment;
                                 $.ajax({
                                     type: "DELETE",
                                     url: actionUrl,
                                     data: { PaymentId: payment.paymentId },
-                                    success: function() {
+                                    success: function () {
                                         viewModel.allPayments.remove(payment);
                                         toastr.success("Success! Payment deleted.");
                                     }
@@ -78,11 +78,11 @@
                         });
                     };
 
-                    self.displayHold = function(item, event) {
+                    self.displayHold = function (item, event) {
                         displayPopoUp('hold', item, event);
                     };
 
-                    var displayPopoUp = function(name, item, event) {
+                    var displayPopoUp = function (name, item, event) {
                         var button = $(event.target);
                         $('.btn-action-with-popup').removeClass('active');
                         button.removeClass('btn-hover-show');
@@ -97,13 +97,13 @@
                         }).show();
                     };
 
-                    self.holdPayment = function(item, event) {
+                    self.holdPayment = function (item, event) {
                         var actionUrl = urls.ManageServiceCall.AddPaymentOnHold;
                         $.ajax({
                             type: "POST",
                             url: actionUrl,
                             data: { PaymentId: item.paymentId, message: item.holdComments },
-                            success: function(response) {
+                            success: function (response) {
                                 item.paymentStatusDisplayName(response.NewStatusDisplayName);
                                 item.holdDate(response.Date);
                                 toastr.success("Success! Hold request sent.");
@@ -112,21 +112,21 @@
                         });
                     };
 
-                    self.shouldDisplayOnHold = ko.computed(function() {
+                    self.shouldDisplayOnHold = ko.computed(function () {
                         return self.paymentStatusDisplayName() == paymentStatusEnum.Pending.DisplayName;
                     });
 
-                    self.shouldDisplayApprove = ko.computed(function() {
+                    self.shouldDisplayApprove = ko.computed(function () {
                         return self.paymentStatusDisplayName() == paymentStatusEnum.Pending.DisplayName;
                     });
 
-                    self.approvePayment = function(item, event) {
+                    self.approvePayment = function (item, event) {
                         var actionUrl = urls.ManageServiceCall.ApprovePayment;
                         $.ajax({
                             type: "POST",
                             url: actionUrl,
                             data: { PaymentId: item.paymentId, message: item.holdComments },
-                            success: function(response) {
+                            success: function (response) {
                                 item.paymentStatusDisplayName(response);
                                 toastr.success("Success! Approval Request sent.");
                                 closeWindow(event);
@@ -134,11 +134,11 @@
                         });
                     };
 
-                    self.cancelPopup = function(item, event) {
+                    self.cancelPopup = function (item, event) {
                         closeWindow(event);
                     };
 
-                    var closeWindow = function(event) {
+                    var closeWindow = function (event) {
                         var button = $(event.target);
                         var window = button.parent();
                         var parentButton = $("#btn_" + window.attr('id'));
@@ -179,11 +179,11 @@
 
                 self.allPayments = ko.observableArray([]);
 
-                self.canAddPayment = ko.computed(function() {
+                self.canAddPayment = ko.computed(function () {
                     return true;
                 });
 
-                self.clearPaymentFields = function() {
+                self.clearPaymentFields = function () {
 
                     $('#vendor-search').val('');
                     $('#backcharge-vendor-search').val('');
@@ -214,10 +214,10 @@
                         processData: false,
                         contentType: "application/json; charset=utf-8"
                     })
-                        .fail(function(response) {
+                        .fail(function (response) {
                             toastr.error("There was an issue completing the line item. Please try again!");
                         })
-                        .done(function(response) {
+                        .done(function (response) {
                             line.serviceCallLineItemStatusDisplayName(response.DisplayName);
 
                             //if user is not allowed to ALWAYS reopen Completed lines at anytime, then allow them to reopen only right after completing a line.
@@ -243,10 +243,10 @@
                         processData: false,
                         contentType: "application/json; charset=utf-8"
                     })
-                        .fail(function(response) {
+                        .fail(function (response) {
                             toastr.error("There was an issue reopening the line item. Please try again!");
                         })
-                        .done(function(response) {
+                        .done(function (response) {
                             toastr.success("Success! Item reopened.");
                             line.serviceCallLineItemStatusDisplayName(response.DisplayName);
                         });
@@ -282,53 +282,53 @@
                     self.warrantyCostCodes = ko.observableArray(modelData.warrantyCostCodes);
                     self.backchargeAmount = ko.observable('').extend({
                         required: {
-                            onlyIf: function() { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
                     self.backchargeReason = ko.observable('').extend({
                         required: {
-                            onlyIf: function() { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
                     self.personNotified = ko.observable('').extend({
                         required: {
-                            onlyIf: function() { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
                     self.personNotifiedPhoneNumber = ko.observable('').extend({
                         required: {
-                            onlyIf: function() { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
                     self.personNotifiedDate = ko.observable('').extend({
                         required: {
-                            onlyIf: function() { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
                     self.backchargeResponseFromVendor = ko.observable('').extend({
                         required: {
-                            onlyIf: function() { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
                     self.vendorName = ko.observable('').extend({ required: true });
                     self.vendorNumber = ko.observable('').extend({ required: true });
                     self.backchargeVendorName = ko.observable('').extend({
                         required: {
-                            onlyIf: function() { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
                     self.backchargeVendorNumber = ko.observable('').extend({
                         required: {
-                            onlyIf: function() { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
                     self.allPayments = ko.observableArray([]);
 
-                    self.canAddPayment = ko.computed(function() {
+                    self.canAddPayment = ko.computed(function () {
                         return true;
                     });
 
-                    self.clearPaymentFields = function() {
+                    self.clearPaymentFields = function () {
 
                         $('#vendor-search').val('');
                         $('#backcharge-vendor-search').val('');
@@ -347,13 +347,13 @@
                         self.errors.showAllMessages(false);
                     };
 
-                    $(document).on('vendor-number-selected', function() {
+                    $(document).on('vendor-number-selected', function () {
                         var vendorNumber = $('#vendor-search').data('vendor-number');
                         var vendorName = $('#vendor-search').data('vendor-name');
                         self.vendorNumber(vendorNumber);
                         self.vendorName(vendorName);
                     });
-                    $(document).on('backcharge-vendor-number-selected', function() {
+                    $(document).on('backcharge-vendor-number-selected', function () {
                         var vendorNumber = $('#backcharge-vendor-search').data('vendor-number');
                         var vendorName = $('#backcharge-vendor-search').data('vendor-name');
 
@@ -361,7 +361,7 @@
                         self.backchargeVendorName(vendorName);
                     });
 
-                    self.addPayment = function() {
+                    self.addPayment = function () {
                         if (self.errors().length != 0) {
                             self.errors.showAllMessages();
                             return;
@@ -399,10 +399,10 @@
                             processData: false,
                             contentType: "application/json; charset=utf-8"
                         })
-                            .fail(function(response) {
+                            .fail(function (response) {
                                 toastr.error("There was a problem adding the payment. Please try again.");
                             })
-                            .done(function(response) {
+                            .done(function (response) {
 
                                 newPayment.paymentId = response;
                                 self.allPayments.unshift(newPayment);
@@ -416,12 +416,12 @@
                         format: 'm/d/yyyy'
                     });
 
-                    $("#Person_Notified_Date").on('changeDate', function(e) {
+                    $("#Person_Notified_Date").on('changeDate', function (e) {
                         self.personNotifiedDate(moment(e.date).format("L"));
                     });
 
                     //edit line item.
-                    self.editLine = function() {
+                    self.editLine = function () {
                         this.problemCodeEditing(true);
                         this.problemDescriptionEditing(true);
                         this.lineEditing(true);
@@ -430,12 +430,12 @@
                     };
 
                     //save line item changes.
-                    self.saveLineItemChanges = function() {
+                    self.saveLineItemChanges = function () {
                         updateServiceCallLineItem(this);
                     };
 
                     //cancel line item changes.
-                    self.cancelLineItemChanges = function() {
+                    self.cancelLineItemChanges = function () {
                         this.problemCodeEditing(false);
                         this.problemDescriptionEditing(false);
                         this.lineEditing(false);
@@ -444,20 +444,20 @@
                     };
 
                     //complete line item.
-                    self.completeLine = function() {
+                    self.completeLine = function () {
                         this.lineEditing(false);
                         completeServiceCallLineItem(this);
                     };
 
                     //reopen line item.
-                    self.reopenLine = function() {
+                    self.reopenLine = function () {
                         this.lineEditing(false);
                         reopenServiceCallLineItem(this);
                     };
 
                     self.lineNumber = ko.observable(modelData.initialServiceCallLineItem.lineNumber);
 
-                    self.lineNumberWithProblemCode = ko.computed(function() {
+                    self.lineNumberWithProblemCode = ko.computed(function () {
                         return self.lineNumber() + " - " + self.problemCode();
                     });
 
@@ -471,11 +471,11 @@
                             self.serviceCallLineItemStatusDisplayName(modelData.initialServiceCallLineItem.serviceCallLineItemStatus.DisplayName); //TODO: DisplayName works for model passed from ajax call. Need to keep both similar.
                     }
 
-                    self.lineItemStatusCSS = ko.computed(function() {
+                    self.lineItemStatusCSS = ko.computed(function () {
                         return self.serviceCallLineItemStatusDisplayName() ? 'label label-' + self.serviceCallLineItemStatusDisplayName().toLowerCase() + '-service-line-item' : '';
                     });
 
-                    self.isLineItemCompleted = function() {
+                    self.isLineItemCompleted = function () {
                         if (!self.serviceCallLineItemStatusDisplayName())
                             return false;
 
@@ -488,8 +488,8 @@
                     self.noteDescriptionToAdd = ko.observable('');
                     self.userCanAlwaysReopenCallLines = ko.observable();
 
-                    self.removeAttachment = function(e) {
-                        bootbox.confirm(modelData.attachmentRemovalMessage, function(result) {
+                    self.removeAttachment = function (e) {
+                        bootbox.confirm(modelData.attachmentRemovalMessage, function (result) {
                             if (result) {
                                 var item = $('.boxclose[data-attachment-id="' + e.serviceCallAttachmentId + '"]');
                                 var actionUrl = item.data('url');
@@ -498,7 +498,7 @@
                                     type: "POST",
                                     url: actionUrl,
                                     data: { id: attachmentId },
-                                    success: function(data) {
+                                    success: function (data) {
                                         self.allAttachments.remove(e);
                                         toastr.success("Success! Attachment deleted.");
                                     }
@@ -507,7 +507,7 @@
                         });
                     };
 
-                    self.addCallNote = function() {
+                    self.addCallNote = function () {
                         self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
                         self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
                         self.note = $("#addCallNoteDescription").val();
@@ -535,10 +535,10 @@
                             processData: false,
                             contentType: "application/json; charset=utf-8"
                         })
-                            .fail(function(response) {
+                            .fail(function (response) {
                                 toastr.error("There was a problem adding the call note. Please try again.");
                             })
-                            .done(function(response) {
+                            .done(function (response) {
                                 self.allCallNotes.unshift(new CallNotesViewModel({
                                     serviceCallNoteId: response.ServiceCallNoteId,
                                     serviceCallId: self.serviceCallId,
@@ -556,14 +556,14 @@
                             });
                     };
 
-                    self.cancelCallNote = function() {
+                    self.cancelCallNote = function () {
                         clearNoteFields();
                     };
 
                     self.lineJustCompleted = ko.observable();
 
                     //undo last line item which was completed.
-                    self.undoLastCompletedLine = function() {
+                    self.undoLastCompletedLine = function () {
                         reopenServiceCallLineItem(this);
                         self.lineJustCompleted(false);
                     };
@@ -574,7 +574,7 @@
                         dataType: "json",
                         processData: false,
                         contentType: "application/json; charset=utf-8"
-                    }).done(function(response) {
+                    }).done(function (response) {
                         self.constructionVendors(response);
                     });
 
@@ -592,19 +592,19 @@
 
                 var persistedAllCallNotesViewModel = modelData.initialServiceCallLineNotes;
 
-                _(persistedAllCallNotesViewModel).each(function(note) {
+                _(persistedAllCallNotesViewModel).each(function (note) {
                     viewModel.allCallNotes.push(new CallNotesViewModel(note));
                 });
 
                 var persistedAllAttachmentsViewModel = modelData.initialServiceCallLineAttachments;
 
-                _(persistedAllAttachmentsViewModel).each(function(attachment) {
+                _(persistedAllAttachmentsViewModel).each(function (attachment) {
                     viewModel.allAttachments.push(new CallAttachmentsViewModel(attachment));
                 });
 
                 var persistedAllPaymentsViewModel = modelData.initialServiceCallLinePayments;
 
-                _(persistedAllPaymentsViewModel).each(function(payment) {
+                _(persistedAllPaymentsViewModel).each(function (payment) {
 
                     viewModel.allPayments.push(new PaymentViewModel(payment));
                 });
