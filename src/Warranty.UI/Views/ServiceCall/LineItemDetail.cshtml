@@ -399,7 +399,7 @@
                 initialServiceCallLineNotes: @Html.Raw(Model.ServiceCallLineItemNotes.ToJson()),
                 initialServiceCallLineAttachments: @Html.Raw(Model.ServiceCallLineItemAttachments.ToJson()),
                 initialServiceCallLinePayments: @Html.Raw(Model.ServiceCallLineItemPayments.ToJson()),
-                warrantyCostCodes:  @Html.Raw(@WarrantyCostCode.GetAll().Select(x => new { DisplayText = x.DisplayName, x.Value }).ToJson()),
+                warrantyCostCodes:  @Html.Raw(@WarrantyCostCode.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { DisplayText = x.DisplayName, x.Value }).ToJson()),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
             }
         });
