@@ -137,5 +137,26 @@
             _mediator.Send(new AddServiceCallPurchaseOrderCommand{ Model = model });
             return new PostResponseModel {Success = true};
         }
+
+		[HttpPost]
+        public string ApproveBackcharge(ApproveBackchargeCommand model)
+        {
+            var response = _mediator.Send(model);
+            return response;
+        }
+
+        [HttpPost]
+        public HoldBackchargeCommandHandler.HoldBackchargeCommandHandlerResponse HoldBackcharge(HoldBackchargeCommand model)
+        {
+            var response = _mediator.Send(model);
+            return response;
+        }
+
+        [HttpPost]
+        public DenyBackchargeCommandHandler.DenyBackchargeCommandHandlerResponse DenyBackcharge(DenyBackchargeCommand model)
+        {
+            var response = _mediator.Send(model);
+            return response;
+        }
     }
 }

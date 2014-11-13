@@ -141,9 +141,9 @@
                 </section>
                 <section class="margin-bottom-15">
                     <h3 class="col-md-12">Payments
-                    <span>
-                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Payments" data-toggle="collapse" data-target="#addPayment"><span class="glyphicon glyphicon-plus"></span></button>
-                    </span>
+                        <span>
+                            <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Payments" data-toggle="collapse" data-target="#addPayment"><span class="glyphicon glyphicon-plus"></span></button>
+                        </span>
                     </h3>
                     <div id="addPayment" class="collapse">
                         <div class="panel-body">
@@ -247,7 +247,7 @@
                                                 <div class="col-md-4">
                                                     <strong><span data-bind="text: vendorName"></span></strong>
                                                     <br />
-                                                    <span class="label label-default" data-bind="text: paymentStatusDisplayName"></span>
+                                                    <span data-bind="text: paymentStatusDisplayName, css: 'label label-' + paymentStatusBadgeClassName()"></span>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <span data-bind="text: 'Invoice #' + invoiceNumber"></span>
@@ -257,58 +257,85 @@
                                                 <div class="col-md-2">
                                                     <h4 data-bind="currency: amount"></h4>
                                                 </div>
+
                                                 <div class="col-md-4 margin-bottom-3 text-align-right no-right-padding no-print">
-                                                    <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="visible: shouldDisplayApprove, click: approvePayment">Approve</a>
-                                                    <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10 btn-action-with-popup" data-bind="visible: shouldDisplayOnHold, attr: {id:'btn_hold-' + paymentId}, click: displayHold">Hold</a>
-                                                    <button class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="visible: shouldDisplayDelete, click:deletePayment">Delete</button>
+                                                    @if (Model.CanTakeActionOnPayments)
+                                                    {
+                                                        <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="visible: shouldDisplayApprovePayment, click: approvePayment">Approve</a>
+                                                        <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10 btn-action-with-popup" data-bind="visible: shouldDisplayHoldPayment, attr: {id:'btn_hold-' + paymentId}, click: displayHold">Hold</a>
+                                                    }
+                                                    <button class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="visible: shouldDisplayDeletePayment, click:deletePayment">Delete</button>
                                                 </div>
+                                                
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-12" data-bind="visible: isBackcharge">
-                                        <span class="glyphicon glyphicon-warning-sign"></span><a data-toggle="collapse" data-bind="attr:{'data-target': '#backcharge-' + paymentId}">Backcharge</a>
-                                        <div class="row" style="margin: 5px; background-color: white;">
-                                            <div class="collapse" data-bind="attr: { id: 'backcharge-' + paymentId }">
-                                                <div class="col-md-12">
-                                                    <div class="row">
-                                                        <div class="col-md-7">
-                                                            <small>
-                                                                <strong><span data-bind="text: backchargeVendorName"></span></strong>
-                                                                <br />
-                                                                <span data-bind="text: backchargeReason"></span>
-                                                            </small>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <small>
-                                                                <span><strong>Backcharge Amount: </strong></span></small>
-                                                            <h4 data-bind="currency: backchargeAmount"></h4>
+                                        <div class="margin-bottom-10">
+                                        <span class="glyphicon glyphicon-warning-sign"></span>&nbsp;<a data-toggle="collapse" class="cursor-pointer" data-bind="attr:{'data-target': '#backcharge-' + paymentId}">Backcharge</a>
+                                        </div>
+                                        <div class="row backcharge-container collapse" data-bind="attr: { id: 'backcharge-' + paymentId }">
+                                            <div>
+                                                <div class="col-md-12 margin-top-10">
+                                                    <span data-bind="text: backchargeStatusDisplayName, css: 'label label-' + backchargeStatusBadgeClassName()"></span>
+                                                </div>
+                                                <div class="col-md-6 margin-top-10">
+                                                    <small>
+                                                        <strong><span data-bind="text: backchargeVendorName"></span></strong>
+                                                        <br />
+                                                        <span data-bind="text: backchargeReason"></span>
+                                                    </small>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <small>
+                                                        <span><strong>Backcharge Amount: </strong></span></small>
+                                                    <h4 data-bind="currency: backchargeAmount"></h4>
 
+                                                </div>
+                                               
+                                          
+                                                <div class="col-md-12 margin-top-10 margin-bottom-10">
+                                                    <small>
+                                                        <span data-bind="text: 'Notified ' + personNotified + ' on ' + personNotifiedDate"></span>
+                                                        <br />
+                                                        <strong>Phone: </strong><span data-bind="text: personNotifiedPhoneNumber"></span>
+                                                        <br />
+                                                        <strong>Response from Vendor: </strong><span data-bind="text: backchargeResponseFromVendor"></span>
+                                                    </small>
+                                                </div>
+                                                @if (Model.CanTakeActionOnPayments)
+                                                {
+                                                    <div class="col-md-12 form-inline no-print">
+                                                        <div class="row row-list">
+                                                            <div data-bind="visible: shouldDisplayApproveBackcharge" class="inline-block">
+                                                                <small><button class="btn btn-link" data-bind="click:approveBackcharge">Approve</button>|</small>
+                                                            </div>
+                                                            <div data-bind="visible: shouldDisplayHoldBackcharge" class="inline-block">
+                                                                <small><a href="#" class="btn btn-link btn-action-with-popup" data-bind="attr: {id:'btn_holdBackcharge-' + paymentId}, click: displayHoldBackcharge">Hold</a>|</small>
+                                                            </div>
+                                                            <div data-bind="visible: shouldDisplayDenyBackcharge" class="inline-block">
+                                                                <small><a href="#" class="btn btn-link btn-action-with-popup" data-bind="attr: {id:'btn_denyBackcharge-' + paymentId}, click: displayDenyBackcharge">Deny</a></small>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row margin-top-10">
-                                                        <div class="col-md-12">
-                                                            <small>
-                                                                <span data-bind="text: 'Notified ' + personNotified + ' on ' + personNotifiedDate"></span>
-                                                                <br />
-                                                                <strong>Phone: </strong><span data-bind="text: personNotifiedPhoneNumber"></span>
-                                                                <br />
-                                                                <br />
-                                                                <strong>Response from Vendor: </strong><span data-bind="text: backchargeResponseFromVendor"></span>
-                                                            </small>
-                                                        </div>
-                                                    </div>
+                                                }
+                                                <div class="col-md-12 alert alert-warning no-bottom-margin" data-bind="visible: isBackchargeHeld">
+                                                    <strong><span data-bind="text: backchargeStatusDisplayName"></span></strong> - <span data-bind="    date: backchargeHoldDate"></span>- <span data-bind="    text: backchargeHoldComments"></span>
+                                                </div>
+                                                <div class="col-md-12 alert alert-danger no-bottom-margin" data-bind="visible: isBackchargeDenied">
+                                                    <strong><span data-bind="text: backchargeStatusDisplayName"></span></strong> - <span data-bind="    date: backchargeDenyDate"></span>- <span data-bind="    text: backchargeDenyComments"></span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-12 alert alert-warning no-bottom-margin" data-bind="visible: isHeld">
-                                        <strong><span data-bind="text: paymentStatusDisplayName"></span></strong><span data-bind="    date: holdDate"></span>- <span data-bind="    text: holdComments"></span>
+                                        <strong><span data-bind="text: paymentStatusDisplayName"></span></strong> - <span data-bind="date: holdDate"></span>- <span data-bind="text: holdComments"></span>
                                     </div>
                                 </li>
                             </div>
                         </ul>
                     </div>
-                </section>
+        </section>
                 <section class="margin-bottom-15">
                     <h3 class="col-md-12">Attachments
                         <span>
@@ -415,6 +442,16 @@
         <a href="#" class="btn btn-primary btn-execute-action" data-bind="click: holdPayment">Submit</a>
         <a href="#" class="btn-link btn-cancel-popup" data-bind="click: cancelPopup">Cancel</a>
     </div>
+    <div data-bind="attr: {id: 'holdBackcharge-' + paymentId}" class="popup-action-with-message">
+        <textarea class="form-control margin-bottom-10" rows="5" placeholder="Enter reason" data-bind="value: backchargeHoldComments"></textarea>
+        <a href="#" class="btn btn-primary btn-execute-action" data-bind="click: holdBackcharge">Submit</a>
+        <a href="#" class="btn-link btn-cancel-popup" data-bind="click: cancelPopup">Cancel</a>
+    </div>
+        <div data-bind="attr: {id: 'denyBackcharge-' + paymentId}" class="popup-action-with-message">
+        <textarea class="form-control margin-bottom-10" rows="5" placeholder="Enter reason" data-bind="value: backchargeDenyComments"></textarea>
+        <a href="#" class="btn btn-primary btn-execute-action" data-bind="click: denyBackcharge">Submit</a>
+        <a href="#" class="btn-link btn-cancel-popup" data-bind="click: cancelPopup">Cancel</a>
+    </div>
 </div>
 @section modules
 {
@@ -426,7 +463,7 @@
                 initialServiceCallLineAttachments: @Html.Raw(Model.ServiceCallLineItemAttachments.ToJson()),
                 initialServiceCallLinePayments: @Html.Raw(Model.ServiceCallLineItemPayments.ToJson()),
                 initialServiceCallLinePurchaseOrders: @Html.Raw(Model.ServiceCallLineItemPurchaseOrders.ToJson()),
-                warrantyCostCodes:  @Html.Raw(@WarrantyCostCode.GetAll().Select(x => new { DisplayText = x.DisplayName, x.Value }).ToJson()),
+                warrantyCostCodes:  @Html.Raw(@WarrantyCostCode.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { DisplayText = x.DisplayName, x.Value }).ToJson()),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
             }
         });

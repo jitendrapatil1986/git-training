@@ -6,5 +6,6 @@
     public class NotifyBackchargeOnHold : ICommand
     {
         public Guid BackchargeId { get; set; }
+        public string UserName { get; set; }
     }
 }

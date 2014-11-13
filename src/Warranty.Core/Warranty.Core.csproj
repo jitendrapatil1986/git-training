@@ -261,10 +261,16 @@
     <Compile Include="Features\AddServiceCallNote\AddServiceCallNoteModel.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddPaymentCommand.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddPaymentCommandHandler.cs" />
+    <Compile Include="Features\AddServiceCallPayment\ApproveBackchargeCommand.cs" />
+    <Compile Include="Features\AddServiceCallPayment\ApproveBackchargeCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallPayment\ApprovePaymentCommand.cs" />
     <Compile Include="Features\AddServiceCallPayment\ApprovePaymentCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallPayment\DeletePaymentCommand.cs" />
     <Compile Include="Features\AddServiceCallPayment\DeletePaymentCommandHandler.cs" />
+    <Compile Include="Features\AddServiceCallPayment\DenyBackchargeCommand.cs" />
+    <Compile Include="Features\AddServiceCallPayment\DenyBackchargeCommandHandler.cs" />
+    <Compile Include="Features\AddServiceCallPayment\HoldBackchargeCommand.cs" />
+    <Compile Include="Features\AddServiceCallPayment\HoldBackchargeCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallPayment\HoldPaymentCommand.cs" />
     <Compile Include="Features\AddServiceCallPayment\HoldPaymentCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallPurchaseOrder\AddServiceCallPurchaseOrderCommand.cs" />

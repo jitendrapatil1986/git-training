@@ -34,13 +34,13 @@
 
                 _database.Update(payment);
 
-                _activityLogger.Write("Payment approval requested", string.Empty, payment.PaymentId, ActivityType.PaymentOnHold, ReferenceType.LineItem);
+                _activityLogger.Write("Payment approval requested", string.Empty, payment.PaymentId, ActivityType.PaymentApprove, ReferenceType.LineItem);
 
                 _bus.Send<NotifyPaymentApproved>(x =>
-                    {
-                        x.PaymentId = payment.PaymentId;
-                        x.UserName = _userSession.GetCurrentUser().LoginName;
-                    });
+                {
+                    x.PaymentId = payment.PaymentId;
+                    x.UserName = _userSession.GetCurrentUser().LoginName;
+                });
 
                 return payment.PaymentStatus.DisplayName;
             }

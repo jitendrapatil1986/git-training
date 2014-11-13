@@ -9,9 +9,9 @@
 <div class="container">
     <h2>My Team Stats</h2>
     <h4>Quarter @Model.CurrentQuarter</h4>
-    <div class="@Model.View.ShowChart(StatView.AvgDaysClosed)" id="quarter_perf_avg_days_closed"></div>
-    <div class="@Model.View.ShowChart(StatView.DollarsSpent)" id="quarter_perf_spent"></div>
-    <div class="@Model.View.ShowChart(StatView.PercentClosed)" id="quarter_perf_percent_closed"></div>
+    <div class="@Model.View.ShowChart(StatView.AvgDaysClosed) hidden-xs" id="quarter_perf_avg_days_closed"></div>
+    <div class="@Model.View.ShowChart(StatView.DollarsSpent) hidden-xs" id="quarter_perf_spent"></div>
+    <div class="@Model.View.ShowChart(StatView.PercentClosed) hidden-xs" id="quarter_perf_percent_closed"></div>
     
     <ul class="nav nav-pills">
         <li class="@Model.View.Active(StatView.DollarsSpent)">@Html.ActionLink("$ Spent", "Index", new {id=StatView.DollarsSpent.DisplayName})</li>

@@ -35,7 +35,7 @@
                     BackchargeId = backcharge.BackchargeId.ToString(),
                     ProgramId = WarrantyConstants.ProgramId,
                     DateOnHold = DateTime.Today,
-                    OnHoldBy = _userSession.GetCurrentUser().LoginName,
+                    OnHoldBy = message.UserName,
                     OnHoldReason = backcharge.HoldComments
                 };
                 _bus.Send(command);
