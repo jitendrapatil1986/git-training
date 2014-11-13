@@ -39,8 +39,8 @@
 
                 _activityLogger.Write("Payment hold requested", message.Message, payment.PaymentId, ActivityType.PaymentOnHold, ReferenceType.LineItem);
 
-                _bus.Send<NotifyPaymentOnHold>(x => 
-                { 
+                _bus.Send<NotifyPaymentOnHold>(x =>
+                {
                     x.PaymentId = payment.PaymentId;
                     x.Username = _userSession.GetCurrentUser().LoginName;
                 });

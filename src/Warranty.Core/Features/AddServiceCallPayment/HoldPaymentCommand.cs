@@ -7,5 +7,4 @@
         public Guid PaymentId { get; set; }
         public string Message { get; set; }
     }
-
 }
