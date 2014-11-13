@@ -35,7 +35,7 @@
                     BackchargeId = backcharge.BackchargeId.ToString(),
                     ProgramId = WarrantyConstants.ProgramId,
                     DateDenied = DateTime.Today,
-                    DeniedBy = _userSession.GetCurrentUser().LoginName,
+                    DeniedBy = message.UserName,
                     DeniedReason = backcharge.DenyComments
                 };
                 _bus.Send(command);

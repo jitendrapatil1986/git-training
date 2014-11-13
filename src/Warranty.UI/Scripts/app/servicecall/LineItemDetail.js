@@ -1,5 +1,5 @@
 ﻿require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'moment', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchBackchargeVendor', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, moment, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, bootbox) {
+    require(['jquery', 'ko', 'ko.x-editable', 'moment', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/BackchargeStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchBackchargeVendor', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, moment, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, backchargeStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, bootbox) {
         window.ko = ko; //manually set the global ko property.
 
         require(['ko.validation'], function () {
@@ -41,6 +41,7 @@
                     self.invoiceNumber = options.invoiceNumber;
                     self.amount = options.amount;
                     self.backchargeAmount = options.backchargeAmount;
+                    self.backchargeId = options.backchargeId;
                     self.isBackcharge = options.isBackcharge;
                     self.backchargeReason = options.backchargeReason;
                     self.personNotified = options.personNotified;
@@ -50,16 +51,73 @@
                     self.paymentId = options.paymentId;
                     self.paymentCreatedDate = options.paymentCreatedDate;
                     self.holdComments = ko.observable(options.holdComments);
+                    self.backchargeHoldComments = ko.observable(options.backchargeHoldComments);
+                    self.backchargeDenyComments = ko.observable(options.backchargeDenyComments);
                     self.holdDate = ko.observable(options.holdDate);
+                    self.backchargeHoldDate = ko.observable(options.backchargeHoldDate);
+                    self.backchargeDenyDate = ko.observable(options.backchargeDenyDate);
                     self.selectedCostCode = options.selectedCostCode;
-                    if (options.paymentStatusDisplayName) {
-                        self.paymentStatusDisplayName = ko.observable(options.paymentStatusDisplayName);
-                    }
+                    self.paymentStatusDisplayName = ko.observable(options.paymentStatusDisplayName);
+                    self.backchargeStatusDisplayName = ko.observable(options.backchargeStatusDisplayName);
 
+                    self.isBackchargeHeld = ko.computed(function () {
+                        return self.backchargeStatusDisplayName() == backchargeStatusEnum.RequestedHold.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName;
+                    });
+                    
+                    self.isBackchargeDenied = ko.computed(function () {
+                        return self.backchargeStatusDisplayName() == backchargeStatusEnum.RequestedDeny.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Denied.DisplayName;
+                    });
+                    
                     self.isHeld = ko.computed(function () {
                         return self.paymentStatusDisplayName() == paymentStatusEnum.RequestedHold.DisplayName || self.paymentStatusDisplayName() == paymentStatusEnum.Hold.DisplayName;
                     });
 
+                    self.displayHold = function (item, event) {
+                        displayPopoUp('hold', item, event);
+                    };
+                    
+                    self.displayHoldBackcharge = function (item, event) {
+                        displayPopoUp('holdBackcharge', item, event, true);
+                    };
+                    
+                    self.displayDenyBackcharge = function (item, event) {
+                        displayPopoUp('denyBackcharge', item, event, true);
+                    };
+
+
+                    var displayPopoUp = function (name, item, event, displayToTheRight) {
+                        var button = $(event.target);
+                        $('.btn-action-with-popup').removeClass('active');
+                        button.removeClass('btn-hover-show');
+                        button.addClass("active");
+                        $('.popup-action-with-message').hide();
+                        var right = ($(window).width() - (button.offset().left + button.outerWidth()));
+                        var actionwithPopup = name + '-' + item.paymentId;
+                        if (displayToTheRight) {
+                            right = right - 250;
+                        }
+                        $("#" + actionwithPopup).css({
+                            'position': 'absolute',
+                            'right': right,
+                            'top': button.offset().top + button.height() + 15
+                        }).show();
+                    };
+                    
+
+                    self.approvePayment = function (item, event) {
+                        var actionUrl = urls.ManageServiceCall.ApprovePayment;
+                        $.ajax({
+                            type: "POST",
+                            url: actionUrl,
+                            data: { PaymentId: item.paymentId },
+                            success: function (response) {
+                                item.paymentStatusDisplayName(response);
+                                toastr.success("Success! Approval Request sent.");
+                                closeWindow(event);
+                            }
+                        });
+                    };
+                    
                     self.deletePayment = function () {
                         var payment = this;
                         bootbox.confirm("Are you sure you want to delete this payment?", function (result) {
@@ -78,25 +136,6 @@
                         });
                     };
 
-                    self.displayHold = function (item, event) {
-                        displayPopoUp('hold', item, event);
-                    };
-
-                    var displayPopoUp = function (name, item, event) {
-                        var button = $(event.target);
-                        $('.btn-action-with-popup').removeClass('active');
-                        button.removeClass('btn-hover-show');
-                        button.addClass("active");
-                        $('.popup-action-with-message').hide();
-                        var right = ($(window).width() - (button.offset().left + button.outerWidth()));
-                        var actionwithPopup = name + '-' + item.paymentId;
-                        $("#" + actionwithPopup).css({
-                            'position': 'absolute',
-                            'right': right,
-                            'top': button.offset().top + button.height() + 15
-                        }).show();
-                    };
-
                     self.holdPayment = function (item, event) {
                         var actionUrl = urls.ManageServiceCall.AddPaymentOnHold;
                         $.ajax({
@@ -111,33 +150,98 @@
                             }
                         });
                     };
-
-                    self.shouldDisplayOnHold = ko.computed(function () {
-                        return self.paymentStatusDisplayName() == paymentStatusEnum.Pending.DisplayName;
-                    });
-
-                    self.shouldDisplayApprove = ko.computed(function () {
-                        return self.paymentStatusDisplayName() == paymentStatusEnum.Pending.DisplayName;
-                    });
                     
-                    self.shouldDisplayDelete = ko.computed(function () {
-                        return self.paymentStatusDisplayName() == paymentStatusEnum.Pending.DisplayName;
-                    });
-
-                    self.approvePayment = function (item, event) {
-                        var actionUrl = urls.ManageServiceCall.ApprovePayment;
+                    self.holdBackcharge = function (item, event) {
+                        var actionUrl = urls.ManageServiceCall.HoldBackcharge;
                         $.ajax({
                             type: "POST",
                             url: actionUrl,
-                            data: { PaymentId: item.paymentId, message: item.holdComments },
+                            data: { BackchargeId: item.backchargeId, message: item.backchargeHoldComments },
                             success: function (response) {
-                                item.paymentStatusDisplayName(response);
-                                toastr.success("Success! Approval Request sent.");
+                                item.backchargeStatusDisplayName(response.NewStatusDisplayName);
+                                item.backchargeHoldDate(response.Date);
+                                toastr.success("Success! Backcharge Hold request sent.");
+                                closeWindow(event);
+                            }
+                        });
+                    };
+                    
+                    self.denyBackcharge = function (item, event) {
+                        var actionUrl = urls.ManageServiceCall.DenyBackcharge;
+                        $.ajax({
+                            type: "POST",
+                            url: actionUrl,
+                            data: { BackchargeId: item.backchargeId, message: item.backchargeDenyComments },
+                            success: function (response) {
+                                item.backchargeStatusDisplayName(response.NewStatusDisplayName);
+                                item.backchargeDenyDate(response.Date);
+                                toastr.success("Success! Backcharge deny request sent.");
+                                closeWindow(event);
+                            }
+                        });
+                    };
+                    
+                    self.approveBackcharge = function (item, event) {
+                        var actionUrl = urls.ManageServiceCall.ApproveBackcharge;
+                        $.ajax({
+                            type: "POST",
+                            url: actionUrl,
+                            data: { BackchargeId: item.backchargeId },
+                            success: function (response) {
+                                item.backchargeStatusDisplayName(response);
+                                toastr.success("Success! Backcharge Approval Request sent.");
                                 closeWindow(event);
                             }
                         });
                     };
 
+                    self.shouldDisplayHoldPayment = ko.computed(function () {
+                        return self.paymentStatusDisplayName() == paymentStatusEnum.Pending.DisplayName;
+                    });
+
+                    self.paymentStatusBadgeClassName = ko.computed(function () {
+                        if (self.paymentStatusDisplayName() == paymentStatusEnum.Hold.DisplayName) {
+                            return "warning";
+                        }
+                        else if (self.paymentStatusDisplayName() == paymentStatusEnum.Approved.DisplayName) {
+                            return "success";
+                        }
+                        return "default";
+                    });
+                    
+                    self.backchargeStatusBadgeClassName = ko.computed(function () {
+                        if (self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName) {
+                            return "warning";
+                        }
+                        else if (self.backchargeStatusDisplayName() == backchargeStatusEnum.Approved.DisplayName) {
+                            return "success";
+                        }
+                        else if (self.backchargeStatusDisplayName() == backchargeStatusEnum.Denied.DisplayName) {
+                            return "danger";
+                        }
+                        return "default";
+                    });
+
+                    self.shouldDisplayApprovePayment = ko.computed(function () {
+                        return self.paymentStatusDisplayName() == paymentStatusEnum.Pending.DisplayName || self.paymentStatusDisplayName() == paymentStatusEnum.Hold.DisplayName;
+                    });
+                    
+                    self.shouldDisplayDeletePayment = ko.computed(function () {
+                        return self.paymentStatusDisplayName() == paymentStatusEnum.Pending.DisplayName || self.paymentStatusDisplayName() == paymentStatusEnum.Hold.DisplayName;
+                    });
+                    
+                    self.shouldDisplayApproveBackcharge = ko.computed(function () {
+                        return self.backchargeStatusDisplayName() == backchargeStatusEnum.Pending.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName;
+                    });
+                    
+                    self.shouldDisplayDenyBackcharge = ko.computed(function () {
+                        return self.backchargeStatusDisplayName() == backchargeStatusEnum.Pending.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName;
+                    });
+                    
+                    self.shouldDisplayHoldBackcharge = ko.computed(function () {
+                        return self.backchargeStatusDisplayName() == backchargeStatusEnum.Pending.DisplayName;
+                    });
+                                        
                     self.cancelPopup = function (item, event) {
                         closeWindow(event);
                     };
@@ -390,6 +494,7 @@
                             personNotifiedDate: self.personNotifiedDate(),
                             backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
                             paymentStatusDisplayName: paymentStatusEnum.Requested.DisplayName,
+                            backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
                             selectedCostCode: self.selectedCostCode
                         });
 
@@ -609,7 +714,6 @@
                 var persistedAllPaymentsViewModel = modelData.initialServiceCallLinePayments;
 
                 _(persistedAllPaymentsViewModel).each(function (payment) {
-
                     viewModel.allPayments.push(new PaymentViewModel(payment));
                 });
 

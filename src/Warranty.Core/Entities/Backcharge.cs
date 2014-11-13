@@ -19,6 +19,8 @@
         public DateTime? CreatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        public DateTime? HoldDate { get; set; }
+        public DateTime? DenyDate { get; set; }
         public string JdeIdentifier { get; set; }
         public string HoldComments { get; set; }
         public string DenyComments { get; set; }

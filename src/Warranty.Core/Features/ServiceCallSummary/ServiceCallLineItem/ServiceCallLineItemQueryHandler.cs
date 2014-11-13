@@ -27,6 +27,8 @@
             model.ProblemCodes = SharedQueries.ProblemCodes.GetProblemCodeList(_database);
             model.ServiceCallLineItemPayments = GetServiceCallLinePayments(query.ServiceCallLineItemId);
             model.CanReopenLines = user.IsInRole(UserRoles.WarrantyServiceManager) || user.IsInRole(UserRoles.WarrantyServiceCoordinator);
+            model.CanTakeActionOnPayments = user.IsInRole(UserRoles.WarrantyServiceManager);
+
 
             return model;
         }
@@ -95,6 +97,7 @@
                                     , p.CreatedDate as PaymentCreatedDate
                                     , p.HoldComments
                                     , p.HoldDate
+                                    , b.backchargeId
                                     , b.BackchargeVendorNumber
                                     , b.BackchargeVendorName
                                     , b.BackchargeReason
@@ -103,6 +106,11 @@
                                     , b.PersonNotifiedPhoneNumber
                                     , b.PersonNotifiedDate
                                     , b.BackchargeResponseFromVendor
+                                    , b.BackchargeStatus
+                                    , b.HoldComments backchargeHoldComments
+                                    , b.HoldDate backchargeHoldDate
+                                    , b.DenyComments backchargeDenyComments
+                                    , b.DenyDate backchargeDenyDate
                                     , CASE WHEN b.BackchargeVendorNumber IS NOT NULL THEN 1 ELSE 0 END AS IsBackcharge
                                 FROM payments p
                                     LEFT JOIN backcharges b
