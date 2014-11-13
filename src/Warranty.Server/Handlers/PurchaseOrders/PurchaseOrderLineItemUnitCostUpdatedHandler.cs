@@ -1,0 +1,32 @@
+﻿namespace Warranty.Server.Handlers.PurchaseOrders
+{
+    using Accounting.Events.PurchaseOrders;
+    using Core.Entities;
+    using Extensions;
+    using NPoco;
+    using NServiceBus;
+
+    public class PurchaseOrderLineItemUnitCostUpdatedHandler : IHandleMessages<PurchaseOrderLineUnitCostUpdated>
+    {
+        private readonly IDatabase _database;
+
+        public PurchaseOrderLineItemUnitCostUpdatedHandler(IDatabase database)
+        {
+            _database = database;
+        }
+
+        public void Handle(PurchaseOrderLineUnitCostUpdated message)
+        {
+            using (_database)
+            {
+                var purchaseOrderLineItem = _database.SingleOrDefaultByJdeId<PurchaseOrderLineItem>(message.JDEId);
+
+                if (purchaseOrderLineItem == null)
+                    return;
+
+                purchaseOrderLineItem.UnitCost = message.PurchaseOrderLineUnitCost;
+                _database.Update(purchaseOrderLineItem);
+            }
+        }
+    }
+}
