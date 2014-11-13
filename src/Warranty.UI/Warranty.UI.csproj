@@ -311,6 +311,7 @@
     <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\search.js" />
     <Content Include="Scripts\app\servicecall\CallSummary.js" />
+    <Content Include="Scripts\app\servicecall\CreatePurchaseOrder.js" />
     <Content Include="Scripts\app\servicecall\SearchBackchargeVendor.js" />
     <Content Include="Scripts\app\servicecall\SearchVendor.js" />
     <Content Include="Scripts\app\servicecall\create.js" />
@@ -446,6 +447,7 @@
     <Content Include="Views\Report\AchievementReport.cshtml" />
     <Content Include="Views\Shared\_AdditionalContacts.cshtml" />
     <Content Include="Views\Admin\ManageProblemCodeCostCodes.cshtml" />
+    <Content Include="Views\ServiceCall\CreatePurchaseOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

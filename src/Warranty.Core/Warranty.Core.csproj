@@ -267,6 +267,9 @@
     <Compile Include="Features\AddServiceCallPayment\DeletePaymentCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallPayment\HoldPaymentCommand.cs" />
     <Compile Include="Features\AddServiceCallPayment\HoldPaymentCommandHandler.cs" />
+    <Compile Include="Features\AddServiceCallPurchaseOrder\AddServiceCallPurchaseOrderCommand.cs" />
+    <Compile Include="Features\AddServiceCallPurchaseOrder\AddServiceCallPurchaseOrderCommandHandler.cs" />
+    <Compile Include="Features\AddServiceCallPurchaseOrder\AddServiceCallPurchaseOrderModel.cs" />
     <Compile Include="Features\AssignWSRs\AssignedEmployee.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRCommand.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRCommandHandler.cs" />

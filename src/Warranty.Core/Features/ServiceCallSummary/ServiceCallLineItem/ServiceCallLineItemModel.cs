@@ -29,6 +29,7 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
         public IEnumerable<ServiceCallLineItemNote> ServiceCallLineItemNotes { get; set; }
         public IEnumerable<ServiceCallLineItemAttachment> ServiceCallLineItemAttachments { get; set; }
         public IEnumerable<ServiceCallLineItemPayment> ServiceCallLineItemPayments { get; set; }
+        public IEnumerable<ServiceCallLineItemPurchaseOrder> ServiceCallLineItemPurchaseOrders { get; set; }
 
         public class ServiceCallLineItemNote
         {
@@ -75,5 +76,30 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public bool IsBackcharge { get; set; }
         }
 
+        public class ServiceCallLineItemPurchaseOrder
+        {
+            public Guid PurchaseOrderId { get; set; }
+            public string VendorNumber { get; set; }
+            public string VendorName { get; set; }
+            public DeliveryInstruction DeliveryInstructions { get; set; }
+            public DateTime? DeliveryDate { get; set; }
+            public string CostCode { get; set; }
+            public string ObjectAccount { get; set; }
+            public Guid ServiceCallLineItemId { get; set; }
+            public string JobNumber { get; set; }
+            public string PurchaseOrderNote { get; set; }
+            public List<ServiceCallLineItemPurchaseOrderLine> ServiceCallLineItemPurchaseOrderLines { get; set; }
+        }
+
+        public class ServiceCallLineItemPurchaseOrderLine
+        {
+            public Guid PurchaseOrderLineItemId { get; set; }
+            public Guid PurchaseOrderId { get; set; }
+            public int LineNumber { get; set; }
+            public decimal Quantity { get; set; }
+            public decimal UnitCost { get; set; }
+            public string Description { get; set; }
+            public PurchaseOrderLineItemStatus PurchaseOrderLineItemStatus { get; set; }
+        }
     }
 }

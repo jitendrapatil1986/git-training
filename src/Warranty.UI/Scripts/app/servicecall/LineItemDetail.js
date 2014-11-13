@@ -31,6 +31,31 @@
                     self.noteDescriptionToAdd('');
                 }
 
+                function PurchaseOrderViewModel(options) {
+                    var self = this;
+
+                    self.serviceCallLineItemId = options.serviceCallLineItemId;
+                    self.vendorNumber = options.vendorNumber;
+                    self.vendorName = options.vendorName;
+                    self.deliveryInstructions = options.deliveryInstructions;
+                    self.deliveryDate = options.deliveryDate;
+                    self.purchaseOrderNote = options.purchaseOrderNote;
+
+                    self.allPurchaseOrderLines = ko.observableArray([]);
+                    _(options.serviceCallLineItemPurchaseOrderLines).each(function (lineItem) {
+                        self.allPurchaseOrderLines.push(new PurchaseOrderLineViewModel(lineItem));
+                    });
+                }
+                
+                function PurchaseOrderLineViewModel(options) {
+                    var self = this;
+
+                    self.lineNumber = options.lineNumber;
+                    self.quantity = options.quantity;
+                    self.unitCost = options.unitCost;
+                    self.description = options.description;
+                }
+                
                 function PaymentViewModel(options) {
                     var self = this;
                     self.serviceCallLineItemId = options.serviceCallLineItemId;
@@ -489,6 +514,7 @@
                     self.theLookups = dropdownData.availableLookups; //dropdown list does not need to be observable. Only the actual elements w/i the array do.
                     self.allCallNotes = ko.observableArray([]);
                     self.allAttachments = ko.observableArray([]);
+                    self.allPurchaseOrders = ko.observableArray([]);
                     self.noteDescriptionToAdd = ko.observable('');
                     self.userCanAlwaysReopenCallLines = ko.observable();
 
@@ -581,7 +607,10 @@
                     }).done(function (response) {
                         self.constructionVendors(response);
                     });
-
+                    
+                    self.createPurchaseOrder = function () {
+                        window.location.href = urls.ServiceCall.CreatePurchaseOrder + '/' + self.serviceCallLineItemId;
+                    };
                 }
 
                 ko.validation.init({
@@ -611,6 +640,12 @@
                 _(persistedAllPaymentsViewModel).each(function (payment) {
 
                     viewModel.allPayments.push(new PaymentViewModel(payment));
+                });
+
+                var persistedAllPurchaseOrdersViewModel = modelData.initialServiceCallLinePurchaseOrders;
+
+                _(persistedAllPurchaseOrdersViewModel).each(function(purchaseOrder) {
+                    viewModel.allPurchaseOrders.push(new PurchaseOrderViewModel(purchaseOrder));
                 });
 
             });
