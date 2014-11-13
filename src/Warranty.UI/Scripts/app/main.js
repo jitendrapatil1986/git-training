@@ -26,6 +26,7 @@ require.config({
         'responsive.tabs': 'lib/responsive.tabs',
         'ko.x-editable': 'lib/knockout.x-editable.min',
         'ko.validation': 'lib/knockout.validation.min',
+        'hideseek': 'lib/jquery.hideseek.min'
     },
     shim: {
         'jquery.validate': ['jquery'],
@@ -43,6 +44,7 @@ require.config({
         'bloodhound': { deps: ['jquery'], exports: 'Bloodhound' },
         'responsive.tabs': { deps: ['bootstrap'] },
         'jquery.maskedinput': ['jquery'],
+        'hideseek': ['jquery'],
     },
     callback: function () {
         require(['app/feedbackForm', 'app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields', 'app/responsiveTabs']);

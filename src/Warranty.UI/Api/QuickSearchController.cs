@@ -37,6 +37,13 @@
         }
 
         [HttpGet]
+        public IEnumerable<QuickSearchEmployeeModel> Employees(string query)
+        {
+            var results = _mediator.Request(new QuickSearchEmployeesQuery {Query = query});
+            return results;
+        }
+
+        [HttpGet]
         public IEnumerable<QuickSearchCallVendorModel> Vendors(string query)
         {
             var results = _mediator.Request(new QuickSearchVendorsQuery { Query = query });

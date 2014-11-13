@@ -24,6 +24,5 @@
 
             return stringWriter.ToString();
         }
-
     }
 }

@@ -7,19 +7,22 @@
     using InnerMessages;
     using NPoco;
     using NServiceBus;
+    using Security;
 
-    public class AddServiceCallLineItemPaymentCommandHandler : ICommandHandler<AddServiceCallLineItemPaymentCommand, Guid>
+    public class AddPaymentCommandHandler : ICommandHandler<AddPaymentCommand, Guid>
     {
         private readonly IDatabase _database;
         private readonly IBus _bus;
+        private readonly IUserSession _userSession;
 
-        public AddServiceCallLineItemPaymentCommandHandler(IDatabase database, IBus bus)
+        public AddPaymentCommandHandler(IDatabase database, IBus bus, IUserSession userSession)
         {
             _database = database;
             _bus = bus;
+            _userSession = userSession;
         }
 
-        public Guid Handle(AddServiceCallLineItemPaymentCommand message)
+        public Guid Handle(AddPaymentCommand message)
         {
             using (_database)
             {
@@ -46,9 +49,10 @@
 
                 _database.Insert(payment);
 
-                _bus.Send<NotifyRequestedPayment>(x =>
+                _bus.Send<NotifyPaymentRequested>(x =>
                 {
                     x.PaymentId = payment.PaymentId;
+                    x.Username = _userSession.GetCurrentUser().LoginName;
                 });
 
                 if (message.IsBackcharge)
@@ -70,9 +74,10 @@
                     };
                     _database.Insert(backcharge);
 
-                    _bus.Send<NotifyRequestedBackcharge>(x =>
+                    _bus.Send<NotifyBackchargeRequested>(x =>
                     {
                         x.BackchargeId = backcharge.BackchargeId;
+                        x.Username = _userSession.GetCurrentUser().LoginName;
                     });
                 }
 
