@@ -35,25 +35,11 @@
                     var self = this;
 
                     self.serviceCallLineItemId = options.serviceCallLineItemId;
+                    self.purchaseOrderNumber = options.purchaseOrderNumber;
                     self.vendorNumber = options.vendorNumber;
                     self.vendorName = options.vendorName;
-                    self.deliveryInstructions = options.deliveryInstructions;
-                    self.deliveryDate = options.deliveryDate;
-                    self.purchaseOrderNote = options.purchaseOrderNote;
-
-                    self.allPurchaseOrderLines = ko.observableArray([]);
-                    _(options.serviceCallLineItemPurchaseOrderLines).each(function (lineItem) {
-                        self.allPurchaseOrderLines.push(new PurchaseOrderLineViewModel(lineItem));
-                    });
-                }
-                
-                function PurchaseOrderLineViewModel(options) {
-                    var self = this;
-
-                    self.lineNumber = options.lineNumber;
-                    self.quantity = options.quantity;
-                    self.unitCost = options.unitCost;
-                    self.description = options.description;
+                    self.createdDate = moment(options.createdDate).format("L");
+                    self.totalCost = options.totalCost;
                 }
                 
                 function PaymentViewModel(options) {

@@ -77,7 +77,7 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public string HoldComments { get; set; }
             public DateTime? HoldDate { get; set; }
             public string BackchargeHoldComments { get; set; }
-            public DateTime? BackchargeHoldDate { get; set; }            
+            public DateTime? BackchargeHoldDate { get; set; }
             public string BackchargeDenyComments { get; set; }
             public DateTime? BackchargeDenyDate { get; set; }
             public bool IsBackcharge { get; set; }
@@ -88,13 +88,8 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public Guid PurchaseOrderId { get; set; }
             public string VendorNumber { get; set; }
             public string VendorName { get; set; }
-            public DeliveryInstruction DeliveryInstructions { get; set; }
-            public DateTime? DeliveryDate { get; set; }
-            public string CostCode { get; set; }
-            public string ObjectAccount { get; set; }
-            public Guid ServiceCallLineItemId { get; set; }
-            public string JobNumber { get; set; }
-            public string PurchaseOrderNote { get; set; }
+            public DateTime? CreatedDate { get; set; }
+            public decimal TotalCost { get; set; }
             public List<ServiceCallLineItemPurchaseOrderLine> ServiceCallLineItemPurchaseOrderLines { get; set; }
         }
 
@@ -105,8 +100,6 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public int LineNumber { get; set; }
             public decimal Quantity { get; set; }
             public decimal UnitCost { get; set; }
-            public string Description { get; set; }
-            public PurchaseOrderLineItemStatus PurchaseOrderLineItemStatus { get; set; }
         }
     }
 }

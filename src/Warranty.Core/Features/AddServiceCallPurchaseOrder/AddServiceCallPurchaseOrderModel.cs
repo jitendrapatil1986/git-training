@@ -3,20 +3,26 @@
     using System;
     using System.Collections.Generic;
     using Enumerations;
-    using ServiceCallSummary.ServiceCallLineItem;
 
     public class AddServiceCallPurchaseOrderModel
     {
+        public Guid ServiceCallId { get; set; }
+        public int ServiceCallNumber { get; set; }
+        public Guid JobId { get; set; }
+        public string JobNumber { get; set; }
+        public string AddressLine { get; set; }
+        public string City { get; set; }
+        public string StateCode { get; set; }
+        public string PostalCode { get; set; }
         public string VendorNumber { get; set; }
         public string VendorName { get; set; }
-        public DeliveryInstruction DeliveryInstructions { get; set; }
+        public int DeliveryInstructions { get; set; }
         public DateTime? DeliveryDate { get; set; }
-        public string CostCode { get; set; }
+        public int CostCode { get; set; }
         public string ObjectAccount { get; set; }
         public Guid ServiceCallLineItemId { get; set; }
-        public string JobNumber { get; set; }
         public string PurchaseOrderNote { get; set; }
-        public List<ServiceCallLineItemModel.ServiceCallLineItemPurchaseOrderLine> ServiceCallLineItemPurchaseOrderLines { get; set; }
+        public List<ServiceCallLineItemPurchaseOrderLine> ServiceCallLineItemPurchaseOrderLines { get; set; }
     }
 
     public class ServiceCallLineItemPurchaseOrderLine

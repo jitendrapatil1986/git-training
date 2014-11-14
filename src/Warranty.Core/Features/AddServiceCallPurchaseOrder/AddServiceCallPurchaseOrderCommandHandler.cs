@@ -1,5 +1,6 @@
 ﻿namespace Warranty.Core.Features.AddServiceCallPurchaseOrder
 {
+    using Configurations;
     using Entities;
     using Enumerations;
     using NPoco;
@@ -17,18 +18,26 @@
         {
             using (_database)
             {
-                //TODO: Update with correct fields.
+                //TODO: Job keeps failing b/c IsOutOfWarranty is not a valid column???
+                var job = _database.SingleOrDefault<Job>("WHERE JobNumber = @0", message.Model.JobNumber);
+                
                 var purchaseOrder = new PurchaseOrder
                     {
-                        CostCode = message.Model.CostCode,
-                        //DeliveryDate = message.Model.DeliveryDate,
-                        DeliveryInstructions = DeliveryInstruction.ASAP, //message.Model.DeliveryInstructions,
+                        CostCode = WarrantyCostCode.FromValue(message.Model.CostCode).DisplayName,
+                        DeliveryDate = message.Model.DeliveryDate,
+                        DeliveryInstructions = DeliveryInstruction.FromValue(message.Model.DeliveryInstructions),
                         JobNumber = message.Model.JobNumber,
-                        ObjectAccount = message.Model.ObjectAccount,
                         PurchaseOrderNote = message.Model.PurchaseOrderNote,
                         ServiceCallLineItemId = message.Model.ServiceCallLineItemId,
                         VendorName = message.Model.VendorName,
                         VendorNumber = message.Model.VendorNumber,
+                        ObjectAccount = job.IsOutOfWarranty
+                                            ? message.Model.ObjectAccount.Equals(WarrantyConstants.MaterialObjectAccount)
+                                                  ? WarrantyConstants.OurOfWarrantyMaterialCode
+                                                  : WarrantyConstants.OutOfWarrantyLaborCode
+                                            : message.Model.ObjectAccount.Equals(WarrantyConstants.MaterialObjectAccount)
+                                                  ? WarrantyConstants.InWarrantyMaterialCode
+                                                  : WarrantyConstants.InWarrantyLaborCode,
                     };
 
                 _database.Insert(purchaseOrder);

@@ -114,27 +114,28 @@
                     <div class="clearfix"></div>
                 </section>
                 <section class="margin-bottom-15">
-                    
                     <h3 class="col-md-12">POs
                         <span>
-                            <button type="button" class="btn btn-default pull-right no-print" data-bind="click: createPurchaseOrder">Create PO</button>
+                            <button type="button" class="btn btn-default pull-right no-print hidden-sm hidden-xs" data-bind="click: createPurchaseOrder">Create PO</button>
                         </span>
                     </h3>
                     <em data-bind="visible: allPurchaseOrders().length < 1" class="padding-left-15 padding-top-7 pull-left">No Purchase Orders Available</em>
                     <!-- ko foreach: allPurchaseOrders -->
-                    <div class="col-md-4">
-                        <span data-bind="text: vendorName"></span>
-                        <span data-bind="text: deliveryInstructions"></span>
-                        <span data-bind="text: deliveryDate"></span>
-                        <span data-bind="text: deliveryInstructions"></span>
-                        <!-- ko foreach: allPurchaseOrderLines -->
-                        <div class="row">
-                            <span data-bind="text: quantity"></span>
-                            <span data-bind="text: unitCost"></span>
-                            <span data-bind="text: description"></span>
+                    <div class="row service-call-line">
+                        <div class="">
+                            <div class="col-md-3">
+                                <span data-bind="text: purchaseOrderNumber"></span>PO number
+                            </div>
+                            <div class="col-md-3">
+                                <span data-bind="text: vendorName"></span>
+                            </div>
+                            <div class="col-md-3">
+                                <span data-bind="text: createdDate"></span>
+                            </div>
+                            <div class="col-md-3">
+                                <span data-bind="text: totalCost"></span>
+                            </div>
                         </div>
-
-                        <!-- /ko -->
                     </div>
                     <!-- /ko -->
                     <div class="clearfix"></div>

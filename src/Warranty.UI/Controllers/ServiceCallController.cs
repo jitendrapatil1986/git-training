@@ -248,10 +248,7 @@ namespace Warranty.UI.Controllers
 
         public ActionResult CreatePurchaseOrder(Guid id)
         {
-            var model = new AddServiceCallPurchaseOrderModel
-                {
-                    ServiceCallLineItemId = id,
-                };
+            var model = _mediator.Request(new AddServiceCallPurchaseOrderQuery { ServiceCallLineItemId = id });
 
             return View(model);
         }

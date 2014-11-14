@@ -4,6 +4,8 @@
 
         require(['ko.validation'], function () {
             $(function () {
+
+                $(".datepicker-input").datepicker();
                 
                 function PurchaseOrderLineViewModel() {
                     var self = this;
@@ -23,20 +25,32 @@
                 function purchaseOrderViewModel() {
                     var self = this;
 
-                    self.serviceCallLineItemId = modelData.serviceCallLineItemId;
-                    self.vendorName = ko.observable();
-                    self.vendorNumber = ko.observable();
-                    self.deliveryInstructions = ko.observable();
-                    self.deliveryDate = ko.observable();
-                    self.costCode = ko.observable();
+                    self.serviceCallLineItemId = modelData.initialPurchaseOrder.serviceCallLineItemId;
+                    self.vendorName = ko.observable().extend({required : true});
+                    self.vendorNumber = ko.observable().extend({ required: true });
+                    self.deliveryInstructionCodes = ko.observableArray(modelData.deliveryInstructionCodes);
+                    self.selectedDeliveryInstruction = ko.observable().extend({ required: true });
+                    self.deliveryDate = ko.observable().extend({ required: true });
+                    self.warrantyCostCodes = ko.observableArray(modelData.warrantyCostCodes);
+                    self.selectedCostCode = ko.observable().extend({required: true});
                     self.objectAccount = ko.observable();
-                    self.jobNumber = ko.observable();
+                    self.jobNumber = ko.observable(modelData.initialPurchaseOrder.jobNumber);
+                    self.address = ko.observable(modelData.initialPurchaseOrder.addressLine);
+                    self.city = ko.observable(modelData.initialPurchaseOrder.city);
+                    self.stateCode = ko.observable(modelData.initialPurchaseOrder.stateCode);
+                    self.postalCode = ko.observable(modelData.initialPurchaseOrder.postalCode);
+                    
                     self.notes = ko.observable();
                     self.line1 = new PurchaseOrderLineViewModel();
                     self.line2 = new PurchaseOrderLineViewModel();
                     self.line3 = new PurchaseOrderLineViewModel();
                     self.line4 = new PurchaseOrderLineViewModel();
                     self.line5 = new PurchaseOrderLineViewModel();
+                    self.line1.lineNumber(1);
+                    self.line2.lineNumber(2);
+                    self.line3.lineNumber(3);
+                    self.line4.lineNumber(4);
+                    self.line5.lineNumber(5);
 
                     self.allPurchaseOrderLines = ko.observableArray([]);
 
@@ -55,14 +69,18 @@
                     };
 
                     self.submitPurchaseOrder = function () {
-                        debugger;
+                        if (self.errors().length != 0) {
+                            self.errors.showAllMessages();
+                            return;
+                        }
+                        
                         var newPurchaseOrder = {
                             VendorNumber: self.vendorNumber(),
                             VendorName: self.vendorName(),
-                            DeliveryInstructions: self.deliveryInstructions(),
+                            DeliveryInstructions: self.selectedDeliveryInstruction(),
                             DeliveryDate: self.deliveryDate(),
                             PurchaseOrderNote: self.notes(),
-                            CostCode: self.costCode(),
+                            CostCode: self.selectedCostCode(),
                             ObjectAccount: self.objectAccount(),
                             JobNumber: self.jobNumber(),
                             ServiceCallLineItemId: self.serviceCallLineItemId,
@@ -93,16 +111,19 @@
                             })
                             .done(function(response) {
                                 toastr.success("Success! Purchase order created.");
-                                window.location.url = urls.ServiceCall.LineItemDetail + self.serviceCallLineItemId();
+                                window.location.href = urls.ServiceCall.LineItemDetail + '/' + self.initialPurchaseOrder.serviceCallLineItemId;
                             });
                     };
                     
                     $(document).on('vendor-number-selected', function () {
-                        debugger;
                         var vendorNumber = $('#vendor-search').attr('data-vendor-number');
                         var vendorName = $('#vendor-search').attr('data-vendor-name');
                         self.vendorNumber(vendorNumber);
                         self.vendorName(vendorName);
+                    });
+                    
+                    $("#deliveryDate").on('changeDate', function (e) {
+                        self.deliveryDate(moment(e.date).format("L"));
                     });
                 };
 

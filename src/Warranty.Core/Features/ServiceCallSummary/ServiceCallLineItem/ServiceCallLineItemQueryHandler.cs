@@ -30,7 +30,6 @@
             model.CanReopenLines = user.IsInRole(UserRoles.WarrantyServiceManager) || user.IsInRole(UserRoles.WarrantyServiceCoordinator);
             model.CanTakeActionOnPayments = user.IsInRole(UserRoles.WarrantyServiceManager);
 
-
             return model;
         }
 
@@ -146,18 +145,12 @@
             const string sql = @"SELECT p.[PurchaseOrderId]
                                     ,[VendorNumber]
                                     ,[VendorName]
-                                    ,[DeliveryInstructions]
-                                    ,[DeliveryDate]
-                                    ,[CostCode]
-                                    ,[ObjectAccount]
+                                    ,p.[CreatedDate]
                                     ,[ServiceCallLineItemId]
                                     ,[JobNumber]
-                                    ,[PurchaseOrderNote]
                                     ,[LineNumber]
                                     ,[Quantity]
                                     ,[UnitCost]
-                                    ,[Description]
-                                    ,[PurchaseOrderLineItemStatusId]
                                 FROM [PurchaseOrders] p
                                 INNER JOIN PurchaseOrderLineItems l
                                 ON p.PurchaseOrderId = l.PurchaseOrderId
