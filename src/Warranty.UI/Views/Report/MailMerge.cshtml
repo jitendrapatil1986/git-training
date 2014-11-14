@@ -13,6 +13,8 @@
                 @using (Html.BeginForm("MailMergeDownloadAsCsv", "Report"))
                 {
                     @(Html.HiddenFor(x => x.Date))
+                    <a href="javascript:window.print()" class="btn btn-default pull-right margin-botom-10 no-print"><span class="glyphicon glyphicon-print"></span> Print</a>
+
                     <button type="submit" class="btn btn-default pull-right margin-botom-10 no-print" value="Download as .csv"><span class="glyphicon glyphicon-download-alt"></span> Download as .csv</button>
                 }
             </div>
