@@ -18,8 +18,7 @@
         {
             using (_database)
             {
-                //TODO: Job keeps failing b/c IsOutOfWarranty is not a valid column???
-                var job = _database.SingleOrDefault<Job>("WHERE JobNumber = @0", message.Model.JobNumber);
+                var job = _database.SingleOrDefault<Job>("SELECT JobId, CloseDate FROM Jobs WHERE JobNumber = @0", message.Model.JobNumber);
                 
                 var purchaseOrder = new PurchaseOrder
                     {
@@ -32,10 +31,10 @@
                         VendorName = message.Model.VendorName,
                         VendorNumber = message.Model.VendorNumber,
                         ObjectAccount = job.IsOutOfWarranty
-                                            ? message.Model.ObjectAccount.Equals(WarrantyConstants.MaterialObjectAccount)
-                                                  ? WarrantyConstants.OurOfWarrantyMaterialCode
+                                            ? message.Model.IsMaterialObjectAccount
+                                                  ? WarrantyConstants.OutOfWarrantyMaterialCode
                                                   : WarrantyConstants.OutOfWarrantyLaborCode
-                                            : message.Model.ObjectAccount.Equals(WarrantyConstants.MaterialObjectAccount)
+                                            : message.Model.IsMaterialObjectAccount
                                                   ? WarrantyConstants.InWarrantyMaterialCode
                                                   : WarrantyConstants.InWarrantyLaborCode,
                     };

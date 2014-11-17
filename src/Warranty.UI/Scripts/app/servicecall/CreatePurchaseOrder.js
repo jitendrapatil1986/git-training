@@ -17,14 +17,14 @@
                     self.subTotal = ko.computed(function () {
                         if (!self.quantity() || !self.unitCost())
                             return 0;
-                        
+
                         return self.quantity() * self.unitCost();
                     });
                 }
                 
                 function purchaseOrderViewModel() {
                     var self = this;
-
+                    
                     self.serviceCallLineItemId = modelData.initialPurchaseOrder.serviceCallLineItemId;
                     self.vendorName = ko.observable().extend({required : true});
                     self.vendorNumber = ko.observable().extend({ required: true });
@@ -33,7 +33,7 @@
                     self.deliveryDate = ko.observable().extend({ required: true });
                     self.warrantyCostCodes = ko.observableArray(modelData.warrantyCostCodes);
                     self.selectedCostCode = ko.observable().extend({required: true});
-                    self.objectAccount = ko.observable();
+                    self.isMaterialObjectAccount = ko.observable().extend({required: true});
                     self.jobNumber = ko.observable(modelData.initialPurchaseOrder.jobNumber);
                     self.address = ko.observable(modelData.initialPurchaseOrder.addressLine);
                     self.city = ko.observable(modelData.initialPurchaseOrder.city);
@@ -56,9 +56,10 @@
 
                     self.totalCost = ko.computed(function () {
                         var total = 0;
-                        total += self.line1.subTotal() + self.line2.subTotal() + self.line3.subTotal() + self.line4.subTotal() + self.line5.subTotal();
-                        
-                        ko.utils.arrayForEach(this.allPurchaseOrderLines(), function(lineItem) {
+                        total += self.line1.subTotal() + self.line2.subTotal() + self.line3.subTotal() +
+                                 self.line4.subTotal() + self.line5.subTotal();
+
+                        ko.utils.arrayForEach(this.allPurchaseOrderLines(), function (lineItem) {
                             total += lineItem.subTotal();
                         });
                         return total;
@@ -81,7 +82,7 @@
                             DeliveryDate: self.deliveryDate(),
                             PurchaseOrderNote: self.notes(),
                             CostCode: self.selectedCostCode(),
-                            ObjectAccount: self.objectAccount(),
+                            IsMaterialObjectAccount: self.isMaterialObjectAccount(),
                             JobNumber: self.jobNumber(),
                             ServiceCallLineItemId: self.serviceCallLineItemId,
                             ServiceCallLineItemPurchaseOrderLines: []
@@ -111,7 +112,7 @@
                             })
                             .done(function(response) {
                                 toastr.success("Success! Purchase order created.");
-                                window.location.href = urls.ServiceCall.LineItemDetail + '/' + self.initialPurchaseOrder.serviceCallLineItemId;
+                                window.location.href = urls.ServiceCall.LineItemDetail + '/' + self.serviceCallLineItemId;
                             });
                     };
                     

@@ -19,9 +19,9 @@
         public int DeliveryInstructions { get; set; }
         public DateTime? DeliveryDate { get; set; }
         public int CostCode { get; set; }
-        public string ObjectAccount { get; set; }
         public Guid ServiceCallLineItemId { get; set; }
         public string PurchaseOrderNote { get; set; }
+        public bool IsMaterialObjectAccount { get; set; }
         public List<ServiceCallLineItemPurchaseOrderLine> ServiceCallLineItemPurchaseOrderLines { get; set; }
     }
 

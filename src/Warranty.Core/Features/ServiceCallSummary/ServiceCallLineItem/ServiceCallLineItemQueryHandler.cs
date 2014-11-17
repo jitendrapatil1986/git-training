@@ -151,6 +151,7 @@
                                     ,[LineNumber]
                                     ,[Quantity]
                                     ,[UnitCost]
+                                    ,[PurchaseOrderLineItemStatusId] as PurchaseOrderLineItemStatus
                                 FROM [PurchaseOrders] p
                                 INNER JOIN PurchaseOrderLineItems l
                                 ON p.PurchaseOrderId = l.PurchaseOrderId

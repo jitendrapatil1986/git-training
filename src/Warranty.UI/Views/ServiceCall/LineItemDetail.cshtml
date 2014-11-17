@@ -123,17 +123,18 @@
                     <!-- ko foreach: allPurchaseOrders -->
                     <div class="row service-call-line">
                         <div class="">
-                            <div class="col-md-3">
-                                <span data-bind="text: purchaseOrderNumber"></span>PO number
+                            <div class="col-md-4">
+                                <strong><span data-bind="text: vendorName"></span></strong>
+                                <br/>
+                                <span data-bind="text: purchaseOrderStatusDisplayName, css: 'label label-' + purchaseOrderStatusBadgeClassName()"></span>
                             </div>
-                            <div class="col-md-3">
-                                <span data-bind="text: vendorName"></span>
+                            <div class="col-md-2">
+                                <span data-bind="text: purchaseOrderNumber ? 'PO #:' + purchaseOrderNumber : 'PO #:'"></span>
+                                <br/>
+                                <span data-bind="text: 'Date:' + createdDate"></span>
                             </div>
-                            <div class="col-md-3">
-                                <span data-bind="text: createdDate"></span>
-                            </div>
-                            <div class="col-md-3">
-                                <span data-bind="text: totalCost"></span>
+                            <div class="col-md-2">
+                                <h4 data-bind="currency: totalCost"></h4>
                             </div>
                         </div>
                     </div>
@@ -251,7 +252,7 @@
                                                     <span data-bind="text: paymentStatusDisplayName, css: 'label label-' + paymentStatusBadgeClassName()"></span>
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <span data-bind="text: 'Invoice #' + invoiceNumber"></span>
+                                                    <span data-bind="text: 'Invoice #:' + invoiceNumber"></span>
                                                     <br />
                                                     <span data-bind="text: 'Date:' + moment(paymentCreatedDate).format('L')"></span>
                                                 </div>

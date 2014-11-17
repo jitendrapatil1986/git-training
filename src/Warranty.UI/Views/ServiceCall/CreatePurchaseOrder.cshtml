@@ -15,20 +15,21 @@
                     <div class="panel-body">
                         <div class="row margin-bottom-10">
                             <div class="col-md-6">
-                                <div class="form-group" data-bind="validationElement: vendorNumber, validationOptions: { insertMessages: false}">
+                                <div class="control-group" data-bind="validationElement: vendorNumber, validationOptions: { insertMessages: false}">
                                     <label class="control-label" for="vendor-search">Vendor</label>
                                     <input type="text" id="vendor-search" class="form-control" autocomplete="off" placeholder="Type vendor name or vendor number" />
                                     <span data-bind="validationMessage: vendorNumber" class="help-block"></span>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="control-group">
+                                <div class="control-group padding-top-31" data-bind="validationElement: isMaterialObjectAccount, validationOptions: { insertMessages: false}">
                                     <label class="radio-inline">
-                                        <input type="radio" name="objectAccount" id="materialType" data-bind="checked: objectAccount" value="material"> Material
+                                        <input type="radio" id="materialAccount" name="isMaterialObjectAccount" data-bind="checked: isMaterialObjectAccount" value="true"> Material
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="objectAccount" id="laborType" data-bind="checked: objectAccount" value="labor"> Labor
+                                        <input type="radio" id="laborAccount" name="isMaterialObjectAccount" data-bind="checked: isMaterialObjectAccount" value="false"> Labor
                                     </label>
+                                    <span data-bind="validationMessage: isMaterialObjectAccount" class="help-block padding-top-7"></span>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -44,7 +45,7 @@
                         </div>
                         <div class="row margin-bottom-10">
                             <div class="col-md-6">
-                                <div class="form-group" data-bind="validationElement: selectedDeliveryInstruction">
+                                <div class="control-group" data-bind="validationElement: selectedDeliveryInstruction">
                                     <label class="control-label" for="selectedDeliveryInstruction">Delivery Instructions</label>
                                     <select id="selectedDeliveryInstruction" class="form-control" data-bind="options: deliveryInstructionCodes, optionsText: 'displayText', optionsValue: 'value', value: selectedDeliveryInstruction, optionsCaption: 'Select Delivery Instruction'"></select>
                                 </div>
@@ -90,7 +91,7 @@
                                 </div>
                             </div>
                             <div class="col-md-1">
-                                <p class="text-right" data-bind="text: '$' + line1.subTotal()"></p>
+                                <p class="text-right" data-bind="currency: line1.subTotal"></p>
                             </div>
                         </div>
                         <div class="row margin-bottom-10">
@@ -110,7 +111,7 @@
                                 </div>
                             </div>
                             <div class="col-md-1">
-                                <p class="text-right" data-bind="text: '$' + line2.subTotal()"></p>
+                                <p class="text-right" data-bind="currency: line2.subTotal"></p>
                             </div>
                         </div>
                         <div class="row margin-bottom-10">
@@ -130,7 +131,7 @@
                                 </div>
                             </div>
                             <div class="col-md-1">
-                                <p class="text-right" data-bind="text: '$' + line3.subTotal()"></p>
+                                <p class="text-right" data-bind="currency: line3.subTotal"></p>
                             </div>
                         </div>
                         <div class="row margin-bottom-10">
@@ -150,7 +151,7 @@
                                 </div>
                             </div>
                             <div class="col-md-1">
-                                <p class="text-right" data-bind="text: '$' + line4.subTotal()"></p>
+                                <p class="text-right" data-bind="currency: line4.subTotal"></p>
                             </div>
                         </div>
                         <div class="row margin-bottom-10">
@@ -170,7 +171,7 @@
                                 </div>
                             </div>
                             <div class="col-md-1">
-                                <p class="text-right" data-bind="text: '$' + line5.subTotal()"></p>
+                                <p class="text-right" data-bind="currency: line5.subTotal"></p>
                             </div>
                         </div>
 
@@ -186,18 +187,19 @@
                                 <input type="text" class="form-control numeric" data-bind="value: unitCost"/>
                             </div>
                             <div class="col-md-1">
-                                <p class="text-right" data-bind="text: '$' + subTotal()"></p>
+                                <p class="text-right" data-bind="currency: subTotal"></p>
                             </div>
                             <span class="hidden" data-bind="value: lineNumber($index() + 6)"></span>
                         </div>
                         <!-- /ko -->
 
                         <div class="row margin-bottom-10">
-                            <div class="col-md-6">
+                            <div class="col-md-9">
                                 <a href="#" data-bind="click: $root.addPurchaseOrderLine">+ Add a new line</a>
                             </div>
-                            <div class="col-md-6">
-                                <span class="pull-right" data-bind="text: 'Total $' + totalCost()"></span>
+                            <div class="col-md-1">Total</div>
+                            <div class="col-md-2">
+                                <span class="pull-right" data-bind="currency: totalCost"></span>
                             </div>
                         </div>
                         <div class="row margin-top-10">
