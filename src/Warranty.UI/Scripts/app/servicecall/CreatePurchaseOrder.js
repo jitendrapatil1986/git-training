@@ -65,8 +65,11 @@
                         return total;
                     }, this);
                     
-                    self.addPurchaseOrderLine = function() {
+                    self.addPurchaseOrderLine = function () {
+                        debugger;
                         self.allPurchaseOrderLines.push(new PurchaseOrderLineViewModel());
+                        $('#quantity_' + self.allPurchaseOrderLines()[self.allPurchaseOrderLines().length - 1].lineNumber()).numeric();
+                        $('#unitCost_' + self.allPurchaseOrderLines()[self.allPurchaseOrderLines().length - 1].lineNumber()).numeric();
                     };
 
                     self.submitPurchaseOrder = function () {

@@ -178,13 +178,13 @@
                         <!-- ko foreach: allPurchaseOrderLines -->
                         <div class="row margin-bottom-10">
                             <div class="col-md-2">
-                                <input type="text" class="form-control numeric" data-bind="value: quantity"/>
+                                <input type="text" class="form-control" data-bind="value: quantity, attr: {id: 'quantity_' + lineNumber()}"/>
                             </div>
                             <div class="col-md-7">
                                 <input type="text" class="form-control" data-bind="value: description"/>
                             </div>
                             <div class="col-md-2">
-                                <input type="text" class="form-control numeric" data-bind="value: unitCost"/>
+                                <input type="text" class="form-control" data-bind="value: unitCost, attr: {id: 'unitCost_' + lineNumber()}"/>
                             </div>
                             <div class="col-md-1">
                                 <p class="text-right" data-bind="currency: subTotal"></p>

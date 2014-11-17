@@ -40,21 +40,25 @@
                     };
 
                 _database.Insert(purchaseOrder);
-                
+
+                var lineNumber = 1;
                 foreach (var line in message.Model.ServiceCallLineItemPurchaseOrderLines)
                 {
                     var purchaseOrderLineItem = new PurchaseOrderLineItem
                         {
                             Description = line.Description,
-                            LineNumber = line.LineNumber,
                             Quantity = line.Quantity,
                             UnitCost = line.UnitCost,
                             PurchaseOrderLineItemStatus = PurchaseOrderLineItemStatus.Open,
                             PurchaseOrderId = purchaseOrder.PurchaseOrderId,
                         };
 
-                    if(purchaseOrderLineItem.Quantity != 0 && !string.IsNullOrEmpty(purchaseOrderLineItem.Description) && purchaseOrderLineItem.UnitCost != 0)
+                    if (purchaseOrderLineItem.Quantity != 0 && !string.IsNullOrEmpty(purchaseOrderLineItem.Description) && purchaseOrderLineItem.UnitCost != 0)
+                    {
+                        purchaseOrderLineItem.LineNumber = lineNumber;
+                        lineNumber += 1;
                         _database.Insert(purchaseOrderLineItem);
+                    }
                 }
             }
         }
