@@ -3,7 +3,16 @@
 @model Warranty.Core.Features.Report.Achievement.AchievementReportModel
 
 <div class="container">
-    <h3 class="no-print">WSR Achievement Report</h3>
+    <section class="margin-bottom-10">
+    <h2 class="pull-left no-margin">WSR Achievement Report</h2>
+     @if (Model.AnyResults)
+        {
+            <div class="warranty-header-buttons">
+                    <a href="javascript:window.print()" class="btn btn-default pull-right margin-botom-10 no-print"><span class="glyphicon glyphicon-print"></span> Print</a>
+            </div>
+        }
+    <div class="clearfix"></div>
+        </section>
     <div class="panel panel-default no-print">
         <div class="panel-heading">
             <div id="wsrLoadingReportFilter">

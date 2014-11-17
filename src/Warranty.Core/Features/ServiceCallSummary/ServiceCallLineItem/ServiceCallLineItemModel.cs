@@ -24,6 +24,7 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
         public string LineItemRoot { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool CanReopenLines { get; set; }
+        public bool CanTakeActionOnPayments { get; set; }
         public ServiceCallLineItemStatus ServiceCallLineItemStatus { get; set; }
         public IEnumerable<SelectListItem> ProblemCodes { get; set; }
         public IEnumerable<ServiceCallLineItemNote> ServiceCallLineItemNotes { get; set; }
@@ -56,7 +57,9 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public string VendorNumber { get; set; }
             public decimal Amount { get; set; }
             public PaymentStatus PaymentStatus { get; set; }
+            public BackchargeStatus BackchargeStatus { get; set; }
             public string PaymentStatusDisplayName { get { return PaymentStatus.DisplayName; }}
+            public string BackchargeStatusDisplayName { get { return IsBackcharge ? BackchargeStatus.DisplayName : string.Empty; } }
             public string InvoiceNumber { get; set; }
             public Guid ServiceCallLineItemId { get; set; }
             public DateTime PaymentCreatedDate { get; set; }
@@ -72,6 +75,10 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public string BackchargeVendorName { get; set; }
             public string HoldComments { get; set; }
             public DateTime? HoldDate { get; set; }
+            public string BackchargeHoldComments { get; set; }
+            public DateTime? BackchargeHoldDate { get; set; }            
+            public string BackchargeDenyComments { get; set; }
+            public DateTime? BackchargeDenyDate { get; set; }
             public bool IsBackcharge { get; set; }
         }
 

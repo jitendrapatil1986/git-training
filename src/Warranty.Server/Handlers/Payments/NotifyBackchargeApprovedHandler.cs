@@ -35,7 +35,7 @@
                     BackchargeId = backcharge.BackchargeId.ToString(),
                     ProgramId = WarrantyConstants.ProgramId,
                     DateApproved = DateTime.Today,
-                    ApprovedBy = _userSession.GetCurrentUser().LoginName
+                    ApprovedBy = message.UserName,
                 };
                 _bus.Send(command);
             }
