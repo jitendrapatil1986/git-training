@@ -245,6 +245,7 @@
     <Compile Include="Core\Initialization\Bundling\VirtualPathResolver.cs" />
     <Compile Include="Core\Initialization\IoC.cs" />
     <Compile Include="Core\Initialization\ModelMetadataProvider.cs" />
+    <Compile Include="Core\Initialization\RoleAuthorizeAttribute.cs" />
     <Compile Include="Core\Initialization\StructureMapDependencyResolver.cs" />
     <Compile Include="Core\Initialization\StructureMapDependencyScope.cs" />
     <Compile Include="Core\Initialization\WarrantyWebsiteBootstrapper.cs" />
