@@ -44,7 +44,7 @@
                     JobNumber = job.JobNumber,
                     CommunityNumber = string.IsNullOrEmpty(job.JobNumber) ? "" : job.JobNumber.Substring(0, 4),
                     CostCode = WarrantyCostCode.FromValue(message.SelectedCostCode).CostCode,
-                    ObjectAccount = job.IsOutOfWarranty ? WarrantyConstants.OutOfWarrantyLaborCode : WarrantyConstants.InWarrantyLaborCode,
+                    ObjectAccount = job.IsOutOfWarranty ? WarrantyConstants.OverOneYearLaborCode : WarrantyConstants.UnderOneYearLaborCode,
                 };
 
                 _database.Insert(payment);
@@ -74,10 +74,12 @@
                     };
                     _database.Insert(backcharge);
 
+
                     _bus.Send<NotifyBackchargeRequested>(x =>
                     {
                         x.BackchargeId = backcharge.BackchargeId;
                         x.Username = _userSession.GetCurrentUser().LoginName;
+                        x.EmployeeNumber = _userSession.GetCurrentUser().EmployeeNumber;
                     });
                 }
 

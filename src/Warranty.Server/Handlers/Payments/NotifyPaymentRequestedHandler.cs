@@ -2,7 +2,6 @@
 {
     using Accounting.Commands.Payments;
     using Core.Entities;
-    using Core.Security;
     using InnerMessages;
     using NPoco;
     using NServiceBus;
@@ -11,13 +10,11 @@
     {
         private readonly IDatabase _database;
         private readonly IBus _bus;
-        private readonly IUserSession _userSession;
 
-        public NotifyPaymentRequestedHandler(IDatabase database, IBus bus, IUserSession userSession)
+        public NotifyPaymentRequestedHandler(IDatabase database, IBus bus)
         {
             _database = database;
             _bus = bus;
-            _userSession = userSession;
         }
 
         public void Handle(NotifyPaymentRequested message)
@@ -34,7 +31,7 @@
                         CommunityNumber = payment.JobNumber,  //accounting pulls the substring
                         InvoiceDate = payment.CreatedDate,
                         InvoiceNumber = payment.InvoiceNumber,
-                        Username = _userSession.GetCurrentUser().LoginName,
+                        Username = message.Username,
                         VendorNumber = payment.VendorNumber,
                         CostCode = payment.CostCode,
                         PaymentType = Configuration.WarrantyConstants.PaymentType,

@@ -10,14 +10,12 @@
     public class NotifyBackchargeRequestedHandler : IHandleMessages<NotifyBackchargeRequested>
     {
         private readonly IDatabase _database;
-        private readonly IUserSession _userSession;
         private readonly IBus _bus;
 
-        public NotifyBackchargeRequestedHandler(IBus bus, IDatabase database, IUserSession userSession)
+        public NotifyBackchargeRequestedHandler(IBus bus, IDatabase database)
         {
             _bus = bus;
             _database = database;
-            _userSession = userSession;
         }
 
         public void Handle(NotifyBackchargeRequested message)
@@ -40,12 +38,12 @@
                     PhoneNumber = backcharge.PersonNotifiedPhoneNumber,
                     PaymentAmount = payment.Amount,
                     PaymentInvoiceNumber = payment.InvoiceNumber,
-                    Username = _userSession.GetCurrentUser().LoginName,
+                    Username = message.Username,
                     PaymentVendorNumber = payment.VendorNumber,
                     CostCode = backcharge.CostCode,
                     ProgramId = Configuration.WarrantyConstants.ProgramId,
                     ObjectAccount = payment.ObjectAccount,
-                    BuilderNumber = _userSession.GetCurrentUser().EmployeeNumber,
+                    BuilderNumber = message.EmployeeNumber,
                     BackchargeIdentifier = backcharge.BackchargeId.ToString()
                 };
 
