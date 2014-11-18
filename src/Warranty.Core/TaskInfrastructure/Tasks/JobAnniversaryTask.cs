@@ -6,11 +6,11 @@
     using Interfaces;
     using NPoco;
 
-    public class JobStageUpdatedContactBuilderTask : ITask<Job>
+    public class JobAnniversaryTask : ITask<Job>
     {
         private readonly IDatabase _database;
 
-        public JobStageUpdatedContactBuilderTask(IDatabase database)
+        public JobAnniversaryTask(IDatabase database)
         {
             _database = database;
         }
@@ -34,12 +34,12 @@
                             break;
                     }
                     var task = new Task
-                    {
-                        EmployeeId = employeeId,
-                        Description = description,
-                        ReferenceId = entity.JobId,
-                        TaskType = TaskType.JobStageChanged
-                    };
+                        {
+                            EmployeeId = employeeId,
+                            Description = description,
+                            ReferenceId = entity.JobId,
+                            TaskType = TaskType.JobStageChanged
+                        };
 
                     _database.Insert(task);
                 }
