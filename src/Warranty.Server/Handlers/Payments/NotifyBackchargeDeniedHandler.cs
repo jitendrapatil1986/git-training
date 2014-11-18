@@ -3,7 +3,6 @@
     using System;
     using Configuration;
     using Core.Entities;
-    using Core.Security;
     using InnerMessages;
     using NPoco;
     using NServiceBus;
@@ -12,13 +11,11 @@
     {
         private readonly IBus _bus;
         private readonly IDatabase _database;
-        private readonly IUserSession _userSession;
 
-        public NotifyBackchargeDeniedHandler(IBus bus, IDatabase database, IUserSession userSession)
+        public NotifyBackchargeDeniedHandler(IBus bus, IDatabase database)
         {
             _bus = bus;
             _database = database;
-            _userSession = userSession;
         }
 
         public void Handle(NotifyBackchargeDeny message)
