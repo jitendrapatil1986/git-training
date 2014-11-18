@@ -39,9 +39,7 @@ namespace Warranty.UI.Mailers
             ViewBag.Url = model.Url;
 
             if (!ConfigurationManager.AppSettings["sendEmailsForTest"].IsNullOrEmpty())
-            {
                 model.Emails = new[] {ConfigurationManager.AppSettings["sendEmailsForTest"]};
-            }
 
             return Populate(x =>
             {
