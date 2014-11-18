@@ -39,6 +39,13 @@
                                                                     UserRoles.WarrantyServiceCoordinator,
                                                                 });
 
+        public static readonly ToDoType JobAnniversaryTask = new ToDoType(5, "Job Anniversary",
+                                                    new List<string>
+                                                                {
+                                                                    UserRoles.WarrantyServiceManager,
+                                                                    UserRoles.WarrantyServiceCoordinator,
+                                                                });
+
         private ToDoType(int value, string displayName, IEnumerable<string> userRolesWithAccess)
             : base(value, displayName)
         {
