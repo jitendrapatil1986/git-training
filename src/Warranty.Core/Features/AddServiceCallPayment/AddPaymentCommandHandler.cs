@@ -33,6 +33,16 @@
                                                             INNER JOIN Jobs j
                                                                 ON J.JobId = sc.JobId
                                                             WHERE scli.ServiceCallLineItemId = @0", message.ServiceCallLineItemId);
+
+                var serviceCall = _database.Single<ServiceCall>(@"SELECT sc.* 
+                                                                    FROM ServiceCallLineItems scli
+                                                            INNER JOIN ServiceCalls sc
+                                                                ON sc.ServiceCallId = scli.ServiceCallId
+                                                            WHERE scli.ServiceCallLineItemId = @0", message.ServiceCallLineItemId);
+
+                var isUnderOneYear = job.CloseDate.GetValueOrDefault().AddYears(1) <=
+                                     serviceCall.CreatedDate.GetValueOrDefault();
+
                 var payment = new Payment
                 {
                     Amount = message.Amount,
@@ -44,7 +54,7 @@
                     JobNumber = job.JobNumber,
                     CommunityNumber = string.IsNullOrEmpty(job.JobNumber) ? "" : job.JobNumber.Substring(0, 4),
                     CostCode = WarrantyCostCode.FromValue(message.SelectedCostCode).CostCode,
-                    ObjectAccount = job.IsOutOfWarranty ? WarrantyConstants.OverOneYearLaborCode : WarrantyConstants.UnderOneYearLaborCode,
+                    ObjectAccount = isUnderOneYear ? WarrantyConstants.UnderOneYearLaborCode : WarrantyConstants.OverOneYearLaborCode,
                 };
 
                 _database.Insert(payment);
