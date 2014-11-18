@@ -518,6 +518,7 @@
     <Compile Include="Security\WarrantyUser.cs" />
     <Compile Include="StructureMapValidatorFactory.cs" />
     <Compile Include="SystemTime.cs" />
+    <Compile Include="TaskInfrastructure\Tasks\JobAnniversaryTask.cs" />
     <Compile Include="TaskInfrastructure\Tasks\JobClosedContactHomeownerTask.cs" />
     <Compile Include="TaskInfrastructure\Interfaces\ITask.cs" />
     <Compile Include="TaskInfrastructure\Tasks\JobStageUpdatedContactBuilderTask.cs" />

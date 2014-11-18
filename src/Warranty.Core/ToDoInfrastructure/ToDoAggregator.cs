@@ -109,21 +109,9 @@ namespace Warranty.Core.ToDoInfrastructure
 
         private static IEnumerable<IToDo> GetJobChangedTaskToDos(IUser user, IDatabase database, TaskType taskType)
         {
-            const string query = @"SELECT t.CreatedDate [Date], Description, TaskId,  j.JobId, j.JobNumber
-                                    FROM 
-                                        [Tasks] t
-                                    INNER join Employees e
-                                        ON e.EmployeeId = t.EmployeeId
-                                    INNER JOIN Jobs j
-                                        ON t.ReferenceId = j.JobId
-                                    where 
-                                        e.EmployeeNumber = @0 and t.TaskType=@1 and t.IsComplete = 0";
-
-            var toDos = database.Fetch<ToDoJobStageChangedTask, ToDoJobChangedTaskModel>(query, user.EmployeeNumber, taskType.Value);
-
-            return toDos;
+            return GetToDoTasks<ToDoJobStageChangedTask, ToDoJobChangedTaskModel>(user, database, taskType);
         }
-        
+
         private static IEnumerable<IToDo> GetJobAnniversaryTaskToDos(IUser user, IDatabase database, TaskType taskType, int months)
         {
             var employeeId = database.ExecuteScalar<Guid>("SELECT EmployeeId FROM Employees where employeeNumber = @0", user.EmployeeNumber);
@@ -151,6 +139,18 @@ namespace Warranty.Core.ToDoInfrastructure
                     database.Insert(x);
                 });
 
+            var toDos = GetToDoTasks<ToDoJobAnniversaryTask, ToDoJobAnniversaryTaskModel>(user, database, taskType);
+
+            toDos.ForEach(x =>
+                {
+                    x.Model.NumberOfMonths = months;
+                });
+
+            return toDos;
+        }
+
+        private static IEnumerable<TTask> GetToDoTasks<TTask, TModel>(IUser user, IDatabase database, TaskType taskType) where TTask : IToDo where TModel : class
+        {
             const string query = @"SELECT t.CreatedDate [Date], Description, TaskId,  j.JobId, j.JobNumber
                                     FROM 
                                         [Tasks] t
@@ -161,12 +161,7 @@ namespace Warranty.Core.ToDoInfrastructure
                                     where 
                                         e.EmployeeNumber = @0 and t.TaskType=@1 and t.IsComplete = 0";
 
-            var toDos = database.Fetch<ToDoJobAnniversaryTask, ToDoJobAnniversaryTaskModel>(query, user.EmployeeNumber, taskType.Value);
-
-            toDos.ForEach(x =>
-                {
-                    x.Model.NumberOfMonths = months;
-                });
+            var toDos = database.Fetch<TTask, TModel>(query, user.EmployeeNumber, taskType.Value);
 
             return toDos;
         }
