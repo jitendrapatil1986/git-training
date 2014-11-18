@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NPoco;
 using Warranty.Core.Entities;
 
@@ -13,9 +14,11 @@ namespace Warranty.Server.IntegrationTests.SetUp
 
         public override Community GetSaved(Action<Community> action)
         {
+            var comNum = Guid.NewGuid().ToString("n").Substring(1,4);
+
             var entity = new Community
             {
-                CommunityNumber = Guid.NewGuid().ToString().Substring(1,4),
+                CommunityNumber = comNum,
                 CreatedBy = "test",
                 CreatedDate = DateTime.UtcNow,
             };

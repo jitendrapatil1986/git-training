@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NPoco;
 using Warranty.Core.Entities;
 
@@ -14,10 +15,12 @@ namespace Warranty.Server.IntegrationTests.SetUp
         public override Job GetSaved(Action<Job> action)
         {
             var community = GetSaved<Community>();
+            var r = new Random();
+            var jobNum = r.Next(12345678, 88889999).ToString(CultureInfo.InvariantCulture);
 
             var entity = new Job{
-                JdeIdentifier = "12345678",
-                JobNumber = Guid.NewGuid().ToString().Substring(1,8),
+                JdeIdentifier = jobNum,
+                JobNumber = jobNum,
                 CreatedBy = "test",
                 CreatedDate = DateTime.UtcNow,
                 CommunityId = community.CommunityId,

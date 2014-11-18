@@ -16,7 +16,7 @@ namespace Warranty.Server.IntegrationTests.SetUp
             var id = Guid.NewGuid();
 
             var entity = new Payment{
-                JdeIdentifier = id.ToString(),
+                JdeIdentifier = id.ToString("n"),
                 PaymentId = id,
                 Amount = 1,
                 CreatedBy = "test",
