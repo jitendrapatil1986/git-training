@@ -22,27 +22,28 @@
         {
             var model = new WSRLoadingReportModel
                 {
-                    LoadingSummaries = GetWSRLoadingSummary(query),
                     EmployeeTiedToRepresentatives = GetEmployeesTiedToRepresentatives(),
                 };
 
+            if (model.EmployeeTiedToRepresentatives.Count() == 1)
+            {
+                model.SelectedEmployeeNumber = model.EmployeeTiedToRepresentatives.First().EmployeeNumber;
+                model.LoadingSummaries = GetWSRLoadingSummary(model.EmployeeTiedToRepresentatives.First().EmployeeNumber).ToList();
+            }
+            else
+            {
+                model.LoadingSummaries = GetWSRLoadingSummary(query.queryModel != null ? query.queryModel.SelectedEmployeeNumber : "").ToList();
+            }
+            
             model.TotalNumberOfWarrantableHomes = model.LoadingSummaries.Sum(lines => lines.NumberOfWarrantableHomes);
             model.AnyResults = model.LoadingSummaries.Any();
 
             return model;
         }
 
-        private IEnumerable<WSRLoadingReportModel.LoadingSummary> GetWSRLoadingSummary(WSRLoadingReportQuery query)
+        private IEnumerable<WSRLoadingReportModel.LoadingSummary> GetWSRLoadingSummary(string employeeNumber)
         {
             var user = _userSession.GetCurrentUser();
-
-            var employeeNumber = "";
-
-            if (query.queryModel != null)
-            {
-                employeeNumber = query.queryModel.SelectedEmployeeNumber;
-            }
-
             using (_database)
             {
                 const string sql = @"SELECT e.EmployeeName, e.EmployeeNumber, c.CommunityName, a.*
