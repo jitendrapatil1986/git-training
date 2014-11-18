@@ -1,4 +1,6 @@
-﻿namespace Warranty.UI.Mailers
+﻿using System.Configuration;
+
+namespace Warranty.UI.Mailers
 {
     using Mvc.Mailer;
     using Warranty.Core.Extensions;
@@ -20,6 +22,9 @@
             ViewBag.AddressLine = model.AddressLine;
             ViewBag.Comments = model.Comments;
 
+            if (!ConfigurationManager.AppSettings["sendEmailsForTest"].IsNullOrEmpty())
+                model.WarrantyRepresentativeEmployeeEmail = ConfigurationManager.AppSettings["sendEmailsForTest"];
+
             return Populate(x =>
             {
                 x.Subject = string.Format("Warranty Call # {0}", model.ServiceCallNumber);
@@ -32,6 +37,12 @@
         {
             ViewBag.CallNumber = model.CallNumber;
             ViewBag.Url = model.Url;
+
+            if (!ConfigurationManager.AppSettings["sendEmailsForTest"].IsNullOrEmpty())
+            {
+                model.Emails = new[] {ConfigurationManager.AppSettings["sendEmailsForTest"]};
+            }
+
             return Populate(x =>
             {
                 x.Subject = string.Format("Warranty Call # {0} has been escalated.", model.CallNumber);
