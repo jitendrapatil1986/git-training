@@ -19,7 +19,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 
             Send(x =>
             {
-                x.JDEId = _job.JobNumber;
+                x.JDEId = _job.JdeIdentifier;
                 x.PrimaryBuilderName = _originalBuilder.Name;
                 x.PrimaryBuilderNumber = _originalBuilder.JdeIdentifier;
             });
@@ -28,7 +28,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         [Test]
         public void Job_PrimaryBuilder_Should_Be_Updated()
         {
-            var job = Get<Job>(_job.JobId);
+            var job = Get<Job>(Event.JDEId);
             job.BuilderEmployeeId.ShouldEqual(_originalBuilder.EmployeeId);
         }
     }
