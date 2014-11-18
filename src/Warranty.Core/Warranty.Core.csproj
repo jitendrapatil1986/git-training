@@ -522,6 +522,7 @@
     <Compile Include="TaskInfrastructure\Tasks\JobClosedContactHomeownerTask.cs" />
     <Compile Include="TaskInfrastructure\Interfaces\ITask.cs" />
     <Compile Include="TaskInfrastructure\Tasks\JobStageUpdatedContactBuilderTask.cs" />
+    <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoJobAnniversaryTask.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoJobChangedTask.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoCommunityEmployeeAssignment.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoPaymentRequestApproval.cs" />
@@ -529,6 +530,7 @@
     <Compile Include="ToDoInfrastructure\Interfaces\IToDo.cs" />
     <Compile Include="ToDoInfrastructure\IToDoAggregator.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoCommunityEmployeeAssignmentModel.cs" />
+    <Compile Include="ToDoInfrastructure\Models\ToDoJobAnniversaryTaskModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoPaymentRequestApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoServiceCallApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoJobChangedTaskModel.cs" />

@@ -11,6 +11,7 @@ using Warranty.Core.ToDoInfrastructure.Models;
 
 namespace Warranty.Core.ToDoInfrastructure
 {
+    using System;
     using Common.Security.Entities;
     using Entities;
 
@@ -56,6 +57,14 @@ namespace Warranty.Core.ToDoInfrastructure
                     var paymentRequestApprovalToDos = GetPaymentRequestApprovalToDos(user, _database);
                     toDos.AddRange(paymentRequestApprovalToDos);
                 }
+                
+                if (ToDoType.JobAnniversaryTask.HasAccess(user.Roles))
+                {
+                    
+                    toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job3MonthAnniversary, 3));
+                    toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job5MonthAnniversary, 5));
+                    toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job9MonthAnniversary, 9));
+                }
 
                 return toDos.OrderBy(x=>x.Priority).ThenBy(x => x.Date).ToList();
             }
@@ -100,6 +109,48 @@ namespace Warranty.Core.ToDoInfrastructure
 
         private static IEnumerable<IToDo> GetJobChangedTaskToDos(IUser user, IDatabase database, TaskType taskType)
         {
+            return GetToDoTasks<ToDoJobStageChangedTask, ToDoJobChangedTaskModel>(user, database, taskType);
+        }
+
+        private static IEnumerable<IToDo> GetJobAnniversaryTaskToDos(IUser user, IDatabase database, TaskType taskType, int months)
+        {
+            var employeeId = database.ExecuteScalar<Guid>("SELECT EmployeeId FROM Employees where employeeNumber = @0", user.EmployeeNumber);
+            
+            const string sqlAnniversaries = @"SELECT j.JobId as ReferenceId, j.JobNumber
+                                                FROM Jobs j                                    
+                                                    INNER JOIN Communities cm
+                                                        ON j.CommunityId = cm.CommunityId
+                                                    INNER JOIN Cities ci
+                                                        ON cm.CityId = ci.CityId
+                                                    LEFT JOIN Tasks t
+                                                        ON j.JobId = t.ReferenceId
+                                                    AND t.TaskType = @0
+                                                    WHERE CityCode IN ({0}) 
+                                                        AND (MONTH(CloseDate) = MONTH( DATEADD(MM,@1, getdate() )) AND YEAR(CloseDate) = YEAR( DATEADD(MM, @1, getdate())))
+                                                        AND t.TaskId IS NULL";
+            
+            var sqlNewTasks = string.Format(sqlAnniversaries, user.Markets.CommaSeparateWrapWithSingleQuote());
+            var newTasks = database.Fetch<Task>(sqlNewTasks, taskType.Value, -months);
+            newTasks.ForEach(x =>
+                {
+                    x.EmployeeId = employeeId;
+                    x.Description = taskType.DisplayName;
+                    x.TaskType = taskType;
+                    database.Insert(x);
+                });
+
+            var toDos = GetToDoTasks<ToDoJobAnniversaryTask, ToDoJobAnniversaryTaskModel>(user, database, taskType);
+
+            toDos.ForEach(x =>
+                {
+                    x.Model.NumberOfMonths = months;
+                });
+
+            return toDos;
+        }
+
+        private static IEnumerable<TTask> GetToDoTasks<TTask, TModel>(IUser user, IDatabase database, TaskType taskType) where TTask : IToDo where TModel : class
+        {
             const string query = @"SELECT t.CreatedDate [Date], Description, TaskId,  j.JobId, j.JobNumber
                                     FROM 
                                         [Tasks] t
@@ -110,7 +161,7 @@ namespace Warranty.Core.ToDoInfrastructure
                                     where 
                                         e.EmployeeNumber = @0 and t.TaskType=@1 and t.IsComplete = 0";
 
-            var toDos = database.Fetch<ToDoJobStageChangedTask, ToDoJobChangedTaskModel>(query, user.EmployeeNumber, taskType.Value);
+            var toDos = database.Fetch<TTask, TModel>(query, user.EmployeeNumber, taskType.Value);
 
             return toDos;
         }
