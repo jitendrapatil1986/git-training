@@ -17,7 +17,7 @@ namespace Warranty.Server.IntegrationTests.SetUp
 
             var entity = new Job{
                 JdeIdentifier = "12345678",
-                JobNumber = "12345678",
+                JobNumber = Guid.NewGuid().ToString().Substring(1,8),
                 CreatedBy = "test",
                 CreatedDate = DateTime.UtcNow,
                 CommunityId = community.CommunityId,

@@ -52,6 +52,14 @@
                     cmd.CommandTimeout = 6000;
                     cmd.ExecuteNonQuery();
                 }
+
+                using (var cmd = new SqlCommand("imports.ImportHomeownerFromCall", sc))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("@CityCodeList", markets));
+                    cmd.CommandTimeout = 6000;
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
     }

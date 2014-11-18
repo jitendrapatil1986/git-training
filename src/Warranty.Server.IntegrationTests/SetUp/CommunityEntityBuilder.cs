@@ -15,7 +15,7 @@ namespace Warranty.Server.IntegrationTests.SetUp
         {
             var entity = new Community
             {
-                CommunityNumber = "1234",
+                CommunityNumber = Guid.NewGuid().ToString().Substring(1,4),
                 CreatedBy = "test",
                 CreatedDate = DateTime.UtcNow,
             };

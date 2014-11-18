@@ -12,6 +12,7 @@ namespace Warranty.Core.DataAccess
         public SqlServerDatabase(string connectionString, DatabaseType databaseType, IUserSession userSession)
             : base(connectionString, databaseType)
         {
+            KeepConnectionAlive = false;
             _userSession = userSession;
         }
 

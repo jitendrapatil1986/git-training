@@ -85,6 +85,14 @@ namespace Warranty.JdeImport.Importers
                                                 INSERT (JobId, Stage, CompletionDate, JdeIdentifier, CreatedDate, CreatedBy)
                                                 VALUES (JobId, JobStage, CompletionDate, JdeIdentifier, SYSDATETIME(), 'Warranty Jde Import');";
 
+            using (var sc = new SqlConnection(connectionString))
+            {
+                sc.Open();
+
+                using (var cmd = new SqlCommand("TRUNCATE TABLE imports.JobStageImports", sc))
+                    cmd.ExecuteNonQuery();
+            }
+
             Import();
 
             using (var sc = new SqlConnection(connectionString))
@@ -96,9 +104,6 @@ namespace Warranty.JdeImport.Importers
                     cmd.CommandTimeout = 6000;
                     cmd.ExecuteNonQuery();
                 }
-
-                using (var cmd = new SqlCommand("TRUNCATE TABLE imports.JobStageImports", sc))
-                    cmd.ExecuteNonQuery();
             }
         }
     }

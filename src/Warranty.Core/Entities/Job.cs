@@ -1,7 +1,6 @@
 namespace Warranty.Core.Entities
 {
     using System;
-    using NPoco;
 
     public class Job : IAuditableEntity, IJdeEntity
     {
@@ -32,7 +31,6 @@ namespace Warranty.Core.Entities
         public virtual string UpdatedBy { get; set; }
         public string JdeIdentifier { get; set; }
 
-        [Ignore]
         public bool IsOutOfWarranty
         {
             get

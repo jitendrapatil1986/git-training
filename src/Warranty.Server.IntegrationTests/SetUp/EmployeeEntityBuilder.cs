@@ -16,7 +16,7 @@ namespace Warranty.Server.IntegrationTests.SetUp
             var entity = new Employee
                              {
                                  Name = "Test Employee",
-                                 Number = "123456",
+                                 Number = Guid.NewGuid().ToString().Substring(1,6),
                                  JdeIdentifier = "99123456",
                              };
 

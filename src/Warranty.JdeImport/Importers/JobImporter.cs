@@ -85,7 +85,7 @@ namespace Warranty.JdeImport.Importers
                                   ON $H$DS1 = designer.aban8
                             LEFT OUTER JOIN f0101 sales
                                   ON $H$ASC = sales.aban8
-                            WHERE f2.mcstyl='JB' 
+                            WHERE f2.mcstyl IN ('JB', 'BD')
                             GROUP BY $hmcu";
             }
         }
@@ -235,6 +235,15 @@ namespace Warranty.JdeImport.Importers
                                             WHERE Jobs.JobId = HomeOwners.JobId
                                             AND Jobs.CurrentHomeOwnerId IS NULL;";
 
+
+            using (var sc = new SqlConnection(connectionString))
+            {
+                sc.Open();
+
+                using (var cmd = new SqlCommand("TRUNCATE TABLE imports.JobStage", sc))
+                    cmd.ExecuteNonQuery();
+            }
+
             Import();
 
             using (var sc = new SqlConnection(connectionString))
@@ -251,9 +260,6 @@ namespace Warranty.JdeImport.Importers
                     cmd.CommandTimeout = 6000;
                     cmd.ExecuteNonQuery();
                 }
-
-                using (var cmd = new SqlCommand("TRUNCATE TABLE imports.JobStage", sc))
-                   cmd.ExecuteNonQuery();
 
                 using (var cmd = new SqlCommand(dropIndex, sc))
                     cmd.ExecuteNonQuery();
