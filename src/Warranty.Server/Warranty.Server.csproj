@@ -35,13 +35,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Commands, Version=1.1.858.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Accounting.Commands, Version=1.1.871.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Accounting.Commands.1.1.858.0\lib\net45\Accounting.Commands.dll</HintPath>
+      <HintPath>..\packages\Accounting.Commands.1.1.871.0\lib\net45\Accounting.Commands.dll</HintPath>
     </Reference>
-    <Reference Include="Accounting.Events, Version=1.1.858.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Accounting.Events, Version=1.1.871.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Accounting.Events.1.1.858.0\lib\net45\Accounting.Events.dll</HintPath>
+      <HintPath>..\packages\Accounting.Events.1.1.871.0\lib\net45\Accounting.Events.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
@@ -51,7 +51,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>

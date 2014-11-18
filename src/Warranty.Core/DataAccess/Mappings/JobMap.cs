@@ -31,6 +31,7 @@ namespace Warranty.Core.DataAccess.Mappings
                     x.Column(y => y.WarrantyExpirationDate);
                     x.Column(y => y.DoNotContact);
                     x.Column(y => y.JdeIdentifier);
+                    x.Column(y => y.IsOutOfWarranty).Ignore();
                 });
         }
     }

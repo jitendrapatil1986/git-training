@@ -19,7 +19,7 @@
 
             Send(x =>
                      {
-                         x.JDEId = _job.JobNumber;
+                         x.JDEId = _job.JdeIdentifier;
                          x.PrimaryBuilderName = "New Builder";
                          x.PrimaryBuilderNumber = "9912345";
                      });

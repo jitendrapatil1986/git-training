@@ -20,6 +20,7 @@ namespace Warranty.Server
                 scanner.TheCallingAssembly();
                 scanner.AssemblyContainingType<IAuditableEntity>();
                 scanner.AddAllTypesOf<IMap>();
+
                 For<IDatabase>().Use(() => DbFactory.DatabaseFactory.GetDatabase());
                 For<IUserSession>().Use<WarrantyServerUserSession>();
             });
