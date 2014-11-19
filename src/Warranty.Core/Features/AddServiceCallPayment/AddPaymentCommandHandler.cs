@@ -8,18 +8,21 @@
     using NPoco;
     using NServiceBus;
     using Security;
+    using Services;
 
     public class AddPaymentCommandHandler : ICommandHandler<AddPaymentCommand, Guid>
     {
         private readonly IDatabase _database;
         private readonly IBus _bus;
         private readonly IUserSession _userSession;
+        private readonly IResolveObjectAccount _resolveObjectAccount;
 
-        public AddPaymentCommandHandler(IDatabase database, IBus bus, IUserSession userSession)
+        public AddPaymentCommandHandler(IDatabase database, IBus bus, IUserSession userSession, IResolveObjectAccount resolveObjectAccount)
         {
             _database = database;
             _bus = bus;
             _userSession = userSession;
+            _resolveObjectAccount = resolveObjectAccount;
         }
 
         public Guid Handle(AddPaymentCommand message)
@@ -33,6 +36,14 @@
                                                             INNER JOIN Jobs j
                                                                 ON J.JobId = sc.JobId
                                                             WHERE scli.ServiceCallLineItemId = @0", message.ServiceCallLineItemId);
+
+                var serviceCall = _database.Single<ServiceCall>(@"SELECT sc.* 
+                                                                    FROM ServiceCallLineItems scli
+                                                            INNER JOIN ServiceCalls sc
+                                                                ON sc.ServiceCallId = scli.ServiceCallId
+                                                            WHERE scli.ServiceCallLineItemId = @0", message.ServiceCallLineItemId);
+
+                
                 var payment = new Payment
                 {
                     Amount = message.Amount,
@@ -44,7 +55,7 @@
                     JobNumber = job.JobNumber,
                     CommunityNumber = string.IsNullOrEmpty(job.JobNumber) ? "" : job.JobNumber.Substring(0, 4),
                     CostCode = WarrantyCostCode.FromValue(message.SelectedCostCode).CostCode,
-                    ObjectAccount = job.IsOutOfWarranty ? WarrantyConstants.OutOfWarrantyLaborCode : WarrantyConstants.InWarrantyLaborCode,
+                    ObjectAccount = _resolveObjectAccount.ResolveLaborObjectAccount(job, serviceCall),
                 };
 
                 _database.Insert(payment);
@@ -74,10 +85,12 @@
                     };
                     _database.Insert(backcharge);
 
+
                     _bus.Send<NotifyBackchargeRequested>(x =>
                     {
                         x.BackchargeId = backcharge.BackchargeId;
                         x.Username = _userSession.GetCurrentUser().LoginName;
+                        x.EmployeeNumber = _userSession.GetCurrentUser().EmployeeNumber;
                     });
                 }
 
