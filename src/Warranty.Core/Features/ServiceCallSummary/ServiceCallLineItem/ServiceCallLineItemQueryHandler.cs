@@ -143,6 +143,7 @@
         private IEnumerable<ServiceCallLineItemModel.ServiceCallLineItemPurchaseOrder> GetServiceCallLinePurchaseOrders(Guid serviceCallLineItemId)
         {
             const string sql = @"SELECT p.[PurchaseOrderId]
+                                    ,[PurchaseOrderNumber]
                                     ,[VendorNumber]
                                     ,[VendorName]
                                     ,p.[CreatedDate]

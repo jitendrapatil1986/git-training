@@ -35,13 +35,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Commands, Version=1.1.871.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Accounting.Commands, Version=1.1.875.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Accounting.Commands.1.1.871.0\lib\net45\Accounting.Commands.dll</HintPath>
+      <HintPath>..\packages\Accounting.Commands.1.1.875.0\lib\net45\Accounting.Commands.dll</HintPath>
     </Reference>
-    <Reference Include="Accounting.Events, Version=1.1.871.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Accounting.Events, Version=1.1.875.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Accounting.Events.1.1.871.0\lib\net45\Accounting.Events.dll</HintPath>
+      <HintPath>..\packages\Accounting.Events.1.1.875.0\lib\net45\Accounting.Events.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
@@ -135,6 +135,7 @@
     <Compile Include="Handlers\PurchaseOrders\CityPurchaseOrderMaxAddedHandler .cs" />
     <Compile Include="Handlers\PurchaseOrders\CityPurchaseOrderMaxDeletedHandler.cs" />
     <Compile Include="Handlers\PurchaseOrders\CityPurchaseOrderMaxUpdatedHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\NotifyPurchaseOrderRequestedHandler.cs" />
     <Compile Include="Handlers\PurchaseOrders\PurchaseOrderDeletedHandler.cs" />
     <Compile Include="Handlers\PurchaseOrders\PurchaseOrderDeliveryDateUpdatedHandler.cs" />
     <Compile Include="Handlers\PurchaseOrders\PurchaseOrderDeliveryInstructionsUpdatedHandler.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Handlers\PurchaseOrders\PurchaseOrderLineItemOpenStatusUpdatedHandler.cs" />
     <Compile Include="Handlers\PurchaseOrders\PurchaseOrderLineItemQuantityUpdatedHandler.cs" />
     <Compile Include="Handlers\PurchaseOrders\PurchaseOrderLineItemUnitCostUpdatedHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\RequestPurchaseOrderResponseHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallCompletedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallCreatedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallEmployeeReassignedHandler.cs" />
