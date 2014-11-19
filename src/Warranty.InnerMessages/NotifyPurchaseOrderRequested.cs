@@ -7,6 +7,5 @@
     {
         public Guid PurchaseOrderId { get; set; }
         public string LoginName { get; set; }
-        public string JobNumber { get; set; }
     }
 }

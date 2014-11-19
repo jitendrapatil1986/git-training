@@ -1,9 +1,10 @@
 ﻿namespace Warranty.Server.Handlers.PurchaseOrders
 {
-    using System.Collections.Generic;
+    using System;
     using Accounting.Commands.PurchaseOrders;
     using Core;
     using Core.Entities;
+    using Core.Enumerations;
     using InnerMessages;
     using NPoco;
     using NServiceBus;
@@ -24,39 +25,36 @@
         {
             using (_database)
             {
-                const string sql = @"SELECT c.CityCode, cm.CommunityNumber
-                                     FROM Jobs j
-                                     INNER JOIN Communities cm
-                                     ON j.CommunityId = cm.CommunityId
-                                     INNER JOIN Cities c
-                                     ON c.CityId = cm.CityId
-                                     WHERE j.JobNumber = @0";
+                const string sql = @"SELECT p.*, j.JobNumber, c.CityCode, cm.CommunityNumber
+                                    FROM PurchaseOrders p
+                                    INNER JOIN Jobs j
+                                    ON p.JobNumber = j.JobNumber
+                                    INNER JOIN Communities cm
+                                    ON j.CommunityId = cm.CommunityId
+                                    INNER JOIN Cities c
+                                    ON c.CityId = cm.CityId
+                                    WHERE p.PurchaseOrderId = @0";
 
-                var model = _database.Single<PurchaseOrderRequestedModel>(sql, message.JobNumber);
+                var model = _database.Single<PurchaseOrderRequestedModel>(sql, message.PurchaseOrderId);
 
-                model.PurchaseOrder = _database.SingleById<PurchaseOrder>(message.PurchaseOrderId);
-
-                if (model.PurchaseOrder == null)
-                    return;
-
-                model.PurchaseOrderLineItems = _database.Fetch<PurchaseOrderLineItem>().Where(x => x.PurchaseOrderId == model.PurchaseOrder.PurchaseOrderId);
+                var purchaseOrderLineItems = _database.Fetch<PurchaseOrderLineItem>().Where(x => x.PurchaseOrderId == model.PurchaseOrderId);
 
                 var purchaseOrderRequest = new RequestPurchaseOrder
                     {
-                        PurchaseOrderIdentifier = model.PurchaseOrder.PurchaseOrderId.ToString(),
-                        CostCode = model.PurchaseOrder.CostCode,
-                        VendorNumber = model.PurchaseOrder.VendorNumber,
-                        DeliveryInstructions = model.PurchaseOrder.DeliveryInstructions.JdeCode,
-                        VendorNotes = model.PurchaseOrder.PurchaseOrderNote,
-                        CostCenter = model.PurchaseOrder.JobNumber,
+                        PurchaseOrderIdentifier = model.PurchaseOrderId.ToString(),
+                        CostCode = model.CostCode,
+                        VendorNumber = model.VendorNumber,
+                        DeliveryInstructions = model.DeliveryInstructions.JdeCode,
+                        VendorNotes = model.PurchaseOrderNote,
+                        CostCenter = model.JobNumber,
                         Market = model.CityCode,
                         CommunityNumber = model.CommunityNumber,
-                        ObjectAccount = model.PurchaseOrder.ObjectAccount,
+                        ObjectAccount = model.ObjectAccount,
                         IsCommunityLevel = false,
                         CopyToBuilder = false,
-                        RequestedDate = model.PurchaseOrder.DeliveryDate ?? SystemTime.Now.Date,
+                        RequestedDate = model.DeliveryDate ?? SystemTime.Now.Date,
                         UserId = message.LoginName,
-                        LineItems = model.PurchaseOrderLineItems.Select(y => new RequestPurchaseOrder.LineItem
+                        LineItems = purchaseOrderLineItems.Select(y => new RequestPurchaseOrder.LineItem
                             {
                                 Quantity = y.Quantity,
                                 UnitPrice = y.UnitCost,
@@ -70,10 +68,16 @@
 
         public class PurchaseOrderRequestedModel
         {
+            public Guid PurchaseOrderId { get; set; }
+            public string CostCode { get; set; }
+            public string VendorNumber { get; set; }
+            public DeliveryInstruction DeliveryInstructions { get; set; }
+            public string PurchaseOrderNote { get; set; }
+            public string JobNumber { get; set; }
+            public string ObjectAccount { get; set; }
+            public DateTime? DeliveryDate { get; set; }
             public string CommunityNumber { get; set; }
             public string CityCode { get; set; }
-            public PurchaseOrder PurchaseOrder { get; set; }
-            public IEnumerable<PurchaseOrderLineItem> PurchaseOrderLineItems { get; set; }
         }
     }
 }

@@ -71,7 +71,6 @@
                     {
                         x.PurchaseOrderId = purchaseOrder.PurchaseOrderId;
                         x.LoginName = _userSession.GetCurrentUser().LoginName;
-                        x.JobNumber = purchaseOrder.JobNumber;
                     });
             }
         }
