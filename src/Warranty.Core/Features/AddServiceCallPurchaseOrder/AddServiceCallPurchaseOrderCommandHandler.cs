@@ -1,20 +1,26 @@
 ﻿namespace Warranty.Core.Features.AddServiceCallPurchaseOrder
 {
-    using Configurations;
     using Entities;
     using Enumerations;
+    using InnerMessages;
     using NPoco;
+    using Security;
     using Services;
+    using NServiceBus;
 
     public class AddServiceCallPurchaseOrderCommandHandler : ICommandHandler<AddServiceCallPurchaseOrderCommand>
     {
         private readonly IDatabase _database;
         private readonly IResolveObjectAccount _resolveObjectAccount;
+        private readonly IBus _bus;
+        private readonly IUserSession _userSession;
 
-        public AddServiceCallPurchaseOrderCommandHandler(IDatabase database, IResolveObjectAccount resolveObjectAccount)
+        public AddServiceCallPurchaseOrderCommandHandler(IDatabase database, IUserSession userSession, IResolveObjectAccount resolveObjectAccount, IBus bus)
         {
             _database = database;
+            _userSession = userSession;
             _resolveObjectAccount = resolveObjectAccount;
+            _bus = bus;
         }
 
         public void Handle(AddServiceCallPurchaseOrderCommand message)
@@ -60,6 +66,13 @@
                         _database.Insert(purchaseOrderLineItem);
                     }
                 }
+
+                _bus.Send<NotifyPurchaseOrderRequested>(x =>
+                    {
+                        x.PurchaseOrderId = purchaseOrder.PurchaseOrderId;
+                        x.LoginName = _userSession.GetCurrentUser().LoginName;
+                        x.JobNumber = purchaseOrder.JobNumber;
+                    });
             }
         }
     }

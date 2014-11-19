@@ -87,6 +87,7 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
         public class ServiceCallLineItemPurchaseOrder
         {
             public Guid PurchaseOrderId { get; set; }
+            public string PurchaseOrderNumber { get; set; }
             public string VendorNumber { get; set; }
             public string VendorName { get; set; }
             public DateTime? CreatedDate { get; set; }
