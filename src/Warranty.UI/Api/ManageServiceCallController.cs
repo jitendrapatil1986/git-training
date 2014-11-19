@@ -132,9 +132,9 @@
         }
 
         [HttpPost]
-        public PostResponseModel AddPurchaseOrder(AddServiceCallPurchaseOrderModel model)
+        public PostResponseModel AddPurchaseOrder(AddServiceCallPurchaseOrderCommand model)
         {
-            _mediator.Send(new AddServiceCallPurchaseOrderCommand{ Model = model });
+            _mediator.Send(model);
             return new PostResponseModel {Success = true};
         }
 
