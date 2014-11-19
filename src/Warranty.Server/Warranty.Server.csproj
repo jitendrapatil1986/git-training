@@ -132,6 +132,9 @@
     <Compile Include="Handlers\Payments\NotifyPaymentRequestedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentStatusUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\RequestPaymentResponseHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\CityPurchaseOrderMaxAddedHandler .cs" />
+    <Compile Include="Handlers\PurchaseOrders\CityPurchaseOrderMaxDeletedHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\CityPurchaseOrderMaxUpdatedHandler.cs" />
     <Compile Include="Handlers\PurchaseOrders\PurchaseOrderDeletedHandler.cs" />
     <Compile Include="Handlers\PurchaseOrders\PurchaseOrderDeliveryDateUpdatedHandler.cs" />
     <Compile Include="Handlers\PurchaseOrders\PurchaseOrderDeliveryInstructionsUpdatedHandler.cs" />
