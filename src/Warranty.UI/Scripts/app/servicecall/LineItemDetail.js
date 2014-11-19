@@ -1,5 +1,5 @@
 ﻿require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'moment', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/BackchargeStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchBackchargeVendor', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, moment, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, backchargeStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, bootbox) {
+    require(['jquery', 'ko', 'ko.x-editable', 'moment', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/BackchargeStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'enumeration/PurchaseOrderLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchBackchargeVendor', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, moment, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, backchargeStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, purchaseOrderLineItemStatusEnum, bootbox) {
         window.ko = ko; //manually set the global ko property.
 
         require(['ko.validation'], function () {
@@ -31,6 +31,25 @@
                     self.noteDescriptionToAdd('');
                 }
 
+                function PurchaseOrderViewModel(options) {
+                    var self = this;
+
+                    self.serviceCallLineItemId = options.serviceCallLineItemId;
+                    self.purchaseOrderNumber = options.purchaseOrderNumber;
+                    self.vendorNumber = options.vendorNumber;
+                    self.vendorName = options.vendorName;
+                    self.createdDate = moment(options.createdDate).format("L");
+                    self.totalCost = options.totalCost;
+                    self.purchaseOrderStatusDisplayName = ko.observable(options.purchaseOrderStatusDisplayName);
+
+                    self.purchaseOrderStatusBadgeClassName = ko.computed(function() {
+                        if (self.purchaseOrderStatusDisplayName() == purchaseOrderLineItemStatusEnum.Closed.DisplayName) {
+                            return "success";
+                        }
+                        return "default";
+                    });
+                }
+                
                 function PaymentViewModel(options) {
                     var self = this;
                     self.serviceCallLineItemId = options.serviceCallLineItemId;
@@ -594,6 +613,7 @@
                     self.theLookups = dropdownData.availableLookups; //dropdown list does not need to be observable. Only the actual elements w/i the array do.
                     self.allCallNotes = ko.observableArray([]);
                     self.allAttachments = ko.observableArray([]);
+                    self.allPurchaseOrders = ko.observableArray([]);
                     self.noteDescriptionToAdd = ko.observable('');
                     self.userCanAlwaysReopenCallLines = ko.observable();
 
@@ -686,7 +706,10 @@
                     }).done(function (response) {
                         self.constructionVendors(response);
                     });
-
+                    
+                    self.createPurchaseOrder = function () {
+                        window.location.href = urls.ServiceCall.CreatePurchaseOrder + '/' + self.serviceCallLineItemId;
+                    };
                 }
 
                 ko.validation.init({
@@ -715,6 +738,12 @@
 
                 _(persistedAllPaymentsViewModel).each(function (payment) {
                     viewModel.allPayments.push(new PaymentViewModel(payment));
+                });
+
+                var persistedAllPurchaseOrdersViewModel = modelData.initialServiceCallLinePurchaseOrders;
+
+                _(persistedAllPurchaseOrdersViewModel).each(function(purchaseOrder) {
+                    viewModel.allPurchaseOrders.push(new PurchaseOrderViewModel(purchaseOrder));
                 });
 
             });
