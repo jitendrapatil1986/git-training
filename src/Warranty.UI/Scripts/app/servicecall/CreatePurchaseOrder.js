@@ -9,11 +9,30 @@
                 
                 function PurchaseOrderLineViewModel() {
                     var self = this;
-
+                    
                     self.lineNumber = ko.observable();
                     self.quantity = ko.observable();
                     self.unitCost = ko.observable();
                     self.description = ko.observable();
+
+                    self.quantity.extend({
+                        required: {
+                            onlyIf: function () { return (self.unitCost() || self.description()); }
+                        }
+                    });
+
+                    self.unitCost.extend({
+                        required: {
+                            onlyIf: function() { return (self.quantity() || self.description()); }
+                        }
+                    });
+
+                    self.description.extend({
+                        required: {
+                            onlyIf: function() { return (self.quantity() || self.unitCost()); }
+                        }
+                    });
+                    
                     self.subTotal = ko.computed(function () {
                         if (!self.quantity() || !self.unitCost())
                             return 0;
@@ -66,7 +85,6 @@
                     }, this);
                     
                     self.addPurchaseOrderLine = function () {
-                        debugger;
                         self.allPurchaseOrderLines.push(new PurchaseOrderLineViewModel());
                         $('#quantity_' + self.allPurchaseOrderLines()[self.allPurchaseOrderLines().length - 1].lineNumber()).numeric();
                         $('#unitCost_' + self.allPurchaseOrderLines()[self.allPurchaseOrderLines().length - 1].lineNumber()).numeric();
@@ -134,7 +152,8 @@
                 ko.validation.init({
                     errorElementClass: 'has-error',
                     errorMessageClass: 'help-block',
-                    decorateElement: true
+                    decorateElement: true,
+                    grouping: { deep: true }
                 });
 
                 var viewModel = new purchaseOrderViewModel();
