@@ -9,6 +9,8 @@ namespace Warranty.UI.Controllers
     using Warranty.Core;
     using Warranty.Core.Entities;
     using Warranty.Core.Enumerations;
+    using Warranty.Core.Features.AddServiceCallLineItem;
+    using Warranty.Core.Features.AddServiceCallPurchaseOrder;
     using Warranty.Core.Features.CreateServiceCall;
     using Warranty.Core.Features.CreateServiceCallCustomerSearch;
     using Warranty.Core.Features.CreateServiceCallVerifyCustomer;
@@ -242,6 +244,13 @@ namespace Warranty.UI.Controllers
         {
             var model = _mediator.Request(new ServiceCallDownloadAttachmentQuery { Id = id });
             return File(model.Bytes,model.MimeMapping, model.FileName);
+        }
+
+        public ActionResult CreatePurchaseOrder(Guid id)
+        {
+            var model = _mediator.Request(new AddServiceCallPurchaseOrderQuery { ServiceCallLineItemId = id });
+
+            return View(model);
         }
     }
 }

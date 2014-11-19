@@ -107,8 +107,36 @@
                         <p>
                             <!-- ko foreach: VendorPhoneNumbers -->
                             <span data-bind="text: $data"></span>&nbsp;
-                        <!-- /ko -->
+                            <!-- /ko -->
                         </p>
+                    </div>
+                    <!-- /ko -->
+                    <div class="clearfix"></div>
+                </section>
+                <section class="margin-bottom-15">
+                    <h3 class="col-md-12">POs
+                        <span>
+                            <button type="button" class="btn btn-default pull-right no-print hidden-sm hidden-xs" data-bind="click: createPurchaseOrder">Create PO</button>
+                        </span>
+                    </h3>
+                    <em data-bind="visible: allPurchaseOrders().length < 1" class="padding-left-15 padding-top-7 pull-left">No Purchase Orders Available</em>
+                    <!-- ko foreach: allPurchaseOrders -->
+                    <div class="row service-call-line">
+                        <div class="">
+                            <div class="col-md-4">
+                                <strong><span data-bind="text: vendorName"></span></strong>
+                                <br/>
+                                <span data-bind="text: purchaseOrderStatusDisplayName, css: 'label label-' + purchaseOrderStatusBadgeClassName()"></span>
+                            </div>
+                            <div class="col-md-2">
+                                <span data-bind="text: purchaseOrderNumber ? 'PO #:' + purchaseOrderNumber : 'PO #:'"></span>
+                                <br/>
+                                <span data-bind="text: 'Date:' + createdDate"></span>
+                            </div>
+                            <div class="col-md-2">
+                                <h4 data-bind="currency: totalCost"></h4>
+                            </div>
+                        </div>
                     </div>
                     <!-- /ko -->
                     <div class="clearfix"></div>
@@ -224,7 +252,7 @@
                                                     <span data-bind="text: paymentStatusDisplayName, css: 'label label-' + paymentStatusBadgeClassName()"></span>
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <span data-bind="text: 'Invoice #' + invoiceNumber"></span>
+                                                    <span data-bind="text: 'Invoice #:' + invoiceNumber"></span>
                                                     <br />
                                                     <span data-bind="text: 'Date:' + moment(paymentCreatedDate).format('L')"></span>
                                                 </div>
@@ -436,6 +464,7 @@
                 initialServiceCallLineNotes: @Html.Raw(Model.ServiceCallLineItemNotes.ToJson()),
                 initialServiceCallLineAttachments: @Html.Raw(Model.ServiceCallLineItemAttachments.ToJson()),
                 initialServiceCallLinePayments: @Html.Raw(Model.ServiceCallLineItemPayments.ToJson()),
+                initialServiceCallLinePurchaseOrders: @Html.Raw(Model.ServiceCallLineItemPurchaseOrders.ToJson()),
                 warrantyCostCodes:  @Html.Raw(@WarrantyCostCode.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { DisplayText = x.DisplayName, x.Value }).ToJson()),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
             }
