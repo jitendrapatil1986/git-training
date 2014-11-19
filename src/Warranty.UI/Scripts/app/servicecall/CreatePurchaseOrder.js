@@ -43,7 +43,8 @@
                 
                 function purchaseOrderViewModel() {
                     var self = this;
-                    
+
+                    self.serviceCallId = modelData.initialPurchaseOrder.serviceCallId;
                     self.serviceCallLineItemId = modelData.initialPurchaseOrder.serviceCallLineItemId;
                     self.vendorName = ko.observable().extend({required : true});
                     self.vendorNumber = ko.observable().extend({ required: true });
@@ -52,7 +53,7 @@
                     self.deliveryDate = ko.observable().extend({ required: true });
                     self.warrantyCostCodes = ko.observableArray(modelData.warrantyCostCodes);
                     self.selectedCostCode = ko.observable().extend({required: true});
-                    self.isMaterialObjectAccount = ko.observable().extend({required: true});
+                    self.isMaterialObjectAccount = ko.observable('true').extend({required: true});
                     self.jobNumber = ko.observable(modelData.initialPurchaseOrder.jobNumber);
                     self.address = ko.observable(modelData.initialPurchaseOrder.addressLine);
                     self.city = ko.observable(modelData.initialPurchaseOrder.city);
@@ -105,6 +106,7 @@
                             CostCode: self.selectedCostCode(),
                             IsMaterialObjectAccount: self.isMaterialObjectAccount(),
                             JobNumber: self.jobNumber(),
+                            ServiceCallId: self.serviceCallId,
                             ServiceCallLineItemId: self.serviceCallLineItemId,
                             ServiceCallLineItemPurchaseOrderLines: []
                         };
