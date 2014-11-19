@@ -495,8 +495,10 @@
     <Compile Include="Services\HomeownerAdditionalContactsService.cs" />
     <Compile Include="Services\IAccountingService.cs" />
     <Compile Include="Services\IHomeownerAdditionalContactsService.cs" />
+    <Compile Include="Services\IResolveObjectAccount.cs" />
     <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\ISendSmtpMailMessage.cs" />
+    <Compile Include="Services\ResolveObjectAccount.cs" />
     <Compile Include="Services\SendSmtpMailMessage.cs" />
     <Compile Include="Services\ServiceCallCalculator.cs" />
     <Compile Include="Net4Collection.cs" />

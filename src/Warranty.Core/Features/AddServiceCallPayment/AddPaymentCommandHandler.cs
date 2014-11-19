@@ -8,18 +8,21 @@
     using NPoco;
     using NServiceBus;
     using Security;
+    using Services;
 
     public class AddPaymentCommandHandler : ICommandHandler<AddPaymentCommand, Guid>
     {
         private readonly IDatabase _database;
         private readonly IBus _bus;
         private readonly IUserSession _userSession;
+        private readonly IResolveObjectAccount _resolveObjectAccount;
 
-        public AddPaymentCommandHandler(IDatabase database, IBus bus, IUserSession userSession)
+        public AddPaymentCommandHandler(IDatabase database, IBus bus, IUserSession userSession, IResolveObjectAccount resolveObjectAccount)
         {
             _database = database;
             _bus = bus;
             _userSession = userSession;
+            _resolveObjectAccount = resolveObjectAccount;
         }
 
         public Guid Handle(AddPaymentCommand message)
@@ -40,9 +43,7 @@
                                                                 ON sc.ServiceCallId = scli.ServiceCallId
                                                             WHERE scli.ServiceCallLineItemId = @0", message.ServiceCallLineItemId);
 
-                var isUnderOneYear = job.CloseDate.GetValueOrDefault().AddYears(1) <=
-                                     serviceCall.CreatedDate.GetValueOrDefault();
-
+                
                 var payment = new Payment
                 {
                     Amount = message.Amount,
@@ -54,7 +55,7 @@
                     JobNumber = job.JobNumber,
                     CommunityNumber = string.IsNullOrEmpty(job.JobNumber) ? "" : job.JobNumber.Substring(0, 4),
                     CostCode = WarrantyCostCode.FromValue(message.SelectedCostCode).CostCode,
-                    ObjectAccount = isUnderOneYear ? WarrantyConstants.UnderOneYearLaborCode : WarrantyConstants.OverOneYearLaborCode,
+                    ObjectAccount = _resolveObjectAccount.ResolveLaborObjectAccount(job, serviceCall),
                 };
 
                 _database.Insert(payment);
