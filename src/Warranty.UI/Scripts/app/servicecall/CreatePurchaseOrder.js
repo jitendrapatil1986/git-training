@@ -43,8 +43,6 @@
                 
                 function purchaseOrderViewModel() {
                     var self = this;
-
-                    self.serviceCallId = modelData.initialPurchaseOrder.serviceCallId;
                     self.serviceCallLineItemId = modelData.initialPurchaseOrder.serviceCallLineItemId;
                     self.vendorName = ko.observable().extend({required : true});
                     self.vendorNumber = ko.observable().extend({ required: true });
@@ -59,6 +57,7 @@
                     self.city = ko.observable(modelData.initialPurchaseOrder.city);
                     self.stateCode = ko.observable(modelData.initialPurchaseOrder.stateCode);
                     self.postalCode = ko.observable(modelData.initialPurchaseOrder.postalCode);
+                    self.purchaseOrderMaxAmount = ko.observable(modelData.initialPurchaseOrder.purchaseOrderMaxAmount);
                     
                     self.notes = ko.observable();
                     self.line1 = new PurchaseOrderLineViewModel();
@@ -84,7 +83,12 @@
                         });
                         return total;
                     }, this);
-                    
+
+                    self.totalCost.extend(
+                    {
+                        max: { params: self.purchaseOrderMaxAmount()?self.purchaseOrderMaxAmount():99999999, message: 'Maximum: ${0}' }
+                    });
+
                     self.addPurchaseOrderLine = function () {
                         self.allPurchaseOrderLines.push(new PurchaseOrderLineViewModel());
                         $('#quantity_' + self.allPurchaseOrderLines()[self.allPurchaseOrderLines().length - 1].lineNumber()).numeric();
@@ -98,6 +102,7 @@
                         }
                         
                         var newPurchaseOrder = {
+                            ServiceCallLineItemId: self.serviceCallLineItemId,
                             VendorNumber: self.vendorNumber(),
                             VendorName: self.vendorName(),
                             DeliveryInstructions: self.selectedDeliveryInstruction(),
@@ -105,9 +110,6 @@
                             PurchaseOrderNote: self.notes(),
                             CostCode: self.selectedCostCode(),
                             IsMaterialObjectAccount: self.isMaterialObjectAccount(),
-                            JobNumber: self.jobNumber(),
-                            ServiceCallId: self.serviceCallId,
-                            ServiceCallLineItemId: self.serviceCallLineItemId,
                             ServiceCallLineItemPurchaseOrderLines: []
                         };
 
