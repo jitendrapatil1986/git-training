@@ -9,18 +9,16 @@
     {
         public SaltlineReportModel()
         {
-            EmployeeMonthlySaltlineSummary = new List<SaltlineSummary>();
             DivisionSaltlineSummary = new List<SaltlineSummary>();
             EmployeeSaltlineSummary = new List<SaltlineSummary>();
             ProjectSaltlineSummary = new List<SaltlineSummary>();
         }
-        public IEnumerable<SaltlineSummary> EmployeeMonthlySaltlineSummary { get; set; }
         public IList<SaltlineSummary> EmployeeSaltlineSummary { get; set; }
         public IList<SaltlineSummary> DivisionSaltlineSummary { get; set; }
         public IList<SaltlineSummary> ProjectSaltlineSummary { get; set; }
 
         public string SelectedEmployeeNumber { get; set; }
-        public bool AnyResults { get { return true; } }
+        public bool AnyResults { get { return EmployeeSaltlineSummary.Any() || DivisionSaltlineSummary.Any() || ProjectSaltlineSummary.Any(); } }
         public bool HasSearchCriteria { get { return StartDate.HasValue & EndDate.HasValue; } }
 
         public DateTime? StartDate { get; set; }

@@ -11,6 +11,7 @@
         public static NavHeaderItem WsrBonusSummaryReport = new NavHeaderItem(2, Reports.Key, Reports.Display.WsrBonusSummaryReportName, "Report", "WarrantyBonusSummaryWSRReport");
         public static NavHeaderItem MailMergeReport = new NavHeaderItem(3, Reports.Key, Reports.Display.MailMergeReportName, "Report", "MailMerge");
         public static NavHeaderItem Achievement = new NavHeaderItem(4, Reports.Key, Reports.Display.AchievementReportName, "Report", "AchievementReport");
+        public static NavHeaderItem Saltline = new NavHeaderItem(5, Reports.Key, Reports.Display.SaltlineReportName, "Report", "SaltlineReport");
 
         protected NavHeaderItem(int value, string key, string displayName, string controller, string action, bool hasDivider = false)
             : base(value, displayName)
@@ -41,6 +42,7 @@
                 public const string MailMergeReportName = "Mail Merge Report";
                 public const string WsrBonusSummaryReportName = "WSR Bonus Summary Report";
                 public const string AchievementReportName = "Achievement Report";
+                public const string SaltlineReportName = "Saltline Report";
             }
         }
     }
