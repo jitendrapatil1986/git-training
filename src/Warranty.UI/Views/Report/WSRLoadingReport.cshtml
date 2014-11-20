@@ -1,4 +1,5 @@
-﻿@model Warranty.Core.Features.Report.WSRLoadingReport.WSRLoadingReportModel
+﻿@using Warranty.Core.Enumerations
+@model Warranty.Core.Features.Report.WSRLoadingReport.WSRLoadingReportModel
 
 <div class="container">
      <section class="margin-bottom-10">
@@ -12,28 +13,32 @@
     <div class="clearfix"></div>
         </section>
     <h4 class="margin-bottom-20">Homes Under 2 Years Warranty</h4>
+@if (!User.IsInRole(UserRoles.WarrantyServiceRepresentative))
+{
     <div class="panel panel-default no-print">
         <div class="panel-heading">
             <div id="wsrLoadingReportFilter">
                 <div class="no-bottom-padding">
                     <div class="row">
                         <div class="col-md-12">
-                            @using (Html.BeginForm("WSRLoadingReport", "Report", FormMethod.Post, new { @class = "form-inline" }))
-                            {
-                                <div class="form-group">
-                                    @Html.DropDownList("Model.SelectedEmployeeNumber", Model.EmployeeTiedToRepresentatives.Select(c => new SelectListItem {Text = c.EmployeeName, Value = c.EmployeeNumber.ToString()}), "Select Representative", new{@class="form-control text-capitalize"})
-                                </div>
-                                <div class="form-group">
-                                    <input type="submit" class="btn btn-primary" value="Run Report" />
-                                </div>
-                            }
+                            
+                                @using (Html.BeginForm("WSRLoadingReport", "Report", FormMethod.Post, new { @class = "form-inline" }))
+                                {
+                                    <div class="form-group">
+                                        @Html.DropDownList("SelectedEmployeeNumber", Model.EmployeeTiedToRepresentatives.Select(c => new SelectListItem { Text = c.EmployeeName, Value = c.EmployeeNumber.ToString() }), "Select Representative", new { @class = "form-control text-capitalize" })
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" class="btn btn-primary" value="Run Report" />
+                                    </div>
+                                }
+                            
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+}
     @if (!Model.AnyResults)
     {
         <p><em>No entries match report criteria</em></p>

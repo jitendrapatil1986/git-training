@@ -60,6 +60,7 @@
     <Compile Include="NotifyPaymentOnHold.cs" />
     <Compile Include="NotifyBackchargeRequested.cs" />
     <Compile Include="NotifyPaymentRequested.cs" />
+    <Compile Include="NotifyPurchaseOrderRequested.cs" />
     <Compile Include="NotifyServiceCallCreated.cs" />
     <Compile Include="NotifyServiceCallLineItemCreated.cs" />
     <Compile Include="NotifyServiceCallCompleted.cs" />

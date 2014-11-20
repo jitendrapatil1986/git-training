@@ -152,29 +152,56 @@ namespace Warranty.JdeImport.Importers
             const string addIndex = @"IF NOT EXISTS (SELECT 1 FROM SYS.INDEXES WHERE NAME = 'IDX_PaymentStage_JdeId') CREATE NONCLUSTERED INDEX IDX_PaymentStage_JdeId ON imports.PaymentStage(JdeIdentifier)";
             const string dropIndex = @"DROP INDEX IDX_PaymentStage_JdeId ON imports.PaymentStage";
 
-            const string mergeScript = @";WITH stage AS (SELECT * FROM (
-                                                                  SELECT *
-                                                                          , ROW_NUMBER() OVER (PARTITION BY JdeIdentifier ORDER BY CreatedDate) AS rowNum
-                                                                  FROM imports.PaymentStage
-                                                              ) removeDups
-                                                              WHERE rowNum = 1)
-                                          MERGE INTO Payments AS TARGET
-                                          USING stage AS LIST
-                                          ON TARGET.JdeIdentifier = LIST.JdeIdentifier
-                                          WHEN NOT MATCHED BY TARGET THEN INSERT (VendorNumber, Amount, PaymentStatus, JobNumber, JdeIdentifier, CreatedDate, CreatedBy, CommunityNumber, InvoiceNumber, HoldComments, VarianceExplanation)
-                                                                              VALUES (VendorNumber, Amount, PaymentStatus, JobNumber, JdeIdentifier, CreatedDate, CreatedBy, CommunityNumber, InvoiceNumber, HoldComments, VarianceExplanation)
-                                          WHEN NOT MATCHED BY SOURCE THEN DELETE
-                                          WHEN MATCHED THEN UPDATE SET TARGET.VendorNumber = LIST.VendorNumber
-                                                                      , TARGET.Amount = LIST.Amount
-                                                                      , TARGET.PaymentStatus = LIST.PaymentStatus
-                                                                      , TARGET.JobNumber = LIST.JobNumber
-                                                                      , TARGET.JdeIdentifier = LIST.JdeIdentifier
-                                                                      , TARGET.CreatedDate = LIST.CreatedDate
-                                                                      , TARGET.CreatedBy = LIST.CreatedBy
-                                                                      , TARGET.CommunityNumber = LIST.CommunityNumber
-                                                                      , TARGET.InvoiceNumber = LIST.InvoiceNumber
-                                                                      , TARGET.HoldComments = LIST.HoldComments
-                                                                      , TARGET.VarianceExplanation = LIST.VarianceExplanation;";
+            const string mergeScript = @";WITH statuses AS (
+                                                    SELECT 1 AS StatusId, 'Requested' AS StatusName, 'NoJdeCode-WarrantyModuleStatus' AS StatusCode
+                                                    UNION SELECT 2, 'Pending', 'P'
+                                                    UNION SELECT 3, 'Requested Approval', 'NoJdeCode-WarrantyModuleStatus'
+                                                    UNION SELECT 4, 'Approved', 'A'
+                                                    UNION SELECT 5, 'Requested Hold', 'NoJdeCode-WarrantyModuleStatus'
+                                                    UNION SELECT 6, 'Hold', 'H'
+                                                    UNION SELECT 7, 'Never Pay', 'Z'
+                                                    UNION SELECT 8, 'Question', 'Q'
+                                                    UNION SELECT 9, 'Manual', 'M'
+                                                    UNION SELECT 10, 'Paid', '1'
+                                            )
+                                            , stage AS (SELECT * FROM (
+                                                                        SELECT ps.*
+                                                                                , s.StatusId
+                                                                                , ROW_NUMBER() OVER (PARTITION BY JdeIdentifier ORDER BY CreatedDate) AS rowNum
+                                                                        FROM imports.PaymentStage ps
+                                                                        INNER JOIN statuses s ON
+                                                                        ps.PaymentStatus = s.StatusCode
+                                                                    ) removeDups
+                                                                    WHERE rowNum = 1)
+                                                MERGE INTO Payments AS TARGET
+                                                USING stage AS LIST
+                                                ON TARGET.JdeIdentifier = LIST.JdeIdentifier
+                                                WHEN NOT MATCHED BY TARGET THEN INSERT (VendorNumber, Amount, PaymentStatus, JobNumber, JdeIdentifier, CreatedDate, CreatedBy, CommunityNumber, InvoiceNumber, HoldComments, VarianceExplanation)
+                                                                                    VALUES (VendorNumber, Amount, StatusId, JobNumber, JdeIdentifier, CreatedDate, CreatedBy, CommunityNumber, InvoiceNumber, HoldComments, VarianceExplanation)
+                                                WHEN MATCHED THEN UPDATE SET TARGET.VendorNumber = LIST.VendorNumber
+                                                                            , TARGET.Amount = LIST.Amount
+                                                                            , TARGET.PaymentStatus = LIST.StatusId
+                                                                            , TARGET.JobNumber = LIST.JobNumber
+                                                                            , TARGET.JdeIdentifier = LIST.JdeIdentifier
+                                                                            , TARGET.CreatedDate = LIST.CreatedDate
+                                                                            , TARGET.CreatedBy = LIST.CreatedBy
+                                                                            , TARGET.CommunityNumber = LIST.CommunityNumber
+                                                                            , TARGET.InvoiceNumber = LIST.InvoiceNumber
+                                                                            , TARGET.HoldComments = LIST.HoldComments
+                                                                            , TARGET.VarianceExplanation = LIST.VarianceExplanation;
+            ";
+
+            var deletePayments = @"DELETE FROM Payments 
+                                    WHERE JdeIdentifier NOT IN (SELECT JdeIdentifier FROM imports.PaymentStage)
+                                        AND PaymentId NOT IN (SELECT PaymentId FROM BackCharges)";
+
+            using (var sc = new SqlConnection(connectionString))
+            {
+                sc.Open();
+
+                using (var cmd = new SqlCommand("TRUNCATE TABLE imports.PaymentStage", sc))
+                    cmd.ExecuteNonQuery();
+            }
 
             Import();
 
@@ -189,11 +216,9 @@ namespace Warranty.JdeImport.Importers
 
                 using (var cmd = new SqlCommand(mergeScript, sc))
                 {
+                    cmd.CommandTimeout = 6000;
                     cmd.ExecuteNonQuery();
                 }
-
-                using (var cmd = new SqlCommand("TRUNCATE TABLE imports.PaymentStage", sc))
-                    cmd.ExecuteNonQuery();
 
                 using (var cmd = new SqlCommand(dropIndex, sc))
                     cmd.ExecuteNonQuery();

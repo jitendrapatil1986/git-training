@@ -35,8 +35,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Client">
-      <HintPath>..\packages\Accounting.Client.1.1.853.0\lib\net45\Accounting.Client.dll</HintPath>
+    <Reference Include="Accounting.Client, Version=1.1.871.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Accounting.Client.1.1.871.0\lib\net45\Accounting.Client.dll</HintPath>
     </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -57,7 +58,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
@@ -273,6 +274,11 @@
     <Compile Include="Features\AddServiceCallPayment\HoldBackchargeCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallPayment\HoldPaymentCommand.cs" />
     <Compile Include="Features\AddServiceCallPayment\HoldPaymentCommandHandler.cs" />
+    <Compile Include="Features\AddServiceCallPurchaseOrder\AddServiceCallPurchaseOrderCommand.cs" />
+    <Compile Include="Features\AddServiceCallPurchaseOrder\AddServiceCallPurchaseOrderCommandHandler.cs" />
+    <Compile Include="Features\AddServiceCallPurchaseOrder\AddServiceCallPurchaseOrderModel.cs" />
+    <Compile Include="Features\AddServiceCallPurchaseOrder\AddServiceCallPurchaseOrderQuery.cs" />
+    <Compile Include="Features\AddServiceCallPurchaseOrder\AddServiceCallPurchaseOrderQueryHandler.cs" />
     <Compile Include="Features\AssignWSRs\AssignedEmployee.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRCommand.cs" />
     <Compile Include="Features\AssignWSRs\AssignWSRCommandHandler.cs" />
@@ -497,8 +503,10 @@
     <Compile Include="Services\HomeownerAdditionalContactsService.cs" />
     <Compile Include="Services\IAccountingService.cs" />
     <Compile Include="Services\IHomeownerAdditionalContactsService.cs" />
+    <Compile Include="Services\IResolveObjectAccount.cs" />
     <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\ISendSmtpMailMessage.cs" />
+    <Compile Include="Services\ResolveObjectAccount.cs" />
     <Compile Include="Services\SendSmtpMailMessage.cs" />
     <Compile Include="Services\ServiceCallCalculator.cs" />
     <Compile Include="Net4Collection.cs" />
@@ -524,6 +532,7 @@
     <Compile Include="TaskInfrastructure\Tasks\JobClosedContactHomeownerTask.cs" />
     <Compile Include="TaskInfrastructure\Interfaces\ITask.cs" />
     <Compile Include="TaskInfrastructure\Tasks\JobStageUpdatedContactBuilderTask.cs" />
+    <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoJobAnniversaryTask.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoJobChangedTask.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoCommunityEmployeeAssignment.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoPaymentRequestApproval.cs" />
@@ -531,6 +540,7 @@
     <Compile Include="ToDoInfrastructure\Interfaces\IToDo.cs" />
     <Compile Include="ToDoInfrastructure\IToDoAggregator.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoCommunityEmployeeAssignmentModel.cs" />
+    <Compile Include="ToDoInfrastructure\Models\ToDoJobAnniversaryTaskModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoPaymentRequestApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoServiceCallApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoJobChangedTaskModel.cs" />

@@ -6,6 +6,7 @@
     public class PurchaseOrder : IAuditableEntity, IJdeEntity
     {
         public Guid PurchaseOrderId { get; set; }
+        public string PurchaseOrderNumber { get; set; }
         public string VendorNumber { get; set; }
         public string VendorName { get; set; }
         public DeliveryInstruction DeliveryInstructions { get; set; }

@@ -17,6 +17,7 @@
                     x.Column(y => y.JobNumber);
                     x.Column(y => y.ObjectAccount);
                     x.Column(y => y.PurchaseOrderNote);
+                    x.Column(y => y.PurchaseOrderNumber);
                     x.Column(y => y.ServiceCallLineItemId);
                     x.Column(y => y.VendorName);
                     x.Column(y => y.VendorNumber);

@@ -64,8 +64,9 @@ define(['urls','jquery'], function(urls, $) {
                 url: url,
                 data: { id: serviceCallId },
                 success: function (result) {
-                    $('#service-call-approval-todo-' + serviceCallId).remove();
-                    updateTodoWidgetElements();
+                    var element = $('#service-call-approval-todo-' + serviceCallId);
+                    element.remove();
+                    updateTodoWidgetElements(element);
                 }
             });
         }
@@ -82,16 +83,18 @@ define(['urls','jquery'], function(urls, $) {
                 url: url,
                 data: { CommunityId: communityId, EmployeeNumber: employeeNumber },
                 success: function (result) {
-                        if (result.success == true) {
-                            $('#community-todo-' + communityId).remove();
-                            updateTodoWidgetElements();
+                    if (result.success == true) {
+                            var element = $('#community-todo-' + communityId);
+                            element.remove();
+                            updateTodoWidgetElements(element);
                         }
                 }
             });
         });
         
-        function updateTodoWidgetElements() {
-            var nextTodo = $(".todo.hide").first();
+        function updateTodoWidgetElements(hiddenelement) {
+            var cssClass = hiddenelement.attr('class').replace(/[\s]+/g, ' ').replace(/ /g, ".");
+            var nextTodo = $("." + cssClass + ".hide").first();
             if (nextTodo) {
                 nextTodo.removeClass("hide");
             }
@@ -106,8 +109,9 @@ define(['urls','jquery'], function(urls, $) {
                 url: url,
                 data: { id: taskId },
                 success: function (result) {
-                    $('#task-todo-' + taskId).remove();
-                    updateTodoWidgetElements();
+                    var element = $('#task-todo-' + taskId);
+                    element.remove();
+                    updateTodoWidgetElements(element);
                 }
             });
         });

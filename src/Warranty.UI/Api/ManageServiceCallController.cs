@@ -8,9 +8,11 @@
     using Warranty.Core.Features.AddServiceCallLineItem;
     using Warranty.Core.Features.AddServiceCallNote;
     using Warranty.Core.Features.AddServiceCallPayment;
+    using Warranty.Core.Features.AddServiceCallPurchaseOrder;
     using Warranty.Core.Features.CompleteServiceCallLineItem;
     using Warranty.Core.Features.EditServiceCallLineItem;
-	using Warranty.Core.Features.UpdateServiceCallLineItem;
+    using Warranty.Core.Features.SharedQueries;
+    using Warranty.Core.Features.UpdateServiceCallLineItem;
     using Warranty.Core.Features.EditServiceCallStatus;
     using Warranty.Core.Security;
 
@@ -127,6 +129,13 @@
         {
             var response = _mediator.Send(model);
             return response;
+        }
+
+        [HttpPost]
+        public PostResponseModel AddPurchaseOrder(AddServiceCallPurchaseOrderCommand model)
+        {
+            _mediator.Send(model);
+            return new PostResponseModel {Success = true};
         }
 
         [HttpPost]
