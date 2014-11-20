@@ -60,12 +60,12 @@
 
             var monthRange = _warrantyCalculator.GetMonthRange(startDate, endDate);
 
-            var excellentService = _warrantyCalculator.GetExcellentWarrantyService(startDate, endDate, employeeNumber);
-            var definetelyWouldRecommend = _warrantyCalculator.GetDefinetelyWouldRecommend(startDate, endDate, employeeNumber);
-            var rightTheFirstTime = _warrantyCalculator.GetRightTheFirstTime(startDate, endDate, employeeNumber);
-            var amountSpent = _warrantyCalculator.GetAmountSpent(startDate, endDate, employeeNumber);
-            var averageDays = _warrantyCalculator.GetAverageDaysClosed(startDate, endDate, employeeNumber);
-            var percentClosedWithin7Days = _warrantyCalculator.GetPercentClosedWithin7Days(startDate, endDate, employeeNumber);
+            var excellentService = _warrantyCalculator.GetEmployeeExcellentWarrantyService(startDate, endDate, employeeNumber);
+            var definetelyWouldRecommend = _warrantyCalculator.GetEmployeeDefinetelyWouldRecommend(startDate, endDate, employeeNumber);
+            var rightTheFirstTime = _warrantyCalculator.GetEmployeeRightTheFirstTime(startDate, endDate, employeeNumber);
+            var amountSpent = _warrantyCalculator.GetEmployeeAmountSpent(startDate, endDate, employeeNumber);
+            var averageDays = _warrantyCalculator.GetEmployeeAverageDaysClosed(startDate, endDate, employeeNumber);
+            var percentClosedWithin7Days = _warrantyCalculator.GetEmployeePercentClosedWithin7Days(startDate, endDate, employeeNumber);
 
             return AgregateDataForReport(averageDays, percentClosedWithin7Days, amountSpent, excellentService, definetelyWouldRecommend, rightTheFirstTime, monthRange);
         }

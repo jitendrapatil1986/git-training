@@ -1,0 +1,40 @@
+﻿@model Warranty.Core.Features.Report.Saltline.SaltlineReportModel
+
+<div class="container">
+    <section class="margin-bottom-10">
+    <h2 class="pull-left no-margin">Saltline Report</h2>
+     @if (Model.AnyResults)
+        {
+            <div class="warranty-header-buttons">
+                    <a href="javascript:window.print()" class="btn btn-default pull-right margin-botom-10 no-print"><span class="glyphicon glyphicon-print"></span> Print</a>
+            </div>
+        }
+    <div class="clearfix"></div>
+        </section>
+    <div class="panel panel-default no-print">
+        <div class="panel-heading">
+            <div id="wsrLoadingReportFilter">
+                <div class="no-bottom-padding">
+                    <div class="row">
+                        <div class="col-md-12">
+                            @using (Html.BeginForm("SaltlineReport", "Report", FormMethod.Post, new { @class = "form-inline" }))
+                            {
+                                <div class="form-group">
+                                    @Html.TextBox("Model.StartDate", null, new { @class = "form-control monthpicker-input", placeholder = "Select Start Month" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.TextBox("Model.EndDate", null, new { @class = "form-control monthpicker-input", placeholder = "Select End Month" })
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-primary" value="Run Report" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
