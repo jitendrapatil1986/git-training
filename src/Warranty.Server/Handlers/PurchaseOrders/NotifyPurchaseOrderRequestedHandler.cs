@@ -2,6 +2,7 @@
 {
     using System;
     using Accounting.Commands.PurchaseOrders;
+    using Configuration;
     using Core;
     using Core.Entities;
     using Core.Enumerations;
@@ -52,6 +53,7 @@
                         ObjectAccount = model.ObjectAccount,
                         IsCommunityLevel = false,
                         CopyToBuilder = false,
+                        PurchaseOrderTypeJdeIdentifier = WarrantyConstants.DefaultPurchaseOrderType,
                         RequestedDate = model.DeliveryDate ?? SystemTime.Now.Date,
                         UserId = message.LoginName,
                         LineItems = purchaseOrderLineItems.Select(y => new RequestPurchaseOrder.LineItem
