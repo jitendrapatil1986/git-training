@@ -216,12 +216,6 @@ namespace Warranty.Core.Calculator
             return surveyData.Details.ToObject<List<SurveyDataResult>>();
         }
 
-
-
-
-
-
-
         public IEnumerable<CalculatorResult> GetDivisionAverageDaysClosed(DateTime startDate, DateTime endDate, string divisionName)
         {
             using (_database)
@@ -418,12 +412,6 @@ namespace Warranty.Core.Calculator
 
         }
 
-
-
-
-
-
-
         public IEnumerable<CalculatorResult> GetProjectAverageDaysClosed(DateTime startDate, DateTime endDate, string divisionName)
         {
             using (_database)
@@ -619,22 +607,6 @@ namespace Warranty.Core.Calculator
                           });
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         private IEnumerable<SurveyDataResult> GetDivisionSurveyData(DateTime startDate, DateTime endDate, string divisionName)
         {
