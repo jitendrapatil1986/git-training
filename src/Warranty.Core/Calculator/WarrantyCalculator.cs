@@ -26,7 +26,7 @@ namespace Warranty.Core.Calculator
         {
             using (_database)
             {
-                const string sql = @"SELECT AVG(DATEDIFF(DD, sc.CreatedDate, CompletionDate)) as Amount, month(completiondate) MonthNumber, year(completionDate) YearNumber
+                const string sql = @"SELECT count(*) as TotalElements, AVG(DATEDIFF(DD, sc.CreatedDate, CompletionDate)) as Amount, month(completiondate) MonthNumber, year(completionDate) YearNumber
                                             FROM ServiceCalls sc
                                             INNER JOIN Employees e
                                             ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
@@ -52,7 +52,7 @@ namespace Warranty.Core.Calculator
             using (_database)
             {
                 const string sql =
-                    @"SELECT SUM(CASE WHEN DATEDIFF(DD, sc.CreatedDate, CompletionDate) <= 7 THEN 1 ELSE 0 END) * 100.0/COUNT(*) as Amount,  month(completiondate) MonthNumber, year(completionDate) YearNumber
+                    @"SELECT count(*) as TotalElements, SUM(CASE WHEN DATEDIFF(DD, sc.CreatedDate, CompletionDate) <= 7 THEN 1 ELSE 0 END) * 100.0/COUNT(*) as Amount,  month(completiondate) MonthNumber, year(completionDate) YearNumber
 								FROM ServiceCalls sc
 								INNER JOIN Employees e
 								ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
@@ -89,7 +89,8 @@ namespace Warranty.Core.Calculator
                 {
                     Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
                     MonthNumber = month.MonthNumber,
-                    YearNumber = month.YearNumber
+                    YearNumber = month.YearNumber,
+                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount : 0
                 });
             }
             return list;
@@ -173,7 +174,8 @@ namespace Warranty.Core.Calculator
                           {
                               Amount = l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") / l.Count() * 100,
                               MonthNumber = l.Key.Month,
-                              YearNumber = l.Key.Year
+                              YearNumber = l.Key.Year,
+                              TotalElements = l.Count()
                           });
 
         }
@@ -187,7 +189,8 @@ namespace Warranty.Core.Calculator
                           {
                               Amount = l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9") / l.Count() * 100,
                               MonthNumber = l.Key.Month,
-                              YearNumber = l.Key.Year
+                              YearNumber = l.Key.Year,
+                              TotalElements = l.Count()
                           });
 
         }
@@ -201,7 +204,8 @@ namespace Warranty.Core.Calculator
                           {
                               Amount = l.Count(x => x.DefinitelyWillRecommend != null && x.DefinitelyWillRecommend.ToUpper() == SurveyConstants.DefinitelyWillThreshold) / l.Count() * 100,
                               MonthNumber = l.Key.Month,
-                              YearNumber = l.Key.Year
+                              YearNumber = l.Key.Year,
+                              TotalElements = l.Count()
                           });
 
         }
@@ -222,7 +226,7 @@ namespace Warranty.Core.Calculator
         {
             using (_database)
             {
-                const string sql = @"SELECT AVG(DATEDIFF(DD, sc.CreatedDate, CompletionDate)) as Amount, month(completiondate) MonthNumber, year(completionDate) YearNumber
+                const string sql = @"SELECT count(*) as TotalElements, AVG(DATEDIFF(DD, sc.CreatedDate, CompletionDate)) as Amount, month(completiondate) MonthNumber, year(completionDate) YearNumber
                                             FROM ServiceCalls sc
                                             INNER JOIN Employees e
                                             ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
@@ -245,12 +249,12 @@ namespace Warranty.Core.Calculator
             }
         }
 
-        public IEnumerable<CalculatorResult> GetDivisionPercentClosedWithin7Days(DateTime startDate, DateTime endDate, string divisionName)
+        public IEnumerable<CalculatorResult> GetDivisionPercentClosedWithin7Days(DateTime startDate, DateTime endDate, string divisionName) 
         {
             using (_database)
             {
                 const string sql =
-                    @"SELECT SUM(CASE WHEN DATEDIFF(DD, sc.CreatedDate, CompletionDate) <= 7 THEN 1 ELSE 0 END) * 100.0/COUNT(*) as Amount,  month(completiondate) MonthNumber, year(completionDate) YearNumber
+                    @"SELECT count(*) as TotalElements, SUM(CASE WHEN DATEDIFF(DD, sc.CreatedDate, CompletionDate) <= 7 THEN 1 ELSE 0 END) * 100.0/COUNT(*) as Amount,  month(completiondate) MonthNumber, year(completionDate) YearNumber
 								FROM ServiceCalls sc
 								INNER JOIN Employees e
 								ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
@@ -289,7 +293,8 @@ namespace Warranty.Core.Calculator
                 {
                     Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
                     MonthNumber = month.MonthNumber,
-                    YearNumber = month.YearNumber
+                    YearNumber = month.YearNumber,
+                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount : 0
                 });
             }
             return list;
@@ -377,7 +382,8 @@ namespace Warranty.Core.Calculator
                           {
                               Amount = l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") / l.Count() * 100,
                               MonthNumber = l.Key.Month,
-                              YearNumber = l.Key.Year
+                              YearNumber = l.Key.Year,
+                              TotalElements = l.Count()
                           });
 
         }
@@ -391,7 +397,8 @@ namespace Warranty.Core.Calculator
                           {
                               Amount = l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9") / l.Count() * 100,
                               MonthNumber = l.Key.Month,
-                              YearNumber = l.Key.Year
+                              YearNumber = l.Key.Year,
+                              TotalElements = l.Count()
                           });
 
         }
@@ -405,7 +412,8 @@ namespace Warranty.Core.Calculator
                           {
                               Amount = l.Count(x => x.DefinitelyWillRecommend != null && x.DefinitelyWillRecommend.ToUpper() == SurveyConstants.DefinitelyWillThreshold) / l.Count() * 100,
                               MonthNumber = l.Key.Month,
-                              YearNumber = l.Key.Year
+                              YearNumber = l.Key.Year,
+                              TotalElements = l.Count()
                           });
 
         }
@@ -420,7 +428,7 @@ namespace Warranty.Core.Calculator
         {
             using (_database)
             {
-                const string sql = @"SELECT AVG(DATEDIFF(DD, sc.CreatedDate, CompletionDate)) as Amount, month(completiondate) MonthNumber, year(completionDate) YearNumber
+                const string sql = @"SELECT count(*) as TotalElements, AVG(DATEDIFF(DD, sc.CreatedDate, CompletionDate)) as Amount, month(completiondate) MonthNumber, year(completionDate) YearNumber
                                             FROM ServiceCalls sc
                                             INNER JOIN Employees e
                                             ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
@@ -448,7 +456,7 @@ namespace Warranty.Core.Calculator
             using (_database)
             {
                 const string sql =
-                    @"SELECT SUM(CASE WHEN DATEDIFF(DD, sc.CreatedDate, CompletionDate) <= 7 THEN 1 ELSE 0 END) * 100.0/COUNT(*) as Amount,  month(completiondate) MonthNumber, year(completionDate) YearNumber
+                    @"SELECT count(*) as TotalElements, SUM(CASE WHEN DATEDIFF(DD, sc.CreatedDate, CompletionDate) <= 7 THEN 1 ELSE 0 END) * 100.0/COUNT(*) as Amount,  month(completiondate) MonthNumber, year(completionDate) YearNumber
 								FROM ServiceCalls sc
 								INNER JOIN Employees e
 								ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
@@ -487,7 +495,8 @@ namespace Warranty.Core.Calculator
                 {
                     Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
                     MonthNumber = month.MonthNumber,
-                    YearNumber = month.YearNumber
+                    YearNumber = month.YearNumber,
+                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount : 0
                 });
             }
             return list;
@@ -575,7 +584,8 @@ namespace Warranty.Core.Calculator
                           {
                               Amount = l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") / l.Count() * 100,
                               MonthNumber = l.Key.Month,
-                              YearNumber = l.Key.Year
+                              YearNumber = l.Key.Year,
+                              TotalElements = l.Count()
                           });
 
         }
@@ -589,7 +599,8 @@ namespace Warranty.Core.Calculator
                           {
                               Amount = l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9") / l.Count() * 100,
                               MonthNumber = l.Key.Month,
-                              YearNumber = l.Key.Year
+                              YearNumber = l.Key.Year,
+                              TotalElements = l.Count()
                           });
 
         }
@@ -603,7 +614,8 @@ namespace Warranty.Core.Calculator
                           {
                               Amount = l.Count(x => x.DefinitelyWillRecommend != null && x.DefinitelyWillRecommend.ToUpper() == SurveyConstants.DefinitelyWillThreshold) / l.Count() * 100,
                               MonthNumber = l.Key.Month,
-                              YearNumber = l.Key.Year
+                              YearNumber = l.Key.Year,
+                              TotalElements = l.Count()
                           });
 
         }

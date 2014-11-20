@@ -20,7 +20,7 @@
         public IList<SaltlineSummary> ProjectSaltlineSummary { get; set; }
 
         public string SelectedEmployeeNumber { get; set; }
-        public bool AnyResults { get { return EmployeeMonthlySaltlineSummary.Any(); } }
+        public bool AnyResults { get { return true; } }
         public bool HasSearchCriteria { get { return StartDate.HasValue & EndDate.HasValue; } }
 
         public DateTime? StartDate { get; set; }
@@ -42,6 +42,9 @@
             public string DivisionId { get; set; }
             public string ProjectNumber { get; set; }
             public string ProjectName { get; set; }
+            public decimal NumerOfCalls { get; set; }
+            public decimal NmberOfSurveys { get; set; }
+            public decimal NumberOfHomes { get; set; }
         }
 
         public class EmployeeModel

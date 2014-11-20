@@ -124,7 +124,9 @@
                         DefinetelyWouldRecommend = GetValueForMonth(definetelyWouldRecommend, range),
                         RightTheFirstTime = GetValueForMonth(rightTheFirstTime, range),
                         Month = range.MonthNumber,
-                        Year = range.YearNumber
+                        Year = range.YearNumber,
+                        NumerOfCalls = averageDays.Sum(x=>x.TotalElements),
+                        NmberOfSurveys = excellentService.Sum(x=>x.TotalElements),
                     });
             }
             return new SaltlineReportModel.SaltlineSummary
@@ -135,6 +137,9 @@
                 ExcellentWarrantyService = list.Average(x => x.ExcellentWarrantyService),
                 RightTheFirstTime = list.Average(x => x.RightTheFirstTime),
                 PercentComplete7Days = list.Average(x => x.PercentComplete7Days),
+                NumerOfCalls = averageDays.Sum(x => x.TotalElements),
+                NmberOfSurveys = excellentService.Sum(x => x.TotalElements),
+                NumberOfHomes = amountSpent.Sum(x => x.TotalElements)
             };
         }
 
