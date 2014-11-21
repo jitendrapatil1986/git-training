@@ -182,7 +182,7 @@ namespace Warranty.Core.ToDoInfrastructure
                 x.TaskType = taskType;
                 x.IsComplete = true;
                 database.Insert(x);
-                serviceCallCreateService.CreateServiceCallForTwelveMonthAnniversary(x.ReferenceId, RequestType.TwelveMonthRequest, ServiceCallStatus.Requested);
+                serviceCallCreateService.Create(x.ReferenceId, RequestType.TwelveMonthRequest, ServiceCallStatus.Requested);
             });
 
             var userMarkets = user.Markets;

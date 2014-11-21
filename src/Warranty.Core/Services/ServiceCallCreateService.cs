@@ -20,7 +20,7 @@
             _communityEmployeeService = communityEmployeeService;
         }
 
-        public Guid CreateServiceCallForTwelveMonthAnniversary(Guid jobId, RequestType requestType, ServiceCallStatus serviceCallStatus)
+        public Guid Create(Guid jobId, RequestType requestType, ServiceCallStatus serviceCallStatus)
         {
             using (_database)
             {

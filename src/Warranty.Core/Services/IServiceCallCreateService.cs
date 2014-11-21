@@ -5,6 +5,6 @@
 
     public interface IServiceCallCreateService
     {
-        Guid CreateServiceCallForTwelveMonthAnniversary(Guid jobId, RequestType requestType, ServiceCallStatus serviceCallStatus);
+        Guid Create(Guid jobId, RequestType requestType, ServiceCallStatus serviceCallStatus);
     }
 }

@@ -33,7 +33,7 @@ namespace Warranty.Core.Features.CreateServiceCall
 
             using (_database)
             {
-                var serviceCallId = _serviceCallCreateService.CreateServiceCallForTwelveMonthAnniversary(message.JobId, RequestType.WarrantyRequest, status);
+                var serviceCallId = _serviceCallCreateService.Create(message.JobId, RequestType.WarrantyRequest, status);
               
                 if (message.ServiceCallLineItems != null)
                 {
