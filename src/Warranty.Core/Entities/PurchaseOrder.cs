@@ -11,7 +11,7 @@
         public string VendorName { get; set; }
         public DeliveryInstruction DeliveryInstructions { get; set; }
         public DateTime? DeliveryDate { get; set; }
-        public string CostCode { get; set; }
+        public WarrantyCostCode CostCode { get; set; }
         public string ObjectAccount { get; set; }
         public Guid ServiceCallLineItemId { get; set; }
         public string JobNumber { get; set; }

@@ -44,7 +44,7 @@
                 var purchaseOrderRequest = new RequestPurchaseOrder
                     {
                         PurchaseOrderIdentifier = model.PurchaseOrderId.ToString(),
-                        CostCode = model.CostCode,
+                        CostCode = model.CostCode.CostCode,
                         VendorNumber = model.VendorNumber,
                         DeliveryInstructions = model.DeliveryInstructions.JdeCode,
                         VendorNotes = model.PurchaseOrderNote,
@@ -73,7 +73,7 @@
         public class PurchaseOrderRequestedModel
         {
             public Guid PurchaseOrderId { get; set; }
-            public string CostCode { get; set; }
+            public WarrantyCostCode CostCode { get; set; }
             public string VendorNumber { get; set; }
             public DeliveryInstruction DeliveryInstructions { get; set; }
             public string PurchaseOrderNote { get; set; }
