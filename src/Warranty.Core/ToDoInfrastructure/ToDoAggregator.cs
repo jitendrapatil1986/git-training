@@ -67,7 +67,7 @@ namespace Warranty.Core.ToDoInfrastructure
                     toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job3MonthAnniversary, 3));
                     toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job5MonthAnniversary, 5));
                     toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job9MonthAnniversary, 9));
-                    toDos.AddRange(GetTenJobAnniversaryTaskToDos(user, _database, _serviceCallCreateService));
+                    toDos.AddRange(GetTenMonthJobAnniversaryTaskToDos(user, _database, _serviceCallCreateService));
                 }
                 
                 return toDos.OrderBy(x=>x.Priority).ThenBy(x => x.Date).ToList();
@@ -156,7 +156,7 @@ namespace Warranty.Core.ToDoInfrastructure
 
 
 
-        private static IEnumerable<IToDo> GetTenJobAnniversaryTaskToDos(IUser user, IDatabase database, IServiceCallCreateService serviceCallCreateService)
+        private static IEnumerable<IToDo> GetTenMonthJobAnniversaryTaskToDos(IUser user, IDatabase database, IServiceCallCreateService serviceCallCreateService)
         {
             var employeeId = database.ExecuteScalar<Guid>("SELECT EmployeeId FROM Employees where employeeNumber = @0", user.EmployeeNumber);
             var taskType = TaskType.Job10MonthAnniversary;
