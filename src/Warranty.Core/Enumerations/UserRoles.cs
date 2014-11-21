@@ -9,6 +9,6 @@
         public const string WarrantyCoordinatorRole = @"ROLE_WarrantyCoordinators";
         public const string CustomerCareManagerRole = @"ROLE_WarrantyCustomerCareManagers";
         public const string WarrantyServiceRepresentativeRole = @"ROLE_WarrantyServiceReps";
-
+        public const string Access = @"APP_Warranty_Access";
     }
 }
