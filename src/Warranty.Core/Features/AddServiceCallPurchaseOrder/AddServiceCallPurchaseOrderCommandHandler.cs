@@ -51,7 +51,7 @@
                 {
                     var purchaseOrder = new PurchaseOrder
                     {
-                        CostCode = WarrantyCostCode.FromValue(message.CostCode).DisplayName,
+                        CostCode = WarrantyCostCode.FromValue(message.CostCode),
                         DeliveryDate = message.DeliveryDate,
                         DeliveryInstructions = DeliveryInstruction.FromValue(message.DeliveryInstructions),
                         JobNumber = job.JobNumber,
