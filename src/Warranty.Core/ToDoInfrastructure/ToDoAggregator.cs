@@ -64,9 +64,9 @@ namespace Warranty.Core.ToDoInfrastructure
                 if (ToDoType.JobAnniversaryTask.HasAccess(user.Roles))
                 {
 
-                    //toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job3MonthAnniversary, 3));
-                    //toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job5MonthAnniversary, 5));
-                    //toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job9MonthAnniversary, 9));
+                    toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job3MonthAnniversary, 3));
+                    toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job5MonthAnniversary, 5));
+                    toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job9MonthAnniversary, 9));
                     toDos.AddRange(GetTenJobAnniversaryTaskToDos(user, _database, _serviceCallCreateService));
                 }
                 
