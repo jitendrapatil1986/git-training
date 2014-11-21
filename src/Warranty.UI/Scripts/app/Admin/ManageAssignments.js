@@ -16,6 +16,7 @@
                 self.employeeName = ko.observable('');
                 self.typeaheadSelectedEmployeeId = ko.observable('');
                 self.typeaheadSelectedEmployeeName = ko.observable('');
+                viewModel.loading(false);
                 
                 //employees is the submodel, which is employee list tied to the community, where a community only has 1 employee assigned to it.
                 _(options.employees).each(function (item) {
@@ -47,7 +48,7 @@
                 //edit line item.
                 self.editLine = function (data, event) {
                     this.assigneeEditing(true);
-                    $(event.currentTarget).closest(".communityDesc").find(".typeahead").focus();
+                    $(event.currentTarget).closest(".itemLabel").find(".tt-input").focus();
                 };
                 
                 //specify typeahead options for knockout custom binding.
@@ -74,6 +75,7 @@
                 var self = this;
                 
                 self.allCommunityAssignments = ko.observableArray([]);
+                self.loading = ko.observable(true);
             }
 
 

@@ -2,15 +2,13 @@
 @model Warranty.Core.Features.ManageProblemCodeCostCodes.ManageProblemCodeCostCodeModel
 
 <div class="container" style="display: none;" data-bind="visible: true">
-    <h3>Market Cost Codes</h3>
+    <h2>Market Cost Codes</h2>
     <div class="row">
-        <div class="well col-md-12">
+        <div class="col-md-12 no-left-padding">
             <form class="col-xs-4">
-                
-                    <div class="form-group">
-                        <select class="form-control" id="cities" data-bind="options: cities, value:city, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select a City'"></select>
-                    </div>
-                
+                <div class="form-group">
+                    <select class="form-control" id="cities" data-bind="options: cities, value:city, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select a City'"></select>
+                </div>
             </form>
         </div>
     </div>
@@ -22,11 +20,13 @@
     <!-- ko foreach: groupedCodes-->
     <div class="row" data-bind="foreach: $data">
         <div class="col-md-4">
-            <div class="panel panel-default">
+            <div class="itemContainer panel panel-default" style="min-height: 150px;">
                 <div class="panel-heading">
                     <h3 class="panel-title" data-bind="text: problemCode"></h3>
                 </div>
-                <div class="panel-body inline-editable-text">
+                <div class="itemLabel panel-body inline-editable-text">
+                    <label>Cost Code</label>
+                    <br/>
                     <a href="#" data-bind="editable: costCode, editableOptions: {emptytext: 'Set Cost Code', mode: 'inline', tpl:'<input type=\'text\' maxlength=\'10\'>'}" data-placeholder="Cost Code"></a>
                 </div>
             </div>
