@@ -37,6 +37,7 @@
                                     WHERE p.PurchaseOrderId = @0";
 
                 var model = _database.Single<PurchaseOrderRequestedModel>(sql, message.PurchaseOrderId);
+                var number = 0;
 
                 var purchaseOrderLineItems = _database.Fetch<PurchaseOrderLineItem>().Where(x => x.PurchaseOrderId == model.PurchaseOrderId);
 
@@ -48,6 +49,7 @@
                         DeliveryInstructions = model.DeliveryInstructions.JdeCode,
                         VendorNotes = model.PurchaseOrderNote,
                         CostCenter = model.JobNumber,
+                        ShipToJobNumber = int.TryParse(model.JobNumber, out number) ? number : 0,
                         Market = model.CityCode,
                         CommunityNumber = model.CommunityNumber,
                         ObjectAccount = model.ObjectAccount,
