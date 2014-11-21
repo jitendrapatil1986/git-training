@@ -449,6 +449,7 @@
     <Content Include="Views\Admin\ManageProblemCodeCostCodes.cshtml" />
     <Content Include="Views\ServiceCall\CreatePurchaseOrder.cshtml" />
     <Content Include="Views\Home\_ToDoJobAnniversaryTask.cshtml" />
+    <Content Include="Views\Home\_ToDoJob10MonthAnniversary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
