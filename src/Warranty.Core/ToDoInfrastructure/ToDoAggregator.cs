@@ -14,16 +14,19 @@ namespace Warranty.Core.ToDoInfrastructure
     using System;
     using Common.Security.Entities;
     using Entities;
+    using Services;
 
     public class ToDoAggregator : IToDoAggregator
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
+        private readonly IServiceCallCreateService _serviceCallCreateService;
 
-        public ToDoAggregator(IDatabase database, IUserSession userSession)
+        public ToDoAggregator(IDatabase database, IUserSession userSession, IServiceCallCreateService serviceCallCreateService)
         {
             _database = database;
             _userSession = userSession;
+            _serviceCallCreateService = serviceCallCreateService;
         }
 
         public List<IToDo> Execute()
@@ -57,15 +60,16 @@ namespace Warranty.Core.ToDoInfrastructure
                     var paymentRequestApprovalToDos = GetPaymentRequestApprovalToDos(user, _database);
                     toDos.AddRange(paymentRequestApprovalToDos);
                 }
-                
+
                 if (ToDoType.JobAnniversaryTask.HasAccess(user.Roles))
                 {
-                    
+
                     toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job3MonthAnniversary, 3));
                     toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job5MonthAnniversary, 5));
                     toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job9MonthAnniversary, 9));
+                    toDos.AddRange(GetTenMonthJobAnniversaryTaskToDos(user, _database, _serviceCallCreateService));
                 }
-
+                
                 return toDos.OrderBy(x=>x.Priority).ThenBy(x => x.Date).ToList();
             }
         }
@@ -99,10 +103,11 @@ namespace Warranty.Core.ToDoInfrastructure
                                     where 
                                         wc.ServiceCallStatusId = @0    
                                     and 
-                                        ci.CityCode in ({0})";
+                                        ci.CityCode in ({0})
+                                    AND wc.ServiceCallType = @1";
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
-            var toDos = database.Fetch<ToDoServiceCallApproval, ToDoServiceCallApprovalModel>(query, ServiceCallStatus.Requested.Value);
+            var toDos = database.Fetch<ToDoServiceCallApproval, ToDoServiceCallApprovalModel>(query, ServiceCallStatus.Requested.Value, RequestType.WarrantyRequest.DisplayName);
 
             return toDos;
         }
@@ -115,7 +120,7 @@ namespace Warranty.Core.ToDoInfrastructure
         private static IEnumerable<IToDo> GetJobAnniversaryTaskToDos(IUser user, IDatabase database, TaskType taskType, int months)
         {
             var employeeId = database.ExecuteScalar<Guid>("SELECT EmployeeId FROM Employees where employeeNumber = @0", user.EmployeeNumber);
-            
+
             const string sqlAnniversaries = @"SELECT j.JobId as ReferenceId, j.JobNumber
                                                 FROM Jobs j                                    
                                                     INNER JOIN Communities cm
@@ -128,23 +133,92 @@ namespace Warranty.Core.ToDoInfrastructure
                                                     WHERE CityCode IN ({0}) 
                                                         AND (MONTH(CloseDate) = MONTH( DATEADD(MM,@1, getdate() )) AND YEAR(CloseDate) = YEAR( DATEADD(MM, @1, getdate())))
                                                         AND t.TaskId IS NULL";
-            
+
             var sqlNewTasks = string.Format(sqlAnniversaries, user.Markets.CommaSeparateWrapWithSingleQuote());
             var newTasks = database.Fetch<Task>(sqlNewTasks, taskType.Value, -months);
             newTasks.ForEach(x =>
-                {
-                    x.EmployeeId = employeeId;
-                    x.Description = taskType.DisplayName;
-                    x.TaskType = taskType;
-                    database.Insert(x);
-                });
+            {
+                x.EmployeeId = employeeId;
+                x.Description = taskType.DisplayName;
+                x.TaskType = taskType;
+                database.Insert(x);
+            });
 
             var toDos = GetToDoTasks<ToDoJobAnniversaryTask, ToDoJobAnniversaryTaskModel>(user, database, taskType);
 
             toDos.ForEach(x =>
-                {
-                    x.Model.NumberOfMonths = months;
-                });
+            {
+                x.Model.NumberOfMonths = months;
+            });
+
+            return toDos;
+        }
+
+
+
+        private static IEnumerable<IToDo> GetTenMonthJobAnniversaryTaskToDos(IUser user, IDatabase database, IServiceCallCreateService serviceCallCreateService)
+        {
+            var employeeId = database.ExecuteScalar<Guid>("SELECT EmployeeId FROM Employees where employeeNumber = @0", user.EmployeeNumber);
+            var taskType = TaskType.Job10MonthAnniversary;
+            const string sqlAnniversaries = @"SELECT j.JobId as ReferenceId, j.JobNumber
+                                                FROM Jobs j                                    
+                                                    INNER JOIN Communities cm
+                                                        ON j.CommunityId = cm.CommunityId
+                                                    INNER JOIN Cities ci
+                                                        ON cm.CityId = ci.CityId
+                                                    LEFT JOIN Tasks t
+                                                        ON j.JobId = t.ReferenceId
+                                                    AND t.TaskType = @0
+                                                    WHERE CityCode IN ({0}) 
+                                                        AND (MONTH(CloseDate) = MONTH( DATEADD(MM,@1, getdate() )) AND YEAR(CloseDate) = YEAR( DATEADD(MM, @1, getdate())))
+                                                        AND t.TaskId IS NULL";
+
+            var sqlNewTasks = string.Format(sqlAnniversaries, user.Markets.CommaSeparateWrapWithSingleQuote());
+            var newTasks = database.Fetch<Task>(sqlNewTasks, taskType.Value, -10);
+            newTasks.ForEach(x =>
+            {
+                x.EmployeeId = employeeId;
+                x.Description = taskType.DisplayName;
+                x.TaskType = taskType;
+                x.IsComplete = true;
+                database.Insert(x);
+                serviceCallCreateService.Create(x.ReferenceId, RequestType.TwelveMonthRequest, ServiceCallStatus.Requested);
+            });
+
+            var userMarkets = user.Markets;
+            const string sql = @"SELECT
+                                         wc.CreatedDate as [Date]
+                                        ,ho.HomeOwnerName
+                                        ,ho.HomeOwnerNumber
+                                        ,j.AddressLine
+                                        ,wc.ServiceCallId
+                                        ,wc.ServiceCallNumber
+                                        ,j.JobId
+                                        ,j.JobNumber
+                                        ,DATEDIFF(yy, j.CloseDate, wc.CreatedDate) as YearsWithinWarranty
+                                        ,j.CloseDate as WarrantyStartDate
+                                    FROM 
+                                        [ServiceCalls] wc
+                                    INNER join Jobs j
+                                        ON wc.JobId = j.JobId
+                                    INNER JOIN Tasks t
+                                        ON j.jobid = t.ReferenceId
+                                    INNER join HomeOwners ho
+                                        ON j.CurrentHomeOwnerId = ho.HomeOwnerId
+                                    LEFT join Employees e
+                                        ON wc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+                                    INNER JOIN Communities cm
+                                        ON j.CommunityId = cm.CommunityId
+                                    INNER JOIN Cities ci
+                                        ON cm.CityId = ci.CityId
+                                    where 
+                                        wc.ServiceCallStatusId = @0    
+                                    and 
+                                        ci.CityCode in ({0})
+                                    AND wc.ServiceCallType = @1";
+
+            var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
+            var toDos = database.Fetch<ToDoJob10MonthAnniversary, ToDoJob10MonthAnniversaryModel>(query, ServiceCallStatus.Requested.Value, RequestType.TwelveMonthRequest.DisplayName);
 
             return toDos;
         }
