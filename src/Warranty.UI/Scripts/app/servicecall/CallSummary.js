@@ -357,14 +357,18 @@ require(['/Scripts/app/main.js'], function () {
                     $(updateProblemCode).parent().addClass("has-error");
                     return;
                 }
-                line.problemCode($("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemCode").find('option:selected').text());
-
+                
+                var selectedProblemCodeLine = ko.utils.arrayFirst(viewModel.theLookups, function(item) {
+                    return item.problemId == line.problemJdeCode();
+                });
+                line.problemCode(selectedProblemCodeLine.problemCode);
+                
                 var updateProblemDetailCode = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemDetail");
                 if (updateProblemDetailCode.val() == "") {
                     $(updateProblemDetailCode).parent().addClass("has-error");
                     return;
                 }
-                line.problemDetailCode($("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemDetail").find('option:selected').text());
+                line.problemDetailCode(line.editProblemDetailCode);
 
                 var updateProblemDescription = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemDescription");
                 if (updateProblemDescription.val() == "") {
@@ -388,6 +392,7 @@ require(['/Scripts/app/main.js'], function () {
                     .done(function (response) {
                         toastr.success("Success! Item updated.");
                         self.problemCode = line.problemCode;
+                        self.problemDetailCode = line.problemDetailCode;
 
                         //change to non-edit mode once success has occurred.
                         line.problemCodeEditing(false);
@@ -522,8 +527,6 @@ require(['/Scripts/app/main.js'], function () {
                         }
                     });
                 };
-
-                
 
                 self.addLineItem = function () {
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
