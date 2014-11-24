@@ -21,7 +21,6 @@
                 </div>
             </div>
 
-
             <section class="margin-bottom-10">
                 <h2 class="no-margin">
                     <a class="bread-crumb" href="@Url.Action("CallSummary", "ServiceCall", new { id = Model.ServiceCallId })">Service Call #@Model.ServiceCallNumber</a>
@@ -40,9 +39,9 @@
                 <div class="panel-heading no-bottom-padding no-top-padding margin-bottom-15">
                     <div class="row remove-list-style">
                         <div id="allServiceCallLineItems" class="service-call-line edit-line-item" data-bind="attr: {'data-service-call-line-item': lineNumber()}">
-                            <h3 data-bind="text: problemDetailCode"></h3>
-                            <div class="col-md-12 main-info">
-                                <p class="panel-title text-capitalize">
+                            <div class="col-md-12">
+                                <h3 data-bind="text: problemDetailCode"></h3>
+                                <p class="panel-title text-capitalize  main-info">
                                     <strong>Status: </strong><span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
                                 </p>
                             </div>
