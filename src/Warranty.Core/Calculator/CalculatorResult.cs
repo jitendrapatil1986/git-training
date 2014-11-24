@@ -3,5 +3,6 @@
     public class CalculatorResult : MonthYearModel
     {
         public decimal Amount { get; set; }
+        public decimal TotalElements { get; set; }
     }
 }

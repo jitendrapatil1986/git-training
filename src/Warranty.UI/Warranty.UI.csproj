@@ -448,6 +448,7 @@
     <Content Include="Views\Report\AchievementReport.cshtml" />
     <Content Include="Views\Shared\_AdditionalContacts.cshtml" />
     <Content Include="Views\Admin\ManageProblemCodeCostCodes.cshtml" />
+    <Content Include="Views\Report\SaltlineReport.cshtml" />
     <Content Include="Views\ServiceCall\CreatePurchaseOrder.cshtml" />
     <Content Include="Views\Home\_ToDoJobAnniversaryTask.cshtml" />
     <Content Include="Views\Home\_ToDoJob10MonthAnniversary.cshtml" />

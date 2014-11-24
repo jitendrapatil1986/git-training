@@ -326,6 +326,9 @@
     <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerModel.cs" />
     <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerQuery.cs" />
     <Compile Include="Features\JobSummary\ChangeHomeowner\ChangeHomeownerQueryHandler.cs" />
+    <Compile Include="Features\Report\SaltLine\SaltlineReportModel.cs" />
+    <Compile Include="Features\Report\SaltLine\SaltlineReportQuery.cs" />
+    <Compile Include="Features\Report\SaltLine\SaltlineReportQueryHandler.cs" />
     <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ConstructionVendorQueryHandler.cs" />
     <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ServiceCallLineItemModel.cs" />
     <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ServiceCallLineItemQuery.cs" />
