@@ -391,8 +391,6 @@ require(['/Scripts/app/main.js'], function () {
                     })
                     .done(function (response) {
                         toastr.success("Success! Item updated.");
-                        self.problemCode = line.problemCode;
-                        self.problemDetailCode = line.problemDetailCode;
 
                         //change to non-edit mode once success has occurred.
                         line.problemCodeEditing(false);
