@@ -28,7 +28,6 @@
                                                                     UserRoles.WarrantyAdmin,
                                                                     UserRoles.WarrantyServiceManager,
                                                                     UserRoles.WarrantyServiceCoordinator,
-                                                                    UserRoles.WarrantyServiceRepresentative,
                                                                 });
         
         public static readonly ToDoType CommunityEmployeeAssignment = new ToDoType(4, "Community Employee Assignment",
