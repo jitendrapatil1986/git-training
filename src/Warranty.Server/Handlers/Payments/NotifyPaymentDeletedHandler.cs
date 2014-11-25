@@ -1,7 +1,5 @@
 ﻿namespace Warranty.Server.Handlers.Payments
 {
-    using System;
-    using Configuration;
     using Core.Entities;
     using InnerMessages;
     using NPoco;
@@ -24,13 +22,11 @@
             {
                 var payment = _database.SingleById<Payment>(message.PaymentId);
 
-                var command = new Accounting.Commands.Payments.RequestPaymentApproval()
+                var command = new Accounting.Commands.Payments.RequestDeletePendingPayment
                     {
-                        PaymentJdeIdentifier = payment.JdeIdentifier,
-                        PaymentId = payment.PaymentId.ToString(),
-                        ProgramId = WarrantyConstants.ProgramId,
-                        DateApproved = DateTime.Today,
-                        ApprovedBy = message.UserName
+                        PaymentIdentifier = message.PaymentId.ToString(),
+                        Username = message.UserName,
+                        JdeIdentifier = payment.JdeIdentifier
                     };
                 _bus.Send(command);
             }
