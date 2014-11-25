@@ -203,10 +203,14 @@
                             <div class="col-md-9">
                                 <a href="#" data-bind="click: $root.addPurchaseOrderLine">+ Add a new line</a>
                             </div>
-                            <div class="col-md-1">Total</div>
-                            <div class="col-md-2" data-bind="validationElement: totalCost">
-                                <span class="pull-right" data-bind="currency: totalCost"></span>
-                                <span class="pull-right help-block" data-bind="validationMessage: totalCost"></span>
+                            
+                            <div class="col-md-3">
+                                <div class="control-group" data-bind="validationElement: totalCost">
+                                    <label class="control-label" for="totalCost">Total</label>
+                                    <label id="totalCost" class="pull-right" data-bind="currency: totalCost"></label>
+                                    <br/>
+                                    <span class="pull-right help-block" data-bind="validationMessage: totalCost"></span>
+                                </div>
                             </div>
                         </div>
                         <div class="row margin-top-10">
