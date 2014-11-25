@@ -128,14 +128,14 @@ namespace Warranty.Core.ToDoInfrastructure
                                                     INNER JOIN Cities ci
                                                         ON cm.CityId = ci.CityId
                                                     LEFT JOIN Tasks t
-                                                        ON j.JobId = t.ReferenceId
-                                                    AND t.TaskType = @0
+                                                        ON j.JobId = t.ReferenceId and t.EmployeeId = @0
+                                                    AND t.TaskType = @1
                                                     WHERE CityCode IN ({0}) 
-                                                        AND (MONTH(CloseDate) = MONTH( DATEADD(MM,@1, getdate() )) AND YEAR(CloseDate) = YEAR( DATEADD(MM, @1, getdate())))
+                                                        AND (MONTH(CloseDate) = MONTH( DATEADD(MM,@2, getdate() )) AND YEAR(CloseDate) = YEAR( DATEADD(MM, @2, getdate())))
                                                         AND t.TaskId IS NULL";
 
             var sqlNewTasks = string.Format(sqlAnniversaries, user.Markets.CommaSeparateWrapWithSingleQuote());
-            var newTasks = database.Fetch<Task>(sqlNewTasks, taskType.Value, -months);
+            var newTasks = database.Fetch<Task>(sqlNewTasks, employeeId, taskType.Value, -months);
             newTasks.ForEach(x =>
             {
                 x.EmployeeId = employeeId;
