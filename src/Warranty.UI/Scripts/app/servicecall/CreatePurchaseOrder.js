@@ -86,7 +86,7 @@
 
                     self.totalCost.extend(
                     {
-                        max: { params: self.purchaseOrderMaxAmount()?self.purchaseOrderMaxAmount():99999999, message: 'Maximum: ${0}' }
+                        max: { params: self.purchaseOrderMaxAmount()?self.purchaseOrderMaxAmount().toFixed(2):99999999, message: 'Maximum: ${0}' }
                     });
 
                     self.addPurchaseOrderLine = function () {
