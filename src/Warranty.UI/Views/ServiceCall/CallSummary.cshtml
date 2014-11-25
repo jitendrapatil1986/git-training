@@ -162,9 +162,6 @@
                     </div>
                 </div>
             </section>
-            
-
-            
 
             <section class="line-items margin-bottom-15">
                 <h3 class="col-md-12">Line Items
@@ -177,7 +174,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group">
+                                <div class="form-group" data-bind="validationElement: problemJdeCodeToAdd">
                                     <select id="addCallLineProblemCode" class="form-control" data-bind="options: theLookups, value: problemJdeCodeToAdd, optionsText: 'problemCode', optionsValue: 'problemId', optionsCaption: 'Select Problem Code'"></select>
                                     @*@Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select problem code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemJdeCodeToAdd" })*@   
                                 </div>
@@ -185,14 +182,14 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group">
+                                <div class="form-group" data-bind="validationElement: problemDetailCodeToAdd">
                                     <select id="addCallLineProblemDetail" class="dropdown form-control" data-bind="options: problemDetailCodes, value: problemDetailCodeToAdd, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Problem Detail'"></select>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group">
+                                <div class="form-group" data-bind="validationElement: problemDescriptionToAdd">
                                     @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
                                 </div>
                             </div>
@@ -200,7 +197,7 @@
                         <br />
                         <div class="form-submit">
                             <button class="btn btn-primary" data-bind="click: addLineItem, enable: problemDescriptionToAdd().length > 0">Add</button>
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#addCallLineItem">Cancel</button>
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#addCallLineItem" data-bind="toggle: addNewLineItem">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -218,11 +215,16 @@
                                                     <div class="no-left-right-padding">
                                                         <div class="row">
                                                             <div class="col-md-9">
-                                                                <div class="editor" data-bind="css: { editing: problemCodeEditing }"> 
-                                                                    <h4>
-                                                                        <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemJdeCode, optionsText: 'problemCode', optionsValue: 'problemId', optionsCaption: 'Select Problem Code'"></select>
-                                                                        <span data-bind="text: problemCode" class="view"></span>
-                                                                    </h4>
+                                                                <div class="control-group" data-bind="validationElement: problemJdeCode">
+                                                                    <label class="control-label" for="problemJdeCode"></label>
+                                                                    <div class="editor" data-bind="css: { editing: problemCodeEditing }"> 
+                                                                        <h4>
+                                                                            
+                                                                            @*<select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemJdeCode, optionsText: 'problemCode', optionsValue: 'problemId', optionsCaption: 'Select Problem Code'"></select>*@
+                                                                            <select id="problemJdeCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemJdeCode, optionsText: 'problemCode', optionsValue: 'problemId', optionsCaption: 'Select Problem Code'"></select>
+                                                                            <span data-bind="text: problemCode" class="view"></span>
+                                                                        </h4>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
