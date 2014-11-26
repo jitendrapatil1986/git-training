@@ -396,6 +396,7 @@
                     self.jobNumber = ko.observable(modelData.initialServiceCallLineItem.jobNumber);
                     self.costCode = ko.observable(modelData.initialServiceCallLineItem.costCode);
                     self.constructionVendors = ko.observableArray([]);
+                    self.constructionVendorsLoading = ko.observable(true);
 
                     //track editing problem code, desc, and line altogether.
                     self.problemCodeEditing = ko.observable();
@@ -705,6 +706,7 @@
                         contentType: "application/json; charset=utf-8"
                     }).done(function (response) {
                         self.constructionVendors(response);
+                        self.constructionVendorsLoading(false);
                     });
                     
                     self.createPurchaseOrder = function () {
