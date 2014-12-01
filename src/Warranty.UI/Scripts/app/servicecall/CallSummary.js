@@ -794,17 +794,6 @@ require(['/Scripts/app/main.js'], function () {
 
             viewModel.errors = ko.validation.group(viewModel);
              
-            ko.bindingHandlers.toggle = {
-                init: function (element, valueAccessor) {
-                    var value = valueAccessor();
-                    ko.applyBindingsToNode(element, {
-                        click: function () {
-                            value(!value());
-                        }
-                    });
-                }
-            };
-             
             ko.applyBindings(viewModel);
          });
         });
