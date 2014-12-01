@@ -35,7 +35,13 @@ require(['/Scripts/app/main.js'], function () {
                 $(this).data('editable').input.$input.mask("(999) 999-9999? x99999", { placeholder: " " });
             });
 
-            $(".datepicker-input").datepicker();
+            $("#homeownerVerificationSignatureDate").datepicker({
+                format: 'm/d/yyyy'
+            });
+
+            $("#homeownerVerificationSignatureDate").on('changeDate', function (e) {
+                viewModel.homeownerVerificationSignatureDate(moment(e.date).format("L"));
+            });
 
             $('.btn-action-with-popup').click(function (e) {
                 $('.btn-action-with-popup').removeClass('active');
@@ -192,7 +198,8 @@ require(['/Scripts/app/main.js'], function () {
 
             function clearNoteFields() {
                 $("#addCallNoteDescription").val('');
-                self.noteDescriptionToAdd('');
+                viewModel.noteDescriptionToAdd('');
+                viewModel.noteDescriptionToAdd.isModified(false);
             }
 
             function AllLineItemsViewModel(options) {
@@ -250,9 +257,10 @@ require(['/Scripts/app/main.js'], function () {
 
                 //save line item changes.
                 self.saveLineItemChanges = function () {
-                    var errors = ko.validation.group(self); //, { deep: true });
+                    var errors = ko.validation.group(self);
 
                     if (errors().length != 0) {
+                        viewModel.errors.showAllMessages(false);
                         self.errors.showAllMessages();
                         return;
                     }
@@ -372,13 +380,12 @@ require(['/Scripts/app/main.js'], function () {
                 self.createdBy = options.createdBy;
                 self.createdDate = options.createdDate;
             }
-            
              
             function formHasErrors(theModel) {
-                debugger;
                 var errors = ko.validation.group(theModel);
                 
                 if (errors().length != 0) {
+                    viewModel.errors.showAllMessages(false);
                     errors.showAllMessages();
                     return true;
                 }
@@ -554,26 +561,7 @@ require(['/Scripts/app/main.js'], function () {
                     self.problemJdeCode = $("#addCallLineProblemCode").val();
                     self.problemDescription = $("#addCallLineProblemDescription").val();
 
-                    var newProblemCode = $("#addCallLineProblemCode");
-                    if (newProblemCode.val() == "") {
-                        $(newProblemCode).parent().addClass("has-error");
-                        return;
-                    }
-
-                    var newProblemDetailCode = $("#addCallLineProblemDetail");
-                    if (newProblemDetailCode.val() == "") {
-                        $(newProblemDetailCode).parent().addClass("has-error");
-                        return;
-                    }
-
-                    var newProblemDescription = $("#addCallLineProblemDescription");
-                    if (newProblemDescription.val() == "") {
-                        $(newProblemDescription).parent().addClass("has-error");
-                        return;
-                    }
-
                     var newLineItem = new AllLineItemsViewModel({
-
                         serviceCallId: self.serviceCallId, problemJdeCode: self.problemJdeCode,
                         problemCode: self.problemCode, problemDescription: self.problemDescription,
                         problemDetailCode: self.problemDetailCode
@@ -612,10 +600,13 @@ require(['/Scripts/app/main.js'], function () {
                             $("#addCallLineProblemCode").val('');
                             $("#addCallLineProblemDetail").val('');
                             self.problemDescription = '';
+                            self.problemJdeCodeToAdd('');
+                            self.problemJdeCodeToAdd.isModified(false);
+                            self.problemDetailCodeToAdd('');
+                            self.problemDetailCodeToAdd.isModified(false);
+                            self.problemDescriptionToAdd('');
+                            self.problemDescriptionToAdd.isModified(false);
                         });
-
-                    $(newProblemCode).parent().removeClass("has-error");
-                    $(newProblemDescription).parent().removeClass("has-error");
                 };
 
                 self.addCallNote = function () {
@@ -718,8 +709,8 @@ require(['/Scripts/app/main.js'], function () {
                     return self.areAllLineItemsCompleted() && !self.callSummaryStatusComplete() && self.callSummaryStatusSigned();
                 });
 
-                self.homeownerVerificationSignature = ko.observable('');
-                self.homeownerVerificationSignatureDate = ko.observable();
+                self.homeownerVerificationSignature = ko.observable('').extend({required: true});
+                self.homeownerVerificationSignatureDate = ko.observable().extend({required: true}).extend({date: true});
 
                 self.verifiedHomeownerSignature = ko.observable($("#verifiedHomeownerSignature").val());
                 self.verifiedHomeownerSignatureDate = ko.observable($("#verifiedHomeownerSignatureDate").val());
@@ -735,21 +726,12 @@ require(['/Scripts/app/main.js'], function () {
                 });
 
                 self.saveVerifiedHomeownerSignature = function () {
+                    if (formHasErrors([self.homeownerVerificationSignature, self.homeownerVerificationSignatureDate]))
+                        return;
+                    
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
                     self.homeownerVerificationSignature = $("#homeownerVerificationSignature").val();
                     self.homeownerVerificationSignatureDate = $("#homeownerVerificationSignatureDate").val();
-
-                    var newhomeownerVerificationSignature = $("#homeownerVerificationSignature");
-                    if (newhomeownerVerificationSignature.val() == "") {
-                        $(newhomeownerVerificationSignature).parent().addClass("has-error");
-                        return;
-                    }
-
-                    var newhomeownerVerificationSignatureDate = $("#homeownerVerificationSignatureDate");
-                    if (newhomeownerVerificationSignatureDate.val() == "") {
-                        $(newhomeownerVerificationSignatureDate).parent().addClass("has-error");
-                        return;
-                    }
 
                     var verifySignatureData = ko.toJSON({
                         serviceCallId: self.serviceCallId, homeownerVerificationSignature: self.homeownerVerificationSignature,
@@ -779,17 +761,14 @@ require(['/Scripts/app/main.js'], function () {
                             self.homeownerVerificationSignature = '';
                             self.homeownerVerificationSignatureDate = '';
                         });
-
-                    $(homeownerVerificationSignature).parent().removeClass("has-error");
-                    $(homeownerVerificationSignatureDate).parent().removeClass("has-error");
                 };
             }
              
             ko.validation.init({
                 errorElementClass: 'has-error',
                 errorMessageClass: 'help-block',
-                decorateElement: true
-                //grouping: { deep: true }
+                decorateElement: true,
+                grouping: { deep: true }
             });
 
             var viewModel = new serviceCallSummaryItemViewModel();

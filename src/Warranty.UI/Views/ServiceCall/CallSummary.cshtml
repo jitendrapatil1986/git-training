@@ -149,15 +149,22 @@
                 <div id="verifyHomeownerSignature">
                     <div class="panel panel-default no-border">
                         <div class="panel-body">
-                            <form class="form-inline">
-                                <div class="form-group">
-                                    @Html.TextBox("Signature", null, new { id = "homeownerVerificationSignature", @class = "form-control", data_bind = "value: homeownerVerificationSignature, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Signature'}" })
-                                </div>
-                                <div class="form-group">
-                                    @Html.TextBox("Date", null, new { id = "homeownerVerificationSignatureDate", @class = "datepicker-input form-control", data_bind="value: homeownerVerificationSignatureDate, attr:{placeholder: 'Select Date'}" })
-                                </div>
-                                <button class="btn btn-primary" data-bind="click: saveVerifiedHomeownerSignature, enable: homeownerVerificationSignature().length > 0">Save</button>
-                            </form>
+                            <div class="row">
+                                <form>
+                                    <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationSignature">
+                                        <label class="control-label" for="homeownerVerificationSignature"></label>
+                                        @Html.TextBox("Signature", null, new { id = "homeownerVerificationSignature", @class = "form-control", data_bind = "value: homeownerVerificationSignature, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Signature'}" })
+                                    </div>
+                                    <div class="control-group col-md-4 no-right-padding" data-bind="validationElement: homeownerVerificationSignatureDate">
+                                        <label class="control-label" for="homeownerVerificationSignatureDate"></label>
+                                        @Html.TextBox("Date", null, new { id = "homeownerVerificationSignatureDate", @class = "datepicker-input form-control", data_bind="value: homeownerVerificationSignatureDate, attr:{placeholder: 'Select Date'}" })
+                                    </div>
+                                    <br/>
+                                    <div class="col-md-1">
+                                        <button class="btn btn-primary" data-bind="click: saveVerifiedHomeownerSignature">Save</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -196,7 +203,7 @@
                         </div>
                         <br />
                         <div class="form-submit">
-                            <button class="btn btn-primary" data-bind="click: addLineItem, enable: problemDescriptionToAdd().length > 0">Add</button>
+                            <button class="btn btn-primary" data-bind="click: addLineItem">Add</button>
                             <button class="btn btn-link" data-toggle="collapse" data-target="#addCallLineItem">Cancel</button>
                         </div>
                     </div>
