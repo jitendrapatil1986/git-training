@@ -11,8 +11,8 @@ Environment "training" -servers @(
     ) -installPath "C:\Installs\WarrantyTraining"
     
 Environment "prod" -servers @(
-    Server "wkcorpappprod1" @("Web";)
-    Server "wkcorpappprod1" @("Nsb";)
+    Server "wkcorpappprod2" @("Web";)
+    Server "wkcorpappprod2" @("Nsb";)
     Server "wksql1" @("Database";)
     ) -installPath "C:\Installs\Warranty"
 
