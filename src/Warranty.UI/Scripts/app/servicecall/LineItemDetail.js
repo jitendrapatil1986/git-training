@@ -28,7 +28,8 @@
 
                 function clearNoteFields() {
                     $("#addCallNoteDescription").val('');
-                    self.noteDescriptionToAdd('');
+                    viewModel.noteDescriptionToAdd('');
+                    viewModel.noteDescriptionToAdd.isModified(false);
                 }
 
                 function PurchaseOrderViewModel(options) {
@@ -615,7 +616,7 @@
                     self.allCallNotes = ko.observableArray([]);
                     self.allAttachments = ko.observableArray([]);
                     self.allPurchaseOrders = ko.observableArray([]);
-                    self.noteDescriptionToAdd = ko.observable('');
+                    self.noteDescriptionToAdd = ko.observable('').extend({required: true});
                     self.userCanAlwaysReopenCallLines = ko.observable();
 
                     self.removeAttachment = function (e) {
@@ -638,15 +639,16 @@
                     };
 
                     self.addCallNote = function () {
+                        var errors = ko.validation.group([self.noteDescriptionToAdd]);
+
+                        if (errors().length != 0) {
+                            errors.showAllMessages();
+                            return;
+                        }
+                        
                         self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
                         self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
                         self.note = $("#addCallNoteDescription").val();
-
-                        var newNoteDescription = $("#addCallNoteDescription");
-                        if (newNoteDescription.val() == "") {
-                            $(newNoteDescription).parent().addClass("has-error");
-                            return;
-                        }
 
                         var newCallNote = new CallNotesViewModel({
                             serviceCallId: self.serviceCallId,
