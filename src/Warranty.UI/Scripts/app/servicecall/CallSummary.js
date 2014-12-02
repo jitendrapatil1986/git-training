@@ -35,7 +35,13 @@ require(['/Scripts/app/main.js'], function () {
                 $(this).data('editable').input.$input.mask("(999) 999-9999? x99999", { placeholder: " " });
             });
 
-            $(".datepicker-input").datepicker();
+            $("#homeownerVerificationSignatureDate").datepicker({
+                format: 'm/d/yyyy'
+            });
+
+            $("#homeownerVerificationSignatureDate").on('changeDate', function (e) {
+                viewModel.homeownerVerificationSignatureDate(moment(e.date).format("L"));
+            });
 
             $('.btn-action-with-popup').click(function (e) {
                 $('.btn-action-with-popup').removeClass('active');
@@ -192,7 +198,8 @@ require(['/Scripts/app/main.js'], function () {
 
             function clearNoteFields() {
                 $("#addCallNoteDescription").val('');
-                self.noteDescriptionToAdd('');
+                viewModel.noteDescriptionToAdd('');
+                viewModel.noteDescriptionToAdd.isModified(false);
             }
 
             function AllLineItemsViewModel(options) {
@@ -206,11 +213,26 @@ require(['/Scripts/app/main.js'], function () {
                 self.problemDetailCodes = ko.observableArray([]);
 
                 //track line item properties.
-                self.problemJdeCode = ko.observable(options.problemJdeCode);
+                self.problemJdeCode = ko.observable(options.problemJdeCode).extend({
+                    required: {
+                        onlyIf: function () { return self.lineEditing() === true; }
+                    }
+                });
+                
                 self.problemCode = ko.observable(options.problemCode);
                 self.problemDetailCode = ko.observable(options.problemDetailCode);
-                self.editProblemDetailCode = ko.observable();
-                self.problemDescription = ko.observable(options.problemDescription);
+                self.editProblemDetailCode = ko.observable().extend({
+                    required: {
+                        onlyIf: function () { return self.lineEditing() === true; }
+                    }
+                });
+                
+                self.problemDescription = ko.observable(options.problemDescription).extend({
+                    required: {
+                        onlyIf: function () { return self.lineEditing() === true; }
+                    }
+                });
+
                 self.currentProblemCode = ko.observable();
                 self.currentProblemJdeCode = ko.observable();
                 self.currentProblemDetailCode = ko.observable();
@@ -235,6 +257,14 @@ require(['/Scripts/app/main.js'], function () {
 
                 //save line item changes.
                 self.saveLineItemChanges = function () {
+                    var errors = ko.validation.group(self);
+
+                    if (errors().length != 0) {
+                        viewModel.errors.showAllMessages(false);
+                        self.errors.showAllMessages();
+                        return;
+                    }
+                    
                     updateServiceCallLineItem(this);
                 };
 
@@ -350,31 +380,26 @@ require(['/Scripts/app/main.js'], function () {
                 self.createdBy = options.createdBy;
                 self.createdDate = options.createdDate;
             }
-            
-            function updateServiceCallLineItem(line) {
-                var updateProblemCode = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemCode");
-                if (updateProblemCode.val() == "") {
-                    $(updateProblemCode).parent().addClass("has-error");
-                    return;
-                }
+             
+            function formHasErrors(theModel) {
+                var errors = ko.validation.group(theModel);
                 
+                if (errors().length != 0) {
+                    viewModel.errors.showAllMessages(false);
+                    errors.showAllMessages();
+                    return true;
+                }
+
+                return false;
+            }
+
+            function updateServiceCallLineItem(line) {
                 var selectedProblemCodeLine = ko.utils.arrayFirst(viewModel.theLookups, function(item) {
                     return item.problemId == line.problemJdeCode();
                 });
-                line.problemCode(selectedProblemCodeLine.problemCode);
                 
-                var updateProblemDetailCode = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemDetail");
-                if (updateProblemDetailCode.val() == "") {
-                    $(updateProblemDetailCode).parent().addClass("has-error");
-                    return;
-                }
+                line.problemCode(selectedProblemCodeLine.problemCode);
                 line.problemDetailCode(line.editProblemDetailCode);
-
-                var updateProblemDescription = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemDescription");
-                if (updateProblemDescription.val() == "") {
-                    $(updateProblemDescription).parent().addClass("has-error");
-                    return;
-                }
 
                 var lineData = ko.toJSON(line);
 
@@ -397,9 +422,6 @@ require(['/Scripts/app/main.js'], function () {
                         line.problemDescriptionEditing(false);
                         line.lineEditing(false);
                     });
-
-                $(updateProblemCode).parent().removeClass("has-error");
-                $(updateProblemDescription).parent().removeClass("has-error");
             }
 
             function completeServiceCallLineItem(line) {
@@ -456,9 +478,12 @@ require(['/Scripts/app/main.js'], function () {
 
                 self.allLineItems = ko.observableArray([]);
                 self.theLookups = dropdownData.availableLookups;  //dropdown list does not need to be observable. Only the actual elements w/i the array do.
-                self.problemDescriptionToAdd = ko.observable('');
-                self.problemJdeCodeToAdd = ko.observable();
-                self.problemDetailCodeToAdd = ko.observable();
+                self.problemDescriptionToAdd = ko.observable('').extend({ required: true });
+                
+                self.problemJdeCodeToAdd = ko.observable().extend({ required: true });
+                
+                self.problemDetailCodeToAdd = ko.observable().extend({ required: true });
+                
                 self.canBeReopened = ko.observable(modelData.canBeReopened);
                 self.isSpecialProject = ko.observable(modelData.isSpecialProject);
                 self.specialProjectReason = ko.observable(modelData.specialProjectReason);
@@ -469,7 +494,7 @@ require(['/Scripts/app/main.js'], function () {
                 self.allCallNotes = ko.observableArray([]);
                 self.allAttachments = ko.observableArray([]);
 
-                self.noteDescriptionToAdd = ko.observable('');
+                self.noteDescriptionToAdd = ko.observable('').extend({ required: true});
                 self.userCanAlwaysReopenCallLines = ko.observable();
                 self.problemDetailCodes = ko.observableArray([]);
 
@@ -527,32 +552,16 @@ require(['/Scripts/app/main.js'], function () {
                 };
 
                 self.addLineItem = function () {
+                    if (formHasErrors([self.problemJdeCodeToAdd, self.problemDetailCodeToAdd, self.problemDescriptionToAdd]))
+                        return;
+                    
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
                     self.problemCode = $("#addCallLineProblemCode").find('option:selected').text();
                     self.problemDetailCode = $("#addCallLineProblemDetail").find('option:selected').text();
                     self.problemJdeCode = $("#addCallLineProblemCode").val();
                     self.problemDescription = $("#addCallLineProblemDescription").val();
 
-                    var newProblemCode = $("#addCallLineProblemCode");
-                    if (newProblemCode.val() == "") {
-                        $(newProblemCode).parent().addClass("has-error");
-                        return;
-                    }
-
-                    var newProblemDetailCode = $("#addCallLineProblemDetail");
-                    if (newProblemDetailCode.val() == "") {
-                        $(newProblemDetailCode).parent().addClass("has-error");
-                        return;
-                    }
-
-                    var newProblemDescription = $("#addCallLineProblemDescription");
-                    if (newProblemDescription.val() == "") {
-                        $(newProblemDescription).parent().addClass("has-error");
-                        return;
-                    }
-
                     var newLineItem = new AllLineItemsViewModel({
-
                         serviceCallId: self.serviceCallId, problemJdeCode: self.problemJdeCode,
                         problemCode: self.problemCode, problemDescription: self.problemDescription,
                         problemDetailCode: self.problemDetailCode
@@ -591,21 +600,22 @@ require(['/Scripts/app/main.js'], function () {
                             $("#addCallLineProblemCode").val('');
                             $("#addCallLineProblemDetail").val('');
                             self.problemDescription = '';
+                            self.problemJdeCodeToAdd('');
+                            self.problemJdeCodeToAdd.isModified(false);
+                            self.problemDetailCodeToAdd('');
+                            self.problemDetailCodeToAdd.isModified(false);
+                            self.problemDescriptionToAdd('');
+                            self.problemDescriptionToAdd.isModified(false);
                         });
-
-                    $(newProblemCode).parent().removeClass("has-error");
-                    $(newProblemDescription).parent().removeClass("has-error");
                 };
 
                 self.addCallNote = function () {
-                    self.serviceCallId = $("#callSummaryServiceCallId").val();
-                    self.note = $("#addCallNoteDescription").val();
-
-                    var newNoteDescription = $("#addCallNoteDescription");
-                    if (newNoteDescription.val() == "") {
-                        $(newNoteDescription).parent().addClass("has-error");
+                    if (formHasErrors([self.noteDescriptionToAdd])) {
                         return;
                     }
+
+                    self.serviceCallId = $("#callSummaryServiceCallId").val();
+                    self.note = $("#addCallNoteDescription").val();
 
                     var newCallNote = new CallNotesViewModel({
                         serviceCallId: self.serviceCallId,
@@ -699,8 +709,8 @@ require(['/Scripts/app/main.js'], function () {
                     return self.areAllLineItemsCompleted() && !self.callSummaryStatusComplete() && self.callSummaryStatusSigned();
                 });
 
-                self.homeownerVerificationSignature = ko.observable('');
-                self.homeownerVerificationSignatureDate = ko.observable();
+                self.homeownerVerificationSignature = ko.observable('').extend({required: true});
+                self.homeownerVerificationSignatureDate = ko.observable().extend({required: true}).extend({date: true});
 
                 self.verifiedHomeownerSignature = ko.observable($("#verifiedHomeownerSignature").val());
                 self.verifiedHomeownerSignatureDate = ko.observable($("#verifiedHomeownerSignatureDate").val());
@@ -716,21 +726,12 @@ require(['/Scripts/app/main.js'], function () {
                 });
 
                 self.saveVerifiedHomeownerSignature = function () {
+                    if (formHasErrors([self.homeownerVerificationSignature, self.homeownerVerificationSignatureDate]))
+                        return;
+                    
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
                     self.homeownerVerificationSignature = $("#homeownerVerificationSignature").val();
                     self.homeownerVerificationSignatureDate = $("#homeownerVerificationSignatureDate").val();
-
-                    var newhomeownerVerificationSignature = $("#homeownerVerificationSignature");
-                    if (newhomeownerVerificationSignature.val() == "") {
-                        $(newhomeownerVerificationSignature).parent().addClass("has-error");
-                        return;
-                    }
-
-                    var newhomeownerVerificationSignatureDate = $("#homeownerVerificationSignatureDate");
-                    if (newhomeownerVerificationSignatureDate.val() == "") {
-                        $(newhomeownerVerificationSignatureDate).parent().addClass("has-error");
-                        return;
-                    }
 
                     var verifySignatureData = ko.toJSON({
                         serviceCallId: self.serviceCallId, homeownerVerificationSignature: self.homeownerVerificationSignature,
@@ -760,15 +761,14 @@ require(['/Scripts/app/main.js'], function () {
                             self.homeownerVerificationSignature = '';
                             self.homeownerVerificationSignatureDate = '';
                         });
-
-                    $(homeownerVerificationSignature).parent().removeClass("has-error");
-                    $(homeownerVerificationSignatureDate).parent().removeClass("has-error");
                 };
             }
+             
             ko.validation.init({
                 errorElementClass: 'has-error',
                 errorMessageClass: 'help-block',
-                decorateElement: true
+                decorateElement: true,
+                grouping: { deep: true }
             });
 
             var viewModel = new serviceCallSummaryItemViewModel();
@@ -793,6 +793,7 @@ require(['/Scripts/app/main.js'], function () {
             });
 
             viewModel.errors = ko.validation.group(viewModel);
+             
             ko.applyBindings(viewModel);
          });
         });
