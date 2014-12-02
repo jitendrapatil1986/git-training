@@ -23,6 +23,7 @@ namespace Warranty.Core.DataAccess.Mappings
                     x.Column(y => y.HomeOwnerSignature);
                     x.Column(y => y.HomeownerVerificationSignature);
                     x.Column(y => y.HomeownerVerificationSignatureDate);
+                    x.Column(y => y.HomeownerVerificationType).WithName("HomeownerVerificationTypeId");
                 });
         }
     }
