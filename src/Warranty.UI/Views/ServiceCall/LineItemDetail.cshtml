@@ -392,12 +392,15 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    @Html.TextArea("Description", null, new { id = "addCallNoteDescription", @class = "form-control", data_bind = "text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
+                                    <div class="control-group" data-bind="validationElement: noteDescriptionToAdd">
+                                        <label class="control-label" for="addCallNoteDescription"></label>
+                                        @Html.TextArea("Description", null, new { id = "addCallNoteDescription", @class = "form-control", data_bind = "text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
+                                    </div>
                                 </div>
                             </div>
                             <br />
                             <div class="form-submit">
-                                <button class="btn btn-primary" data-bind="click: addCallNote, enable: noteDescriptionToAdd().length > 0">Add</button>
+                                <button class="btn btn-primary" data-bind="click: addCallNote">Add</button>
                                 <button class="btn btn-link" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</button>
                             </div>
                         </div>
