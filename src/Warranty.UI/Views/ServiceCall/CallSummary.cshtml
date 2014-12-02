@@ -445,7 +445,7 @@
         define('dropdownData', function() {
             return {
                 availableLookups: @Html.Raw(Model.AddServiceCallLineItem.ProblemCodes.Select(x => new {problemId = x.Value, problemCode = x.Text}).ToJson()),
-                verificationTypes: @Html.Raw(@HomeownerVerificationType.GetAll().OrderBy(x => x.DisplayName).Select(x => new {DisplayText = x.DisplayName, x.Value}).ToJson())
+                verificationTypes: @Html.Raw(@HomeownerVerificationType.GetAll().Where(x => x.Value != @HomeownerVerificationType.NotVerified.Value).OrderBy(x => x.DisplayName).Select(x => new {DisplayText = x.DisplayName, x.Value}).ToJson())
                 }
         });
     </script>
