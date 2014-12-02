@@ -64,7 +64,7 @@
                     <li class="active"><a href="#job_service_calls" role="tab" data-toggle="tab">Call History <span class="label label-default">@Model.JobServiceCalls.Count()</span></a></li>
                     <li><a href="#job_selections" role="tab" data-toggle="tab">Options <span class="label label-default">@Model.JobSelections.Count()</span></a></li>
                     <li><a href="#job_vendors" role="tab" data-toggle="tab">Vendors </a></li>
-                    <li><a href="#job_payments" role="tab" data-toggle="tab">Payments </a></li>
+                    <li><a href="#job_payments" role="tab" data-toggle="tab">Payments <span class="label label-default">@Model.JobPayments.Count()</span></a></li>
                 </ul>
 
         
@@ -272,8 +272,77 @@
                         </div>
                     </div>
                     <div class="tab-pane" id="job_payments">
-                        <div class="col-md-12">
-                            Payment Information - Coming Soon
+                            <em data-bind="visible: allJobPayments().length < 1" class="padding-left-15 padding-top-7 pull-left">No Payments Available</em>
+                        <div class="remove-list-style">
+                            <div class="clearfix"></div>
+                            <br />
+                            <ul data-bind="foreach: allJobPayments">
+                                <div id="allServiceCallPayments">
+                                    <li class="row service-call-line">
+                                        <div class="col-md-12 margin-bottom-5">
+                                            <div class="no-left-right-padding">
+                                                <div class="row payment-line">
+                                                    <div class="col-md-4">
+                                                        <strong><span data-bind="text: vendorName"></span></strong>
+                                                        <br />
+                                                        <span data-bind="text: paymentStatusDisplayName, css: 'label label-' + paymentStatusBadgeClassName()"></span>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <span data-bind="text: 'Invoice #:' + invoiceNumber"></span>
+                                                        <br />
+                                                        <span data-bind="text: 'Date:' + moment(paymentCreatedDate).format('L')"></span>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <h4 data-bind="currency: amount"></h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12" data-bind="visible: isBackcharge">
+                                            <div class="margin-bottom-10">
+                                                <span class="glyphicon glyphicon-warning-sign"></span>&nbsp;<a data-toggle="collapse" class="cursor-pointer" data-bind="attr:{'data-target': '#backcharge-' + paymentId}">Backcharge</a>
+                                            </div>
+                                            <div class="row backcharge-container collapse" data-bind="attr: { id: 'backcharge-' + paymentId }">
+                                                <div>
+                                                    <div class="col-md-12 margin-top-10">
+                                                        <span data-bind="text: backchargeStatusDisplayName, css: 'label label-' + backchargeStatusBadgeClassName()"></span>
+                                                    </div>
+                                                    <div class="col-md-6 margin-top-10">
+                                                        <small>
+                                                            <strong><span data-bind="text: backchargeVendorName"></span></strong>
+                                                            <br />
+                                                            <span data-bind="text: backchargeReason"></span>
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <small>
+                                                            <span><strong>Backcharge Amount: </strong></span></small>
+                                                        <h4 data-bind="currency: backchargeAmount"></h4>
+                                                    </div>
+                                                    <div class="col-md-12 margin-top-10 margin-bottom-10">
+                                                        <small>
+                                                            <span data-bind="text: 'Notified ' + personNotified + ' on ' + personNotifiedDate"></span>
+                                                            <br />
+                                                            <strong>Phone: </strong><span data-bind="text: personNotifiedPhoneNumber"></span>
+                                                            <br />
+                                                            <strong>Response from Vendor: </strong><span data-bind="text: backchargeResponseFromVendor"></span>
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-md-12 alert alert-warning no-bottom-margin" data-bind="visible: isBackchargeHeld">
+                                                        <strong><span data-bind="text: backchargeStatusDisplayName"></span></strong> - <span data-bind="    date: backchargeHoldDate"></span>- <span data-bind="    text: backchargeHoldComments"></span>
+                                                    </div>
+                                                    <div class="col-md-12 alert alert-danger no-bottom-margin" data-bind="visible: isBackchargeDenied">
+                                                        <strong><span data-bind="text: backchargeStatusDisplayName"></span></strong> - <span data-bind="    date: backchargeDenyDate"></span>- <span data-bind="    text: backchargeDenyComments"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 alert alert-warning no-bottom-margin" data-bind="visible: isHeld">
+                                            <strong><span data-bind="text: paymentStatusDisplayName"></span></strong> - <span data-bind="    date: holdDate"></span>- <span data-bind="    text: holdComments"></span>
+                                        </div>
+                                    </li>
+                                </div>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -296,6 +365,7 @@
             return {
                 initialJobNotes: @Html.Raw(Model.JobNotes.ToJson()),
                 initialJobAttachments: @Html.Raw(Model.Attachments.ToJson()),
+                initialJobPayments: @Html.Raw(Model.JobPayments.ToJson()),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
             };
         });

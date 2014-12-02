@@ -1,5 +1,5 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'x-editable', 'ko', 'ko.x-editable', 'toastr', 'urls', 'modelData', 'enumeration/PhoneNumberType', 'bootbox', 'jquery.maskedinput', 'app/formUploader', 'app/additionalContacts', 'app/approveServiceCalls', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, xeditable, ko, koxeditable, toastr, urls, modelData, phoneNumberTypeEnum, bootbox) {
+    require(['jquery', 'x-editable', 'ko', 'ko.x-editable', 'toastr', 'urls', 'modelData', 'enumeration/PhoneNumberType', 'enumeration/PaymentStatus', 'enumeration/BackchargeStatus', 'bootbox', 'jquery.maskedinput', 'app/formUploader', 'app/additionalContacts', 'app/approveServiceCalls', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, xeditable, ko, koxeditable, toastr, urls, modelData, phoneNumberTypeEnum, paymentStatusEnum, backchargeStatusEnum, bootbox) {
         $(function () {
             $.fn.editable.defaults.mode = 'inline';
             $.fn.editable.defaults.emptytext = 'Add';
@@ -117,6 +117,8 @@ require(['/Scripts/app/main.js'], function () {
                         }
                     });
                 };
+
+                self.allJobPayments = ko.observableArray([]);
             }
 
             function JobNotesViewModel(option) {
@@ -141,6 +143,67 @@ require(['/Scripts/app/main.js'], function () {
                 self.createdDate = option.createdDate;
             };
             
+            function JobPaymentViewModel(options) {
+                var self = this;
+                
+                self.vendorName = options.vendorName;
+                self.backchargeVendorName = options.backchargeVendorName;
+                self.invoiceNumber = options.invoiceNumber;
+                self.amount = options.amount;
+                self.backchargeAmount = options.backchargeAmount;
+                self.isBackcharge = options.isBackcharge;
+                self.backchargeReason = options.backchargeReason;
+                self.personNotified = options.personNotified;
+                self.personNotifiedPhoneNumber = options.personNotifiedPhoneNumber;
+                self.personNotifiedDate = options.personNotifiedDate;
+                self.backchargeResponseFromVendor = options.backchargeResponseFromVendor;
+                self.paymentId = options.paymentId;
+                self.paymentCreatedDate = options.paymentCreatedDate;
+                self.holdComments = ko.observable(options.holdComments);
+                self.backchargeHoldComments = ko.observable(options.backchargeHoldComments);
+                self.backchargeDenyComments = ko.observable(options.backchargeDenyComments);
+                self.holdDate = ko.observable(options.holdDate);
+                self.backchargeHoldDate = ko.observable(options.backchargeHoldDate);
+                self.backchargeDenyDate = ko.observable(options.backchargeDenyDate);
+                self.paymentStatusDisplayName = ko.observable(options.paymentStatusDisplayName);
+                self.backchargeStatusDisplayName = ko.observable(options.backchargeStatusDisplayName);
+
+                self.isBackchargeHeld = ko.computed(function () {
+                    return self.backchargeStatusDisplayName() == backchargeStatusEnum.RequestedHold.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName;
+                });
+
+                self.isBackchargeDenied = ko.computed(function () {
+                    return self.backchargeStatusDisplayName() == backchargeStatusEnum.RequestedDeny.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Denied.DisplayName;
+                });
+
+                self.isHeld = ko.computed(function () {
+                    return self.paymentStatusDisplayName() == paymentStatusEnum.RequestedHold.DisplayName || self.paymentStatusDisplayName() == paymentStatusEnum.Hold.DisplayName;
+                });
+
+                self.paymentStatusBadgeClassName = ko.computed(function () {
+                    if (self.paymentStatusDisplayName() == paymentStatusEnum.Hold.DisplayName) {
+                        return "warning";
+                    }
+                    else if (self.paymentStatusDisplayName() == paymentStatusEnum.Approved.DisplayName) {
+                        return "success";
+                    }
+                    return "default";
+                });
+
+                self.backchargeStatusBadgeClassName = ko.computed(function () {
+                    if (self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName) {
+                        return "warning";
+                    }
+                    else if (self.backchargeStatusDisplayName() == backchargeStatusEnum.Approved.DisplayName) {
+                        return "success";
+                    }
+                    else if (self.backchargeStatusDisplayName() == backchargeStatusEnum.Denied.DisplayName) {
+                        return "danger";
+                    }
+                    return "default";
+                });
+            }
+            
             var viewModel = new jobSummaryViewModel();
             ko.applyBindings(viewModel);
 
@@ -156,6 +219,11 @@ require(['/Scripts/app/main.js'], function () {
                 viewModel.allJobAttachments.push(new JobAttachmentViewModel(attachment));
             });
 
+            var persistedAllJobPaymentsViewModel = modelData.initialJobPayments;
+
+            _(persistedAllJobPaymentsViewModel).each(function(payment) {
+                viewModel.allJobPayments.push(new JobPaymentViewModel(payment));
+            });
         });
     });
 });
