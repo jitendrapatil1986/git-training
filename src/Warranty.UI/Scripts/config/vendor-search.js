@@ -12,7 +12,7 @@
         engine: new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: urls.QuickSearch.Vendors + '?query=%QUERY'
+            remote: urls.QuickSearch.Vendors + '?query=%QUERY&cityCode=' + $('#vendor-search').attr('data-city-code')
         })
     };
 });
