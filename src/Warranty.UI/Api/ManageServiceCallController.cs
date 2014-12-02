@@ -26,15 +26,9 @@
         }
 
         [HttpPost]
-        public VerifyHomeownerSignatureServiceCallStatusModel VerifyHomeownerSignatureServiceCall(VerifyHomeownerSignatureServiceCallStatusModel model)
+        public VerifyHomeownerSignatureServiceCallStatusModel VerifyHomeownerSignatureServiceCall(VerifyHomeownerSignatureServiceCallStatusCommand model)
         {
-            var resultModel = _mediator.Send(new VerifyHomeownerSignatureServiceCallStatusCommand
-                {
-                    ServiceCallId = model.ServiceCallId,
-                    ServiceCallStatus = model.ServiceCallStatus,
-                    HomeownerVerificationSignature = model.HomeownerVerificationSignature,
-                    HomeownerVerificationSignatureDate = model.HomeownerVerificationSignatureDate,
-                });
+            var resultModel = _mediator.Send(model);
 
             return resultModel;
         }

@@ -24,6 +24,7 @@
                 var updateServiceCall = _database.SingleById<ServiceCall>(message.ServiceCallId);
                 updateServiceCall.HomeownerVerificationSignature = message.HomeownerVerificationSignature;
                 updateServiceCall.HomeownerVerificationSignatureDate = message.HomeownerVerificationSignatureDate;
+                updateServiceCall.HomeownerVerificationType = HomeownerVerificationType.FromValue(message.HomeownerVerificationTypeId);
 
                 if (updateServiceCall.ServiceCallStatus != ServiceCallStatus.Complete)
                     updateServiceCall.ServiceCallStatus = ServiceCallStatus.HomeownerSigned;
@@ -41,6 +42,7 @@
                         ServiceCallStatus = updateServiceCall.ServiceCallStatus,
                         HomeownerVerificationSignature = updateServiceCall.HomeownerVerificationSignature,
                         HomeownerVerificationSignatureDate = updateServiceCall.HomeownerVerificationSignatureDate,
+                        HomeownerVerificationType = updateServiceCall.HomeownerVerificationType,
                     };
 
                 return model;
