@@ -81,17 +81,11 @@
                         PersonNotifiedDate = message.PersonNotifiedDate,
                         BackchargeResponseFromVendor = message.BackchargeResponseFromVendor,
                         CostCode = WarrantyCostCode.FromValue(message.SelectedCostCode).CostCode,
-                        BackchargeStatus = BackchargeStatus.Requested
+                        BackchargeStatus = BackchargeStatus.Requested,
+                        Username = _userSession.GetCurrentUser().LoginName,
+                        EmployeeNumber = _userSession.GetCurrentUser().EmployeeNumber
                     };
                     _database.Insert(backcharge);
-
-
-                    _bus.Send<NotifyBackchargeRequested>(x =>
-                    {
-                        x.BackchargeId = backcharge.BackchargeId;
-                        x.Username = _userSession.GetCurrentUser().LoginName;
-                        x.EmployeeNumber = _userSession.GetCurrentUser().EmployeeNumber;
-                    });
                 }
 
                 return payment.PaymentId;

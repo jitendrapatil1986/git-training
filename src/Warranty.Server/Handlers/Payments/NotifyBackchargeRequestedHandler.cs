@@ -1,6 +1,7 @@
 ﻿namespace Warranty.Server.Handlers.Payments
 {
     using Accounting.Commands.Backcharges;
+    using Configuration;
     using Core.Entities;
     using InnerMessages;
     using NPoco;
@@ -27,7 +28,7 @@
 
                 var backchargeRequest = new RequestBackcharge
                 {
-                    JobNumber = payment.JobNumber,
+                    JobNumber = string.Format("{0}{1}", payment.JobNumber.Substring(0,4), WarrantyConstants.DefaultWarrantyJobNumberSuffix),
                     BackchargeAmount = backcharge.BackchargeAmount,
                     VendorNumber = backcharge.BackchargeVendorNumber,
                     ResponseFromVendor = backcharge.BackchargeResponseFromVendor,

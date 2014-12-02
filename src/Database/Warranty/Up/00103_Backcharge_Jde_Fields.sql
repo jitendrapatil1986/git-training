@@ -1,0 +1,7 @@
+ALTER TABLE Backcharges
+ADD Username VARCHAR(50) NULL
+GO
+
+ALTER TABLE Backcharges
+ADD EmployeeNumber VARCHAR(50) NULL
+GO

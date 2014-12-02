@@ -26,6 +26,8 @@
                     x.Column(y => y.CostCode);
                     x.Column(y => y.HoldDate);
                     x.Column(y => y.DenyDate);
+                    x.Column(y => y.Username);
+                    x.Column(y => y.EmployeeNumber);
                 });
         }
     }
