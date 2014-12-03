@@ -110,7 +110,7 @@
             return _mediator.Send(model); ;
         }
 
-        [HttpDelete]
+        [System.Web.Http.HttpDelete]
         public string DeletePayment(DeletePaymentCommand model)
         {
             _mediator.Send(model);
