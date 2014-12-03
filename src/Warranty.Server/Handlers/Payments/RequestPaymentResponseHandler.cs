@@ -31,7 +31,7 @@
                 
                 if (backcharge != null)
                 {
-                    _bus.Send<NotifyBackchargeRequested>(x =>
+                    _bus.SendLocal<NotifyBackchargeRequested>(x =>
                     {
                         x.BackchargeId = backcharge.BackchargeId;
                         x.Username = backcharge.Username;
