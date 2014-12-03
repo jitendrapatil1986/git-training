@@ -16,10 +16,13 @@ namespace Warranty.Server.Handlers.PurchaseOrders
 
         public void Handle(CityPurchaseOrderMaxDeleted message)
         {
-            var existingCity = _database.Single<City>("SELECT * FROM Cities WHERE CityCode = @0", message.JDEId);
+            using (_database)
+            {
+                var existingCity = _database.Single<City>("SELECT * FROM Cities WHERE CityCode = @0", message.JDEId);
 
-            existingCity.PurchaseOrderMaxAmount = 0;
-            _database.Update(existingCity);
+                existingCity.PurchaseOrderMaxAmount = 0;
+                _database.Update(existingCity);    
+            }
         }
     }
 }
