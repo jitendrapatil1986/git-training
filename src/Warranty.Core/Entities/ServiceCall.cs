@@ -24,6 +24,7 @@ namespace Warranty.Core.Entities
         public virtual string HomeOwnerSignature { get; set; }
         public virtual string HomeownerVerificationSignature { get; set; }
         public virtual DateTime? HomeownerVerificationSignatureDate { get; set; }
+        public virtual HomeownerVerificationType HomeownerVerificationType { get; set; }
         public virtual DateTime? CreatedDate { get; set; }
         public virtual string CreatedBy { get; set; }
         public virtual DateTime? UpdatedDate { get; set; }

@@ -37,6 +37,7 @@
                     ServiceCallType = requestType.DisplayName,
                     JobId = jobId,
                     WarrantyRepresentativeEmployeeId = employeeId,
+                    HomeownerVerificationType = HomeownerVerificationType.NotVerified,
                 };
 
                 _database.Insert(serviceCall);
