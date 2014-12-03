@@ -45,11 +45,40 @@ namespace Warranty.Core.Features.JobSummary
         public DateTime WarrantyStartDate { get; set; }
 
         public IEnumerable<JobServiceCall> JobServiceCalls { get; set; }
-        public IEnumerable<JobPayment> JobPayments { get; set; }
         public IEnumerable<JobSelection> JobSelections { get; set; }
+        public IEnumerable<JobPayment> JobPayments { get; set; }
         public IEnumerable<JobNote> JobNotes { get; set; }
         public IEnumerable<Attachment> Attachments { get; set; }
         public IEnumerable<Homeowner> Homeowners { get; set; }
+
+        public class JobPayment
+        {
+            public Guid PaymentId { get; set; }
+            public decimal Amount { get; set; }
+            public PaymentStatus PaymentStatus { get; set; }
+            public BackchargeStatus BackchargeStatus { get; set; }
+            public string PaymentStatusDisplayName { get { return PaymentStatus.DisplayName; } }
+            public string BackchargeStatusDisplayName { get { return IsBackcharge ? BackchargeStatus.DisplayName : string.Empty; } }
+            public string InvoiceNumber { get; set; }
+            public DateTime PaymentCreatedDate { get; set; }
+            public Guid BackchargeId { get; set; }
+            public decimal BackchargeAmount { get; set; }
+            public string BackchargeReason { get; set; }
+            public string PersonNotified { get; set; }
+            public string PersonNotifiedPhoneNumber { get; set; }
+            public DateTime PersonNotifiedDate { get; set; }
+            public string BackchargeResponseFromVendor { get; set; }
+            public string VendorName { get; set; }
+            public string BackchargeVendorName { get; set; }
+            public string HoldComments { get; set; }
+            public DateTime? HoldDate { get; set; }
+            public string BackchargeHoldComments { get; set; }
+            public DateTime? BackchargeHoldDate { get; set; }
+            public string BackchargeDenyComments { get; set; }
+            public DateTime? BackchargeDenyDate { get; set; }
+            public bool IsBackcharge { get; set; }
+        }
+
         public AdditionalContactsModel AdditionalContacts { get; set; }
 
         public int HomeOwnerNumber { get; set; }
@@ -61,21 +90,6 @@ namespace Warranty.Core.Features.JobSummary
             public string OptionNumber { get; set; }
             public string OptionDescription { get; set; }
             public int Quantity { get; set; }
-        }
-
-        public class JobPayment
-        {
-            public Guid PaymentId { get; set; }
-            public string VendorNumber { get; set; }
-            public decimal Amount { get; set; }
-            public string PaymentStatus { get; set; }
-            public string JobNumber { get; set; }
-            public string CreatedBy { get; set; }
-            public DateTime? CreatedDate { get; set; }
-            public string UpdatedBy { get; set; }
-            public DateTime? UpdatedDate { get; set; }
-
-            public string JdeIdentifier { get; set; }
         }
 
         public class JobServiceCall
