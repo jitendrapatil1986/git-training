@@ -26,5 +26,7 @@
         public string DenyComments { get; set; }
         public string CostCode { get; set; }
         public BackchargeStatus BackchargeStatus { get; set; }
+        public string Username { get; set; }
+        public string EmployeeNumber { get; set; }
     }
 }
