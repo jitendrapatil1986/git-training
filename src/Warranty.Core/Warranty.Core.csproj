@@ -127,15 +127,11 @@
     <Compile Include="Configurations\WarrantyConfigSection.cs" />
     <Compile Include="Configurations\EnumerationDisplayConverter.cs" />
     <Compile Include="Configurations\WarrantyConstants.cs" />
-    <Compile Include="Configurations\WarrantyContractResolver.cs" />
     <Compile Include="CsvBuilder\CsvBuilder.cs" />
     <Compile Include="CsvBuilder\ICsvBuilder.cs" />
-    <Compile Include="DataAccess\AuditEventListener.cs" />
     <Compile Include="DataAccess\EnumerationMapper.cs" />
-    <Compile Include="DataAccess\Conventions\Int32EnumerationType.cs" />
     <Compile Include="DataAccess\Conventions\IStringEnumeration.cs" />
     <Compile Include="DataAccess\Conventions\StringEnumeration.cs" />
-    <Compile Include="DataAccess\Conventions\StringEnumerationType.cs" />
     <Compile Include="DataAccess\DbFactory.cs" />
     <Compile Include="DataAccess\Mappings\ActivityLogMap.cs" />
     <Compile Include="DataAccess\Mappings\AuditCreatedEntityMap.cs" />
@@ -224,7 +220,6 @@
     <Compile Include="Extensions\ToDoTypeExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Enumerations\GenericCompositeUserType.cs" />
     <Compile Include="Enumerations\Int32Enumeration.cs" />
     <Compile Include="Enumerations\IEnumeration.cs" />
     <Compile Include="Enumerations\Enumeration.cs" />
