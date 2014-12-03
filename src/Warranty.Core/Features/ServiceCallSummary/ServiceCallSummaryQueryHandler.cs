@@ -80,6 +80,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , cm.CommunityName
                                     , wc.HomeownerVerificationSignature
                                     , wc.HomeownerVerificationSignatureDate
+                                    , wc.HomeownerVerificationTypeId as HomeownerVerificationType
                                     , wc.SpecialProjectReason
                                     , wc.SpecialProjectDate
                                     

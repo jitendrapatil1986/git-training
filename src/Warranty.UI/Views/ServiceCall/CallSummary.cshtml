@@ -125,8 +125,9 @@
             </div>
             @Html.Partial("_AdditionalContacts", Model.ServiceCallSummary.HomeownerId)
  
-            @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignature, new { id = "verifiedHomeownerSignature", @class = "form-control" })
-            @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignatureDate, new { id = "verifiedHomeownerSignatureDate", @class = "form-control" })
+            @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignature, new { id = "verifiedHomeownerSignature"})
+            @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignatureDate, new { id = "verifiedHomeownerSignatureDate"})
+            @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationType, new {id = "verifiedHomeownerType"})
 
             <section data-bind="visible: verifiedHomeownerSignature() && (callSummaryStatusSigned() || callSummaryStatusComplete())">
                 <div class="alert alert-success no-bottom-margin" >
@@ -151,11 +152,15 @@
                         <div class="panel-body">
                             <div class="row">
                                 <form>
+                                    <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationTypeId">
+                                        <label class="control-label" for="verifyHomeownerType"></label>
+                                        <select id="verifyHomeownerType" class="form-control" data-bind="options: homeownerVerificationCodes, value: homeownerVerificationTypeId, optionsText: 'displayText', optionsValue: 'value', optionsCaption: 'Select Verification Type'"></select>
+                                    </div>
                                     <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationSignature">
                                         <label class="control-label" for="homeownerVerificationSignature"></label>
                                         @Html.TextBox("Signature", null, new { id = "homeownerVerificationSignature", @class = "form-control", data_bind = "value: homeownerVerificationSignature, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Signature'}" })
                                     </div>
-                                    <div class="control-group col-md-4 no-right-padding" data-bind="validationElement: homeownerVerificationSignatureDate">
+                                    <div class="control-group col-md-2 no-right-padding" data-bind="validationElement: homeownerVerificationSignatureDate">
                                         <label class="control-label" for="homeownerVerificationSignatureDate"></label>
                                         @Html.TextBox("Date", null, new { id = "homeownerVerificationSignatureDate", @class = "datepicker-input form-control", data_bind="value: homeownerVerificationSignatureDate, attr:{placeholder: 'Select Date'}" })
                                     </div>
@@ -439,7 +444,8 @@
 
         define('dropdownData', function() {
             return {
-                availableLookups: @Html.Raw(Model.AddServiceCallLineItem.ProblemCodes.Select(x => new {problemId = x.Value, problemCode = x.Text}).ToJson())
+                availableLookups: @Html.Raw(Model.AddServiceCallLineItem.ProblemCodes.Select(x => new {problemId = x.Value, problemCode = x.Text}).ToJson()),
+                verificationTypes: @Html.Raw(@HomeownerVerificationType.GetAll().Where(x => x.Value != @HomeownerVerificationType.NotVerified.Value).OrderBy(x => x.DisplayName).Select(x => new {DisplayText = x.DisplayName, x.Value}).ToJson())
                 }
         });
     </script>

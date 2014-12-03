@@ -218,6 +218,7 @@
     <Compile Include="Enumerations\ActivityType.cs" />
     <Compile Include="Enumerations\BackchargeStatus.cs" />
     <Compile Include="Enumerations\DeliveryInstruction.cs" />
+    <Compile Include="Enumerations\HomeownerVerificationType.cs" />
     <Compile Include="Enumerations\PaymentStatus.cs" />
     <Compile Include="Enumerations\PurchaseOrderLineItemStatus.cs" />
     <Compile Include="Enumerations\TaskType.cs" />

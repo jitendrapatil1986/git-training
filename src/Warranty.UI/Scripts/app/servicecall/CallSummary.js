@@ -1,5 +1,5 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'bootbox', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/additionalContacts', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, bootbox, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, additionalContacts) {
+    require(['jquery', 'ko', 'ko.x-editable', 'bootbox', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'enumeration/HomeownerVerificationType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/additionalContacts', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, bootbox, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, homeownerVerificationTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, additionalContacts) {
         window.ko = ko; //manually set the global ko property.
         require(['ko.validation'], function () {
 
@@ -709,14 +709,17 @@ require(['/Scripts/app/main.js'], function () {
                     return self.areAllLineItemsCompleted() && !self.callSummaryStatusComplete() && self.callSummaryStatusSigned();
                 });
 
-                self.homeownerVerificationSignature = ko.observable('').extend({required: true});
+                self.homeownerVerificationSignature = ko.observable('').extend({ required: true });
                 self.homeownerVerificationSignatureDate = ko.observable().extend({required: true}).extend({date: true});
+                self.homeownerVerificationCodes = dropdownData.verificationTypes;
+                self.homeownerVerificationTypeId = ko.observable().extend({ required: true });                
 
                 self.verifiedHomeownerSignature = ko.observable($("#verifiedHomeownerSignature").val());
                 self.verifiedHomeownerSignatureDate = ko.observable($("#verifiedHomeownerSignatureDate").val());
+                self.verifiedHomeownerType = ko.observable($("#verifiedHomeownerType").val());
 
                 self.verifiedSignature = ko.computed(function () {
-                    var result = 'Verification signed by ' + self.verifiedHomeownerSignature();
+                    var result = self.verifiedHomeownerType() + ' Verification Acknowledged by ' + self.verifiedHomeownerSignature();
 
                     if (self.verifiedHomeownerSignatureDate()) {
                         result += ' on ' + moment(self.verifiedHomeownerSignatureDate()).format('L');
@@ -726,16 +729,15 @@ require(['/Scripts/app/main.js'], function () {
                 });
 
                 self.saveVerifiedHomeownerSignature = function () {
-                    if (formHasErrors([self.homeownerVerificationSignature, self.homeownerVerificationSignatureDate]))
+                    if (formHasErrors([self.homeownerVerificationSignature, self.homeownerVerificationSignatureDate, self.homeownerVerificationTypeId]))
                         return;
                     
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
-                    self.homeownerVerificationSignature = $("#homeownerVerificationSignature").val();
-                    self.homeownerVerificationSignatureDate = $("#homeownerVerificationSignatureDate").val();
 
                     var verifySignatureData = ko.toJSON({
                         serviceCallId: self.serviceCallId, homeownerVerificationSignature: self.homeownerVerificationSignature,
-                        homeownerVerificationSignatureDate: self.homeownerVerificationSignatureDate
+                        homeownerVerificationSignatureDate: self.homeownerVerificationSignatureDate,
+                        homeownerVerificationTypeId: self.homeownerVerificationTypeId
                     });
 
                     $.ajax({
@@ -748,18 +750,20 @@ require(['/Scripts/app/main.js'], function () {
                     })
                         .fail(function (response) {
                             alert(JSON.stringify(response));
-                            toastr.error("There was an issue saving the homeowner verification signature. Please try again!");
+                            toastr.error("There was an issue saving the homeowner verification. Please try again!");
                         })
                         .done(function (response) {
                             self.callSummaryServiceCallStatus(response.ServiceCallStatus.DisplayName);
                             self.verifiedHomeownerSignature(response.HomeownerVerificationSignature);
                             self.verifiedHomeownerSignatureDate(response.HomeownerVerificationSignatureDate);
+                            self.verifiedHomeownerType(response.HomeownerVerificationType.DisplayName);
                             toastr.success("Success! Data saved.");
 
                             $("#homeownerVerificationSignature").val('');
                             $("#homeownerVerificationSignatureDate").val('');
                             self.homeownerVerificationSignature = '';
                             self.homeownerVerificationSignatureDate = '';
+                            self.homeownerVerificationTypeId = '';
                         });
                 };
             }
