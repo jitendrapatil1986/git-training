@@ -22,12 +22,11 @@
                                                                     UserRoles.WarrantyServiceRepresentative,
                                                                 });
 
-        public static readonly ToDoType PaymentRequestApproval = new ToDoType(3, "Payment Request Approval",
+        public static readonly ToDoType PaymentRequestApprovalUnderWarranty = new ToDoType(3, "Non Closed Out Payments",
                                                             new List<string>
                                                                 {
                                                                     UserRoles.WarrantyAdmin,
                                                                     UserRoles.WarrantyServiceManager,
-                                                                    UserRoles.WarrantyServiceCoordinator,
                                                                 });
         
         public static readonly ToDoType CommunityEmployeeAssignment = new ToDoType(4, "Community Employee Assignment",
@@ -45,6 +44,13 @@
                                                                     UserRoles.WarrantyServiceCoordinator,
                                                                 });
 
+        public static readonly ToDoType PaymentRequestApprovalOutOfWarranty = new ToDoType(6, "Closed Out Payments",
+                                                    new List<string>
+                                                                {
+                                                                    UserRoles.WarrantyAdmin,
+                                                                    UserRoles.WarrantyServiceManager,
+                                                                });
+
         private ToDoType(int value, string displayName, IEnumerable<string> userRolesWithAccess)
             : base(value, displayName)
         {
@@ -55,7 +61,7 @@
 
         public static IEnumerable<ToDoType> GetAccesibleToDos(IEnumerable<string> userRoles)
         {
-            return GetAll().Where(x => x.UserRolesWithAccess.Intersect(userRoles).Any());
+            return GetAll().Where(x => x.UserRolesWithAccess.Intersect(userRoles).Any()).OrderBy(x=>x.DisplayName);
         }
     }
 }

@@ -35,9 +35,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Client, Version=1.1.871.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Accounting.Client, Version=1.1.889.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Accounting.Client.1.1.871.0\lib\net45\Accounting.Client.dll</HintPath>
+      <HintPath>..\packages\Accounting.Client.1.1.889.0\lib\net45\Accounting.Client.dll</HintPath>
     </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -541,14 +541,16 @@
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoJobAnniversaryTask.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoJobChangedTask.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoCommunityEmployeeAssignment.cs" />
-    <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoPaymentRequestApproval.cs" />
+    <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoPaymentRequestApprovalUnderWarranty.cs" />
+    <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoPaymentRequestApprovalOutOfWarranty.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoServiceCallApproval.cs" />
     <Compile Include="ToDoInfrastructure\Interfaces\IToDo.cs" />
     <Compile Include="ToDoInfrastructure\IToDoAggregator.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoCommunityEmployeeAssignmentModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoJob10MonthAnniversaryModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoJobAnniversaryTaskModel.cs" />
-    <Compile Include="ToDoInfrastructure\Models\ToDoPaymentRequestApprovalModel.cs" />
+    <Compile Include="ToDoInfrastructure\Models\ToDoPaymentRequestApprovalUnderWarrantyModel.cs" />
+    <Compile Include="ToDoInfrastructure\Models\ToDoPaymentRequestApprovalOutOfWarrantyModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoServiceCallApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoJobChangedTaskModel.cs" />
     <Compile Include="ToDoInfrastructure\ToDo.cs" />

@@ -1,8 +1,8 @@
 ﻿@using Warranty.Core.Enumerations
 @using Warranty.UI.Core.Helpers
-@model Warranty.Core.ToDoInfrastructure.Models.ToDoPaymentRequestApprovalModel
+@model Warranty.Core.ToDoInfrastructure.Models.ToDoPaymentRequestApprovalOutOfWarrantyModel
 
-<div class="todo @Css.ToDoClass(ToDoType.PaymentRequestApproval) hide" id="pending-payment-todo-@Model.PaymentId">
+<div class="todo @Css.ToDoClass(ToDoType.PaymentRequestApprovalOutOfWarranty) hide" id="pending-payment-todo-@Model.PaymentId">
 
     <div class="todo-widget-data-container">
         <div class="payment-request-approval-icon">
@@ -30,7 +30,7 @@
             <strong>@Model.VendorName</strong>
             <br/>
             <small class="text-muted">
-                @Model.InvoiceNumber
+                <strong>Invoice # </strong>@Model.InvoiceNumber
                 <br/>
                 @Format.Dollars(Model.Amount)
                 <br/>
