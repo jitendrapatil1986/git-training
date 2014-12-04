@@ -13,7 +13,7 @@
 
         public AddServiceCallPurchaseOrderModel Handle(AddServiceCallPurchaseOrderQuery query)
         {
-            const string sql = @"SELECT j.JobId, j.JobNumber, j.AddressLine, j.City, j.StateCode, j.PostalCode, sc.ServiceCallNumber, l.ServiceCallLineItemId, c.PurchaseOrderMaxAmount
+            const string sql = @"SELECT j.JobId, j.JobNumber, j.AddressLine, j.City, j.StateCode, j.PostalCode, sc.ServiceCallNumber, l.ServiceCallLineItemId, c.PurchaseOrderMaxAmount, c.CityCode
                                 FROM Jobs j
                                 INNER JOIN ServiceCalls sc
                                 ON j.JobId = sc.JobId

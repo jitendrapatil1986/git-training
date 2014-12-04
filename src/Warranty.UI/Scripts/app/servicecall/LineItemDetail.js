@@ -490,11 +490,22 @@
                         self.backchargeVendorName(vendorName);
                     });
 
-                    self.addPayment = function () {
-                        if (self.errors().length != 0) {
-                            self.errors.showAllMessages();
-                            return;
+                    function formHasErrors(theModel) {
+                        var errors = ko.validation.group(theModel);
+
+                        if (errors().length != 0) {
+                            viewModel.errors.showAllMessages(false);
+                            errors.showAllMessages();
+                            return true;
                         }
+
+                        return false;
+                    }
+
+                    self.addPayment = function () {
+                        
+                        if (formHasErrors([self.invoiceNumber, self.amount, self.selectedCostCode, self.backchargeAmount, self.backchargeReason, self.personNotified, self.personNotifiedPhoneNumber, self.personNotifiedDate, self.backchargeResponseFromVendor, self.vendorNumber, self.backchargeVendorName, self.backchargeVendorNumber]))
+                            return;
 
                         self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
                         self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;

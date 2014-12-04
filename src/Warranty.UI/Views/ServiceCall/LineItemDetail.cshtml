@@ -152,7 +152,7 @@
                             <div class="row">
                                 <div class="form-group col-md-3" data-bind="validationElement: vendorNumber, validationOptions: { insertMessages: false}">
                                     @Html.Label("Vendor", new { @class = "control-label", @for = "vendor-search" })
-                                    <input type="text" id="vendor-search" class="form-control" autocomplete="off" placeholder="Type vendor name or vendor number" />
+                                    <input type="text" id="vendor-search" class="form-control" autocomplete="off" data-city-code="@Model.CityCode" placeholder="Type vendor name or vendor number" />
                                     <span data-bind="validationMessage: vendorNumber" class="help-block"></span>
                                 </div>
                                 <div class="form-group col-md-3" data-bind="validationElement: invoiceNumber">
@@ -186,7 +186,7 @@
                                 <div class="row">
                                     <div class="form-group col-md-4" data-bind="validationElement: backchargeVendorNumber, validationOptions: { insertMessages: false}">
                                         @Html.Label("Backcharge vendor", new { @class = "control-label", @for = "backcharge-vendor-search" })
-                                        <input type="text" id="backcharge-vendor-search" class="form-control" autocomplete="off" placeholder="Type vendor name or vendor number" data-vendor-number="0" />
+                                        <input type="text" id="backcharge-vendor-search" class="form-control" autocomplete="off" data-city-code="@Model.CityCode" placeholder="Type vendor name or vendor number" data-vendor-number="0" />
                                         <span data-bind="validationMessage: backchargeVendorNumber" class="help-block"></span>
                                     </div>
 
