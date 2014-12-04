@@ -22,6 +22,7 @@ namespace Warranty.Core.Features.QuickSearch
                 new
                 {
                     searchString = query.Query,
+                    marketCode = query.CityCode
                 }));
 
             if (vendors == null) return new List<QuickSearchCallVendorModel>();
