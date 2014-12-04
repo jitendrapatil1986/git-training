@@ -22,7 +22,7 @@
                                                                     UserRoles.WarrantyServiceRepresentative,
                                                                 });
 
-        public static readonly ToDoType PaymentRequestApprovalUnderWarranty = new ToDoType(3, "Payment Approval Under Warranty",
+        public static readonly ToDoType PaymentRequestApprovalUnderWarranty = new ToDoType(3, "Non Closed Out Payments",
                                                             new List<string>
                                                                 {
                                                                     UserRoles.WarrantyAdmin,
@@ -44,7 +44,7 @@
                                                                     UserRoles.WarrantyServiceCoordinator,
                                                                 });
 
-        public static readonly ToDoType PaymentRequestApprovalOutOfWarranty = new ToDoType(6, "Payment Approval Out of Warraty",
+        public static readonly ToDoType PaymentRequestApprovalOutOfWarranty = new ToDoType(6, "Closed Out Payments",
                                                     new List<string>
                                                                 {
                                                                     UserRoles.WarrantyAdmin,
