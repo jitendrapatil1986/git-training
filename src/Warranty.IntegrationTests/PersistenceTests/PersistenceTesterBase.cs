@@ -3,6 +3,7 @@
     using System;
     using Core;
     using Core.DataAccess;
+    using Core.Security;
     using NPoco;
     using NUnit.Framework;
     using StructureMap;
@@ -14,8 +15,12 @@
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
-            ObjectFactory.Initialize(x => x.AddRegistry<WarrantyCoreRegistry>()); 
-            DbFactory.Setup(ObjectFactory.Container, new TestWarrantyUserSession());
+            ObjectFactory.Initialize(x =>
+            {
+                x.AddRegistry<WarrantyCoreRegistry>();
+                x.For<IUserSession>().Use<TestWarrantyUserSession>();
+            }); 
+            DbFactory.Setup(ObjectFactory.Container);
 
             var deleter = new DatabaseDeleter(DbFactory.DatabaseFactory.GetDatabase());
             deleter.DeleteAllData(DbFactory.DatabaseFactory.GetDatabase());
