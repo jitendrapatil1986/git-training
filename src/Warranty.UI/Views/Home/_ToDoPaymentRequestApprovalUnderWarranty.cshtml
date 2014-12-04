@@ -1,0 +1,45 @@
+﻿@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
+@model Warranty.Core.ToDoInfrastructure.Models.ToDoPaymentRequestApprovalUnderWarrantyModel
+
+<div class="todo @Css.ToDoClass(ToDoType.PaymentRequestApprovalUnderWarranty) hide" id="pending-payment-todo-@Model.PaymentId">
+
+    <div class="todo-widget-data-container">
+        <div class="payment-request-approval-icon">
+            P
+        </div>
+
+        <div class="todo-widget-separator-line">
+        </div>
+
+        <div class="todo-widget-element">
+            <small class="text-muted">
+                @Html.ActionLink(Model.ServiceCallNumber.ToString(), "CallSummary", "ServiceCall", new { id = Model.ServiceCallId }, null)
+            </small>
+        </div>
+
+        <div class="todo-widget-element service-call-line cursor-pointer" onclick="location.href='@Url.Action("LineItemDetail", "ServiceCall", new { id = Model.ServiceCallLineItemId })';">
+            @if (User.IsInRole(UserRoles.WarrantyServiceRepresentative))
+            {
+                <p class="text-muted margin-bottom-5 small-text">Payment placed on hold</p>
+            }
+            else
+            {
+                <p class="text-muted margin-bottom-5 small-text">Payment is pending approval</p>
+            }
+            <strong>@Model.VendorName</strong>
+            <br/>
+            <small class="text-muted">
+                <strong>Invoice # </strong>@Model.InvoiceNumber
+                <br/>
+                @Format.Dollars(Model.Amount)
+                <br/>
+                @Model.HoldComments
+                <br/>
+                @Format.DateMonthDayYear(Model.UpdatedDate)
+            </small>
+        </div>
+
+    </div>
+</div>
+
