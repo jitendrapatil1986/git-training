@@ -414,7 +414,7 @@
     <Content Include="Views\Job\Index.cshtml" />
     <Content Include="css\less\toastr.less" />
     <Content Include="Views\Home\ToDoWidget.cshtml" />
-    <Content Include="Views\Home\_ToDoPaymentRequestApproval.cshtml" />
+    <Content Include="Views\Home\_ToDoPaymentRequestApprovalUnderWarranty.cshtml" />
     <Content Include="Views\Home\_ToDoServiceCallApproval.cshtml" />
     <Content Include="Views\ServiceCall\CallSummary.cshtml" />
     <Content Include="Views\ServiceCall\SearchCustomer.cshtml" />
@@ -452,6 +452,7 @@
     <Content Include="Views\ServiceCall\CreatePurchaseOrder.cshtml" />
     <Content Include="Views\Home\_ToDoJobAnniversaryTask.cshtml" />
     <Content Include="Views\Home\_ToDoJob10MonthAnniversary.cshtml" />
+    <Content Include="Views\Home\_ToDoPaymentRequestApprovalOutOfWarranty.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

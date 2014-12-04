@@ -3,7 +3,7 @@
     using System;
     using Enumerations;
 
-    public class ToDoPaymentRequestApprovalModel
+    public class ToDoPaymentRequestApprovalUnderWarrantyModel
     {
         public Guid PaymentId { get; set; }
         public Guid ServiceCallLineItemId { get; set; }
