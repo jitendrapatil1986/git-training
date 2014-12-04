@@ -50,7 +50,8 @@
                                     li.[ProblemJdeCode],
                                     li.[ProblemDetailCode],
                                     cc.[CostCode],
-                                    job.[JobNumber]
+                                    job.[JobNumber],
+                                    city.CityCode
                                 FROM ServiceCallLineItems li
                                 INNER JOIN ServiceCalls sc
                                     ON li.ServiceCallId = sc.ServiceCallId

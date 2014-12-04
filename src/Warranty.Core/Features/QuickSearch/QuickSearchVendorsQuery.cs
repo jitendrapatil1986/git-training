@@ -5,5 +5,6 @@
     public class QuickSearchVendorsQuery : IQuery<IEnumerable<QuickSearchCallVendorModel>>
     {
         public string Query { get; set; }
+        public string CityCode { get; set; }
     }
 }

@@ -17,7 +17,7 @@
                             <div class="col-md-6">
                                 <div class="control-group" data-bind="validationElement: vendorNumber, validationOptions: { insertMessages: false}">
                                     <label class="control-label" for="vendor-search">Vendor</label>
-                                    <input type="text" id="vendor-search" class="form-control" autocomplete="off" placeholder="Type vendor name or vendor number" />
+                                    <input type="text" id="vendor-search" data-city-code="@Model.CityCode"  class="form-control" autocomplete="off" placeholder="Type vendor name or vendor number" />
                                     <span data-bind="validationMessage: vendorNumber" class="help-block"></span>
                                 </div>
                             </div>
