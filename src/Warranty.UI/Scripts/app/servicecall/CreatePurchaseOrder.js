@@ -49,12 +49,13 @@
                 
                 function purchaseOrderViewModel() {
                     var self = this;
+
                     self.serviceCallLineItemId = modelData.initialPurchaseOrder.serviceCallLineItemId;
                     self.vendorName = ko.observable().extend({required : true});
                     self.vendorNumber = ko.observable().extend({ required: true });
                     self.deliveryInstructionCodes = ko.observableArray(modelData.deliveryInstructionCodes);
                     self.selectedDeliveryInstruction = ko.observable().extend({ required: true });
-                    self.deliveryDate = ko.observable().extend({ required: true });
+                    self.deliveryDate = ko.observable().extend({ required: true, minDate: now});
                     self.warrantyCostCodes = ko.observableArray(modelData.warrantyCostCodes);
                     self.selectedCostCode = ko.observable().extend({required: true});
                     self.isMaterialObjectAccount = ko.observable('true').extend({required: true});
@@ -166,6 +167,15 @@
                     grouping: { deep: true }
                 });
 
+                ko.validation.rules['minDate'] = {
+                    validator: function (val, otherVal) {
+                        return Date.parse(val) >= Date.parse(otherVal);
+                    },
+                    message: 'Date must be greater than or equal to {0}.'
+                };
+
+                ko.validation.registerExtenders();
+                
                 var viewModel = new purchaseOrderViewModel();
                 viewModel.errors = ko.validation.group(viewModel);
                 ko.applyBindings(viewModel);
