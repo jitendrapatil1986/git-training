@@ -6,6 +6,7 @@
         target: function (item) {
             $('#backcharge-vendor-search').attr('data-vendor-number', item.VendorNumber);
             $('#backcharge-vendor-search').attr('data-vendor-name', item.VendorName);
+            $('#backcharge-vendor-search').attr('data-vendor-on-hold', item.VendorOnHold);
             $(document).trigger('backcharge-vendor-number-selected');
         },
         emptyText: 'No vendors found.',

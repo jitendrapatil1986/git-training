@@ -439,8 +439,11 @@
                             onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
+                    self.vendorOnHold = ko.observable(false);
                     self.vendorName = ko.observable('').extend({ required: true });
-                    self.vendorNumber = ko.observable('').extend({ required: true });
+                    self.vendorNumber = ko.observable('').extend({ required: true, vendorIsBlocked: self.vendorOnHold });
+
+                    self.backchargeVendorOnHold = ko.observable(false);
                     self.backchargeVendorName = ko.observable('').extend({
                         required: {
                             onlyIf: function () { return (self.isBackcharge() === true); }
@@ -449,7 +452,7 @@
                     self.backchargeVendorNumber = ko.observable('').extend({
                         required: {
                             onlyIf: function () { return (self.isBackcharge() === true); }
-                        }
+                        }, vendorIsBlocked: self.backchargeVendorOnHold
                     });
                     self.allPayments = ko.observableArray([]);
 
@@ -477,15 +480,19 @@
                     };
 
                     $(document).on('vendor-number-selected', function () {
-                        var vendorNumber = $('#vendor-search').data('vendor-number');
-                        var vendorName = $('#vendor-search').data('vendor-name');
+                        var vendorNumber = $('#vendor-search').attr('data-vendor-number');
+                        var vendorName = $('#vendor-search').attr('data-vendor-name');
+                        var vendorOnHold = $('#vendor-search').attr('data-vendor-on-hold');
+                        self.vendorOnHold(vendorOnHold);
                         self.vendorNumber(vendorNumber);
                         self.vendorName(vendorName);
                     });
+                    
                     $(document).on('backcharge-vendor-number-selected', function () {
-                        var vendorNumber = $('#backcharge-vendor-search').data('vendor-number');
-                        var vendorName = $('#backcharge-vendor-search').data('vendor-name');
-
+                        var vendorNumber = $('#backcharge-vendor-search').attr('data-vendor-number');
+                        var vendorName = $('#backcharge-vendor-search').attr('data-vendor-name');
+                        var vendorOnHold = $('#backcharge-vendor-search').attr('data-vendor-on-hold');
+                        self.backchargeVendorOnHold(vendorOnHold);
                         self.backchargeVendorNumber(vendorNumber);
                         self.backchargeVendorName(vendorName);
                     });
@@ -732,6 +739,19 @@
                     errorMessageClass: 'help-block',
                     decorateElement: true
                 });
+
+                ko.validation.rules["vendorIsBlocked"] = {
+                    validator: function (val, condition) {
+                        if (condition() === 'true' || condition() === true) {
+                            return false;
+                        }
+
+                        return true;
+                    },
+                    message: 'Vendor must not be a blocked.'
+                };
+
+                ko.validation.registerExtenders();
 
                 var viewModel = new serviceCallLineItemViewModel();
                 viewModel.errors = ko.validation.group(viewModel);
