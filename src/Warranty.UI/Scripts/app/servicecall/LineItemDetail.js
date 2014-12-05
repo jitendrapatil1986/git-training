@@ -748,7 +748,7 @@
 
                         return true;
                     },
-                    message: 'Vendor must not be blocked.'
+                    message: 'Vendor on hold.'
                 };
 
                 ko.validation.registerExtenders();
