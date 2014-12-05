@@ -8,6 +8,7 @@ namespace Warranty.Server
     using Core.Entities;
     using NPoco.FluentMappings;
     using StructureMap.Configuration.DSL;
+    using StructureMap.Pipeline;
 
     public class WarrantyRegistry : Registry
     {
@@ -21,7 +22,10 @@ namespace Warranty.Server
                 scanner.AssemblyContainingType<IAuditableEntity>();
                 scanner.AddAllTypesOf<IMap>();
 
-                For<IDatabase>().Use(() => DbFactory.DatabaseFactory.GetDatabase());
+                For<IDatabase>()
+                    .LifecycleIs(new ThreadLocalStorageLifecycle())
+                    .Use(() => DbFactory.DatabaseFactory.GetDatabase());
+
                 For<IUserSession>().Use<WarrantyServerUserSession>();
             });
         }
