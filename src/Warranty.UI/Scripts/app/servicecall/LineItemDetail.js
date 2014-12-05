@@ -441,7 +441,7 @@
                     });
                     self.vendorOnHold = ko.observable(false);
                     self.vendorName = ko.observable('').extend({ required: true });
-                    self.vendorNumber = ko.observable('').extend({ required: true, vendorIsBlocked: self.vendorOnHold });
+                    self.vendorNumber = ko.observable('').extend({ required: true, vendorIsOnHold: self.vendorOnHold });
 
                     self.backchargeVendorOnHold = ko.observable(false);
                     self.backchargeVendorName = ko.observable('').extend({
@@ -452,7 +452,7 @@
                     self.backchargeVendorNumber = ko.observable('').extend({
                         required: {
                             onlyIf: function () { return (self.isBackcharge() === true); }
-                        }, vendorIsBlocked: self.backchargeVendorOnHold
+                        }, vendorIsOnHold: self.backchargeVendorOnHold
                     });
                     self.allPayments = ko.observableArray([]);
 
@@ -740,7 +740,7 @@
                     decorateElement: true
                 });
 
-                ko.validation.rules["vendorIsBlocked"] = {
+                ko.validation.rules["vendorIsOnHold"] = {
                     validator: function (val, condition) {
                         if (condition() === 'true' || condition() === true) {
                             return false;
