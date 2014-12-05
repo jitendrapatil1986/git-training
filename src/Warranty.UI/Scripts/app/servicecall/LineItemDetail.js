@@ -748,7 +748,7 @@
 
                         return true;
                     },
-                    message: 'Vendor must not be a blocked.'
+                    message: 'Vendor must not be blocked.'
                 };
 
                 ko.validation.registerExtenders();
