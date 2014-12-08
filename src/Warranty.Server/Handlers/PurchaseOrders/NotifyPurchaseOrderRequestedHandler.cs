@@ -63,6 +63,7 @@
                                 Quantity = y.Quantity,
                                 UnitPrice = y.UnitCost,
                                 ItemDescription = y.Description,
+                                VarianceCode = WarrantyConstants.VarianceCode
                             })
                     };
 
