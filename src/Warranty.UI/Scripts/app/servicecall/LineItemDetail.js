@@ -439,8 +439,11 @@
                             onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
+                    self.vendorOnHold = ko.observable(false);
                     self.vendorName = ko.observable('').extend({ required: true });
-                    self.vendorNumber = ko.observable('').extend({ required: true });
+                    self.vendorNumber = ko.observable('').extend({ required: true, vendorIsOnHold: self.vendorOnHold });
+
+                    self.backchargeVendorOnHold = ko.observable(false);
                     self.backchargeVendorName = ko.observable('').extend({
                         required: {
                             onlyIf: function () { return (self.isBackcharge() === true); }
@@ -449,7 +452,7 @@
                     self.backchargeVendorNumber = ko.observable('').extend({
                         required: {
                             onlyIf: function () { return (self.isBackcharge() === true); }
-                        }
+                        }, vendorIsOnHold: self.backchargeVendorOnHold
                     });
                     self.allPayments = ko.observableArray([]);
 
@@ -477,24 +480,39 @@
                     };
 
                     $(document).on('vendor-number-selected', function () {
-                        var vendorNumber = $('#vendor-search').data('vendor-number');
-                        var vendorName = $('#vendor-search').data('vendor-name');
+                        var vendorNumber = $('#vendor-search').attr('data-vendor-number');
+                        var vendorName = $('#vendor-search').attr('data-vendor-name');
+                        var vendorOnHold = $('#vendor-search').attr('data-vendor-on-hold');
+                        self.vendorOnHold(vendorOnHold);
                         self.vendorNumber(vendorNumber);
                         self.vendorName(vendorName);
                     });
+                    
                     $(document).on('backcharge-vendor-number-selected', function () {
-                        var vendorNumber = $('#backcharge-vendor-search').data('vendor-number');
-                        var vendorName = $('#backcharge-vendor-search').data('vendor-name');
-
+                        var vendorNumber = $('#backcharge-vendor-search').attr('data-vendor-number');
+                        var vendorName = $('#backcharge-vendor-search').attr('data-vendor-name');
+                        var vendorOnHold = $('#backcharge-vendor-search').attr('data-vendor-on-hold');
+                        self.backchargeVendorOnHold(vendorOnHold);
                         self.backchargeVendorNumber(vendorNumber);
                         self.backchargeVendorName(vendorName);
                     });
 
-                    self.addPayment = function () {
-                        if (self.errors().length != 0) {
-                            self.errors.showAllMessages();
-                            return;
+                    function formHasErrors(theModel) {
+                        var errors = ko.validation.group(theModel);
+
+                        if (errors().length != 0) {
+                            viewModel.errors.showAllMessages(false);
+                            errors.showAllMessages();
+                            return true;
                         }
+
+                        return false;
+                    }
+
+                    self.addPayment = function () {
+                        
+                        if (formHasErrors([self.invoiceNumber, self.amount, self.selectedCostCode, self.backchargeAmount, self.backchargeReason, self.personNotified, self.personNotifiedPhoneNumber, self.personNotifiedDate, self.backchargeResponseFromVendor, self.vendorNumber, self.backchargeVendorName, self.backchargeVendorNumber]))
+                            return;
 
                         self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
                         self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
@@ -721,6 +739,19 @@
                     errorMessageClass: 'help-block',
                     decorateElement: true
                 });
+
+                ko.validation.rules["vendorIsOnHold"] = {
+                    validator: function (val, condition) {
+                        if (condition() === 'true' || condition() === true) {
+                            return false;
+                        }
+
+                        return true;
+                    },
+                    message: 'Vendor on hold.'
+                };
+
+                ko.validation.registerExtenders();
 
                 var viewModel = new serviceCallLineItemViewModel();
                 viewModel.errors = ko.validation.group(viewModel);
