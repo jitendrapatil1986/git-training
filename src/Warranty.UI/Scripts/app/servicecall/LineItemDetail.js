@@ -376,7 +376,7 @@
                         })
                         .done(function (response) {
                             toastr.success("Success! Item reopened.");
-                            line.serviceCallLineItemStatusDisplayName(response.DisplayName);
+                            line.serviceCallLineItemStatusDisplayName(response.ServiceCallLineItemStatus.DisplayName);
                         });
                 }
 

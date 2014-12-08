@@ -3,7 +3,7 @@
     using System;
     using Enumerations;
 
-    public class UpdateServiceCallLineItemCommand : ICommand<ServiceCallLineItemStatus>
+    public class UpdateServiceCallLineItemCommand : ICommand<UpdateServiceCallLineItemModel>
     {
         public Guid ServiceCallLineItemId { get; set; }
     }
