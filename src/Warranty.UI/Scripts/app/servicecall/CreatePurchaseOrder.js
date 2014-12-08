@@ -51,8 +51,9 @@
                     var self = this;
 
                     self.serviceCallLineItemId = modelData.initialPurchaseOrder.serviceCallLineItemId;
+                    self.vendorOnHold = ko.observable(false);
                     self.vendorName = ko.observable().extend({required : true});
-                    self.vendorNumber = ko.observable().extend({ required: true });
+                    self.vendorNumber = ko.observable().extend({ required: true, vendorIsOnHold: self.vendorOnHold });
                     self.deliveryInstructionCodes = ko.observableArray(modelData.deliveryInstructionCodes);
                     self.selectedDeliveryInstruction = ko.observable().extend({ required: true });
                     self.deliveryDate = ko.observable().extend({ required: true, minDate: now});
@@ -151,6 +152,8 @@
                     $(document).on('vendor-number-selected', function () {
                         var vendorNumber = $('#vendor-search').attr('data-vendor-number');
                         var vendorName = $('#vendor-search').attr('data-vendor-name');
+                        var vendorOnHold = $('#vendor-search').attr('data-vendor-on-hold');
+                        self.vendorOnHold(vendorOnHold);
                         self.vendorNumber(vendorNumber);
                         self.vendorName(vendorName);
                     });
@@ -172,6 +175,17 @@
                         return Date.parse(val) >= Date.parse(otherVal);
                     },
                     message: 'Date must be greater than or equal to {0}.'
+                };
+                
+                ko.validation.rules["vendorIsOnHold"] = {
+                    validator: function (val, condition) {
+                        if (condition() === 'true' || condition() === true) {
+                            return false;
+                        }
+
+                        return true;
+                    },
+                    message: 'Vendor on hold.'
                 };
 
                 ko.validation.registerExtenders();
