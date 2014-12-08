@@ -135,7 +135,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Importers", "Importers", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "runAfterOtherAnytimeScripts", "runAfterOtherAnytimeScripts", "{D76E83FE-4DBA-4953-BCE6-A903B4A99A06}"
 	ProjectSection(SolutionItems) = preProject
-		Database\Warranty\runAfterOtherAnytimeScripts\9998_AlterImportHomeownerFromCallProc.EVERYTIME.sql = Database\Warranty\runAfterOtherAnytimeScripts\9998_AlterImportHomeownerFromCallProc.EVERYTIME.sql
 		Database\Warranty\runAfterOtherAnytimeScripts\9999_AlterImportDataProc.EVERYTIME.sql = Database\Warranty\runAfterOtherAnytimeScripts\9999_AlterImportDataProc.EVERYTIME.sql
 	EndProjectSection
 EndProject
