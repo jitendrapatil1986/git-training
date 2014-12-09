@@ -28,7 +28,7 @@
 
                 var backchargeRequest = new RequestBackcharge
                 {
-                    JobNumber = string.Format("{0}{1}", payment.JobNumber.Substring(0,4), WarrantyConstants.DefaultWarrantyJobNumberSuffix),
+                    JobNumber = payment.JobNumber.Substring(0,4),
                     BackchargeAmount = backcharge.BackchargeAmount,
                     VendorNumber = backcharge.BackchargeVendorNumber,
                     ResponseFromVendor = backcharge.BackchargeResponseFromVendor,
