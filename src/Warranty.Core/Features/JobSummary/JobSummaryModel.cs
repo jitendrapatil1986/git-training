@@ -50,6 +50,8 @@ namespace Warranty.Core.Features.JobSummary
         public IEnumerable<JobNote> JobNotes { get; set; }
         public IEnumerable<Attachment> Attachments { get; set; }
         public IEnumerable<Homeowner> Homeowners { get; set; }
+        public IEnumerable<Vendor> Vendors { get; set; }
+        public IEnumerable<CostCodeModel> CostCodes { get; set; }
 
         public class JobPayment
         {
@@ -77,6 +79,56 @@ namespace Warranty.Core.Features.JobSummary
             public string BackchargeDenyComments { get; set; }
             public DateTime? BackchargeDenyDate { get; set; }
             public bool IsBackcharge { get; set; }
+        }
+
+        public class Vendor : IEquatable<Vendor>
+        {
+            public Guid VendorId { get; set; }
+            public string Name { get; set; }
+            public string Number { get; set; }
+            public IList<ContactInfoModel> ContactInfo { get; set; }
+            public IList<CostCodeModel> CostCodes { get; set; }
+
+            public class ContactInfoModel : IEquatable<ContactInfoModel>
+            {
+                public string Value { get; set; }
+                public string Type { get; set; }
+
+                public bool Equals(ContactInfoModel other)
+                {
+                    return Value == other.Value && Type == other.Type;
+                }
+
+                public override int GetHashCode()
+                {
+                    return Value.GetHashCode() ^ Type.GetHashCode();
+                }
+            }
+
+            public bool Equals(Vendor other)
+            {
+                return Number == other.Number;
+            }
+
+            public override int GetHashCode()
+            {
+                return Number.GetHashCode();
+            }
+        }
+        public class CostCodeModel : IEquatable<CostCodeModel>
+        {
+            public string CostCode { get; set; }
+            public string CostCodeDescription { get; set; }
+
+            public bool Equals(CostCodeModel other)
+            {
+                return CostCode == other.CostCode;
+            }
+
+            public override int GetHashCode()
+            {
+                return CostCode.GetHashCode();
+            }
         }
 
         public AdditionalContactsModel AdditionalContacts { get; set; }
