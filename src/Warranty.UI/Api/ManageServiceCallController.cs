@@ -75,7 +75,7 @@
         }
 
         [HttpPost]
-        public ServiceCallLineItemStatus ReopenLineItem(UpdateServiceCallLineItemModel model)
+        public UpdateServiceCallLineItemModel ReopenLineItem(UpdateServiceCallLineItemModel model)
         {
             var result = _mediator.Send(new UpdateServiceCallLineItemCommand
                 {

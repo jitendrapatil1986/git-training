@@ -469,7 +469,8 @@ require(['/Scripts/app/main.js'], function () {
                     })
                     .done(function (response) {
                         toastr.success("Success! Item reopened.");
-                        line.serviceCallLineItemStatusDisplayName(response.DisplayName);
+                        line.serviceCallLineItemStatusDisplayName(response.ServiceCallLineItemStatus.DisplayName);
+                        viewModel.callSummaryServiceCallStatus(response.ServiceCallStatus.DisplayName);
                     });
             }
 
