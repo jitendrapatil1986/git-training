@@ -44,6 +44,7 @@
                     ProgramId = Configuration.WarrantyConstants.ProgramId,
                     ObjectAccount = payment.ObjectAccount,
                     BuilderNumber = message.EmployeeNumber,
+                    OptionNumber = payment.JobNumber,
                     BackchargeIdentifier = backcharge.BackchargeId.ToString()
                 };
 
