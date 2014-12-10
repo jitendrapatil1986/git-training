@@ -35,9 +35,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Client, Version=1.1.889.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Accounting.Client, Version=1.1.899.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Accounting.Client.1.1.889.0\lib\net45\Accounting.Client.dll</HintPath>
+      <HintPath>..\packages\Accounting.Client.1.1.899.0\lib\net45\Accounting.Client.dll</HintPath>
     </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -164,6 +164,7 @@
     <Compile Include="DataAccess\Mappings\JobNoteMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobOptionMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobStageMap.cs" />
+    <Compile Include="DataAccess\Mappings\JobVendorCostCodeMap.cs" />
     <Compile Include="DataAccess\Mappings\Lookups\ClassificationCodeMap.cs" />
     <Compile Include="DataAccess\Mappings\Lookups\LookupMap.cs" />
     <Compile Include="DataAccess\Mappings\Lookups\RootCauseMap.cs" />
@@ -182,6 +183,9 @@
     <Compile Include="DataAccess\Mappings\ServiceCallMap.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallMapping.cs" />
     <Compile Include="DataAccess\Mappings\TaskMap.cs" />
+    <Compile Include="DataAccess\Mappings\VendorEmailMap.cs" />
+    <Compile Include="DataAccess\Mappings\VendorMap.cs" />
+    <Compile Include="DataAccess\Mappings\VendorPhoneMap.cs" />
     <Compile Include="DataAccess\SqlServerDatabase.cs" />
     <Compile Include="DataAccess\SqlServerDatabaseType.cs" />
     <Compile Include="Entities\ActivityLog.cs" />
@@ -201,6 +205,7 @@
     <Compile Include="Entities\JobNote.cs" />
     <Compile Include="Entities\JobOption.cs" />
     <Compile Include="Entities\JobStage.cs" />
+    <Compile Include="Entities\JobVendorCostCode.cs" />
     <Compile Include="Entities\Lookups\ClassificationCode.cs" />
     <Compile Include="Entities\Lookups\LookupEntity.cs" />
     <Compile Include="Entities\Lookups\RootCause.cs" />
@@ -215,6 +220,9 @@
     <Compile Include="Entities\ServiceCallNote.cs" />
     <Compile Include="Entities\ServiceCallLineItem.cs" />
     <Compile Include="Entities\Task.cs" />
+    <Compile Include="Entities\Vendor.cs" />
+    <Compile Include="Entities\VendorEmail.cs" />
+    <Compile Include="Entities\VendorPhone.cs" />
     <Compile Include="Enumerations\ActivityType.cs" />
     <Compile Include="Enumerations\BackchargeStatus.cs" />
     <Compile Include="Enumerations\DeliveryInstruction.cs" />
