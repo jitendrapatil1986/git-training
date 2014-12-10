@@ -267,9 +267,11 @@
                         </div>
                     </div>
                     <div class="tab-pane" id="job_vendors">
-                        <div class="col-md-4 margin-top-10">
+                        <div class="col-md-12 margin-top-10">
                             <div class="row">
-                                <select class="form-control" data-bind="options: costCodes, optionsText: 'costCodeDescription' , value: selectedCostCode, optionsCaption: 'Filter by Cost Code...'"></select>
+                                <div class="col-md-4">
+                                    <select class="form-control" data-bind="options: costCodes, optionsText: 'costCodeDescription' , value: selectedCostCode, optionsCaption: 'Filter by Cost Code...'"></select>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-12">
