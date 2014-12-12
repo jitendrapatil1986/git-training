@@ -36,7 +36,7 @@
                         VendorNumber = payment.VendorNumber,
                         CostCode = payment.CostCode,
                         PaymentType = Configuration.WarrantyConstants.PaymentType,
-                        VarianceCode = backcharge == null? Configuration.WarrantyConstants.VarianceCode : Configuration.WarrantyConstants.VarianceCodeForBackcharge,
+                        VarianceCode = Configuration.WarrantyConstants.VarianceCode,
                         PaymentIdentifier = payment.PaymentId.ToString(),
                         ProgramId = Configuration.WarrantyConstants.ProgramId,
                         ObjectAccount = payment.ObjectAccount,
