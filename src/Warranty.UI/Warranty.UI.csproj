@@ -453,6 +453,7 @@
     <Content Include="Views\Home\_ToDoJobAnniversaryTask.cshtml" />
     <Content Include="Views\Home\_ToDoJob10MonthAnniversary.cshtml" />
     <Content Include="Views\Home\_ToDoPaymentRequestApprovalOutOfWarranty.cshtml" />
+    <Content Include="Views\Home\_MyTeamDropdown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
