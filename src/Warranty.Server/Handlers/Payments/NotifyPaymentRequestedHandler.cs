@@ -23,7 +23,6 @@
             {
                 
                 var payment = _database.SingleById<Payment>(message.PaymentId);
-                var backcharge = _database.SingleOrDefault<Backcharge>("WHERE PaymentId = @0", message.PaymentId);
 
                 var paymentRequest = new RequestExtraWorkOrderPayment
                     {
