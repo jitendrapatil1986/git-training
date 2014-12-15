@@ -416,6 +416,9 @@
                         min: 0,
                         validation: {
                             validator: function (val, someOtherVal) {
+                                if (self.isBackcharge() === false)
+                                    return true;
+                                
                                 return Number(val) <= Number(someOtherVal());
                             },
                             message: 'Must be less than or equal to payment amount.',
