@@ -23,6 +23,7 @@
             {
                 
                 var payment = _database.SingleById<Payment>(message.PaymentId);
+                var backcharge = _database.SingleOrDefault<Backcharge>("WHERE PaymentId = @0", message.PaymentId);
 
                 var paymentRequest = new RequestExtraWorkOrderPayment
                     {
@@ -35,7 +36,7 @@
                         VendorNumber = payment.VendorNumber,
                         CostCode = payment.CostCode,
                         PaymentType = Configuration.WarrantyConstants.PaymentType,
-                        VarianceCode = Configuration.WarrantyConstants.VarianceCode,
+                        VarianceCode = backcharge == null ? Configuration.WarrantyConstants.VarianceCode : Configuration.WarrantyConstants.VarianceCodeForBackcharge,
                         PaymentIdentifier = payment.PaymentId.ToString(),
                         ProgramId = Configuration.WarrantyConstants.ProgramId,
                         ObjectAccount = payment.ObjectAccount,
