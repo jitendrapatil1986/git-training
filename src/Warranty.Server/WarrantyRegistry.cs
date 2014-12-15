@@ -21,6 +21,7 @@ namespace Warranty.Server
                 
                 scanner.TheCallingAssembly();
                 scanner.AssemblyContainingType<IAuditableEntity>();
+                scanner.AssemblyContainingType<IAccountingClient>();
                 scanner.AddAllTypesOf((typeof(IAccountingClient)));
                 scanner.AddAllTypesOf<IMap>();
 
