@@ -5,6 +5,7 @@ using Warranty.Server.Security;
 
 namespace Warranty.Server
 {
+    using Accounting.Client;
     using Core.Entities;
     using NPoco.FluentMappings;
     using StructureMap.Configuration.DSL;
@@ -20,6 +21,7 @@ namespace Warranty.Server
                 
                 scanner.TheCallingAssembly();
                 scanner.AssemblyContainingType<IAuditableEntity>();
+                scanner.AddAllTypesOf((typeof(IAccountingClient)));
                 scanner.AddAllTypesOf<IMap>();
 
                 For<IDatabase>()
