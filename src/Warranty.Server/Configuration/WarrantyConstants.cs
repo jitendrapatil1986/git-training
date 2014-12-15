@@ -7,6 +7,7 @@
         public static readonly string ProgramId = "WARRANTY";
         public static readonly string PaymentType = "E";
         public static readonly string VarianceCode = "W";
+        public static readonly string VarianceCodeForBackcharge = "C";
         public static readonly string DefaultPurchaseOrderType = "EO";
         public static readonly string DefaultWarrantyJobNumberSuffix = "9999";
 
