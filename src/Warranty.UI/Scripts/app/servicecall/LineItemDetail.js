@@ -418,7 +418,7 @@
                             validator: function (val, someOtherVal) {
                                 return val <= someOtherVal();
                             },
-                            message: 'This field must be less than or equal to Amount field.',
+                            message: 'This field must be less than or equal to the Amount field.',
                             params: self.amount
                         }
                     });
