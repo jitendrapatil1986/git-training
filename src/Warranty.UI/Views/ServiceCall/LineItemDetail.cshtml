@@ -184,7 +184,7 @@
                         </div>
                     </div>
 
-                    <span data-bind="visible: allPayments().length < 1"><em>No Payments Available</em></span>
+                    <p class="padding-left-15" data-bind="visible: allPayments().length < 1"><em>No Payments Available</em></p>
                     <div class="remove-list-style">
                         <ul data-bind="foreach: allPayments">
                             <div id="allServiceCallPayments">
@@ -292,7 +292,7 @@
                     </div>
         </section>
                 </div>
-                <div class="panel panel-default padding-top-10">
+                <div class="panel panel-default">
                 <section>
                     <h3 class="col-md-12">Attachments
                         <span>
@@ -315,11 +315,9 @@
                             </div>
                         </div>
                     </div>
-                    <br />
-                    <span data-bind="visible: allAttachments().length < 1"><em>No Attachments Available</em></span>
+                    <p class="padding-left-15" data-bind="visible: allAttachments().length < 1"><em>No Attachments Available</em></p>
                     <div class="remove-list-style attachments row">
                         <div class="clearfix"></div>
-                        <br />
                         <ul data-bind="foreach: allAttachments">
                             <li>
                                 <a class="attached-file" data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "ServiceCall")/' + serviceCallAttachmentId}">
@@ -349,7 +347,6 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="control-group" data-bind="validationElement: noteDescriptionToAdd">
-                                        <label class="control-label" for="addCallNoteDescription"></label>
                                         @Html.TextArea("Description", null, new { id = "addCallNoteDescription", @class = "form-control", data_bind = "text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
                                     </div>
                                 </div>
