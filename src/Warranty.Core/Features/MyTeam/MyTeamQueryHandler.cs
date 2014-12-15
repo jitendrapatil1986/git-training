@@ -4,6 +4,7 @@
     using Enumerations;
     using NPoco;
     using Security;
+    using Extensions;
 
     public class MyTeamQueryHandler : IQueryHandler<MyTeamQuery, IEnumerable<MyTeamModel>>
     {
@@ -32,10 +33,10 @@
                                     ON ca.EmployeeId = e.EmployeeId
                                     INNER JOIN Cities ci
                                     ON c.CityId = ci.CityId
-                                    WHERE CityCode IN ('CHA')
+                                    WHERE CityCode IN ({0})
                                     ORDER BY EmployeeName";
 
-                    result = _database.Fetch<MyTeamModel>(sql);
+                    result = _database.Fetch<MyTeamModel>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()));
                 }
 
                 return result;
