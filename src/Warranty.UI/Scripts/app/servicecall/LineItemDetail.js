@@ -413,15 +413,14 @@
                         required: {
                             onlyIf: function () { return (self.isBackcharge() === true); }
                         },
-                        min: 0,
                         validation: {
                             validator: function (val, someOtherVal) {
                                 if (self.isBackcharge() === false)
                                     return true;
                                 
-                                return Number(val) <= Number(someOtherVal());
+                                return (Number(val) >= 0) && (Number(val) <= Number(someOtherVal()));
                             },
-                            message: 'Must be less than or equal to payment amount.',
+                            message: 'Must be greater than 0 and less than or equal to payment amount.',
                             params: self.amount
                         }
                     });
