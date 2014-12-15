@@ -34,9 +34,12 @@
                     _database.Delete(backcharge);
                 }
 
-                _database.Delete(payment);
+                var newStatus = PaymentStatus.RequestedDelete;
+                payment.PaymentStatus = newStatus;
 
-                _activityLogger.Write("Payment deleted", string.Empty, payment.PaymentId, ActivityType.PaymentDelete, ReferenceType.LineItem);
+                _database.Update(payment);
+
+                _activityLogger.Write("Payment delete requested", string.Empty, payment.PaymentId, ActivityType.PaymentDelete, ReferenceType.LineItem);
 
                 _bus.Send<NotifyPaymentDeleted>(x =>
                 {
