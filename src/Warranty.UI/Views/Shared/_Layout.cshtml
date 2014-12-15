@@ -91,6 +91,8 @@
                     @NavItemHelper(NavItem.Home, Url.Action("Index", "Home"))
                     <li class="divider divider-vertical hidden-xs"></li>
                     @NavItemSectionHelper(NavHeaderItem.Reports.Key)
+                    <li class="divider divider-vertical hidden-xs"></li>
+                    @{ Html.RenderAction("MyTeamDropdown", "Home"); }
                 </ul>
                     <div class="main-search nav-extra">
                         <div class="input-group">

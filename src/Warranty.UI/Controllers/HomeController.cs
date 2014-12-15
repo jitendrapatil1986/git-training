@@ -13,6 +13,7 @@
     using Warranty.Core.Extensions;
     using Warranty.Core.Features.AmountSpentWidget;
     using Warranty.Core.Features.AverageDaysClosedWidget;
+    using Warranty.Core.Features.MyTeam;
     using Warranty.Core.Features.PercentClosedWithinSevenDaysWidget;
     using Warranty.Core.Features.PercentSurveyExcellentWidget;
     using Warranty.Core.Features.PercentSurveyRecommendWidget;
@@ -62,6 +63,13 @@
         {
             var model = _mediator.Request(new MyServiceTeamWidgetQuery());
             return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult MyTeamDropdown()
+        {
+            var model = _mediator.Request(new MyTeamQuery());
+            return PartialView("_MyTeamDropdown", model);
         }
 
         [ChildActionOnly]
