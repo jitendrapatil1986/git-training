@@ -32,7 +32,7 @@ namespace Warranty.Core.Features.RepServiceCalls
             public string EscalationReason { get; set; }
             public string HomeownerName { get; set; }
             public int HomeownerNumber { get; set; }
-            public int NumberOfDaysRemaining { get; set; }
+            public int NumberOfDaysRemaining { get { return ServiceCallCalculator.CalculateNumberOfDaysRemaining(CreatedDate); } }
             public int NumberOfLineItems { get; set; }
             public int DaysOpenedFor { get; set; }
             public int YearsWithinWarranty { get; set; }
