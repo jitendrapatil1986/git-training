@@ -405,18 +405,18 @@
                     self.lineEditing = ko.observable("");
 
                     self.invoiceNumber = ko.observable('').extend({ required: true });
-                    self.amount = ko.observable('').extend({ required: true, min: 0 });
+                    self.amount = ko.observable().extend({ required: true, min: 0 });
                     self.isBackcharge = ko.observable(false);
                     self.selectedCostCode = ko.observable(undefined).extend({ required: true });
                     self.warrantyCostCodes = ko.observableArray(modelData.warrantyCostCodes);
-                    self.backchargeAmount = ko.observable('').extend({
+                    self.backchargeAmount = ko.observable().extend({
                         required: {
                             onlyIf: function () { return (self.isBackcharge() === true); }
                         },
                         min: 0,
                         validation: {
                             validator: function (val, someOtherVal) {
-                                return val <= someOtherVal();
+                                return Number(val) <= Number(someOtherVal());
                             },
                             message: 'Must be less than or equal to payment amount.',
                             params: self.amount
