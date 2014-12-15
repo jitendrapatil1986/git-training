@@ -5,6 +5,7 @@ namespace Warranty.UI.Core.Helpers
 {
     using System;
     using System.Web.Mvc;
+    using Warranty.Core.Configurations;
     using Warranty.Core.Extensions;
 
     public static class Format
@@ -336,17 +337,13 @@ namespace Warranty.UI.Core.Helpers
 
         public static MvcHtmlString ServiceCallDaysLeft(int numberOfDaysRemaining)
         {
-            var plural = "s";
-            var css = "text-muted";
-            if (numberOfDaysRemaining == 1)
-                plural = "";
-            if (numberOfDaysRemaining <= 2)
-            {
-                css = "text-danger";
-            }
+            var plural = numberOfDaysRemaining == 1 ? "" : "s";
+            var css = numberOfDaysRemaining <= 2 ? "text-danger" : "text-muted";
+            var label = numberOfDaysRemaining >= 0 ? "Day" + plural + " Left" : "Day" + plural + " Total";
+            var daysToUse = numberOfDaysRemaining >= 0 ? numberOfDaysRemaining : Math.Abs(numberOfDaysRemaining) + WarrantyConstants.NumberOfDaysAllowedToCloseServiceCall;
 
-            const string daysLeft = "<strong class=\"{0}\">{1}</strong> Day{2} Left";
-            return MvcHtmlString.Create(string.Format(daysLeft, css, numberOfDaysRemaining, plural));
+            const string daysLeft = "<strong class=\"{0}\">{1}</strong> {2}";
+            return MvcHtmlString.Create(string.Format(daysLeft, css, Math.Abs(daysToUse), label));
         }
 
         public static MvcHtmlString PhoneNumber(string phoneNumber)
