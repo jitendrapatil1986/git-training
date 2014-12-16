@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{288B6502-98F6-47E7-8DFF-44F7F8CFF1D1}</ProjectGuid>
+    <ProjectGuid>{E17253D6-54B6-4073-B6A0-1FB17BD6A0E5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Warranty.Events</RootNamespace>
-    <AssemblyName>Warranty.Events</AssemblyName>
+    <RootNamespace>Warranty.Commands</RootNamespace>
+    <AssemblyName>Warranty.Commands</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,9 +35,6 @@
     <Reference Include="NServiceBus">
       <HintPath>..\packages\NServiceBus.Interfaces.4.2.0\lib\net40\NServiceBus.dll</HintPath>
     </Reference>
-    <Reference Include="NServiceBus.Core">
-      <HintPath>..\packages\NServiceBus.4.2.0\lib\net40\NServiceBus.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,17 +47,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="JobHomeownerChanged.cs" />
-    <Compile Include="RequestServiceCallResponse.cs" />
-    <Compile Include="ServiceCallCompleted.cs" />
-    <Compile Include="ServiceCallCreated.cs" />
-    <Compile Include="ServiceCallEmployeeReassigned.cs" />
-    <Compile Include="ServiceCallEscalatedStatusChanged.cs" />
-    <Compile Include="ServiceCallHomeownerVerified.cs" />
-    <Compile Include="ServiceCallLineItemCompleted.cs" />
-    <Compile Include="ServiceCallLineItemCreated.cs" />
-    <Compile Include="ServiceCallLineItemProblemChanged.cs" />
-    <Compile Include="ServiceCallSpecialProjectStatusChanged.cs" />
+    <Compile Include="RequestServiceCall.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
