@@ -20,6 +20,13 @@
             using (_database)
             {
                 var payment = _database.SingleById<Payment>(new Guid(message.PaymentId));
+                var backcharge = _database.Single<Backcharge>("Where PaymentId = @0", message.PaymentId);
+
+                if (backcharge != null)
+                {
+                    _database.Delete(backcharge);
+                }
+
                 _database.Delete(payment);
             }
         }
