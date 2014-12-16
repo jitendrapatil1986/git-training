@@ -1,9 +1,10 @@
 ﻿require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchBackchargeVendor', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, bootbox) {
-        window.ko = ko;  //manually set the global ko property.
+    require(['jquery', 'ko', 'ko.x-editable', 'moment', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/BackchargeStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'enumeration/PurchaseOrderLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchBackchargeVendor', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, moment, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, backchargeStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, purchaseOrderLineItemStatusEnum, bootbox) {
+        window.ko = ko; //manually set the global ko property.
 
         require(['ko.validation'], function () {
             $(function () {
+
                 $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
                     $(this).hide();
                 });
@@ -27,11 +28,30 @@
 
                 function clearNoteFields() {
                     $("#addCallNoteDescription").val('');
-                    self.noteDescriptionToAdd('');
+                    viewModel.noteDescriptionToAdd('');
+                    viewModel.noteDescriptionToAdd.isModified(false);
                 }
 
-                function PaymentViewModel(options) {
+                function PurchaseOrderViewModel(options) {
+                    var self = this;
 
+                    self.serviceCallLineItemId = options.serviceCallLineItemId;
+                    self.purchaseOrderNumber = options.purchaseOrderNumber;
+                    self.vendorNumber = options.vendorNumber;
+                    self.vendorName = options.vendorName;
+                    self.createdDate = moment(options.createdDate).format("L");
+                    self.totalCost = options.totalCost;
+                    self.purchaseOrderStatusDisplayName = ko.observable(options.purchaseOrderStatusDisplayName);
+
+                    self.purchaseOrderStatusBadgeClassName = ko.computed(function() {
+                        if (self.purchaseOrderStatusDisplayName() == purchaseOrderLineItemStatusEnum.Closed.DisplayName) {
+                            return "success";
+                        }
+                        return "default";
+                    });
+                }
+                
+                function PaymentViewModel(options) {
                     var self = this;
                     self.serviceCallLineItemId = options.serviceCallLineItemId;
                     self.vendorNumber = options.vendorNumber;
@@ -41,6 +61,7 @@
                     self.invoiceNumber = options.invoiceNumber;
                     self.amount = options.amount;
                     self.backchargeAmount = options.backchargeAmount;
+                    self.backchargeId = options.backchargeId;
                     self.isBackcharge = options.isBackcharge;
                     self.backchargeReason = options.backchargeReason;
                     self.personNotified = options.personNotified;
@@ -49,15 +70,77 @@
                     self.backchargeResponseFromVendor = options.backchargeResponseFromVendor;
                     self.paymentId = options.paymentId;
                     self.paymentCreatedDate = options.paymentCreatedDate;
+                    self.holdComments = ko.observable(options.holdComments);
+                    self.backchargeHoldComments = ko.observable(options.backchargeHoldComments);
+                    self.backchargeDenyComments = ko.observable(options.backchargeDenyComments);
+                    self.holdDate = ko.observable(options.holdDate);
+                    self.backchargeHoldDate = ko.observable(options.backchargeHoldDate);
+                    self.backchargeDenyDate = ko.observable(options.backchargeDenyDate);
                     self.selectedCostCode = options.selectedCostCode;
-                    if (options.paymentStatusDisplayName) {
-                        self.paymentStatusDisplayName = options.paymentStatusDisplayName;
-                    }
+                    self.paymentStatusDisplayName = ko.observable(options.paymentStatusDisplayName);
+                    self.backchargeStatusDisplayName = ko.observable(options.backchargeStatusDisplayName);
 
+                    self.isBackchargeHeld = ko.computed(function () {
+                        return self.backchargeStatusDisplayName() == backchargeStatusEnum.RequestedHold.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName;
+                    });
+                    
+                    self.isBackchargeDenied = ko.computed(function () {
+                        return self.backchargeStatusDisplayName() == backchargeStatusEnum.RequestedDeny.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Denied.DisplayName;
+                    });
+                    
+                    self.isHeld = ko.computed(function () {
+                        return self.paymentStatusDisplayName() == paymentStatusEnum.RequestedHold.DisplayName || self.paymentStatusDisplayName() == paymentStatusEnum.Hold.DisplayName;
+                    });
+
+                    self.displayHold = function (item, event) {
+                        displayPopoUp('hold', item, event);
+                    };
+                    
+                    self.displayHoldBackcharge = function (item, event) {
+                        displayPopoUp('holdBackcharge', item, event, true);
+                    };
+                    
+                    self.displayDenyBackcharge = function (item, event) {
+                        displayPopoUp('denyBackcharge', item, event, true);
+                    };
+
+
+                    var displayPopoUp = function (name, item, event, displayToTheRight) {
+                        var button = $(event.target);
+                        $('.btn-action-with-popup').removeClass('active');
+                        button.removeClass('btn-hover-show');
+                        button.addClass("active");
+                        $('.popup-action-with-message').hide();
+                        var right = ($(window).width() - (button.offset().left + button.outerWidth()));
+                        var actionwithPopup = name + '-' + item.paymentId;
+                        if (displayToTheRight) {
+                            right = right - 250;
+                        }
+                        $("#" + actionwithPopup).css({
+                            'position': 'absolute',
+                            'right': right,
+                            'top': button.offset().top + button.height() + 15
+                        }).show();
+                    };
+                    
+
+                    self.approvePayment = function (item, event) {
+                        var actionUrl = urls.ManageServiceCall.ApprovePayment;
+                        $.ajax({
+                            type: "POST",
+                            url: actionUrl,
+                            data: { PaymentId: item.paymentId },
+                            success: function (response) {
+                                item.paymentStatusDisplayName(response);
+                                toastr.success("Success! Approval Request sent.");
+                                closeWindow(event);
+                            }
+                        });
+                    };
+                    
                     self.deletePayment = function () {
                         var payment = this;
                         bootbox.confirm("Are you sure you want to delete this payment?", function (result) {
-
                             if (result) {
                                 var actionUrl = urls.ManageServiceCall.DeletePayment;
                                 $.ajax({
@@ -65,13 +148,131 @@
                                     url: actionUrl,
                                     data: { PaymentId: payment.paymentId },
                                     success: function () {
-
                                         viewModel.allPayments.remove(payment);
                                         toastr.success("Success! Payment deleted.");
                                     }
                                 });
                             }
                         });
+                    };
+
+                    self.holdPayment = function (item, event) {
+                        var actionUrl = urls.ManageServiceCall.AddPaymentOnHold;
+                        $.ajax({
+                            type: "POST",
+                            url: actionUrl,
+                            data: { PaymentId: item.paymentId, message: item.holdComments },
+                            success: function (response) {
+                                item.paymentStatusDisplayName(response.NewStatusDisplayName);
+                                item.holdDate(response.Date);
+                                toastr.success("Success! Hold request sent.");
+                                closeWindow(event);
+                            }
+                        });
+                    };
+                    
+                    self.holdBackcharge = function (item, event) {
+                        var actionUrl = urls.ManageServiceCall.HoldBackcharge;
+                        $.ajax({
+                            type: "POST",
+                            url: actionUrl,
+                            data: { BackchargeId: item.backchargeId, message: item.backchargeHoldComments },
+                            success: function (response) {
+                                item.backchargeStatusDisplayName(response.NewStatusDisplayName);
+                                item.backchargeHoldDate(response.Date);
+                                toastr.success("Success! Backcharge Hold request sent.");
+                                closeWindow(event);
+                            }
+                        });
+                    };
+                    
+                    self.denyBackcharge = function (item, event) {
+                        var actionUrl = urls.ManageServiceCall.DenyBackcharge;
+                        $.ajax({
+                            type: "POST",
+                            url: actionUrl,
+                            data: { BackchargeId: item.backchargeId, message: item.backchargeDenyComments },
+                            success: function (response) {
+                                item.backchargeStatusDisplayName(response.NewStatusDisplayName);
+                                item.backchargeDenyDate(response.Date);
+                                toastr.success("Success! Backcharge deny request sent.");
+                                closeWindow(event);
+                            }
+                        });
+                    };
+                    
+                    self.approveBackcharge = function (item, event) {
+                        var actionUrl = urls.ManageServiceCall.ApproveBackcharge;
+                        $.ajax({
+                            type: "POST",
+                            url: actionUrl,
+                            data: { BackchargeId: item.backchargeId },
+                            success: function (response) {
+                                item.backchargeStatusDisplayName(response);
+                                toastr.success("Success! Backcharge Approval Request sent.");
+                                closeWindow(event);
+                            }
+                        });
+                    };
+
+                    self.shouldDisplayHoldPayment = ko.computed(function () {
+                        return self.paymentStatusDisplayName() == paymentStatusEnum.Pending.DisplayName;
+                    });
+
+                    self.paymentStatusBadgeClassName = ko.computed(function () {
+                        if (self.paymentStatusDisplayName() == paymentStatusEnum.Hold.DisplayName) {
+                            return "warning";
+                        }
+                        else if (self.paymentStatusDisplayName() == paymentStatusEnum.Approved.DisplayName) {
+                            return "success";
+                        }
+                        return "default";
+                    });
+                    
+                    self.backchargeStatusBadgeClassName = ko.computed(function () {
+                        if (self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName) {
+                            return "warning";
+                        }
+                        else if (self.backchargeStatusDisplayName() == backchargeStatusEnum.Approved.DisplayName) {
+                            return "success";
+                        }
+                        else if (self.backchargeStatusDisplayName() == backchargeStatusEnum.Denied.DisplayName) {
+                            return "danger";
+                        }
+                        return "default";
+                    });
+
+                    self.shouldDisplayApprovePayment = ko.computed(function () {
+                        return self.paymentStatusDisplayName() == paymentStatusEnum.Pending.DisplayName || self.paymentStatusDisplayName() == paymentStatusEnum.Hold.DisplayName;
+                    });
+                    
+                    self.shouldDisplayDeletePayment = ko.computed(function () {
+                        return self.paymentStatusDisplayName() == paymentStatusEnum.Pending.DisplayName || self.paymentStatusDisplayName() == paymentStatusEnum.Hold.DisplayName;
+                    });
+                    
+                    self.shouldDisplayApproveBackcharge = ko.computed(function () {
+                        return self.backchargeStatusDisplayName() == backchargeStatusEnum.Pending.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName;
+                    });
+                    
+                    self.shouldDisplayDenyBackcharge = ko.computed(function () {
+                        return self.backchargeStatusDisplayName() == backchargeStatusEnum.Pending.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName;
+                    });
+                    
+                    self.shouldDisplayHoldBackcharge = ko.computed(function () {
+                        return self.backchargeStatusDisplayName() == backchargeStatusEnum.Pending.DisplayName;
+                    });
+                                        
+                    self.cancelPopup = function (item, event) {
+                        closeWindow(event);
+                    };
+
+                    var closeWindow = function (event) {
+                        var button = $(event.target);
+                        var window = button.parent();
+                        var parentButton = $("#btn_" + window.attr('id'));
+                        parentButton.removeClass("active");
+                        parentButton.addClass('btn-hover-show');
+                        window.hide();
                     };
                 }
 
@@ -102,39 +303,33 @@
                         $(updateProblemCode).parent().addClass("has-error");
                         return;
                     }
-
-                    var updateProblemDescription = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemDescription");
-                    if (updateProblemDescription.val() == "") {
-                        $(updateProblemDescription).parent().addClass("has-error");
-                        return;
-                    }
-
-                    var lineData = ko.toJSON(line);
-
-                    $.ajax({
-                        url: urls.ManageServiceCall.EditLineItem,
-                        type: "POST",
-                        data: lineData,
-                        dataType: "json",
-                        processData: false,
-                        contentType: "application/json; charset=utf-8"
-                    })
-                        .fail(function (response) {
-                            toastr.error("There was an issue updating the line item. Please try again!");
-                        })
-                        .done(function (response) {
-                            toastr.success("Success! Item updated.");
-                            self.problemCode = line.problemCode;
-
-                            //change to non-edit mode once success has occurred.
-                            line.problemCodeEditing(false);
-                            line.problemDescriptionEditing(false);
-                            line.lineEditing(false);
-                        });
-
-                    $(updateProblemCode).parent().removeClass("has-error");
-                    $(updateProblemDescription).parent().removeClass("has-error");
                 }
+
+                self.allPayments = ko.observableArray([]);
+
+                self.canAddPayment = ko.computed(function () {
+                    return true;
+                });
+
+                self.clearPaymentFields = function () {
+
+                    $('#vendor-search').val('');
+                    $('#backcharge-vendor-search').val('');
+                    self.vendorNumber('');
+                    self.backchargeVendorNumber('');
+                    self.invoiceNumber('');
+                    self.amount('');
+                    self.backchargeAmount('');
+                    self.isBackcharge(false);
+                    self.backchargeReason('');
+                    self.personNotified('');
+                    self.personNotifiedPhoneNumber('');
+                    self.personNotifiedDate('');
+                    self.backchargeResponseFromVendor('');
+                    self.selectedCostCode(undefined);
+                    self.errors.showAllMessages(false);
+                };
+
 
                 function completeServiceCallLineItem(line) {
                     var lineData = ko.toJSON(line);
@@ -158,7 +353,7 @@
                                 $("#undoLastCompletedLineItemAlert").attr('data-service-line-id-to-undo', line.serviceCallLineItemId);
                                 $("#undoLastCompletedLineItemAlert").show();
                                 viewModel.lineJustCompleted(true);
-                                $("#undoLastCompletedLineItemAlert").attr("tabindex", -1).focus();  //focus only after setting lineJustCompleted observable which visibly shows control on form first and then focus.
+                                $("#undoLastCompletedLineItemAlert").attr("tabindex", -1).focus(); //focus only after setting lineJustCompleted observable which visibly shows control on form first and then focus.
                             } else {
                                 toastr.success("Success! Item completed.");
                             }
@@ -181,7 +376,7 @@
                         })
                         .done(function (response) {
                             toastr.success("Success! Item reopened.");
-                            line.serviceCallLineItemStatusDisplayName(response.DisplayName);
+                            line.serviceCallLineItemStatusDisplayName(response.ServiceCallLineItemStatus.DisplayName);
                         });
                 }
 
@@ -202,6 +397,7 @@
                     self.jobNumber = ko.observable(modelData.initialServiceCallLineItem.jobNumber);
                     self.costCode = ko.observable(modelData.initialServiceCallLineItem.costCode);
                     self.constructionVendors = ko.observableArray([]);
+                    self.constructionVendorsLoading = ko.observable(true);
 
                     //track editing problem code, desc, and line altogether.
                     self.problemCodeEditing = ko.observable();
@@ -209,13 +405,23 @@
                     self.lineEditing = ko.observable("");
 
                     self.invoiceNumber = ko.observable('').extend({ required: true });
-                    self.amount = ko.observable('').extend({ required: true });
+                    self.amount = ko.observable().extend({ required: true, min: 0 });
                     self.isBackcharge = ko.observable(false);
                     self.selectedCostCode = ko.observable(undefined).extend({ required: true });
                     self.warrantyCostCodes = ko.observableArray(modelData.warrantyCostCodes);
-                    self.backchargeAmount = ko.observable('').extend({
+                    self.backchargeAmount = ko.observable().extend({
                         required: {
                             onlyIf: function () { return (self.isBackcharge() === true); }
+                        },
+                        validation: {
+                            validator: function (val, someOtherVal) {
+                                if (self.isBackcharge() === false)
+                                    return true;
+                                
+                                return (Number(val) >= 0) && (Number(val) <= Number(someOtherVal()));
+                            },
+                            message: 'Must be greater than 0 and less than or equal to payment amount.',
+                            params: self.amount
                         }
                     });
                     self.backchargeReason = ko.observable('').extend({
@@ -243,8 +449,11 @@
                             onlyIf: function () { return (self.isBackcharge() === true); }
                         }
                     });
+                    self.vendorOnHold = ko.observable(false);
                     self.vendorName = ko.observable('').extend({ required: true });
-                    self.vendorNumber = ko.observable('').extend({ required: true });
+                    self.vendorNumber = ko.observable('').extend({ required: true, vendorIsOnHold: self.vendorOnHold });
+
+                    self.backchargeVendorOnHold = ko.observable(false);
                     self.backchargeVendorName = ko.observable('').extend({
                         required: {
                             onlyIf: function () { return (self.isBackcharge() === true); }
@@ -253,7 +462,7 @@
                     self.backchargeVendorNumber = ko.observable('').extend({
                         required: {
                             onlyIf: function () { return (self.isBackcharge() === true); }
-                        }
+                        }, vendorIsOnHold: self.backchargeVendorOnHold
                     });
                     self.allPayments = ko.observableArray([]);
 
@@ -281,24 +490,39 @@
                     };
 
                     $(document).on('vendor-number-selected', function () {
-                        var vendorNumber = $('#vendor-search').data('vendor-number');
-                        var vendorName = $('#vendor-search').data('vendor-name');
+                        var vendorNumber = $('#vendor-search').attr('data-vendor-number');
+                        var vendorName = $('#vendor-search').attr('data-vendor-name');
+                        var vendorOnHold = $('#vendor-search').attr('data-vendor-on-hold');
+                        self.vendorOnHold(vendorOnHold);
                         self.vendorNumber(vendorNumber);
                         self.vendorName(vendorName);
                     });
+                    
                     $(document).on('backcharge-vendor-number-selected', function () {
-                        var vendorNumber = $('#backcharge-vendor-search').data('vendor-number');
-                        var vendorName = $('#backcharge-vendor-search').data('vendor-name');
-
+                        var vendorNumber = $('#backcharge-vendor-search').attr('data-vendor-number');
+                        var vendorName = $('#backcharge-vendor-search').attr('data-vendor-name');
+                        var vendorOnHold = $('#backcharge-vendor-search').attr('data-vendor-on-hold');
+                        self.backchargeVendorOnHold(vendorOnHold);
                         self.backchargeVendorNumber(vendorNumber);
                         self.backchargeVendorName(vendorName);
                     });
 
-                    self.addPayment = function () {
-                        if (self.errors().length != 0) {
-                            self.errors.showAllMessages();
-                            return;
+                    function formHasErrors(theModel) {
+                        var errors = ko.validation.group(theModel);
+
+                        if (errors().length != 0) {
+                            viewModel.errors.showAllMessages(false);
+                            errors.showAllMessages();
+                            return true;
                         }
+
+                        return false;
+                    }
+
+                    self.addPayment = function () {
+                        
+                        if (formHasErrors([self.invoiceNumber, self.amount, self.selectedCostCode, self.backchargeAmount, self.backchargeReason, self.personNotified, self.personNotifiedPhoneNumber, self.personNotifiedDate, self.backchargeResponseFromVendor, self.vendorNumber, self.backchargeVendorName, self.backchargeVendorNumber]))
+                            return;
 
                         self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
                         self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
@@ -319,6 +543,7 @@
                             personNotifiedDate: self.personNotifiedDate(),
                             backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
                             paymentStatusDisplayName: paymentStatusEnum.Requested.DisplayName,
+                            backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
                             selectedCostCode: self.selectedCostCode
                         });
 
@@ -399,9 +624,9 @@
                     self.serviceCallLineItemStatusDisplayName = ko.observable('');
                     if (modelData.initialServiceCallLineItem.serviceCallLineItemStatus) {
                         if (modelData.initialServiceCallLineItem.serviceCallLineItemStatus.displayName)
-                            self.serviceCallLineItemStatusDisplayName(modelData.initialServiceCallLineItem.serviceCallLineItemStatus.displayName);  //TODO: displayName works for model passed into js file via toJSON().
+                            self.serviceCallLineItemStatusDisplayName(modelData.initialServiceCallLineItem.serviceCallLineItemStatus.displayName); //TODO: displayName works for model passed into js file via toJSON().
                         if (modelData.initialServiceCallLineItem.serviceCallLineItemStatus.DisplayName)
-                            self.serviceCallLineItemStatusDisplayName(modelData.initialServiceCallLineItem.serviceCallLineItemStatus.DisplayName);  //TODO: DisplayName works for model passed from ajax call. Need to keep both similar.
+                            self.serviceCallLineItemStatusDisplayName(modelData.initialServiceCallLineItem.serviceCallLineItemStatus.DisplayName); //TODO: DisplayName works for model passed from ajax call. Need to keep both similar.
                     }
 
                     self.lineItemStatusCSS = ko.computed(function () {
@@ -415,10 +640,11 @@
                         return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase() ? true : false;
                     };
 
-                    self.theLookups = dropdownData.availableLookups;  //dropdown list does not need to be observable. Only the actual elements w/i the array do.
+                    self.theLookups = dropdownData.availableLookups; //dropdown list does not need to be observable. Only the actual elements w/i the array do.
                     self.allCallNotes = ko.observableArray([]);
                     self.allAttachments = ko.observableArray([]);
-                    self.noteDescriptionToAdd = ko.observable('');
+                    self.allPurchaseOrders = ko.observableArray([]);
+                    self.noteDescriptionToAdd = ko.observable('').extend({required: true});
                     self.userCanAlwaysReopenCallLines = ko.observable();
 
                     self.removeAttachment = function (e) {
@@ -441,15 +667,16 @@
                     };
 
                     self.addCallNote = function () {
+                        var errors = ko.validation.group([self.noteDescriptionToAdd]);
+
+                        if (errors().length != 0) {
+                            errors.showAllMessages();
+                            return;
+                        }
+                        
                         self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
                         self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
                         self.note = $("#addCallNoteDescription").val();
-
-                        var newNoteDescription = $("#addCallNoteDescription");
-                        if (newNoteDescription.val() == "") {
-                            $(newNoteDescription).parent().addClass("has-error");
-                            return;
-                        }
 
                         var newCallNote = new CallNotesViewModel({
                             serviceCallId: self.serviceCallId,
@@ -509,15 +736,32 @@
                         contentType: "application/json; charset=utf-8"
                     }).done(function (response) {
                         self.constructionVendors(response);
+                        self.constructionVendorsLoading(false);
                     });
-
+                    
+                    self.createPurchaseOrder = function () {
+                        window.location.href = urls.ServiceCall.CreatePurchaseOrder + '/' + self.serviceCallLineItemId;
+                    };
                 }
-
+                
                 ko.validation.init({
                     errorElementClass: 'has-error',
                     errorMessageClass: 'help-block',
                     decorateElement: true
                 });
+
+                ko.validation.rules["vendorIsOnHold"] = {
+                    validator: function (val, condition) {
+                        if (condition() === 'true' || condition() === true) {
+                            return false;
+                        }
+
+                        return true;
+                    },
+                    message: 'Vendor on hold.'
+                };
+
+                ko.validation.registerExtenders();
 
                 var viewModel = new serviceCallLineItemViewModel();
                 viewModel.errors = ko.validation.group(viewModel);
@@ -538,9 +782,15 @@
                 var persistedAllPaymentsViewModel = modelData.initialServiceCallLinePayments;
 
                 _(persistedAllPaymentsViewModel).each(function (payment) {
-
                     viewModel.allPayments.push(new PaymentViewModel(payment));
                 });
+
+                var persistedAllPurchaseOrdersViewModel = modelData.initialServiceCallLinePurchaseOrders;
+
+                _(persistedAllPurchaseOrdersViewModel).each(function(purchaseOrder) {
+                    viewModel.allPurchaseOrders.push(new PurchaseOrderViewModel(purchaseOrder));
+                });
+
             });
         });
     });

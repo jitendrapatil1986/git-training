@@ -80,6 +80,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , cm.CommunityName
                                     , wc.HomeownerVerificationSignature
                                     , wc.HomeownerVerificationSignatureDate
+                                    , wc.HomeownerVerificationTypeId as HomeownerVerificationType
                                     , wc.SpecialProjectReason
                                     , wc.SpecialProjectDate
                                     
@@ -88,7 +89,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                 ON wc.JobId = j.JobId
                                 INNER JOIN HomeOwners ho
                                 ON j.CurrentHomeOwnerId = ho.HomeOwnerId
-                                INNER JOIN (select COUNT(*) as NumberOfLineItems, ServiceCallId FROM ServiceCallLineItems group by ServiceCallId) li
+                                LEFT JOIN (select COUNT(*) as NumberOfLineItems, ServiceCallId FROM ServiceCallLineItems group by ServiceCallId) li
                                 ON wc.ServiceCallId = li.ServiceCallId
                                 LEFT JOIN Employees e
                                 ON wc.WarrantyRepresentativeEmployeeId = e.EmployeeId

@@ -8,6 +8,7 @@ namespace Warranty.Server.IntegrationTests
 {
     using Core;
     using Core.DataAccess;
+    using Core.Security;
     using NPoco.FluentMappings;
     using Server.Handlers.Payments;
     using Tests.Core;
@@ -34,9 +35,10 @@ namespace Warranty.Server.IntegrationTests
 
                                                             scan.ConnectImplementationsToTypesClosing(typeof (IEntityBuilder<>));
                                                         });
+                                             x.For<IUserSession>().Use<TestWarrantyUserSession>();
                                          });
 
-            DbFactory.Setup(ObjectFactory.Container, new TestWarrantyUserSession());
+            DbFactory.Setup(ObjectFactory.Container);
         }
     }
 }

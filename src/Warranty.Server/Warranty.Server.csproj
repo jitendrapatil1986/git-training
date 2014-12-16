@@ -35,13 +35,16 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Commands, Version=1.1.858.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Accounting.Commands.1.1.858.0\lib\net45\Accounting.Commands.dll</HintPath>
+    <Reference Include="Accounting.Client">
+      <HintPath>..\packages\Accounting.Client.1.1.899.0\lib\net45\Accounting.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Accounting.Events, Version=1.1.858.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Accounting.Commands, Version=1.1.889.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Accounting.Events.1.1.858.0\lib\net45\Accounting.Events.dll</HintPath>
+      <HintPath>..\packages\Accounting.Commands.1.1.889.0\lib\net45\Accounting.Commands.dll</HintPath>
+    </Reference>
+    <Reference Include="Accounting.Events, Version=1.1.889.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Accounting.Events.1.1.889.0\lib\net45\Accounting.Events.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
@@ -51,7 +54,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
@@ -111,7 +114,8 @@
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandler.cs" />
-    <Compile Include="Handlers\Payments\NotifyRequestedBackchargeHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyPaymentDeletedHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyBackchargeRequestedHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyBackchargeApprovedHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyBackchargeDeniedHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyBackchargeOnHoldHandler.cs" />
@@ -125,12 +129,28 @@
     <Compile Include="Handlers\Payments\RequestBackchargeDenialResponseHandler.cs" />
     <Compile Include="Handlers\Payments\RequestBackchargeHoldResponseHandler.cs" />
     <Compile Include="Handlers\Payments\RequestBackchargeResponseHandler.cs" />
+    <Compile Include="Handlers\Payments\RequestDeletePendingPaymentResponseHandler.cs" />
     <Compile Include="Handlers\Payments\RequestPaymentApprovalResponseHandler.cs" />
     <Compile Include="Handlers\Payments\RequestPaymentHoldResponseHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentPaymentAmountUpdatedHandler.cs" />
-    <Compile Include="Handlers\Payments\NotifyRequestedPaymentHandler.cs" />
+    <Compile Include="Handlers\Payments\NotifyPaymentRequestedHandler.cs" />
     <Compile Include="Handlers\Payments\PaymentStatusUpdatedHandler.cs" />
     <Compile Include="Handlers\Payments\RequestPaymentResponseHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\CityPurchaseOrderMaxAddedHandler .cs" />
+    <Compile Include="Handlers\PurchaseOrders\CityPurchaseOrderMaxDeletedHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\CityPurchaseOrderMaxUpdatedHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\NotifyPurchaseOrderRequestedHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\PurchaseOrderDeletedHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\PurchaseOrderDeliveryDateUpdatedHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\PurchaseOrderDeliveryInstructionsUpdatedHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\PurchaseOrderLineItemCancelledStatusUpdatedHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\PurchaseOrderLineItemClosedStatusUpdatedHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\PurchaseOrderLineItemDeletedHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\PurchaseOrderLineItemDescriptionUpdatedHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\PurchaseOrderLineItemOpenStatusUpdatedHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\PurchaseOrderLineItemQuantityUpdatedHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\PurchaseOrderLineItemUnitCostUpdatedHandler.cs" />
+    <Compile Include="Handlers\PurchaseOrders\RequestPurchaseOrderResponseHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallCompletedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallCreatedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallEmployeeReassignedHandler.cs" />
@@ -140,6 +160,7 @@
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallLineItemProblemChangedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallLineItemCompletedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallSpecialProjectStatusChangedHandler.cs" />
+    <Compile Include="Handlers\ServiceCalls\RequestServiceCallHandler.cs" />
     <Compile Include="Security\WarrantyServerUserSession.cs" />
     <Compile Include="StructureMapConfig.cs" />
     <Compile Include="WarrantyRegistry.cs" />
@@ -152,6 +173,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Warranty.Commands\Warranty.Commands.csproj">
+      <Project>{E17253D6-54B6-4073-B6A0-1FB17BD6A0E5}</Project>
+      <Name>Warranty.Commands</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Warranty.Core\Warranty.Core.csproj">
       <Project>{991144F8-B588-4604-930B-3224FEC6FF32}</Project>
       <Name>Warranty.Core</Name>

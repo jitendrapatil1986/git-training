@@ -6,6 +6,7 @@ namespace Warranty.UI.Controllers
     using Warranty.Core;
     using Warranty.Core.Features.Report.Achievement;
     using Warranty.Core.Features.Report.MailMerge;
+    using Warranty.Core.Features.Report.Saltline;
     using Warranty.Core.Features.Report.WSRLoadingReport;
     using Warranty.Core.Features.Report.WarrantyBonusSummary;
 
@@ -90,6 +91,21 @@ namespace Warranty.UI.Controllers
         public ActionResult AchievementReport(AchievementReportModel model)
         {
             var resultModel = _mediator.Request(new AchievementReportQuery { queryModel = model });
+
+            return View(resultModel);
+        }
+
+        public ActionResult SaltlineReport()
+        {
+            var resultModel = _mediator.Request(new SaltlineReportQuery());
+
+            return View(resultModel);
+        }
+
+        [HttpPost]
+        public ActionResult SaltlineReport(SaltlineReportModel model)
+        {
+            var resultModel = _mediator.Request(new SaltlineReportQuery { queryModel = model });
 
             return View(resultModel);
         }

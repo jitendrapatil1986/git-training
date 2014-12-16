@@ -34,7 +34,7 @@
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
 
-            DbFactory.Setup(IoC.Container, new WarrantyUserSession());
+            DbFactory.Setup(IoC.Container);
             InitializeAutoMapper();
             InitializeNServiceBus();
         }

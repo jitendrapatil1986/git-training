@@ -103,6 +103,14 @@ namespace Warranty.JdeImport.Importers
                                                                         , TARGET.ExplanationName = LIST.ExplanationName
                                                                         , TARGET.ExplanationRemark = LIST.ExplanationRemark;";
 
+            using (var sc = new SqlConnection(connectionString))
+            {
+                sc.Open();
+
+                using (var cmd = new SqlCommand("TRUNCATE TABLE imports.WarrantyPaymentStage", sc))
+                    cmd.ExecuteNonQuery();
+            }
+
             Import();
 
             using (var sc = new SqlConnection(connectionString))
@@ -114,9 +122,6 @@ namespace Warranty.JdeImport.Importers
                     cmd.CommandTimeout = 6000;
                     cmd.ExecuteNonQuery();
                 }
-
-                using (var cmd = new SqlCommand("TRUNCATE TABLE imports.WarrantyPaymentStage", sc))
-                    cmd.ExecuteNonQuery();
             }
         }
     }

@@ -3,7 +3,6 @@
     using System;
     using Configuration;
     using Core.Entities;
-    using Core.Security;
     using InnerMessages;
     using NPoco;
     using NServiceBus;
@@ -12,13 +11,11 @@
     {
         private readonly IBus _bus;
         private readonly IDatabase _database;
-        private readonly IUserSession _userSession;
 
-        public NotifyBackchargeOnHoldHandler(IBus bus, IDatabase database, IUserSession userSession)
+        public NotifyBackchargeOnHoldHandler(IBus bus, IDatabase database)
         {
             _bus = bus;
             _database = database;
-            _userSession = userSession;
         }
 
         public void Handle(NotifyBackchargeOnHold message)
@@ -35,7 +32,7 @@
                     BackchargeId = backcharge.BackchargeId.ToString(),
                     ProgramId = WarrantyConstants.ProgramId,
                     DateOnHold = DateTime.Today,
-                    OnHoldBy = _userSession.GetCurrentUser().LoginName,
+                    OnHoldBy = message.UserName,
                     OnHoldReason = backcharge.HoldComments
                 };
                 _bus.Send(command);

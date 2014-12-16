@@ -37,9 +37,20 @@
         }
 
         [HttpGet]
-        public IEnumerable<QuickSearchCallVendorModel> Vendors(string query)
+        public IEnumerable<QuickSearchEmployeeModel> Employees(string query)
         {
-            var results = _mediator.Request(new QuickSearchVendorsQuery { Query = query });
+            var results = _mediator.Request(new QuickSearchEmployeesQuery {Query = query});
+            return results;
+        }
+
+        [HttpGet]
+        public IEnumerable<QuickSearchCallVendorModel> Vendors(string query, string cityCode)
+        {
+            var results = _mediator.Request(new QuickSearchVendorsQuery
+                {
+                    Query = query,
+                    CityCode = cityCode
+                });
             return results;
         }
     }

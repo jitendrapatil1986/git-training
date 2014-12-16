@@ -11,8 +11,8 @@ Environment "training" -servers @(
     ) -installPath "C:\Installs\WarrantyTraining"
     
 Environment "prod" -servers @(
-    Server "wkcorpappprod1" @("Web";)
-    Server "wkcorpappprod1" @("Nsb";)
+    Server "wkcorpappprod2" @("Web";)
+    Server "wkcorpappprod2" @("Nsb";)
     Server "wksql1" @("Database";)
     ) -installPath "C:\Installs\Warranty"
 
@@ -72,6 +72,7 @@ Role "Web" -Incremental {
     poke-xml "$web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@realm" $warranty_identity_uri
     poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Environment']/@value" $environment
     poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='sendFeedbackAddresses']/@value" $sendFeedbackAddresses
+    poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='sendEmailsForTest']/@value" $sendEmailsForTest
     poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='DocumentSharePath']/@value" $documentSharePath
     poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Warranty.BaseUri']/@value" $warranty_identity_uri
     poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Survey.API.BaseUri']/@value" $surveyApiBaseUri

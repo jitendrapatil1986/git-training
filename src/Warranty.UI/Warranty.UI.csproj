@@ -44,9 +44,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Client, Version=1.1.853.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Accounting.Client, Version=1.1.899.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Accounting.Client.1.1.853.0\lib\net45\Accounting.Client.dll</HintPath>
+      <HintPath>..\packages\Accounting.Client.1.1.899.0\lib\net45\Accounting.Client.dll</HintPath>
     </Reference>
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\WebGrease.1.3.0\lib\Antlr3.Runtime.dll</HintPath>
@@ -90,7 +90,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\packages\NServiceBus.Interfaces.4.2.0\lib\net40\NServiceBus.dll</HintPath>
@@ -245,6 +245,7 @@
     <Compile Include="Core\Initialization\Bundling\VirtualPathResolver.cs" />
     <Compile Include="Core\Initialization\IoC.cs" />
     <Compile Include="Core\Initialization\ModelMetadataProvider.cs" />
+    <Compile Include="Core\Initialization\RoleAuthorizeAttribute.cs" />
     <Compile Include="Core\Initialization\StructureMapDependencyResolver.cs" />
     <Compile Include="Core\Initialization\StructureMapDependencyScope.cs" />
     <Compile Include="Core\Initialization\WarrantyWebsiteBootstrapper.cs" />
@@ -311,6 +312,7 @@
     <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\search.js" />
     <Content Include="Scripts\app\servicecall\CallSummary.js" />
+    <Content Include="Scripts\app\servicecall\CreatePurchaseOrder.js" />
     <Content Include="Scripts\app\servicecall\SearchBackchargeVendor.js" />
     <Content Include="Scripts\app\servicecall\SearchVendor.js" />
     <Content Include="Scripts\app\servicecall\create.js" />
@@ -320,6 +322,7 @@
     <Content Include="Scripts\config\vendor-search.js" />
     <Content Include="Scripts\config\customer-search.js" />
     <Content Include="Scripts\lib\bootstrap-editable.min.js" />
+    <Content Include="Scripts\lib\jquery.hideseek.min.js" />
     <Content Include="Scripts\lib\knockout.x-editable.min.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />
     <Content Include="Scripts\lib\handlebars.amd.min.js" />
@@ -411,7 +414,7 @@
     <Content Include="Views\Job\Index.cshtml" />
     <Content Include="css\less\toastr.less" />
     <Content Include="Views\Home\ToDoWidget.cshtml" />
-    <Content Include="Views\Home\_ToDoPaymentRequestApproval.cshtml" />
+    <Content Include="Views\Home\_ToDoPaymentRequestApprovalUnderWarranty.cshtml" />
     <Content Include="Views\Home\_ToDoServiceCallApproval.cshtml" />
     <Content Include="Views\ServiceCall\CallSummary.cshtml" />
     <Content Include="Views\ServiceCall\SearchCustomer.cshtml" />
@@ -445,6 +448,12 @@
     <Content Include="Views\Report\AchievementReport.cshtml" />
     <Content Include="Views\Shared\_AdditionalContacts.cshtml" />
     <Content Include="Views\Admin\ManageProblemCodeCostCodes.cshtml" />
+    <Content Include="Views\Report\SaltlineReport.cshtml" />
+    <Content Include="Views\ServiceCall\CreatePurchaseOrder.cshtml" />
+    <Content Include="Views\Home\_ToDoJobAnniversaryTask.cshtml" />
+    <Content Include="Views\Home\_ToDoJob10MonthAnniversary.cshtml" />
+    <Content Include="Views\Home\_ToDoPaymentRequestApprovalOutOfWarranty.cshtml" />
+    <Content Include="Views\Home\_MyTeamDropdown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

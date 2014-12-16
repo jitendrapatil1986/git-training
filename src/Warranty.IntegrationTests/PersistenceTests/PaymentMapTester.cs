@@ -1,3 +1,5 @@
+using System;
+
 namespace Warranty.IntegrationTests.PersistenceTests
 {
     using Core.Enumerations;
@@ -9,19 +11,84 @@ namespace Warranty.IntegrationTests.PersistenceTests
     [TestFixture]
     public class PaymentMapTester : PersistenceTesterBase
     {
-        private Payment _payment;
+        private static Payment _payment;
 
         [SetUp]
         public void TestFixtureSetup()
         {
+            var serviceCallId = Guid.NewGuid();
+            var jobId = Guid.NewGuid();
+            var communityId = Guid.NewGuid();
+            var employeeId = Guid.NewGuid();
+            var lineItemId = Guid.NewGuid();
+
+            var job = new Job
+            {
+                AddressLine = "123 Street",
+                City = "Houston",
+                JobNumber = jobId.ToString().Substring(1,8),
+                CloseDate = DateTime.Now,
+                CommunityId = communityId,
+                JobId = jobId
+            };
+
+            var community = new Community
+            {
+                CommunityId = communityId,
+                CommunityName = "The Harbour",
+                CommunityNumber = communityId.ToString().Substring(1,4),
+                CityId = null,
+                DivisionId = null,
+                ProjectId = null,
+                SateliteCityId = null
+            };
+
+            var employee = new Employee
+            {
+                EmployeeId = employeeId,
+                Number = Guid.NewGuid().ToString().Substring(0, 8),
+                Name = "Employee A"
+            };
+
+            var serviceCall = new ServiceCall
+            {
+                CompletionDate = null,
+                Contact = "Mr. Test",
+                HomeOwnerSignature = "sign",
+                IsEscalated = true,
+                IsSpecialProject = true,
+                JobId = jobId,
+                ServiceCallId = serviceCallId,
+                ServiceCallStatus = ServiceCallStatus.Open,  //TODO: Need to update.
+                ServiceCallNumber = 12345,
+                ServiceCallType = "Warranty",  //TODO: Need to update.
+                WarrantyRepresentativeEmployeeId = employeeId,
+                WorkSummary = "Testing"
+            };
+
+            var serviceCallLineItem = new ServiceCallLineItem
+            {
+                ServiceCallId = serviceCallId,
+                ServiceCallLineItemId = lineItemId,
+                ServiceCallLineItemStatus = ServiceCallLineItemStatus.Open,
+            };
+
             _payment = new Payment
                            {
                                Amount = .12M,
                                JdeIdentifier = "123",
                                JobNumber = "12",
                                PaymentStatus = PaymentStatus.Pending,
+                               ServiceCallLineItemId = lineItemId,
                                VendorNumber = "1"
                            };
+
+            Insert(employee);
+            Insert(community);
+            Insert(job);
+
+            Insert(serviceCall);
+            Insert(serviceCallLineItem);
 
             Insert(_payment);
         }

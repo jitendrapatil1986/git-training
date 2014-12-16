@@ -24,5 +24,17 @@ namespace Warranty.UI.Api
 
             return new PostResponseModel { Success = true };
         }
+
+        [HttpPost]
+        public PostResponseModel UpdateAssignment(AssignWSRsModel assignment)
+        {
+            _mediator.Send(new AssignWSRCommand
+            {
+                CommunityId = assignment.SelectedCommunityId,
+                EmployeeId = assignment.SelectedEmployeeId,
+            });
+
+            return new PostResponseModel { Success = true };
+        }
     }
 }

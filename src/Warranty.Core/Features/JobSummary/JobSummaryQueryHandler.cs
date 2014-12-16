@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Warranty.Core.Features.JobSummary
 {
@@ -10,18 +7,21 @@ namespace Warranty.Core.Features.JobSummary
     using NPoco;
     using Security;
     using Services;
+    using System.Linq;
 
     public class JobSummaryQueryHandler : IQueryHandler<JobSummaryQuery, JobSummaryModel>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
         private readonly IHomeownerAdditionalContactsService _homeownerAdditionalContactsService;
+        private readonly IAccountingService _accountingService;
 
-        public JobSummaryQueryHandler(IDatabase database, IUserSession userSession, IHomeownerAdditionalContactsService homeownerAdditionalContactsService)
+        public JobSummaryQueryHandler(IDatabase database, IUserSession userSession, IHomeownerAdditionalContactsService homeownerAdditionalContactsService, IAccountingService accountingService)
         {
             _database = database;
             _userSession = userSession;
             _homeownerAdditionalContactsService = homeownerAdditionalContactsService;
+            _accountingService = accountingService;
         }
 
         public JobSummaryModel Handle(JobSummaryQuery query)
@@ -33,8 +33,13 @@ namespace Warranty.Core.Features.JobSummary
             model.JobNotes = GetJobNotes(query.JobId);
             model.Attachments = GetJobAttachments(query.JobId);
             model.Homeowners = GetJobHomeowners(query.JobId);
-            //model.JobPayments = GetJobPayments(query.JobId);
+            model.JobPayments = GetJobPayments(query.JobId);
             model.AdditionalContacts = _homeownerAdditionalContactsService.Get(model.HomeownerId);
+            model.Vendors = GetJobVendors(query.JobId);
+            model.CostCodes = model.Vendors.SelectMany(cc => cc.CostCodes)
+                                   .Distinct()
+                                   .OrderBy(x => x.CostCodeDescription);
+
             return model;
         }
 
@@ -209,5 +214,95 @@ namespace Warranty.Core.Features.JobSummary
 
             return result;
         }
+
+        private IEnumerable<JobSummaryModel.JobPayment> GetJobPayments(Guid jobId)
+        {
+            const string sql = @"SELECT sc.ServiceCallNumber,
+                                    p.PaymentId
+                                    , p.VendorName
+                                    , p.Amount
+                                    , p.PaymentStatus
+                                    , p.InvoiceNumber
+                                    , p.CreatedDate as PaymentCreatedDate
+                                    , p.HoldComments
+                                    , p.HoldDate
+                                    , b.backchargeId
+                                    , b.BackchargeVendorName
+                                    , b.BackchargeReason
+                                    , b.BackchargeAmount
+                                    , b.PersonNotified
+                                    , b.PersonNotifiedPhoneNumber
+                                    , b.PersonNotifiedDate
+                                    , b.BackchargeResponseFromVendor
+                                    , b.BackchargeStatus
+                                    , b.HoldComments backchargeHoldComments
+                                    , b.HoldDate backchargeHoldDate
+                                    , b.DenyComments backchargeDenyComments
+                                    , b.DenyDate backchargeDenyDate
+                                    , CASE WHEN b.BackchargeVendorNumber IS NOT NULL THEN 1 ELSE 0 END AS IsBackcharge
+                                FROM payments p
+                                LEFT JOIN backcharges b
+                                ON p.PaymentId = b.PaymentId
+                                INNER JOIN ServiceCallLineItems scli
+                                ON scli.ServiceCallLineItemId = p.ServiceCallLineItemId
+                                INNER JOIN ServiceCalls sc
+                                ON scli.ServiceCallId = sc.ServiceCallId
+                                INNER JOIN Jobs j
+                                ON sc.JobId = j.JobId
+                                WHERE j.JobId = @0 ORDER BY p.CreatedDate desc";
+
+            var result = _database.Fetch<JobSummaryModel.JobPayment>(sql, jobId);
+
+            return result;
+        }
+
+        private IEnumerable<JobSummaryModel.Vendor> GetJobVendors(Guid jobId)
+        {
+            const string sql = @"SELECT v.VendorId, v.Number, v.Name, ci.Value, ci.Type, jbcc.CostCode, jbcc.CostCodeDescription FROM Vendors v
+                                INNER JOIN (SELECT VendorId, number as Value, Type as Type FROM VendorPhones
+                                    UNION
+                                    SELECT VendorId, email as Value, 'E-mail' as Type FROM VendorEmails) as ci 
+                                    on v.vendorid = ci.vendorid
+                                INNER JOIN JobVendorCostCodes jbcc
+                                ON jbcc.VendorId = v.VendorId
+                                AND jbcc.JobId = @0";
+
+            var result = _database.Fetch<VendorDto>(sql, jobId);
+
+            return
+                result.Select(x => new JobSummaryModel.Vendor
+                    {
+                        Name = x.Name,
+                        Number = x.Number,
+                        VendorId = x.VendorId,
+                        CostCodes =
+                            result.Where(v => v.VendorId == x.VendorId)
+                                  .Select(cc => new JobSummaryModel.CostCodeModel
+                                      {
+                                          CostCode = cc.CostCode,
+                                          CostCodeDescription = cc.CostCodeDescription
+                                      }).Distinct().OrderBy(ob=>ob.CostCode).ToList(),
+                        ContactInfo =
+                            result.Where(v => v.VendorId == x.VendorId)
+                                  .Select(cc => new JobSummaryModel.Vendor.ContactInfoModel()
+                                      {
+                                          Value = cc.Value,
+                                          Type = cc.Type
+                                      }).Distinct().OrderBy(ob=> ob.Value).ToList()
+                    }).Distinct().OrderBy(x=>x.Name).ToList();
+        }
+
+        public class VendorDto
+        {
+            public Guid VendorId { get; set; }
+            public string Name { get; set; }
+            public string Number { get; set; }
+            public string Value { get; set; }
+            public string Type { get; set; }
+            public string CostCode { get; set; }
+            public string CostCodeDescription { get; set; }
+        }
+
+    
     }
 }

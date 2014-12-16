@@ -13,6 +13,7 @@
                         {
                             x.Column(col => col.CityCode);
                             x.Column(col => col.CityName);
+                            x.Column(col => col.PurchaseOrderMaxAmount);
                         });
         }
     }

@@ -9,295 +9,370 @@
 }
 
 <div style="display: none;" data-bind="visible: true">
-<div class="container">
-    <div class="col-md-12">
-        @Html.HiddenFor(model => model.ServiceCallLineItemStatus, new { id = "lineItemStatus" })
+    <div class="container">
+        <div class="col-md-12">
+            @Html.HiddenFor(model => model.ServiceCallLineItemStatus, new { id = "lineItemStatus" })
 
-        @Html.HiddenFor(model => model.CanReopenLines, new { id = "userCanReopenCallLinesAnytime", @class = "form-control" , data_bind="value: userCanAlwaysReopenCallLines"})
+            @Html.HiddenFor(model => model.CanReopenLines, new { id = "userCanReopenCallLinesAnytime", @class = "form-control", data_bind = "value: userCanAlwaysReopenCallLines" })
 
-        <div id="undoLastCompletedLineItem" data-bind="visible: !userCanAlwaysReopenCallLines() && lineJustCompleted()" class="undo-alert">
-            <div id="undoLastCompletedLineItemAlert" class="alert alert-warning alert-dismissible padding-5" role="alert">
-                Line item marked as complete. <a class="cursor-pointer" data-bind="click: undoLastCompletedLine">Undo mark as complete.</a>
-            </div>
-        </div>
-        
-        <section class="margin-bottom-10">
-            <h2 class="no-margin">
-                <a class="bread-crumb" href="@Url.Action("CallSummary", "ServiceCall", new {id=Model.ServiceCallId})">Service Call #@Model.ServiceCallNumber</a>
-                @Model.LineNumber - <span data-bind="text: problemCode"></span>
-                <div class="pull-right no-right-padding no-print">
-                    <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: completeLine, visible: !lineEditing()&& !isLineItemCompleted()">Complete</button>
-                    @if (Model.CanReopenLines)
-                    {
-                        <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: reopenLine, visible: !lineEditing() && isLineItemCompleted()">Reopen</button>
-                    }
+            <div id="undoLastCompletedLineItem" data-bind="visible: !userCanAlwaysReopenCallLines() && lineJustCompleted()" class="undo-alert">
+                <div id="undoLastCompletedLineItemAlert" class="alert alert-warning alert-dismissible padding-5" role="alert">
+                    Line item marked as complete. <a class="cursor-pointer" data-bind="click: undoLastCompletedLine">Undo mark as complete.</a>
                 </div>
-            </h2>
-            <div class="clearfix"></div>
-        </section>
-        <div id="serviceCallLineItemDetailPage" class="panel panel-default">
-            <div class="panel-heading no-bottom-padding no-top-padding margin-bottom-15">
-                <div class="row remove-list-style">
-                    <div id="allServiceCallLineItems" class="service-call-line edit-line-item" data-bind="attr: {'data-service-call-line-item': lineNumber()}">
-                        
-                        <h3 data-bind="text: problemDetailCode"></h3>
-                        <div class="col-md-12 main-info">
-                            <p class="panel-title text-capitalize"><strong>Status: </strong><span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
-                            </p>
-                        </div>
-                        <ul>
-                            <li class="row">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-9">
-                                            <div class="no-left-right-padding">
-                                                <div class="row">
-                                                    <div class="col-md-9">
-                                                        <div class="editor" data-bind="css: { editing: problemCodeEditing }"> 
-                                                            <h4>
-                                                                <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
-                                                            </h4>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="editor" data-bind="css: { editing: problemDescriptionEditing }"> 
-                                                        <p class="view" data-bind="text: problemDescription"></p>
-                                                        <textarea id="updateCallLineProblemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4 col-xs-12 no-left-right-padding top-buffer bottom-buffer">
-                                                    <div class="editor" data-bind="css: { editing: lineEditing }">
-                                                        <div class="col-md-3 col-xs-4">
-                                                            <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges, enable: problemDescription().length > 0">Save</button>
-                                                        </div>
-                                                        <div class="col-md-3 col-xs-4">
-                                                            <button class="btn btn-link edit" data-bind="click: cancelLineItemChanges">Cancel</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+            </div>
 
-                                        <div class="col-md-3 margin-bottom-3 text-align-right no-right-padding no-print">
-                                            @*<button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>*@
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+            <section class="margin-bottom-10">
+                <h2 class="no-margin">
+                    <a class="bread-crumb" href="@Url.Action("CallSummary", "ServiceCall", new { id = Model.ServiceCallId })">Service Call #@Model.ServiceCallNumber</a>
+                    @Model.LineNumber - <span data-bind="text: problemCode"></span>
+                    <div class="pull-right no-right-padding no-print">
+                        <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: completeLine, visible: !lineEditing()&& !isLineItemCompleted()">Complete</button>
+                        @if (Model.CanReopenLines)
+                        {
+                            <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: reopenLine, visible: !lineEditing() && isLineItemCompleted()">Reopen</button>
+                        }
                     </div>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-            <section class="margin-bottom-15">
-                <h3 class="col-md-12">Vendors</h3>
-                <em data-bind="visible: constructionVendors().length < 1" class="padding-left-15 padding-top-7 pull-left">No Vendors Found</em>
-                <!-- ko foreach: constructionVendors -->
-                <div class="col-md-4">
-                    <strong data-bind="text: VendorName"></strong><br/>
-                    <span data-bind="text: VendorEmail"></span>
-                    <p>
-                        <!-- ko foreach: VendorPhoneNumbers -->
-                         <span data-bind="text: $data"></span>&nbsp;
-                        <!-- /ko -->
-                    </p>
-                </div>
-                <!-- /ko -->
+                </h2>
                 <div class="clearfix"></div>
             </section>
-            <section class="margin-bottom-15">
-                <h3 class="col-md-12">Payments
-                    <span>
-                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Payments" data-toggle="collapse" data-target="#addPayment"><span class="glyphicon glyphicon-plus"></span></button>
-                    </span> 
-                </h3>
-                <div id="addPayment" class="collapse">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="form-group col-md-3"  data-bind="validationElement: vendorNumber, validationOptions: { insertMessages: false}">
-                                @Html.Label("Vendor", new{@class="control-label", @for="vendor-search"})
-                                <input type="text" id="vendor-search" class="form-control" autocomplete="off" placeholder="Type vendor name or vendor number" />
-                                <span data-bind="validationMessage: vendorNumber" class="help-block"></span>
+            <div id="serviceCallLineItemDetailPage" class="panel panel-default">
+                <div class="panel-heading no-bottom-padding no-top-padding margin-bottom-15">
+                    <div class="row remove-list-style">
+                        <div id="allServiceCallLineItems" class="service-call-line edit-line-item" data-bind="attr: {'data-service-call-line-item': lineNumber()}">
+                            <div class="col-md-12">
+                                <h3 data-bind="text: problemDetailCode"></h3>
+                                <p class="panel-title text-capitalize  main-info">
+                                    <strong>Status: </strong><span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
+                                </p>
                             </div>
-                            <div class="form-group col-md-3" data-bind="validationElement: invoiceNumber">
-                                @Html.Label("Invoice #", new{@class="control-label", @for="invoiceNumber"})
-                                <input type="text" class="form-control" id="invoiceNumber" data-bind="value: invoiceNumber"/>
-                            </div>
-                            <div class="form-group col-md-3" data-bind="validationElement: amount, validationOptions: { insertMessages: false}">
-                                @Html.Label("Amount", new{@class="control-label", @for="amount"})
-                                <div class="input-group">
-                                    <span class="input-group-addon">$</span>
-                                    <input type="text" class="form-control numeric" data-bind="value: amount" id="amount"/>
-                                </div>
-                                <span data-bind="validationMessage: amount" class="help-block"></span>
-                            </div>
-                            <div class="form-group col-md-3" data-bind="validationElement: selectedCostCode">
-                                @Html.Label("Cost Code", new{@class="control-label", @for="selectedCostCode"})
-                                <select id="selectedCostCode" class="form-control" data-bind="options: warrantyCostCodes, optionsText: 'displayText', optionsValue: 'value', value: selectedCostCode, optionsCaption: 'Select...'"></select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-2 margin-top-10">
-                                <div class="checkbox-inline">
-                                    <label class="cursor-pointer"><input type="checkbox" data-bind="checked: isBackcharge" /> Backcharge</label>
-                                </div>
-                            </div>
-                        </div>
+                            <ul>
+                                <li class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-9">
+                                                <div class="no-left-right-padding">
+                                                    <div class="row">
+                                                        <div class="col-md-9">
+                                                            <div class="editor" data-bind="css: { editing: problemCodeEditing }">
+                                                                <h4>
+                                                                    <select id="updateCallLineProblemCode" class="edit dropdown form-control" data-bind="options: theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
+                                                                </h4>
+                                                            </div>
 
-                        <div data-bind="visible: isBackcharge">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="editor" data-bind="css: { editing: problemDescriptionEditing }">
+                                                            <p class="view" data-bind="text: problemDescription"></p>
+                                                            <textarea id="updateCallLineProblemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4 col-xs-12 no-left-right-padding top-buffer bottom-buffer">
+                                                        <div class="editor" data-bind="css: { editing: lineEditing }">
+                                                            <div class="col-md-3 col-xs-4">
+                                                                <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges, enable: problemDescription().length > 0">Save</button>
+                                                            </div>
+                                                            <div class="col-md-3 col-xs-4">
+                                                                <button class="btn btn-link edit" data-bind="click: cancelLineItemChanges">Cancel</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3 margin-bottom-3 text-align-right no-right-padding no-print">
+                                                @*<button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <section class="margin-bottom-15">
+                    <h3 class="col-md-12">Vendors</h3>
+                    <p class="padding-left-15 padding-top-7 pull-left" data-bind="visible: constructionVendorsLoading"><span class="glyphicon glyphicon-refresh glyphicon-spin"></span> Loading...</p>
+                    <p class="padding-left-15 padding-top-7 pull-left" data-bind="visible: constructionVendors().length < 1 && !constructionVendorsLoading()"><em>No Vendors Found</em></p>
+                    <!-- ko foreach: constructionVendors -->
+                    <div class="col-md-4">
+                        <strong data-bind="text: VendorName"></strong>
+                        <br />
+                        <span data-bind="text: VendorEmail"></span>
+                        <p>
+                            <!-- ko foreach: VendorPhoneNumbers -->
+                            <span data-bind="text: $data"></span>&nbsp;
+                            <!-- /ko -->
+                        </p>
+                    </div>
+                    <!-- /ko -->
+                    <div class="clearfix"></div>
+                </section>
+                <section class="margin-bottom-15">
+                    <h3 class="col-md-12">POs
+                        <span>
+                            <button type="button" class="btn btn-default pull-right no-print hidden-sm hidden-xs" data-bind="click: createPurchaseOrder">Create PO</button>
+                        </span>
+                    </h3>
+                    <em data-bind="visible: allPurchaseOrders().length < 1" class="padding-left-15 padding-top-7 pull-left">No Purchase Orders Available</em>
+                    <!-- ko foreach: allPurchaseOrders -->
+                    <div class="row service-call-line">
+                        <div class="">
+                            <div class="col-md-4">
+                                <strong><span data-bind="text: vendorName"></span></strong>
+                                <br/>
+                                <span data-bind="text: purchaseOrderStatusDisplayName, css: 'label label-' + purchaseOrderStatusBadgeClassName()"></span>
+                            </div>
+                            <div class="col-md-2">
+                                <span data-bind="text: purchaseOrderNumber ? 'PO #:' + purchaseOrderNumber : 'PO #:'"></span>
+                                <br/>
+                                <span data-bind="text: 'Date:' + createdDate"></span>
+                            </div>
+                            <div class="col-md-2">
+                                <h4 data-bind="currency: totalCost"></h4>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /ko -->
+                    <div class="clearfix"></div>
+                </section>
+                <section class="margin-bottom-15">
+                    <h3 class="col-md-12">Payments
+                        <span>
+                            <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Payments" data-toggle="collapse" data-target="#addPayment"><span class="glyphicon glyphicon-plus"></span></button>
+                        </span>
+                    </h3>
+                    <div id="addPayment" class="collapse">
+                        <div class="panel-body">
                             <div class="row">
-                                <div class="form-group col-md-4"   data-bind="validationElement: backchargeVendorNumber, validationOptions: { insertMessages: false}">
-                                    @Html.Label("Backcharge vendor", new{@class="control-label", @for="backcharge-vendor-search"})
-                                    <input type="text" id="backcharge-vendor-search" class="form-control" autocomplete="off" placeholder="Type vendor name or vendor number" data-vendor-number="0" />
-                                    <span data-bind="validationMessage: backchargeVendorNumber" class="help-block"></span>
+                                <div class="form-group col-md-3" data-bind="validationElement: vendorNumber, validationOptions: { insertMessages: false}">
+                                    @Html.Label("Vendor", new { @class = "control-label", @for = "vendor-search" })
+                                    <input type="text" id="vendor-search" class="form-control" autocomplete="off" data-city-code="@Model.CityCode" placeholder="Type vendor name or vendor number" />
+                                    <span data-bind="validationMessage: vendorNumber" class="help-block"></span>
                                 </div>
-
-                                <div class="form-group col-md-3" data-bind="validationElement: backchargeAmount, validationOptions: { insertMessages: false}">
-                                    @Html.Label("Backcharge amount", new{@class="control-label", @for="backchargeAmount"})
+                                <div class="form-group col-md-3" data-bind="validationElement: invoiceNumber">
+                                    @Html.Label("Invoice #", new { @class = "control-label", @for = "invoiceNumber" })
+                                    <input type="text" class="form-control" id="invoiceNumber" data-bind="value: invoiceNumber" />
+                                </div>
+                                <div class="form-group col-md-3" data-bind="validationElement: amount, validationOptions: { insertMessages: false}">
+                                    @Html.Label("Amount", new { @class = "control-label", @for = "amount" })
                                     <div class="input-group">
                                         <span class="input-group-addon">$</span>
-                                        <input type="text" class="form-control numeric" data-bind="value: backchargeAmount" id="backchargeAmount"/>
+                                        <input type="text" class="form-control numeric" data-bind="value: amount" id="amount" />
                                     </div>
-                                    <span data-bind="validationMessage: backchargeAmount" class="help-block"></span>
+                                    <span data-bind="validationMessage: amount" class="help-block"></span>
                                 </div>
-
-                                <div class="form-group col-md-12"   data-bind="validationElement: backchargeReason">
-                                    @Html.Label("Reason for backcharge", new{@class="control-label", @for="backchargeReason"})
-                                    <textarea class="form-control" maxlength="255" data-bind="value: backchargeReason" id="backchargeReason"></textarea>
+                                <div class="form-group col-md-3" data-bind="validationElement: selectedCostCode">
+                                    @Html.Label("Cost Code", new { @class = "control-label", @for = "selectedCostCode" })
+                                    <select id="selectedCostCode" class="form-control" data-bind="options: warrantyCostCodes, optionsText: 'displayText', optionsValue: 'value', value: selectedCostCode, optionsCaption: 'Select...'"></select>
                                 </div>
-
                             </div>
                             <div class="row">
-                                
-                                <div class="form-group col-md-4" data-bind="validationElement: personNotified">
-                                    @Html.Label("Person notified", new{@class="control-label", @for="personNotified"})
-                                    <input type="text" class="form-control" data-bind="value: personNotified" id="personNotified"/>
-                                </div>
-
-                                <div class="form-group col-md-4" data-bind="validationElement: personNotifiedPhoneNumber">
-                                    @Html.Label("Phone number", new{@class="control-label", @for="personNotifiedPhoneNumber"})
-                                    <input type="text" class="form-control phone-number-with-extension" data-bind="value: personNotifiedPhoneNumber" id="personNotifiedPhoneNumber"/>
-                                </div>
-
-                                <div class="form-group col-md-4" data-bind="validationElement: personNotifiedDate">
-                                    @Html.Label("Date notified", new{@class="control-label", @for="Person_Notified_Date"})
-                                    <input id="Person_Notified_Date" type="text" data-bind="value: personNotifiedDate" class="form-control" />
-                                </div>
-
-                                <div class="form-group col-md-12" data-bind="validationElement: backchargeResponseFromVendor">
-                                    @Html.Label("Response from vendor", new{@class="control-label", @for="backchargeResponseFromVendor"})
-                                    <textarea class="form-control" maxlength="255" data-bind="value: backchargeResponseFromVendor" id="backchargeResponseFromVendor"></textarea>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="form-submit">
-                                    <button class="btn btn-primary" data-bind="click: addPayment, enable: canAddPayment" disabled="">Add</button>
-                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addPayment" data-bind="click: clearPaymentFields">Cancel</button>
-                            </div>
-                    </div>
-                </div>
-                <br />
-                <em data-bind="visible: allPayments().length < 1" class="padding-left-15 padding-top-7 pull-left">No Payments Available</em>
-                <div class="remove-list-style">
-                    <div class="clearfix"></div>
-                    <br />
-                    <ul data-bind="foreach: allPayments">
-                        <div id="allServiceCallPayments">
-                            <li class="row service-call-line">
-                                <div class="padding-bottom-10 padding-top-7">
-                                <div class="col-md-12 margin-bottom-5">
-                                    <div class="no-left-right-padding">
-                                        <div class="row payment-line">
-                                            <div class="col-md-4">
-                                                <strong><span data-bind="text: vendorName"></span></strong>
-                                                <br/>
-                                                <span class="label label-default" data-bind="text: paymentStatusDisplayName"></span>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <span data-bind="text: 'Invoice #' + invoiceNumber"></span>
-                                                <br/>
-                                                <span data-bind="text: 'Date:' + moment(paymentCreatedDate).format('L')"></span>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <h4 data-bind="currency: amount"></h4>
-                                            </div>
-                                            <div class="col-md-2 margin-bottom-3 text-align-right no-right-padding no-print">
-                                                <button class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click:deletePayment">Delete</button>
-                                            </div>
-                                        </div>
+                                <div class="form-group col-md-2 margin-top-10">
+                                    <div class="checkbox-inline">
+                                        <label class="cursor-pointer">
+                                            <input type="checkbox" data-bind="checked: isBackcharge" />
+                                            Backcharge</label>
                                     </div>
                                 </div>
-                                <div class="col-md-12" data-bind="visible: isBackcharge">
-                                    <span class="glyphicon glyphicon-warning-sign"></span> <a href="#" data-toggle="collapse" data-bind="attr:{'data-target': '#backcharge-' + paymentId}">Backcharge</a>
-                                    <div class="row" style="margin:5px;background-color: white;">
-                                        <div class="collapse" data-bind="attr: { id: 'backcharge-' + paymentId }">
-                                            <div class="col-md-12">
-                                                <div class="row">
-                                                    <div class="col-md-7">
-                                                        <small>
-                                                            <strong><span data-bind="text: backchargeVendorName"></span></strong><br/>
-                                                            <span data-bind="text: backchargeReason"></span>
-                                                        </small>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <small>
-                                                            <span><strong>Backcharge Amount: </strong></span> </small><h4 data-bind="currency: backchargeAmount"></h4>
-                                                        
-                                                    </div>
-                                                </div>
-                                                <div class="row margin-top-10">
-                                                    <div class="col-md-12">
-                                                        <small>
-                                                            <span data-bind="text: 'Notified ' + personNotified + ' on ' + personNotifiedDate"></span>
-                                                            <br/>
-                                                            <strong>Phone: </strong><span data-bind="text: personNotifiedPhoneNumber"></span><br/><br/>
-                                                            <strong>Response from Vendor: </strong><span data-bind="text: backchargeResponseFromVendor"></span>
-                                                        </small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                            </div>
+
+                            <div data-bind="visible: isBackcharge">
+                                <div class="row">
+                                    <div class="form-group col-md-4" data-bind="validationElement: backchargeVendorNumber, validationOptions: { insertMessages: false}">
+                                        @Html.Label("Backcharge vendor", new { @class = "control-label", @for = "backcharge-vendor-search" })
+                                        <input type="text" id="backcharge-vendor-search" class="form-control" autocomplete="off" data-city-code="@Model.CityCode" placeholder="Type vendor name or vendor number" data-vendor-number="0" />
+                                        <span data-bind="validationMessage: backchargeVendorNumber" class="help-block"></span>
                                     </div>
+
+                                    <div class="form-group col-md-3" data-bind="validationElement: backchargeAmount, validationOptions: { insertMessages: false}">
+                                        @Html.Label("Backcharge amount", new { @class = "control-label", @for = "backchargeAmount" })
+                                        <div class="input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <input type="text" class="form-control numeric" data-bind="value: backchargeAmount" id="backchargeAmount" />
+                                        </div>
+                                        <span data-bind="validationMessage: backchargeAmount" class="help-block"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-12" data-bind="validationElement: backchargeReason">
+                                        @Html.Label("Reason for backcharge", new { @class = "control-label", @for = "backchargeReason" })
+                                        <textarea class="form-control" maxlength="255" data-bind="value: backchargeReason" id="backchargeReason"></textarea>
+                                    </div>
+
                                 </div>
-                            </li>
-                        </div>
-                    </ul>
-                </div>
-            </section>
-            <section class="margin-bottom-15">
-                <h3 class="col-md-12">Attachments
-                    <span>
-                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Attachments" data-toggle="collapse" data-target="#addAttachment"><span class="glyphicon glyphicon-plus"></span></button>
-                    </span>
-                </h3>
-                <div id="addAttachment" class="collapse">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                @using (Html.BeginForm("UploadAttachment", "ServiceCall"))
-                                {
-                                    @Html.HiddenFor(x => Model.ServiceCallId, new { @Name = "ServiceCallId" })
-                                    @Html.HiddenFor(x => Model.ServiceCallLineItemId, new { @Name = "ServiceCallLineItemId" })
-                                    @Html.EditorFor(x => x.TempFiles)
-                                    <input type="submit" class="btn btn-primary trigger-file-uploader" value="Add" />
-                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addAttachment">Cancel</button>
-                                }
+                                <div class="row">
+
+                                    <div class="form-group col-md-4" data-bind="validationElement: personNotified">
+                                        @Html.Label("Person notified", new { @class = "control-label", @for = "personNotified" })
+                                        <input type="text" class="form-control" data-bind="value: personNotified" id="personNotified" />
+                                    </div>
+
+                                    <div class="form-group col-md-4" data-bind="validationElement: personNotifiedPhoneNumber">
+                                        @Html.Label("Phone number", new { @class = "control-label", @for = "personNotifiedPhoneNumber" })
+                                        <input type="text" class="form-control phone-number-with-extension" data-bind="value: personNotifiedPhoneNumber" id="personNotifiedPhoneNumber" />
+                                    </div>
+
+                                    <div class="form-group col-md-4" data-bind="validationElement: personNotifiedDate">
+                                        @Html.Label("Date notified", new { @class = "control-label", @for = "Person_Notified_Date" })
+                                        <input id="Person_Notified_Date" type="text" data-bind="value: personNotifiedDate" class="form-control" />
+                                    </div>
+
+                                    <div class="form-group col-md-12" data-bind="validationElement: backchargeResponseFromVendor">
+                                        @Html.Label("Response from vendor", new { @class = "control-label", @for = "backchargeResponseFromVendor" })
+                                        <textarea class="form-control" maxlength="255" data-bind="value: backchargeResponseFromVendor" id="backchargeResponseFromVendor"></textarea>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-submit">
+                                <button class="btn btn-primary" data-bind="click: addPayment, enable: canAddPayment" disabled="">Add</button>
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#addPayment" data-bind="click: clearPaymentFields">Cancel</button>
                             </div>
                         </div>
                     </div>
-                </div>
-                <br />
-                <em data-bind="visible: allAttachments().length < 1" class="padding-left-15 padding-top-7 pull-left">No Attachments Available</em>
-                <div class="remove-list-style attachments row">
-                    <div class="clearfix"></div>
                     <br />
-                    <ul data-bind="foreach: allAttachments">
+                    <em data-bind="visible: allPayments().length < 1" class="padding-left-15 padding-top-7 pull-left">No Payments Available</em>
+                    <div class="remove-list-style">
+                        <div class="clearfix"></div>
+                        <br />
+                        <ul data-bind="foreach: allPayments">
+                            <div id="allServiceCallPayments">
+                                <li class="row service-call-line">
+                                    <div class="col-md-12 margin-bottom-5">
+                                        <div class="no-left-right-padding">
+                                            <div class="row payment-line">
+                                                <div class="col-md-4">
+                                                    <strong><span data-bind="text: vendorName"></span></strong>
+                                                    <br />
+                                                    <span data-bind="text: paymentStatusDisplayName, css: 'label label-' + paymentStatusBadgeClassName()"></span>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <span data-bind="text: 'Invoice #:' + invoiceNumber"></span>
+                                                    <br />
+                                                    <span data-bind="text: 'Date:' + moment(paymentCreatedDate).format('L')"></span>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <h4 data-bind="currency: amount"></h4>
+                                                </div>
+
+                                                <div class="col-md-4 margin-bottom-3 text-align-right no-right-padding no-print">
+                                                    @if (Model.CanTakeActionOnPayments)
+                                                    {
+                                                        <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="visible: shouldDisplayApprovePayment, click: approvePayment">Approve</a>
+                                                        <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10 btn-action-with-popup hidden-xs" data-bind="visible: shouldDisplayHoldPayment, attr: {id:'btn_hold-' + paymentId}, click: displayHold">Hold</a>
+                                                    }
+                                                    <button class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="visible: shouldDisplayDeletePayment, click:deletePayment">Delete</button>
+                                                    
+                                                    @if (Model.CanTakeActionOnPayments)
+                                                    {
+                                                        <a href="#" class="btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayApprovePayment, click: approvePayment">Approve</a>
+                                                        <a href="#" class="btn btn-default btn-sm margin-right-10 btn-action-with-popup hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayHoldPayment, attr: {id:'btn_hold-' + paymentId}, click: displayHold">Hold</a>
+                                                    }
+                                                    <button class="btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayDeletePayment, click:deletePayment">Delete</button>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12" data-bind="visible: isBackcharge">
+                                        <div class="margin-bottom-10">
+                                        <span class="glyphicon glyphicon-warning-sign"></span>&nbsp;<a data-toggle="collapse" class="cursor-pointer" data-bind="attr:{'data-target': '#backcharge-' + paymentId}">Backcharge</a>
+                                        </div>
+                                        <div class="row backcharge-container collapse" data-bind="attr: { id: 'backcharge-' + paymentId }">
+                                            <div>
+                                                <div class="col-md-12 margin-top-10">
+                                                    <span data-bind="text: backchargeStatusDisplayName, css: 'label label-' + backchargeStatusBadgeClassName()"></span>
+                                                </div>
+                                                <div class="col-md-6 margin-top-10">
+                                                    <small>
+                                                        <strong><span data-bind="text: backchargeVendorName"></span></strong>
+                                                        <br />
+                                                        <span data-bind="text: backchargeReason"></span>
+                                                    </small>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <small>
+                                                        <span><strong>Backcharge Amount: </strong></span></small>
+                                                    <h4 data-bind="currency: backchargeAmount"></h4>
+
+                                                </div>
+                                               
+                                          
+                                                <div class="col-md-12 margin-top-10 margin-bottom-10">
+                                                    <small>
+                                                        <span data-bind="text: 'Notified ' + personNotified + ' on ' + personNotifiedDate"></span>
+                                                        <br />
+                                                        <strong>Phone: </strong><span data-bind="text: personNotifiedPhoneNumber"></span>
+                                                        <br />
+                                                        <strong>Response from Vendor: </strong><span data-bind="text: backchargeResponseFromVendor"></span>
+                                                    </small>
+                                                </div>
+                                                @if (Model.CanTakeActionOnPayments)
+                                                {
+                                                    <div class="col-md-12 form-inline no-print">
+                                                        <div class="row row-list">
+                                                            <div data-bind="visible: shouldDisplayApproveBackcharge" class="inline-block">
+                                                                <small><button class="btn btn-link" data-bind="click:approveBackcharge">Approve</button>|</small>
+                                                            </div>
+                                                            <div data-bind="visible: shouldDisplayHoldBackcharge" class="inline-block">
+                                                                <small><a href="#" class="btn btn-link btn-action-with-popup" data-bind="attr: {id:'btn_holdBackcharge-' + paymentId}, click: displayHoldBackcharge">Hold</a>|</small>
+                                                            </div>
+                                                            <div data-bind="visible: shouldDisplayDenyBackcharge" class="inline-block">
+                                                                <small><a href="#" class="btn btn-link btn-action-with-popup" data-bind="attr: {id:'btn_denyBackcharge-' + paymentId}, click: displayDenyBackcharge">Deny</a></small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                <div class="col-md-12 alert alert-warning no-bottom-margin" data-bind="visible: isBackchargeHeld">
+                                                    <strong><span data-bind="text: backchargeStatusDisplayName"></span></strong> - <span data-bind="    date: backchargeHoldDate"></span>- <span data-bind="    text: backchargeHoldComments"></span>
+                                                </div>
+                                                <div class="col-md-12 alert alert-danger no-bottom-margin" data-bind="visible: isBackchargeDenied">
+                                                    <strong><span data-bind="text: backchargeStatusDisplayName"></span></strong> - <span data-bind="    date: backchargeDenyDate"></span>- <span data-bind="    text: backchargeDenyComments"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 alert alert-warning no-bottom-margin" data-bind="visible: isHeld">
+                                        <strong><span data-bind="text: paymentStatusDisplayName"></span></strong> - <span data-bind="date: holdDate"></span>- <span data-bind="text: holdComments"></span>
+                                    </div>
+                                </li>
+                            </div>
+                        </ul>
+                    </div>
+        </section>
+                <section class="margin-bottom-15">
+                    <h3 class="col-md-12">Attachments
+                        <span>
+                            <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Attachments" data-toggle="collapse" data-target="#addAttachment"><span class="glyphicon glyphicon-plus"></span></button>
+                        </span>
+                    </h3>
+                    <div id="addAttachment" class="collapse">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @using (Html.BeginForm("UploadAttachment", "ServiceCall"))
+                                    {
+                                        @Html.HiddenFor(x => Model.ServiceCallId, new { @Name = "ServiceCallId" })
+                                        @Html.HiddenFor(x => Model.ServiceCallLineItemId, new { @Name = "ServiceCallLineItemId" })
+                                        @Html.EditorFor(x => x.TempFiles)
+                                        <input type="submit" class="btn btn-primary trigger-file-uploader" value="Add" />
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#addAttachment">Cancel</button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <em data-bind="visible: allAttachments().length < 1" class="padding-left-15 padding-top-7 pull-left">No Attachments Available</em>
+                    <div class="remove-list-style attachments row">
+                        <div class="clearfix"></div>
+                        <br />
+                        <ul data-bind="foreach: allAttachments">
                             <li>
                                 <a class="attached-file" data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "ServiceCall")/' + serviceCallAttachmentId}">
                                     @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
@@ -307,70 +382,89 @@
                                     <span class="download-attachment glyphicon glyphicon-file"></span>
                                 </a>
                                 <a href="#" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId}, editable: displayName, editableOptions: { pk: serviceCallAttachmentId, url: '@Url.Action("RenameAttachment", "ServiceCall")    '}"  class="attached-file-display-name"></a>
-                                <br/>
+                                <br />
                                 <p data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></p>
                             </li>
-                    </ul>
-                </div>
-            </section>
+                        </ul>
+                    </div>
+                </section>
 
-            <section>
-                <h3 class="col-md-12">Notes
-                    <span>
-                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Note" data-toggle="collapse" data-target="#addCallNote"><span class="glyphicon glyphicon-plus"></span></button>
-                    </span>
-                </h3>
-                <div id="addCallNote" class="collapse">
+                <section>
+                    <h3 class="col-md-12">Notes
+                        <span>
+                            <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Note" data-toggle="collapse" data-target="#addCallNote"><span class="glyphicon glyphicon-plus"></span></button>
+                        </span>
+                    </h3>
+                    <div id="addCallNote" class="collapse">
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    @Html.TextArea("Description", null, new { id = "addCallNoteDescription", @class = "form-control", data_bind = "text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
+                                    <div class="control-group" data-bind="validationElement: noteDescriptionToAdd">
+                                        <label class="control-label" for="addCallNoteDescription"></label>
+                                        @Html.TextArea("Description", null, new { id = "addCallNoteDescription", @class = "form-control", data_bind = "text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
+                                    </div>
                                 </div>
                             </div>
-                            <br/>
+                            <br />
                             <div class="form-submit">
-                                    <button class="btn btn-primary" data-bind="click: addCallNote, enable: noteDescriptionToAdd().length > 0">Add</button>
-                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</button>
+                                <button class="btn btn-primary" data-bind="click: addCallNote">Add</button>
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</button>
                             </div>
                         </div>
                     </div>
-                <br />
-                <em data-bind="visible: allCallNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">No Notes Available</em>
-                <div class="remove-list-style">
-                    <div class="clearfix"></div>
-                    <br/>
-                    <ul>
-                        <div data-bind="foreach: allCallNotes">
-                            <div id="allServiceCallNotes" class="service-call-line edit-line-item">
-                                <li class="row">
-                                    <div class="col-md-12">
-                                        <div class="no-left-right-padding">
-                                            <div class="row">
-                                                <div class="col-md-12 margin-bottom-5">
-                                                    <strong><small><span data-bind="text: createdBy"></span></small></strong>
-                                                    <small><span data-bind="text: moment(createdDate).format('L')"></span></small>
+                    <br />
+                    <em data-bind="visible: allCallNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">No Notes Available</em>
+                    <div class="remove-list-style">
+                        <div class="clearfix"></div>
+                        <br />
+                        <ul>
+                            <div data-bind="foreach: allCallNotes">
+                                <div id="allServiceCallNotes" class="service-call-line edit-line-item">
+                                    <li class="row">
+                                        <div class="col-md-12">
+                                            <div class="no-left-right-padding">
+                                                <div class="row">
+                                                    <div class="col-md-12 margin-bottom-5">
+                                                        <strong><small><span data-bind="text: createdBy"></span></small></strong>
+                                                        <small><span data-bind="text: moment(createdDate).format('L')"></span></small>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <p data-bind="text: note"></p>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <p data-bind="text: note"></p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                                <div class="clearfix"></div>
+                                    </li>
+                                    <div class="clearfix"></div>
+                                </div>
                             </div>
-                        </div>
-                    </ul>
-                </div>
-            </section>
+                        </ul>
+                    </div>
+                </section>
 
+            </div>
         </div>
     </div>
 </div>
+<div data-bind="foreach: allPayments">
+    <div data-bind="attr: {id: 'hold-' + paymentId}" class="popup-action-with-message">
+        <textarea class="form-control margin-bottom-10" rows="5" placeholder="Enter reason" data-bind="value: holdComments"></textarea>
+        <a href="#" class="btn btn-primary btn-execute-action" data-bind="click: holdPayment">Submit</a>
+        <a href="#" class="btn-link btn-cancel-popup" data-bind="click: cancelPopup">Cancel</a>
+    </div>
+    <div data-bind="attr: {id: 'holdBackcharge-' + paymentId}" class="popup-action-with-message">
+        <textarea class="form-control margin-bottom-10" rows="5" placeholder="Enter reason" data-bind="value: backchargeHoldComments"></textarea>
+        <a href="#" class="btn btn-primary btn-execute-action" data-bind="click: holdBackcharge">Submit</a>
+        <a href="#" class="btn-link btn-cancel-popup" data-bind="click: cancelPopup">Cancel</a>
+    </div>
+        <div data-bind="attr: {id: 'denyBackcharge-' + paymentId}" class="popup-action-with-message">
+        <textarea class="form-control margin-bottom-10" rows="5" placeholder="Enter reason" data-bind="value: backchargeDenyComments"></textarea>
+        <a href="#" class="btn btn-primary btn-execute-action" data-bind="click: denyBackcharge">Submit</a>
+        <a href="#" class="btn-link btn-cancel-popup" data-bind="click: cancelPopup">Cancel</a>
+    </div>
 </div>
-
 @section modules
 {
     <script>
@@ -380,14 +474,15 @@
                 initialServiceCallLineNotes: @Html.Raw(Model.ServiceCallLineItemNotes.ToJson()),
                 initialServiceCallLineAttachments: @Html.Raw(Model.ServiceCallLineItemAttachments.ToJson()),
                 initialServiceCallLinePayments: @Html.Raw(Model.ServiceCallLineItemPayments.ToJson()),
-                warrantyCostCodes:  @Html.Raw(@WarrantyCostCode.GetAll().Select(x=> new { DisplayText = x.DisplayName, x.Value}).ToJson()),
+                initialServiceCallLinePurchaseOrders: @Html.Raw(Model.ServiceCallLineItemPurchaseOrders.ToJson()),
+                warrantyCostCodes:  @Html.Raw(@WarrantyCostCode.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { DisplayText = x.DisplayName, x.Value }).ToJson()),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
-                }
+            }
         });
 
         define('dropdownData', function() {
             return {
-                availableLookups: @Html.Raw(Model.ProblemCodes.Select(x => new {problemId = x.Value, problemCode = x.Text}).ToJson())
+                availableLookups: @Html.Raw(Model.ProblemCodes.Select(x => new { problemId = x.Value, problemCode = x.Text }).ToJson())
                 }
         });
     </script>

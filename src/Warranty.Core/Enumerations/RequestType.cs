@@ -8,5 +8,6 @@
         }
 
         public static readonly RequestType WarrantyRequest = new RequestType(1, "Warranty Service Request");
+        public static readonly RequestType TwelveMonthRequest = new RequestType(2, "Twelve Month List");
     }
 }

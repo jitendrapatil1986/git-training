@@ -21,6 +21,7 @@ h2, h3, h4 {
 
 .alert {
     border-radius: 0;
+    padding: 10px;
 }
 
 .small-text {
@@ -105,13 +106,25 @@ section.line-items {
     margin: 0;
 }
 
-#serviceCallSummaryPage .service-call-line:first-child, #serviceCallLineItemDetailPage .service-call-line:first-child {
+#serviceCallSummaryPage .service-call-line:first-child{
     border-top: solid 1px #e7e7e7;
 }
 
-#serviceCallSummaryPage .service-call-line:last-child, #serviceCallLineItemDetailPage .service-call-line:last-child {
-    border-bottom: 0;
+
+#serviceCallSummaryPage .service-call-line{
+    border: 0;
 }
+
+
+#allServiceCallNotes.service-call-line{
+    border-bottom: solid 1px #e7e7e7;
+    padding: 10px 10px 0;
+}
+
+ .service-call-line:first-child{
+    border-top: solid 1px #e7e7e7;
+}
+
 
 .service-call-line:hover {
     background: @gray-lighter;
@@ -442,6 +455,11 @@ section.line-items {
     margin: 0;
 }
 
+.vertical-menu-scroll {
+    max-height: 30em;
+    overflow-y: auto;
+}
+
 .label, badge {
     &-open-service-call, &-homeowner-signed-service-call, &-open-service-line-item {
         background-color: #5cb85c;
@@ -541,7 +559,7 @@ a.delete-group-item:hover {
 }
 
 .editing .edit {
-    display: block;
+    display: inline-block;
 }
 
 .editing .view {
@@ -596,8 +614,16 @@ a.delete-group-item:hover {
     padding-bottom: 10px;
 }
 
+.padding-top-10 { 
+    padding-top: 10px;
+}
+
 .padding-top-7 { 
     padding-top: 7px;
+}
+
+.padding-top-31 { 
+    padding-top: 31px;
 }
 
 .padding-left-15 { 
@@ -986,6 +1012,29 @@ span.boxclose{
     display: block;
 }
 
+.searchContainer{
+    margin-bottom: 20px;
+}
+
+.searchContainer label{
+    margin-right: 10px;
+}
+
+ul.default_list{
+    list-style: none;
+    padding: 0;
+    position: relative;
+}
+
+.itemContainer{
+    border: 1px solid #DDD;
+}
+
+.itemContainer h3{
+    font-size: 15px;
+    margin: 0;
+}
+
 span.remove-additional-contact{    
     cursor: pointer;
     display: none;  
@@ -997,6 +1046,12 @@ span.remove-additional-contact{
 
 .additional-contact .additional-contact-icon {
     display:none;
+}
+
+.itemLabel label{
+    font-size: 12px;
+    text-transform: uppercase;
+    margin: 0;
 }
 
 .additional-contact.can-remove .additional-contact-icon {
@@ -1014,6 +1069,16 @@ span.remove-additional-contact{
 
 .payment-line:hover .btn-hover-show{
     opacity: 1;
+}
+
+.backcharge-container {
+    margin: 5px;
+    background-color: white;
+    border: solid 1px lightgrey;
+}
+
+.inline-block {
+    display: inline-block;
 }
 
 

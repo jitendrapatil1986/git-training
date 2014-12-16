@@ -1,48 +1,63 @@
 ﻿@using System.Linq
-@using System.Web.Mvc.Html
+@using Warranty.Core.Extensions
 @model Warranty.Core.Features.AssignWSRs.AssignWSRsModel
 
 @{
     ViewBag.Title = "Assign WSR's";
 }
 
-<h2>Assign WSR's</h2>
-@using (Html.BeginForm("ManageAssignments"))
-{
-    <span>Community:</span>
-    @Html.DropDownListFor(x => x.SelectedCommunityId, Model.Communities.Select(c => new SelectListItem {Text = c.Name, Value = c.Id.ToString()}))
-    @Html.ValidationMessageFor(x=>x.SelectedCommunityId)
-    <span>Employee:</span>
-    @Html.DropDownListFor(x => x.SelectedEmployeeId, Model.Employees.Select(c => new SelectListItem {Text = c.Name, Value = c.EmployeeId.ToString()}))
-    @Html.ValidationMessageFor(x=>x.SelectedEmployeeId)
-    <input type="submit" value="Add" class="btn btn-success"/>
-}
 
-<div class="well">
-    <h2>Assignments</h2>
-
-    @if (!Model.Communities.Any(c => c.Employees.Any()))
-    {
-        <div>No assignments found.</div>
-    }
-
-    @foreach (var com in Model.Communities.Where(c => c.Employees.Any()))
-    {
-        <div  class="list-group col-md-12">
-            <div class="list-group-item">
-                    @com.Name
-            </div>
-                @foreach (var emp in com.Employees)
-                {
-                    <div>
-                        <span class="list-group-item">
-                            @emp.Name
-                            <a href="#" class="pull-right glyphicon glyphicon-remove" data-assignmentId="@emp.EmployeeAssignmentId"></a>
-                        </span>
-                    </div>
-                }
+<div class="container">
+    <h2>Assign WSR's</h2>
+    <div class="row">
+        <div class="col-md-12 text-center" data-bind="visible: $root.loading">
+            <span class="glyphicon glyphicon-refresh glyphicon-spin"></span> Loading...
         </div>
-    }
-
-    <div class="clearfix"></div>
+    </div>
+    <div style="display: none;" data-bind="visible: true">
+        <div id="communities">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="searchContainer">
+                        <input id="search" name="search" type="text" class="form-control" data-list=".default_list" autocomplete="off" placeholder="Type to search and filter list">
+                    </div>
+                </div>
+            </div>
+            <div class="row"></div>
+            <ul class="default_list row" data-bind="foreach: allCommunityAssignments">
+                <li class="col-md-4">
+                    <div class="itemContainer panel panel-default" style="min-height: 150px;">
+                        <div class="panel-heading">
+                            <h3 class="panel-title" data-bind="text: communityName"></h3>
+                        </div>
+                        <div class="itemLabel panel-body" data-bind="attr: {'data-manage-assignment-line-item': $index() + 1}">
+                            <div class="hidden" data-bind="text: communityAssignmentId()"></div>
+                            <label>WSR</label>
+                            <div class="editor" data-bind="css: { editing: assigneeEditing }"> 
+                                <a href="#" data-bind="text: employeeName(), click: editLine, visible: employeeName() != ''" class="view"></a>
+                                <a href="#" data-bind="click: editLine, visible: employeeName() == ''" class="view">Unassigned</a>
+                            </div>
+                            <div class="editor" data-bind="css: { editing: assigneeEditing }">
+                                <input type="text" class="form-control edit" data-bind="typeahead: typeaheadOptions, text: employeeName()" placeholder="Search Employee" />
+                            </div>
+                            <div class="hidden" data-bind="value: employeeId"></div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
+
+
+
+@section modules
+{
+    <script>
+        define('modelData', function() {
+            return {
+                initialCommunityAssignmentLines: @Html.Raw(Model.Communities.ToJson())
+            }
+        });
+    </script>
+}

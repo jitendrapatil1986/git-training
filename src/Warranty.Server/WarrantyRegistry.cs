@@ -5,9 +5,11 @@ using Warranty.Server.Security;
 
 namespace Warranty.Server
 {
+    using Accounting.Client;
     using Core.Entities;
     using NPoco.FluentMappings;
     using StructureMap.Configuration.DSL;
+    using StructureMap.Pipeline;
 
     public class WarrantyRegistry : Registry
     {
@@ -19,8 +21,14 @@ namespace Warranty.Server
                 
                 scanner.TheCallingAssembly();
                 scanner.AssemblyContainingType<IAuditableEntity>();
+                scanner.AssemblyContainingType<IAccountingClient>();
+                scanner.AddAllTypesOf((typeof(IAccountingClient)));
                 scanner.AddAllTypesOf<IMap>();
-                For<IDatabase>().Use(() => DbFactory.DatabaseFactory.GetDatabase());
+
+                For<IDatabase>()
+                    .LifecycleIs(new ThreadLocalStorageLifecycle())
+                    .Use(() => DbFactory.DatabaseFactory.GetDatabase());
+
                 For<IUserSession>().Use<WarrantyServerUserSession>();
             });
         }

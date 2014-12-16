@@ -20,7 +20,7 @@
             using (_database)
             {
                 var employeeId = _database.ExecuteScalar<Guid>("Select EmployeeId from CommunityAssignments where CommunityId = @0", entity.CommunityId);
-                if (employeeId != Guid.Empty && (entity.Stage ==3 || entity.Stage == 7))
+                if (employeeId != Guid.Empty && (entity.Stage == 3 || entity.Stage == 7))
                 {
                     var description = String.Empty;
 
