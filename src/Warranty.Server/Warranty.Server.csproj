@@ -160,6 +160,7 @@
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallLineItemProblemChangedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallLineItemCompletedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallSpecialProjectStatusChangedHandler.cs" />
+    <Compile Include="Handlers\ServiceCalls\RequestServiceCallHandler.cs" />
     <Compile Include="Security\WarrantyServerUserSession.cs" />
     <Compile Include="StructureMapConfig.cs" />
     <Compile Include="WarrantyRegistry.cs" />
@@ -172,6 +173,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Warranty.Commands\Warranty.Commands.csproj">
+      <Project>{E17253D6-54B6-4073-B6A0-1FB17BD6A0E5}</Project>
+      <Name>Warranty.Commands</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Warranty.Core\Warranty.Core.csproj">
       <Project>{991144F8-B588-4604-930B-3224FEC6FF32}</Project>
       <Name>Warranty.Core</Name>
