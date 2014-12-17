@@ -1,6 +1,5 @@
 ﻿namespace Warranty.Core.Features.AddServiceCallLineItem
 {
-    using System;
     using Entities;
     using Enumerations;
     using InnerMessages;
@@ -34,7 +33,6 @@
                         ServiceCallId = message.ServiceCallId,
                         LineNumber = newLine,
                         ProblemCode = message.ProblemCode,
-                        ProblemDetailCode = message.ProblemDetailCode,
                         ProblemJdeCode = message.ProblemJdeCode,
                         ProblemDescription = message.ProblemDescription,
                         ServiceCallLineItemStatus = ServiceCallLineItemStatus.Open,
