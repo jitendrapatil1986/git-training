@@ -25,3 +25,5 @@ $errorReportingSubject = "Warranty Exception (prod)"
 
 $documentSharePath = "\\wkcorpdata1\warranty"
 $surveyApiBaseUri = "http://survey.davidweekleyhomes.com/api/"
+$accountingApiBaseUri = "http://accounting.davidweekleyhomes.com/api/"
+$jobServiceApiBaseUri = "http://jobservice.davidweekleyhomes.com"
