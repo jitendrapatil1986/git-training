@@ -35,9 +35,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Client, Version=1.1.899.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Accounting.Client, Version=1.1.914.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Accounting.Client.1.1.899.0\lib\net45\Accounting.Client.dll</HintPath>
+      <HintPath>..\packages\Accounting.Client.1.1.914.0\lib\net45\Accounting.Client.dll</HintPath>
     </Reference>
     <Reference Include="Common.Core">
       <HintPath>..\packages\Common.Core.1.1.57.0\lib\net45\Common.Core.dll</HintPath>
