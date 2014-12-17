@@ -20,7 +20,6 @@
         public virtual string UpdatedBy { get; set; }
         public virtual string RootCause { get; set; }
         public virtual string ProblemJdeCode { get; set; }
-        public virtual string ProblemDetailCode { get; set; }
     }
 }
 
