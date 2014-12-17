@@ -1,4 +1,4 @@
-﻿namespace Warranty.Core.ApiService
+﻿namespace Warranty.Core.JobServiceApiHelpers
 {
     using JobService.Client.Api;
     using Newtonsoft.Json;

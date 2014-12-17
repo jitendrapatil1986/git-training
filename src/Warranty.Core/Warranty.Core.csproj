@@ -131,9 +131,9 @@
     <Compile Include="Calculator\MonthYearModel.cs" />
     <Compile Include="Calculator\SurveyDataResult.cs" />
     <Compile Include="Calculator\WarrantyCalculator.cs" />
-    <Compile Include="ApiService\ApiJsonConverter.cs" />
-    <Compile Include="ApiService\EnumerationJsonConverter.cs" />
-    <Compile Include="ApiService\OptionAttributeDictionaryJsonConverter.cs" />
+    <Compile Include="JobServiceApiHelpers\ApiJsonConverter.cs" />
+    <Compile Include="JobServiceApiHelpers\EnumerationJsonConverter.cs" />
+    <Compile Include="JobServiceApiHelpers\OptionAttributeDictionaryJsonConverter.cs" />
     <Compile Include="Configurations\CitiesCollection.cs" />
     <Compile Include="Configurations\CityConfig.cs" />
     <Compile Include="Configurations\SurveyConstants.cs" />

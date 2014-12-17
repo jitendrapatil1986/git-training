@@ -1,11 +1,11 @@
-﻿namespace Warranty.Core.ApiService
+﻿namespace Warranty.Core.JobServiceApiHelpers
 {
     using System;
     using System.Reflection;
     using JobService.Enumerations.Extensions;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using Enumerations;
+    using Warranty.Core.Enumerations;
 
     public class EnumerationJsonConverter : JsonConverter
     {

@@ -5,8 +5,8 @@ namespace Warranty.Core.Features.JobSummary
 {
     using System.Configuration;
     using System.Net.Http;
-    using ApiService;
     using Enumerations;
+    using JobServiceApiHelpers;
     using NPoco;
     using Security;
     using Services;
