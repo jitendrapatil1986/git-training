@@ -132,7 +132,7 @@
     <Compile Include="Calculator\SurveyDataResult.cs" />
     <Compile Include="Calculator\WarrantyCalculator.cs" />
     <Compile Include="ApiService\ApiJsonConverter.cs" />
-    <Compile Include="EnumerationJsonConverter.cs" />
+    <Compile Include="ApiService\EnumerationJsonConverter.cs" />
     <Compile Include="ApiService\OptionAttributeDictionaryJsonConverter.cs" />
     <Compile Include="Configurations\CitiesCollection.cs" />
     <Compile Include="Configurations\CityConfig.cs" />
@@ -583,7 +583,6 @@
     <Compile Include="WarrantyCoreRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
