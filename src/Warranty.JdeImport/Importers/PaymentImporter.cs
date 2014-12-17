@@ -211,6 +211,7 @@ namespace Warranty.JdeImport.Importers
 
                 using (var cmd = new SqlCommand(addIndex, sc))
                 {
+                    cmd.CommandTimeout = 6000;
                     cmd.ExecuteNonQuery();
                 }
 
@@ -221,7 +222,10 @@ namespace Warranty.JdeImport.Importers
                 }
 
                 using (var cmd = new SqlCommand(dropIndex, sc))
+                {
+                    cmd.CommandTimeout = 6000;
                     cmd.ExecuteNonQuery();
+                }
             }
         }
     }
