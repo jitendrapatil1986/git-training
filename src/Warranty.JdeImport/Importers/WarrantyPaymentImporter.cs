@@ -108,7 +108,10 @@ namespace Warranty.JdeImport.Importers
                 sc.Open();
 
                 using (var cmd = new SqlCommand("TRUNCATE TABLE imports.WarrantyPaymentStage", sc))
+                {
+                    cmd.CommandTimeout = 6000;
                     cmd.ExecuteNonQuery();
+                }
             }
 
             Import();
