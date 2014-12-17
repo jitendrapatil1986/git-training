@@ -39,6 +39,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Accounting.Client.1.1.899.0\lib\net45\Accounting.Client.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Core">
+      <HintPath>..\packages\Common.Core.1.1.57.0\lib\net45\Common.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Common.Security.1.1.57.0\lib\net45\Common.Security.dll</HintPath>
@@ -52,6 +55,12 @@
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="JobService.Client">
+      <HintPath>..\packages\JobService.Client.1.0.426.0\lib\net45\JobService.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="JobService.Enumerations">
+      <HintPath>..\packages\JobService.Enumerations.1.0.423.0\lib\net45\JobService.Enumerations.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel">
       <HintPath>..\..\..\purchasing\src\Purchasing.UI\bin\Microsoft.IdentityModel.dll</HintPath>
@@ -91,6 +100,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Web">
       <Private>True</Private>
     </Reference>
@@ -121,6 +131,9 @@
     <Compile Include="Calculator\MonthYearModel.cs" />
     <Compile Include="Calculator\SurveyDataResult.cs" />
     <Compile Include="Calculator\WarrantyCalculator.cs" />
+    <Compile Include="JobServiceApiHelpers\ApiJsonConverter.cs" />
+    <Compile Include="JobServiceApiHelpers\EnumerationJsonConverter.cs" />
+    <Compile Include="JobServiceApiHelpers\OptionAttributeDictionaryJsonConverter.cs" />
     <Compile Include="Configurations\CitiesCollection.cs" />
     <Compile Include="Configurations\CityConfig.cs" />
     <Compile Include="Configurations\SurveyConstants.cs" />
