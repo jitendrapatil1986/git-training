@@ -10,6 +10,7 @@
     using Warranty.Core.Features.AddServiceCallPayment;
     using Warranty.Core.Features.AddServiceCallPurchaseOrder;
     using Warranty.Core.Features.CompleteServiceCallLineItem;
+    using Warranty.Core.Features.DeleteServiceCall;
     using Warranty.Core.Features.EditServiceCallLineItem;
     using Warranty.Core.Features.SharedQueries;
     using Warranty.Core.Features.UpdateServiceCallLineItem;
@@ -151,6 +152,13 @@
         {
             var response = _mediator.Send(model);
             return response;
+        }
+
+        [HttpDelete]
+        public PostResponseModel DeleteServiceCall(DeleteServiceCallCommand command)
+        {
+            _mediator.Send(command);
+            return new PostResponseModel { Success = true };
         }
     }
 }

@@ -7,6 +7,5 @@
     public class CreateServiceCallCommand : ICommand<Guid>
     {
         public Guid JobId { get; set; }
-        public IEnumerable<ServiceCallLineItem> ServiceCallLineItems { get; set; }
     }
 }

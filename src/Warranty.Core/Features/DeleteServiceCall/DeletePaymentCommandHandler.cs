@@ -1,4 +1,4 @@
-﻿namespace Warranty.Core.Features.AddServiceCallPayment
+﻿namespace Warranty.Core.Features.DeleteServiceCall
 {
     using ActivityLogger;
     using Entities;
@@ -29,7 +29,7 @@
             {
                 var payment = _database.SingleById<Payment>(message.PaymentId);
                 var backcharge = _database.SingleOrDefault<Backcharge>("Where PaymentId = @0", message.PaymentId);
-                
+
                 if (backcharge != null)
                 {
                     backcharge.BackchargeStatus = BackchargeStatus.RequestedDelete;

@@ -3,7 +3,7 @@
 @using Warranty.Core.Extensions
 @using Warranty.Core.Features.JobSummary
 @using Warranty.UI.Core.Helpers
-@model Warranty.Core.Features.JobSummary.JobSummaryModel
+@model JobSummaryModel
 
 <div class="container">
     <div class="col-md-12">
@@ -13,12 +13,16 @@
             <h2 class="pull-left no-margin">Job #@Model.JobNumber <small>@Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)</small>
             </h2>
             <div class="pull-right">
-                @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                @using (Html.BeginForm("Create", "ServiceCall", new {id = Model.JobId}))
                 {
-                    @Html.ActionLink("Change Homeowner", "ChangeHomeowner", "Job", new { id = Model.JobId }, new { @class = "btn btn-default margin-right-10" })
-                }
+                    if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                    {
+                        @Html.ActionLink("Change Homeowner", "ChangeHomeowner", "Job", new { id = Model.JobId }, new { @class = "btn btn-default margin-right-10" })
+                    }
 
-                @Html.ActionLink("Create Call", "Create", "ServiceCall", new { id = Model.JobId }, new { @class = "btn btn-default pull-right" })
+                    <input type="submit" value="Create Call" class="btn btn-default pull-right"/>
+                    @Html.HiddenFor(x=>x.JobId)
+                }
             </div>
             <div class="clearfix"></div>
         </section>

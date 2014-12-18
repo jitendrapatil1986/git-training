@@ -1,4 +1,4 @@
-﻿namespace Warranty.Core.Features.AddServiceCallPayment
+﻿namespace Warranty.Core.Features.DeleteServiceCall
 {
     using System;
 

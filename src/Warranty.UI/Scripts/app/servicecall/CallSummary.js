@@ -291,6 +291,8 @@ require(['/Scripts/app/main.js'], function () {
                     reopenServiceCallLineItem(this);
                 };
 
+                
+
                 self.lineNumber = ko.observable(options.lineNumber);
 
                 self.lineNumberWithProblemCode = ko.computed(function () {
@@ -394,10 +396,10 @@ require(['/Scripts/app/main.js'], function () {
             }
 
             function updateServiceCallLineItem(line) {
-                var selectedProblemCodeLine = ko.utils.arrayFirst(viewModel.theLookups, function(item) {
+                var selectedProblemCodeLine = ko.utils.arrayFirst(viewModel.theLookups, function (item) {
                     return item.problemId == line.problemJdeCode();
                 });
-                
+
                 line.problemCode(selectedProblemCodeLine.problemCode);
                 line.problemDetailCode(line.editProblemDetailCode);
 
@@ -423,6 +425,7 @@ require(['/Scripts/app/main.js'], function () {
                         line.lineEditing(false);
                     });
             }
+            
 
             function completeServiceCallLineItem(line) {
                 var lineData = ko.toJSON(line);
@@ -498,6 +501,7 @@ require(['/Scripts/app/main.js'], function () {
                 self.noteDescriptionToAdd = ko.observable('').extend({ required: true});
                 self.userCanAlwaysReopenCallLines = ko.observable();
                 self.problemDetailCodes = ko.observableArray([]);
+                self.relatedCalls = ko.observableArray([]);
 
                 self.areAllLineItemsCompleted = ko.computed(function () {
                     var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
@@ -512,14 +516,42 @@ require(['/Scripts/app/main.js'], function () {
 
                 self.problemJdeCodeToAdd.subscribe(function (newValue) {
                     if (newValue != "") {
-                        var problemJdeCode = $("#addCallLineProblemCode").find('option:selected').val();
-                        getproblemDetailCodes(problemJdeCode, self.problemDetailCodes);
+                        self.loadRelatedCalls();
                     } else {
                         self.problemDetailCodes([]);
                     }
-                    
-                    
                 });
+                
+                self.loadRelatedCalls = function loadRelatedCalls() {
+                    self.relatedCalls.removeAll();
+                    var problemCode = $("#addCallLineProblemCode").find('option:selected').val();
+                    $.ajax({
+                        url: urls.RelatedCall.RelatedCalls,
+                        cache: false,
+                        data: { serviceCallId: $("#callSummaryServiceCallId").val(), problemCode: problemCode },
+                        dataType: "json",
+                    })
+                        .done(function (response) {
+                            $.each(response, function (index, value) {
+                                self.relatedCalls.push(new relatedCallViewModel({ serviceCallId: value.ServiceCallId, callNumber: value.CallNumber, problemDescription: value.ProblemDescription, createdDate: value.CreatedDate }));
+                            });
+
+                            var problemJdeCode = problemCode;
+                            getproblemDetailCodes(problemJdeCode, self.problemDetailCodes);
+                        });
+                };
+                
+                function relatedCallViewModel(options) {
+                    var self = this;
+                    self.serviceCallId = options.serviceCallId;
+                    self.callNumber = options.callNumber;
+                    self.problemDescription = options.problemDescription;
+                    self.createdDate = options.createdDate;
+
+                    self.callSummaryUrl = ko.computed(function () {
+                        return urls.ServiceCall.CallSummary + '/' + self.serviceCallId;
+                    });
+                }
 
                 function getproblemDetailCodes(problemJdeCode, problemDetailCodes) {
                     $.ajax({
@@ -679,6 +711,23 @@ require(['/Scripts/app/main.js'], function () {
                 };
 
                 self.callSummaryServiceCallStatus = ko.observable($("#callSummaryServiceCallStatus").html());
+                
+                self.deleteServiceCall = function () {
+                    $.ajax({
+                        url: urls.ManageServiceCall.DeleteServiceCall,
+                        type: "DELETE",
+                        data: { serviceCallId: $("#callSummaryServiceCallId").val() }
+                    })
+                        .fail(function (response) {
+                            toastr.error("There was an issue deleting the service call. Please try again!");
+                        })
+                        .success(function () {
+                            toastr.success("Success! Service Call deleted.");
+                        })
+                        .done(function (response) {
+                            window.location = urls.Home.Index;
+                        });
+                };
 
                 self.cssforCallSummaryServiceCallStatus = ko.computed(function () {
                     var className = self.callSummaryServiceCallStatus().toLowerCase().replace(/\ /g, '-');
@@ -687,6 +736,13 @@ require(['/Scripts/app/main.js'], function () {
 
                 self.callSummaryStatusComplete = ko.computed(function () {
                     if (self.callSummaryServiceCallStatus().toLowerCase() == serviceCallStatusData.Complete.DisplayName.toLowerCase())
+                        return true;
+                    else
+                        return false;
+                });
+                
+                self.callSummaryStatusRequested = ko.computed(function () {
+                    if (self.callSummaryServiceCallStatus().toLowerCase() == serviceCallStatusData.Requested.DisplayName.toLowerCase())
                         return true;
                     else
                         return false;
@@ -708,6 +764,10 @@ require(['/Scripts/app/main.js'], function () {
 
                 self.canBeCompleted = ko.computed(function () {
                     return self.areAllLineItemsCompleted() && !self.callSummaryStatusComplete() && self.callSummaryStatusSigned();
+                });
+                
+                self.canBeDeleted = ko.computed(function () {
+                    return self.callSummaryStatusRequested();
                 });
 
                 self.homeownerVerificationSignature = ko.observable('').extend({ required: true });

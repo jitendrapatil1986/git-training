@@ -190,43 +190,31 @@ namespace Warranty.Core.ToDoInfrastructure
                 x.TaskType = taskType;
                 x.IsComplete = true;
                 database.Insert(x);
-                serviceCallCreateService.Create(x.ReferenceId, RequestType.TwelveMonthRequest, ServiceCallStatus.Requested);
             });
 
             var userMarkets = user.Markets;
-            const string sql = @"SELECT
-                                         wc.CreatedDate as [Date]
+            const string sql = @"SELECT DISTINCT
+                                        t.TaskId
                                         ,ho.HomeOwnerName
                                         ,ho.HomeOwnerNumber
                                         ,j.AddressLine
-                                        ,wc.ServiceCallId
-                                        ,wc.ServiceCallNumber
                                         ,j.JobId
                                         ,j.JobNumber
-                                        ,DATEDIFF(yy, j.CloseDate, wc.CreatedDate) as YearsWithinWarranty
                                         ,j.CloseDate as WarrantyStartDate
-                                    FROM 
-                                        [ServiceCalls] wc
+                                    FROM Tasks t
                                     INNER join Jobs j
-                                        ON wc.JobId = j.JobId
-                                    INNER JOIN Tasks t
-                                        ON j.jobid = t.ReferenceId
+                                        ON t.ReferenceId = j.JobId
                                     INNER join HomeOwners ho
-                                        ON j.CurrentHomeOwnerId = ho.HomeOwnerId
-                                    LEFT join Employees e
-                                        ON wc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+                                        ON j.CurrentHomeOwnerId = ho.HomeOwnerId                                   
                                     INNER JOIN Communities cm
                                         ON j.CommunityId = cm.CommunityId
                                     INNER JOIN Cities ci
                                         ON cm.CityId = ci.CityId
                                     where 
-                                        wc.ServiceCallStatusId = @0    
-                                    and 
-                                        ci.CityCode in ({0})
-                                    AND wc.ServiceCallType = @1";
+                                        ci.CityCode in ({0}) and TaskType=@0";
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
-            var toDos = database.Fetch<ToDoJob10MonthAnniversary, ToDoJob10MonthAnniversaryModel>(query, ServiceCallStatus.Requested.Value, RequestType.TwelveMonthRequest.DisplayName);
+            var toDos = database.Fetch<ToDoJob10MonthAnniversary, ToDoJob10MonthAnniversaryModel>(query, taskType.Value);
 
             return toDos;
         }

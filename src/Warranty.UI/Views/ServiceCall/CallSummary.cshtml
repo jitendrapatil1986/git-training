@@ -42,9 +42,10 @@
         <section class="margin-bottom-10">
             <h2 class="pull-left no-margin">Service Call #@Model.ServiceCallSummary.CallNumber</h2>
 
-            @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
-            {
-                <div class="warranty-header-buttons no-print">
+
+            <div class="warranty-header-buttons no-print">
+                @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                {
                     <div data-bind="visible: callSummaryStatusOpen()">
                         @Format.ServiceCallToggleButton("escalate", Model.ServiceCallSummary.IsEscalated, "Escalate", "De-escalate")
                         @Format.ServiceCallToggleButton("special_project", Model.ServiceCallSummary.IsSpecialProject, "Special Project", "Not Special Project")
@@ -55,8 +56,12 @@
                     <div data-bind="visible: canBeCompleted()">
                         <a href='#' class='btn btn-default pull-right' data-action-with-popup='reopen' data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" id='btn_complete'>Complete</a>
                     </div>
+                }
+                <div data-bind="visible: canBeDeleted()">
+                    <a href='#' data-bind="click: deleteServiceCall" class='btn btn-default pull-right' id='btn_delete'>Delete</a>
                 </div>
-            }
+            </div>
+            
             <div class="clearfix"></div>
         </section>
         <div id="serviceCallSummaryPage">
@@ -185,32 +190,44 @@
                 @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallId, new { id = "callSummaryServiceCallId", @class = "form-control" })
                 <div id="addCallLineItem" class="collapse">
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group" data-bind="validationElement: problemJdeCodeToAdd">
-                                    <select id="addCallLineProblemCode" class="form-control" data-bind="options: theLookups, value: problemJdeCodeToAdd, optionsText: 'problemCode', optionsValue: 'problemId', optionsCaption: 'Select Problem Code'"></select>
-                                    @*@Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select problem code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemJdeCodeToAdd" })*@   
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group" data-bind="validationElement: problemJdeCodeToAdd">
+                                        <select id="addCallLineProblemCode" class="form-control" data-bind="options: theLookups, value: problemJdeCodeToAdd, optionsText: 'problemCode', optionsValue: 'problemId', optionsCaption: 'Select Problem Code'"></select>
+                                        @*@Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select problem code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemJdeCodeToAdd" })*@   
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group" data-bind="validationElement: problemDetailCodeToAdd">
-                                    <select id="addCallLineProblemDetail" class="dropdown form-control" data-bind="options: problemDetailCodes, value: problemDetailCodeToAdd, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Problem Detail'"></select>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group" data-bind="validationElement: problemDetailCodeToAdd">
+                                        <select id="addCallLineProblemDetail" class="dropdown form-control" data-bind="options: problemDetailCodes, value: problemDetailCodeToAdd, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Problem Detail'"></select>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group" data-bind="validationElement: problemDescriptionToAdd">
-                                    @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group" data-bind="validationElement: problemDescriptionToAdd">
+                                        @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
+                                    </div>
                                 </div>
                             </div>
+                            <br />
+                            <div class="form-submit">
+                                <button class="btn btn-primary" data-bind="click: addLineItem">Add</button>
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#addCallLineItem">Cancel</button>
+                            </div>
                         </div>
-                        <br />
-                        <div class="form-submit">
-                            <button class="btn btn-primary" data-bind="click: addLineItem">Add</button>
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#addCallLineItem">Cancel</button>
+                        <div class="col-md-3 hidden" data-bind="css: { hidden: relatedCalls().length == 0}">
+                            @Html.Label("Related Calls")
+                            <div data-bind="foreach: relatedCalls">
+                                <div class="well well-sm">
+                                <a data-bind="attr: {href: callSummaryUrl}"><span data-bind="    text: callNumber"></span></a><br />
+                                <span data-bind="text: problemDescription"></span><br />
+                                <small class="text-muted">Date Created: <span data-bind="text: moment(createdDate).format('LL')"></span></small>
+                            </div>
+                            </div>
                         </div>
                     </div>
                 </div>
