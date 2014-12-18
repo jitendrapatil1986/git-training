@@ -144,11 +144,5 @@
             var response = _mediator.Send(model);
             return response;
         }
-
-        [HttpPost]
-        public void UpdateLineItemRootCause()
-        {
-            
-        }
     }
 }
