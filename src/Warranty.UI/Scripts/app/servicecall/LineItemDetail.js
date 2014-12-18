@@ -705,7 +705,6 @@
                         self.completeButtonClicked(true);
 
                         if (formHasErrors([self.rootCauseId, self.rootProblemId])) {
-                            //self.completeButtonClicked(false);
                             return;
                         }
 
