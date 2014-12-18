@@ -10,10 +10,12 @@ namespace Warranty.UI.Controllers
     using Warranty.Core.Entities;
     using Warranty.Core.Enumerations;
     using Warranty.Core.Features.AddServiceCallLineItem;
+    using Warranty.Core.Features.AddServiceCallPayment;
     using Warranty.Core.Features.AddServiceCallPurchaseOrder;
     using Warranty.Core.Features.CreateServiceCall;
     using Warranty.Core.Features.CreateServiceCallCustomerSearch;
     using Warranty.Core.Features.CreateServiceCallVerifyCustomer;
+    using Warranty.Core.Features.DeleteServiceCall;
     using Warranty.Core.Features.ServiceCallSummary;
     using System.Linq;
     using Warranty.Core.Features.ServiceCallSummary.Attachments;
@@ -91,22 +93,12 @@ namespace Warranty.UI.Controllers
             return View(model);
         }
 
-        public ActionResult Create(Guid id)
-        {
-            var model = _mediator.Request(new CreateServiceCallQuery
-                {
-                    JobId = id
-                });
-
-            return View(model);
-        }
-
         [HttpPost]
         public ActionResult Create(CreateServiceCallModel model)
         {
             if (ModelState.IsValid)
             {
-                var newCallId = _mediator.Send(new CreateServiceCallCommand{JobId = model.JobId, ServiceCallLineItems = model.ServiceCallLineItems.ToList().Select(x=>new ServiceCallLineItem{LineNumber = x.LineItemNumber, ProblemCode = x.ProblemCode, ProblemJdeCode = x.ProblemJdeCode, ProblemDescription = x.ProblemDescription})});
+                var newCallId = _mediator.Send(new CreateServiceCallCommand { JobId = model.JobId });
                 if (_userSession.GetCurrentUser().IsInRole(UserRoles.WarrantyServiceManager) || _userSession.GetCurrentUser().IsInRole(UserRoles.WarrantyServiceCoordinator))
                 { 
                     var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery { ServiceCallId = newCallId });
@@ -121,7 +113,7 @@ namespace Warranty.UI.Controllers
 
             return View(model);
         }
-
+        
         public ActionResult Approve(Guid id)
         {
             _mediator.Send(new ServiceCallApproveCommand

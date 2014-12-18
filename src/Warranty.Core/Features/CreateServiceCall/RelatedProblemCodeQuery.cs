@@ -6,7 +6,7 @@
 
     public class RelatedProblemCodeQuery : IQuery<IEnumerable<RelatedProblemCode>>
     {
-        public Guid JobId { get; set; }
+        public Guid ServiceCallId { get; set; }
         public string ProblemCode { get; set; }
     }
 }
