@@ -210,7 +210,6 @@ require(['/Scripts/app/main.js'], function () {
                 self.completed = options.completed;
                 self.numberOfAttachments = options.numberOfAttachments;
                 self.numberOfNotes = options.numberOfNotes;
-                self.problemDetailCodes = ko.observableArray([]);
 
                 //track line item properties.
                 self.problemJdeCode = ko.observable(options.problemJdeCode).extend({
@@ -220,13 +219,6 @@ require(['/Scripts/app/main.js'], function () {
                 });
                 
                 self.problemCode = ko.observable(options.problemCode);
-                self.problemDetailCode = ko.observable(options.problemDetailCode);
-                self.editProblemDetailCode = ko.observable().extend({
-                    required: {
-                        onlyIf: function () { return self.lineEditing() === true; }
-                    }
-                });
-                
                 self.problemDescription = ko.observable(options.problemDescription).extend({
                     required: {
                         onlyIf: function () { return self.lineEditing() === true; }
@@ -235,7 +227,6 @@ require(['/Scripts/app/main.js'], function () {
 
                 self.currentProblemCode = ko.observable();
                 self.currentProblemJdeCode = ko.observable();
-                self.currentProblemDetailCode = ko.observable();
                 self.currentProblemDescription = ko.observable();
 
                 //track editing problem code, desc, and line altogether.
@@ -250,9 +241,7 @@ require(['/Scripts/app/main.js'], function () {
                     this.lineEditing(true);
                     this.currentProblemCode(this.problemCode());
                     this.currentProblemJdeCode(this.problemJdeCode());
-                    this.currentProblemDetailCode(this.problemDetailCode());
                     this.currentProblemDescription(this.problemDescription());
-                    getProblemDetailCodes(self.problemJdeCode(), self.problemDetailCodes, self.problemDetailCode);
                 };
 
                 //save line item changes.
@@ -275,7 +264,6 @@ require(['/Scripts/app/main.js'], function () {
                     this.lineEditing(false);
                     this.problemCode(this.currentProblemCode());
                     this.problemJdeCode(this.currentProblemJdeCode());
-                    this.problemDetailCode(this.currentProblemDetailCode());
                     this.problemDescription(this.currentProblemDescription());
                 };
 
@@ -325,24 +313,6 @@ require(['/Scripts/app/main.js'], function () {
                         window.location.href = urls.ServiceCall.LineItemDetail + '/' + self.serviceCallLineItemId;
                     }
                 };
-
-                self.problemJdeCode.subscribe(function (newValue) {
-                    if(self.lineEditing())
-                        getProblemDetailCodes(newValue, self.problemDetailCodes);
-                });
-
-                function getProblemDetailCodes(problemJdeCode, problemDetailCodes, problemDetailCode) {
-                    $.ajax({
-                        url: urls.ProblemDetail.ProblemDetails + '?problemJdeCode=' + problemJdeCode,
-                        type: "GET",
-                        dataType: "json",
-                        processData: false,
-                        contentType: "application/json; charset=utf-8"
-                    }).done(function(response) {
-                        problemDetailCodes(response);
-                        self.editProblemDetailCode(self.problemDetailCode());
-                    });
-                }
             }
 
             function CallNotesViewModel(options) {
@@ -399,7 +369,6 @@ require(['/Scripts/app/main.js'], function () {
                 });
                 
                 line.problemCode(selectedProblemCodeLine.problemCode);
-                line.problemDetailCode(line.editProblemDetailCode);
 
                 var lineData = ko.toJSON(line);
 
@@ -480,10 +449,7 @@ require(['/Scripts/app/main.js'], function () {
                 self.allLineItems = ko.observableArray([]);
                 self.theLookups = dropdownData.availableLookups;  //dropdown list does not need to be observable. Only the actual elements w/i the array do.
                 self.problemDescriptionToAdd = ko.observable('').extend({ required: true });
-                
                 self.problemJdeCodeToAdd = ko.observable().extend({ required: true });
-                
-                self.problemDetailCodeToAdd = ko.observable().extend({ required: true });
                 
                 self.canBeReopened = ko.observable(modelData.canBeReopened);
                 self.isSpecialProject = ko.observable(modelData.isSpecialProject);
@@ -497,7 +463,6 @@ require(['/Scripts/app/main.js'], function () {
 
                 self.noteDescriptionToAdd = ko.observable('').extend({ required: true});
                 self.userCanAlwaysReopenCallLines = ko.observable();
-                self.problemDetailCodes = ko.observableArray([]);
 
                 self.areAllLineItemsCompleted = ko.computed(function () {
                     var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
@@ -509,29 +474,6 @@ require(['/Scripts/app/main.js'], function () {
                     else
                         return true;
                 }).extend({ notify: 'always' });
-
-                self.problemJdeCodeToAdd.subscribe(function (newValue) {
-                    if (newValue != "") {
-                        var problemJdeCode = $("#addCallLineProblemCode").find('option:selected').val();
-                        getproblemDetailCodes(problemJdeCode, self.problemDetailCodes);
-                    } else {
-                        self.problemDetailCodes([]);
-                    }
-                    
-                    
-                });
-
-                function getproblemDetailCodes(problemJdeCode, problemDetailCodes) {
-                    $.ajax({
-                        url: urls.ProblemDetail.ProblemDetails + '?problemJdeCode=' + problemJdeCode,
-                        type: "GET",
-                        dataType: "json",
-                        processData: false,
-                        contentType: "application/json; charset=utf-8"
-                    }).done(function (response) {
-                        problemDetailCodes(response);
-                    });
-                }
                 
                 self.removeAttachment = function (e) {
                     bootbox.confirm(modelData.attachmentRemovalMessage, function(result) {
@@ -553,19 +495,17 @@ require(['/Scripts/app/main.js'], function () {
                 };
 
                 self.addLineItem = function () {
-                    if (formHasErrors([self.problemJdeCodeToAdd, self.problemDetailCodeToAdd, self.problemDescriptionToAdd]))
+                    if (formHasErrors([self.problemJdeCodeToAdd, self.problemDescriptionToAdd]))
                         return;
                     
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
                     self.problemCode = $("#addCallLineProblemCode").find('option:selected').text();
-                    self.problemDetailCode = $("#addCallLineProblemDetail").find('option:selected').text();
                     self.problemJdeCode = $("#addCallLineProblemCode").val();
                     self.problemDescription = $("#addCallLineProblemDescription").val();
 
                     var newLineItem = new AllLineItemsViewModel({
                         serviceCallId: self.serviceCallId, problemJdeCode: self.problemJdeCode,
-                        problemCode: self.problemCode, problemDescription: self.problemDescription,
-                        problemDetailCode: self.problemDetailCode
+                        problemCode: self.problemCode, problemDescription: self.problemDescription
                     });
 
                     var lineData = ko.toJSON(newLineItem);
@@ -587,7 +527,6 @@ require(['/Scripts/app/main.js'], function () {
                                 serviceCallLineItemId: response.ServiceCallLineItemId,
                                 lineNumber: response.LineNumber,
                                 problemCode: self.problemCode,
-                                problemDetailCode: self.problemDetailCode,
                                 problemJdeCode: self.problemJdeCode,
                                 problemDescription: self.problemDescription,
                                 serviceCallLineItemStatus: response.ServiceCallLineItemStatus,
@@ -599,12 +538,9 @@ require(['/Scripts/app/main.js'], function () {
 
                             $("#addCallLineProblemDescription").val('');
                             $("#addCallLineProblemCode").val('');
-                            $("#addCallLineProblemDetail").val('');
                             self.problemDescription = '';
                             self.problemJdeCodeToAdd('');
                             self.problemJdeCodeToAdd.isModified(false);
-                            self.problemDetailCodeToAdd('');
-                            self.problemDetailCodeToAdd.isModified(false);
                             self.problemDescriptionToAdd('');
                             self.problemDescriptionToAdd.isModified(false);
                         });

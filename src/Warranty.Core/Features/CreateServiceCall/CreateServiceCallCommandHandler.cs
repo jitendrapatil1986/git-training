@@ -45,7 +45,6 @@ namespace Warranty.Core.Features.CreateServiceCall
                                 LineNumber = line.LineNumber,
                                 ProblemCode = line.ProblemCode,
                                 ProblemJdeCode = line.ProblemJdeCode,
-                                ProblemDetailCode = line.ProblemDetailCode,
                                 ProblemDescription = line.ProblemDescription,
                                 ServiceCallLineItemStatus = ServiceCallLineItemStatus.Open,
                             };

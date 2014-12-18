@@ -24,7 +24,6 @@
             {
                 var updateServiceCallLine = _database.SingleById<ServiceCallLineItem>(message.ServiceCallLineItemId);
                 updateServiceCallLine.ProblemCode = message.ProblemCode ?? updateServiceCallLine.ProblemCode;
-                updateServiceCallLine.ProblemDetailCode = message.ProblemDetailCode;
                 updateServiceCallLine.ProblemJdeCode = message.ProblemJdeCode ?? updateServiceCallLine.ProblemJdeCode;
                 updateServiceCallLine.ProblemDescription = message.ProblemDescription ?? updateServiceCallLine.ProblemDescription;
                 updateServiceCallLine.RootCause = message.RootCause == null ? updateServiceCallLine.RootCause : RootCause.FromValue(Convert.ToInt16(message.RootCause)).DisplayName;
