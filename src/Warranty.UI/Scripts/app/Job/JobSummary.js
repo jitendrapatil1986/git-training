@@ -49,11 +49,9 @@ require(['/Scripts/app/main.js'], function () {
                 self.jobNoteDescriptionToAdd = ko.observable('');
                 self.vendors = ko.observableArray([]);
                 self.selectedCostCode = ko.observable();
-                debugger;
                 self.costCodes = modelData.costCodes;
 
                 self.filteredVendors = ko.computed(function () {
-                    debugger;
                     var costCode = self.selectedCostCode();
                     if (!costCode || costCode == "") {
                         return self.vendors();
@@ -63,7 +61,6 @@ require(['/Scripts/app/main.js'], function () {
                         return ko.utils.arrayFilter(self.vendors(), function(vendor) {
                             var isMatch = false;
                             var first = ko.utils.arrayFirst(vendor.costCodes, function (vendorCostCode) {
-                                debugger;
                                 return vendorCostCode.costCode == costCode.costCode;
                             });
                             if (first) {
@@ -257,11 +254,9 @@ require(['/Scripts/app/main.js'], function () {
             
             var viewModel = new jobSummaryViewModel();
             ko.applyBindings(viewModel);
-            debugger;
             var persistedVendors = modelData.vendors;
 
             _(persistedVendors).each(function (vendor) {
-                debugger;
                 viewModel.vendors.push(new VendorViewModel(vendor));
             });
             
