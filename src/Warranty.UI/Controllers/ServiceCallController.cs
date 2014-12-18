@@ -93,16 +93,6 @@ namespace Warranty.UI.Controllers
             return View(model);
         }
 
-        public ActionResult Create(Guid id)
-        {
-            var model = _mediator.Request(new CreateServiceCallQuery
-                {
-                    JobId = id
-                });
-
-            return View(model);
-        }
-
         [HttpPost]
         public ActionResult Create(CreateServiceCallModel model)
         {
