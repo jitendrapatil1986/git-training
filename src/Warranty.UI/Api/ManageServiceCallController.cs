@@ -34,16 +34,9 @@
         }
 
         [HttpPost]
-        public Guid EditLineItem(EditServiceCallLineModel model)
+        public Guid EditLineItem(EditServiceCallLineCommand model)
         {
-            var result = _mediator.Send(new EditServiceCallLineCommand
-            {
-                ServiceCallLineItemId = model.ServiceCallLineItemId,
-                ProblemCode = model.ProblemCode,
-                ProblemDetailCode = model.ProblemDetailCode,
-                ProblemJdeCode = model.ProblemJdeCode,
-                ProblemDescription = model.ProblemDescription
-            });
+            var result = _mediator.Send(model);
 
             return result;
         }
@@ -151,6 +144,12 @@
         {
             var response = _mediator.Send(model);
             return response;
+        }
+
+        [HttpPost]
+        public void UpdateLineItemRootCause()
+        {
+            
         }
     }
 }
