@@ -44,12 +44,13 @@
         }
 
         [HttpGet]
-        public IEnumerable<QuickSearchCallVendorModel> Vendors(string query, string cityCode)
+        public IEnumerable<QuickSearchCallVendorModel> Vendors(string query, string cityCode, string invoicePayableCode)
         {
             var results = _mediator.Request(new QuickSearchVendorsQuery
                 {
                     Query = query,
-                    CityCode = cityCode
+                    CityCode = cityCode,
+                    InvoicePayableCode = invoicePayableCode
                 });
             return results;
         }
