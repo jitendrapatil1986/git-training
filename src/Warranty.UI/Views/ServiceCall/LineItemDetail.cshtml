@@ -37,10 +37,34 @@
             <div id="serviceCallLineItemDetailPage">
                 <div class="panel panel-default">
                 <div class="panel-heading">
-                                <p class="panel-title text-capitalize margin-bottom-10 main-info">
-                                    <strong>Status: </strong><span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
-                                </p>
-                                <p class="view no-margin" data-bind="text: problemDescription"></p>
+                    <p class="panel-title text-capitalize margin-bottom-10 main-info">
+                        <strong>Status: </strong><span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
+                    </p>
+                    <p class="view no-margin" data-bind="text: problemDescription"></p>
+                    <p></p>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="inline-editable-dropdown text-capitalize" data-bind="visible: !isLineItemCompleted()">
+                                <div class="control-group" data-bind="validationElement: rootCauseId">
+                                    <label class="control-label" for="rootCauseId"></label>Root Cause: 
+                                    <a href="#" id="rootCauseId" data-bind="editable: rootCauseId, value: rootCauseId, editableOptions: { pk: rootCauseId, type: 'select', emptytext: 'Set Root Cause', options: rootCauseCodes, optionsText: 'displayText', optionsValue: 'value'}"></a>
+                                </div>
+                            </div>
+                            <span data-bind="visible: isLineItemCompleted(), text: 'Root Cause: ' + rootCause()"></span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="inline-editable-dropdown text-capitalize" data-bind="visible: !isLineItemCompleted()">
+                                <div class="control-group" data-bind="validationElement: rootProblemId">
+                                    <label class="control-group" for="rootProblemId"></label>Root Problem: 
+                                    <a href="#" id="rootProblemId" data-bind="editable: rootProblemId, value: rootProblemId, editableOptions: { pk: rootProblemId, type: 'select', emptytext: 'Set Root Problem', options: rootProblemCodes, optionsText: 'displayText', optionsValue: 'value'}"></a>
+
+                                    @*<a href="#" id="rootProblemId" data-bind="value: rootProblemId" data-source="@RootProblem.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName, }).ToJson()" data-url="@Url.Action("InlineUpdateRootProblem", "ServiceCall")" data-pk="@Model.ServiceCallLineItemId" data-value="@Model.RootProblem" data-emptytext="Set Root Problem">@Model.RootProblem</a>*@
+                                    @*<a href="#" id="rootProblemId" data-bind="value: rootProblemId"></a>*@
+                                </div>
+                            </div>
+                            <span data-bind="visible: isLineItemCompleted(), text: 'Root Problem: ' + rootProblem()"></span>
+                        </div>
+                    </div>
                 </div>
 
                 <section>
@@ -402,6 +426,9 @@
                 initialServiceCallLinePurchaseOrders: @Html.Raw(Model.ServiceCallLineItemPurchaseOrders.ToJson()),
                 warrantyCostCodes:  @Html.Raw(@WarrantyCostCode.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { DisplayText = x.DisplayName, x.Value }).ToJson()),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
+                rootCauseCodes: @Html.Raw(@RootCause.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { DisplayText = x.DisplayName, x.Value}).ToJson()),
+                rootProblemCodes: @Html.Raw(@RootProblem.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { DisplayText = x.DisplayName, x.Value}).ToJson()),
+                @*rootProblemCodes: @Html.Raw(@RootProblem.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName}).ToJson()),*@
             }
         });
 

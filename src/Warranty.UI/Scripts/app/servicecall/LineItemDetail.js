@@ -11,11 +11,25 @@
 
                 $.fn.editable.defaults.mode = 'inline';
                 $.fn.editable.defaults.emptytext = 'Add';
+                
                 $.fn.editableform.buttons =
                     '<button type="submit" class="btn btn-primary editable-submit btn-sm"><i class="glyphicon glyphicon-ok"></i></button>';
 
                 $(".attached-file-display-name").editable();
 
+                //$("#rootProblemId").editable({
+                //    type: 'select',
+                //    pk: modelData.initialServiceCallLineItem.serviceCallLineItemId,
+                //    value: modelData.initialServiceCallLineItem.rootProblem,
+                //    emptytext: 'Set Root Problem',
+                //    source: modelData.rootProblemCodes,
+                //    success: function (response) {
+                //        viewModel.completeButtonClicked(false);
+                //        toastr.success("Successfully updated root problem");
+                //    },
+                //    error: function (response) { toastr.error("There was an error updating the root problem"); },
+                //});
+                
                 function highlight(elemId) {
 
                     var elem = $(elemId);
@@ -386,6 +400,7 @@
                     self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
                     self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
                     self.completed = modelData.initialServiceCallLineItem.completed;
+                    self.completeButtonClicked = ko.observable(false);
 
                     //track line item properties.
                     self.problemCodeId = ko.observable(modelData.initialServiceCallLineItem.problemCodeId);
@@ -398,6 +413,72 @@
                     self.costCode = ko.observable(modelData.initialServiceCallLineItem.costCode);
                     self.constructionVendors = ko.observableArray([]);
                     self.constructionVendorsLoading = ko.observable(true);
+
+                    self.rootCause = ko.observable(modelData.initialServiceCallLineItem.rootCause);  //Value saved in db is string but ddl needs id to set default value..
+                    var selectedRootCause = ko.utils.arrayFirst(modelData.rootCauseCodes, function (item) {
+                        return item.displayText === modelData.initialServiceCallLineItem.rootCause;
+                    });
+                    self.rootCauseId = ko.observable(selectedRootCause ? selectedRootCause.value : '').extend({
+                        required:
+                        {
+                            onlyIf: function() {
+                                return self.completeButtonClicked() === true;
+                            }
+                        }
+                    });
+                    
+                    self.rootProblem = ko.observable(modelData.initialServiceCallLineItem.rootProblem);
+                    var selectedRootProblem = ko.utils.arrayFirst(modelData.rootProblemCodes, function (item) {
+                        debugger;
+                        return item.displayText === modelData.initialServiceCallLineItem.rootProblem;
+                    });
+                    self.rootProblemId = ko.observable(selectedRootProblem ? selectedRootProblem.value : '').extend({
+                        required: {
+                            onlyIf: function () {
+                                return self.completeButtonClicked() === true;
+                            }
+                        }
+                    });
+
+                    self.rootCauseCodes = ko.observableArray(modelData.rootCauseCodes);
+                    self.rootProblemCodes = ko.observableArray(modelData.rootProblemCodes);
+
+                    //TODO: Review why this is called 3 times.
+                    self.rootCauseId.subscribe(function (rootCauseId) {
+                        //var matchedRootCause = ko.utils.arrayFirst(modelData.rootCauseCodes, function (item) {
+                        //    debugger;
+                        //    return Number(item.value) === Number(rootCauseId);
+                        //});
+                        
+                        $.ajax({
+                            url: urls.ManageServiceCall.EditLineItem,
+                            type: "POST",
+                            data: ko.toJSON({ serviceCallLineItemId: self.serviceCallLineItemId, rootCause: rootCauseId }), //matchedRootCause.displayText }),
+                            dataType: "json",
+                            processData: false,
+                            contentType: "application/json; charset=utf-8"
+                        }).fail(function() {
+                            toastr.error("There was an error updating the root cause");
+                        }).success(function() {
+                            toastr.success("Successfully updated root cause");
+                        });
+                    });
+
+                    self.rootProblemId.subscribe(function (rootProblemId) {
+                        debugger;
+                        $.ajax({
+                            url: urls.ManageServiceCall.EditLineItem,
+                            type: "POST",
+                            data: ko.toJSON({ serviceCallLineItemId: self.serviceCallLineItemId, rootProblem: rootProblemId }),
+                            dataType: "json",
+                            processData: false,
+                            contentType: "application/json; charset=utf-8"
+                        }).fail(function () {
+                            toastr.error("There was an error updating the root problem");
+                        }).success(function () {
+                            toastr.success("Successfully updated root problem");
+                        });
+                    });
 
                     //track editing problem code, desc, and line altogether.
                     self.problemCodeEditing = ko.observable();
@@ -508,6 +589,7 @@
                     });
 
                     function formHasErrors(theModel) {
+                        debugger;
                         var errors = ko.validation.group(theModel);
 
                         if (errors().length != 0) {
@@ -603,6 +685,13 @@
 
                     //complete line item.
                     self.completeLine = function () {
+                        self.completeButtonClicked(true);
+
+                        if (formHasErrors([self.rootCauseId, self.rootProblemId])) {
+                            //self.completeButtonClicked(false);
+                            return;
+                        }
+
                         this.lineEditing(false);
                         completeServiceCallLineItem(this);
                     };
