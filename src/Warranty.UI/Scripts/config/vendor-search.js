@@ -13,7 +13,7 @@
         engine: new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: urls.QuickSearch.Vendors + '?query=%QUERY&cityCode=' + $('#vendor-search').attr('data-city-code')
+            remote: urls.QuickSearch.Vendors + '?query=%QUERY&cityCode=' + $('#vendor-search').attr('data-city-code') + '&invoicePayableCode=' + (($('#vendor-search').attr('data-ip-code') === undefined) ? '' : $('#vendor-search').attr('data-ip-code'))
         })
     };
 });

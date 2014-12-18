@@ -35,16 +35,17 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Client">
-      <HintPath>..\packages\Accounting.Client.1.1.899.0\lib\net45\Accounting.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Accounting.Commands, Version=1.1.889.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Accounting.Client, Version=1.1.914.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Accounting.Commands.1.1.889.0\lib\net45\Accounting.Commands.dll</HintPath>
+      <HintPath>..\packages\Accounting.Client.1.1.914.0\lib\net45\Accounting.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Accounting.Events, Version=1.1.889.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Accounting.Commands, Version=1.1.914.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Accounting.Events.1.1.889.0\lib\net45\Accounting.Events.dll</HintPath>
+      <HintPath>..\packages\Accounting.Commands.1.1.914.0\lib\net45\Accounting.Commands.dll</HintPath>
+    </Reference>
+    <Reference Include="Accounting.Events, Version=1.1.914.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Accounting.Events.1.1.914.0\lib\net45\Accounting.Events.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
