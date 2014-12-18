@@ -710,7 +710,7 @@ require(['/Scripts/app/main.js'], function () {
                     self.lineJustCompleted(false);
                 };
 
-                self.callSummaryServiceCallStatus = ko.observable($("#callSummaryServiceCallStatus").html());
+                self.callSummaryServiceCallStatus = ko.observable($("#callSummaryServiceCallStatus").val());
                 
                 self.deleteServiceCall = function () {
                     $.ajax({
@@ -767,7 +767,8 @@ require(['/Scripts/app/main.js'], function () {
                 });
                 
                 self.canBeDeleted = ko.computed(function () {
-                    return self.callSummaryStatusRequested();
+
+                    return self.callSummaryStatusRequested() && self.allLineItems().length == 0;
                 });
 
                 self.homeownerVerificationSignature = ko.observable('').extend({ required: true });
