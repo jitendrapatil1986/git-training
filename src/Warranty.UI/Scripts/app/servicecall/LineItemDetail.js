@@ -17,18 +17,53 @@
 
                 $(".attached-file-display-name").editable();
 
-                //$("#rootProblemId").editable({
-                //    type: 'select',
-                //    pk: modelData.initialServiceCallLineItem.serviceCallLineItemId,
-                //    value: modelData.initialServiceCallLineItem.rootProblem,
-                //    emptytext: 'Set Root Problem',
-                //    source: modelData.rootProblemCodes,
-                //    success: function (response) {
-                //        viewModel.completeButtonClicked(false);
-                //        toastr.success("Successfully updated root problem");
-                //    },
-                //    error: function (response) { toastr.error("There was an error updating the root problem"); },
-                //});
+                $("#rootCauseId").editable({
+                    type: 'select',
+                    pk: modelData.initialServiceCallLineItem.serviceCallLineItemId,
+                    value: modelData.initialServiceCallLineItem.rootCause,
+                    emptytext: 'Set Root Cause',
+                    source: modelData.rootCauseCodes,
+                    url: function (params) {
+                        $.ajax({
+                            url: urls.ManageServiceCall.EditLineItem,
+                            type: "POST",
+                            data: ko.toJSON({ serviceCallLineItemId: params.pk, rootCause: params.value }),
+                            dataType: "json",
+                            processData: false,
+                            contentType: "application/json; charset=utf-8"
+                        }).fail(function () {
+                            viewModel.completeButtonClicked(false);
+                            toastr.error("There was an error updating the root cause");
+                        }).success(function () {
+                            viewModel.completeButtonClicked(false);
+                            toastr.success("Successfully updated root cause");
+                        });
+                    },
+                });
+                
+                $("#rootProblemId").editable({
+                    type: 'select',
+                    pk: modelData.initialServiceCallLineItem.serviceCallLineItemId,
+                    value: modelData.initialServiceCallLineItem.rootProblem,
+                    emptytext: 'Set Root Problem',
+                    source: modelData.rootProblemCodes,
+                    url: function(params) {
+                            $.ajax({
+                                url: urls.ManageServiceCall.EditLineItem,
+                                type: "POST",
+                                data: ko.toJSON({ serviceCallLineItemId: params.pk, rootProblem: params.value }),
+                                dataType: "json",
+                                processData: false,
+                                contentType: "application/json; charset=utf-8"
+                            }).fail(function () {
+                                viewModel.completeButtonClicked(false);
+                                toastr.error("There was an error updating the root problem");
+                            }).success(function () {
+                                viewModel.completeButtonClicked(false);
+                                toastr.success("Successfully updated root problem");
+                            });
+                        },
+                });
                 
                 function highlight(elemId) {
 
@@ -414,9 +449,10 @@
                     self.constructionVendors = ko.observableArray([]);
                     self.constructionVendorsLoading = ko.observable(true);
 
-                    self.rootCause = ko.observable(modelData.initialServiceCallLineItem.rootCause);  //Value saved in db is string but ddl needs id to set default value..
+                    //Value saved in db is string but ddl needs id to set default value.
+                    self.rootCause = ko.observable(modelData.initialServiceCallLineItem.rootCause);
                     var selectedRootCause = ko.utils.arrayFirst(modelData.rootCauseCodes, function (item) {
-                        return item.displayText === modelData.initialServiceCallLineItem.rootCause;
+                        return item.text === modelData.initialServiceCallLineItem.rootCause;
                     });
                     self.rootCauseId = ko.observable(selectedRootCause ? selectedRootCause.value : '').extend({
                         required:
@@ -429,8 +465,7 @@
                     
                     self.rootProblem = ko.observable(modelData.initialServiceCallLineItem.rootProblem);
                     var selectedRootProblem = ko.utils.arrayFirst(modelData.rootProblemCodes, function (item) {
-                        debugger;
-                        return item.displayText === modelData.initialServiceCallLineItem.rootProblem;
+                        return item.text === modelData.initialServiceCallLineItem.rootProblem;
                     });
                     self.rootProblemId = ko.observable(selectedRootProblem ? selectedRootProblem.value : '').extend({
                         required: {
@@ -443,41 +478,24 @@
                     self.rootCauseCodes = ko.observableArray(modelData.rootCauseCodes);
                     self.rootProblemCodes = ko.observableArray(modelData.rootProblemCodes);
 
-                    //TODO: Review why this is called 3 times.
-                    self.rootCauseId.subscribe(function (rootCauseId) {
-                        //var matchedRootCause = ko.utils.arrayFirst(modelData.rootCauseCodes, function (item) {
-                        //    debugger;
-                        //    return Number(item.value) === Number(rootCauseId);
-                        //});
-                        
-                        $.ajax({
-                            url: urls.ManageServiceCall.EditLineItem,
-                            type: "POST",
-                            data: ko.toJSON({ serviceCallLineItemId: self.serviceCallLineItemId, rootCause: rootCauseId }), //matchedRootCause.displayText }),
-                            dataType: "json",
-                            processData: false,
-                            contentType: "application/json; charset=utf-8"
-                        }).fail(function() {
-                            toastr.error("There was an error updating the root cause");
-                        }).success(function() {
-                            toastr.success("Successfully updated root cause");
+                    self.rootCauseId.subscribe(function(rootCauseId) {
+                        var matchedRootCause = ko.utils.arrayFirst(modelData.rootCauseCodes, function (item) {
+                            return Number(item.value) === Number(rootCauseId);
                         });
-                    });
 
+                        if (matchedRootCause) {
+                            self.rootCause(matchedRootCause.text);
+                        }
+                    });
+                    
                     self.rootProblemId.subscribe(function (rootProblemId) {
-                        debugger;
-                        $.ajax({
-                            url: urls.ManageServiceCall.EditLineItem,
-                            type: "POST",
-                            data: ko.toJSON({ serviceCallLineItemId: self.serviceCallLineItemId, rootProblem: rootProblemId }),
-                            dataType: "json",
-                            processData: false,
-                            contentType: "application/json; charset=utf-8"
-                        }).fail(function () {
-                            toastr.error("There was an error updating the root problem");
-                        }).success(function () {
-                            toastr.success("Successfully updated root problem");
+                        var matchedRootProblem = ko.utils.arrayFirst(modelData.rootProblemCodes, function (item) {
+                            return Number(item.value) === Number(rootProblemId);
                         });
+
+                        if (matchedRootProblem) {
+                            self.rootProblem(matchedRootProblem.text);
+                        }
                     });
 
                     //track editing problem code, desc, and line altogether.
@@ -589,7 +607,6 @@
                     });
 
                     function formHasErrors(theModel) {
-                        debugger;
                         var errors = ko.validation.group(theModel);
 
                         if (errors().length != 0) {
