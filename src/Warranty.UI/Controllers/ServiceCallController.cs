@@ -193,13 +193,6 @@ namespace Warranty.UI.Controllers
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
-        //TODO: Testing InLine update for Root Problem. Complete command to update db.
-        public ActionResult InlineUpdateRootProblem(ReassignEmployeeCommand command)
-        {
-            //_mediator.Send(command);
-            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
-        }
-
         public ActionResult Complete(Guid id)
         {
             _mediator.Send(new ServiceCallCompleteCommand()
