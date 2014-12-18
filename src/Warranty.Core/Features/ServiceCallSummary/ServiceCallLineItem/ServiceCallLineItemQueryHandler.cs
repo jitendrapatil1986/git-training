@@ -49,6 +49,8 @@
                                     li.[RootCause],
                                     li.[ProblemJdeCode],
                                     li.[ProblemDetailCode],
+                                    li.[RootCause],
+                                    li.[RootProblem],
                                     cc.[CostCode],
                                     job.[JobNumber],
                                     city.CityCode
