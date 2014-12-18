@@ -49,14 +49,6 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group" data-bind="validationElement: problemDetailCodeToAdd">
-                                                    @Html.Label("Problem Detail", new { @class = "control-label", @for = "problemDetail" })
-                                                    <select id="problemDetail" class="form-control" data-bind="options: problemDetailCodes, value:problemDetailCodeToAdd, optionsValue: 'Value', optionsText: 'Text', optionsCaption: 'Select Problem Detail'"></select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
                                             <div class="col-md-10">
                                                 <div class="form-group" data-bind="validationElement: problemDescriptionToAdd">
                                                     @Html.Label("Description", new { @class = "control-label", @for = "problemDescription" })
@@ -82,11 +74,9 @@
                                                     <div class="service-call-line">
                                                         <input type="hidden" data-bind="value: $index() + 1, attr: { name: 'ServiceCallLineItems[' + $index() + '].LineItemNumber' }" />
                                                         <input type="hidden" data-bind="value: problemJdeCode, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemJdeCode' }" />
-                                                        <input type="hidden" data-bind="value: problemDetailCode, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemDetailCode' }" />
                                                         <input type="hidden" data-bind="value: problemCode, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemCode' }" />
                                                         <input type="hidden" data-bind="value: problemDescription, attr: { name: 'ServiceCallLineItems[' + $index() + '].ProblemDescription' }" />
                                                         <h4 data-bind="text: problemCode"></h4>
-                                                        <p><strong data-bind="text: problemDetailCode"></strong></p>
                                                         <span data-bind="text: problemDescription"></span>
                                                         <button data-bind="click: $root.removeLineItem" class="btn btn-default btn-xs pull-right">Delete</button>
                                                     </div>

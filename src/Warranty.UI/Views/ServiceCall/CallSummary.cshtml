@@ -193,38 +193,24 @@
                     <div class="panel-body">
                         <div class="col-md-9">
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group" data-bind="validationElement: problemJdeCodeToAdd">
-                                        <select id="addCallLineProblemCode" class="form-control" data-bind="options: theLookups, value: problemJdeCodeToAdd, optionsText: 'problemCode', optionsValue: 'problemId', optionsCaption: 'Select Problem Code'"></select>
-                                        @*@Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select problem code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemJdeCodeToAdd" })*@   
-                                    </div>
+                                <div class="form-group" data-bind="validationElement: problemJdeCodeToAdd">
+                                    <select id="addCallLineProblemCode" class="form-control" data-bind="options: theLookups, value: problemJdeCodeToAdd, optionsText: 'problemCode', optionsValue: 'problemId', optionsCaption: 'Select Problem Code'"></select>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group" data-bind="validationElement: problemDetailCodeToAdd">
-                                        <select id="addCallLineProblemDetail" class="dropdown form-control" data-bind="options: problemDetailCodes, value: problemDetailCodeToAdd, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Problem Detail'"></select>
-                                    </div>
+                                <div class="form-group" data-bind="validationElement: problemDescriptionToAdd">
+                                    @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group" data-bind="validationElement: problemDescriptionToAdd">
-                                        @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
-                                    </div>
+                                <div class="form-submit">
+                                    <button class="btn btn-primary" data-bind="click: addLineItem">Add</button>
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addCallLineItem">Cancel</button>
                                 </div>
-                            </div>
-                            <br />
-                            <div class="form-submit">
-                                <button class="btn btn-primary" data-bind="click: addLineItem">Add</button>
-                                <button class="btn btn-link" data-toggle="collapse" data-target="#addCallLineItem">Cancel</button>
-                            </div>
-                        </div>
+                            </div></div>
                         <div class="col-md-3 hidden" data-bind="css: { hidden: relatedCalls().length == 0}">
                             @Html.Label("Related Calls")
                             <div data-bind="foreach: relatedCalls">
                                 <div class="well well-sm">
-                                <a data-bind="attr: {href: callSummaryUrl}"><span data-bind="    text: callNumber"></span></a><br />
+                                <strong><a data-bind="attr: {href: callSummaryUrl}"><span data-bind="text: callNumber"></span></a></strong><br />
                                 <span data-bind="text: problemDescription"></span><br />
                                 <small class="text-muted">Date Created: <span data-bind="text: moment(createdDate).format('LL')"></span></small>
                             </div>
@@ -232,7 +218,6 @@
                         </div>
                     </div>
                 </div>
-
                         <div data-bind="foreach: allLineItems">
                             <div data-bind="click: jumpToServiceCallLineDetailPage, css: { 'cursor-pointer': lineEditing() == false }">
                                 <div id="allServiceCallLineItems" class="service-call-line edit-line-item row lineDetail" data-bind="attr: {'data-service-call-line-item': lineNumber()}">
@@ -244,12 +229,6 @@
                                                                         <h4>
                                                                             <span data-bind="text: problemCode" class="view"></span>
                                                                         </h4>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="control-group margin-bottom-10" data-bind="validationElement: editProblemDetailCode">
-                                                                    <div class="editor" data-bind="css: { editing: problemCodeEditing }">
-                                                                        <p class="view"><strong data-bind="text: problemDetailCode()"></strong></p>
-                                                                        <select id="editProblemDetailCode" class="edit dropdown form-control" data-bind="options: problemDetailCodes, value: editProblemDetailCode, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Problem Detail'"></select>
                                                                     </div>
                                                                 </div>
                                                                 <div class="control-group margin-bottom-10" data-bind="validationElement: problemDescription">
