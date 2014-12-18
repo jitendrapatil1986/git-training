@@ -40,7 +40,6 @@
             {
                 ServiceCallLineItemId = model.ServiceCallLineItemId,
                 ProblemCode = model.ProblemCode,
-                ProblemDetailCode = model.ProblemDetailCode,
                 ProblemJdeCode = model.ProblemJdeCode,
                 ProblemDescription = model.ProblemDescription
             });
@@ -55,7 +54,6 @@
             {
                 ServiceCallId = model.ServiceCallId,
                 ProblemCode = model.ProblemCode,
-                ProblemDetailCode = model.ProblemDetailCode,
                 ProblemJdeCode = model.ProblemJdeCode,
                 ProblemDescription = model.ProblemDescription
             });
