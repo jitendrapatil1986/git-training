@@ -292,8 +292,8 @@
     <Compile Include="Features\AddServiceCallPayment\ApproveBackchargeCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallPayment\ApprovePaymentCommand.cs" />
     <Compile Include="Features\AddServiceCallPayment\ApprovePaymentCommandHandler.cs" />
-    <Compile Include="Features\DeleteServiceCall\DeletePaymentCommand.cs" />
-    <Compile Include="Features\DeleteServiceCall\DeletePaymentCommandHandler.cs" />
+    <Compile Include="Features\AddServiceCallPayment\DeletePaymentCommand.cs" />
+    <Compile Include="Features\AddServiceCallPayment\DeletePaymentCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallPayment\DenyBackchargeCommand.cs" />
     <Compile Include="Features\AddServiceCallPayment\DenyBackchargeCommandHandler.cs" />
     <Compile Include="Features\AddServiceCallPayment\HoldBackchargeCommand.cs" />

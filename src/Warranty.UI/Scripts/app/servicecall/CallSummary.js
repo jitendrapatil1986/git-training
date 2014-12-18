@@ -675,22 +675,26 @@ require(['/Scripts/app/main.js'], function () {
                 };
 
                 self.callSummaryServiceCallStatus = ko.observable($("#callSummaryServiceCallStatus").val());
-                
-                self.deleteServiceCall = function () {
-                    $.ajax({
-                        url: urls.ManageServiceCall.DeleteServiceCall,
-                        type: "DELETE",
-                        data: { serviceCallId: $("#callSummaryServiceCallId").val() }
-                    })
-                        .fail(function (response) {
-                            toastr.error("There was an issue deleting the service call. Please try again!");
-                        })
-                        .success(function () {
-                            toastr.success("Success! Service Call deleted.");
-                        })
-                        .done(function (response) {
-                            window.location = urls.Home.Index;
-                        });
+
+                self.deleteServiceCall = function() {
+                    bootbox.confirm("Are you sure you want to delete this service call?", function(result) {
+                        if (result) {
+                            $.ajax({
+                                url: urls.ManageServiceCall.DeleteServiceCall,
+                                type: "DELETE",
+                                data: { serviceCallId: $("#callSummaryServiceCallId").val() }
+                            })
+                                .fail(function(response) {
+                                    toastr.error("There was an issue deleting the service call. Please try again!");
+                                })
+                                .success(function() {
+                                    toastr.success("Success! Service Call deleted.");
+                                })
+                                .done(function(response) {
+                                    window.location = urls.Home.Index;
+                                });
+                        }
+                    });
                 };
 
                 self.cssforCallSummaryServiceCallStatus = ko.computed(function () {
