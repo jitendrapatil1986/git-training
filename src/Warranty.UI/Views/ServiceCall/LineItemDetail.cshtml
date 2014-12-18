@@ -45,21 +45,21 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="inline-editable-dropdown text-capitalize" data-bind="visible: !isLineItemCompleted()">
-                                <div class="control-group" data-bind="validationElement: rootCauseId">
-                                    <label class="control-label" for="rootCauseId"></label>Root Cause: 
-                                    <a href="#" id="rootCauseId" data-bind="editable: rootCauseId, value: rootCauseId"></a>
-                                </div>
-                            </div>
-                            <span data-bind="visible: isLineItemCompleted(), text: 'Root Cause: ' + rootCause()"></span>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="inline-editable-dropdown text-capitalize" data-bind="visible: !isLineItemCompleted()">
                                 <div class="control-group" data-bind="validationElement: rootProblemId">
                                     <label class="control-group" for="rootProblemId"></label>Root Problem: 
                                     <a href="#" id="rootProblemId" data-bind="editable: rootProblemId, value: rootProblemId"></a>
                                 </div>
                             </div>
                             <span data-bind="visible: isLineItemCompleted(), text: 'Root Problem: ' + rootProblem()"></span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="inline-editable-dropdown text-capitalize" data-bind="visible: !isLineItemCompleted()">
+                                <div class="control-group" data-bind="validationElement: rootCauseId">
+                                    <label class="control-label" for="rootCauseId"></label>Root Cause: 
+                                    <a href="#" id="rootCauseId" data-bind="editable: rootCauseId, value: rootCauseId"></a>
+                                </div>
+                            </div>
+                            <span data-bind="visible: isLineItemCompleted(), text: 'Root Cause: ' + rootCause()"></span>
                         </div>
                     </div>
                 </div>
