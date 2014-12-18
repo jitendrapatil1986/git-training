@@ -26,3 +26,5 @@ $documentSharePath = "C:\temp\dwh_files\warranty"
 $surveyApiBaseUri = "http://surveytraining.davidweekleyhomes.com/api/"
 $accountingApiBaseUri = "http://accountingtest.davidweekleyhomes.com/api/"
 $jobServiceApiBaseUri = "http://jobservicetest.davidweekleyhomes.com"
+
+$accountingEndPointServer = "wkcorpapptrain1"
