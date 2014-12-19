@@ -31,17 +31,9 @@
 <div style="display: none;" data-bind="visible: true">
 <div class="container">
 
-        @Html.HiddenFor(model => model.CanReopenLines, new { id = "userCanReopenCallLinesAnytime", @class = "form-control" , data_bind="value: userCanAlwaysReopenCallLines"})
     @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallStatus, new { id = "callSummaryServiceCallStatus"})
-        <div id="undoLastCompletedLineItem" data-bind="visible: !userCanAlwaysReopenCallLines() && lineJustCompleted()" class="undo-alert">
-            <div id="undoLastCompletedLineItemAlert" class="alert alert-warning alert-dismissible padding-5" role="alert">
-                Line item marked as complete. <a class="cursor-pointer" data-bind="click: undoLastCompletedLine">Undo mark as complete.</a>
-            </div>
-        </div>
-        
         <section class="margin-bottom-10">
             <h2 class="pull-left no-margin">Service Call #@Model.ServiceCallSummary.CallNumber</h2>
-
 
             <div class="warranty-header-buttons no-print">
                 @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
@@ -255,10 +247,7 @@
 
                                                 <div class="col-md-3 margin-bottom-3 text-align-right no-right-padding no-print">
                                                     <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="click: editLine, clickBubble: false, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>
-                                                    <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="click: completeLine, clickBubble: false, visible: !lineEditing()&& !isLineItemCompleted()">Complete</button>
-
                                                     <button id="btn-edit-line-item" type="button" class="col-xs-4 btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="click: editLine, clickBubble: false, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>
-                                                    <button id="btn-complete-line-item" type="button" class="col-xs-4 btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="click: completeLine, clickBubble: false, visible: !lineEditing() && !isLineItemCompleted()">Complete</button>
 
                                                     @if (Model.CanReopenLines)
                                                     {
