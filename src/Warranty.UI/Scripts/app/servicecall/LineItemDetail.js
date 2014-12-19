@@ -66,7 +66,6 @@
                 });
                 
                 function highlight(elemId) {
-
                     var elem = $(elemId);
                     elem.css("backgroundColor", "#ffffff"); // hack for Safari
                     elem.animate({ backgroundColor: '#d4dde3' }, 500);
@@ -346,14 +345,6 @@
                     self.createdDate = options.createdDate;
                 }
 
-                function updateServiceCallLineItem(line) {
-                    var updateProblemCode = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemCode");
-                    if (updateProblemCode.val() == "") {
-                        $(updateProblemCode).parent().addClass("has-error");
-                        return;
-                    }
-                }
-
                 self.allPayments = ko.observableArray([]);
 
                 self.canAddPayment = ko.computed(function () {
@@ -361,7 +352,6 @@
                 });
 
                 self.clearPaymentFields = function () {
-
                     $('#vendor-search').val('');
                     $('#backcharge-vendor-search').val('');
                     self.vendorNumber('');
@@ -378,7 +368,6 @@
                     self.selectedCostCode(undefined);
                     self.errors.showAllMessages(false);
                 };
-
 
                 function completeServiceCallLineItem(line) {
                     var lineData = ko.toJSON(line);
@@ -437,13 +426,9 @@
                     self.completed = modelData.initialServiceCallLineItem.completed;
                     self.completeButtonClicked = ko.observable(false);
 
-                    //track line item properties.
                     self.problemCodeId = ko.observable(modelData.initialServiceCallLineItem.problemCodeId);
                     self.problemCode = ko.observable(modelData.initialServiceCallLineItem.problemCode);
-                    self.problemDetailCode = ko.observable(modelData.initialServiceCallLineItem.problemDetailCode);
                     self.problemDescription = ko.observable(modelData.initialServiceCallLineItem.problemDescription);
-                    self.currentProblemCode = ko.observable();
-                    self.currentProblemDescription = ko.observable();
                     self.jobNumber = ko.observable(modelData.initialServiceCallLineItem.jobNumber);
                     self.costCode = ko.observable(modelData.initialServiceCallLineItem.costCode);
                     self.constructionVendors = modelData.vendors;
@@ -510,11 +495,6 @@
                             self.rootProblem(matchedRootProblem.text);
                         }
                     });
-
-                    //track editing problem code, desc, and line altogether.
-                    self.problemCodeEditing = ko.observable();
-                    self.problemDescriptionEditing = ko.observable("");
-                    self.lineEditing = ko.observable("");
 
                     self.invoiceNumber = ko.observable('').extend({ required: true });
                     self.amount = ko.observable().extend({ required: true, min: 0 });
@@ -583,7 +563,6 @@
                     });
 
                     self.clearPaymentFields = function () {
-
                         $('#vendor-search').val('');
                         $('#backcharge-vendor-search').val('');
                         self.vendorNumber('');
@@ -690,29 +669,6 @@
                         self.personNotifiedDate(moment(e.date).format("L"));
                     });
 
-                    //edit line item.
-                    self.editLine = function () {
-                        this.problemCodeEditing(true);
-                        this.problemDescriptionEditing(true);
-                        this.lineEditing(true);
-                        this.currentProblemCode(this.problemCode());
-                        this.currentProblemDescription(this.problemDescription());
-                    };
-
-                    //save line item changes.
-                    self.saveLineItemChanges = function () {
-                        updateServiceCallLineItem(this);
-                    };
-
-                    //cancel line item changes.
-                    self.cancelLineItemChanges = function () {
-                        this.problemCodeEditing(false);
-                        this.problemDescriptionEditing(false);
-                        this.lineEditing(false);
-                        this.problemCode(this.currentProblemCode());
-                        this.problemDescription(this.currentProblemDescription());
-                    };
-
                     //complete line item.
                     self.completeLine = function () {
                         self.completeButtonClicked(true);
@@ -721,13 +677,11 @@
                             return;
                         }
 
-                        this.lineEditing(false);
                         completeServiceCallLineItem(this);
                     };
 
                     //reopen line item.
                     self.reopenLine = function () {
-                        this.lineEditing(false);
                         reopenServiceCallLineItem(this);
                     };
 
