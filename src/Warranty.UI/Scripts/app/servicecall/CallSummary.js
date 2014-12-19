@@ -4,10 +4,6 @@ require(['/Scripts/app/main.js'], function () {
         require(['ko.validation'], function () {
 
          $(function () {
-                
-            $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
-                $(this).hide();
-            });
 
             $.fn.editable.defaults.mode = 'inline';
             $.fn.editable.defaults.emptytext = 'Add';
@@ -267,19 +263,11 @@ require(['/Scripts/app/main.js'], function () {
                     this.problemDescription(this.currentProblemDescription());
                 };
 
-                //complete line item.
-                self.completeLine = function () {
-                    this.lineEditing(false);
-                    completeServiceCallLineItem(this);
-                };
-
                 //reopen line item.
                 self.reopenLine = function () {
                     this.lineEditing(false);
                     reopenServiceCallLineItem(this);
                 };
-
-                
 
                 self.lineNumber = ko.observable(options.lineNumber);
 
@@ -394,36 +382,6 @@ require(['/Scripts/app/main.js'], function () {
                         line.lineEditing(false);
                     });
             }
-            
-
-            function completeServiceCallLineItem(line) {
-                var lineData = ko.toJSON(line);
-
-                $.ajax({
-                    url: urls.ManageServiceCall.CompleteLineItem,
-                    type: "POST",
-                    data: lineData,
-                    dataType: "json",
-                    processData: false,
-                    contentType: "application/json; charset=utf-8"
-                })
-                    .fail(function (response) {
-                        toastr.error("There was an issue completing the line item. Please try again!");
-                    })
-                    .done(function (response) {
-                        line.serviceCallLineItemStatusDisplayName(response.DisplayName);
-
-                        //if user is not allowed to ALWAYS reopen Completed lines at anytime, then allow them to reopen only right after completing a line.
-                        if ($("#userCanReopenCallLinesAnytime").val() == false) {
-                            $("#undoLastCompletedLineItemAlert").attr('data-service-line-id-to-undo', line.serviceCallLineItemId);
-                            $("#undoLastCompletedLineItemAlert").show();
-                            viewModel.lineJustCompleted(true);
-                            $("#undoLastCompletedLineItemAlert").attr("tabindex", -1).focus();  //focus only after setting lineJustCompleted observable which visibly shows control on form first and then focus.
-                        } else {
-                            toastr.success("Success! Item completed.");
-                        }
-                    });
-            }
 
             function reopenServiceCallLineItem(line) {
                 var lineData = ko.toJSON(line);
@@ -465,7 +423,6 @@ require(['/Scripts/app/main.js'], function () {
                 self.allAttachments = ko.observableArray([]);
 
                 self.noteDescriptionToAdd = ko.observable('').extend({ required: true});
-                self.userCanAlwaysReopenCallLines = ko.observable();
 
                 self.problemDetailCodes = ko.observableArray([]);
                 self.relatedCalls = ko.observableArray([]);
@@ -660,18 +617,6 @@ require(['/Scripts/app/main.js'], function () {
 
                 self.cancelCallNote = function () {
                     clearNoteFields();
-                };
-
-                self.lineJustCompleted = ko.observable();
-
-                //undo last line item which was completed.
-                self.undoLastCompletedLine = function () {
-                    var lineId = $("#undoLastCompletedLineItemAlert").attr('data-service-line-id-to-undo');
-                    var lineToReopen = ko.utils.arrayFirst(self.allLineItems(), function (i) {
-                        return (i.serviceCallLineItemId == lineId);
-                    });
-                    reopenServiceCallLineItem(lineToReopen);
-                    self.lineJustCompleted(false);
                 };
 
                 self.callSummaryServiceCallStatus = ko.observable($("#callSummaryServiceCallStatus").val());
