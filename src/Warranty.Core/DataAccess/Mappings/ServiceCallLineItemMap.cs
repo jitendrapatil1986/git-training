@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Warranty.Core.DataAccess.Mappings
+﻿namespace Warranty.Core.DataAccess.Mappings
 {
     using Entities;
 
@@ -24,6 +18,8 @@ namespace Warranty.Core.DataAccess.Mappings
                     x.Column(y => y.ClassificationNote);
                     x.Column(y => y.LineItemRoot);
                     x.Column(y => y.ServiceCallLineItemStatus).WithName("ServiceCallLineItemStatusId");
+                    x.Column(y => y.RootCause);
+                    x.Column(y => y.RootProblem);
                 });
         }
     }
