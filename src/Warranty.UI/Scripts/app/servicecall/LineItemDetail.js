@@ -396,8 +396,22 @@
                     self.currentProblemDescription = ko.observable();
                     self.jobNumber = ko.observable(modelData.initialServiceCallLineItem.jobNumber);
                     self.costCode = ko.observable(modelData.initialServiceCallLineItem.costCode);
-                    self.constructionVendors = ko.observableArray([]);
-                    self.constructionVendorsLoading = ko.observable(true);
+                    debugger;
+                    self.constructionVendors = modelData.vendors;
+                    
+                    self.groupedConstructionVendors = ko.computed(function () {
+                        var rows = [], current = [];
+                        rows.push(current);
+                        for (var i = 0; i < self.constructionVendors.length; i += 1) {
+                            current.push(self.constructionVendors[i]);
+                            if (((i + 1) % 3) === 0) {
+                                current = [];
+                                rows.push(current);
+                            }
+                        }
+                        return rows;
+                    }, this);
+
 
                     //track editing problem code, desc, and line altogether.
                     self.problemCodeEditing = ko.observable();
@@ -727,17 +741,6 @@
                         reopenServiceCallLineItem(this);
                         self.lineJustCompleted(false);
                     };
-
-                    $.ajax({
-                        url: urls.ConstructionVendor.ConstructionVendors + '?jobNumber=' + self.jobNumber() + '&costCode=' + self.costCode(),
-                        type: "GET",
-                        dataType: "json",
-                        processData: false,
-                        contentType: "application/json; charset=utf-8"
-                    }).done(function (response) {
-                        self.constructionVendors(response);
-                        self.constructionVendorsLoading(false);
-                    });
                     
                     self.createPurchaseOrder = function () {
                         window.location.href = urls.ServiceCall.CreatePurchaseOrder + '/' + self.serviceCallLineItemId;
