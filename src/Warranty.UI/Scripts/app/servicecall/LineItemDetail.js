@@ -446,7 +446,6 @@
                     self.currentProblemDescription = ko.observable();
                     self.jobNumber = ko.observable(modelData.initialServiceCallLineItem.jobNumber);
                     self.costCode = ko.observable(modelData.initialServiceCallLineItem.costCode);
-                    debugger;
                     self.constructionVendors = modelData.vendors;
                     
                     self.groupedConstructionVendors = ko.computed(function () {

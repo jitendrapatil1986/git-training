@@ -358,12 +358,9 @@
     <Compile Include="Features\Report\SaltLine\SaltlineReportModel.cs" />
     <Compile Include="Features\Report\SaltLine\SaltlineReportQuery.cs" />
     <Compile Include="Features\Report\SaltLine\SaltlineReportQueryHandler.cs" />
-    <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ConstructionVendorQueryHandler.cs" />
     <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ServiceCallLineItemModel.cs" />
     <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ServiceCallLineItemQuery.cs" />
     <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ServiceCallLineItemQueryHandler.cs" />
-    <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ConstructionVendorModel.cs" />
-    <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ConstructionVendorQuery.cs" />
     <Compile Include="Features\TaskCompletion\TaskCompleteCommand.cs" />
     <Compile Include="Features\TaskCompletion\ServiceCallApproveCommandHandler.cs" />
     <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetModel.cs" />
