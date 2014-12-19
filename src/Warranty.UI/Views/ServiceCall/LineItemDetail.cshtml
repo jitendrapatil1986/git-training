@@ -25,10 +25,10 @@
                     <a class="bread-crumb" href="@Url.Action("CallSummary", "ServiceCall", new { id = Model.ServiceCallId })">Service Call #@Model.ServiceCallNumber</a>
                     @Model.LineNumber - <span data-bind="text: problemCode"></span>
                     <div class="pull-right no-right-padding no-print">
-                        <button id="btn-complete-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: completeLine, visible: !lineEditing()&& !isLineItemCompleted()">Complete</button>
+                        <button id="btn-complete-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: completeLine, visible: !isLineItemCompleted()">Complete</button>
                         @if (Model.CanReopenLines)
                         {
-                            <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: reopenLine, visible: !lineEditing() && isLineItemCompleted()">Reopen</button>
+                            <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: reopenLine, visible: isLineItemCompleted()">Reopen</button>
                         }
                     </div>
                 </h2>
