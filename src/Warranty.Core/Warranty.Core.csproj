@@ -412,7 +412,6 @@
     <Compile Include="Features\ManageLookups\ManageLookupItemsQueryHandler.cs" />
     <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemCommand.cs" />
     <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemCommandHandler.cs" />
-    <Compile Include="Features\EditServiceCallLineItem\EditServiceCallLineItemModel.cs" />
     <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetWSRQuery.cs" />
     <Compile Include="Features\PercentClosedWithinSevenDaysWidget\PercentClosedWithinSevenDaysWidgetWSRQueryHandler.cs" />
     <Compile Include="Features\PercentSurveyRecommendWidget\PercentSurveyRecommendWidgetModel.cs" />

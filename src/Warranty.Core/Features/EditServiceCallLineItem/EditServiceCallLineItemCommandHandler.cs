@@ -2,6 +2,7 @@
 {
     using System;
     using Entities;
+    using Enumerations;
     using InnerMessages;
     using NPoco;
     using NServiceBus;
@@ -22,9 +23,11 @@
             using (_database)
             {
                 var updateServiceCallLine = _database.SingleById<ServiceCallLineItem>(message.ServiceCallLineItemId);
-                updateServiceCallLine.ProblemCode = message.ProblemCode;
-                updateServiceCallLine.ProblemJdeCode = message.ProblemJdeCode;
-                updateServiceCallLine.ProblemDescription = message.ProblemDescription;
+                updateServiceCallLine.ProblemCode = message.ProblemCode ?? updateServiceCallLine.ProblemCode;
+                updateServiceCallLine.ProblemJdeCode = message.ProblemJdeCode ?? updateServiceCallLine.ProblemJdeCode;
+                updateServiceCallLine.ProblemDescription = message.ProblemDescription ?? updateServiceCallLine.ProblemDescription;
+                updateServiceCallLine.RootCause = message.RootCause == null ? updateServiceCallLine.RootCause : RootCause.FromValue(Convert.ToInt16(message.RootCause)).DisplayName;
+                updateServiceCallLine.RootProblem = message.RootProblem == null ? updateServiceCallLine.RootProblem : RootProblem.FromValue(Convert.ToInt16(message.RootProblem)).DisplayName;
                 _database.Update(updateServiceCallLine);
 
                 _bus.Send<NotifyServiceCallLineItemProblemChanged>(x =>

@@ -150,36 +150,39 @@
                     <strong>Special Project</strong> <span data-bind="text: specialProjectDate()!=null ? moment(specialProjectDate()).format('MM/DD/YYYY') : ''"></span><span data-bind="    text: (specialProjectReason()) ? ' - ' + specialProjectReason(): ''"></span>
                 </div>
             </section>
-
-            <section data-bind="visible: areAllLineItemsCompleted() && !callSummaryStatusComplete() && !callSummaryStatusSigned()">
-                <h3 class="col-md-12">Verify Homeowner Signature</h3>
-                <div id="verifyHomeownerSignature">
-                    <div class="panel panel-default no-border">
-                        <div class="panel-body">
-                            <div class="row">
-                                <form>
-                                    <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationTypeId">
-                                        <label class="control-label" for="verifyHomeownerType"></label>
-                                        <select id="verifyHomeownerType" class="form-control" data-bind="options: homeownerVerificationCodes, value: homeownerVerificationTypeId, optionsText: 'displayText', optionsValue: 'value', optionsCaption: 'Select Verification Type'"></select>
-                                    </div>
-                                    <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationSignature">
-                                        <label class="control-label" for="homeownerVerificationSignature"></label>
-                                        @Html.TextBox("Signature", null, new { id = "homeownerVerificationSignature", @class = "form-control", data_bind = "value: homeownerVerificationSignature, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Signature'}" })
-                                    </div>
-                                    <div class="control-group col-md-2 no-right-padding" data-bind="validationElement: homeownerVerificationSignatureDate">
-                                        <label class="control-label" for="homeownerVerificationSignatureDate"></label>
-                                        @Html.TextBox("Date", null, new { id = "homeownerVerificationSignatureDate", @class = "datepicker-input form-control", data_bind="value: homeownerVerificationSignatureDate, attr:{placeholder: 'Select Date'}" })
-                                    </div>
-                                    <br/>
-                                    <div class="col-md-1">
-                                        <button class="btn btn-primary" data-bind="click: saveVerifiedHomeownerSignature">Save</button>
-                                    </div>
-                                </form>
+                
+            @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+            {
+                <section data-bind="visible: areAllLineItemsCompleted() && !callSummaryStatusComplete() && !callSummaryStatusSigned()">
+                    <h3 class="col-md-12">Verify Homeowner Signature</h3>
+                    <div id="verifyHomeownerSignature">
+                        <div class="panel panel-default no-border">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <form>
+                                        <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationTypeId">
+                                            <label class="control-label" for="verifyHomeownerType"></label>
+                                            <select id="verifyHomeownerType" class="form-control" data-bind="options: homeownerVerificationCodes, value: homeownerVerificationTypeId, optionsText: 'displayText', optionsValue: 'value', optionsCaption: 'Select Verification Type'"></select>
+                                        </div>
+                                        <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationSignature">
+                                            <label class="control-label" for="homeownerVerificationSignature"></label>
+                                            @Html.TextBox("Signature", null, new {id = "homeownerVerificationSignature", @class = "form-control", data_bind = "value: homeownerVerificationSignature, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Signature'}"})
+                                        </div>
+                                        <div class="control-group col-md-2 no-right-padding" data-bind="validationElement: homeownerVerificationSignatureDate">
+                                            <label class="control-label" for="homeownerVerificationSignatureDate"></label>
+                                            @Html.TextBox("Date", null, new {id = "homeownerVerificationSignatureDate", @class = "datepicker-input form-control", data_bind = "value: homeownerVerificationSignatureDate, attr:{placeholder: 'Select Date'}"})
+                                        </div>
+                                        <br/>
+                                        <div class="col-md-1">
+                                            <button class="btn btn-primary" data-bind="click: saveVerifiedHomeownerSignature">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            }
 
             <section class="line-items margin-bottom-15">
                 <h3 class="col-md-12">Line Items

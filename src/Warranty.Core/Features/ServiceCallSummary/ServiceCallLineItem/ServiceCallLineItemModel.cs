@@ -19,6 +19,7 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
         public string CostCode { get; set; }
         public string JobNumber { get; set; }
         public string RootCause { get; set; }
+        public string RootProblem { get; set; }
         public string ProblemDescription { get; set; }
         public string CauseDescription { get; set; }
         public string ClassificationNote { get; set; }
