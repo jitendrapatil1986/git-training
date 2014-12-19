@@ -4,8 +4,14 @@
 
         require(['ko.validation'], function () {
             $(function () {
-
-                $(".datepicker-input").datepicker();
+                var nowTemp = new Date();
+                var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+                
+                $(".datepicker").datepicker({
+                    onRender: function (date) {
+                        return date.valueOf() < now.valueOf() ? 'disabled' : '';
+                    }
+                });
                 
                 function PurchaseOrderLineViewModel() {
                     var self = this;
@@ -43,12 +49,14 @@
                 
                 function purchaseOrderViewModel() {
                     var self = this;
+
                     self.serviceCallLineItemId = modelData.initialPurchaseOrder.serviceCallLineItemId;
+                    self.vendorOnHold = ko.observable(false);
                     self.vendorName = ko.observable().extend({required : true});
-                    self.vendorNumber = ko.observable().extend({ required: true });
+                    self.vendorNumber = ko.observable().extend({ required: true, vendorIsOnHold: self.vendorOnHold });
                     self.deliveryInstructionCodes = ko.observableArray(modelData.deliveryInstructionCodes);
                     self.selectedDeliveryInstruction = ko.observable().extend({ required: true });
-                    self.deliveryDate = ko.observable().extend({ required: true });
+                    self.deliveryDate = ko.observable().extend({ required: true, minDate: now});
                     self.warrantyCostCodes = ko.observableArray(modelData.warrantyCostCodes);
                     self.selectedCostCode = ko.observable().extend({required: true});
                     self.isMaterialObjectAccount = ko.observable('true').extend({required: true});
@@ -144,6 +152,8 @@
                     $(document).on('vendor-number-selected', function () {
                         var vendorNumber = $('#vendor-search').attr('data-vendor-number');
                         var vendorName = $('#vendor-search').attr('data-vendor-name');
+                        var vendorOnHold = $('#vendor-search').attr('data-vendor-on-hold');
+                        self.vendorOnHold(vendorOnHold);
                         self.vendorNumber(vendorNumber);
                         self.vendorName(vendorName);
                     });
@@ -160,6 +170,26 @@
                     grouping: { deep: true }
                 });
 
+                ko.validation.rules['minDate'] = {
+                    validator: function (val, otherVal) {
+                        return Date.parse(val) >= Date.parse(otherVal);
+                    },
+                    message: 'Date must be greater than or equal to {0}.'
+                };
+                
+                ko.validation.rules["vendorIsOnHold"] = {
+                    validator: function (val, condition) {
+                        if (condition() === 'true' || condition() === true) {
+                            return false;
+                        }
+
+                        return true;
+                    },
+                    message: 'Vendor on hold.'
+                };
+
+                ko.validation.registerExtenders();
+                
                 var viewModel = new purchaseOrderViewModel();
                 viewModel.errors = ko.validation.group(viewModel);
                 ko.applyBindings(viewModel);

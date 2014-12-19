@@ -3,7 +3,7 @@
 @using Warranty.Core.Extensions
 @using Warranty.Core.Features.JobSummary
 @using Warranty.UI.Core.Helpers
-@model Warranty.Core.Features.JobSummary.JobSummaryModel
+@model JobSummaryModel
 
 <div class="container">
     <div class="col-md-12">
@@ -13,12 +13,16 @@
             <h2 class="pull-left no-margin">Job #@Model.JobNumber <small>@Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)</small>
             </h2>
             <div class="pull-right">
-                @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                @using (Html.BeginForm("Create", "ServiceCall", new {id = Model.JobId}))
                 {
-                    @Html.ActionLink("Change Homeowner", "ChangeHomeowner", "Job", new { id = Model.JobId }, new { @class = "btn btn-default margin-right-10" })
-                }
+                    if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                    {
+                        @Html.ActionLink("Change Homeowner", "ChangeHomeowner", "Job", new { id = Model.JobId }, new { @class = "btn btn-default margin-right-10" })
+                    }
 
-                @Html.ActionLink("Create Call", "Create", "ServiceCall", new { id = Model.JobId }, new { @class = "btn btn-default pull-right" })
+                    <input type="submit" value="Create Call" class="btn btn-default pull-right"/>
+                    @Html.HiddenFor(x=>x.JobId)
+                }
             </div>
             <div class="clearfix"></div>
         </section>
@@ -63,7 +67,7 @@
                 <ul class="nav nav-tabs responsive" role="tablist">
                     <li class="active"><a href="#job_service_calls" role="tab" data-toggle="tab">Call History <span class="label label-default">@Model.JobServiceCalls.Count()</span></a></li>
                     <li><a href="#job_selections" role="tab" data-toggle="tab">Options <span class="label label-default">@Model.JobSelections.Count()</span></a></li>
-                    <li><a href="#job_vendors" role="tab" data-toggle="tab">Vendors </a></li>
+                    <li><a href="#job_vendors" role="tab" data-toggle="tab">Vendors <span class="label label-default">@Model.Vendors.Count()</span></a></li>
                     <li><a href="#job_payments" role="tab" data-toggle="tab">Payments <span class="label label-default">@Model.JobPayments.Count()</span></a></li>
                 </ul>
 
@@ -249,26 +253,60 @@
                         </section>
                     </div>
                     <div class="tab-pane" id="job_selections">
-                        <div class="col-md-12">
-                            @foreach (var selection in Model.JobSelections)
+                            @if (Model.JobSelections.Any())
                             {
-                                <div class="service-call-line">
-                                    <div class="col-md-1">
-                                        <small class="text-muted">
-                                            @Html.DisplayFor(x => selection.OptionNumber)
-                                        </small>
+                                foreach (var selection in Model.JobSelections)
+                                {
+                                    <div class="service-call-line">
+                                        <div class="col-md-1">
+                                            <small class="text-muted">
+                                                <strong>
+                                                    @Html.DisplayFor(x => selection.OptionNumber)
+                                                </strong>
+                                            </small>
+                                        </div>
+                                        <div class="col-md-11 text-capitalize small">
+                                            @Html.DisplayFor(x => selection.OptionDescription)
+                                        </div>
+                                        <div class="clearfix"></div>
                                     </div>
-                                    <div class="col-md-11 text-capitalize small">
-                                        @Html.DisplayFor(x => selection.OptionDescription)
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
+                                }
                             }
-                        </div>
+                            else
+                            {
+                                <div class="margin-top-10"><span>No option selections found.</span></div>
+                            }
                     </div>
                     <div class="tab-pane" id="job_vendors">
+                        <div class="col-md-12 margin-top-10">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <select class="form-control" data-bind="options: costCodes, optionsText: 'costCodeDescription' , value: selectedCostCode, optionsCaption: 'Filter by Cost Code...'"></select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-12">
-                            Vendor Information - Coming Soon
+                            <!-- ko foreach: groupedVendors-->
+                            <div class="row margin-top-10" data-bind="foreach: $data">
+                                <div class="col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><div class="panel-title"><span class="panel-title text-capitalize" data-bind="text: name + ' (' + number + ')'"></span></div></div>
+                                        <div class="panel-body">
+                                            <strong>Work Performed</strong>
+                                            <p id="lalala" data-bind="foreach: costCodes">
+                                                <small><span data-bind="text: costCodeDescription"></span></small><br/>
+                                            </p>
+                                            <!-- ko if: contactInfo.length > 0 -->
+                                            <strong>Contact Information</strong>
+                                            <p data-bind="foreach: contactInfo">
+                                                <small><span data-bind="text: value + ' (' + type + ')' "></span></small><br/>
+                                            </p>
+                                            <!-- /ko -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /ko -->
                         </div>
                     </div>
                     <div class="tab-pane" id="job_payments">
@@ -367,6 +405,8 @@
                 initialJobAttachments: @Html.Raw(Model.Attachments.ToJson()),
                 initialJobPayments: @Html.Raw(Model.JobPayments.ToJson()),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
+                vendors: @Html.Raw(Model.Vendors.ToJson()),
+                costCodes: @Html.Raw(Model.CostCodes.ToJson())
             };
         });
     </script>

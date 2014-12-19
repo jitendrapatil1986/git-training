@@ -52,6 +52,7 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="JobHomeownerChanged.cs" />
+    <Compile Include="RequestServiceCallResponse.cs" />
     <Compile Include="ServiceCallCompleted.cs" />
     <Compile Include="ServiceCallCreated.cs" />
     <Compile Include="ServiceCallEmployeeReassigned.cs" />

@@ -12,19 +12,20 @@ namespace Warranty.Core.DataAccess
     {
         public static DatabaseFactory DatabaseFactory { get; set; }
 
-        public static void Setup(IContainer container, IUserSession userSession)
+        public static void Setup(IContainer container)
         {
             var maps = container.GetAllInstances<IMap>().ToArray();
             var fluentConfig = FluentMappingConfiguration.Configure(maps);
 
-            var dbType = new SqlServerDatabaseType();
-            var connString = ConfigurationManager.ConnectionStrings["WarrantyDB"].ConnectionString;
-
-            var dataBase = new SqlServerDatabase(connString, dbType, userSession);
-
             DatabaseFactory = DatabaseFactory.Config(x =>
             {
-                x.UsingDatabase(() => dataBase);
+                x.UsingDatabase(() =>
+                {
+                    var dbType = new SqlServerDatabaseType();
+                    var connString = ConfigurationManager.ConnectionStrings["WarrantyDB"].ConnectionString;
+
+                    return new SqlServerDatabase(connString, dbType, container.GetInstance<IUserSession>());
+                });
                 x.WithFluentConfig(fluentConfig);
                 x.WithMapper(new EnumerationMapper());
             });

@@ -21,6 +21,7 @@ h2, h3, h4 {
 
 .alert {
     border-radius: 0;
+    padding: 10px;
 }
 
 .small-text {
@@ -105,13 +106,25 @@ section.line-items {
     margin: 0;
 }
 
-#serviceCallSummaryPage .service-call-line:first-child, #serviceCallLineItemDetailPage .service-call-line:first-child {
+#serviceCallSummaryPage .service-call-line:first-child{
     border-top: solid 1px #e7e7e7;
 }
 
-#serviceCallSummaryPage .service-call-line:last-child, #serviceCallLineItemDetailPage .service-call-line:last-child {
-    border-bottom: 0;
+
+#serviceCallSummaryPage .service-call-line{
+    border: 0;
 }
+
+
+#allServiceCallNotes.service-call-line{
+    border-bottom: solid 1px #e7e7e7;
+    padding: 10px 10px 0;
+}
+
+ .service-call-line:first-child{
+    border-top: solid 1px #e7e7e7;
+}
+
 
 .service-call-line:hover {
     background: @gray-lighter;
@@ -442,6 +455,11 @@ section.line-items {
     margin: 0;
 }
 
+.vertical-menu-scroll {
+    max-height: 30em;
+    overflow-y: auto;
+}
+
 .label, badge {
     &-open-service-call, &-homeowner-signed-service-call, &-open-service-line-item {
         background-color: #5cb85c;
@@ -541,7 +559,7 @@ a.delete-group-item:hover {
 }
 
 .editing .edit {
-    display: block;
+    display: inline-block;
 }
 
 .editing .view {
@@ -594,6 +612,10 @@ a.delete-group-item:hover {
 
 .padding-bottom-10 { 
     padding-bottom: 10px;
+}
+
+.padding-top-10 { 
+    padding-top: 10px;
 }
 
 .padding-top-7 { 
@@ -684,6 +706,10 @@ a.delete-group-item:hover {
     color: #999;
     text-align: center;
     margin: 10px 0 5px 0;
+}
+
+.my-service-call div.service-call-line:first-child {
+    border-top: none;
 }
 
 @media (max-width: 767px) {
@@ -1057,6 +1083,11 @@ span.remove-additional-contact{
 
 .inline-block {
     display: inline-block;
+}
+
+#serviceCallLineItemDetailPage section {
+    padding-top: 15px;
+    margin: 0;
 }
 
 

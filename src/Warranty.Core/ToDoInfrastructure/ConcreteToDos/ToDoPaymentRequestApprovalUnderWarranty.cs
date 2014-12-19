@@ -3,16 +3,16 @@ using Warranty.Core.ToDoInfrastructure.Models;
 
 namespace Warranty.Core.ToDoInfrastructure.ConcreteTodos
 {
-    public class ToDoPaymentRequestApproval : ToDo<ToDoPaymentRequestApprovalModel>
+    public class ToDoPaymentRequestApprovalUnderWarranty : ToDo<ToDoPaymentRequestApprovalUnderWarrantyModel>
     {
         public override string ViewName
         {
-            get { return "_ToDoPaymentRequestApproval"; }
+            get { return "_ToDoPaymentRequestApprovalUnderWarranty"; }
         }
 
         public override ToDoType Type
         {
-            get { return ToDoType.PaymentRequestApproval; }
+            get { return ToDoType.PaymentRequestApprovalUnderWarranty; }
         }
     }
 }

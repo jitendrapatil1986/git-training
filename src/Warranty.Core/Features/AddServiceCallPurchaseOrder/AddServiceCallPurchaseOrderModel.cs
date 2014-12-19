@@ -14,6 +14,7 @@
         public string City { get; set; }
         public string StateCode { get; set; }
         public string PostalCode { get; set; }
+        public string CityCode { get; set; }
         
         public decimal? PurchaseOrderMaxAmount { get; set; }
     }

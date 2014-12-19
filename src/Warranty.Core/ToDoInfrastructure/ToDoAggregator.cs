@@ -55,11 +55,19 @@ namespace Warranty.Core.ToDoInfrastructure
                     toDos.AddRange(taskJobChangedToDos);
                 }
 
-                if (ToDoType.PaymentRequestApproval.HasAccess(user.Roles))
+                if (ToDoType.PaymentRequestApprovalUnderWarranty.HasAccess(user.Roles))
                 {
-                    var paymentRequestApprovalToDos = GetPaymentRequestApprovalToDos(user, _database);
+                    var paymentRequestApprovalToDos = GetPaymentRequestApprovalUnderWarrantyToDos(user, _database);
                     toDos.AddRange(paymentRequestApprovalToDos);
                 }
+
+                if (ToDoType.PaymentRequestApprovalOutOfWarranty.HasAccess(user.Roles))
+                {
+                    var paymentRequestApprovalToDos = GetPaymentRequestApprovalOutOfWarrantyToDos(user, _database);
+                    toDos.AddRange(paymentRequestApprovalToDos);
+                }
+
+
 
                 if (ToDoType.JobAnniversaryTask.HasAccess(user.Roles))
                 {
@@ -182,43 +190,31 @@ namespace Warranty.Core.ToDoInfrastructure
                 x.TaskType = taskType;
                 x.IsComplete = true;
                 database.Insert(x);
-                serviceCallCreateService.Create(x.ReferenceId, RequestType.TwelveMonthRequest, ServiceCallStatus.Requested);
             });
 
             var userMarkets = user.Markets;
-            const string sql = @"SELECT
-                                         wc.CreatedDate as [Date]
+            const string sql = @"SELECT DISTINCT
+                                        t.TaskId
                                         ,ho.HomeOwnerName
                                         ,ho.HomeOwnerNumber
                                         ,j.AddressLine
-                                        ,wc.ServiceCallId
-                                        ,wc.ServiceCallNumber
                                         ,j.JobId
                                         ,j.JobNumber
-                                        ,DATEDIFF(yy, j.CloseDate, wc.CreatedDate) as YearsWithinWarranty
                                         ,j.CloseDate as WarrantyStartDate
-                                    FROM 
-                                        [ServiceCalls] wc
+                                    FROM Tasks t
                                     INNER join Jobs j
-                                        ON wc.JobId = j.JobId
-                                    INNER JOIN Tasks t
-                                        ON j.jobid = t.ReferenceId
+                                        ON t.ReferenceId = j.JobId
                                     INNER join HomeOwners ho
-                                        ON j.CurrentHomeOwnerId = ho.HomeOwnerId
-                                    LEFT join Employees e
-                                        ON wc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+                                        ON j.CurrentHomeOwnerId = ho.HomeOwnerId                                   
                                     INNER JOIN Communities cm
                                         ON j.CommunityId = cm.CommunityId
                                     INNER JOIN Cities ci
                                         ON cm.CityId = ci.CityId
                                     where 
-                                        wc.ServiceCallStatusId = @0    
-                                    and 
-                                        ci.CityCode in ({0})
-                                    AND wc.ServiceCallType = @1";
+                                        ci.CityCode in ({0}) and TaskType=@0";
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
-            var toDos = database.Fetch<ToDoJob10MonthAnniversary, ToDoJob10MonthAnniversaryModel>(query, ServiceCallStatus.Requested.Value, RequestType.TwelveMonthRequest.DisplayName);
+            var toDos = database.Fetch<ToDoJob10MonthAnniversary, ToDoJob10MonthAnniversaryModel>(query, taskType.Value);
 
             return toDos;
         }
@@ -273,10 +269,10 @@ namespace Warranty.Core.ToDoInfrastructure
             return toDos;
         }
 
-        private static IEnumerable<IToDo> GetPaymentRequestApprovalToDos(IUser user, IDatabase database)
+        private static IEnumerable<IToDo> GetPaymentRequestApprovalUnderWarrantyToDos(IUser user, IDatabase database)
         {
             var userMarkets = user.Markets;
-            
+
             const string sql = @"SELECT p.PaymentId, sc.ServiceCallId, sc.ServiceCallNumber, li.ServiceCallLineItemId, p.VendorName, p.InvoiceNumber, p.Amount, 
                                         p.PaymentStatus, p.HoldComments, p.UpdatedBy, p.UpdatedDate FROM Payments p
                                 INNER JOIN ServiceCallLineItems li
@@ -291,12 +287,40 @@ namespace Warranty.Core.ToDoInfrastructure
                                 ON cm.CityId = c.CityId
                                 INNER JOIN Employees e
                                 ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-                                {0} /* WHERE */";
+                                WHERE CloseDate >= DATEADD(yy, -2, sc.CreatedDate) {0} /* WHERE */";
 
-            var query = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? string.Format(sql, "WHERE c.CityCode IN (" + userMarkets.CommaSeparateWrapWithSingleQuote() + ") AND p.PaymentStatus = " + PaymentStatus.Hold.Value + " AND e.EmployeeNumber = " + user.EmployeeNumber) 
-                                                                               : string.Format(sql, "WHERE c.CityCode IN (" + userMarkets.CommaSeparateWrapWithSingleQuote() + ") AND p.PaymentStatus = " + PaymentStatus.Pending.Value);
-            
-            var toDos = database.Fetch<ToDoPaymentRequestApproval, ToDoPaymentRequestApprovalModel>(query);
+            var query = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? string.Format(sql, "AND c.CityCode IN (" + userMarkets.CommaSeparateWrapWithSingleQuote() + ") AND p.PaymentStatus = " + PaymentStatus.Hold.Value + " AND e.EmployeeNumber = " + user.EmployeeNumber)
+                                                                               : string.Format(sql, "AND c.CityCode IN (" + userMarkets.CommaSeparateWrapWithSingleQuote() + ") AND p.PaymentStatus = " + PaymentStatus.Pending.Value);
+
+            var toDos = database.Fetch<ToDoPaymentRequestApprovalUnderWarranty, ToDoPaymentRequestApprovalUnderWarrantyModel>(query);
+
+            return toDos;
+        }
+
+        private static IEnumerable<IToDo> GetPaymentRequestApprovalOutOfWarrantyToDos(IUser user, IDatabase database)
+        {
+            var userMarkets = user.Markets;
+
+            const string sql = @"SELECT p.PaymentId, sc.ServiceCallId, sc.ServiceCallNumber, li.ServiceCallLineItemId, p.VendorName, p.InvoiceNumber, p.Amount, 
+                                        p.PaymentStatus, p.HoldComments, p.UpdatedBy, p.UpdatedDate FROM Payments p
+                                INNER JOIN ServiceCallLineItems li
+                                ON p.ServiceCallLineItemId = li.ServiceCallLineItemId
+                                INNER JOIN ServiceCalls sc
+                                ON li.ServiceCallId = sc.ServiceCallId
+                                INNER JOIN Jobs j
+                                ON p.JobNumber = j.JobNumber
+                                INNER JOIN Communities cm
+                                ON j.CommunityId = cm.CommunityId
+                                INNER JOIN Cities c
+                                ON cm.CityId = c.CityId
+                                INNER JOIN Employees e
+                                ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+                                WHERE CloseDate < DATEADD(yy, -2, sc.CreatedDate) {0} /* WHERE */";
+
+            var query = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? string.Format(sql, "AND c.CityCode IN (" + userMarkets.CommaSeparateWrapWithSingleQuote() + ") AND p.PaymentStatus = " + PaymentStatus.Hold.Value + " AND e.EmployeeNumber = " + user.EmployeeNumber)
+                                                                               : string.Format(sql, "AND c.CityCode IN (" + userMarkets.CommaSeparateWrapWithSingleQuote() + ") AND p.PaymentStatus = " + PaymentStatus.Pending.Value);
+
+            var toDos = database.Fetch<ToDoPaymentRequestApprovalOutOfWarranty, ToDoPaymentRequestApprovalOutOfWarrantyModel>(query);
 
             return toDos;
         }

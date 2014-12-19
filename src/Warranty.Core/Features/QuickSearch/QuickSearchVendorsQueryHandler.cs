@@ -1,10 +1,7 @@
 namespace Warranty.Core.Features.QuickSearch
 {
-    using System;
     using System.Collections.Generic;
-    using Extensions;
-    using NPoco;
-    using Security;
+    using System.Linq;
     using Services;
 
     public class QuickSearchVendorsQueryHandler : IQueryHandler<QuickSearchVendorsQuery, IEnumerable<QuickSearchCallVendorModel>>
@@ -22,13 +19,14 @@ namespace Warranty.Core.Features.QuickSearch
                 new
                 {
                     searchString = query.Query,
+                    marketCode = query.CityCode
                 }));
 
             if (vendors == null) return new List<QuickSearchCallVendorModel>();
 
             IEnumerable<QuickSearchCallVendorModel> vendorsResult = vendors.Details.ToObject<List<QuickSearchCallVendorModel>>();
 
-            return vendorsResult;
+            return vendorsResult.Where(r => string.IsNullOrEmpty(query.InvoicePayableCode) || r.InvoiceProcessingCode == query.InvoicePayableCode);
         }
     }
 }

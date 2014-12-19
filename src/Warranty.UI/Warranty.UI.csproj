@@ -44,9 +44,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Client, Version=1.1.871.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Accounting.Client, Version=1.1.914.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Accounting.Client.1.1.871.0\lib\net45\Accounting.Client.dll</HintPath>
+      <HintPath>..\packages\Accounting.Client.1.1.914.0\lib\net45\Accounting.Client.dll</HintPath>
     </Reference>
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\WebGrease.1.3.0\lib\Antlr3.Runtime.dll</HintPath>
@@ -200,8 +200,6 @@
     </Compile>
     <Compile Include="Api\ApiController.cs" />
     <Compile Include="Api\AssignWSRController.cs" />
-    <Compile Include="Api\ConstructionVendorController.cs" />
-    <Compile Include="Api\ProblemDetailController.cs" />
     <Compile Include="Api\HomeownerController.cs" />
     <Compile Include="Api\ManageJobController.cs" />
     <Compile Include="Api\ManageProblemCodeCostCodesController.cs" />
@@ -315,7 +313,6 @@
     <Content Include="Scripts\app\servicecall\CreatePurchaseOrder.js" />
     <Content Include="Scripts\app\servicecall\SearchBackchargeVendor.js" />
     <Content Include="Scripts\app\servicecall\SearchVendor.js" />
-    <Content Include="Scripts\app\servicecall\create.js" />
     <Content Include="Scripts\app\servicecall\LineItemDetail.js" />
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
     <Content Include="Scripts\config\backcharge-vendor-search.js" />
@@ -414,12 +411,11 @@
     <Content Include="Views\Job\Index.cshtml" />
     <Content Include="css\less\toastr.less" />
     <Content Include="Views\Home\ToDoWidget.cshtml" />
-    <Content Include="Views\Home\_ToDoPaymentRequestApproval.cshtml" />
+    <Content Include="Views\Home\_ToDoPaymentRequestApprovalUnderWarranty.cshtml" />
     <Content Include="Views\Home\_ToDoServiceCallApproval.cshtml" />
     <Content Include="Views\ServiceCall\CallSummary.cshtml" />
     <Content Include="Views\ServiceCall\SearchCustomer.cshtml" />
     <Content Include="Views\ServiceCall\VerifyCustomer.cshtml" />
-    <Content Include="Views\ServiceCall\Create.cshtml" />
     <Content Include="Views\Job\JobSummary.cshtml" />
     <Content Include="Views\Admin\ManageAssignments.cshtml" />
     <Content Include="Views\Admin\ManageLookups.cshtml" />
@@ -452,6 +448,8 @@
     <Content Include="Views\ServiceCall\CreatePurchaseOrder.cshtml" />
     <Content Include="Views\Home\_ToDoJobAnniversaryTask.cshtml" />
     <Content Include="Views\Home\_ToDoJob10MonthAnniversary.cshtml" />
+    <Content Include="Views\Home\_ToDoPaymentRequestApprovalOutOfWarranty.cshtml" />
+    <Content Include="Views\Home\_MyTeamDropdown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

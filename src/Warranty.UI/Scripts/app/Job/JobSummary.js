@@ -47,6 +47,45 @@ require(['/Scripts/app/main.js'], function () {
                 self.jobId = ko.observable($("#jobId").val());
                 self.allJobNotes = ko.observableArray([]);
                 self.jobNoteDescriptionToAdd = ko.observable('');
+                self.vendors = ko.observableArray([]);
+                self.selectedCostCode = ko.observable();
+                self.costCodes = modelData.costCodes;
+
+                self.filteredVendors = ko.computed(function () {
+                    var costCode = self.selectedCostCode();
+                    if (!costCode || costCode == "") {
+                        return self.vendors();
+                    }
+                    else {
+
+                        return ko.utils.arrayFilter(self.vendors(), function(vendor) {
+                            var isMatch = false;
+                            var first = ko.utils.arrayFirst(vendor.costCodes, function (vendorCostCode) {
+                                return vendorCostCode.costCode == costCode.costCode;
+                            });
+                            if (first) {
+                                isMatch = true;
+                            }
+
+                            return isMatch;
+                        });
+                    }
+                });
+                
+                self.groupedVendors = ko.computed(function () {
+                    var rows = [], current = [];
+                    rows.push(current);
+                    for (var i = 0; i < self.filteredVendors().length; i += 1) {
+                        current.push(self.filteredVendors()[i]);
+                        if (((i + 1) % 3) === 0) {
+                            current = [];
+                            rows.push(current);
+                        }
+                    }
+                    return rows;
+                }, this);
+                
+
                 
                 self.addJobNote = function () {
                     var newNoteDescription = $("#addJobNoteDescription");
@@ -123,12 +162,21 @@ require(['/Scripts/app/main.js'], function () {
 
             function JobNotesViewModel(option) {
                 var self = this;
-                
+
                 self.jobNoteId = option.jobNoteId;
                 self.jobId = option.jobId;
                 self.note = option.note;
                 self.createdBy = option.createdBy;
                 self.createdDate = option.createdDate;
+            };
+            
+            function VendorViewModel(option) {
+                var self = this;
+                self.name = option.name;
+                self.vendorId = option.vendorId;
+                self.number = option.number;
+                self.contactInfo = option.contactInfo;
+                self.costCodes = option.costCodes;
             };
 
             function JobAttachmentViewModel(option) {
@@ -206,10 +254,15 @@ require(['/Scripts/app/main.js'], function () {
             
             var viewModel = new jobSummaryViewModel();
             ko.applyBindings(viewModel);
+            var persistedVendors = modelData.vendors;
 
+            _(persistedVendors).each(function (vendor) {
+                viewModel.vendors.push(new VendorViewModel(vendor));
+            });
+            
             var persistedAllJobNotesViewModel = modelData.initialJobNotes;
 
-            _(persistedAllJobNotesViewModel).each(function(note) {
+            _(persistedAllJobNotesViewModel).each(function (note) {
                 viewModel.allJobNotes.push(new JobNotesViewModel(note));
             });
 
