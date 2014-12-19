@@ -66,20 +66,30 @@
 
                 <section>
                     <h3 class="col-md-12">Vendors</h3>
-                    <p class="padding-left-15" data-bind="visible: constructionVendorsLoading"><span class="glyphicon glyphicon-refresh glyphicon-spin"></span> Loading...</p>
-                    <p class="padding-left-15" data-bind="visible: constructionVendors().length < 1 && !constructionVendorsLoading()"><em>No Vendors Found</em></p>
-                    <!-- ko foreach: constructionVendors -->
-                    <div class="col-md-4">
-                        <strong data-bind="text: VendorName"></strong>
-                        <br />
-                        <span data-bind="text: VendorEmail"></span>
-                        <p>
-                            <!-- ko foreach: VendorPhoneNumbers -->
-                            <span data-bind="text: $data"></span>&nbsp;
-                            <!-- /ko -->
-                        </p>
+                    <p class="padding-left-15" data-bind="visible: constructionVendors.length < 1"><em>No Vendors Found</em></p>
+                    <div class="col-md-12">
+                        <!-- ko foreach: groupedConstructionVendors-->
+                        <div class="row" data-bind="foreach: $data">
+                            <div class="col-md-4 margin-bottom-10">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"><div class="panel-title"><span class="panel-title text-capitalize" data-bind="text: name + ' (' + number + ')'"></span></div></div>
+                                    <div class="panel-body">
+                                        <strong>Work Performed</strong>
+                                        <p id="lalala" data-bind="foreach: costCodes">
+                                            <small><span data-bind="text: costCodeDescription"></span></small><br/>
+                                        </p>
+                                        <!-- ko if: contactInfo.length > 0 -->
+                                        <strong>Contact Information</strong>
+                                        <p data-bind="foreach: contactInfo">
+                                            <small><span data-bind="text: value + ' (' + type + ')' "></span></small><br/>
+                                        </p>
+                                        <!-- /ko -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /ko -->
                     </div>
-                    <!-- /ko -->
                     <div class="clearfix"></div>
                 </section>
                 <section>
@@ -423,6 +433,7 @@
                 initialServiceCallLinePurchaseOrders: @Html.Raw(Model.ServiceCallLineItemPurchaseOrders.ToJson()),
                 warrantyCostCodes:  @Html.Raw(@WarrantyCostCode.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { DisplayText = x.DisplayName, x.Value }).ToJson()),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
+                vendors: @Html.Raw(Model.Vendors.ToJson()),
                 rootCauseCodes: @Html.Raw(@RootCause.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName, }).ToJson()),
                 rootProblemCodes: @Html.Raw(@RootProblem.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName}).ToJson()),
             }
