@@ -6,5 +6,6 @@
     {
         public string Query { get; set; }
         public string CityCode { get; set; }
+        public string InvoicePayableCode { get; set; }
     }
 }

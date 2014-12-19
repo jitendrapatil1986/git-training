@@ -21,9 +21,9 @@
                             from ServiceCalls sc
                             inner join ServiceCallLineItems li
                             on sc.ServiceCallId = li.ServiceCallId
-                            where JobId=@0 and ProblemCode=@1";
+                            where JobId=(Select JobId from ServiceCalls where ServiceCallId = @0) and ProblemJdeCode=@1";
 
-                return _database.Fetch<RelatedProblemCode>(sql, query.JobId, query.ProblemCode);
+                return _database.Fetch<RelatedProblemCode>(sql, query.ServiceCallId, query.ProblemCode);
             }
         }
     }

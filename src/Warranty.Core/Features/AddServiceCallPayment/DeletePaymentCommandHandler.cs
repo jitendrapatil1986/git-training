@@ -29,14 +29,17 @@
             {
                 var payment = _database.SingleById<Payment>(message.PaymentId);
                 var backcharge = _database.SingleOrDefault<Backcharge>("Where PaymentId = @0", message.PaymentId);
+
                 if (backcharge != null)
                 {
-                    _database.Delete(backcharge);
+                    backcharge.BackchargeStatus = BackchargeStatus.RequestedDelete;
+                    _database.Update(backcharge);
                 }
 
-                _database.Delete(payment);
+                payment.PaymentStatus = PaymentStatus.RequestedDelete;
+                _database.Update(payment);
 
-                _activityLogger.Write("Payment deleted", string.Empty, payment.PaymentId, ActivityType.PaymentDelete, ReferenceType.LineItem);
+                _activityLogger.Write("Payment delete requested", string.Empty, payment.PaymentId, ActivityType.PaymentDelete, ReferenceType.LineItem);
 
                 _bus.Send<NotifyPaymentDeleted>(x =>
                 {

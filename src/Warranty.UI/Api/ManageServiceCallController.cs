@@ -10,6 +10,7 @@
     using Warranty.Core.Features.AddServiceCallPayment;
     using Warranty.Core.Features.AddServiceCallPurchaseOrder;
     using Warranty.Core.Features.CompleteServiceCallLineItem;
+    using Warranty.Core.Features.DeleteServiceCall;
     using Warranty.Core.Features.EditServiceCallLineItem;
     using Warranty.Core.Features.SharedQueries;
     using Warranty.Core.Features.UpdateServiceCallLineItem;
@@ -40,7 +41,6 @@
             {
                 ServiceCallLineItemId = model.ServiceCallLineItemId,
                 ProblemCode = model.ProblemCode,
-                ProblemDetailCode = model.ProblemDetailCode,
                 ProblemJdeCode = model.ProblemJdeCode,
                 ProblemDescription = model.ProblemDescription
             });
@@ -55,7 +55,6 @@
             {
                 ServiceCallId = model.ServiceCallId,
                 ProblemCode = model.ProblemCode,
-                ProblemDetailCode = model.ProblemDetailCode,
                 ProblemJdeCode = model.ProblemJdeCode,
                 ProblemDescription = model.ProblemDescription
             });
@@ -151,6 +150,13 @@
         {
             var response = _mediator.Send(model);
             return response;
+        }
+
+        [HttpDelete]
+        public PostResponseModel DeleteServiceCall(DeleteServiceCallCommand command)
+        {
+            _mediator.Send(command);
+            return new PostResponseModel { Success = true };
         }
     }
 }

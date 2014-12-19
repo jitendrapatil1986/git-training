@@ -9,5 +9,6 @@ namespace Warranty.Core.Features.QuickSearch
         public string VendorName { get; set; }
         public string HeldStatus { get; set; }
         public bool VendorOnHold { get { return String.Equals(HeldStatus, "Y", StringComparison.CurrentCultureIgnoreCase); } }
+        public string InvoiceProcessingCode { get; set; }
     }
 }

@@ -10,6 +10,7 @@
         public static readonly BackchargeStatus Hold = new BackchargeStatus(6, "Hold");
         public static readonly BackchargeStatus RequestedDeny = new BackchargeStatus(7, "Requested Deny");
         public static readonly BackchargeStatus Denied = new BackchargeStatus(8, "Denied");
+        public static readonly BackchargeStatus RequestedDelete = new BackchargeStatus(9, "Requested Delete");
 
         private BackchargeStatus(int value, string displayName)
             : base(value, displayName)
