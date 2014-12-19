@@ -151,7 +151,7 @@
                 </div>
             </section>
                 
-            @if (User.IsInRole(UserRoles.WarrantyServiceManager))
+            @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
             {
                 <section data-bind="visible: areAllLineItemsCompleted() && !callSummaryStatusComplete() && !callSummaryStatusSigned()">
                     <h3 class="col-md-12">Verify Homeowner Signature</h3>
