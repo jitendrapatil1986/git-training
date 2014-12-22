@@ -12,6 +12,8 @@ namespace Warranty.Core.DataAccess.Mappings
             Id(x => x.DivisionId, map => map.Generator(Generators.GuidComb));
             Property(x => x.DivisionCode);
             Property(x => x.DivisionName);
+            Property(x => x.AreaCode);
+            Property(x => x.AreaName);
         }
     }
 }

@@ -13,6 +13,8 @@ namespace Warranty.Core.DataAccess.Mappings
                         {
                             x.Column(col => col.DivisionCode);
                             x.Column(col => col.DivisionName);
+                            x.Column(col => col.AreaCode);
+                            x.Column(col => col.AreaName);
                         });
         }
     }
