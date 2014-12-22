@@ -49,6 +49,9 @@
                     {
                         ServiceCallLineItemId = newServiceLineItem.ServiceCallLineItemId,
                         ServiceCallId = newServiceLineItem.ServiceCallId,
+                        ProblemCode = message.ProblemCode,
+                        ProblemJdeCode = message.ProblemJdeCode,
+                        ProblemDescription = message.ProblemDescription,
                         LineNumber = newServiceLineItem.LineNumber,
                         ServiceCallLineItemStatus = newServiceLineItem.ServiceCallLineItemStatus,
                     };

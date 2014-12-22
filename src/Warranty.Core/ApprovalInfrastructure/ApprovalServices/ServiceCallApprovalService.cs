@@ -6,13 +6,18 @@ using Warranty.Core.Enumerations;
 
 namespace Warranty.Core.ApprovalInfrastructure.ApprovalServices
 {
+    using Events;
+    using NServiceBus;
+
     public class ServiceCallApprovalService : IApprovalService<ServiceCall>
     {
         private readonly IDatabase _database;
+        private readonly IBus _bus;
 
-        public ServiceCallApprovalService(IDatabase database)
+        public ServiceCallApprovalService(IDatabase database, IBus bus)
         {
             _database = database;
+            _bus = bus;
         }
 
         public ServiceCall Approve(Guid id)
@@ -32,6 +37,10 @@ namespace Warranty.Core.ApprovalInfrastructure.ApprovalServices
                 var serviceCall = _database.SingleById<ServiceCall>(id);
                 serviceCall.ServiceCallStatus = newStatus;
                 _database.Update(serviceCall);
+                _bus.Send<ServiceCallStatusChanged>(x =>
+                {
+                    x.ServiceCallId = serviceCall.ServiceCallId;
+                });
                 return serviceCall;
             }
         }

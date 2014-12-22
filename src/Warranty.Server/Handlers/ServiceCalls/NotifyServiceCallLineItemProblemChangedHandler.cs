@@ -29,6 +29,9 @@
                     x.ServiceCallLineItemId = serviceCallLineItem.ServiceCallLineItemId;
                     x.ProbemDescription = serviceCallLineItem.ProblemDescription;
                     x.ProblemCode = serviceCallLineItem.ProblemCode;
+                    x.ProblemJdeCode = serviceCallLineItem.ProblemJdeCode;
+                    x.RootCause = serviceCallLineItem.RootCause;
+                    x.RootProblem = serviceCallLineItem.RootProblem;
                 });
             }
         }
