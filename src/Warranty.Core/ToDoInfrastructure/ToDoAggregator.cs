@@ -71,13 +71,17 @@ namespace Warranty.Core.ToDoInfrastructure
 
                 if (ToDoType.JobAnniversaryTask.HasAccess(user.Roles))
                 {
-
                     toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job3MonthAnniversary, 3));
                     toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job5MonthAnniversary, 5));
                     toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job9MonthAnniversary, 9));
                     toDos.AddRange(GetTenMonthJobAnniversaryTaskToDos(user, _database, _serviceCallCreateService));
                 }
-                
+
+                if (ToDoType.PaymentStatusChanged.HasAccess(user.Roles))
+                {
+                    toDos.AddRange(GetStatusChangedToDos(user, _database ));
+                }
+
                 return toDos.OrderBy(x=>x.Priority).ThenBy(x => x.Date).ToList();
             }
         }
@@ -295,6 +299,67 @@ namespace Warranty.Core.ToDoInfrastructure
             var toDos = database.Fetch<ToDoPaymentRequestApprovalUnderWarranty, ToDoPaymentRequestApprovalUnderWarrantyModel>(query);
 
             return toDos;
+        }
+
+        private static IEnumerable<IToDo> GetStatusChangedToDos(IUser user, IDatabase database)
+        {
+            UpdatePaymentStatusChangedTasks(database, PaymentStatus.Approved, user.EmployeeNumber);
+            UpdatePaymentStatusChangedTasks(database, PaymentStatus.Hold, user.EmployeeNumber);
+
+            const string sql = @"SELECT DISTINCT
+								        p.CreatedDate as Date
+                                        ,p.PaymentStatus
+                                        ,p.Amount
+                                        ,t.TaskId
+								        ,t.Description
+                                        ,ho.HomeOwnerName
+                                        ,ho.HomeOwnerNumber
+                                        ,j.AddressLine
+                                        ,j.JobId
+								        ,j.JobNumber
+								        ,scli.ServiceCallLineItemId                                    
+                                    FROM Tasks t
+                                    INNER join Payments p
+                                        ON t.ReferenceId = p.PaymentId
+							        INNER JOIN ServiceCallLineItems scli
+	                                   ON scli.ServiceCallLineItemId = p.ServiceCallLineItemId                                
+                                    INNER JOIN ServiceCalls sc
+	                                   ON sc.ServiceCallId = scli.ServiceCallId
+                                    INNER JOIN Jobs j
+                                        ON sc.JobId = j.JobId
+							        INNER join HomeOwners ho
+                                        ON j.CurrentHomeOwnerId = ho.HomeOwnerId   
+                                    INNER JOIN Employees e
+	                                   ON e.EmployeeId = sc.WarrantyRepresentativeEmployeeId
+							        WHERE e.EmployeeNumber = @0 and t.TaskType= @1 and t.IsComplete = 0";
+
+            var toDos = database.Fetch<ToDoPaymentStatusChanged, ToDoPaymentStatusChangedModel>(sql, user.EmployeeNumber, TaskType.PaymentStatusChanged.Value);
+
+            return toDos;
+        }
+
+        private static void UpdatePaymentStatusChangedTasks(IDatabase database, PaymentStatus paymentStatus, string employeeNumber)
+        {
+            const string sql = @"SELECT p.PaymentId as ReferenceId, e.EmployeeId FROM Payments p
+                                    LEFT JOIN Tasks t
+	                                   ON t.ReferenceId = p.PaymentId and t.TaskType = @0
+                                    INNER JOIN ServiceCallLineItems scli
+	                                   ON scli.ServiceCallLineItemId = p.ServiceCallLineItemId
+                                    INNER JOIN ServiceCalls sc
+	                                   ON sc.ServiceCallId = scli.ServiceCallId
+                                    INNER JOIN Jobs j
+                                        ON sc.JobId = j.JobId
+                                    INNER JOIN Employees e
+	                                   ON e.EmployeeId = sc.WarrantyRepresentativeEmployeeId
+                                    WHERE PaymentStatus = @1 AND e.EmployeeNumber =@2 AND t.TaskId IS NULL;";
+
+            var newTasks = database.Fetch<Task>(sql, TaskType.PaymentStatusChanged.Value, paymentStatus.Value, employeeNumber);
+            newTasks.ForEach(x =>
+            {
+                x.Description = string.Format("Payment Status: {0}", paymentStatus.DisplayName);
+                x.TaskType = TaskType.PaymentStatusChanged;
+                database.Insert(x);
+            });
         }
 
         private static IEnumerable<IToDo> GetPaymentRequestApprovalOutOfWarrantyToDos(IUser user, IDatabase database)

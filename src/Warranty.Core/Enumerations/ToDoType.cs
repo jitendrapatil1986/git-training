@@ -51,6 +51,12 @@
                                                                     UserRoles.WarrantyServiceManager,
                                                                 });
 
+        public static readonly ToDoType PaymentStatusChanged = new ToDoType(7, "Payment Status Changed",
+                                            new List<string>
+                                                                {
+                                                                    UserRoles.WarrantyServiceRepresentative,
+                                                                });
+
         private ToDoType(int value, string displayName, IEnumerable<string> userRolesWithAccess)
             : base(value, displayName)
         {
