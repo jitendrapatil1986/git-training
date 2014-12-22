@@ -24,10 +24,10 @@
                 var serviceCall = _database.SingleById<ServiceCall>(message.ServiceCallId);
 
                 _bus.Publish<ServiceCallStatusChanged>(x =>
-                    {
-                        x.ServiceCallId = serviceCall.ServiceCallId;
-                        x.StatusDisplayName = serviceCall.ServiceCallStatus.DisplayName;
-                    });
+                {
+                    x.ServiceCallId = serviceCall.ServiceCallId;
+                    x.StatusDisplayName = serviceCall.ServiceCallStatus.DisplayName;
+                });
             }
         }
     }

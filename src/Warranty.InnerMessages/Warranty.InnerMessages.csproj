@@ -62,6 +62,7 @@
     <Compile Include="NotifyPaymentRequested.cs" />
     <Compile Include="NotifyPurchaseOrderRequested.cs" />
     <Compile Include="NotifyServiceCallCreated.cs" />
+    <Compile Include="NotifyServiceCallDeleted.cs" />
     <Compile Include="NotifyServiceCallLineItemCreated.cs" />
     <Compile Include="NotifyServiceCallCompleted.cs" />
     <Compile Include="NotifyServiceCallEmployeeReassigned.cs" />

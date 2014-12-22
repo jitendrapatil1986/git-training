@@ -154,6 +154,7 @@
     <Compile Include="Handlers\PurchaseOrders\RequestPurchaseOrderResponseHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallCompletedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallCreatedHandler.cs" />
+    <Compile Include="Handlers\ServiceCalls\NotifyServiceCallDeletedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallEmployeeReassignedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallEscalatedStatusChangedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallHomeownerVerifiedHandler.cs" />

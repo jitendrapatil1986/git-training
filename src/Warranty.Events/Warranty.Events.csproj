@@ -55,6 +55,7 @@
     <Compile Include="RequestServiceCallResponse.cs" />
     <Compile Include="ServiceCallCompleted.cs" />
     <Compile Include="ServiceCallCreated.cs" />
+    <Compile Include="ServiceCallDeleted.cs" />
     <Compile Include="ServiceCallEmployeeReassigned.cs" />
     <Compile Include="ServiceCallEscalatedStatusChanged.cs" />
     <Compile Include="ServiceCallHomeownerVerified.cs" />
