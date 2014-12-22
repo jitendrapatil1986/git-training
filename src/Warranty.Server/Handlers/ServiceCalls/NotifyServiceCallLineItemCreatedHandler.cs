@@ -34,6 +34,9 @@
                         x.ProblemCode = serviceCallLineItem.ProblemCode;
                         x.ProblemDescription = serviceCallLineItem.ProblemDescription;
                         x.ServiceCallLineItemStatus = serviceCallLineItem.ServiceCallLineItemStatus.DisplayName;
+                        x.RootCause = serviceCallLineItem.RootCause;
+                        x.RootProblem = serviceCallLineItem.RootProblem;
+                        x.ProblemJdeCode = serviceCallLineItem.ProblemJdeCode;
                     });
             }
         }
