@@ -64,5 +64,6 @@
         //public static int Home_Owner = 59; /* Same as ordinal 22*/
         //public static int Close_Date_2 = 60; /* Same as ordinal 11*/
         //public static int Job_# = 61; /* Same as ordinal 25*/
+        public static int FileNames = 62;
     }
 }
