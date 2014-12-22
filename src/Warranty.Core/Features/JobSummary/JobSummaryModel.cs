@@ -137,11 +137,8 @@ namespace Warranty.Core.Features.JobSummary
 
         public class JobSelection
         {
-            public Guid JobOptionId { get; set; }
-            public Guid JobId { get; set; }
             public string OptionNumber { get; set; }
             public string OptionDescription { get; set; }
-            public int Quantity { get; set; }
         }
 
         public class JobServiceCall

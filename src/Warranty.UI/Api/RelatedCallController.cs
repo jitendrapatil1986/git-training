@@ -16,9 +16,9 @@
         }
 
         [HttpGet]
-        public IEnumerable<RelatedProblemCode> RelatedCalls(Guid jobId, string problemCode)
+        public IEnumerable<RelatedProblemCode> RelatedCalls(Guid serviceCallId, string problemCode)
         {
-            var results = _mediator.Request(new RelatedProblemCodeQuery { JobId=jobId, ProblemCode=problemCode });
+            var results = _mediator.Request(new RelatedProblemCodeQuery { ServiceCallId = serviceCallId, ProblemCode = problemCode });
 
             return results;
         }

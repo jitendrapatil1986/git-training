@@ -3,7 +3,7 @@
 @using Warranty.Core.Extensions
 @using Warranty.Core.Features.JobSummary
 @using Warranty.UI.Core.Helpers
-@model Warranty.Core.Features.JobSummary.JobSummaryModel
+@model JobSummaryModel
 
 <div class="container">
     <div class="col-md-12">
@@ -13,12 +13,16 @@
             <h2 class="pull-left no-margin">Job #@Model.JobNumber <small>@Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)</small>
             </h2>
             <div class="pull-right">
-                @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                @using (Html.BeginForm("Create", "ServiceCall", new {id = Model.JobId}))
                 {
-                    @Html.ActionLink("Change Homeowner", "ChangeHomeowner", "Job", new { id = Model.JobId }, new { @class = "btn btn-default margin-right-10" })
-                }
+                    if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                    {
+                        @Html.ActionLink("Change Homeowner", "ChangeHomeowner", "Job", new { id = Model.JobId }, new { @class = "btn btn-default margin-right-10" })
+                    }
 
-                @Html.ActionLink("Create Call", "Create", "ServiceCall", new { id = Model.JobId }, new { @class = "btn btn-default pull-right" })
+                    <input type="submit" value="Create Call" class="btn btn-default pull-right"/>
+                    @Html.HiddenFor(x=>x.JobId)
+                }
             </div>
             <div class="clearfix"></div>
         </section>
@@ -249,22 +253,29 @@
                         </section>
                     </div>
                     <div class="tab-pane" id="job_selections">
-                        <div class="col-md-12">
-                            @foreach (var selection in Model.JobSelections)
+                            @if (Model.JobSelections.Any())
                             {
-                                <div class="service-call-line">
-                                    <div class="col-md-1">
-                                        <small class="text-muted">
-                                            @Html.DisplayFor(x => selection.OptionNumber)
-                                        </small>
+                                foreach (var selection in Model.JobSelections)
+                                {
+                                    <div class="service-call-line">
+                                        <div class="col-md-1">
+                                            <small class="text-muted">
+                                                <strong>
+                                                    @Html.DisplayFor(x => selection.OptionNumber)
+                                                </strong>
+                                            </small>
+                                        </div>
+                                        <div class="col-md-11 text-capitalize small">
+                                            @Html.DisplayFor(x => selection.OptionDescription)
+                                        </div>
+                                        <div class="clearfix"></div>
                                     </div>
-                                    <div class="col-md-11 text-capitalize small">
-                                        @Html.DisplayFor(x => selection.OptionDescription)
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
+                                }
                             }
-                        </div>
+                            else
+                            {
+                                <div class="margin-top-10"><span>No option selections found.</span></div>
+                            }
                     </div>
                     <div class="tab-pane" id="job_vendors">
                         <div class="col-md-12 margin-top-10">

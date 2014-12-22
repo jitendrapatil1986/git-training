@@ -19,6 +19,7 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
         public string CostCode { get; set; }
         public string JobNumber { get; set; }
         public string RootCause { get; set; }
+        public string RootProblem { get; set; }
         public string ProblemDescription { get; set; }
         public string CauseDescription { get; set; }
         public string ClassificationNote { get; set; }
@@ -33,6 +34,7 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
         public IEnumerable<ServiceCallLineItemAttachment> ServiceCallLineItemAttachments { get; set; }
         public IEnumerable<ServiceCallLineItemPayment> ServiceCallLineItemPayments { get; set; }
         public IEnumerable<ServiceCallLineItemPurchaseOrder> ServiceCallLineItemPurchaseOrders { get; set; }
+        public IEnumerable<Vendor> Vendors { get; set; }
 
         public class ServiceCallLineItemNote
         {
@@ -113,6 +115,56 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public decimal Quantity { get; set; }
             public decimal UnitCost { get; set; }
             public PurchaseOrderLineItemStatus PurchaseOrderLineItemStatus { get; set; }
+        }
+
+        public class Vendor : IEquatable<Vendor>
+        {
+            public Guid VendorId { get; set; }
+            public string Name { get; set; }
+            public string Number { get; set; }
+            public IList<ContactInfoModel> ContactInfo { get; set; }
+            public IList<CostCodeModel> CostCodes { get; set; }
+
+            public class ContactInfoModel : IEquatable<ContactInfoModel>
+            {
+                public string Value { get; set; }
+                public string Type { get; set; }
+
+                public bool Equals(ContactInfoModel other)
+                {
+                    return Value == other.Value && Type == other.Type;
+                }
+
+                public override int GetHashCode()
+                {
+                    return Value.GetHashCode() ^ Type.GetHashCode();
+                }
+            }
+
+            public bool Equals(Vendor other)
+            {
+                return Number == other.Number;
+            }
+
+            public override int GetHashCode()
+            {
+                return Number.GetHashCode();
+            }
+        }
+        public class CostCodeModel : IEquatable<CostCodeModel>
+        {
+            public string CostCode { get; set; }
+            public string CostCodeDescription { get; set; }
+
+            public bool Equals(CostCodeModel other)
+            {
+                return CostCode == other.CostCode;
+            }
+
+            public override int GetHashCode()
+            {
+                return CostCode.GetHashCode();
+            }
         }
     }
 }

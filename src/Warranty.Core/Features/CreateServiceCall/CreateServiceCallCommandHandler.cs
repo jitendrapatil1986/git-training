@@ -34,25 +34,6 @@ namespace Warranty.Core.Features.CreateServiceCall
             using (_database)
             {
                 var serviceCallId = _serviceCallCreateService.Create(message.JobId, RequestType.WarrantyRequest, status);
-              
-                if (message.ServiceCallLineItems != null)
-                {
-                    foreach (var line in message.ServiceCallLineItems)
-                    {
-                        var serviceCallLine = new ServiceCallLineItem
-                            {
-                                ServiceCallId = serviceCallId,
-                                LineNumber = line.LineNumber,
-                                ProblemCode = line.ProblemCode,
-                                ProblemJdeCode = line.ProblemJdeCode,
-                                ProblemDetailCode = line.ProblemDetailCode,
-                                ProblemDescription = line.ProblemDescription,
-                                ServiceCallLineItemStatus = ServiceCallLineItemStatus.Open,
-                            };
-
-                        _database.Insert(serviceCallLine);
-                    }
-                }
                 return serviceCallId;
             }
         }

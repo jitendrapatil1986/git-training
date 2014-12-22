@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Enumerations;
     using NPoco;
     using Security;
@@ -29,8 +30,68 @@
             model.ServiceCallLineItemPurchaseOrders = GetServiceCallLinePurchaseOrders(query.ServiceCallLineItemId);
             model.CanReopenLines = user.IsInRole(UserRoles.WarrantyServiceManager) || user.IsInRole(UserRoles.WarrantyServiceCoordinator);
             model.CanTakeActionOnPayments = user.IsInRole(UserRoles.WarrantyServiceManager);
+            model.Vendors = GetLineItemVendors(query.ServiceCallLineItemId);
 
             return model;
+        }
+
+        private IEnumerable<ServiceCallLineItemModel.Vendor> GetLineItemVendors(Guid serviceCallLineItemId)
+        {
+            const string sql = @"SELECT DISTINCT v.VendorId, v.Number, v.Name, ci.Value, ci.Type, jvcc.CostCode, jvcc.CostCodeDescription FROM ServiceCalls sc
+                                INNER JOIN ServiceCallLineITems scli
+                                    ON scli.ServiceCallId = sc.ServiceCallId 
+                                INNER JOIN Jobs job
+                                    ON job.JobId = sc.JobId
+                                INNER JOIN Communities community
+                                    ON community.CommunityId = job.CommunityId
+                                INNER JOIN Cities city
+                                    ON city.CityId = community.CityId
+                                LEFT JOIN CityCodeProblemCodeCostCodes cc
+                                    ON cc.CityCode = city.CityCode AND cc.ProblemJdeCode = scli.ProblemJDECode  
+						  INNER JOIN JobVendorCostCodes jvcc
+							 ON jvcc.JobId = job.JobId and jvcc.CostCode = cc.CostCode
+						  INNER JOIN Vendors v
+							 ON v.VendorId = jvcc.VendorId
+						  INNER JOIN (SELECT VendorId, number as Value, Type as Type FROM VendorPhones
+                                    UNION
+                                    SELECT VendorId, email as Value, 'E-mail' as Type FROM VendorEmails) as ci 
+                                    on v.vendorid = ci.vendorid
+						  where scli.ServiceCallLineItemId = @0";
+
+            var result = _database.Fetch<VendorDto>(sql, serviceCallLineItemId);
+
+            return
+                result.Select(x => new ServiceCallLineItemModel.Vendor
+                {
+                    Name = x.Name,
+                    Number = x.Number,
+                    VendorId = x.VendorId,
+                    CostCodes =
+                        result.Where(v => v.VendorId == x.VendorId)
+                              .Select(cc => new ServiceCallLineItemModel.CostCodeModel
+                              {
+                                  CostCode = cc.CostCode,
+                                  CostCodeDescription = cc.CostCodeDescription
+                              }).Distinct().OrderBy(ob => ob.CostCode).ToList(),
+                    ContactInfo =
+                        result.Where(v => v.VendorId == x.VendorId)
+                              .Select(cc => new ServiceCallLineItemModel.Vendor.ContactInfoModel()
+                              {
+                                  Value = cc.Value,
+                                  Type = cc.Type
+                              }).Distinct().OrderBy(ob => ob.Value).ToList()
+                }).Distinct().OrderBy(x => x.Name).ToList();
+        }
+
+        public class VendorDto
+        {
+            public Guid VendorId { get; set; }
+            public string Name { get; set; }
+            public string Number { get; set; }
+            public string Value { get; set; }
+            public string Type { get; set; }
+            public string CostCode { get; set; }
+            public string CostCodeDescription { get; set; }
         }
 
         private ServiceCallLineItemModel GetServiceCallLineItem(Guid serviceCallLineItemId)
@@ -49,6 +110,8 @@
                                     li.[RootCause],
                                     li.[ProblemJdeCode],
                                     li.[ProblemDetailCode],
+                                    li.[RootCause],
+                                    li.[RootProblem],
                                     cc.[CostCode],
                                     job.[JobNumber],
                                     city.CityCode

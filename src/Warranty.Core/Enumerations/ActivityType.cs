@@ -23,5 +23,6 @@
         public static readonly ActivityType BackchargeOnHold = new ActivityType(14, "Backcharge On Hold");
         public static readonly ActivityType BackchargeApprove = new ActivityType(15, "Backcharge Approval");
         public static readonly ActivityType BackchargeDeny = new ActivityType(16, "Backcharge Deny");
+        public static readonly ActivityType ServiceCallDelete = new ActivityType(17, "Service Call Delete");
     }
 }

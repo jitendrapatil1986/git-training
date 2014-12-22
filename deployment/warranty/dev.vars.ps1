@@ -24,3 +24,7 @@ $errorReportingSubject = "Warranty Exception (test)"
 
 $documentSharePath = "C:\temp\dwh_files\warranty"
 $surveyApiBaseUri = "http://surveytest.davidweekleyhomes.com/api/"
+$accountingApiBaseUri = "http://accountingtest.davidweekleyhomes.com/api/"
+$jobServiceApiBaseUri = "http://jobservicetest.davidweekleyhomes.com"
+
+$accountingEndPointServer = "wkcorpappdev1"
