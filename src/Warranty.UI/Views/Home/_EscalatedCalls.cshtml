@@ -12,9 +12,9 @@ else
 <div class="panel-group" id="escalated_list">
     @foreach (var employee in Model.RepresentativeWithEscalatedCalls)
     {
-        <div class="panel list-group-item no-left-right-padding">
+        <div class="panel list-group-item">
             <a data-toggle="collapse" data-parent="#escalated_list" href="#collapseEscalatedCalls@(employee.EmployeeNumber)" class="text-capitalize accordion-toggle collapsed">@employee.Name</a> <span class="badge">@employee.ServiceCallsCount</span>
-            <div id="collapseEscalatedCalls@(employee.EmployeeNumber)" class="collapse panel-body no-left-right-padding">
+            <div id="collapseEscalatedCalls@(employee.EmployeeNumber)" class="collapse panel-body">
                 @foreach (var line in Model.EscalatedServiceCalls.Where(x => x.AssignedToEmployeeNumber == employee.EmployeeNumber))
                 {
                     @Html.Partial("_ServiceCallListItem", line)
