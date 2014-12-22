@@ -62,6 +62,7 @@
     <Compile Include="ServiceCallLineItemCreated.cs" />
     <Compile Include="ServiceCallLineItemProblemChanged.cs" />
     <Compile Include="ServiceCallSpecialProjectStatusChanged.cs" />
+    <Compile Include="ServiceCallStatusChanged.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

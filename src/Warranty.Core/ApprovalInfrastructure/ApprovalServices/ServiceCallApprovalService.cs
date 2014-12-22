@@ -6,7 +6,7 @@ using Warranty.Core.Enumerations;
 
 namespace Warranty.Core.ApprovalInfrastructure.ApprovalServices
 {
-    using Events;
+    using InnerMessages;
     using NServiceBus;
 
     public class ServiceCallApprovalService : IApprovalService<ServiceCall>
@@ -37,7 +37,7 @@ namespace Warranty.Core.ApprovalInfrastructure.ApprovalServices
                 var serviceCall = _database.SingleById<ServiceCall>(id);
                 serviceCall.ServiceCallStatus = newStatus;
                 _database.Update(serviceCall);
-                _bus.Send<ServiceCallStatusChanged>(x =>
+                _bus.Send<NotifyServiceCallStatusChanged>(x =>
                 {
                     x.ServiceCallId = serviceCall.ServiceCallId;
                 });

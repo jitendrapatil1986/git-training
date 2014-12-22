@@ -6,5 +6,6 @@
     public class ServiceCallStatusChanged : IEvent
     {
         public Guid ServiceCallId { get; set; }
+        public string StatusDisplayName { get; set; }
     }
 }

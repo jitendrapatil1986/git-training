@@ -70,6 +70,7 @@
     <Compile Include="NotifyServiceCallLineItemProblemChanged.cs" />
     <Compile Include="NotifyServiceCallLineItemCompleted.cs" />
     <Compile Include="NotifyServiceCallSpecialProjectStatusChanged.cs" />
+    <Compile Include="NotifyServiceCallStatusChanged.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

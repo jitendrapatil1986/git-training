@@ -161,6 +161,7 @@
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallLineItemProblemChangedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallLineItemCompletedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallSpecialProjectStatusChangedHandler.cs" />
+    <Compile Include="Handlers\ServiceCalls\NotifyServiceCallStatusChangedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\RequestServiceCallHandler.cs" />
     <Compile Include="Security\WarrantyServerUserSession.cs" />
     <Compile Include="StructureMapConfig.cs" />
