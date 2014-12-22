@@ -92,8 +92,6 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public string ProblemJdeCode { get; set; }
             public string ProblemDescription { get; set; }
             public string CauseDescription { get; set; }
-            public string ClassificationNote { get; set; }
-            public string LineItemRoot { get; set; }
             public DateTime CreatedDate { get; set; }
             public ServiceCallLineItemStatus ServiceCallLineItemStatus { get; set; }
             public int NumberOfAttachments { get; set; }
