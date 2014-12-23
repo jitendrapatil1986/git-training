@@ -40,26 +40,28 @@
                     <p class="panel-title text-capitalize margin-bottom-10 main-info">
                         <strong>Status: </strong><span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
                     </p>
-                    <p class="view no-margin" data-bind="text: problemDescription"></p>
+                    <p class="view margin-bottom-20" data-bind="text: problemDescription"></p>
                     <p></p>
                     <div class="row">
                         <div class="col-md-3">
-                            <div class="inline-editable-dropdown text-capitalize" data-bind="visible: !isLineItemCompleted()">
-                                <div class="control-group" data-bind="validationElement: rootProblemId">
-                                    <label class="control-group" for="rootProblemId"></label>Root Problem: 
-                                    <a href="#" id="rootProblemId" data-bind="editable: rootProblemId, value: rootProblemId"></a>
-                                </div>
+                            <div class="control-group" data-bind="validationElement: rootProblemId, visible: !isLineItemCompleted()">
+                                <label class="control-label" for="rootProblemId">Root Problem</label>
+                                <select id="rootProblemId" class="form-control" data-bind="options: rootProblemCodes, value: rootProblemId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Root Problem'"></select>
                             </div>
-                            <span data-bind="visible: isLineItemCompleted(), text: 'Root Problem: ' + rootProblem()"></span>
+                            <div class="form-group no-margin" data-bind="visible: isLineItemCompleted()">
+                                <label class="control-label">Root Problem</label>
+                                <p class="form-control-static" data-bind="text: rootProblem"></p>
+                            </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="inline-editable-dropdown text-capitalize" data-bind="visible: !isLineItemCompleted()">
-                                <div class="control-group" data-bind="validationElement: rootCauseId">
-                                    <label class="control-label" for="rootCauseId"></label>Root Cause: 
-                                    <a href="#" id="rootCauseId" data-bind="editable: rootCauseId, value: rootCauseId"></a>
-                                </div>
+                            <div class="control-group" data-bind="validationElement: rootCauseId, visible: !isLineItemCompleted()">
+                                <label class="control-label" for="rootCauseId">Root Cause</label>
+                                <select id="rootCauseId" class="form-control" data-bind="options: rootCauseCodes, value: rootCauseId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Root Cause'"></select>
                             </div>
-                            <span data-bind="visible: isLineItemCompleted(), text: 'Root Cause: ' + rootCause()"></span>
+                            <div class="form-group no-margin" data-bind="visible: isLineItemCompleted()">
+                                <label class="control-label">Root Cause</label>
+                                <p class="form-control-static" data-bind="text: rootCause"></p>
+                            </div>
                         </div>
                     </div>
                 </div>
