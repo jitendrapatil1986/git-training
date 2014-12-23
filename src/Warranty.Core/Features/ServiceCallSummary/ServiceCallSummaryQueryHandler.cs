@@ -118,8 +118,6 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     li.ProblemJdeCode,
                                     li.ProblemDescription,
                                     li.CauseDescription,
-                                    li.ClassificationNote,
-                                    li.LineItemRoot,
                                     li.CreatedDate,
                                     li.ServiceCallLineItemStatusId as ServiceCallLineItemStatus,
                                     (SELECT COUNT(*) FROM ServiceCallNotes WHERE ServiceCallLineItemId = li.ServiceCallLineItemId) as NumberOfNotes,
