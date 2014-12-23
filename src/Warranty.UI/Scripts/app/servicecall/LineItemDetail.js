@@ -23,6 +23,7 @@
                     value: modelData.initialServiceCallLineItem.rootCause,
                     emptytext: 'Set Root Cause',
                     source: modelData.rootCauseCodes,
+                    showbuttons: false,
                     url: function (params) {
                         $.ajax({
                             url: urls.ManageServiceCall.EditLineItem,
@@ -47,6 +48,7 @@
                     value: modelData.initialServiceCallLineItem.rootProblem,
                     emptytext: 'Set Root Problem',
                     source: modelData.rootProblemCodes,
+                    showbuttons: false,
                     url: function(params) {
                             $.ajax({
                                 url: urls.ManageServiceCall.EditLineItem,

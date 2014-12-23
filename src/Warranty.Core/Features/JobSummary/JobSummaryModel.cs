@@ -52,6 +52,7 @@ namespace Warranty.Core.Features.JobSummary
         public IEnumerable<Homeowner> Homeowners { get; set; }
         public IEnumerable<Vendor> Vendors { get; set; }
         public IEnumerable<CostCodeModel> CostCodes { get; set; }
+        
 
         public class JobPayment
         {
@@ -88,6 +89,7 @@ namespace Warranty.Core.Features.JobSummary
             public string Number { get; set; }
             public IList<ContactInfoModel> ContactInfo { get; set; }
             public IList<CostCodeModel> CostCodes { get; set; }
+            public string CostCodesSeparatedByComma { get; set; }
 
             public class ContactInfoModel : IEquatable<ContactInfoModel>
             {
@@ -177,7 +179,15 @@ namespace Warranty.Core.Features.JobSummary
             public List<JobServiceCallNote> JobServiceCallNotes { get; set; }
 
             public string Summary { get; set; }
-            public string[] SummaryOfLineItems{get { return string.IsNullOrEmpty(Summary) ? new string[0] : Summary.Split('|'); }}
+
+            public string[] SummaryOfLineItems
+            {
+                get
+                {
+                    return Summary != null ? Summary.Split('|') : new string[0];
+                }
+            }
+
 //NPoco needs prop to be List<> to use FetchOneToMany(). Also need to set to IGNORE if inserting.
 
             public class JobServiceCallNote
