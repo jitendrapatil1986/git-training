@@ -92,7 +92,14 @@
                                         </small>
                                     </div>
                                     <div class="col-md-7 text-capitalize small">
-                                        <b>Line Item Problem Descriptions</b>
+                                        @if (sc.NumberOfLineItems > 0)
+                                        {
+                                            <b>Line Item Problem Descriptions</b>
+                                        }
+                                        else
+                                        {
+                                            <em>This Service Call has no Line Items</em>
+                                        }
                                         <ul>
                                             @foreach (var summary in sc.SummaryOfLineItems)
                                             {
