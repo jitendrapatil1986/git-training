@@ -3,6 +3,7 @@
     using System.IO;
     using Configurations;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
 
     public static class ObjectExtensions
     {
@@ -11,7 +12,7 @@
             var jsonSerializer =
                 JsonSerializer.Create(new JsonSerializerSettings
                 {
-                    ContractResolver = new WarrantyContractResolver(),
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 });
 
             if (useEnumerationDisplay)

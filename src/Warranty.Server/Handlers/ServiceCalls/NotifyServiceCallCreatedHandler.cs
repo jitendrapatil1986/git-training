@@ -49,12 +49,13 @@
                             ServiceCallId = serviceCall.ServiceCallId,
                             ServiceCallLineItemId = y.ServiceCallLineItemId,
                             CauseDescription = y.CauseDescription,
-                            ClassificationNote = y.ClassificationNote,
-                            LineItemRoot = y.LineItemRoot,
                             LineNumber = y.LineNumber,
                             ProblemCode = y.ProblemCode,
                             ProblemDescription = y.ProblemDescription,
                             ServiceCallLineItemStatus = y.ServiceCallLineItemStatus.DisplayName,
+                            ProblemJdeCode = y.ProblemJdeCode,
+                            RootCause = y.RootCause,
+                            RootProblem = y.RootProblem
                         }).ToList();
                 });
             }

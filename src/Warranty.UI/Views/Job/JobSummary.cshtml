@@ -91,25 +91,22 @@
                                             @Html.ActionLink(sc.CallNumber, "CallSummary", "ServiceCall", new { id = sc.ServiceCallId }, null)
                                         </small>
                                     </div>
-                                    <div class="col-md-7">
-                                        <b class="text-capitalize small">Line Item Problem Descriptions</b>
-                                        @if (sc.SummaryOfLineItems.Any())
+                                    <div class="col-md-7 text-capitalize small">
+                                        @if (sc.NumberOfLineItems > 0)
                                         {
-                                            <ul>
-                                                @foreach (var summary in sc.SummaryOfLineItems)
-                                                {
-                                                    <li class="text-capitalize small">@Html.Raw(summary)</li>
-                                                }
-                                            </ul>
+                                            <b>Line Item Problem Descriptions</b>
                                         }
                                         else
                                         {
-                                            <br/>
-                                            <em class="small">There are no line items</em>
-                                            <br/>
+                                            <em>This Service Call has no Line Items</em>
                                         }
-                                        <br/>
-                                        <span class="text-capitalize small">Assigned to @Html.DisplayFor(x => sc.AssignedTo)</span>
+                                        <ul>
+                                            @foreach (var summary in sc.SummaryOfLineItems)
+                                            {
+                                                <li>@Html.Raw(summary)</li>
+                                            }
+                                        </ul>
+                                        Assigned to @Html.DisplayFor(x => sc.AssignedTo)
                                         <br/>
                                         <span class="text-capitalize small">@(sc.CompletionDate == null ? "Date Added: " + Format.DateMonthDayYear(sc.CreatedDate) : "Date Completed: " + Format.DateMonthDayYear(sc.CompletionDate))</span>
                                     </div>

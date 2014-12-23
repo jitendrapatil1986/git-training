@@ -112,7 +112,7 @@ namespace Warranty.JdeImport.Importers
 
                                         MERGE INTO VendorPhones AS TARGET
                                             USING (SELECT distinct v.vendorid, LTRIM(RTRIM(s.phonenumber)) AS PhoneNumber, LTRIM(RTRIM(s.phonetype)) AS PhoneType FROM
-                                                    warranty_test.imports.ArchivedVendorsStage S
+                                                    imports.ArchivedVendorsStage S
                                                     INNER JOIN Vendors V ON
                                                         LTRIM(RTRIM(S.VendorNumber)) = V.Number
                                                     WHERE LTRIM(RTRIM(PhoneNumber)) != '') AS LIST
@@ -123,7 +123,7 @@ namespace Warranty.JdeImport.Importers
 
                                         MERGE INTO JobVendorCostCodes AS TARGET
                                             USING (SELECT DISTINCT LTRIM(RTRIM(S.costcode)) as costcode, max(ltrim(rtrim(s.costcodedescription))) as costcodedescription, J.JobId, V.VendorId FROM
-                                                    warranty_test.imports.ArchivedVendorsStage S
+                                                    imports.ArchivedVendorsStage S
                                                     INNER JOIN Vendors V ON
                                                         LTRIM(RTRIM(S.VendorNumber)) = V.Number
                                                     INNER JOIN Jobs J ON
