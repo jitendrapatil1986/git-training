@@ -31,20 +31,13 @@
 <div style="display: none;" data-bind="visible: true">
 <div class="container">
 
-        @Html.HiddenFor(model => model.CanReopenLines, new { id = "userCanReopenCallLinesAnytime", @class = "form-control" , data_bind="value: userCanAlwaysReopenCallLines"})
-
-        <div id="undoLastCompletedLineItem" data-bind="visible: !userCanAlwaysReopenCallLines() && lineJustCompleted()" class="undo-alert">
-            <div id="undoLastCompletedLineItemAlert" class="alert alert-warning alert-dismissible padding-5" role="alert">
-                Line item marked as complete. <a class="cursor-pointer" data-bind="click: undoLastCompletedLine">Undo mark as complete.</a>
-            </div>
-        </div>
-        
+    @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallStatus, new { id = "callSummaryServiceCallStatus"})
         <section class="margin-bottom-10">
             <h2 class="pull-left no-margin">Service Call #@Model.ServiceCallSummary.CallNumber</h2>
 
-            @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
-            {
-                <div class="warranty-header-buttons no-print">
+            <div class="warranty-header-buttons no-print">
+                @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                {
                     <div data-bind="visible: callSummaryStatusOpen()">
                         @Format.ServiceCallToggleButton("escalate", Model.ServiceCallSummary.IsEscalated, "Escalate", "De-escalate")
                         @Format.ServiceCallToggleButton("special_project", Model.ServiceCallSummary.IsSpecialProject, "Special Project", "Not Special Project")
@@ -55,8 +48,12 @@
                     <div data-bind="visible: canBeCompleted()">
                         <a href='#' class='btn btn-default pull-right' data-action-with-popup='reopen' data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" id='btn_complete'>Complete</a>
                     </div>
+                }
+                <div data-bind="visible: canBeDeleted()">
+                    <a href='#' data-bind="click: deleteServiceCall" class='btn btn-default pull-right' id='btn_delete'>Delete</a>
                 </div>
-            }
+            </div>
+            
             <div class="clearfix"></div>
         </section>
         <div id="serviceCallSummaryPage">
@@ -105,18 +102,19 @@
                         </ul>
                     </div>
                     <div class="col-md-3">
-                            <div id="approveCommands" class="margin-bottom-10">
-                                @if (Model.ServiceCallSummary.ServiceCallStatus == ServiceCallStatus.Requested && Model.CanApprove)
-                                {
-                                    <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" data-display-status="true" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
-                                    <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" data-display-status="true" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
-                                    @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallStatus, new { id = "callSummaryServiceCallStatus"})
-                                }
-                                else
-                                {
-                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus") </span>
-                                }
-                            </div>
+                        <div id="approveCommands" class="margin-bottom-10">
+                            
+                            @if (Model.ServiceCallSummary.ServiceCallStatus == ServiceCallStatus.Requested && Model.CanApprove)
+                            {
+                                <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" data-display-status="true" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
+                                <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" data-display-status="true" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
+                                    
+                            }
+                            else
+                            {
+                                <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus") </span>
+                            }
+                        </div>
 
                             @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
                             
@@ -144,36 +142,39 @@
                     <strong>Special Project</strong> <span data-bind="text: specialProjectDate()!=null ? moment(specialProjectDate()).format('MM/DD/YYYY') : ''"></span><span data-bind="    text: (specialProjectReason()) ? ' - ' + specialProjectReason(): ''"></span>
                 </div>
             </section>
-
-            <section data-bind="visible: areAllLineItemsCompleted() && !callSummaryStatusComplete() && !callSummaryStatusSigned()">
-                <h3 class="col-md-12">Verify Homeowner Signature</h3>
-                <div id="verifyHomeownerSignature">
-                    <div class="panel panel-default no-border">
-                        <div class="panel-body">
-                            <div class="row">
-                                <form>
-                                    <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationTypeId">
-                                        <label class="control-label" for="verifyHomeownerType"></label>
-                                        <select id="verifyHomeownerType" class="form-control" data-bind="options: homeownerVerificationCodes, value: homeownerVerificationTypeId, optionsText: 'displayText', optionsValue: 'value', optionsCaption: 'Select Verification Type'"></select>
-                                    </div>
-                                    <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationSignature">
-                                        <label class="control-label" for="homeownerVerificationSignature"></label>
-                                        @Html.TextBox("Signature", null, new { id = "homeownerVerificationSignature", @class = "form-control", data_bind = "value: homeownerVerificationSignature, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Signature'}" })
-                                    </div>
-                                    <div class="control-group col-md-2 no-right-padding" data-bind="validationElement: homeownerVerificationSignatureDate">
-                                        <label class="control-label" for="homeownerVerificationSignatureDate"></label>
-                                        @Html.TextBox("Date", null, new { id = "homeownerVerificationSignatureDate", @class = "datepicker-input form-control", data_bind="value: homeownerVerificationSignatureDate, attr:{placeholder: 'Select Date'}" })
-                                    </div>
-                                    <br/>
-                                    <div class="col-md-1">
-                                        <button class="btn btn-primary" data-bind="click: saveVerifiedHomeownerSignature">Save</button>
-                                    </div>
-                                </form>
+                
+            @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+            {
+                <section data-bind="visible: areAllLineItemsCompleted() && !callSummaryStatusComplete() && !callSummaryStatusSigned()">
+                    <h3 class="col-md-12">Verify Homeowner Signature</h3>
+                    <div id="verifyHomeownerSignature">
+                        <div class="panel panel-default no-border">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <form>
+                                        <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationTypeId">
+                                            <label class="control-label" for="verifyHomeownerType"></label>
+                                            <select id="verifyHomeownerType" class="form-control" data-bind="options: homeownerVerificationCodes, value: homeownerVerificationTypeId, optionsText: 'displayText', optionsValue: 'value', optionsCaption: 'Select Verification Type'"></select>
+                                        </div>
+                                        <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationSignature">
+                                            <label class="control-label" for="homeownerVerificationSignature"></label>
+                                            @Html.TextBox("Signature", null, new {id = "homeownerVerificationSignature", @class = "form-control", data_bind = "value: homeownerVerificationSignature, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Signature'}"})
+                                        </div>
+                                        <div class="control-group col-md-2 no-right-padding" data-bind="validationElement: homeownerVerificationSignatureDate">
+                                            <label class="control-label" for="homeownerVerificationSignatureDate"></label>
+                                            @Html.TextBox("Date", null, new {id = "homeownerVerificationSignatureDate", @class = "datepicker-input form-control", data_bind = "value: homeownerVerificationSignatureDate, attr:{placeholder: 'Select Date'}"})
+                                        </div>
+                                        <br/>
+                                        <div class="col-md-1">
+                                            <button class="btn btn-primary" data-bind="click: saveVerifiedHomeownerSignature">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            }
 
             <section class="line-items margin-bottom-15">
                 <h3 class="col-md-12">Line Items
@@ -185,36 +186,33 @@
                 @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallId, new { id = "callSummaryServiceCallId", @class = "form-control" })
                 <div id="addCallLineItem" class="collapse">
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-12">
+                        <div class="col-md-9">
+                            <div class="row">
                                 <div class="form-group" data-bind="validationElement: problemJdeCodeToAdd">
                                     <select id="addCallLineProblemCode" class="form-control" data-bind="options: theLookups, value: problemJdeCodeToAdd, optionsText: 'problemCode', optionsValue: 'problemId', optionsCaption: 'Select Problem Code'"></select>
-                                    @*@Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select problem code", new { id = "addCallLineProblemCode", @class = "form-control", data_bind = "value: problemJdeCodeToAdd" })*@   
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group" data-bind="validationElement: problemDetailCodeToAdd">
-                                    <select id="addCallLineProblemDetail" class="dropdown form-control" data-bind="options: problemDetailCodes, value: problemDetailCodeToAdd, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Problem Detail'"></select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
+                            <div class="row">
                                 <div class="form-group" data-bind="validationElement: problemDescriptionToAdd">
                                     @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
                                 </div>
+                                <div class="form-submit">
+                                    <button class="btn btn-primary" data-bind="click: addLineItem">Add</button>
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addCallLineItem">Cancel</button>
+                                </div>
+                            </div></div>
+                        <div class="col-md-3 hidden" data-bind="css: { hidden: relatedCalls().length == 0}">
+                            @Html.Label("Related Calls")
+                            <div data-bind="foreach: relatedCalls">
+                                <div class="well well-sm">
+                                <strong><a data-bind="attr: {href: callSummaryUrl}"><span data-bind="text: callNumber"></span></a></strong><br />
+                                <span data-bind="text: problemDescription"></span><br />
+                                <small class="text-muted">Date Created: <span data-bind="text: moment(createdDate).format('LL')"></span></small>
                             </div>
-                        </div>
-                        <br />
-                        <div class="form-submit">
-                            <button class="btn btn-primary" data-bind="click: addLineItem">Add</button>
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#addCallLineItem">Cancel</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-
                         <div data-bind="foreach: allLineItems">
                             <div data-bind="click: jumpToServiceCallLineDetailPage, css: { 'cursor-pointer': lineEditing() == false }">
                                 <div id="allServiceCallLineItems" class="service-call-line edit-line-item row lineDetail" data-bind="attr: {'data-service-call-line-item': lineNumber()}">
@@ -226,12 +224,6 @@
                                                                         <h4>
                                                                             <span data-bind="text: problemCode" class="view"></span>
                                                                         </h4>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="control-group margin-bottom-10" data-bind="validationElement: editProblemDetailCode">
-                                                                    <div class="editor" data-bind="css: { editing: problemCodeEditing }">
-                                                                        <p class="view"><strong data-bind="text: problemDetailCode()"></strong></p>
-                                                                        <select id="editProblemDetailCode" class="edit dropdown form-control" data-bind="options: problemDetailCodes, value: editProblemDetailCode, optionsText: 'Text', optionsValue: 'Text', optionsCaption: 'Select Problem Detail'"></select>
                                                                     </div>
                                                                 </div>
                                                                 <div class="control-group margin-bottom-10" data-bind="validationElement: problemDescription">
@@ -255,10 +247,7 @@
 
                                                 <div class="col-md-3 margin-bottom-3 text-align-right no-right-padding no-print">
                                                     <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="click: editLine, clickBubble: false, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>
-                                                    <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="click: completeLine, clickBubble: false, visible: !lineEditing()&& !isLineItemCompleted()">Complete</button>
-
                                                     <button id="btn-edit-line-item" type="button" class="col-xs-4 btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="click: editLine, clickBubble: false, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>
-                                                    <button id="btn-complete-line-item" type="button" class="col-xs-4 btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="click: completeLine, clickBubble: false, visible: !lineEditing() && !isLineItemCompleted()">Complete</button>
 
                                                     @if (Model.CanReopenLines)
                                                     {
@@ -318,29 +307,29 @@
                 </div>
             </section>
 
-                     <section>
+                     <section class="margin-bottom-15">
                 <h3 class="col-md-12">Notes
                     <span>
                         <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Note" data-toggle="collapse" data-target="#addCallNote"><span class="glyphicon glyphicon-plus"></span></button>
                     </span>
                 </h3>
-                         <div class="clearfix"></div>
-                <div id="addCallNote" class="collapse">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="control-group" data-bind="validationElement: noteDescriptionToAdd">
-                                    @Html.TextArea("Description", null, new { id = "addCallNoteDescription", @class = "form-control", data_bind = "text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
-                                </div>
-                            </div>
-                        </div>
-                        <br/>
-                        <div class="form-submit">
-                            <button class="btn btn-primary" data-bind="click: addCallNote">Add</button>
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</button>
-                        </div>
-                    </div>
-                </div>
+                         <div id="addCallNote" class="collapse">
+                             <div class="panel-body">
+                                 <div class="row">
+                                     <div class="col-md-12">
+                                         <div class="control-group" data-bind="validationElement: noteDescriptionToAdd">
+                                             @Html.TextArea("Description", null, new { id = "addCallNoteDescription", @class = "form-control", data_bind = "text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
+                                         </div>
+                                     </div>
+                                 </div>
+                                 <br/>
+                                 <div class="form-submit">
+                                     <button class="btn btn-primary" data-bind="click: addCallNote">Add</button>
+                                     <button class="btn btn-link" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</button>
+                                 </div>
+                             </div>
+                         </div>
+                         <br/>
                 <em data-bind="visible: allCallNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">There are no notes to display</em>
                         <div data-bind="foreach: allCallNotes">
                             <div id="allServiceCallNotes" class="service-call-line">

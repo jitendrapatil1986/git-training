@@ -35,7 +35,6 @@
         {
             public string ProblemCode { get; set; }
             public string ProblemJdeCode { get; set; }
-            public string ProblemDetailCode { get; set; }
             public string ProblemDescription { get; set; }
             public int LineItemNumber { get; set; }
         }

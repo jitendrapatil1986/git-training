@@ -6,8 +6,11 @@ using Warranty.Server.IntegrationTests.SetUp;
 
 namespace Warranty.Server.IntegrationTests
 {
+    using System.Configuration;
+    using Accounting.Client;
     using Core;
     using Core.DataAccess;
+    using Core.Extensions;
     using Core.Security;
     using NPoco.FluentMappings;
     using Server.Handlers.Payments;
@@ -36,6 +39,14 @@ namespace Warranty.Server.IntegrationTests
                                                             scan.ConnectImplementationsToTypesClosing(typeof (IEntityBuilder<>));
                                                         });
                                              x.For<IUserSession>().Use<TestWarrantyUserSession>();
+
+                                             var baseAccountingApiUri = ConfigurationManager.AppSettings["Accounting.API.BaseUri"];
+                                             var timeoutInMilliseconds = ConfigurationManager.AppSettings["Accounting.API.TimeoutInMilliseconds"];
+                                             var timeout = timeoutInMilliseconds.TryParseNullable();
+
+                                             x.For<AccountingClientConfiguration>()
+                                                 .Singleton()
+                                                 .Use(() => new AccountingClientConfiguration(baseAccountingApiUri, timeout));
                                          });
 
             DbFactory.Setup(ObjectFactory.Container);

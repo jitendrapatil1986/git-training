@@ -25,10 +25,10 @@
                     <a class="bread-crumb" href="@Url.Action("CallSummary", "ServiceCall", new { id = Model.ServiceCallId })">Service Call #@Model.ServiceCallNumber</a>
                     @Model.LineNumber - <span data-bind="text: problemCode"></span>
                     <div class="pull-right no-right-padding no-print">
-                        <button id="btn-complete-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: completeLine, visible: !lineEditing()&& !isLineItemCompleted()">Complete</button>
+                        <button id="btn-complete-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: completeLine, visible: !isLineItemCompleted()">Complete</button>
                         @if (Model.CanReopenLines)
                         {
-                            <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: reopenLine, visible: !lineEditing() && isLineItemCompleted()">Reopen</button>
+                            <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: reopenLine, visible: isLineItemCompleted()">Reopen</button>
                         }
                     </div>
                 </h2>
@@ -37,28 +37,61 @@
             <div id="serviceCallLineItemDetailPage">
                 <div class="panel panel-default">
                 <div class="panel-heading">
-                                <p class="panel-title text-capitalize margin-bottom-10 main-info">
-                                    <strong>Status: </strong><span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
-                                </p>
-                                <p class="view no-margin" data-bind="text: problemDescription"></p>
+                    <p class="panel-title text-capitalize margin-bottom-10 main-info">
+                        <strong>Status: </strong><span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
+                    </p>
+                    <p class="view margin-bottom-20" data-bind="text: problemDescription"></p>
+                    <p></p>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="control-group" data-bind="validationElement: rootProblemId, visible: !isLineItemCompleted()">
+                                <label class="control-label" for="rootProblemId">Root Problem</label>
+                                <select id="rootProblemId" class="form-control" data-bind="options: rootProblemCodes, value: rootProblemId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Root Problem'"></select>
+                            </div>
+                            <div class="form-group no-margin" data-bind="visible: isLineItemCompleted()">
+                                <label class="control-label">Root Problem</label>
+                                <p class="form-control-static" data-bind="text: rootProblem"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="control-group" data-bind="validationElement: rootCauseId, visible: !isLineItemCompleted()">
+                                <label class="control-label" for="rootCauseId">Root Cause</label>
+                                <select id="rootCauseId" class="form-control" data-bind="options: rootCauseCodes, value: rootCauseId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Root Cause'"></select>
+                            </div>
+                            <div class="form-group no-margin" data-bind="visible: isLineItemCompleted()">
+                                <label class="control-label">Root Cause</label>
+                                <p class="form-control-static" data-bind="text: rootCause"></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <section>
                     <h3 class="col-md-12">Vendors</h3>
-                    <p class="padding-left-15" data-bind="visible: constructionVendorsLoading"><span class="glyphicon glyphicon-refresh glyphicon-spin"></span> Loading...</p>
-                    <p class="padding-left-15" data-bind="visible: constructionVendors().length < 1 && !constructionVendorsLoading()"><em>No Vendors Found</em></p>
-                    <!-- ko foreach: constructionVendors -->
-                    <div class="col-md-4">
-                        <strong data-bind="text: VendorName"></strong>
-                        <br />
-                        <span data-bind="text: VendorEmail"></span>
-                        <p>
-                            <!-- ko foreach: VendorPhoneNumbers -->
-                            <span data-bind="text: $data"></span>&nbsp;
-                            <!-- /ko -->
-                        </p>
+                    <p class="padding-left-15" data-bind="visible: constructionVendors.length < 1"><em>No Vendors Found</em></p>
+                    <div class="col-md-12">
+                        <!-- ko foreach: groupedConstructionVendors-->
+                        <div class="row" data-bind="foreach: $data">
+                            <div class="col-md-4 margin-bottom-10">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"><div class="panel-title"><span class="panel-title text-capitalize" data-bind="text: name + ' (' + number + ')'"></span></div></div>
+                                    <div class="panel-body">
+                                        <strong>Work Performed</strong>
+                                        <p id="lalala" data-bind="foreach: costCodes">
+                                            <small><span data-bind="text: costCodeDescription"></span></small><br/>
+                                        </p>
+                                        <!-- ko if: contactInfo.length > 0 -->
+                                        <strong>Contact Information</strong>
+                                        <p data-bind="foreach: contactInfo">
+                                            <small><span data-bind="text: value + ' (' + type + ')' "></span></small><br/>
+                                        </p>
+                                        <!-- /ko -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /ko -->
                     </div>
-                    <!-- /ko -->
                     <div class="clearfix"></div>
                 </section>
                 <section>
@@ -402,6 +435,9 @@
                 initialServiceCallLinePurchaseOrders: @Html.Raw(Model.ServiceCallLineItemPurchaseOrders.ToJson()),
                 warrantyCostCodes:  @Html.Raw(@WarrantyCostCode.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { DisplayText = x.DisplayName, x.Value }).ToJson()),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
+                vendors: @Html.Raw(Model.Vendors.ToJson()),
+                rootCauseCodes: @Html.Raw(@RootCause.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName, }).ToJson()),
+                rootProblemCodes: @Html.Raw(@RootProblem.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName}).ToJson()),
             }
         });
 

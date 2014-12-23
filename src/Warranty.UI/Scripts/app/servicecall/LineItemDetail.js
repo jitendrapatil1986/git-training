@@ -11,13 +11,13 @@
 
                 $.fn.editable.defaults.mode = 'inline';
                 $.fn.editable.defaults.emptytext = 'Add';
+                
                 $.fn.editableform.buttons =
                     '<button type="submit" class="btn btn-primary editable-submit btn-sm"><i class="glyphicon glyphicon-ok"></i></button>';
 
                 $(".attached-file-display-name").editable();
 
                 function highlight(elemId) {
-
                     var elem = $(elemId);
                     elem.css("backgroundColor", "#ffffff"); // hack for Safari
                     elem.animate({ backgroundColor: '#d4dde3' }, 500);
@@ -297,14 +297,6 @@
                     self.createdDate = options.createdDate;
                 }
 
-                function updateServiceCallLineItem(line) {
-                    var updateProblemCode = $("#allServiceCallLineItems[data-service-call-line-item='" + line.lineNumber() + "'] #updateCallLineProblemCode");
-                    if (updateProblemCode.val() == "") {
-                        $(updateProblemCode).parent().addClass("has-error");
-                        return;
-                    }
-                }
-
                 self.allPayments = ko.observableArray([]);
 
                 self.canAddPayment = ko.computed(function () {
@@ -312,7 +304,6 @@
                 });
 
                 self.clearPaymentFields = function () {
-
                     $('#vendor-search').val('');
                     $('#backcharge-vendor-search').val('');
                     self.vendorNumber('');
@@ -329,7 +320,6 @@
                     self.selectedCostCode(undefined);
                     self.errors.showAllMessages(false);
                 };
-
 
                 function completeServiceCallLineItem(line) {
                     var lineData = ko.toJSON(line);
@@ -349,7 +339,7 @@
                             line.serviceCallLineItemStatusDisplayName(response.DisplayName);
 
                             //if user is not allowed to ALWAYS reopen Completed lines at anytime, then allow them to reopen only right after completing a line.
-                            if ($("#userCanReopenCallLinesAnytime").val() == false) {
+                            if (!line.userCanAlwaysReopenCallLines()) {
                                 $("#undoLastCompletedLineItemAlert").attr('data-service-line-id-to-undo', line.serviceCallLineItemId);
                                 $("#undoLastCompletedLineItemAlert").show();
                                 viewModel.lineJustCompleted(true);
@@ -386,23 +376,113 @@
                     self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
                     self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
                     self.completed = modelData.initialServiceCallLineItem.completed;
+                    self.completeButtonClicked = ko.observable(false);
 
-                    //track line item properties.
                     self.problemCodeId = ko.observable(modelData.initialServiceCallLineItem.problemCodeId);
                     self.problemCode = ko.observable(modelData.initialServiceCallLineItem.problemCode);
-                    self.problemDetailCode = ko.observable(modelData.initialServiceCallLineItem.problemDetailCode);
                     self.problemDescription = ko.observable(modelData.initialServiceCallLineItem.problemDescription);
-                    self.currentProblemCode = ko.observable();
-                    self.currentProblemDescription = ko.observable();
                     self.jobNumber = ko.observable(modelData.initialServiceCallLineItem.jobNumber);
                     self.costCode = ko.observable(modelData.initialServiceCallLineItem.costCode);
-                    self.constructionVendors = ko.observableArray([]);
-                    self.constructionVendorsLoading = ko.observable(true);
+                    self.constructionVendors = modelData.vendors;
+                    
+                    self.groupedConstructionVendors = ko.computed(function () {
+                        var rows = [], current = [];
+                        rows.push(current);
+                        for (var i = 0; i < self.constructionVendors.length; i += 1) {
+                            current.push(self.constructionVendors[i]);
+                            if (((i + 1) % 3) === 0) {
+                                current = [];
+                                rows.push(current);
+                            }
+                        }
+                        return rows;
+                    }, this);
 
-                    //track editing problem code, desc, and line altogether.
-                    self.problemCodeEditing = ko.observable();
-                    self.problemDescriptionEditing = ko.observable("");
-                    self.lineEditing = ko.observable("");
+                    //Value saved in db is string but ddl needs id to set default value.
+                    self.rootCause = ko.observable(modelData.initialServiceCallLineItem.rootCause);
+                    self.hasRootCause = ko.computed(function() {
+                        return self.rootCause() != null;
+                    });
+                    
+                    var selectedRootCause = ko.utils.arrayFirst(modelData.rootCauseCodes, function (item) {
+                        return item.text === modelData.initialServiceCallLineItem.rootCause;
+                    });
+                    self.rootCauseId = ko.observable(selectedRootCause ? selectedRootCause.value : '').extend({
+                        required: {
+                            onlyIf: function () {
+                                return self.completeButtonClicked() === true || self.hasRootCause();
+                            }
+                        }
+                    });
+                    
+                    self.rootProblem = ko.observable(modelData.initialServiceCallLineItem.rootProblem);
+                    self.hasRootProblem = ko.computed(function() {
+                        return self.rootProblem() != null;
+                    });
+                    
+                    var selectedRootProblem = ko.utils.arrayFirst(modelData.rootProblemCodes, function (item) {
+                        return item.text === modelData.initialServiceCallLineItem.rootProblem;
+                    });
+                    self.rootProblemId = ko.observable(selectedRootProblem ? selectedRootProblem.value : '').extend({
+                        required: {
+                            onlyIf: function () {
+                                return self.completeButtonClicked() === true || self.hasRootProblem();
+                            }
+                        }
+                    });
+
+                    self.rootCauseCodes = ko.observableArray(modelData.rootCauseCodes);
+                    self.rootProblemCodes = ko.observableArray(modelData.rootProblemCodes);
+
+                    self.rootCauseId.subscribe(function(rootCauseId) {
+                        var matchedRootCause = ko.utils.arrayFirst(modelData.rootCauseCodes, function (item) {
+                            return Number(item.value) === Number(rootCauseId);
+                        });
+
+                        if (matchedRootCause) {
+                            self.rootCause(matchedRootCause.text);
+
+                            $.ajax({
+                                url: urls.ManageServiceCall.EditLineItem,
+                                type: "POST",
+                                data: ko.toJSON({ serviceCallLineItemId: self.serviceCallLineItemId, rootCause: rootCauseId }),
+                                dataType: "json",
+                                processData: false,
+                                contentType: "application/json; charset=utf-8"
+                            }).fail(function() {
+                                viewModel.completeButtonClicked(false);
+                                toastr.error("There was an error updating the root cause");
+                            }).success(function() {
+                                viewModel.completeButtonClicked(false);
+                                toastr.success("Successfully updated root cause");
+                            });
+                        }
+                    });
+                    
+                    self.rootProblemId.subscribe(function (rootProblemId) {
+                        var matchedRootProblem = ko.utils.arrayFirst(modelData.rootProblemCodes, function (item) {
+                            return Number(item.value) === Number(rootProblemId);
+                        });
+
+                        if (matchedRootProblem) {
+                            self.rootProblem(matchedRootProblem.text);
+
+                            $.ajax({
+                                url: urls.ManageServiceCall.EditLineItem,
+                                type: "POST",
+                                data: ko.toJSON({ serviceCallLineItemId: self.serviceCallLineItemId, rootProblem: rootProblemId }),
+                                dataType: "json",
+                                processData: false,
+                                contentType: "application/json; charset=utf-8"
+                            }).fail(function() {
+                                viewModel.completeButtonClicked(false);
+                                toastr.error("There was an error updating the root problem");
+                            }).success(function() {
+                                viewModel.completeButtonClicked(false);
+                                toastr.success("Successfully updated root problem");
+                            });
+                        }
+                    });
 
                     self.invoiceNumber = ko.observable('').extend({ required: true });
                     self.amount = ko.observable().extend({ required: true, min: 0 });
@@ -471,7 +551,6 @@
                     });
 
                     self.clearPaymentFields = function () {
-
                         $('#vendor-search').val('');
                         $('#backcharge-vendor-search').val('');
                         self.vendorNumber('');
@@ -578,38 +657,19 @@
                         self.personNotifiedDate(moment(e.date).format("L"));
                     });
 
-                    //edit line item.
-                    self.editLine = function () {
-                        this.problemCodeEditing(true);
-                        this.problemDescriptionEditing(true);
-                        this.lineEditing(true);
-                        this.currentProblemCode(this.problemCode());
-                        this.currentProblemDescription(this.problemDescription());
-                    };
-
-                    //save line item changes.
-                    self.saveLineItemChanges = function () {
-                        updateServiceCallLineItem(this);
-                    };
-
-                    //cancel line item changes.
-                    self.cancelLineItemChanges = function () {
-                        this.problemCodeEditing(false);
-                        this.problemDescriptionEditing(false);
-                        this.lineEditing(false);
-                        this.problemCode(this.currentProblemCode());
-                        this.problemDescription(this.currentProblemDescription());
-                    };
-
                     //complete line item.
                     self.completeLine = function () {
-                        this.lineEditing(false);
+                        self.completeButtonClicked(true);
+
+                        if (formHasErrors([self.rootCauseId, self.rootProblemId])) {
+                            return;
+                        }
+
                         completeServiceCallLineItem(this);
                     };
 
                     //reopen line item.
                     self.reopenLine = function () {
-                        this.lineEditing(false);
                         reopenServiceCallLineItem(this);
                     };
 
@@ -645,7 +705,7 @@
                     self.allAttachments = ko.observableArray([]);
                     self.allPurchaseOrders = ko.observableArray([]);
                     self.noteDescriptionToAdd = ko.observable('').extend({required: true});
-                    self.userCanAlwaysReopenCallLines = ko.observable();
+                    self.userCanAlwaysReopenCallLines = ko.observable(modelData.initialServiceCallLineItem.canReopenLines);
 
                     self.removeAttachment = function (e) {
                         bootbox.confirm(modelData.attachmentRemovalMessage, function (result) {
@@ -727,17 +787,6 @@
                         reopenServiceCallLineItem(this);
                         self.lineJustCompleted(false);
                     };
-
-                    $.ajax({
-                        url: urls.ConstructionVendor.ConstructionVendors + '?jobNumber=' + self.jobNumber() + '&costCode=' + self.costCode(),
-                        type: "GET",
-                        dataType: "json",
-                        processData: false,
-                        contentType: "application/json; charset=utf-8"
-                    }).done(function (response) {
-                        self.constructionVendors(response);
-                        self.constructionVendorsLoading(false);
-                    });
                     
                     self.createPurchaseOrder = function () {
                         window.location.href = urls.ServiceCall.CreatePurchaseOrder + '/' + self.serviceCallLineItemId;

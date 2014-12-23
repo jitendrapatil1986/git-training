@@ -200,8 +200,6 @@
     </Compile>
     <Compile Include="Api\ApiController.cs" />
     <Compile Include="Api\AssignWSRController.cs" />
-    <Compile Include="Api\ConstructionVendorController.cs" />
-    <Compile Include="Api\ProblemDetailController.cs" />
     <Compile Include="Api\HomeownerController.cs" />
     <Compile Include="Api\ManageJobController.cs" />
     <Compile Include="Api\ManageProblemCodeCostCodesController.cs" />
@@ -222,7 +220,6 @@
     <Compile Include="Controllers\ServiceRepController.cs" />
     <Compile Include="Controllers\StatsController.cs" />
     <Compile Include="Core\Enumerations\NavHeaderItem.cs" />
-    <Compile Include="Core\Enumerations\NavItem.cs" />
     <Compile Include="Core\Enumerations\ToastType.cs" />
     <Compile Include="Core\Filters\ModelStateToTempData.cs" />
     <Compile Include="Core\Filters\WarrantyServiceCoordinatorOnlyAttribute.cs" />
@@ -315,7 +312,6 @@
     <Content Include="Scripts\app\servicecall\CreatePurchaseOrder.js" />
     <Content Include="Scripts\app\servicecall\SearchBackchargeVendor.js" />
     <Content Include="Scripts\app\servicecall\SearchVendor.js" />
-    <Content Include="Scripts\app\servicecall\create.js" />
     <Content Include="Scripts\app\servicecall\LineItemDetail.js" />
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
     <Content Include="Scripts\config\backcharge-vendor-search.js" />
@@ -419,7 +415,6 @@
     <Content Include="Views\ServiceCall\CallSummary.cshtml" />
     <Content Include="Views\ServiceCall\SearchCustomer.cshtml" />
     <Content Include="Views\ServiceCall\VerifyCustomer.cshtml" />
-    <Content Include="Views\ServiceCall\Create.cshtml" />
     <Content Include="Views\Job\JobSummary.cshtml" />
     <Content Include="Views\Admin\ManageAssignments.cshtml" />
     <Content Include="Views\Admin\ManageLookups.cshtml" />
@@ -454,6 +449,7 @@
     <Content Include="Views\Home\_ToDoJob10MonthAnniversary.cshtml" />
     <Content Include="Views\Home\_ToDoPaymentRequestApprovalOutOfWarranty.cshtml" />
     <Content Include="Views\Home\_MyTeamDropdown.cshtml" />
+    <Content Include="Views\Home\_ToDoPaymentStatusChanged.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

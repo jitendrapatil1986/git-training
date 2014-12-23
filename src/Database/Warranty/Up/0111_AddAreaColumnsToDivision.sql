@@ -1,0 +1,1 @@
+ALTER TABLE Divisions ADD AreaCode VARCHAR(3), AreaName VARCHAR(255);

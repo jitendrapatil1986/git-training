@@ -29,7 +29,7 @@
             {
                 var payment = _database.SingleById<Payment>(message.PaymentId);
                 var backcharge = _database.SingleOrDefault<Backcharge>("Where PaymentId = @0", message.PaymentId);
-                
+
                 if (backcharge != null)
                 {
                     backcharge.BackchargeStatus = BackchargeStatus.RequestedDelete;
