@@ -134,13 +134,13 @@ namespace Warranty.Core.Features.JobSummary
                                     wc.ServiceCallId as ServiceCallId
                                     ,wc.ServiceCallStatusId as ServiceCallStatus
                                     ,Servicecallnumber as CallNumber
-                                    ,STUFF((SELECT '| ' + l.ProblemDescription
+                                    ,ISNULL(STUFF((SELECT '| ' + l.ProblemDescription
                                                     FROM ServiceCallLineItems l WHERE l.ServiceCallId = wc.servicecallid
-                                                    FOR xml path('')),1,1,'') AS Summary
+                                                    FOR xml path('')),1,1,''), '') AS Summary
                                     ,wc.CreatedDate
                                     ,wc.CompletionDate
                                     ,case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
-                                    ,NumberOfLineItems
+                                    ,ISNULL(NumberOfLineItems, 0) as NumberOfLineItems
                                     ,LOWER(e.EmployeeName) as AssignedTo
                                     ,e.EmployeeNumber as AssignedToEmployeeNumber
                                     ,wc.SpecialProject as IsSpecialProject
@@ -158,7 +158,7 @@ namespace Warranty.Core.Features.JobSummary
                                 ON wc.JobId = j.JobId
                                 INNER JOIN HomeOwners ho
                                 ON j.CurrentHomeOwnerId = ho.HomeOwnerId
-                                INNER JOIN (select COUNT(*) as NumberOfLineItems, ServiceCallId FROM ServiceCallLineItems group by ServiceCallId) li
+                                LEFT JOIN (select COUNT(*) as NumberOfLineItems, ServiceCallId FROM ServiceCallLineItems group by ServiceCallId) li
                                 ON wc.ServiceCallId = li.ServiceCallId
                                 LEFT JOIN Employees e
                                 ON wc.WarrantyRepresentativeEmployeeId = e.EmployeeId

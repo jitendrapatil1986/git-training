@@ -177,7 +177,7 @@ namespace Warranty.Core.Features.JobSummary
             public List<JobServiceCallNote> JobServiceCallNotes { get; set; }
 
             public string Summary { get; set; }
-            public string[] SummaryOfLineItems{get { return Summary.Split('|'); }}
+            public string[] SummaryOfLineItems{get { return string.IsNullOrEmpty(Summary) ? new string[0] : Summary.Split('|'); }}
 //NPoco needs prop to be List<> to use FetchOneToMany(). Also need to set to IGNORE if inserting.
 
             public class JobServiceCallNote
