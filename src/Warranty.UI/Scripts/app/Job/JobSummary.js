@@ -177,6 +177,7 @@ require(['/Scripts/app/main.js'], function () {
                 self.number = option.number;
                 self.contactInfo = option.contactInfo;
                 self.costCodes = option.costCodes;
+                self.costCodesSeparatedByComma = option.costCodesSeparatedByComma;
             };
 
             function JobAttachmentViewModel(option) {
