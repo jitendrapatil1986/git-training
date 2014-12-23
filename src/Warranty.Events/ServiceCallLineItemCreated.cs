@@ -11,8 +11,9 @@
         public string ProblemCode { get; set; }
         public string ProblemDescription { get; set; }
         public string CauseDescription { get; set; }
-        public string ClassificationNote { get; set; }
-        public string LineItemRoot { get; set; }
         public string ServiceCallLineItemStatus { get; set; }
+        public string RootCause { get; set; }
+        public string RootProblem { get; set; }
+        public string ProblemJdeCode { get; set; }
     }
 }

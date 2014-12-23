@@ -220,7 +220,6 @@
     <Compile Include="Controllers\ServiceRepController.cs" />
     <Compile Include="Controllers\StatsController.cs" />
     <Compile Include="Core\Enumerations\NavHeaderItem.cs" />
-    <Compile Include="Core\Enumerations\NavItem.cs" />
     <Compile Include="Core\Enumerations\ToastType.cs" />
     <Compile Include="Core\Filters\ModelStateToTempData.cs" />
     <Compile Include="Core\Filters\WarrantyServiceCoordinatorOnlyAttribute.cs" />
@@ -450,6 +449,7 @@
     <Content Include="Views\Home\_ToDoJob10MonthAnniversary.cshtml" />
     <Content Include="Views\Home\_ToDoPaymentRequestApprovalOutOfWarranty.cshtml" />
     <Content Include="Views\Home\_MyTeamDropdown.cshtml" />
+    <Content Include="Views\Home\_ToDoPaymentStatusChanged.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

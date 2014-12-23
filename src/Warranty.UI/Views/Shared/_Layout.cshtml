@@ -1,13 +1,7 @@
 @using System.Web.Optimization
+@using Warranty.Core.Enumerations
 @using Warranty.UI.Core.Enumerations
 @using Warranty.UI.Core.Helpers
-@helper NavItemHelper(NavItem navItem, string url, string data = null)
-{
-    data = data ?? String.Empty;
-    <li class="@(navItem.DisplayName.Equals(ViewData[Warranty.UI.Core.Filters.CurrentNavSectionAttribute.ViewDataKey]) ? "active" : "")">
-            <a @data href="@url">@navItem.Title</a>
-    </li>
-}
 
 @helper NavHeaderItemHelper(NavHeaderItem item)
 {
@@ -16,19 +10,26 @@
 
 @helper NavItemSectionHelper(string key)
 {
-    <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">@key <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-            @foreach (var item in NavHeaderItem.GetAll(key))
-            {
-                if (item.HasDivider)
+    if (NavHeaderItem.GetAll(key).Count() == 1)
+    {
+        @NavHeaderItemHelper(NavHeaderItem.GetAll(key).First())
+    }
+    else
+    {
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">@key <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                @foreach (var item in NavHeaderItem.GetAll(key))
                 {
-                    <li class="divider"></li>
+                    if (item.HasDivider)
+                    {
+                        <li class="divider"></li>
+                    }
+                    @NavHeaderItemHelper(item)
                 }
-                @NavHeaderItemHelper(item)
-            }
-        </ul>
-    </li>
+            </ul>
+        </li>
+    }
 }
 
 <!DOCTYPE html>
@@ -88,17 +89,21 @@
         <div id="subNavMenu" class="subnav subnav-fixed no-print" role="navigation">
             <div class="container">
                 <ul class="nav navbar-nav hidden-xs">
-                    @NavItemHelper(NavItem.Home, Url.Action("Index", "Home"))
+                    @NavItemSectionHelper(NavHeaderItem.Home.Key)
                     <li class="divider divider-vertical hidden-xs"></li>
                     @NavItemSectionHelper(NavHeaderItem.Reports.Key)
                     <li class="divider divider-vertical hidden-xs"></li>
+                    @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                    {
+                        @NavItemSectionHelper(NavHeaderItem.Administration.Key)
+                        <li class="divider divider-vertical hidden-xs"></li>
+                    }
                     @{ Html.RenderAction("MyTeamDropdown", "Home"); }
                 </ul>
-                    <div class="main-search nav-extra">
-                        <div class="input-group">
-                            <input id="searchBar" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder=""/>
-                            <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
-                        </div>
+                <div class="main-search nav-extra">
+                    <div class="input-group">
+                        <input id="searchBar" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder=""/>
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
                     </div>
                 </div>
             </div>

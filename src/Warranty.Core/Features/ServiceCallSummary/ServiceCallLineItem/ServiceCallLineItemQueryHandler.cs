@@ -103,8 +103,6 @@
                                     li.[ProblemCode],
                                     li.[ProblemDescription],
                                     li.[CauseDescription],
-                                    li.[ClassificationNote],
-                                    li.[LineItemRoot],
                                     li.[CreatedDate],
                                     li.[ServiceCallLineItemStatusId] as ServiceCallLineItemStatus,
                                     li.[RootCause],
