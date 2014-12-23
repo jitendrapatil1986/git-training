@@ -91,17 +91,27 @@
                                             @Html.ActionLink(sc.CallNumber, "CallSummary", "ServiceCall", new { id = sc.ServiceCallId }, null)
                                         </small>
                                     </div>
-                                    <div class="col-md-7 text-capitalize small">
-                                        <b>Line Item Problem Descriptions</b>
-                                        <ul>
-                                            @foreach (var summary in sc.SummaryOfLineItems)
-                                            {
-                                                <li>@Html.Raw(summary)</li>
-                                            }
-                                        </ul>
-                                        Assigned to @Html.DisplayFor(x => sc.AssignedTo)
+                                    <div class="col-md-7">
+                                        <b class="text-capitalize small">Line Item Problem Descriptions</b>
+                                        @if (sc.SummaryOfLineItems.Any())
+                                        {
+                                            <ul>
+                                                @foreach (var summary in sc.SummaryOfLineItems)
+                                                {
+                                                    <li class="text-capitalize small">@Html.Raw(summary)</li>
+                                                }
+                                            </ul>
+                                        }
+                                        else
+                                        {
+                                            <br/>
+                                            <em class="small">There are no line items</em>
+                                            <br/>
+                                        }
                                         <br/>
-                                        @(sc.CompletionDate == null ? "Date Added: " + Format.DateMonthDayYear(sc.CreatedDate) : "Date Completed: " + Format.DateMonthDayYear(sc.CompletionDate))
+                                        <span class="text-capitalize small">Assigned to @Html.DisplayFor(x => sc.AssignedTo)</span>
+                                        <br/>
+                                        <span class="text-capitalize small">@(sc.CompletionDate == null ? "Date Added: " + Format.DateMonthDayYear(sc.CreatedDate) : "Date Completed: " + Format.DateMonthDayYear(sc.CompletionDate))</span>
                                     </div>
                                     <div class="col-md-2">
                                         @if (sc.JobServiceCallNotes.Any(x => !string.IsNullOrEmpty(x.Note)))
@@ -286,20 +296,24 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <!-- ko foreach: groupedVendors-->
+<!-- ko foreach: groupedVendors-->
                             <div class="row margin-top-10" data-bind="foreach: $data">
                                 <div class="col-md-4">
                                     <div class="panel panel-default">
                                         <div class="panel-heading"><div class="panel-title"><span class="panel-title text-capitalize" data-bind="text: name + ' (' + number + ')'"></span></div></div>
                                         <div class="panel-body">
                                             <strong>Work Performed</strong>
-                                            <p id="lalala" data-bind="foreach: costCodes">
-                                                <small><span data-bind="text: costCodeDescription"></span></small><br/>
+                                            <p id="lalala">
+                                                <small><span data-bind="text: costCodesSeparatedByComma"></span></small>
                                             </p>
                                             <!-- ko if: contactInfo.length > 0 -->
                                             <strong>Contact Information</strong>
                                             <p data-bind="foreach: contactInfo">
-                                                <small><span data-bind="text: value + ' (' + type + ')' "></span></small><br/>
+                                                <!-- ko if: type != 'E-mail'-->
+                                                <small><span data-bind="text: value"></span> <span data-bind="    text: type!=''?'(' + type + ')': ''"></span></small><br/>
+                                                <!-- /ko -->
+                                                <!-- ko if: type === 'E-mail'-->
+                                                <small><a data-bind="text: value, attr: { href: 'mailto:'+value} "></a></small><br/><!-- /ko -->                            
                                             </p>
                                             <!-- /ko -->
                                         </div>

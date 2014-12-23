@@ -11,6 +11,7 @@ namespace Warranty.Core.Features.JobSummary
     using Security;
     using Services;
     using System.Linq;
+    using Warranty.Core.Extensions;
     using HttpApiClient = JobService.Client.Api.HttpApiClient;
 
     public class JobSummaryQueryHandler : IQueryHandler<JobSummaryQuery, JobSummaryModel>
@@ -30,7 +31,6 @@ namespace Warranty.Core.Features.JobSummary
 
         public JobSummaryModel Handle(JobSummaryQuery query)
         {
-            var user = _userSession.GetCurrentUser();
             var model = GetJobSummary(query.JobId);
             model.JobServiceCalls = GetJobServiceCalls(query.JobId);
             model.JobSelections = GetJobSelections(query.JobId);
@@ -158,7 +158,7 @@ namespace Warranty.Core.Features.JobSummary
                                 ON wc.JobId = j.JobId
                                 INNER JOIN HomeOwners ho
                                 ON j.CurrentHomeOwnerId = ho.HomeOwnerId
-                                INNER JOIN (select COUNT(*) as NumberOfLineItems, ServiceCallId FROM ServiceCallLineItems group by ServiceCallId) li
+                                LEFT JOIN (select COUNT(*) as NumberOfLineItems, ServiceCallId FROM ServiceCallLineItems group by ServiceCallId) li
                                 ON wc.ServiceCallId = li.ServiceCallId
                                 LEFT JOIN Employees e
                                 ON wc.WarrantyRepresentativeEmployeeId = e.EmployeeId
@@ -272,17 +272,17 @@ namespace Warranty.Core.Features.JobSummary
         private IEnumerable<JobSummaryModel.Vendor> GetJobVendors(Guid jobId)
         {
             const string sql = @"SELECT v.VendorId, v.Number, v.Name, ci.Value, ci.Type, jbcc.CostCode, jbcc.CostCodeDescription FROM Vendors v
-                                INNER JOIN (SELECT VendorId, number as Value, Type as Type FROM VendorPhones
+                                INNER JOIN (SELECT VendorId, number as Value, Type as Type FROM VendorPhones WHERE number IS NOT NULL OR LTRIM(RTRIM(number)) <> ''
                                     UNION
-                                    SELECT VendorId, email as Value, 'E-mail' as Type FROM VendorEmails) as ci 
+                                    SELECT VendorId, email as Value, 'E-mail' as Type FROM VendorEmails  WHERE LTRIM(RTRIM(email)) <> '') as ci
                                     on v.vendorid = ci.vendorid
                                 INNER JOIN JobVendorCostCodes jbcc
                                 ON jbcc.VendorId = v.VendorId
                                 AND jbcc.JobId = @0";
 
-            var result = _database.Fetch<VendorDto>(sql, jobId);
+            var result = _database.Fetch<VendorDto>(sql, jobId).ToList();
 
-            return
+            var vendors = 
                 result.Select(x => new JobSummaryModel.Vendor
                 {
                     Name = x.Name,
@@ -294,15 +294,22 @@ namespace Warranty.Core.Features.JobSummary
                               {
                                   CostCode = cc.CostCode,
                                   CostCodeDescription = cc.CostCodeDescription
-                              }).Distinct().OrderBy(ob => ob.CostCode).ToList(),
+                              }).OrderBy(ob => ob.CostCode).ToList(),
                     ContactInfo =
                         result.Where(v => v.VendorId == x.VendorId)
                               .Select(cc => new JobSummaryModel.Vendor.ContactInfoModel()
                               {
                                   Value = cc.Value,
                                   Type = cc.Type
-                              }).Distinct().OrderBy(ob => ob.Value).ToList()
-                }).Distinct().OrderBy(x => x.Name).ToList();
+                              }).OrderBy(ob => ob.Value).ToList()
+                }).OrderBy(x => x.Name).ToList();
+
+            vendors.ForEach(x =>
+                {
+                    x.CostCodesSeparatedByComma = x.CostCodes.Select(z=>z.CostCodeDescription).OrderBy(y=>y).CommaSeparate();
+                });
+
+            return vendors;
         }
 
         public class VendorDto
