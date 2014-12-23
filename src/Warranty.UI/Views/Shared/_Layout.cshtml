@@ -21,7 +21,8 @@
             <ul class="dropdown-menu">
                 @foreach (var item in NavHeaderItem.GetAll(key))
                 {
-                    if ((item.Value != NavHeaderItem.ManageCostCode.Value) || (item.Value == NavHeaderItem.ManageCostCode.Value && User.IsInRole(UserRoles.WarrantyAdmin)))
+                    if((item.Value != NavHeaderItem.ManageCostCode.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))) || 
+                       (item.Value == NavHeaderItem.ManageCostCode.Value && User.IsInRole(UserRoles.WarrantyAdmin)))
                     {
                         if (item.HasDivider)
                         {
@@ -96,7 +97,7 @@
                     <li class="divider divider-vertical hidden-xs"></li>
                     @NavItemSectionHelper(NavHeaderItem.Reports.Key)
                     <li class="divider divider-vertical hidden-xs"></li>
-                    @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                    @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager) || User.IsInRole(UserRoles.WarrantyAdmin))
                     {
                         @NavItemSectionHelper(NavHeaderItem.Administration.Key)
                         <li class="divider divider-vertical hidden-xs"></li>
