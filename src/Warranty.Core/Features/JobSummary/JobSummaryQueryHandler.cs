@@ -282,31 +282,31 @@ namespace Warranty.Core.Features.JobSummary
 
             var result = _database.Fetch<VendorDto>(sql, jobId).ToList();
 
-            var vendors = 
-                result.Select(x => new JobSummaryModel.Vendor
+            var vendors =
+            result.Select(x => new JobSummaryModel.Vendor
+            {
+                Name = x.Name,
+                Number = x.Number,
+                VendorId = x.VendorId,
+                CostCodes =
+                result.Where(v => v.VendorId == x.VendorId)
+                .Select(cc => new JobSummaryModel.CostCodeModel
                 {
-                    Name = x.Name,
-                    Number = x.Number,
-                    VendorId = x.VendorId,
-                    CostCodes =
-                        result.Where(v => v.VendorId == x.VendorId)
-                              .Select(cc => new JobSummaryModel.CostCodeModel
-                              {
-                                  CostCode = cc.CostCode,
-                                  CostCodeDescription = cc.CostCodeDescription
-                              }).OrderBy(ob => ob.CostCode).ToList(),
-                    ContactInfo =
-                        result.Where(v => v.VendorId == x.VendorId)
-                              .Select(cc => new JobSummaryModel.Vendor.ContactInfoModel()
-                              {
-                                  Value = cc.Value,
-                                  Type = cc.Type
-                              }).OrderBy(ob => ob.Value).ToList()
-                }).OrderBy(x => x.Name).ToList();
+                    CostCode = cc.CostCode,
+                    CostCodeDescription = cc.CostCodeDescription
+                }).Distinct().OrderBy(ob => ob.CostCode).ToList(),
+                ContactInfo =
+                result.Where(v => v.VendorId == x.VendorId)
+                                              .Select(cc => new JobSummaryModel.Vendor.ContactInfoModel()
+                                              {
+                                                  Value = cc.Value,
+                                                  Type = cc.Type
+                                              }).Distinct().OrderBy(ob => ob.Value).ToList()
+            }).Distinct().OrderBy(x => x.Name).ToList();
 
             vendors.ForEach(x =>
                 {
-                    x.CostCodesSeparatedByComma = x.CostCodes.Select(z=>z.CostCodeDescription).OrderBy(y=>y).CommaSeparate();
+                    x.CostCodesSeparatedByComma = x.CostCodes.Select(z => z.CostCodeDescription).OrderBy(y => y).CommaSeparate();
                 });
 
             return vendors;
