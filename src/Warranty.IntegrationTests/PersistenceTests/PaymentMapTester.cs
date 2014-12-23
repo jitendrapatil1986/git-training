@@ -63,7 +63,8 @@ namespace Warranty.IntegrationTests.PersistenceTests
                 ServiceCallNumber = 12345,
                 ServiceCallType = "Warranty",  //TODO: Need to update.
                 WarrantyRepresentativeEmployeeId = employeeId,
-                WorkSummary = "Testing"
+                WorkSummary = "Testing",
+                HomeownerVerificationType = HomeownerVerificationType.NotVerified,
             };
 
             var serviceCallLineItem = new ServiceCallLineItem
