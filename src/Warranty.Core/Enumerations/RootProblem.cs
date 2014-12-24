@@ -30,5 +30,6 @@
         public static readonly RootProblem Trim = new RootProblem(21, "Trim");
         public static readonly RootProblem Tile = new RootProblem(22, "Tile");
         public static readonly RootProblem Windows = new RootProblem(23, "Windows");
+        public static readonly RootProblem Imported = new RootProblem(24, "Imported");
     }
 }
