@@ -114,6 +114,7 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="IntegrationSetUpFixture.cs" />
+    <Compile Include="MediatorMessagingTests\CommunityEntityBuilder.cs" />
     <Compile Include="MediatorMessagingTests\EmployeeEntityBuilder.cs" />
     <Compile Include="MediatorMessagingTests\JobEntityBuilder.cs" />
     <Compile Include="MediatorMessagingTests\EntityBuilder.cs" />
