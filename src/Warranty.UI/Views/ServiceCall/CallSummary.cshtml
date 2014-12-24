@@ -1,4 +1,5 @@
-﻿@using Warranty.Core.Enumerations
+﻿@using Warranty.Core.Configurations
+@using Warranty.Core.Enumerations
 @using Warranty.Core.Extensions
 @using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.ServiceCallSummary.ServiceCallSummaryModel
@@ -11,240 +12,387 @@
 {
     if (completionDate == null)
     {
-    <div class="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(createdDate)">
-        <span class="glyphicon glyphicon-time text-muted"></span>@Format.ServiceCallDaysLeft(numberOfDaysRemaining)<br />
-        <div class="progress time-remaining-progress hidden-sm hidden-xs">
-            <div class="progress-bar @Css.ServiceCallProgressBar(numberOfDaysRemaining)" role="progressbar" style="width: @percentComplete%">
-                <span class="sr-only">@percentComplete% Complete</span>
+        <div class="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(createdDate)">
+            <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(numberOfDaysRemaining)<br />
+            <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                <div class="progress-bar @Css.ServiceCallProgressBar(numberOfDaysRemaining)" role="progressbar" style="width: @percentComplete%">
+                    <span class="sr-only">@percentComplete% Complete</span>
+                </div>
             </div>
         </div>
-    </div>
     }
     else
     {
-    <div class="float-right-non-xs-screen">
         @Format.DaysOpenedFor(daysOpenedFor, createdDate, completionDate)
-    </div>
     }
 }
 
 
-@helper EscalationHelper(bool escalated, DateTime? escalationDate, string escalationReason)
-{
-    if (escalated)
-    {
-    <div class='label label-danger'>
-        <span class='glyphicon glyphicon-fire'></span>
-        @Format.DateMonthDayYear(escalationDate) - @escalationReason
-    </div>
-    }
-}
-
+<div style="display: none;" data-bind="visible: true">
 <div class="container">
-    <div class="col-md-12">
-        <section>
-            <h2 class="pull-left">Service Call # @Model.ServiceCallSummary.CallNumber</h2>
-            @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
-            {
-                <div class="service-call-header-buttons">
-                    @Format.ServiceCallToggleButton("special_project", Model.ServiceCallSummary.IsSpecialProject, "Special Project", "Not Special Project")
+
+    @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallStatus, new { id = "callSummaryServiceCallStatus"})
+        <section class="margin-bottom-10">
+            <h2 class="pull-left no-margin">Service Call #@Model.ServiceCallSummary.CallNumber</h2>
+
+            <div class="warranty-header-buttons no-print">
+                @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                {
+                    <div data-bind="visible: callSummaryStatusOpen()">
+                        @Format.ServiceCallToggleButton("escalate", Model.ServiceCallSummary.IsEscalated, "Escalate", "De-escalate")
+                        @Format.ServiceCallToggleButton("special_project", Model.ServiceCallSummary.IsSpecialProject, "Special Project", "Not Special Project")
+                    </div>
+                    <div data-bind="visible: callSummaryStatusComplete() && canBeReopened()">
+                        <a href='#' class='btn btn-default pull-right btn-action-with-popup' data-action-with-popup='reopen' id='btn_reopen'>Reopen</a>
+                    </div>
+                    <div data-bind="visible: canBeCompleted()">
+                        <a href='#' class='btn btn-default pull-right' data-action-with-popup='reopen' data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" id='btn_complete'>Complete</a>
+                    </div>
+                }
+                <div data-bind="visible: canBeDeleted()">
+                    <a href='#' data-bind="click: deleteServiceCall" class='btn btn-default pull-right' id='btn_delete'>Delete</a>
                 </div>
-            }
+            </div>
+            
             <div class="clearfix"></div>
         </section>
-        <div class="panel panel-default">
-            <div class="panel-heading text-capitalize">
+        <div id="serviceCallSummaryPage">
+            <div class="panel panel-default">
+            <div class="panel-heading">
                 <div class="row remove-list-style">
-                    <div class="col-md-3 margin-bottom-10">
-                        <h3 class="panel-title text-capitalize">@Model.ServiceCallSummary.HomeownerName</h3>
-                        <ul>
-                            <li>@Html.ActionLink(Model.ServiceCallSummary.Address, "JobSummary", "Job", new { id = Model.ServiceCallSummary.JobId }, null)</li>
-                            <li>@Format.PhoneNumber(Model.ServiceCallSummary.PhoneNumber)</li>
-                            <li><a>@Format.Email(Model.ServiceCallSummary.EmailAddress)</a></li>
+                    <div class="col-md-3 main-info">
+                        <h3 class="panel-title text-capitalize">@Format.HomeOwner(Model.ServiceCallSummary.HomeownerName, Model.ServiceCallSummary.HomeownerNumber)</h3>
+                        <ul class="no-print">
+                            <li class="text-capitalize">@Model.ServiceCallSummary.Address</li>
+                            <li>
+                                @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.ServiceCallSummary.HomePhone,Url.Action("AddOrUpdatePhoneNumber","Homeowner"), Model.ServiceCallSummary.HomeownerId)
+                            </li>
+                            <li>
+                                @Format.EditableEmailForServiceCall(Model.ServiceCallSummary.EmailAddress, Url.Action("AddOrUpdateEmail","Homeowner"), Model.ServiceCallSummary.HomeownerId, Model.ServiceCallSummary.CallNumber)
+                            </li>
                         </ul>
-                        <span>@Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate)</span>
                     </div>
                     <div class="col-md-3">
                         <ul class="border-bottom-1-solid">
-                            <li class="clearfix"><span class="pull-left">Created By:</span><span class="pull-right">Mr. Placeholder</span></li>
+                            <li class="clearfix"><span class="pull-left">Created By:</span><span class="pull-right">@Model.ServiceCallSummary.CreatedBy</span></li>
                             <li class="clearfix"><span class="pull-left">Created On:</span><span class="pull-right">@Format.DateMonthDayYear(Model.ServiceCallSummary.CreatedDate)</span></li>
-                            <li class="clearfix"><span class="pull-left">Assignee:</span><span class="pull-right">@Model.ServiceCallSummary.AssignedTo</span></li>
+                            <li class="clearfix">
+                                <span class="pull-left">Assignee:</span>
+                                    @if (Model.CanReassign)
+                                    {
+                                        <div class="inline-editable-dropdown pull-right text-capitalize">
+                                            <a href="#" id="Employee_List" data-source="@Url.Action("GetEmployees", "ServiceCall", new { id = Model.ServiceCallSummary.ServiceCallId })" data-url="@Url.Action("InlineReassign", "ServiceCall")" data-pk="@Model.ServiceCallSummary.ServiceCallId" data-value="@Model.ServiceCallSummary.AssignedToEmployeeNumber">@Model.ServiceCallSummary.AssignedTo</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="pull-right">@Model.ServiceCallSummary.AssignedTo</span>
+                                    }
+                            </li>
                         </ul>
                     </div>
                     <div class="col-md-3">
                         <ul class="border-bottom-1-solid">
                             <li class="clearfix"><span class="pull-left">Job Number:</span>
-                                <span class="pull-right">@Html.ActionLink(Model.ServiceCallSummary.JobNumber, "JobSummary", "Job", new { id = Model.ServiceCallSummary.JobId }, null)</span></li>
+                                <span class="pull-right">@Html.ActionLink(Model.ServiceCallSummary.JobNumber, "JobSummary", "Job", new { id = Model.ServiceCallSummary.JobId }, null)&nbsp;&nbsp;<span>@Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate)</span></span></li>
                             <li class="clearfix"><span class="pull-left">Payments:</span><span class="pull-right">&nbsp;</span></li>
                             <li class="clearfix"><span class="pull-left">Division:</span><span class="pull-right">@Model.ServiceCallSummary.DivisionName</span></li>
+                            <li class="clearfix print-only"><span class="pull-left">Phone Number:</span><span class="pull-right">@Model.ServiceCallSummary.HomePhone</span></li>
+                            <li class="clearfix print-only"><span class="pull-left">E-mail:</span><span class="pull-right">@Model.ServiceCallSummary.EmailAddress</span></li>
                         </ul>
                     </div>
                     <div class="col-md-3">
-                        <div class="float-right-non-xs-screen">
-                            <div id="approveCommands" class="margin-bottom-10">
-                                @if (Model.ServiceCallSummary.ServiceCallStatus == ServiceCallStatus.Requested && Model.CanApprove)
-                                {
-                                    <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
-                                    <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
-                                }
-                                else
-                                {
-                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus) </span>
-                                }
-                            </div>
-                            @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
+                        <div id="approveCommands" class="margin-bottom-10">
+                            
+                            @if (Model.ServiceCallSummary.ServiceCallStatus == ServiceCallStatus.Requested && Model.CanApprove)
+                            {
+                                <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" data-display-status="true" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
+                                <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" data-display-status="true" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
+                                    
+                            }
+                            else
+                            {
+                                <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus") </span>
+                            }
                         </div>
-                    </div>
-                </div>
-                @*<div class="panel-body">
-                <div class="row">
-                    <div class="col-md-11"></div>
-                    <div class="col-md-1 pull-right">
-                        @Format.SpecialProject(Model.ServiceCallSummary.IsSpecialProject)
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h4>
-                        @EscalationHelper(Model.ServiceCallSummary.IsEscalated, Model.ServiceCallSummary.EscalationDate, Model.ServiceCallSummary.EscalationReason)
-                    </h4>
-                </div>
-            </div>*@
-            </div>
-            <section>
-                <h3 class="col-md-12">Line Items
-                <span>
-                    <button type="button" class="btn btn-default pull-right has-bottom-tooltip" title="Add Line Item" data-toggle="collapse" data-target="#addCallLineItem"><span class="glyphicon glyphicon-plus"></span></button>
-                </span>
-                </h3>
-                @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallId, new { id = "addCallLineServiceCallId", @class = "form-control" })
-                <div id="addCallLineItem" class="collapse">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Add Line Item</div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    @Html.Label("Problem Code")
-                                    @Html.DropDownList("SelectProblemCode", Model.AddServiceCallLineItem.ProblemCodes, "Select Problem Code", new { id = "addCallLineProblemCode", @class = "form-control" })
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-12">
-                                    @Html.Label("Description")
-                                    @*@Html.TextArea("Description", null, new {id="addCallLineProblemDescription", @class="form-control", data_bind="value: problemDescription, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Description'}"})*@
-                                    @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "attr:{placeholder: 'Add Description'}" })
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-1">
-                                    @*<button class="btn btn-default" data-bind="click: addLineItem, enable: problemDescription().length > 0">Save</button>*@
-                                    <button class="btn btn-default" data-bind="click: addLineItem">Save</button>
-                                </div>
-                                <div class="col-md-1 btn">
-                                    <a href="#" data-toggle="collapse" data-target="#addCallLineItem">Cancel</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="remove-list-style">
-                    <div class="clearfix"></div>
-                    <ul>
-                        <div data-bind="foreach: allLineItems">
-                            <div id="allServiceCallLineItems" class="service-call-line edit-line-item">
-                                <li class="row">
-                                    <div class="col-md-12">
-                                        <div class="col-md-9">
-                                            <div class="no-left-right-padding">
-                                                <div class="row">
-                                                    <div class="col-md-9">
-                                                        <div class="editor" data-bind="css: { editing: problemCodeEditing }">
-                                                            <h4>
-                                                                <select class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemCode, optionsText: 'problemCode', optionsValue: 'problemCode', optionsCaption: 'Select Problem Code' "></select>
-                                                                <small class="text-muted view" data-bind="text: problemCode"></small>
-                                                            </h4>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="editor" data-bind="css: { editing: problemDescriptionEditing }">
-                                                            <p class="view" data-bind="text: problemDescription"></p>
-                                                            <textarea id="updateCallLineProblemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-4 col-xs-12 no-left-right-padding top-buffer bottom-buffer">
-                                                        <div class="editor" data-bind="css: { editing: lineEditing }">
-                                                            <div class="col-md-3 col-xs-4">
-                                                                <button type="submit" class="btn btn-primary btn-sm edit" data-bind="click: saveLineItemChanges">Save</button>
-                                                            </div>
-                                                            <div class="col-md-3 col-xs-4">
-                                                                <button type="button" class="btn btn-default btn-sm edit" data-bind="click: cancelLineItemChanges">Cancel</button>
-                                                                @*<a href="#" class="small editable-cancel edit" data-bind="click: cancelLineItemChanges">Cancel</a>*@
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                            @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
+                            
+                        </div>
+                </div>
+            </div>
+            @Html.Partial("_AdditionalContacts", Model.ServiceCallSummary.HomeownerId)
+ 
+            @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignature, new { id = "verifiedHomeownerSignature"})
+            @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationSignatureDate, new { id = "verifiedHomeownerSignatureDate"})
+            @Html.HiddenFor(model => model.ServiceCallSummary.HomeownerVerificationType, new {id = "verifiedHomeownerType"})
+
+            <section data-bind="visible: verifiedHomeownerSignature() && (callSummaryStatusSigned() || callSummaryStatusComplete())">
+                <div class="alert alert-success no-bottom-margin" >
+                    <span data-bind="text: verifiedSignature()"></span>
+                </div>
+            </section>
+            <section data-bind="visible: isEscalated">
+                <div class="alert alert-danger no-bottom-margin">
+                    <strong>Escalated</strong> <span data-bind="text: escalationDate()!=null ? moment(escalationDate()).format('MM/DD/YYYY') : ''"></span><span data-bind="    text: (escalationReason()) ? ' - ' + escalationReason() : ''"></span>    
+                </div>
+            </section>
+            <section data-bind="visible: isSpecialProject">
+                <div class="alert alert-info no-bottom-margin">
+                    <strong>Special Project</strong> <span data-bind="text: specialProjectDate()!=null ? moment(specialProjectDate()).format('MM/DD/YYYY') : ''"></span><span data-bind="    text: (specialProjectReason()) ? ' - ' + specialProjectReason(): ''"></span>
+                </div>
+            </section>
+                
+            @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+            {
+                <section data-bind="visible: areAllLineItemsCompleted() && !callSummaryStatusComplete() && !callSummaryStatusSigned()">
+                    <h3 class="col-md-12">Verify Homeowner Signature</h3>
+                    <div id="verifyHomeownerSignature">
+                        <div class="panel panel-default no-border">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <form>
+                                        <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationTypeId">
+                                            <label class="control-label" for="verifyHomeownerType"></label>
+                                            <select id="verifyHomeownerType" class="form-control" data-bind="options: homeownerVerificationCodes, value: homeownerVerificationTypeId, optionsText: 'displayText', optionsValue: 'value', optionsCaption: 'Select Verification Type'"></select>
                                         </div>
-                                        <div class="col-md-3 margin-top-13 margin-bottom-3 text-align-right no-right-padding">
-                                            <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: editLine, visible: lineEditing() == false">Edit</button>
-                                            @* <button id="btn-complete-line-item" type="button" class="btn btn-default btn-sm btn-hover-show" data-bind="visible: lineEditing() == false">Complete</button>*@
+                                        <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationSignature">
+                                            <label class="control-label" for="homeownerVerificationSignature"></label>
+                                            @Html.TextBox("Signature", null, new {id = "homeownerVerificationSignature", @class = "form-control", data_bind = "value: homeownerVerificationSignature, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Signature'}"})
                                         </div>
-                                    </div>
-                                </li>
-                                <div class="clearfix"></div>
+                                        <div class="control-group col-md-2 no-right-padding" data-bind="validationElement: homeownerVerificationSignatureDate">
+                                            <label class="control-label" for="homeownerVerificationSignatureDate"></label>
+                                            @Html.TextBox("Date", null, new {id = "homeownerVerificationSignatureDate", @class = "datepicker-input form-control", data_bind = "value: homeownerVerificationSignatureDate, attr:{placeholder: 'Select Date'}"})
+                                        </div>
+                                        <br/>
+                                        <div class="col-md-1">
+                                            <button class="btn btn-primary" data-bind="click: saveVerifiedHomeownerSignature">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                </section>
+            }
+
+            <section class="line-items margin-bottom-15">
+                <h3 class="col-md-12">Line Items
+                    <span>
+                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Line Item" data-toggle="collapse" data-target="#addCallLineItem" data-bind="visible: !callSummaryStatusComplete() && !callSummaryStatusSigned()"><span class="glyphicon glyphicon-plus"></span></button>
+                    </span>
+                </h3>
+                <div class="clearfix"></div>
+                @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallId, new { id = "callSummaryServiceCallId", @class = "form-control" })
+                <div id="addCallLineItem" class="collapse">
+                    <div class="panel-body">
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="form-group" data-bind="validationElement: problemJdeCodeToAdd">
+                                    <select id="addCallLineProblemCode" class="form-control" data-bind="options: theLookups, value: problemJdeCodeToAdd, optionsText: 'problemCode', optionsValue: 'problemId', optionsCaption: 'Select Problem Code'"></select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group" data-bind="validationElement: problemDescriptionToAdd">
+                                    @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
+                                </div>
+                                <div class="form-submit">
+                                    <button class="btn btn-primary" data-bind="click: addLineItem">Add</button>
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addCallLineItem">Cancel</button>
+                                </div>
+                            </div></div>
+                        <div class="col-md-3 hidden" data-bind="css: { hidden: relatedCalls().length == 0}">
+                            @Html.Label("Related Calls")
+                            <div data-bind="foreach: relatedCalls">
+                                <div class="well well-sm">
+                                <strong><a data-bind="attr: {href: callSummaryUrl}"><span data-bind="text: callNumber"></span></a></strong><br />
+                                <span data-bind="text: problemDescription"></span><br />
+                                <small class="text-muted">Date Created: <span data-bind="text: moment(createdDate).format('LL')"></span></small>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                        <div data-bind="foreach: allLineItems">
+                            <div data-bind="click: jumpToServiceCallLineDetailPage, css: { 'cursor-pointer': lineEditing() == false }">
+                                <div id="allServiceCallLineItems" class="service-call-line edit-line-item row lineDetail" data-bind="attr: {'data-service-call-line-item': lineNumber()}">
+                                                <div class="col-md-9">
+                                                                <div class="control-group" data-bind="validationElement: problemJdeCode">
+                                                                   <label class="control-label" for="problemJdeCode"></label>
+                                                                    <div class="editor" data-bind="css: { editing: problemCodeEditing }">
+                                                                        <select id="problemJdeCode" class="edit dropdown form-control" data-bind="options: $parent.theLookups, value: problemJdeCode, optionsText: 'problemCode', optionsValue: 'problemId', optionsCaption: 'Select Problem Code'"></select> 
+                                                                        <h4>
+                                                                            <span data-bind="text: problemCode" class="view"></span>
+                                                                        </h4>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="control-group margin-bottom-10" data-bind="validationElement: problemDescription">
+                                                                    <div class="editor" data-bind="css: { editing: problemDescriptionEditing }"> 
+                                                                        <p class="view" data-bind="text: problemDescription"></p>
+                                                                        <textarea id="problemDescription" class="edit small form-control" type="text" data-bind="value: problemDescription"></textarea>
+                                                                        <span class="text-muted view margin-right-10" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
+                                                                        <div class="indicator-icon-with-value margin-right-10 view" data-bind="visible: numberOfAttachments > 0">
+                                                                            <span class="glyphicon glyphicon-paperclip"></span><span data-bind="text: numberOfAttachments"></span>
+                                                                        </div>
+                                                                        <div class="indicator-icon-with-value margin-right-10 view" data-bind="visible: numberOfNotes > 0">
+                                                                            <span class="glyphicon glyphicon-comment"></span><span data-bind="text: numberOfNotes"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            <div class="editor margin-bottom-10" data-bind="css: { editing: lineEditing }">
+                                                                    <button type="submit" class="btn btn-primary edit" data-bind="click: saveLineItemChanges, clickBubble: false">Save</button>
+                                                                    <button class="btn btn-link edit" data-bind="click: cancelLineItemChanges, clickBubble: false">Cancel</button>
+                                                            </div>
+                                                </div>
+
+                                                <div class="col-md-3 margin-bottom-3 text-align-right no-right-padding no-print">
+                                                    <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="click: editLine, clickBubble: false, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>
+                                                    <button id="btn-edit-line-item" type="button" class="col-xs-4 btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="click: editLine, clickBubble: false, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>
+
+                                                    @if (Model.CanReopenLines)
+                                                    {
+                                                        <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: reopenLine, clickBubble: false, visible: !lineEditing() && isLineItemCompleted()">Reopen</button>
+                                                    }
+                                                </div>
+
+                                        </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+             </section>
+
+            </div>
+            <div class="panel panel-default padding-top-10">
+                     <section class="margin-bottom-15">
+                <h3 class="col-md-12">Attachments
+                    <span>
+                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Attachments" data-toggle="collapse" data-target="#addAttachment"><span class="glyphicon glyphicon-plus"></span></button>
+                    </span>
+                </h3>
+                <div id="addAttachment" class="collapse">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @using (Html.BeginForm("UploadAttachment", "ServiceCall"))
+                                {
+                                    @Html.HiddenFor(x => Model.ServiceCallSummary.ServiceCallId, new { @Name = "ServiceCallId" })
+                                    @Html.EditorFor(x => x.TempFiles)
+                                    <input type="submit" class="btn btn-primary trigger-file-uploader" value="Add" />
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addAttachment">Cancel</button>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <br />
+                <em data-bind="visible: allAttachments().length < 1" class="padding-left-15 padding-top-7 pull-left">There are no attachments to display</em>
+                <div class="remove-list-style attachments row">
+                    <div class="clearfix"></div>
+                    <br />
+                    <ul data-bind="foreach: allAttachments">
+                        <li>
+                            <a class="attached-file" data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "ServiceCall")/' + serviceCallAttachmentId}">
+                            @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                            {
+                                <span data-url="" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "ServiceCall")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
+                            }
+                            <span class="download-attachment glyphicon glyphicon-file"></span>
+                            </a>
+                            <a href="#" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId}, editable: displayName, editableOptions: { pk: serviceCallAttachmentId, url: '@Url.Action("RenameAttachment", "ServiceCall")    '}"  class="attached-file-display-name"></a>
+                            <br />
+                            <p data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></p>
+                        </li>
                     </ul>
                 </div>
             </section>
 
-            @*            <section >
-                <h3 class="col-md-12">Notes</h3>
-                <div class="remove-list-style">
-                    <div class="clearfix"></div>
-                    <ul>
-                        @foreach (var line in Model.ServicCallNotes)
-                        {
-                            <li class="row">
-                                <div class="col-md-12">
-                                    <span>@line.CreatedBy</span> <span>@Format.DateMonthDayYear(line.CreatedDate)</span> 
-                                    <div class="float-right-non-xs-screen">Ref: <a href="#">Placeholder</a></div>
-                                    <p>@line.Note</p>
-                                </div>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </section>*@
+                     <section class="margin-bottom-15">
+                <h3 class="col-md-12">Notes
+                    <span>
+                        <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Note" data-toggle="collapse" data-target="#addCallNote"><span class="glyphicon glyphicon-plus"></span></button>
+                    </span>
+                </h3>
+                         <div id="addCallNote" class="collapse">
+                             <div class="panel-body">
+                                 <div class="row">
+                                     <div class="col-md-12">
+                                         <div class="control-group" data-bind="validationElement: noteDescriptionToAdd">
+                                             @Html.TextArea("Description", null, new { id = "addCallNoteDescription", @class = "form-control", data_bind = "text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
+                                         </div>
+                                     </div>
+                                 </div>
+                                 <br/>
+                                 <div class="form-submit">
+                                     <button class="btn btn-primary" data-bind="click: addCallNote">Add</button>
+                                     <button class="btn btn-link" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</button>
+                                 </div>
+                             </div>
+                         </div>
+                         <br/>
+                <em data-bind="visible: allCallNotes().length < 1" class="padding-left-15 padding-top-7 pull-left">There are no notes to display</em>
+                        <div data-bind="foreach: allCallNotes">
+                            <div id="allServiceCallNotes" class="service-call-line">
+                                            <div class="row">
+                                                <div class="col-md-11 margin-bottom-5">
+                                                    <strong><small><span data-bind="text: createdBy"></span></small></strong>
+                                                    <small><span data-bind="text: moment(createdDate).format('L')"></span></small>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <span data-bind="text: noteLineNumberWithProblemCode()"></span>
+                                                </div>
+                                            </div>
+                                            <p data-bind="text: note"></p>
+                            </div>
+                        </div>
+            </section>
+            </div>
         </div>
-    </div>
+</div>
 </div>
 @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
 {
     @Format.ActionwithPopup("special_project", @Url.Action("ToggleSpecialProject", "ServiceCall"), Model.ServiceCallSummary.ServiceCallId)
+    @Format.ActionwithPopup("escalate", @Url.Action("ToggleEscalate", "ServiceCall"), Model.ServiceCallSummary.ServiceCallId)
+    <div id='reopen' class='popup-action-with-message'>
+        <textarea class="form-control margin-bottom-10" rows="5" placeholder="Enter reason"></textarea>
+        <a href='#' id='btn_execute_reopen' class='btn btn-primary' data-action-url='@Url.Action("Reopen", "ServiceCall")' data-service-call-id='@Model.ServiceCallSummary.ServiceCallId'>Submit</a>
+        <a href='#' class='btn-link btn-cancel-popup'>Cancel</a>
+    </div>
 }
 
 @section modules
 {
     <script>
-        define('modelData', function () {
+        define('modelData', function() {
             return {
-                initialServiceLines: @Html.Raw(Model.ServiceCallLines.ToJson())
-                };
+                initialServiceLines: @Html.Raw(Model.ServiceCallLines.ToJson()),
+                initialServiceNotes: @Html.Raw(Model.ServicCallNotes.ToJson()),
+                initialAttachments: @Html.Raw(Model.Attachments.ToJson()),
+                isSpecialProject: @Model.ServiceCallSummary.IsSpecialProject.ToJson(),
+                specialProjectReason: @Html.Raw(Model.ServiceCallSummary.SpecialProjectReason.ToJson()),
+                specialProjectDate: @Html.Raw(Model.ServiceCallSummary.SpecialProjectDate.ToJson()),
+                isEscalated: @Model.ServiceCallSummary.IsEscalated.ToJson(),
+                escalationReason: @Html.Raw(Model.ServiceCallSummary.EscalationReason.ToJson()),
+                escalationDate: @Html.Raw(Model.ServiceCallSummary.EscalationDate.ToJson()),
+                canBeReopened: @Model.ServiceCallSummary.CanBeReopened.ToJson(),
+                attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
+                saveAdditionalContactsUrl: '@Url.Action("SaveAdditionalContacts","Homeowner")'
+            }
         });
-        
-        define('dropdownData', function () {
+
+        define('additionalContactsData', function() {
             return {
-                availableLookups: @Html.Raw(Model.AddServiceCallLineItem.ProblemCodes.Select(x => new { problemId = x.Value, problemCode = x.Text }).ToJson())
-                };
+                additionalEmailContacts: @Html.Raw(Model.AdditionalContacts.AdditionalEmailContacts.ToJson()),
+                additionalPhoneContacts: @Html.Raw(Model.AdditionalContacts.AdditionalPhoneContacts.ToJson()),
+            };
+        });
+
+        define('dropdownData', function() {
+            return {
+                availableLookups: @Html.Raw(Model.AddServiceCallLineItem.ProblemCodes.Select(x => new {problemId = x.Value, problemCode = x.Text}).ToJson()),
+                verificationTypes: @Html.Raw(@HomeownerVerificationType.GetAll().Where(x => x.Value != @HomeownerVerificationType.NotVerified.Value && x.Value != @HomeownerVerificationType.Imported.Value).OrderBy(x => x.DisplayName).Select(x => new {DisplayText = x.DisplayName, x.Value}).ToJson())
+                }
         });
     </script>
-}
+    }

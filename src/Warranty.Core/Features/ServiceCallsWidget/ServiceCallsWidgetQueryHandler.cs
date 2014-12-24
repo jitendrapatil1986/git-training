@@ -39,6 +39,7 @@
                                         , j.AddressLine as [Address]
                                         , wc.CreatedDate 
                                         , ho.HomeOwnerName
+                                        , ho.HomeOwnerNumber
                                         , NumberOfLineItems
                                         , ho.HomePhone as PhoneNumber
                                         , e.EmployeeName as AssignedTo
@@ -47,6 +48,7 @@
                                         , wc.EscalationReason
                                         , DATEDIFF(yy, j.CloseDate, wc.CreatedDate) as YearsWithinWarranty
                                         , j.CloseDate as WarrantyStartDate
+                                        , j.JobNumber
                                      FROM [ServiceCalls] wc
                                      inner join Jobs j
                                        on wc.JobId = j.JobId

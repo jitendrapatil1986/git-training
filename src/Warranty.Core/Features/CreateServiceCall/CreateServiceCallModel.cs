@@ -12,6 +12,7 @@
 
         public string JobNumber { get; set; }
         public string HomeOwnerName { get; set; }
+        public int HomeOwnerNumber { get; set; }
         public string HomePhone { get; set; }
         public string OtherPhone { get; set; }
         public string WorkPhone1 { get; set; }
@@ -32,8 +33,8 @@
 
         public class ServiceCallLineItemForm
         {
-            public string ProblemCodeId { get; set; }
-            public string ProblemCodeDisplayName { get; set; }
+            public string ProblemCode { get; set; }
+            public string ProblemJdeCode { get; set; }
             public string ProblemDescription { get; set; }
             public int LineItemNumber { get; set; }
         }

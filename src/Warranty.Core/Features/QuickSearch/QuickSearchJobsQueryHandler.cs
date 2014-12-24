@@ -16,23 +16,23 @@
             _userSession = userSession;
         }
 
-        public IEnumerable<QuickSearchJobModel> Handle(QuickSearchJobsQuery request)
+        public IEnumerable<QuickSearchJobModel> Handle(QuickSearchJobsQuery query)
         {
             var currentuser = _userSession.GetCurrentUser();
             var markets = currentuser.Markets;
 
-            const string sqlTemplate = @"SELECT TOP 10 j.JobId as Id, JobNumber, AddressLine, HomeOwnerName, HomePhone
+            const string sqlTemplate = @"SELECT TOP 5 j.JobId as Id, JobNumber, AddressLine, HomeOwnerName, HomeOwnerNumber, HomePhone, EmailAddress
                                 FROM Jobs j
                                 INNER JOIN HomeOwners h
-                                ON j.CurrentHomeOwnerId = h.HomeOwnerId and HomeOwnerNumber=1
+                                ON j.CurrentHomeOwnerId = h.HomeOwnerId and HomeOwnerNumber=(select max(homeownernumber) from HomeOwners WHERE JobId=j.JobId)
                                 INNER JOIN Communities c
                                 ON j.CommunityId = c.CommunityId
                                 INNER JOIN Cities m
                                 ON c.CityId = m.CityId
-                                WHERE CityCode IN ({0}) AND JobNumber+AddressLine+HomeOwnerName LIKE '%'+@0+'%'
+                                WHERE CityCode IN ({0}) AND JobNumber+AddressLine+ISNULL(HomeOwnerName, '')+REPLACE(REPLACE(REPLACE(ISNULL(HomePhone, ''), ')', ''), '(', ''), ' ', '')+ISNULL(EmailAddress, '') LIKE '%'+@0+'%'
                                 ORDER BY HomeOwnerName";
 
-            var result = _database.Fetch<QuickSearchJobModel>(string.Format(sqlTemplate, markets.CommaSeparateWrapWithSingleQuote()), request.Query);
+            var result = _database.Fetch<QuickSearchJobModel>(string.Format(sqlTemplate, markets.CommaSeparateWrapWithSingleQuote()), query.Query);
             return result;
         }
     }

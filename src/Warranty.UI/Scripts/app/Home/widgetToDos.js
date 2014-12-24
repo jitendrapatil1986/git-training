@@ -1,6 +1,39 @@
 define(['urls','jquery'], function(urls, $) {
-    $(function() {
-        $('#toDoSelect').change(function() {
+    $(function () {
+        $('.todo:lt(5)').removeClass('hide');
+
+        $('.show-more-todos').click(function () {
+            var value = $(this).text();
+            $("#Last_Display_Size").val(value);
+            hideShowTodos();
+        });
+        
+        function hideShowTodos() {
+            var classToIntersect = "";
+            var selectedTodoType = $("#toDoSelect").find('option:selected').val();
+            
+            if (selectedTodoType) {
+                classToIntersect = "." + selectedTodoType;
+            }
+            
+            var value = $("#Last_Display_Size").val();
+            if (value == 'All') {
+                $('.todo').addClass('hide');
+                $('.todo' + classToIntersect).removeClass('hide');
+            } else {
+                var show = value - 1;
+                $('.todo').addClass('hide');
+                $('.todo' + classToIntersect + ':lt("' + show + '")').removeClass('hide');
+            }
+            
+            if ($('.todo' + classToIntersect).length >= 5) {
+                $('#ToDo_Display_Size_Controls').show();
+            } else {
+                $('#ToDo_Display_Size_Controls').hide();
+            }
+        }
+        
+        $('#toDoSelect').change(function () {
             if ($(this).find('option:selected').text() == 'All') {
                 $('.todo').removeClass('hide');
             } else {
@@ -8,52 +41,77 @@ define(['urls','jquery'], function(urls, $) {
                 $('.todo').addClass('hide');
                 $('.' + toDoToShow).removeClass('hide');
             }
+            hideShowTodos();
         });
             
         $(".approve-button").click(function (e) {
             e.preventDefault();
             var serviceCallId = $(this).data("service-call-id");
             var url = urls.ServiceCall.Approve;
-            executeApproval(url, serviceCallId, $(this));
+            executeApproval(url, serviceCallId);
         });
             
         $(".deny-button").click(function (e) {
             e.preventDefault();
             var serviceCallId = $(this).data("service-call-id");
             var url = urls.ServiceCall.Deny;
-            executeApproval(url, serviceCallId, $(this));
+            executeApproval(url, serviceCallId);
         });
             
-        function executeApproval(url, serviceCallId, button) {
+        function executeApproval(url, serviceCallId) {
             $.ajax({
                 type: "POST",
                 url: url,
                 data: { id: serviceCallId },
                 success: function (result) {
-                    var divToHide = button.parent().parent();
-                    divToHide.addClass('hide');
+                    var element = $('#service-call-approval-todo-' + serviceCallId);
+                    element.remove();
+                    updateTodoWidgetElements(element);
                 }
             });
         }
         
-
-
         $(".assign-employee-community-button").click(function (e) {
             e.preventDefault();
             var communityId = $(this).data("community-id");
             var employeeNumber = $("#list_assignable_employee_" + communityId).val();
             
             var url = urls.Community.AssignEmployee;
-            var button = $(this);
             
             $.ajax({
                 type: "POST",
                 url: url,
                 data: { CommunityId: communityId, EmployeeNumber: employeeNumber },
                 success: function (result) {
-                        if (result.success == true) {
-                        $('#community-todo-' + communityId).addClass('hide');
-                    }
+                    if (result.success == true) {
+                            var element = $('#community-todo-' + communityId);
+                            element.remove();
+                            updateTodoWidgetElements(element);
+                        }
+                }
+            });
+        });
+        
+        function updateTodoWidgetElements(hiddenelement) {
+            var cssClass = hiddenelement.attr('class').replace(/[\s]+/g, ' ').replace(/ /g, ".");
+            var nextTodo = $("." + cssClass + ".hide").first();
+            if (nextTodo) {
+                nextTodo.removeClass("hide");
+            }
+        }
+        
+        $(".complete-task").click(function (e) {
+            e.preventDefault();
+            var taskId = $(this).data("task-id");
+            var url = urls.Task.Complete;
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { id: taskId },
+                success: function (result) {
+                    var element = $('#task-todo-' + taskId);
+                    element.remove();
+                    updateTodoWidgetElements(element);
                 }
             });
         });

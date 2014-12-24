@@ -1,0 +1,28 @@
+﻿@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
+@model Warranty.Core.ToDoInfrastructure.Models.ToDoPaymentStatusChangedModel
+<div class="todo @Css.ToDoClass(ToDoType.PaymentStatusChanged) hide marging-bottom-10" id="task-todo-@Model.TaskId">
+    <div class="todo-widget-data-container">
+        <div class="service-call-request-icon">
+            P
+        </div>
+
+        <div class="todo-widget-separator-line">
+        </div>
+        <div class="todo-widget-element">
+            <span class="label label-@Model.CssClassName">@Model.PaymentStatus.DisplayName</span><br />
+        </div>
+
+        <div class="todo-widget-element service-call-line cursor-pointer" onclick="location.href='@Url.Action("LineItemDetail", "ServiceCall", new { id = Model.ServiceCallLineItemId })';">
+            <strong>Amount: </strong>@Format.Money(Model.Amount)<br />
+            <strong>@Format.HomeOwner(Model.HomeOwnerName, Model.HomeOwnerNumber)</strong>
+            <br />
+            @Model.AddressLine
+        </div>
+        <div class="todo-widget-action-buttons margin-top-10">
+            <a href="#" data-task-id="@Model.TaskId" class="complete-task"><span class="glyphicon glyphicon-thumbs-up complete-todo"></span>&nbsp;Complete</a>
+        </div>
+        <br/>
+
+    </div>
+</div>

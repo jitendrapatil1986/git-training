@@ -6,16 +6,19 @@ namespace Warranty.Core.Features.CreateServiceCall
     using Enumerations;
     using NPoco;
     using Security;
+    using Services;
 
     public class CreateServiceCallCommandHandler: ICommandHandler<CreateServiceCallCommand, Guid>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
+        private readonly IServiceCallCreateService _serviceCallCreateService;
 
-        public CreateServiceCallCommandHandler(IDatabase database, IUserSession userSession)
+        public CreateServiceCallCommandHandler(IDatabase database, IUserSession userSession, IServiceCallCreateService serviceCallCreateService)
         {
             _database = database;
             _userSession = userSession;
+            _serviceCallCreateService = serviceCallCreateService;
         }
 
         public Guid Handle(CreateServiceCallCommand message)
@@ -30,59 +33,9 @@ namespace Warranty.Core.Features.CreateServiceCall
 
             using (_database)
             {
-                //TODO: change logic to generate call number
-                const string sql = @"SELECT TOP 1 ServiceCallNumber
-                                    FROM ServiceCalls
-                                    ORDER BY ServiceCallNumber DESC";
-
-                var lastCall = _database.First<int>(sql);
-                var newCallNumber = lastCall + 1;
-
-                var employeeId = GetEmployeeIdForWsc(message);
-
-                var serviceCall = new ServiceCall
-                {
-                    ServiceCallNumber = newCallNumber,
-                    ServiceCallStatus = status,
-                    JobId = message.JobId,
-                    WarrantyRepresentativeEmployeeId = employeeId,
-                    ServiceCallType = RequestType.WarrantyRequest.DisplayName,
-                };
-
-                _database.Insert(serviceCall);
-
-                if (message.ServiceCallLineItems != null)
-                {
-                    foreach (var line in message.ServiceCallLineItems)
-                    {
-                        var serviceCallLine = new ServiceCallLineItem
-                            {
-                                ServiceCallId = serviceCall.ServiceCallId,
-                                LineNumber = line.LineNumber,
-                                ProblemCode = line.ProblemCode,
-                                ProblemDescription = line.ProblemDescription,
-                            };
-
-                        _database.Insert(serviceCallLine);
-                    }
-                }
-
-                return serviceCall.ServiceCallId;
+                var serviceCallId = _serviceCallCreateService.Create(message.JobId, RequestType.WarrantyRequest, status);
+                return serviceCallId;
             }
-        }
-
-        private Guid? GetEmployeeIdForWsc(CreateServiceCallCommand message)
-        {
-            const string sqlEmployeeId = @"SELECT TOP 1 ca.EmployeeId
-                                                    FROM CommunityAssignments ca
-                                                    INNER JOIN Jobs j
-                                                    ON ca.CommunityId = j.CommunityId
-                                                    WHERE j.JobId = @0";
-
-
-            var employeeId = _database.FirstOrDefault<Guid>(sqlEmployeeId, message.JobId);
-
-            return employeeId == Guid.Empty ? (Guid?)null : employeeId;
         }
     }
 }

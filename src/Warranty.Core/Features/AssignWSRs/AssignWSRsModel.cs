@@ -4,21 +4,22 @@ using Warranty.Core.Entities;
 
 namespace Warranty.Core.Features.AssignWSRs
 {
+    using System.Linq;
+
     public class AssignWSRsModel
     {
         public AssignWSRsModel()
         {
             Communities = new List<Community>();
-            Employees = new List<Employee>();
         }
 
         public List<Community> Communities { get; set; }
-        public List<Employee> Employees { get; set; }
 
         public class Community
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
+            public bool IsAssigned { get { return Employees.Any(); } }
             public List<AssignedEmployee> Employees { get; set; }
         }
 

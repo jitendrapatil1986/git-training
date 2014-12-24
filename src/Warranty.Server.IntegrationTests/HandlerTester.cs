@@ -9,6 +9,7 @@ namespace Warranty.Server.IntegrationTests
     using Core.Entities;
     using Tests.Core;
     using Extensions;
+    using System.Linq;
 
     public abstract class HandlerTester<TEvent> where TEvent : IEvent, new()
     {

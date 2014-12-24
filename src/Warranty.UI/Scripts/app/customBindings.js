@@ -164,5 +164,32 @@ define(['knockout', 'jquery', 'moment', 'datepicker'], function (ko, $, moment) 
         }
     };
 
+    ko.bindingHandlers.stopBinding = {
+        init: function () {
+            return { controlsDescendantBindings: true };
+        }
+    };
+    
+    ko.bindingHandlers.date = {
+        update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+            var value = valueAccessor();
+            var allBindings = allBindingsAccessor();
+            var valueUnwrapped = ko.utils.unwrapObservable(value);
+
+            var pattern = allBindings.format || 'MM/DD/YYYY';
+
+            var output = "-";
+            if (valueUnwrapped !== null && valueUnwrapped !== undefined && valueUnwrapped.length > 0) {
+                output = moment(valueUnwrapped).format(pattern);
+            }
+
+            if ($(element).is("input") === true) {
+                $(element).val(output);
+            } else {
+                $(element).text(output);
+            }
+        }
+    };
+
     return ko;
 });

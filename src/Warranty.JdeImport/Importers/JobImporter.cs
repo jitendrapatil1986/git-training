@@ -85,7 +85,7 @@ namespace Warranty.JdeImport.Importers
                                   ON $H$DS1 = designer.aban8
                             LEFT OUTER JOIN f0101 sales
                                   ON $H$ASC = sales.aban8
-                            WHERE f2.mcstyl='JB' 
+                            WHERE f2.mcstyl IN ('JB', 'BD')
                             GROUP BY $hmcu";
             }
         }
@@ -174,6 +174,7 @@ namespace Warranty.JdeImport.Importers
                                             WHEN MATCHED THEN UPDATE SET EmployeeName = Name;
 
                                             ;WITH nonDupEmps AS (SELECT MIN(EmployeeId) EmployeeId, EmployeeNumber FROM employees GROUP BY EmployeeNumber),
+                                                  nonDupCom AS (SELECT MIN(CommunityId) CommunityId, CommunityNumber FROM Communities GROUP BY CommunityNumber),
                                                   stage AS (SELECT removeDups.*
                                                                     , builder.EmployeeId as BuilderId
                                                                     , sales.EmployeeId as SalesId
@@ -183,11 +184,11 @@ namespace Warranty.JdeImport.Importers
                                                                                     , ROW_NUMBER() OVER (PARTITION BY JdeIdentifier ORDER BY JobStageId DESC) AS rowNum
                                                                             FROM imports.JobStage
                                                                         ) removeDups
-                                                                    INNER JOIN employees builder ON
+                                                                    INNER JOIN nonDupEmps builder ON
                                                                         removeDups.BuilderEmployeeNumber = builder.EmployeeNumber
-                                                                    INNER JOIN employees sales ON
+                                                                    INNER JOIN nonDupEmps sales ON
                                                                         removeDups.SalesConsultantEmployeeNumber = sales.EmployeeNumber
-                                                                    INNER JOIN Communities com ON
+                                                                    INNER JOIN nonDupCom com ON
                                                                         LEFT(removeDups.CommunityNumber, 4) = com.CommunityNumber
                                                             WHERE rowNum = 1)
                                             MERGE INTO Jobs AS TARGET
@@ -234,6 +235,15 @@ namespace Warranty.JdeImport.Importers
                                             WHERE Jobs.JobId = HomeOwners.JobId
                                             AND Jobs.CurrentHomeOwnerId IS NULL;";
 
+
+            using (var sc = new SqlConnection(connectionString))
+            {
+                sc.Open();
+
+                using (var cmd = new SqlCommand("TRUNCATE TABLE imports.JobStage", sc))
+                    cmd.ExecuteNonQuery();
+            }
+
             Import();
 
             using (var sc = new SqlConnection(connectionString))
@@ -247,12 +257,9 @@ namespace Warranty.JdeImport.Importers
 
                 using (var cmd = new SqlCommand(mergeScript, sc))
                 {
-                    cmd.CommandTimeout = 600;
+                    cmd.CommandTimeout = 6000;
                     cmd.ExecuteNonQuery();
                 }
-
-                using (var cmd = new SqlCommand("TRUNCATE TABLE imports.JobStage", sc))
-                   cmd.ExecuteNonQuery();
 
                 using (var cmd = new SqlCommand(dropIndex, sc))
                     cmd.ExecuteNonQuery();

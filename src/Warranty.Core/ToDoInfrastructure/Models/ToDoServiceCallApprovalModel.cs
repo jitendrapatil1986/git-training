@@ -12,5 +12,6 @@ namespace Warranty.Core.ToDoInfrastructure.Models
         public int JobNumber { get; set; }
         public int YearsWithinWarranty { get; set; }
         public DateTime WarrantyStartDate { get; set; }
+        public int HomeOwnerNumber { get; set; }
     }
 }

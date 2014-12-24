@@ -35,6 +35,7 @@ namespace Warranty.Core.Features.RepServiceCalls
                                         , wc.CreatedDate 
                                         , wc.CompletionDate
                                         , ho.HomeOwnerName
+                                        , ho.HomeOwnerNumber
                                         , case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
                                         , NumberOfLineItems
                                         , ho.HomePhone as PhoneNumber
@@ -47,6 +48,7 @@ namespace Warranty.Core.Features.RepServiceCalls
                                         , j.CloseDate as WarrantyStartDate
                                         , wc.EscalationReason
                                         , wc.EscalationDate
+                                        , j.JobNumber
                                      FROM [ServiceCalls] wc
                                      inner join Jobs j
                                        on wc.JobId = j.JobId
@@ -85,7 +87,7 @@ namespace Warranty.Core.Features.RepServiceCalls
 
             var sql = string.Format(SqlTemplate, whereClause, "ORDER BY wc.CompletionDate desc, ho.HomeOwnerName");
 
-            var result = _database.Fetch<ServiceRepServiceCallsModel.ServiceCall>(sql, ServiceCallStatus.Closed.Value, employeeId);
+            var result = _database.Fetch<ServiceRepServiceCallsModel.ServiceCall>(sql, ServiceCallStatus.Complete.Value, employeeId);
             return result;
         }
     }

@@ -1,15 +1,18 @@
 Environment "dev" -servers @(
     Server "wkcorpappdev1" @("Web";)
+    Server "wkcorpappdev1" @("Nsb";)
     Server "wksql3" @("Database";)
     ) -installPath "C:\Installs\WarrantyTest"
     
 Environment "training" -servers @(
     Server "wkcorpapptrain1" @("Web";)
+    Server "wkcorpapptrain1" @("Nsb";)
     Server "wksql3" @("Database";)
     ) -installPath "C:\Installs\WarrantyTraining"
     
 Environment "prod" -servers @(
-    Server "wkcorpappprod1" @("Web";)
+    Server "wkcorpappprod2" @("Web";)
+    Server "wkcorpappprod2" @("Nsb";)
     Server "wksql1" @("Database";)
     ) -installPath "C:\Installs\Warranty"
 
@@ -37,9 +40,12 @@ Role "Nsb" -Incremental {
 
     # config
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_nsb_application_name;"
+    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='Accounting.API.BaseUri']/@value" $accountingApiBaseUri
+    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Accounting.Events']/@Endpoint" "Accounting.Server@$accountingEndPointServer"
+    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Accounting.Commands']/@Endpoint" "Accounting.Server@$accountingEndPointServer"
         
     #Install NSB Service
-    &"$nsb_directory\NServiceBus.Host.exe" "/install" "/serviceName:$nsb_service_name" "/username:dwh\svc-Warranty-nsb" "/password:O2I(&3J,5`$V1h24"
+    &"$nsb_directory\NServiceBus.Host.exe" "/install" "/serviceName:$nsb_service_name" "/username:dwh\svc-Warranty-nsb" "/password:O2I(?3J,5%!V1h24"
 
     #Start NSB Service
     Start-Service "$nsb_service_name"
@@ -69,7 +75,13 @@ Role "Web" -Incremental {
     poke-xml "$web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@realm" $warranty_identity_uri
     poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Environment']/@value" $environment
     poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='sendFeedbackAddresses']/@value" $sendFeedbackAddresses
-    
+    poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='sendEmailsForTest']/@value" $sendEmailsForTest
+    poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='DocumentSharePath']/@value" $documentSharePath
+    poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Warranty.BaseUri']/@value" $warranty_identity_uri
+    poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Survey.API.BaseUri']/@value" $surveyApiBaseUri
+	poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Accounting.API.BaseUri']/@value" $accountingApiBaseUri
+	poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='ApiServiceUrl']/@value" $jobServiceApiBaseUri
+
     poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
     poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@subject" $errorReportingSubject
     poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@smtpServer" $smtpServer

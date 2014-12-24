@@ -12,6 +12,7 @@
                 {
                     x.Column(y => y.ServiceCallId);
                     x.Column(y => y.Note).WithName("ServiceCallNote");
+                    x.Column(y => y.ServiceCallLineItemId);
                 });
         }
     }

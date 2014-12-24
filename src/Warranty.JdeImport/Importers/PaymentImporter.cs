@@ -26,37 +26,86 @@ namespace Warranty.JdeImport.Importers
                             , trim(T5MCU) || '/' || trim(T5$OPT) || '/' || trim(T5R006) || '/' || trim(T5SUB) || '/' || trim(T5OBJ) || '/' || trim(T5DCTO) || '/' || digits(T5DOCO) || '/' || digits(T5LNID) || '/' || trim(T5SFX) as JdeIdentifier
                             , CASE WHEN T5SBLT='A' THEN T5$OPT ELSE null END as JobNumber
                             , T5VINV as InvoiceNumber
-                            , trim(coalesce(c1.T6SRDS, '')) || trim(coalesce(c2.T6SRDS, '')) || trim(coalesce(c3.T6SRDS, '')) || trim(coalesce(c4.T6SRDS, '')) as Comments
+                            , trim(coalesce(m1.T6SRDS, '')) || trim(coalesce(m2.T6SRDS, '')) || trim(coalesce(m3.T6SRDS, '')) || trim(coalesce(m4.T6SRDS, '')) as HoldComments
+                            , trim(coalesce(vp1.T6SRDS, '')) || trim(coalesce(vp2.T6SRDS, '')) || trim(coalesce(vp3.T6SRDS, '')) || trim(coalesce(vp4.T6SRDS, '')) as VarianceExplanation
                             from f58235 p
-                            LEFT OUTER JOIN f58235M c1 ON
-                                c1.T6$OPT=t5$OPT
-                                AND c1.T6MCU=T5MCU
-                                AND c1.T6SUB=T5SUB
-                                AND c1.t6$LIN=1
-                                AND c1.T6SBLT=T5SBLT
-                                AND c1.t6OBJ=T5OBJ
-                            LEFT OUTER JOIN f58235M c2 ON
-                                c2.T6$OPT=t5$OPT
-                                AND c2.T6MCU=T5MCU
-                                AND c2.T6SUB=T5SUB
-                                AND c2.t6$LIN=2
-                                AND c2.T6SBLT=T5SBLT
-                                AND c2.t6OBJ=T5OBJ
-                            LEFT OUTER JOIN f58235M c3 ON
-                                c3.T6$OPT=t5$OPT
-                                AND c3.T6MCU=T5MCU
-                                AND c3.T6SUB=T5SUB
-                                AND c3.t6$LIN=3
-                                AND c3.T6SBLT=T5SBLT
-                                AND c3.t6OBJ=T5OBJ
-                            LEFT OUTER JOIN f58235M c4 ON
-                                c4.T6$OPT=t5$OPT
-                                AND c4.T6MCU=T5MCU
-                                AND c4.T6SUB=T5SUB
-                                AND c4.t6$LIN=4
-                                AND c4.T6SBLT=T5SBLT
-                                AND c4.t6OBJ=T5OBJ
-                            WHERE TRIM(T5OBJ) IN ('9425', '9435')";
+                            left outer join f58235M m1 on p.T5MCU = m1.T6MCU 
+                                and p.T5$OPT = m1.T6$OPT 
+                                and p.T5SUB = m1.T6SUB 
+                                and p.T5OBJ = m1.T6OBJ 
+                                and p.T5DCTO = m1.T6DCTO 
+                                and p.T5DOCO = m1.T6DOCO 
+                                and p.T5SFX = m1.T6SFX 
+                                and trim(m1.T6$LIN) = 1 
+                                and trim(m1.T6FLAG) = 'H'
+                            left outer join f58235M m2 on p.T5MCU = m2.T6MCU 
+                                and p.T5$OPT = m2.T6$OPT 
+                                and p.T5SUB = m2.T6SUB 
+                                and p.T5OBJ = m2.T6OBJ 
+                                and p.T5DCTO = m2.T6DCTO 
+                                and p.T5DOCO = m2.T6DOCO 
+                                and p.T5SFX = m2.T6SFX 
+                                and trim(m2.T6$LIN) = 2 
+                                and trim(m2.T6FLAG) = 'H'
+                            left outer join f58235M m3 on p.T5MCU = m3.T6MCU 
+                                and p.T5$OPT = m3.T6$OPT 
+                                and p.T5SUB = m3.T6SUB 
+                                and p.T5OBJ = m3.T6OBJ 
+                                and p.T5DCTO = m3.T6DCTO 
+                                and p.T5DOCO = m3.T6DOCO 
+                                and p.T5SFX = m3.T6SFX 
+                                and trim(m3.T6$LIN) = 3 
+                                and trim(m3.T6FLAG) = 'H'
+                            left outer join f58235M m4 on p.T5MCU = m4.T6MCU 
+                                and p.T5$OPT = m4.T6$OPT 
+                                and p.T5SUB = m4.T6SUB 
+                                and p.T5OBJ = m4.T6OBJ 
+                                and p.T5DCTO = m4.T6DCTO 
+                                and p.T5DOCO = m4.T6DOCO 
+                                and p.T5SFX = m4.T6SFX 
+                                and trim(m4.T6$LIN) = 4 
+                                and trim(m4.T6FLAG) = 'H'
+                            left outer join f58235M vp1 on p.T5MCU = vp1.T6MCU 
+                                and p.T5$OPT = vp1.T6$OPT 
+                                and p.T5SUB = vp1.T6SUB 
+                                and p.T5OBJ = vp1.T6OBJ 
+                                and p.T5DCTO = vp1.T6DCTO 
+                                and p.T5DOCO = vp1.T6DOCO 
+                                and p.T5SFX = vp1.T6SFX 
+                                and trim(vp1.T6$LIN) = 1
+                                and trim(vp1.T6PDS1) <> ''
+                                and trim(vp1.T6DCTO)  ='$W'
+                            left outer join f58235M vp2 on p.T5MCU = vp2.T6MCU 
+                                and p.T5$OPT = vp2.T6$OPT 
+                                and p.T5SUB = vp2.T6SUB 
+                                and p.T5OBJ = vp2.T6OBJ 
+                                and p.T5DCTO = vp2.T6DCTO 
+                                and p.T5DOCO = vp2.T6DOCO 
+                                and p.T5SFX = vp2.T6SFX 
+                                and trim(vp2.T6$LIN) = 2
+                                and trim(vp2.T6PDS1) <> ''
+                                and trim(vp2.T6DCTO) = '$W'
+                            left outer join f58235M vp3 on p.T5MCU = vp3.T6MCU 
+                                and p.T5$OPT = vp3.T6$OPT 
+                                and p.T5SUB = vp3.T6SUB 
+                                and p.T5OBJ = vp3.T6OBJ 
+                                and p.T5DCTO = vp3.T6DCTO 
+                                and p.T5DOCO = vp3.T6DOCO 
+                                and p.T5SFX = vp3.T6SFX 
+                                and trim(vp3.T6$LIN) = 3
+                                and trim(vp3.T6PDS1) <> ''
+                                and trim(vp3.T6DCTO) = '$W'
+                            left outer join f58235M vp4 on p.T5MCU = vp4.T6MCU 
+                                and p.T5$OPT = vp4.T6$OPT 
+                                and p.T5SUB = vp4.T6SUB 
+                                and p.T5OBJ = vp4.T6OBJ 
+                                and p.T5DCTO = vp4.T6DCTO 
+                                and p.T5DOCO = vp4.T6DOCO 
+                                and p.T5SFX = vp4.T6SFX 
+                                and trim(vp4.T6$LIN) = 4
+                                and trim(vp4.T6PDS1) <> ''
+                                and trim(vp4.T6DCTO) = '$W'
+                                WHERE TRIM(T5OBJ) IN ('9425', '9430', '9435', '9440')";
             }
         }
 
@@ -88,7 +137,8 @@ namespace Warranty.JdeImport.Importers
                     new KeyValuePair<string, string>("JobNumber", "JobNumber"),
                     new KeyValuePair<string, string>("InvoiceNumber", "InvoiceNumber"),
                     new KeyValuePair<string, string>("JdeIdentifier", "JdeIdentifier"),
-                    new KeyValuePair<string, string>("Comments", "Comments"),
+                    new KeyValuePair<string, string>("HoldComments", "HoldComments"),
+                    new KeyValuePair<string, string>("VarianceExplanation", "VarianceExplanation"),
                     new KeyValuePair<string, string>("CreatedDate", "CreatedDate"),
                     new KeyValuePair<string, string>("CreatedBy", "CreatedBy"),
                 };
@@ -102,28 +152,56 @@ namespace Warranty.JdeImport.Importers
             const string addIndex = @"IF NOT EXISTS (SELECT 1 FROM SYS.INDEXES WHERE NAME = 'IDX_PaymentStage_JdeId') CREATE NONCLUSTERED INDEX IDX_PaymentStage_JdeId ON imports.PaymentStage(JdeIdentifier)";
             const string dropIndex = @"DROP INDEX IDX_PaymentStage_JdeId ON imports.PaymentStage";
 
-            const string mergeScript = @";WITH stage AS (SELECT * FROM (
-                                                                  SELECT *
-                                                                          , ROW_NUMBER() OVER (PARTITION BY JdeIdentifier ORDER BY CreatedDate) AS rowNum
-                                                                  FROM imports.PaymentStage
-                                                              ) removeDups
-                                                              WHERE rowNum = 1)
-                                          MERGE INTO Payments AS TARGET
-                                          USING stage AS LIST
-                                          ON TARGET.JdeIdentifier = LIST.JdeIdentifier
-                                          WHEN NOT MATCHED BY TARGET THEN INSERT (VendorNumber, Amount, PaymentStatus, JobNumber, JdeIdentifier, CreatedDate, CreatedBy, CommunityNumber, InvoiceNumber, Comments)
-                                                                              VALUES (VendorNumber, Amount, PaymentStatus, JobNumber, JdeIdentifier, CreatedDate, CreatedBy, CommunityNumber, InvoiceNumber, Comments)
-                                          WHEN NOT MATCHED BY SOURCE THEN DELETE
-                                          WHEN MATCHED THEN UPDATE SET TARGET.VendorNumber = LIST.VendorNumber
-                                                                      , TARGET.Amount = LIST.Amount
-                                                                      , TARGET.PaymentStatus = LIST.PaymentStatus
-                                                                      , TARGET.JobNumber = LIST.JobNumber
-                                                                      , TARGET.JdeIdentifier = LIST.JdeIdentifier
-                                                                      , TARGET.CreatedDate = LIST.CreatedDate
-                                                                      , TARGET.CreatedBy = LIST.CreatedBy
-                                                                      , TARGET.CommunityNumber = LIST.CommunityNumber
-                                                                      , TARGET.InvoiceNumber = LIST.InvoiceNumber
-                                                                      , TARGET.Comments = LIST.Comments;";
+            const string mergeScript = @";WITH statuses AS (
+                                                    SELECT 1 AS StatusId, 'Requested' AS StatusName, 'NoJdeCode-WarrantyModuleStatus' AS StatusCode
+                                                    UNION SELECT 2, 'Pending', 'P'
+                                                    UNION SELECT 3, 'Requested Approval', 'NoJdeCode-WarrantyModuleStatus'
+                                                    UNION SELECT 4, 'Approved', 'A'
+                                                    UNION SELECT 5, 'Requested Hold', 'NoJdeCode-WarrantyModuleStatus'
+                                                    UNION SELECT 6, 'Hold', 'H'
+                                                    UNION SELECT 7, 'Never Pay', 'Z'
+                                                    UNION SELECT 8, 'Question', 'Q'
+                                                    UNION SELECT 9, 'Manual', 'M'
+                                                    UNION SELECT 10, 'Paid', '1'
+                                            )
+                                            , stage AS (SELECT * FROM (
+                                                                        SELECT ps.*
+                                                                                , s.StatusId
+                                                                                , ROW_NUMBER() OVER (PARTITION BY JdeIdentifier ORDER BY CreatedDate) AS rowNum
+                                                                        FROM imports.PaymentStage ps
+                                                                        INNER JOIN statuses s ON
+                                                                        ps.PaymentStatus = s.StatusCode
+                                                                    ) removeDups
+                                                                    WHERE rowNum = 1)
+                                                MERGE INTO Payments AS TARGET
+                                                USING stage AS LIST
+                                                ON TARGET.JdeIdentifier = LIST.JdeIdentifier
+                                                WHEN NOT MATCHED BY TARGET THEN INSERT (VendorNumber, Amount, PaymentStatus, JobNumber, JdeIdentifier, CreatedDate, CreatedBy, CommunityNumber, InvoiceNumber, HoldComments, VarianceExplanation)
+                                                                                    VALUES (VendorNumber, Amount, StatusId, JobNumber, JdeIdentifier, CreatedDate, CreatedBy, CommunityNumber, InvoiceNumber, HoldComments, VarianceExplanation)
+                                                WHEN MATCHED THEN UPDATE SET TARGET.VendorNumber = LIST.VendorNumber
+                                                                            , TARGET.Amount = LIST.Amount
+                                                                            , TARGET.PaymentStatus = LIST.StatusId
+                                                                            , TARGET.JobNumber = LIST.JobNumber
+                                                                            , TARGET.JdeIdentifier = LIST.JdeIdentifier
+                                                                            , TARGET.CreatedDate = LIST.CreatedDate
+                                                                            , TARGET.CreatedBy = LIST.CreatedBy
+                                                                            , TARGET.CommunityNumber = LIST.CommunityNumber
+                                                                            , TARGET.InvoiceNumber = LIST.InvoiceNumber
+                                                                            , TARGET.HoldComments = LIST.HoldComments
+                                                                            , TARGET.VarianceExplanation = LIST.VarianceExplanation;
+            ";
+
+            var deletePayments = @"DELETE FROM Payments 
+                                    WHERE JdeIdentifier NOT IN (SELECT JdeIdentifier FROM imports.PaymentStage)
+                                        AND PaymentId NOT IN (SELECT PaymentId FROM BackCharges)";
+
+            using (var sc = new SqlConnection(connectionString))
+            {
+                sc.Open();
+
+                using (var cmd = new SqlCommand("TRUNCATE TABLE imports.PaymentStage", sc))
+                    cmd.ExecuteNonQuery();
+            }
 
             Import();
 
@@ -133,19 +211,21 @@ namespace Warranty.JdeImport.Importers
 
                 using (var cmd = new SqlCommand(addIndex, sc))
                 {
+                    cmd.CommandTimeout = 6000;
                     cmd.ExecuteNonQuery();
                 }
 
                 using (var cmd = new SqlCommand(mergeScript, sc))
                 {
+                    cmd.CommandTimeout = 6000;
                     cmd.ExecuteNonQuery();
                 }
 
-                using (var cmd = new SqlCommand("TRUNCATE TABLE imports.PaymentStage", sc))
-                    cmd.ExecuteNonQuery();
-
                 using (var cmd = new SqlCommand(dropIndex, sc))
+                {
+                    cmd.CommandTimeout = 6000;
                     cmd.ExecuteNonQuery();
+                }
             }
         }
     }

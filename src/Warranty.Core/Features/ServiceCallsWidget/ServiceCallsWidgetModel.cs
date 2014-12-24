@@ -72,9 +72,11 @@
             public string AssignedToEmployeeNumber { get; set; }
             public string Address { get; set; }
             public string CallNumber { get; set; }
+            public string JobNumber { get; set; }
             public DateTime CreatedDate { get; set; }
             public string HomeownerName { get; set; }
-            public int NumberOfDaysRemaining { get { return ServiceCallCalculator.CalculateNumberOfDaysRemaining(CreatedDate); }}
+            public int HomeownerNumber { get; set; }
+            public int NumberOfDaysRemaining { get { return ServiceCallCalculator.CalculateNumberOfDaysRemaining(CreatedDate); } }
             public int NumberOfLineItems { get; set; }
             public string PhoneNumber { get; set; }
             public DateTime? EscalationDate { get; set; }

@@ -1,0 +1,19 @@
+﻿@using Warranty.Core.Enumerations
+@model System.Collections.Generic.IEnumerable<Warranty.Core.Features.MyTeam.MyTeamModel>
+
+@{
+    Layout = null;
+}
+
+@if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+{
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Team <b class="caret"></b></a>
+        <ul class="dropdown-menu vertical-menu-scroll">
+            @foreach (var employee in Model)
+            {
+                <li><a href="@Url.Action("ServiceCalls", "ServiceRep", new {id = employee.EmployeeId})" class="text-capitalize">@employee.EmployeeName</a></li>
+            }
+        </ul>
+    </li>
+}

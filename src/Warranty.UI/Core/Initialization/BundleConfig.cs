@@ -18,7 +18,8 @@
             lessBundle.Transforms.Add(new CssMinify());
 
             var cssBundle = new StyleBundle("~/css/extra").Include(
-                "~/css/font.css");
+                "~/css/font.css",
+                "~/css/bootstrap-editable.css");
             cssBundle.Transforms.Add(new CssMinify());
 
             bundles.Add(lessBundle);

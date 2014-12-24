@@ -12,34 +12,12 @@ else
 <div class="panel-group" id="overdue_list">
     @foreach (var employee in Model.RepresentativesWithOverdueCalls)
     {
-        <div class="panel list-group-item no-left-right-padding">
+        <div class="panel list-group-item">
             <a data-toggle="collapse" data-parent="#overdue_list" href="#collapseOverdueCalls@(employee.EmployeeNumber)" class="text-capitalize accordion-toggle collapsed">@employee.Name</a> <span class="badge">@employee.ServiceCallsCount</span>
-            <div id="collapseOverdueCalls@(employee.EmployeeNumber)" class="collapse panel-body no-left-right-padding">
+            <div id="collapseOverdueCalls@(employee.EmployeeNumber)" class="collapse panel-body">
                 @foreach (var line in Model.OverdueServiceCalls.Where(x => x.AssignedToEmployeeNumber == employee.EmployeeNumber))
                 {
-                    <div class="service-call-line">
-                        <div class="col-md-3">
-                            <small class="text-muted">
-                                @Html.ActionLink(line.CallNumber, "CallSummary", "ServiceCall", new {id = line.ServiceCallId}, null)
-                            </small>
-                            <small class="pull-right text-muted">@Format.DateMonthDay(line.CreatedDate)</small>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="col-md-1 hidden-sm hidden-xs">
-                                @Format.NumberOfLineItems(line.NumberOfLineItems)
-                            </div>
-                            <div class="col-md-10">
-                                @line.HomeownerName<br />@Html.ActionLink(line.Address, "JobSummary", "Job", new {id=line.JobId}, null)
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            @Format.PhoneNumber(line.PhoneNumber)<br/>
-                        </div>
-                        <div class="col-md-1 text-center">
-                            @Html.ServiceCallActions(line.ServiceCallId)
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
+                    @Html.Partial("_ServiceCallListItem", line)
                 }
             </div>
         </div>

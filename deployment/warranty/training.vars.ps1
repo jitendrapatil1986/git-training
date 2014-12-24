@@ -17,6 +17,14 @@ $header_image_file_name = "DWH logo_color_233x34_Train.png"
 
 $Warranty_identity_uri = "https://WarrantyTraining.davidweekleyhomes.com"
 
-$sendFeedbackAddresses = "dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com, imorfey@dwhomes.com, rcarr@dwhomes.com"
-$errorReportingEmailAddresses = "dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com"
+$sendFeedbackAddresses = "adam.hopkins@headspring.com, dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com, imorfey@dwhomes.com, rcarr@dwhomes.com, mroberts@dwhomes.com, kiet.huynh@headspring.com"
+$sendEmailsForTest = "adam.hopkins@headspring.com, dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com, imorfey@dwhomes.com, rcarr@dwhomes.com, mroberts@dwhomes.com, kiet.huynh@headspring.com"
+$errorReportingEmailAddresses = "adam.hopkins@headspring.com, dane.schilling@headspring.com, deran@headspring.com, eduardo@headspring.com, kiet.huynh@headspring.com"
 $errorReportingSubject = "Warranty Exception (Training)"
+
+$documentSharePath = "C:\temp\dwh_files\warranty"
+$surveyApiBaseUri = "http://surveytraining.davidweekleyhomes.com/api/"
+$accountingApiBaseUri = "http://accountingtest.davidweekleyhomes.com/api/"
+$jobServiceApiBaseUri = "http://jobservicetest.davidweekleyhomes.com"
+
+$accountingEndPointServer = "wkcorpapptrain1"

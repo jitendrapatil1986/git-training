@@ -48,7 +48,8 @@ namespace Warranty.IntegrationTests.PersistenceTests
                     ServiceCallNumber = 12345,
                     ServiceCallType = "Warranty",  //TODO: Need to update.
                     WarrantyRepresentativeEmployeeId = _employeeId,
-                    WorkSummary = "Testing"
+                    WorkSummary = "Testing",
+                    HomeownerVerificationType = HomeownerVerificationType.NotVerified,
                 };
 
             _job = new Job
@@ -57,6 +58,7 @@ namespace Warranty.IntegrationTests.PersistenceTests
                     //BuilderEmployeeId = null, //_builderId,
                     City = "Houston",
                     CloseDate = DateTime.Now,
+                    JobNumber = _jobId.ToString().Substring(1,8),
                     CommunityId = _communityId,
                     //CurrentHomeOwnerId = _homeownerId,
                     JobId = _jobId
@@ -66,6 +68,7 @@ namespace Warranty.IntegrationTests.PersistenceTests
                 {
                     CommunityId = _communityId,
                     CommunityName = "The Harbour",
+                    CommunityNumber = _communityId.ToString().Substring(1,4),
                     CityId = null,
                     DivisionId = null,
                     ProjectId = null,
@@ -75,6 +78,7 @@ namespace Warranty.IntegrationTests.PersistenceTests
             _employee = new Employee
                 {
                     EmployeeId = _employeeId,
+                    Number = Guid.NewGuid().ToString().Substring(0,8),
                     Name = "Employee A"
                 };
 

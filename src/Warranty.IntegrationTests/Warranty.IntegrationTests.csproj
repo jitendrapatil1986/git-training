@@ -37,6 +37,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accounting.Client, Version=1.1.914.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Warranty.UI\bin\Accounting.Client.dll</HintPath>
+    </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.3.1.229\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
@@ -46,9 +50,9 @@
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
@@ -96,6 +100,10 @@
       <Project>{991144F8-B588-4604-930B-3224FEC6FF32}</Project>
       <Name>Warranty.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Warranty.Server\Warranty.Server.csproj">
+      <Project>{1F88DA00-AE07-4355-8368-37E3A1D6C7A2}</Project>
+      <Name>Warranty.Server</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Warranty.Tests\Warranty.Tests.csproj">
       <Project>{C3CDE3C8-278C-44F6-A498-344A6E666454}</Project>
       <Name>Warranty.Tests</Name>
@@ -106,8 +114,13 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="IntegrationSetUpFixture.cs" />
+    <Compile Include="MediatorMessagingTests\EmployeeEntityBuilder.cs" />
+    <Compile Include="MediatorMessagingTests\JobEntityBuilder.cs" />
+    <Compile Include="MediatorMessagingTests\EntityBuilder.cs" />
+    <Compile Include="MediatorMessagingTests\IEntityBuilder.cs" />
     <Compile Include="MediatorMessagingTests\ServiceCallApprovalTester.cs" />
     <Compile Include="MediatorMessagingTests\MediatorMessagingTesterBase.cs" />
+    <Compile Include="MediatorMessagingTests\ServiceCallEntityBuilder.cs" />
     <Compile Include="PersistenceTests\ActivityLogMapTester.cs" />
     <Compile Include="PersistenceTests\PaymentMapTester.cs" />
     <Compile Include="PersistenceTests\PersistenceTesterBase.cs" />

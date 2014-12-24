@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NPoco;
 using Warranty.Core.Entities;
 
@@ -13,11 +14,15 @@ namespace Warranty.Server.IntegrationTests.SetUp
 
         public override Employee GetSaved(Action<Employee> action)
         {
+            var r = new Random();
+            var empNum = r.Next(100000, 999999).ToString(CultureInfo.InvariantCulture);
+
             var entity = new Employee
                              {
                                  Name = "Test Employee",
-                                 Number = "123456",
-                                 JdeIdentifier = "99123456",
+                                 Number = empNum,
+                                 JdeIdentifier = empNum,
+                                 EmployeeId = Guid.NewGuid(),
                              };
 
             return Saved(entity, action);

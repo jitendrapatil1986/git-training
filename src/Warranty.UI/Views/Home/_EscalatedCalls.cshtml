@@ -12,51 +12,12 @@ else
 <div class="panel-group" id="escalated_list">
     @foreach (var employee in Model.RepresentativeWithEscalatedCalls)
     {
-        <div class="panel list-group-item no-left-right-padding">
+        <div class="panel list-group-item">
             <a data-toggle="collapse" data-parent="#escalated_list" href="#collapseEscalatedCalls@(employee.EmployeeNumber)" class="text-capitalize accordion-toggle collapsed">@employee.Name</a> <span class="badge">@employee.ServiceCallsCount</span>
-            <div id="collapseEscalatedCalls@(employee.EmployeeNumber)" class="collapse panel-body no-left-right-padding">
+            <div id="collapseEscalatedCalls@(employee.EmployeeNumber)" class="collapse panel-body">
                 @foreach (var line in Model.EscalatedServiceCalls.Where(x => x.AssignedToEmployeeNumber == employee.EmployeeNumber))
                 {
-                    <div class="service-call-line">
-                        <div class="col-md-1">
-                            <small class="text-muted">
-                                @Html.ActionLink(line.CallNumber, "CallSummary", "ServiceCall", new {id = line.ServiceCallId}, null)
-                            </small>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="col-md-1 hidden-sm hidden-xs">
-                                @Format.NumberOfLineItems(line.NumberOfLineItems)
-                            </div>
-                            <div class="col-md-10">
-                                @line.HomeownerName<br />@Html.ActionLink(line.Address, "JobSummary", "Job", new {id=line.JobId}, null)
-                            </div>
-                        </div>
-                        <div class="col-md-3 text-center">
-                            @Format.PhoneNumber(line.PhoneNumber)<br/>
-                        </div>
-                        <div class="col-md-2" >
-                            <div class ="has-bottom-tooltip" title="@Format.DateForServiceCallWiget(line.CreatedDate)">
-                                <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@line.NumberOfDaysRemaining)<br/>
-                                <div class="progress time-remaining-progress hidden-sm hidden-xs">
-                                    <div class="progress-bar @Css.ServiceCallProgressBar(line.NumberOfDaysRemaining)" role="progressbar" style="width: @line.PercentComplete%">
-                                        <span class="sr-only">@line.PercentComplete% Complete</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-1 text-center">
-                            @Html.ServiceCallActions(line.ServiceCallId)
-                        </div>
-                        <div class="col-md-8 col-md-offset-1">
-                            <div class="col-md-1 hidden-sm hidden-xs">
-                                <span class="glyphicon glyphicon-fire"></span>
-                            </div>
-                            <div class="col-md-11">
-                                @Format.DateMonthDay(line.EscalationDate) - @line.EscalationReason
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
+                    @Html.Partial("_ServiceCallListItem", line)
                 }
             </div>
         </div>

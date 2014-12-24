@@ -13,7 +13,7 @@
         public void NumberOfDaysRemaining_should_return_0_when_start_date_is_over_seven_days_ago()
         {
             var result = ServiceCallCalculator.CalculateNumberOfDaysRemaining(DateTime.Today.AddDays(-10));
-            result.ShouldEqual(0);
+            result.ShouldEqual(-3);
         }
         
         [Test]

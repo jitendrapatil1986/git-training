@@ -18,7 +18,7 @@
         .not(function() {
             return $(this).closest('.modal').length > 0;
         })
-        .not('#searchBar, #searchBarMobile')
+        .not('#searchBar')
         .first().focus();
 
     $('a.btn.submit').on('click', function (e) {
@@ -29,4 +29,6 @@
     $('.numeric').numeric();
 
     $('.phone-number').mask('(999)-999-9999');
+    
+    $('.phone-number-with-extension').mask("(999) 999-9999? x99999", { placeholder: " " });
 });

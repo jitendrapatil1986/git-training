@@ -1,22 +1,29 @@
-﻿using Warranty.Core.Features.ServiceCallApproval;
-using Warranty.Core.Features.ServiceCallToggleActions;
-using Warranty.UI.Mailer;
+﻿using System.Configuration;
 
 namespace Warranty.UI.Controllers
 {
     using System;
+    using System.Web;
     using System.Web.Mvc;
+    using Mailers;
     using Warranty.Core;
     using Warranty.Core.Entities;
     using Warranty.Core.Enumerations;
     using Warranty.Core.Features.AddServiceCallLineItem;
+    using Warranty.Core.Features.AddServiceCallPayment;
+    using Warranty.Core.Features.AddServiceCallPurchaseOrder;
     using Warranty.Core.Features.CreateServiceCall;
     using Warranty.Core.Features.CreateServiceCallCustomerSearch;
     using Warranty.Core.Features.CreateServiceCallVerifyCustomer;
-    using Warranty.Core.Features.EditServiceCallLineItem;
+    using Warranty.Core.Features.DeleteServiceCall;
     using Warranty.Core.Features.ServiceCallSummary;
     using System.Linq;
+    using Warranty.Core.Features.ServiceCallSummary.Attachments;
+    using Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem;
     using Warranty.Core.Security;
+    using Warranty.Core.Features.ServiceCallApproval;
+    using Warranty.Core.Features.ServiceCallSummary.ReassignEmployee;
+    using Warranty.Core.Features.ServiceCallToggleActions;
 
     public class ServiceCallController : Controller
     {
@@ -31,21 +38,6 @@ namespace Warranty.UI.Controllers
             _userSession = userSession;
         }
 
-        public ActionResult Reassign(Guid id)
-        {
-            return View();
-        }
-
-        public ActionResult AddNote(Guid id)
-        {
-            return View();
-        }
-
-        public ActionResult Close(Guid id)
-        {
-            return View();
-        }
-
         public ActionResult RequestPayment(Guid id)
         {
             return View();
@@ -57,6 +49,16 @@ namespace Warranty.UI.Controllers
                 {
                     ServiceCallId = id
                 });
+
+            return View(model);
+        }
+
+        public ActionResult LineItemDetail(Guid id)
+        {
+            var model = _mediator.Request(new ServiceCallLineItemQuery
+            {
+                ServiceCallLineItemId = id,
+            });
 
             return View(model);
         }
@@ -91,26 +93,19 @@ namespace Warranty.UI.Controllers
             return View(model);
         }
 
-        public ActionResult Create(Guid id)
-        {
-            var model = _mediator.Request(new CreateServiceCallQuery
-                {
-                    JobId = id
-                });
-
-            return View(model);
-        }
-
         [HttpPost]
         public ActionResult Create(CreateServiceCallModel model)
         {
             if (ModelState.IsValid)
             {
-                var newCallId = _mediator.Send(new CreateServiceCallCommand{JobId = model.JobId, ServiceCallLineItems = model.ServiceCallLineItems.ToList().Select(x=>new ServiceCallLineItem{LineNumber = x.LineItemNumber, ProblemCode = x.ProblemCodeDisplayName, ProblemDescription = x.ProblemDescription})});
+                var newCallId = _mediator.Send(new CreateServiceCallCommand { JobId = model.JobId });
                 if (_userSession.GetCurrentUser().IsInRole(UserRoles.WarrantyServiceManager) || _userSession.GetCurrentUser().IsInRole(UserRoles.WarrantyServiceCoordinator))
                 { 
                     var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery { ServiceCallId = newCallId });
-                    _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
+                    if (notificationModel.WarrantyRepresentativeEmployeeEmail != null)
+                    {
+                        _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
+                    }
                 }
 
                 return RedirectToAction("CallSummary", new {id = newCallId} );
@@ -118,29 +113,7 @@ namespace Warranty.UI.Controllers
 
             return View(model);
         }
-
-        [HttpPost]
-        public JsonResult AddLineItem(AddServiceCallLineItemModel model)
-        {
-            var result = _mediator.Send(new AddServiceCallLineItemCommand
-                {
-                    ServiceCallId = model.ServiceCallId, ProblemCode = model.ProblemCode, ProblemDescription = model.ProblemDescription
-                });
-
-            return Json(new {newServiceLineId = result}, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public JsonResult EditLineItem(EditServiceCallLineModel model)
-        {
-            var result = _mediator.Send(new EditServiceCallLineCommand
-            {
-                ServiceCallLineItemId = model.ServiceCallLineItemId, ProblemCode = model.ProblemCode, ProblemDescription = model.ProblemDescription
-            });
-
-            return Json(new { serviceLineItemId = result }, JsonRequestBehavior.AllowGet);
-        }
-
+        
         public ActionResult Approve(Guid id)
         {
             _mediator.Send(new ServiceCallApproveCommand
@@ -149,7 +122,10 @@ namespace Warranty.UI.Controllers
             });
 
             var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery { ServiceCallId = id });
-            _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
+            if (notificationModel.WarrantyRepresentativeEmployeeEmail != null)
+            {
+                _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
+            }
 
             return Json (new { success = "true"}, JsonRequestBehavior.AllowGet );
         }
@@ -166,12 +142,107 @@ namespace Warranty.UI.Controllers
 
         public ActionResult ToggleSpecialProject(Guid id, string message)
         {
-            _mediator.Send(new ServiceCallToogleSpecialProjectCommand
-                {
-                    ServiceCallId = id,
-                    Text = message
-                });
-            return RedirectToAction("CallSummary", new {id});
+            _mediator.Send(new ServiceCallToggleSpecialProjectCommand
+            {
+                ServiceCallId = id,
+                Text = message
+            });
+            return Json(new { actionName = ActivityType.SpecialProject.DisplayName, actionMessage = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ToggleEscalate(Guid id, string message)
+        {
+            var result = _mediator.Send(new ServiceCallToggleEscalateCommand
+            {
+                ServiceCallId = id,
+                Text = message
+            });
+
+            if (result.ShouldSendEmail)
+            {
+                var url = ConfigurationManager.AppSettings["Warranty.BaseUri"];
+                var urlHelper = new UrlHelper(this.ControllerContext.RequestContext);
+                url += urlHelper.Action("CallSummary", "ServiceCall", new { id });
+                result.Url = url;
+                _mailer.ServiceCallEscalated(result).SendAsync();
+            }
+            return Json(new { actionName = ActivityType.Escalation.DisplayName, actionMessage = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetEmployees(Guid id)
+        {
+            var employees = _mediator.Request(new EmployeesForServiceCallQuery
+            {
+                ServiceCallId = id
+            });
+
+            return Json(employees.Select(x => new { value = x.EmployeeNumber, text = x.DisplayName }), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult InlineReassign(ReassignEmployeeCommand command)
+        {
+            _mediator.Send(command);
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Complete(Guid id)
+        {
+            _mediator.Send(new ServiceCallCompleteCommand()
+            {
+                ServiceCallId = id,
+            });
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Reopen(Guid id, string message)
+        {
+            _mediator.Send(new ServiceCallReopenCommand
+            {
+                ServiceCallId = id,
+                Text = message
+
+            });
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult UploadAttachment(ServiceCallUploadAttachmentCommand model)
+        {
+            _mediator.Send(model);
+
+            if (model.ServiceCallLineItemId == Guid.Empty)
+            {
+                return RedirectToAction("CallSummary", new { id = model.ServiceCallId });
+            }
+
+            return RedirectToAction("LineItemDetail", new { id = model.ServiceCallLineItemId });
+        }
+
+        [HttpPost]
+        public ActionResult RenameAttachment(ServiceCallRenameAttachmentCommand model)
+        {
+            _mediator.Send(model);
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteAttachment(ServiceCallDeleteAttachmentCommand model)
+        {
+            _mediator.Send(model);
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DownloadAttachment(Guid id)
+        {
+            var model = _mediator.Request(new ServiceCallDownloadAttachmentQuery { Id = id });
+            return File(model.Bytes,model.MimeMapping, model.FileName);
+        }
+
+        public ActionResult CreatePurchaseOrder(Guid id)
+        {
+            var model = _mediator.Request(new AddServiceCallPurchaseOrderQuery { ServiceCallLineItemId = id });
+
+            return View(model);
         }
     }
 }

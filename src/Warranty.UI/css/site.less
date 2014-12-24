@@ -3,9 +3,39 @@
 @highlight-bg: #d4dde3; //#FFF2A8;
 @gray-lighter: #f7f7f7;
 
+a {
+   outline: 0;
+}
+
+h2 {
+    font-size: 28px;
+}
+
+h2, h3 {
+    line-height: 34px;
+}
+
+h2, h3, h4 {
+    margin-top: 0;
+}
+
+.alert {
+    border-radius: 0;
+    padding: 10px;
+}
+
+.small-text {
+    font-size: 12px;
+}
+
 .main-container {
     margin-top: 108px;
     padding: 0 10px;
+}
+
+.main-search {
+    width: 264px;
+    float: right;
 }
 
 .logged-in-user {
@@ -34,21 +64,70 @@
 
 .progress {
     height: 7px;
+    margin-bottom: 0;
 }
 
 .time-remaining-progress {
     margin-top: 10px;
 }
 
+#serviceCallSummaryPage section, #jobSummaryPage section, #serviceCallLineItemDetailPage section {
+    border-bottom: 1px solid #DDD;
+}
+
+#serviceCallSummaryPage .panel-default, #serviceCallLineItemDetailPage .panel-default {
+    margin: 15px 0 0 0;
+}
+
+.panel-default {
+    border-bottom: 0;
+}
+
+.main-info {
+    line-height: 24px;
+}
+
+.main-info h3{
+    font-weight: bold;
+    line-height: inherit;
+}
+
+.form-submit .btn, .popup-action-with-message .btn {
+   margin-right: 10px;
+}
+
+section.line-items {
+    margin-top: 15px;
+}
+
 .service-call-line {
     border-bottom: solid 1px #e7e7e7;
-    padding: 5px 0;
+    padding: 10px 0 10px;
     margin: 0;
 }
 
-    .service-call-line:hover {
-        background: @gray-lighter;
-    }
+#serviceCallSummaryPage .service-call-line:first-child{
+    border-top: solid 1px #e7e7e7;
+}
+
+
+#serviceCallSummaryPage .service-call-line{
+    border: 0;
+}
+
+
+#allServiceCallNotes.service-call-line{
+    border-bottom: solid 1px #e7e7e7;
+    padding: 10px 10px 0;
+}
+
+.service-call-line:hover {
+    background: @gray-lighter;
+}
+
+#serviceCallSummaryPage select, #serviceCallLineItemDetailPage select {
+    max-width: 300px;
+}
 
 .text-red {
     color: #D9534F;
@@ -60,7 +139,24 @@
 
 .no-margin{ margin: 0;}
 
+.margin-bottom-5 { margin: 0 0 5px 0;}
+
 .margin-bottom-15 { margin: 0 0 15px 0;}
+
+.margin-bottom-20 { margin: 0 0 20px 0;}
+
+.padding-5 {
+    padding: 5px;
+}
+
+.no-border {
+   border: none;
+}
+
+.label.label-info.muted {
+    font-weight: normal;
+    background: #84D0E6;
+}
 
 .label, badge {
     &-warranty-one-year {
@@ -95,18 +191,22 @@
     height: 60px;
 }
 
-.opened-for {
-    border-radius: 10px;
+.opened-for{
+    border-radius: 5px;
     text-align: center;
-    font-size: xx-large;
+    font-size: 10px;
     color: #FFFFFF;
-    height: 60px;
+    padding: 5px;
     width: 60px;
 }
 
-.opened-for p {
-    font-size: xx-small;
-    color: #FFFFFF;
+    .opened-for div:first-child{
+        font-size: 28px;
+        line-height: 26px;
+    }
+
+    #jobSummaryPage .opened-for{
+        float: right;
 }
 
 .opened-for {
@@ -185,6 +285,28 @@
     border-bottom: none;
 }
 
+#serviceCallsWidget .tab-pane{
+    min-height: 300px;
+    border-right: 1px solid #DDD;
+    border-bottom: 1px solid #DDD;
+    border-left: 1px solid #DDD;
+}
+
+#serviceCallsWidget .panel-body {
+  padding: 0;
+}
+
+#serviceCallsWidget .panel-group {
+  margin-bottom: 0;
+}
+
+#collapse-undefined .panel-body {
+    padding: 0;
+}
+
+.collapse div.service-call-line:last-child {
+  border-bottom: 0;
+}
 
 .todo {
     color: #666;
@@ -196,18 +318,21 @@
 .todo-header {
     font-size: 1.6em;
     color: #666;
-    padding-left: 5px;
     margin-bottom: 5px;
     border-bottom: none;
+}
+
+.todo-header select{
+    margin-top: 10px;
+    max-width: 250px;
 }
 
 .todo-container {
     border-left: 1px dashed #ddd;
 }
 
-.todo-header select {
-    margin-left: 15px;
-    font-size: small;
+.todo-widget-element.service-call-line {
+    border-bottom: 0;
 }
 
 .wrap-text {
@@ -242,7 +367,8 @@
 }
 
 .todo-widget-element {
-    padding-left: 35px;
+    margin-left: 25px;
+    padding-left: 10px;
 }
 
 .todo-widget-action-buttons {
@@ -258,6 +384,23 @@
 .deny-todo {
     color: #d9534f;
     font-weight: bold;
+}
+
+.complete-todo {
+    color: #5cb85c;
+    font-weight: bold;
+}
+
+.task-icon {
+    background: green;
+    float: left;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    padding-left: -200px;
 }
 
 .service-call-widget-job-number {
@@ -307,21 +450,32 @@
     margin: 0;
 }
 
+.vertical-menu-scroll {
+    max-height: 30em;
+    overflow-y: auto;
+}
+
 .label, badge {
-    &-open-service-call {
+    &-open-service-call, &-homeowner-signed-service-call, &-open-service-line-item {
         background-color: #5cb85c;
     }
 }
 
 .label, badge {
-    &-requested-service-call {
+    &-requested-service-call, &-requested-service-line-item {
         background-color: #FFBF00;
     }
 }
 
 .label, badge {
-    &-closed-service-call {
-        background-color: #d9534f;
+    &-complete-service-call, &-complete-service-line-item {
+        background-color: #BDC3C7;
+    }
+}
+
+.label, badge {
+    &-in-progress-service-line-item {
+        background-color: #FFBF00;
     }
 }
 
@@ -381,13 +535,26 @@ a.delete-group-item:hover {
     position: absolute;
     right: 0px;
 }
-//Testing inline-edit via ko.
+
+.payment-request-approval-icon {
+    background: red;
+    float: left;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    padding-left: -200px;
+}
+
+
 .edit {
     display: none;
 }
 
 .editing .edit {
-    display: block;
+    display: inline-block;
 }
 
 .editing .view {
@@ -395,7 +562,7 @@ a.delete-group-item:hover {
 }
 
 .edit-line-item:hover, .edit-line-item:focus{
-    background: @highlight-bg;
+    background: @gray-lighter;
 }
 
 .edit-line-item .glyphicon-pencil, .edit-line-item .btn-hover-show{
@@ -438,8 +605,36 @@ a.delete-group-item:hover {
     padding-bottom: 3px;
 }
 
+.padding-bottom-10 { 
+    padding-bottom: 10px;
+}
+
+.padding-top-10 { 
+    padding-top: 10px;
+}
+
+.padding-top-7 { 
+    padding-top: 7px;
+}
+
+.padding-top-31 { 
+    padding-top: 31px;
+}
+
+.padding-left-15 { 
+    padding-left: 15px;
+}
+
+.padding-5 {
+    padding: 5px;
+}
+
 .text-align-right {
     text-align: right;
+}
+
+.text-align-center {
+    text-align: center;
 }
 
 .no-padding{ padding: 0;}
@@ -448,15 +643,22 @@ a.delete-group-item:hover {
 .no-right-padding{ padding-right: 0;}
 .no-left-padding{ padding-left: 0;}
 
+.no-margin{ margin: 0;}
 .no-top-margin{ margin-top: 0;}
 .no-bottom-margin{ margin-bottom: 0;}
+.no-right-margin{ margin-right: 0;}
+.no-left-margin{ margin-left: 0;}
 
 .float-right-non-xs-screen {
     float: right;
 }
 
-.service-call-header-buttons{
+.warranty-header-buttons{
     margin-top:0px;
+}
+
+.warranty-header-buttons .btn{
+    margin-left: 10px;
 }
 
 .popup-action-with-message {
@@ -474,7 +676,77 @@ a.delete-group-item:hover {
     width: 100%;
 }
 
+.dashboard-widget {
+    margin: 15px 0;
+}
+
+.dashboard-widget a{
+    text-decoration: none;
+}
+
+.dashboard-widget-title{
+    font-size: 1.1em;
+    text-align: center;
+}
+
+.dashboard-widget-number{
+    font-size: 3.5em;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    line-height: 1em;
+}
+
+.dashboard-widget-footnote{
+    color: #999;
+    text-align: center;
+    margin: 10px 0 5px 0;
+}
+
+.my-service-call div.service-call-line:first-child {
+    border-top: none;
+}
+
 @media (max-width: 767px) {
+
+    .container {
+           padding: 0;
+    }
+
+    .navbar-fixed-top{
+        top: inherit;
+        position: inherit;
+    }
+
+    .navbar-header, .navbar-brand {
+        width: 100%;
+    }
+
+    .navbar-brand img{
+        margin: 0 auto;
+    }
+
+    .subnav {
+        background-color: #eee;
+        background-image: linear-gradient(#fff,#fff 25%,#f1f0e6);
+        background-repeat: repeat-x;
+        border-bottom: 1px solid #e7e7e5;
+        border-radius: 0;
+        height: 36px;
+        margin: 0 0 15px;
+        width: 100%;
+        }
+
+    .main-search {
+        float: none;
+        margin: 0 auto;
+    }
+    
+    h2 {
+      font-size: 20px;
+      margin-bottom: 10px !important;
+    }
+
     .float-right-non-xs-screen {
         float: none !important;
     }
@@ -489,5 +761,424 @@ a.delete-group-item:hover {
 
     .edit-line-item > row > .col-md-12 {
         padding-left: 0;
-    }    
+    }
+
+    .inline-editable-text .glyphicon {
+        width: 31%;
+        margin: 5px 2px 20px;
+        float: left;
+        padding: 10px;
+        text-align: center;
+        border: 1px solid lightgrey;
+        background: white;
+    }
+
+    .warranty-header-buttons .btn{
+        float: left !important;
+        width: 100%;
+        margin: 0 0 14px 0;
+    }
+
+    #serviceCallsWidget .tab-pane{
+        min-height: 0;
+    }
+}
+
+.indicator-icon-with-value, .indicator-icon-with-value span {
+    display: inline-block;
+}
+
+.indicator-icon-with-value span:first-child{
+    margin-right: 3px;
+}
+
+.inline-editable-dropdown .editable-input {
+    float: right;
+    background-color: lightgray; 
+    padding: 5px;
+}
+
+.inline-editable-dropdown .editable-input select {
+    width: 100%;
+}
+
+.inline-editable-dropdown .editable-buttons{
+    padding: 5px;
+    background-color: lightgray;    
+    margin-top: -4px;
+    position: absolute;
+    right: 0;
+    top: 39px;
+    z-index: 1;
+}
+
+.inline-editable-dropdown .editableform{
+    position: relative;
+}
+
+.position-fixed {
+    position: fixed;
+}
+
+.z-index-on-top {
+    z-index: 1;
+}
+
+.undo-alert {
+    position: fixed;
+    width: 500px;
+    text-align: center;
+    top: 95px;
+    left: 50%;
+    z-index: 2;
+    margin-left: -250px; //half of width.
+}
+
+.inline-editable-text .editable-empty, .inline-editable-text .editable-empty, .inline-editable-text .editable-empty:hover, .inline-editable-text .editable-empty:focus {
+    font-style: normal;
+    color: #08c;
+}
+
+.inline-editable-dropdown .editable-empty, .inline-editable-dropdown .editable-empty, .inline-editable-dropdown .editable-empty:hover, .inline-editable-dropdown .editable-empty:focus {
+    font-style: normal;
+    color: #08c;
+}
+
+.inline-editable-text form {
+    background-color: lightgray; 
+    padding: 5px;
+}
+
+.inline-editable-text .editableform .form-control {
+    width: 170px;
+    padding-left: 5px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.attachments {
+    margin-left:13px;
+}
+
+.attachments ul li{
+    float: left;
+    margin: 0 10px 10px 0;
+    width: 150px;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.attachments .attached-file {
+    margin: 0 0 5px 0;
+    border: 1px lightgray solid;
+    border-radius: 5px;
+    padding: 10px;
+    background-color:@gray-lighter;
+    display: block;
+}
+
+.attached-file:hover {
+    background: #bce8f1;
+}
+
+span.boxclose{
+    float: right;
+    margin-top: -18px;
+    margin-right: -20px;
+    cursor: pointer;
+    color: #fff;
+    border-radius: 100px;
+    background: #313131;
+    font-size: 25px;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 0;
+    padding: 11px 3px;
+    text-align: center;  
+    display: none;   
+    text-decoration: none;
+}
+
+.attached-file:hover span.boxclose {
+    display: block;
+}
+
+.attached-file-display-name {
+    float: none;
+}
+
+.boxclose:before {
+    content: "×";
+}
+
+.uploader-buttons {
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+.attachment-info {
+    margin-top: 5px;
+    font-size: 11px;
+    line-height: 14px;
+}
+
+.download-attachment {
+    font-size: 21px;
+}
+
+#warrantyBonusSummary table tr th{
+    text-align: right;
+    vertical-align: middle;
+}
+
+#warrantyBonusSummary table tr th:first-child, #warrantyBonusSummary table tr td:first-child{
+    text-align: left;
+}
+
+.table-bonus tr th:first-child, .table-bonus tr td:first-child{
+    width: 300px;
+}
+
+.table-bonus-survey tr th:first-child, .table-bonus-survey tr td:first-child{
+    width: 500px;
+}
+
+.margin-right-10 {
+    margin-right: 10px;
+}
+
+.table-wsr-loading tr th{
+    text-align: right;
+    vertical-align: middle;
+}
+
+.table-wsr-loading tr th:first-child, .table-wsr-loading tr td:first-child{
+    text-align: left;
+}
+
+.successData{
+    color: #3c763d;
+    font-weight: bold;
+}
+
+.totalLine{
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.table-wsr-loading tr th:first-child, .table-wsr-loading tr td:first-child{
+    width: 800px;
+}
+
+.validationMessage { 
+    color: Red;
+}
+
+.print-only {
+    display: none;
+}
+
+.bread-crumb {
+    display: block;
+    font-size: 14px;
+}
+
+#addAdditionalcontacts {
+    padding: 10px 30px;
+}
+
+#addAdditionalcontacts div.col-md-6:first-child{
+    padding: 0;
+}
+
+#addAdditionalcontacts .editable-input div{
+    float: left;
+    width: 173px;
+}
+
+#addAdditionalcontacts .editable-input div:first-child{
+    margin-right: 10px;
+}
+
+.additional-contacts-heading {
+    background-color: #ebebeb;
+    padding: 10px;
+    margin-top: 0px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+    display: block;
+}
+
+.searchContainer{
+    margin-bottom: 20px;
+}
+
+.searchContainer label{
+    margin-right: 10px;
+}
+
+ul.default_list{
+    list-style: none;
+    padding: 0;
+    position: relative;
+}
+
+.itemContainer{
+    border: 1px solid #DDD;
+}
+
+.itemContainer h3{
+    font-size: 15px;
+    margin: 0;
+}
+
+span.remove-additional-contact{    
+    cursor: pointer;
+    display: none;  
+}
+
+.additional-contact.can-remove:hover span.remove-additional-contact {
+    display: inline-block;
+}
+
+.additional-contact .additional-contact-icon {
+    display:none;
+}
+
+.itemLabel label{
+    font-size: 12px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.additional-contact.can-remove .additional-contact-icon {
+    display:inline-block;
+}
+
+.payment-line{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.payment-line .btn-hover-show{
+    opacity: 0;
+}
+
+.payment-line:hover .btn-hover-show{
+    opacity: 1;
+}
+
+.backcharge-container {
+    margin: 5px;
+    background-color: white;
+    border: solid 1px lightgrey;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+#serviceCallLineItemDetailPage section {
+    padding-top: 15px;
+    margin: 0;
+}
+
+
+@media (max-width: 767px) {
+
+a.boxclose {
+    display: block;
+}
+
+
+    .float-right-non-xs-screen {
+        float: none !important;
+    }
+
+    .text-align-right {
+        text-align: left;
+    }
+
+    .margin-top-13 {
+        margin-top: 0;
+    }
+
+    .edit-line-item > row > .col-md-12 {
+        padding-left: 0;
+    }
+
+    .inline-editable-text .glyphicon {
+        width: 48%;
+        margin: 2px;
+        float: left;
+        padding: 10px;
+        text-align: center;
+        border: 1px solid lightgrey;
+        background: white;
+    }
+
+    .main-container {
+        margin-top: 0px;
+    }
+
+    .mobile-margin {
+        margin: 5px 0;
+        display: block;
+    }
+
+    .undo-alert {
+        width: 300px;
+        top: 59px;
+        margin-left: -150px; //half of width.
+    }
+}
+
+@media print {
+    .no-print {
+        display: none;
+    }
+
+    .print-only {
+       display: block;
+    }
+
+     a[href]:after {
+        content: none;
+      }
+
+      #serviceCallSummaryPage, #serviceCallLineItemDetailPage {
+        border: 0;
+    }
+
+    #serviceCallSummaryPage .panel-heading, #serviceCallLineItemDetailPage .panel-heading {
+        margin:0;
+        border: 0;
+    }
+}
+
+.fa-spin-custom, .glyphicon-spin {
+    -webkit-animation: spin 1000ms infinite linear;
+    animation: spin 1000ms infinite linear;
+}
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+@keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
 }

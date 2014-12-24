@@ -11,47 +11,24 @@ else
 {
     foreach (var line in Model.MyServiceCalls)
     {
-        <div class="my-service-call service-call-line hide">
-            <div class="col-md-1">
-                <small class="text-muted">
-                    @Html.ActionLink(line.CallNumber, "CallSummary", "ServiceCall", new {id = line.ServiceCallId}, null)
-                </small><br/>@Format.YearsWithinWarranty(line.YearsWithinWarranty, line.WarrantyStartDate)
-            </div>
-            <div class="col-md-5">
-                <div class="col-md-1 hidden-sm hidden-xs">                                        
-                    @Format.NumberOfLineItems(line.NumberOfLineItems)
-                </div>
-                <div class="col-md-10">
-                    @line.HomeownerName<br />@Html.ActionLink(line.Address, "JobSummary", "Job", new {id=line.JobId}, null)
-                </div>
-            </div>
-            <div class="col-md-3">@Format.PhoneNumber(line.PhoneNumber)</div>
-            <div class="col-md-2 has-bottom-tooltip" title="@Format.DateForServiceCallWiget(line.CreatedDate)">
-                <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@line.NumberOfDaysRemaining)<br/>
-                <div class="progress time-remaining-progress hidden-sm hidden-xs">
-                    <div class="progress-bar @Css.ServiceCallProgressBar(line.NumberOfDaysRemaining)" role="progressbar" style="width: @line.PercentComplete%">
-                        <span class="sr-only">@line.PercentComplete% Complete</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-1 text-center">
-                @Html.ServiceCallActions(line.ServiceCallId)
-            </div>
-            <div class="clearfix"></div>
+        <div class="my-service-call hide">
+            @Html.Partial("_ServiceCallListItem", line)
         </div>
+
+
     }
     if (Model.MyServiceCalls.Count() > 5)
     {
-        <div>
+        <div class="padding-5">
             <span class="text-muted">Show:</span> 
-            <a href="#" class="show-more">5</a>
+            <a href="#" class="show-more-service-calls">5</a>
             @if (Model.MyServiceCalls.Count() > 5)
             {
-                <span> | <a href="#" class="show-more">10</a></span>
+                <span> | <a href="#" class="show-more-service-calls">10</a></span>
             }
             @if (Model.MyServiceCalls.Count() > 10)
             {
-                <span> | <a href="#" class="show-more">All</a></span>
+                <span> | <a href="#" class="show-more-service-calls">All</a></span>
             }
         </div>
     }

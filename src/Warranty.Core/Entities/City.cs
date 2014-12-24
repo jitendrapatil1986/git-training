@@ -11,5 +11,6 @@ namespace Warranty.Core.Entities
         public virtual string CreatedBy { get; set; }
         public virtual DateTime? UpdatedDate { get; set; }
         public virtual string UpdatedBy { get; set; }
+        public virtual decimal PurchaseOrderMaxAmount { get; set; }
     }
 }

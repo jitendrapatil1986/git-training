@@ -1,13 +1,7 @@
 @using System.Web.Optimization
+@using Warranty.Core.Enumerations
 @using Warranty.UI.Core.Enumerations
 @using Warranty.UI.Core.Helpers
-@helper NavItemHelper(NavItem navItem, string url, string data = null)
-{
-    data = data ?? String.Empty;
-    <li class="@(navItem.DisplayName.Equals(ViewData[Warranty.UI.Core.Filters.CurrentNavSectionAttribute.ViewDataKey]) ? "active" : "")">
-            <a @data href="@url">@navItem.Title</a>
-    </li>
-}
 
 @helper NavHeaderItemHelper(NavHeaderItem item)
 {
@@ -16,19 +10,30 @@
 
 @helper NavItemSectionHelper(string key)
 {
-    <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">@key <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-            @foreach (var item in NavHeaderItem.GetAll(key))
-            {
-                if (item.HasDivider)
+    if (key == NavHeaderItem.Home.Key)
+    {
+        @NavHeaderItemHelper(NavHeaderItem.GetAll(key).First())
+    }
+    else
+    {
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">@key <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                @foreach (var item in NavHeaderItem.GetAll(key))
                 {
-                    <li class="divider"></li>
+                    if((item.Value != NavHeaderItem.ManageCostCode.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))) || 
+                       (item.Value == NavHeaderItem.ManageCostCode.Value && User.IsInRole(UserRoles.WarrantyAdmin)))
+                    {
+                        if (item.HasDivider)
+                        {
+                            <li class="divider"></li>
+                        }
+                        @NavHeaderItemHelper(item)
+                    }
                 }
-                @NavHeaderItemHelper(item)
-            }
-        </ul>
-    </li>
+            </ul>
+        </li>
+    }
 }
 
 <!DOCTYPE html>
@@ -42,6 +47,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         @Styles.Render("~/css/less/main")
         @Styles.Render("~/css/extra")
+        @Styles.Render("~/css/datepicker.css")
     
         @Html.Partial("_RequireJsConfig")
         @RenderSection("header", required: false)
@@ -62,12 +68,12 @@
         @RenderSection("modules", required: false)
     </head>
     <body>
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar navbar-default navbar-fixed-top no-print">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#"><img src="@Url.Content("~/img/DWH logo_color_233x34.png")" /></a>
+                    <a class="navbar-brand" href="/"><img src="@Url.Content("~/img/DWH logo_color_233x34.png")" class="img-responsive" /></a>
                 </div>
-                <ul class="nav navbar-nav navbar-right hidden-xs">
+                <ul class="nav navbar-nav navbar-right hidden-xs hidden-sm">
                     <li class="divider divider-vertical"></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Help <b class="caret"></b></a>
@@ -80,70 +86,40 @@
                     </li>                
                 </ul>
                 <div class="navbar-brand pull-right hidden-xs">Warranty</div>
+
             </div>
         </div>
         
-        <!--Menu for Desktop view.-->
-        <div class="visible-lg visible-md subnav subnav-fixed">
+        <div id="subNavMenu" class="subnav subnav-fixed no-print" role="navigation">
             <div class="container">
-                <ul class="nav navbar-nav no-bottom-margin">
-                    @NavItemHelper(NavItem.Home, Url.Action("Index", "Home"))
+                <ul class="nav navbar-nav hidden-xs">
+                    @NavItemSectionHelper(NavHeaderItem.Home.Key)
+                    <li class="divider divider-vertical hidden-xs"></li>
+                    @NavItemSectionHelper(NavHeaderItem.Reports.Key)
+                    <li class="divider divider-vertical hidden-xs"></li>
+                    @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager) || User.IsInRole(UserRoles.WarrantyAdmin))
+                    {
+                        @NavItemSectionHelper(NavHeaderItem.Administration.Key)
+                        <li class="divider divider-vertical hidden-xs"></li>
+                    }
+                    @{ Html.RenderAction("MyTeamDropdown", "Home"); }
                 </ul>
-                <div class="nav nav-extra">
-                    <div class="col-md-3 pull-right">
-                        <div class="input-group">
-                            <input id="searchBar" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder=""/>
-                            <div class="input-group-btn">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Type <span class="caret"></span></button>
-                                <ul class="dropdown-menu dropdown-menu-right"></ul>
-                            </div>
-                        </div>
+                <div class="main-search nav-extra">
+                    <div class="input-group">
+                        <input id="searchBar" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder=""/>
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!--Menu for Mobile view.-->
-        <div class="visible-xs visible-sm subnav subnav-fixed" >
-            <div class="container">
-                <div class="navbar-header">
-                    <div class="panel-group" id="accordion">
-                        <div class="panel panel-default">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseSubMenuMobile">
-                                <button type="button" class="navbar-toggle collapsed no-top-margin no-bottom-margin" data-toggle="collapse" data-target="#navbar-collapse-submenu">
-                                    <span class="sr-only">Toggle navigation</span>
-                                    <span class="glyphicon glyphicon-search"></span>
-                                </button>
-                                <a href="@Url.Action("Index", "Home")" class="navbar-brand @(NavItem.Home.DisplayName.Equals(ViewData[Warranty.UI.Core.Filters.CurrentNavSectionAttribute.ViewDataKey]) ? "active" : "")">@NavItem.Home.Title</a>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="container main-container">
-            <!--Menu for Mobile view.-->
-            <div class="visible-xs visible-sm">
-                <div id="collapseSubMenuMobile" class="collapse">
-                    <div class="col-md-3 pull-right">
-                        <div class="input-group">
-                            <input id="searchBarMobile" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder=""/>
-                            <div class="input-group-btn">
-                                <button type="button" class="btn btn-default dropdown-toggle margin-bottom-4" data-toggle="dropdown">Type <span class="caret"></span></button>
-                                <ul class="dropdown-menu dropdown-menu-right"></ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            @RenderBody()
+                @RenderBody()
         </div>
 
         <div class="container">
             <hr/>
-            <footer>
+            <footer class="no-print">
                 <p class="text-center text-muted">
                     Version: @VersionHelper.ApplicationVersionNumber()
                 </p>

@@ -22,6 +22,11 @@ require.config({
         'typeahead': 'lib/typeahead.bundle.min',
         'bloodhound': 'lib/bloodhound.min',
         'handlebars': 'lib/handlebars.min',
+        'x-editable': 'lib/bootstrap-editable.min',
+        'responsive.tabs': 'lib/responsive.tabs',
+        'ko.x-editable': 'lib/knockout.x-editable.min',
+        'ko.validation': 'lib/knockout.validation.min',
+        'hideseek': 'lib/jquery.hideseek.min'
     },
     shim: {
         'jquery.validate': ['jquery'],
@@ -30,12 +35,18 @@ require.config({
         'tooltip': { deps: ['bootstrap'], exports: '$.fn.tooltip' },
         'datepicker': { deps: ['bootstrap'], exports: '$.fn.datepicker' },
         'collapse': { deps: ['bootstrap'], exports: '$.fn.collapse' },
+        'x-editable': { deps: ['bootstrap'], exports: '$.fn.editable' },
         'underscore': { exports: '_' },
         'ko': ['underscore'],
+        'ko.x-editable': ['ko'],
+        'ko.validation': ['ko'],
         'highcharts': { deps: ['jquery'], exports: 'Highcharts' },
-        "bloodhound": { deps: ["jquery"], exports: "Bloodhound" },
+        'bloodhound': { deps: ['jquery'], exports: 'Bloodhound' },
+        'responsive.tabs': { deps: ['bootstrap'] },
+        'jquery.maskedinput': ['jquery'],
+        'hideseek': ['jquery'],
     },
     callback: function () {
-        require(['app/feedbackForm', 'app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields']);
+        require(['app/feedbackForm', 'app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields', 'app/responsiveTabs']);
     }
 });

@@ -1,0 +1,1 @@
+UPDATE ProblemCodes SET JdeCode = 'SEP' WHERE CategoryCode = 'Septic/Well Equipment'

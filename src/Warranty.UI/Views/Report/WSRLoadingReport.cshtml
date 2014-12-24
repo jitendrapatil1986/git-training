@@ -1,0 +1,85 @@
+﻿@using Warranty.Core.Enumerations
+@model Warranty.Core.Features.Report.WSRLoadingReport.WSRLoadingReportModel
+
+<div class="container">
+     <section class="margin-bottom-10">
+    <h2 class="pull-left no-margin">WSR Loading Report</h2>
+     @if (Model.AnyResults)
+        {
+            <div class="warranty-header-buttons">
+                    <a href="javascript:window.print()" class="btn btn-default pull-right margin-botom-10 no-print"><span class="glyphicon glyphicon-print"></span> Print</a>
+            </div>
+        }
+    <div class="clearfix"></div>
+        </section>
+    <h4 class="margin-bottom-20">Homes Under 2 Years Warranty</h4>
+@if (!User.IsInRole(UserRoles.WarrantyServiceRepresentative))
+{
+    <div class="panel panel-default no-print">
+        <div class="panel-heading">
+            <div id="wsrLoadingReportFilter">
+                <div class="no-bottom-padding">
+                    <div class="row">
+                        <div class="col-md-12">
+                            
+                                @using (Html.BeginForm("WSRLoadingReport", "Report", FormMethod.Post, new { @class = "form-inline" }))
+                                {
+                                    <div class="form-group">
+                                        @Html.DropDownList("SelectedEmployeeNumber", Model.EmployeeTiedToRepresentatives.Select(c => new SelectListItem { Text = c.EmployeeName, Value = c.EmployeeNumber.ToString() }), "Select Representative", new { @class = "form-control text-capitalize" })
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" class="btn btn-primary" value="Run Report" />
+                                    </div>
+                                }
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+    @if (!Model.AnyResults)
+    {
+        <p><em>No entries match report criteria</em></p>
+    }
+    else
+    {
+        <div id="wsrLoadingSummary" class="col-md-12">
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.Label("Employee Name: ")
+                    @Html.DisplayFor(model => model.LoadingSummaries.FirstOrDefault().EmployeeName)
+                </div>
+                <div class="col-md-6">
+                    <div class="pull-right">
+                        @Html.Label("Employee Number: ")
+                        @Html.DisplayFor(model => model.LoadingSummaries.FirstOrDefault().EmployeeNumber)
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped table-bordered text-right table-wsr-loading">
+                <thead>
+                    <tr>
+                        <th>Community Name</th>
+                        <th>Warrantable Homes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var line in Model.LoadingSummaries)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(model => line.CommunityName)</td>
+                            <td>@Html.DisplayFor(model => line.NumberOfWarrantableHomes)</td>
+                        </tr>
+                    }
+                    <tr class="totalLine">
+                        <td>Total</td>
+                        <td>@Html.DisplayFor(model => model.TotalNumberOfWarrantableHomes)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

@@ -44,6 +44,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accounting.Client, Version=1.1.914.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Accounting.Client.1.1.914.0\lib\net45\Accounting.Client.dll</HintPath>
+    </Reference>
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\WebGrease.1.3.0\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
@@ -52,6 +56,9 @@
     </Reference>
     <Reference Include="AutoMapper.Net4">
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="CuteWebUI.AjaxUploader">
+      <HintPath>..\..\lib\AjaxUploader\CuteWebUI.AjaxUploader.dll</HintPath>
     </Reference>
     <Reference Include="dotless.Core, Version=1.4.1.0, Culture=neutral, PublicKeyToken=96b446c9e63eae34, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -81,9 +88,9 @@
     <Reference Include="Mvc.Mailer">
       <HintPath>..\packages\MvcMailer.4.5\lib\45\Mvc.Mailer.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus">
       <HintPath>..\packages\NServiceBus.Interfaces.4.2.0\lib\net40\NServiceBus.dll</HintPath>
@@ -113,7 +120,9 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web" />
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Http, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -151,7 +160,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.Mvc">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
     </Reference>
@@ -191,19 +200,26 @@
     </Compile>
     <Compile Include="Api\ApiController.cs" />
     <Compile Include="Api\AssignWSRController.cs" />
+    <Compile Include="Api\HomeownerController.cs" />
+    <Compile Include="Api\ManageJobController.cs" />
+    <Compile Include="Api\ManageProblemCodeCostCodesController.cs" />
     <Compile Include="Api\RelatedCallController.cs" />
     <Compile Include="Api\ManageLookupsController.cs" />
     <Compile Include="Api\QuickSearchController.cs" />
+    <Compile Include="Api\ManageServiceCallController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
+    <Compile Include="Controllers\TaskController.cs" />
+    <Compile Include="Controllers\EnumerationController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ServiceCallController.cs" />
     <Compile Include="Controllers\ServiceRepController.cs" />
+    <Compile Include="Controllers\StatsController.cs" />
     <Compile Include="Core\Enumerations\NavHeaderItem.cs" />
-    <Compile Include="Core\Enumerations\NavItem.cs" />
     <Compile Include="Core\Enumerations\ToastType.cs" />
     <Compile Include="Core\Filters\ModelStateToTempData.cs" />
     <Compile Include="Core\Filters\WarrantyServiceCoordinatorOnlyAttribute.cs" />
@@ -211,6 +227,8 @@
     <Compile Include="Core\Filters\NavActionFilterAttribute.cs" />
     <Compile Include="Core\Filters\WarrantyServiceManagerOnlyAttribute.cs" />
     <Compile Include="Core\Filters\WarrantyServiceRepresentativeOnlyAttribute.cs" />
+    <Compile Include="Core\Helpers\UploadHelper.cs" />
+    <Compile Include="Core\Helpers\ModelBindingHelper.cs" />
     <Compile Include="Core\Helpers\ClientApiHelper.cs" />
     <Compile Include="Core\Helpers\Css.cs" />
     <Compile Include="Core\Helpers\EnvironmentHelper.cs" />
@@ -224,10 +242,12 @@
     <Compile Include="Core\Initialization\Bundling\VirtualPathResolver.cs" />
     <Compile Include="Core\Initialization\IoC.cs" />
     <Compile Include="Core\Initialization\ModelMetadataProvider.cs" />
+    <Compile Include="Core\Initialization\RoleAuthorizeAttribute.cs" />
     <Compile Include="Core\Initialization\StructureMapDependencyResolver.cs" />
     <Compile Include="Core\Initialization\StructureMapDependencyScope.cs" />
     <Compile Include="Core\Initialization\WarrantyWebsiteBootstrapper.cs" />
     <Compile Include="Core\Initialization\WarrantyWebsiteRegistry.cs" />
+    <Compile Include="Core\ModelBinders\FileUploadsPropertyBinder.cs" />
     <Compile Include="Core\ModelBinders\CompositeModelBinder.cs" />
     <Compile Include="Core\ModelBinders\EnumerationCollectionModelBinder.cs" />
     <Compile Include="Core\ModelBinders\EnumerationCollectionPropertyBinder.cs" />
@@ -239,6 +259,9 @@
     </Compile>
     <Compile Include="Mailers\WarrantyMailer.cs" />
     <Compile Include="Mailers\IWarrantyMailer.cs" />
+    <Compile Include="UploadHandler.ashx.cs">
+      <DependentUpon>UploadHandler.ashx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -248,10 +271,12 @@
     <Content Include="App_Readme\Handlebarsjs_LICENSE" />
     <None Include="css\less\bootstrap-custom.less" />
     <Content Include="App_Readme\Elmah.txt" />
+    <Content Include="css\bootstrap-editable.css" />
     <Content Include="css\bootstrap-theme.css" />
     <Content Include="css\bootstrap-theme.min.css" />
     <Content Include="css\bootstrap.css" />
     <Content Include="css\bootstrap.min.css" />
+    <Content Include="css\datepicker.css" />
     <Content Include="css\font\fontawesome-webfont.svg" />
     <Content Include="css\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="favicon.ico" />
@@ -259,6 +284,7 @@
     <Content Include="img\alpha.png" />
     <Content Include="img\background_tab.png" />
     <Content Include="img\background_tab_hover.png" />
+    <Content Include="img\clear.png" />
     <Content Include="img\DWH logo_color.png" />
     <Content Include="img\DWH logo_color_233x34.png" />
     <Content Include="img\DWH logo_color_233x34_dev.png" />
@@ -267,16 +293,33 @@
     <Content Include="img\headerWrapper_bg.png" />
     <Content Include="img\hue.png" />
     <Content Include="img\loader.gif" />
+    <Content Include="img\loading.gif" />
     <Content Include="img\saturation.png" />
     <Content Include="Scripts\app\Admin\ManageAssignments.js" />
     <Content Include="Scripts\app\admin\ManageLookups.js" />
+    <Content Include="Scripts\app\Admin\manageProblemCodeCostCodes.js" />
     <Content Include="Scripts\app\ajaxEvents.js" />
+    <Content Include="Scripts\app\approveServiceCalls.js" />
+    <Content Include="Scripts\app\additionalContacts.js" />
+    <Content Include="Scripts\app\formUploader.js" />
+    <Content Include="Scripts\app\Job\ChangeHomeowner.js" />
+    <Content Include="Scripts\app\Job\JobSummary.js" />
+    <Content Include="Scripts\app\Report\WarrantyBonusSummaryWSRReport.js" />
+    <Content Include="Scripts\app\responsiveTabs.js" />
     <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\search.js" />
     <Content Include="Scripts\app\servicecall\CallSummary.js" />
-    <Content Include="Scripts\app\servicecall\create.js" />
+    <Content Include="Scripts\app\servicecall\CreatePurchaseOrder.js" />
+    <Content Include="Scripts\app\servicecall\SearchBackchargeVendor.js" />
+    <Content Include="Scripts\app\servicecall\SearchVendor.js" />
+    <Content Include="Scripts\app\servicecall\LineItemDetail.js" />
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
+    <Content Include="Scripts\config\backcharge-vendor-search.js" />
+    <Content Include="Scripts\config\vendor-search.js" />
     <Content Include="Scripts\config\customer-search.js" />
+    <Content Include="Scripts\lib\bootstrap-editable.min.js" />
+    <Content Include="Scripts\lib\jquery.hideseek.min.js" />
+    <Content Include="Scripts\lib\knockout.x-editable.min.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />
     <Content Include="Scripts\lib\handlebars.amd.min.js" />
     <Content Include="Scripts\lib\handlebars.js" />
@@ -287,7 +330,6 @@
     <Content Include="Scripts\lib\handlebars.runtime.min.js" />
     <Content Include="Scripts\lib\bloodhound.js" />
     <Content Include="Scripts\lib\bloodhound.min.js" />
-    <Content Include="Scripts\config\call-search.js" />
     <Content Include="Scripts\config\job-search.js" />
     <Content Include="Scripts\app\customBindings.js" />
     <Content Include="Scripts\app\dates.js" />
@@ -303,8 +345,11 @@
     <Content Include="Scripts\app\shared\confirmMessage.js" />
     <Content Include="Scripts\app\shared\Default.js" />
     <Content Include="Scripts\lib\jquery.color-2.1.0.min.js" />
+    <Content Include="Scripts\lib\responsive.tabs.js" />
     <Content Include="Scripts\lib\text.js" />
     <Content Include="Scripts\templates\call-search-item.html" />
+    <Content Include="Scripts\templates\backcharge-vendor-search-item.html" />
+    <Content Include="Scripts\templates\vendor-search-item.html" />
     <Content Include="Scripts\templates\customer-search-item.html" />
     <Content Include="Scripts\templates\job-search-item.html" />
     <Content Include="Scripts\app\toastrNotify.js" />
@@ -365,13 +410,11 @@
     <Content Include="Views\Job\Index.cshtml" />
     <Content Include="css\less\toastr.less" />
     <Content Include="Views\Home\ToDoWidget.cshtml" />
-    <Content Include="Views\Home\_ToDoEscalationApproval.cshtml" />
-    <Content Include="Views\Home\_ToDoPaymentRequestApproval.cshtml" />
+    <Content Include="Views\Home\_ToDoPaymentRequestApprovalUnderWarranty.cshtml" />
     <Content Include="Views\Home\_ToDoServiceCallApproval.cshtml" />
     <Content Include="Views\ServiceCall\CallSummary.cshtml" />
     <Content Include="Views\ServiceCall\SearchCustomer.cshtml" />
     <Content Include="Views\ServiceCall\VerifyCustomer.cshtml" />
-    <Content Include="Views\ServiceCall\Create.cshtml" />
     <Content Include="Views\Job\JobSummary.cshtml" />
     <Content Include="Views\Admin\ManageAssignments.cshtml" />
     <Content Include="Views\Admin\ManageLookups.cshtml" />
@@ -381,6 +424,32 @@
     <Content Include="Views\WarrantyMailer\NewServiceCallAssignedToWsr.cshtml" />
     <Content Include="Views\WarrantyMailer\_Layout.cshtml" />
     <Content Include="Views\Home\_ToDoCommunityEmployeeAssignment.cshtml" />
+    <Content Include="Views\Home\_WarrantyDollarsSpentWidget.cshtml" />
+    <Content Include="Views\Home\_AverageDaysClosedWidget.cshtml" />
+    <Content Include="Views\Home\_PercentClosedWithinSevenDaysWidget.cshtml" />
+    <Content Include="Views\Stats\Index.cshtml" />
+    <Content Include="Views\WarrantyMailer\ServiceCallEscalated.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\FileUpload.cshtml" />
+    <Content Include="UploadHandler.ashx" />
+    <Content Include="Views\Report\WarrantyBonusSummaryWSRReport.cshtml" />
+    <Content Include="Views\Report\WSRLoadingReport.cshtml" />
+    <Content Include="Views\Report\MailMerge.cshtml" />
+    <Content Include="Views\Home\_PercentSurveyRecommendWidget.cshtml" />
+    <Content Include="Views\Home\_PercentSurveyExcellentWidget.cshtml" />
+    <Content Include="Views\Job\ChangeHomeowner.cshtml" />
+    <Content Include="Views\Home\_ServiceCallListItem.cshtml" />
+    <Content Include="Views\Home\_ToDoJobChangedTask.cshtml" />
+    <Content Include="Views\ServiceCall\LineItemDetail.cshtml" />
+    <Content Include="Views\Report\AchievementReport.cshtml" />
+    <Content Include="Views\Shared\_AdditionalContacts.cshtml" />
+    <Content Include="Views\Admin\ManageProblemCodeCostCodes.cshtml" />
+    <Content Include="Views\Report\SaltlineReport.cshtml" />
+    <Content Include="Views\ServiceCall\CreatePurchaseOrder.cshtml" />
+    <Content Include="Views\Home\_ToDoJobAnniversaryTask.cshtml" />
+    <Content Include="Views\Home\_ToDoJob10MonthAnniversary.cshtml" />
+    <Content Include="Views\Home\_ToDoPaymentRequestApprovalOutOfWarranty.cshtml" />
+    <Content Include="Views\Home\_MyTeamDropdown.cshtml" />
+    <Content Include="Views\Home\_ToDoPaymentStatusChanged.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

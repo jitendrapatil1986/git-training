@@ -1,0 +1,31 @@
+﻿@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
+@model Warranty.Core.ToDoInfrastructure.Models.ToDoJob10MonthAnniversaryModel
+<div class="todo @Css.ToDoClass(ToDoType.JobAnniversaryTask) hide" id="task-todo-@Model.TaskId">
+    <div class="todo-widget-data-container">
+        <div class="service-call-request-icon">
+            10
+        </div>
+
+        <div class="todo-widget-separator-line">
+        </div>
+
+        <div class="todo-widget-element">
+            <small class="text-muted">
+                @Html.ActionLink(Model.JobNumber.ToString(), "JobSummary", "Job", new { id = Model.JobId }, null)
+            </small>
+            @Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)
+        </div>
+
+        <div class="todo-widget-element">
+            <p class="text-muted margin-bottom-5 margin-top-10 small-text">Reminder to create one year service call for this job</p>
+            <strong>@Format.HomeOwner(Model.HomeOwnerName, Model.HomeOwnerNumber)</strong>
+            <br />
+            @Model.AddressLine
+        </div>
+        <div class="todo-widget-action-buttons margin-top-10">
+            <a href="#" data-task-id="@Model.TaskId" class="complete-task"><span class="glyphicon glyphicon-thumbs-up complete-todo"></span>&nbsp;Complete</a>
+        </div>
+
+    </div>
+</div>
