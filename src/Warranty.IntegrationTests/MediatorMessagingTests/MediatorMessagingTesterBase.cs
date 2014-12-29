@@ -57,7 +57,7 @@
             return mediator.Request(query);
         }
 
-        public T GetSaved<T>(Action<T> action = null)
+        protected T GetSaved<T>(Action<T> action = null)
         {
             var builder = ObjectFactory.GetInstance<EntityBuilder<T>>();
             var savedItem = builder.GetSaved(action ?? (x => { }));
