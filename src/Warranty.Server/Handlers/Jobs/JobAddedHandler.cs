@@ -7,6 +7,8 @@ using Warranty.Core.Entities;
 
 namespace Warranty.Server.Handlers.Jobs
 {
+    using Extensions;
+
     public class JobAddedHandler : IHandleMessages<JobAdded>
     {
         private readonly SqlServerDatabase _database;
@@ -20,9 +22,9 @@ namespace Warranty.Server.Handlers.Jobs
         {
             using (_database)
             {
-                var job = _database.SingleOrDefault<Job>(message.JDEId) ?? new Job {JdeIdentifier = message.JDEId};
+                var job = _database.SingleOrDefaultByJdeId<Job>(message.JDEId) ?? new Job {JdeIdentifier = message.JDEId};
                 var communityId =
-                    _database.FetchWhere<Community>(c => c.CommunityNumber == message.Community)
+                    _database.FetchWhere<Community>(c => c.CommunityNumber == message.Community.Substring(0,4))
                         .Select(c => c.CommunityId)
                         .Single();
 
