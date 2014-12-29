@@ -1,9 +1,9 @@
-﻿namespace Warranty.IntegrationTests.MediatorMessagingTests
+﻿namespace Warranty.IntegrationTests.MediatorMessagingTests.EntityBuilders
 {
     using System;
     using System.Globalization;
     using NPoco;
-    using Core.Entities;
+    using Warranty.Core.Entities;
 
     public class EmployeeEntityBuilder : EntityBuilder<Employee>
     {

@@ -1,4 +1,4 @@
-﻿namespace Warranty.IntegrationTests.MediatorMessagingTests
+﻿namespace Warranty.IntegrationTests.MediatorMessagingTests.EntityBuilders
 {
     using System;
     using NPoco;

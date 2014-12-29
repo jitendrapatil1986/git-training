@@ -61,8 +61,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NPoco.2.5.76\lib\net40\NPoco.dll</HintPath>
     </Reference>
+    <Reference Include="NServiceBus, Version=4.2.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Warranty.UI\bin\NServiceBus.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks">
+      <HintPath>..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="Should">
       <HintPath>..\packages\Should.1.1.20\lib\Should.dll</HintPath>
@@ -114,14 +121,14 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="IntegrationSetUpFixture.cs" />
-    <Compile Include="MediatorMessagingTests\CommunityEntityBuilder.cs" />
-    <Compile Include="MediatorMessagingTests\EmployeeEntityBuilder.cs" />
-    <Compile Include="MediatorMessagingTests\JobEntityBuilder.cs" />
-    <Compile Include="MediatorMessagingTests\EntityBuilder.cs" />
-    <Compile Include="MediatorMessagingTests\IEntityBuilder.cs" />
+    <Compile Include="MediatorMessagingTests\EntityBuilders\CommunityEntityBuilder.cs" />
+    <Compile Include="MediatorMessagingTests\EntityBuilders\EmployeeEntityBuilder.cs" />
+    <Compile Include="MediatorMessagingTests\EntityBuilders\JobEntityBuilder.cs" />
+    <Compile Include="MediatorMessagingTests\EntityBuilders\EntityBuilder.cs" />
+    <Compile Include="MediatorMessagingTests\EntityBuilders\IEntityBuilder.cs" />
     <Compile Include="MediatorMessagingTests\ServiceCallApprovalTester.cs" />
     <Compile Include="MediatorMessagingTests\MediatorMessagingTesterBase.cs" />
-    <Compile Include="MediatorMessagingTests\ServiceCallEntityBuilder.cs" />
+    <Compile Include="MediatorMessagingTests\EntityBuilders\ServiceCallEntityBuilder.cs" />
     <Compile Include="PersistenceTests\ActivityLogMapTester.cs" />
     <Compile Include="PersistenceTests\PaymentMapTester.cs" />
     <Compile Include="PersistenceTests\PersistenceTesterBase.cs" />

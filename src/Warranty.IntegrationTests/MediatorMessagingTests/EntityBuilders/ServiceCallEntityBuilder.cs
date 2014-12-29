@@ -1,8 +1,8 @@
-﻿namespace Warranty.IntegrationTests.MediatorMessagingTests
+﻿namespace Warranty.IntegrationTests.MediatorMessagingTests.EntityBuilders
 {
     using System;
-    using Core.Entities;
-    using Core.Enumerations;
+    using Warranty.Core.Entities;
+    using Warranty.Core.Enumerations;
     using NPoco;
 
     public class ServiceCallEntityBuilder : EntityBuilder<ServiceCall>
@@ -26,7 +26,9 @@
                     ServiceCallNumber = serviceCallNum,
                     WarrantyRepresentativeEmployeeId = employee.EmployeeId,
                     JobId = job.JobId,
-                    ServiceCallStatus = ServiceCallStatus.Requested
+                    ServiceCallStatus = ServiceCallStatus.Requested,
+                    HomeownerVerificationType = HomeownerVerificationType.NotVerified,
+                    ServiceCallType = RequestType.WarrantyRequest.DisplayName
                 };
 
             return Saved(entity, action);

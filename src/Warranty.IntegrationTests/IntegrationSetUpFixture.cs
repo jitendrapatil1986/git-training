@@ -6,6 +6,7 @@
     using Core.Extensions;
     using Core.Security;
     using MediatorMessagingTests;
+    using MediatorMessagingTests.EntityBuilders;
     using NPoco;
     using NPoco.FluentMappings;
     using NUnit.Framework;
@@ -21,6 +22,7 @@
             ObjectFactory.Initialize(x =>
                                          {
                                              x.AddRegistry<WarrantyCoreRegistry>();
+                                             x.AddRegistry<WarrantyCoreRegistry>();
                                              x.Scan(scan =>
                                                         {
                                                             scan.WithDefaultConventions();
@@ -29,8 +31,8 @@
                                                             scan.TheCallingAssembly();
                                                             scan.AddAllTypesOf(typeof (IMap));
                                                             scan.AddAllTypesOf(typeof (EntityBuilder<>));
-                                                            scan.AddAllTypesOf(typeof (IEntityBuilder<>));
                                                             scan.ConnectImplementationsToTypesClosing(typeof (IEntityBuilder<>));
+                                                            scan.AddAllTypesOf(typeof(IAccountingClient));
                                                         });
                                              x.For<IUserSession>().Use<TestWarrantyUserSession>();
 

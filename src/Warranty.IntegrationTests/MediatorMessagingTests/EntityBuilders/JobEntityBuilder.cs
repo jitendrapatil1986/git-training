@@ -1,10 +1,10 @@
-﻿using System;
-using System.Globalization;
-using NPoco;
-using Warranty.Core.Entities;
-
-namespace Warranty.IntegrationTests.MediatorMessagingTests
+﻿namespace Warranty.IntegrationTests.MediatorMessagingTests.EntityBuilders
 {
+    using System;
+    using System.Globalization;
+    using NPoco;
+    using Warranty.Core.Entities;
+
     public class JobEntityBuilder : EntityBuilder<Job>
     {
         public JobEntityBuilder(IDatabase database)

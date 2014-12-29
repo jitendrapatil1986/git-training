@@ -9,6 +9,8 @@ using Warranty.Tests.Core;
 
 namespace Warranty.IntegrationTests.MediatorMessagingTests
 {
+    using NServiceBus;
+
     public class ServiceCallApprovalTester : MediatorMessagingTesterBase
     {
         private ServiceCall _serviceCall;

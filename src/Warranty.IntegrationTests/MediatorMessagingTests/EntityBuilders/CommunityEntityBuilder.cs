@@ -1,9 +1,9 @@
-﻿using System;
-using NPoco;
-using Warranty.Core.Entities;
-
-namespace Warranty.IntegrationTests.MediatorMessagingTests
+﻿namespace Warranty.IntegrationTests.MediatorMessagingTests.EntityBuilders
 {
+    using System;
+    using NPoco;
+    using Warranty.Core.Entities;
+
     public class CommunityEntityBuilder : EntityBuilder<Community>
     {
         public CommunityEntityBuilder(IDatabase database)
