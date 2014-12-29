@@ -22,25 +22,34 @@ namespace Warranty.Server.Handlers.Jobs
         {
             using (_database)
             {
-                var job = _database.SingleOrDefaultByJdeId<Job>(message.JDEId) ?? new Job {JdeIdentifier = message.JDEId};
-                var communityId =
-                    _database.FetchWhere<Community>(c => c.CommunityNumber == message.Community.Substring(0,4))
+                var job = _database.SingleOrDefaultByJdeId<Job>(message.JDEId);
+                
+                if (job == null)
+                {
+                    var communityId =
+                    _database.FetchWhere<Community>(c => c.CommunityNumber == message.Community.Substring(0, 4))
                         .Select(c => c.CommunityId)
                         .Single();
 
-                job.JobNumber = message.Job;
-                job.CommunityId = communityId;
-                job.PlanNumber = message.Plan;
-                job.Elevation = message.Elevation;
-                job.AddressLine = message.AddressLine1;
-                job.City = message.City;
-                job.StateCode = message.State;
-                job.PostalCode = message.Zip;
-                job.PlanName = message.Description;
-                job.PlanType = message.JobType;
+                    job = new Job()
+                    {
+                        JdeIdentifier = message.JDEId,
+                        JobNumber = message.Job,
+                        CommunityId = communityId,
+                        PlanNumber = message.Plan,
+                        Elevation = message.Elevation,
+                        AddressLine = message.AddressLine1,
+                        City = message.City,
+                        StateCode = message.State,
+                        PostalCode = message.Zip,
+                        PlanType = message.JobType,
+                    };
 
-                _database.Insert(job);
+                    _database.Insert(job);
+                }
             }
         }
+
+        
     }
 }
