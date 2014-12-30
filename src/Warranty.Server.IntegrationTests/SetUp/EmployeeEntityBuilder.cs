@@ -21,7 +21,6 @@ namespace Warranty.Server.IntegrationTests.SetUp
                              {
                                  Name = "Test Employee",
                                  Number = empNum,
-                                 JdeIdentifier = empNum,
                                  EmployeeId = Guid.NewGuid(),
                              };
 

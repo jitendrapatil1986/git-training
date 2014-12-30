@@ -21,7 +21,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             {
                 x.JDEId = _job.JdeIdentifier;
                 x.PrimaryBuilderName = _originalBuilder.Name;
-                x.PrimaryBuilderNumber = _originalBuilder.JdeIdentifier;
+                x.PrimaryBuilderNumber = _originalBuilder.Number;
             });
         }
 
