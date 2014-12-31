@@ -1,4 +1,4 @@
-@using System.Web.Optimization
+﻿@using System.Web.Optimization
 @using Warranty.Core.Enumerations
 @using Warranty.UI.Core.Enumerations
 @using Warranty.UI.Core.Helpers
@@ -21,8 +21,11 @@
             <ul class="dropdown-menu">
                 @foreach (var item in NavHeaderItem.GetAll(key))
                 {
-                    if((item.Value != NavHeaderItem.ManageCostCode.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))) || 
-                       (item.Value == NavHeaderItem.ManageCostCode.Value && User.IsInRole(UserRoles.WarrantyAdmin)))
+                    if( 
+                        (key == NavHeaderItem.Reports.Key) ||
+                        (item.Value != NavHeaderItem.ManageCostCode.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))) || 
+                        (item.Value == NavHeaderItem.ManageCostCode.Value && User.IsInRole(UserRoles.WarrantyAdmin))
+                        )
                     {
                         if (item.HasDivider)
                         {
