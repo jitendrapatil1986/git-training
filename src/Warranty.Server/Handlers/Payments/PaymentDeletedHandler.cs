@@ -19,7 +19,7 @@ namespace Warranty.Server.Handlers.Payments
         {
             using (_database)
             {
-                var payment = _database.SingleByJdeId<Payment>(message.JDEId);
+                var payment = _database.SingleOrDefaultByJdeId<Payment>(message.JDEId);
                 if (payment != null)
                     _database.Delete(payment);
             }

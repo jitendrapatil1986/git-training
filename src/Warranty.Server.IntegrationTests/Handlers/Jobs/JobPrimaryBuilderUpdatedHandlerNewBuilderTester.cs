@@ -31,7 +31,7 @@
             var job = Get<Job>(_job.JobId);
             var employee = Get<Employee>(job.BuilderEmployeeId);
 
-            employee.JdeIdentifier.ShouldEqual(Event.PrimaryBuilderNumber);
+            employee.Number.ShouldEqual(Event.PrimaryBuilderNumber);
             employee.Name.ShouldEqual(Event.PrimaryBuilderName);
         }
     }

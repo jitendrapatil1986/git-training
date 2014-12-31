@@ -436,8 +436,8 @@
                 warrantyCostCodes:  @Html.Raw(@WarrantyCostCode.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { DisplayText = x.DisplayName, x.Value }).ToJson()),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
                 vendors: @Html.Raw(Model.Vendors.ToJson()),
-                rootCauseCodes: @Html.Raw(@RootCause.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName, }).ToJson()),
-                rootProblemCodes: @Html.Raw(@RootProblem.GetAll().OrderBy(x=>x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName}).ToJson()),
+                rootCauseCodes: @Html.Raw(@RootCause.GetAll().Where(x=>x.Value != @RootCause.Imported.Value).OrderBy(x=>x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName, }).ToJson()),
+                rootProblemCodes: @Html.Raw(@RootProblem.GetAll().Where(x=>x.Value != @RootProblem.Imported.Value).OrderBy(x=>x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName}).ToJson()),
             }
         });
 

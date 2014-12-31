@@ -1,0 +1,1 @@
+ALTER TABLE ServiceCallLineItems ALTER COLUMN ProblemDescription VARCHAR(8000);
