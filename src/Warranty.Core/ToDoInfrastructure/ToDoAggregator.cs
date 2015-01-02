@@ -132,8 +132,10 @@ namespace Warranty.Core.ToDoInfrastructure
         private static IEnumerable<IToDo> GetJobAnniversaryTaskToDos(IUser user, IDatabase database, TaskType taskType, int months)
         {
             var employeeId = database.ExecuteScalar<Guid>("SELECT EmployeeId FROM Employees where employeeNumber = @0", user.EmployeeNumber);
+            if(employeeId != Guid.Empty)
+            {
 
-            const string sqlAnniversaries = @"SELECT j.JobId as ReferenceId, j.JobNumber
+                const string sqlAnniversaries = @"SELECT j.JobId as ReferenceId, j.JobNumber
                                                 FROM Jobs j                                    
                                                     INNER JOIN Communities cm
                                                         ON j.CommunityId = cm.CommunityId
@@ -146,24 +148,26 @@ namespace Warranty.Core.ToDoInfrastructure
                                                         AND (MONTH(CloseDate) = MONTH( DATEADD(MM,@2, getdate() )) AND YEAR(CloseDate) = YEAR( DATEADD(MM, @2, getdate())))
                                                         AND t.TaskId IS NULL";
 
-            var sqlNewTasks = string.Format(sqlAnniversaries, user.Markets.CommaSeparateWrapWithSingleQuote());
-            var newTasks = database.Fetch<Task>(sqlNewTasks, employeeId, taskType.Value, -months);
-            newTasks.ForEach(x =>
-            {
-                x.EmployeeId = employeeId;
-                x.Description = taskType.DisplayName;
-                x.TaskType = taskType;
-                database.Insert(x);
-            });
+                var sqlNewTasks = string.Format(sqlAnniversaries, user.Markets.CommaSeparateWrapWithSingleQuote());
+                var newTasks = database.Fetch<Task>(sqlNewTasks, employeeId, taskType.Value, -months);
+                newTasks.ForEach(x =>
+                {
+                    x.EmployeeId = employeeId;
+                    x.Description = taskType.DisplayName;
+                    x.TaskType = taskType;
+                    database.Insert(x);
+                });
 
-            var toDos = GetToDoTasks<ToDoJobAnniversaryTask, ToDoJobAnniversaryTaskModel>(user, database, taskType);
+                var toDos = GetToDoTasks<ToDoJobAnniversaryTask, ToDoJobAnniversaryTaskModel>(user, database, taskType);
 
-            toDos.ForEach(x =>
-            {
-                x.Model.NumberOfMonths = months;
-            });
+                toDos.ForEach(x =>
+                {
+                    x.Model.NumberOfMonths = months;
+                });
 
-            return toDos;
+                return toDos;
+            }
+            return new List<ToDoJobAnniversaryTask>();
         }
 
 
@@ -171,8 +175,11 @@ namespace Warranty.Core.ToDoInfrastructure
         private static IEnumerable<IToDo> GetTenMonthJobAnniversaryTaskToDos(IUser user, IDatabase database, IServiceCallCreateService serviceCallCreateService)
         {
             var employeeId = database.ExecuteScalar<Guid>("SELECT EmployeeId FROM Employees where employeeNumber = @0", user.EmployeeNumber);
-            var taskType = TaskType.Job10MonthAnniversary;
-            const string sqlAnniversaries = @"SELECT j.JobId as ReferenceId, j.JobNumber
+            if(employeeId!=Guid.Empty)
+            {
+
+                var taskType = TaskType.Job10MonthAnniversary;
+                const string sqlAnniversaries = @"SELECT j.JobId as ReferenceId, j.JobNumber
                                                 FROM Jobs j                                    
                                                     INNER JOIN Communities cm
                                                         ON j.CommunityId = cm.CommunityId
@@ -185,19 +192,19 @@ namespace Warranty.Core.ToDoInfrastructure
                                                         AND (MONTH(CloseDate) = MONTH( DATEADD(MM,@1, getdate() )) AND YEAR(CloseDate) = YEAR( DATEADD(MM, @1, getdate())))
                                                         AND t.TaskId IS NULL";
 
-            var sqlNewTasks = string.Format(sqlAnniversaries, user.Markets.CommaSeparateWrapWithSingleQuote());
-            var newTasks = database.Fetch<Task>(sqlNewTasks, taskType.Value, -10);
-            newTasks.ForEach(x =>
-            {
-                x.EmployeeId = employeeId;
-                x.Description = taskType.DisplayName;
-                x.TaskType = taskType;
-                x.IsComplete = true;
-                database.Insert(x);
-            });
+                var sqlNewTasks = string.Format(sqlAnniversaries, user.Markets.CommaSeparateWrapWithSingleQuote());
+                var newTasks = database.Fetch<Task>(sqlNewTasks, taskType.Value, -10);
+                newTasks.ForEach(x =>
+                {
+                    x.EmployeeId = employeeId;
+                    x.Description = taskType.DisplayName;
+                    x.TaskType = taskType;
+                    x.IsComplete = true;
+                    database.Insert(x);
+                });
 
-            var userMarkets = user.Markets;
-            const string sql = @"SELECT DISTINCT
+                var userMarkets = user.Markets;
+                const string sql = @"SELECT DISTINCT
                                         t.TaskId
                                         ,ho.HomeOwnerName
                                         ,ho.HomeOwnerNumber
@@ -217,10 +224,13 @@ namespace Warranty.Core.ToDoInfrastructure
                                     where 
                                         ci.CityCode in ({0}) and TaskType=@0";
 
-            var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
-            var toDos = database.Fetch<ToDoJob10MonthAnniversary, ToDoJob10MonthAnniversaryModel>(query, taskType.Value);
+                var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
+                var toDos = database.Fetch<ToDoJob10MonthAnniversary, ToDoJob10MonthAnniversaryModel>(query, taskType.Value);
 
-            return toDos;
+                return toDos;
+            }
+
+            return new List<ToDoJobAnniversaryTask>();
         }
 
         private static IEnumerable<TTask> GetToDoTasks<TTask, TModel>(IUser user, IDatabase database, TaskType taskType) where TTask : IToDo where TModel : class
