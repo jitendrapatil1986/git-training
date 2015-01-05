@@ -75,7 +75,7 @@ namespace Warranty.Core.Features.RepServiceCalls
         {
             const string whereClause = "WHERE CompletionDate IS NULL and wc.WarrantyRepresentativeEmployeeId = @1";
 
-            var sql = string.Format(SqlTemplate, whereClause, "ORDER BY NumberOfDaysRemaining, ho.HomeOwnerName");
+            var sql = string.Format(SqlTemplate, whereClause, "ORDER BY NumberOfDaysRemaining DESC, ho.HomeOwnerName");
 
             var result = _database.Fetch<ServiceRepServiceCallsModel.ServiceCall>(sql, ServiceCallStatus.Open.Value, employeeId);
             return result;
@@ -85,7 +85,7 @@ namespace Warranty.Core.Features.RepServiceCalls
         {
             const string whereClause = "WHERE CompletionDate IS NOT NULL and wc.WarrantyRepresentativeEmployeeId = @1";
 
-            var sql = string.Format(SqlTemplate, whereClause, "ORDER BY wc.CompletionDate desc, ho.HomeOwnerName");
+            var sql = string.Format(SqlTemplate, whereClause, "ORDER BY wc.CompletionDate DESC, ho.HomeOwnerName");
 
             var result = _database.Fetch<ServiceRepServiceCallsModel.ServiceCall>(sql, ServiceCallStatus.Complete.Value, employeeId);
             return result;

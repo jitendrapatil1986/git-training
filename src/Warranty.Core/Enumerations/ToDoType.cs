@@ -57,6 +57,14 @@
                                                                     UserRoles.WarrantyServiceRepresentative,
                                                                 });
 
+        public static readonly ToDoType ServiceCallClosure = new ToDoType(8, "Service Call Closure",
+           new List<string>
+                                                                               {
+                                                                                   UserRoles.WarrantyAdmin,
+                                                                                   UserRoles.WarrantyServiceManager,
+                                                                                   UserRoles.WarrantyServiceCoordinator
+                                                                               });
+
         private ToDoType(int value, string displayName, IEnumerable<string> userRolesWithAccess)
             : base(value, displayName)
         {
