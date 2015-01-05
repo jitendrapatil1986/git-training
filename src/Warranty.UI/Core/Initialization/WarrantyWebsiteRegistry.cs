@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using FluentValidation.Mvc;
 
+
+
 namespace Warranty.UI.Core.Initialization
 {
     using System.Configuration;
@@ -8,7 +10,6 @@ namespace Warranty.UI.Core.Initialization
     using System.Web.Mvc;
     using Accounting.Client;
     using Mailers;
-    using NServiceBus;
     using Security;
     using StructureMap.Configuration.DSL;
     using Warranty.Core;

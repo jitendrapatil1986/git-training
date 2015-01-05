@@ -36,7 +36,7 @@ namespace Warranty.Core.Features.RepServiceCalls
                                         , wc.CompletionDate
                                         , ho.HomeOwnerName
                                         , ho.HomeOwnerNumber
-                                        , case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
+                                        , DATEDIFF(d, wc.CreatedDate, GETDATE()) as NumberOfDaysRemaining
                                         , NumberOfLineItems
                                         , ho.HomePhone as PhoneNumber
                                         , e.EmployeeName as AssignedTo
@@ -75,7 +75,7 @@ namespace Warranty.Core.Features.RepServiceCalls
         {
             const string whereClause = "WHERE CompletionDate IS NULL and wc.WarrantyRepresentativeEmployeeId = @1";
 
-            var sql = string.Format(SqlTemplate, whereClause, "ORDER BY NumberOfDaysRemaining, ho.HomeOwnerName");
+            var sql = string.Format(SqlTemplate, whereClause, "ORDER BY NumberOfDaysRemaining DESC, ho.HomeOwnerName");
 
             var result = _database.Fetch<ServiceRepServiceCallsModel.ServiceCall>(sql, ServiceCallStatus.Open.Value, employeeId);
             return result;
@@ -85,7 +85,7 @@ namespace Warranty.Core.Features.RepServiceCalls
         {
             const string whereClause = "WHERE CompletionDate IS NOT NULL and wc.WarrantyRepresentativeEmployeeId = @1";
 
-            var sql = string.Format(SqlTemplate, whereClause, "ORDER BY wc.CompletionDate desc, ho.HomeOwnerName");
+            var sql = string.Format(SqlTemplate, whereClause, "ORDER BY wc.CompletionDate DESC, ho.HomeOwnerName");
 
             var result = _database.Fetch<ServiceRepServiceCallsModel.ServiceCall>(sql, ServiceCallStatus.Complete.Value, employeeId);
             return result;

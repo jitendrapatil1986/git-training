@@ -19,14 +19,13 @@
         {
             using (_database)
             {
-                var builder = _database.SingleOrDefaultByJdeId<Employee>(message.PrimaryBuilderNumber);
+                var builder = _database.SingleOrDefault<Employee>("WHERE EmployeeNumber = @0" ,message.PrimaryBuilderNumber);
                 if (builder == null)
                 {
                     builder = new Employee
                     {
                         Name = message.PrimaryBuilderName,
-                        Number = message.PrimaryBuilderNumber.Substring(2,5),
-                        JdeIdentifier = message.PrimaryBuilderNumber,
+                        Number = message.PrimaryBuilderNumber
                     };
                                     
                     _database.Insert(builder);

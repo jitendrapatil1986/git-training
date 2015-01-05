@@ -1,4 +1,4 @@
-@using System.Web.Optimization
+﻿@using System.Web.Optimization
 @using Warranty.Core.Enumerations
 @using Warranty.UI.Core.Enumerations
 @using Warranty.UI.Core.Helpers
@@ -10,7 +10,7 @@
 
 @helper NavItemSectionHelper(string key)
 {
-    if (NavHeaderItem.GetAll(key).Count() == 1)
+    if (key == NavHeaderItem.Home.Key)
     {
         @NavHeaderItemHelper(NavHeaderItem.GetAll(key).First())
     }
@@ -21,11 +21,18 @@
             <ul class="dropdown-menu">
                 @foreach (var item in NavHeaderItem.GetAll(key))
                 {
-                    if (item.HasDivider)
+                    if( 
+                        (key == NavHeaderItem.Reports.Key) ||
+                        (item.Value != NavHeaderItem.ManageCostCode.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))) || 
+                        (item.Value == NavHeaderItem.ManageCostCode.Value && User.IsInRole(UserRoles.WarrantyAdmin))
+                        )
                     {
-                        <li class="divider"></li>
+                        if (item.HasDivider)
+                        {
+                            <li class="divider"></li>
+                        }
+                        @NavHeaderItemHelper(item)
                     }
-                    @NavHeaderItemHelper(item)
                 }
             </ul>
         </li>
@@ -76,7 +83,7 @@
                         <ul class="dropdown-menu">
                             <li><span class="logged-in-user">Logged in as: @User.Identity.Name</span></li>
                             <li class="divider"></li>
-                            <li><a href="#feedbackModal" data-toggle="modal">Contact Developer</a></li>
+                            <li><a href="#feedbackModal" data-toggle="modal">Contact Help Desk</a></li>
                             <li class="divider"></li>
                         </ul>
                     </li>                
@@ -93,7 +100,7 @@
                     <li class="divider divider-vertical hidden-xs"></li>
                     @NavItemSectionHelper(NavHeaderItem.Reports.Key)
                     <li class="divider divider-vertical hidden-xs"></li>
-                    @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                    @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager) || User.IsInRole(UserRoles.WarrantyAdmin))
                     {
                         @NavItemSectionHelper(NavHeaderItem.Administration.Key)
                         <li class="divider divider-vertical hidden-xs"></li>

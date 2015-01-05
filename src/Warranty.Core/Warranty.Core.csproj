@@ -53,9 +53,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
-    <Reference Include="Iesi.Collections">
-      <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
-    </Reference>
     <Reference Include="JobService.Client">
       <HintPath>..\packages\JobService.Client.1.0.426.0\lib\net45\JobService.Client.dll</HintPath>
     </Reference>
@@ -68,12 +65,6 @@
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate.Caches.SysCache">
-      <HintPath>..\packages\NHibernate.Caches.SysCache.3.3.3.4000\lib\net35\NHibernate.Caches.SysCache.dll</HintPath>
     </Reference>
     <Reference Include="AutoMapper">
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.dll</HintPath>
@@ -133,6 +124,8 @@
     <Compile Include="Calculator\WarrantyCalculator.cs" />
     <Compile Include="Features\DeleteServiceCall\DeleteServiceCallCommand.cs" />
     <Compile Include="Features\DeleteServiceCall\DeleteServiceCallCommandHandler.cs" />
+    <Compile Include="Features\SessionStart\VerifyEmployeeExistsCommandHandler.cs" />
+    <Compile Include="Features\SessionStart\VerifyEmployeeExistsCommand.cs" />
     <Compile Include="JobServiceApiHelpers\ApiJsonConverter.cs" />
     <Compile Include="JobServiceApiHelpers\EnumerationJsonConverter.cs" />
     <Compile Include="JobServiceApiHelpers\OptionAttributeDictionaryJsonConverter.cs" />
@@ -142,42 +135,27 @@
     <Compile Include="Configurations\WarrantyConfigSection.cs" />
     <Compile Include="Configurations\EnumerationDisplayConverter.cs" />
     <Compile Include="Configurations\WarrantyConstants.cs" />
-    <Compile Include="Configurations\WarrantyContractResolver.cs" />
     <Compile Include="CsvBuilder\CsvBuilder.cs" />
     <Compile Include="CsvBuilder\ICsvBuilder.cs" />
-    <Compile Include="DataAccess\AuditEventListener.cs" />
     <Compile Include="DataAccess\EnumerationMapper.cs" />
-    <Compile Include="DataAccess\Conventions\Int32EnumerationType.cs" />
     <Compile Include="DataAccess\Conventions\IStringEnumeration.cs" />
     <Compile Include="DataAccess\Conventions\StringEnumeration.cs" />
-    <Compile Include="DataAccess\Conventions\StringEnumerationType.cs" />
     <Compile Include="DataAccess\DbFactory.cs" />
     <Compile Include="DataAccess\Mappings\ActivityLogMap.cs" />
-    <Compile Include="DataAccess\Mappings\AuditableEntityMapping.cs" />
-    <Compile Include="DataAccess\ConfigurationFactoryExtensions.cs" />
     <Compile Include="DataAccess\Mappings\AuditCreatedEntityMap.cs" />
     <Compile Include="DataAccess\Mappings\CityCodeProblemCodeCostCodeMap.cs" />
-    <Compile Include="DataAccess\Mappings\CityCodeProblemCodeCostCodeMapping.cs" />
     <Compile Include="DataAccess\Mappings\BackchargeMap.cs" />
     <Compile Include="DataAccess\Mappings\CityMap.cs" />
-    <Compile Include="DataAccess\Mappings\CityMapping.cs" />
     <Compile Include="DataAccess\Mappings\AuditableEntityMap.cs" />
     <Compile Include="DataAccess\Mappings\CommunityAssignmentMap.cs" />
     <Compile Include="DataAccess\Mappings\CommunityMap.cs" />
-    <Compile Include="DataAccess\Mappings\CommunityMapping.cs" />
     <Compile Include="DataAccess\Mappings\DivisionMap.cs" />
-    <Compile Include="DataAccess\Mappings\DivisionMapping.cs" />
     <Compile Include="DataAccess\Mappings\EmployeeMap.cs" />
     <Compile Include="DataAccess\Mappings\HomeownerContactMap.cs" />
-    <Compile Include="DataAccess\Mappings\HomeownerContactMapping.cs" />
     <Compile Include="DataAccess\Mappings\HomeOwnerMap.cs" />
-    <Compile Include="DataAccess\Mappings\HomeOwnerMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobAttachmentMap.cs" />
-    <Compile Include="DataAccess\Mappings\JobAttachmentMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobMap.cs" />
     <Compile Include="DataAccess\Mappings\JobNoteMap.cs" />
-    <Compile Include="DataAccess\Mappings\JobNoteMapping.cs" />
-    <Compile Include="DataAccess\Mappings\JobOptionMapping.cs" />
     <Compile Include="DataAccess\Mappings\JobStageMap.cs" />
     <Compile Include="DataAccess\Mappings\JobVendorCostCodeMap.cs" />
     <Compile Include="DataAccess\Mappings\Lookups\ClassificationCodeMap.cs" />
@@ -185,18 +163,12 @@
     <Compile Include="DataAccess\Mappings\Lookups\RootCauseMap.cs" />
     <Compile Include="DataAccess\Mappings\PaymentMap.cs" />
     <Compile Include="DataAccess\Mappings\ProjectMap.cs" />
-    <Compile Include="DataAccess\Mappings\ProjectMapping.cs" />
-    <Compile Include="DataAccess\Mappings\EmployeeMapping.cs" />
     <Compile Include="DataAccess\Mappings\PurchaseOrderLineItemMap.cs" />
     <Compile Include="DataAccess\Mappings\PurchaseOrderMap.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallAttachmentMap.cs" />
-    <Compile Include="DataAccess\Mappings\ServiceCallAttachmentMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallNoteMap.cs" />
-    <Compile Include="DataAccess\Mappings\ServiceCallNoteMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallLineItemMap.cs" />
-    <Compile Include="DataAccess\Mappings\ServiceCallLineItemMapping.cs" />
     <Compile Include="DataAccess\Mappings\ServiceCallMap.cs" />
-    <Compile Include="DataAccess\Mappings\ServiceCallMapping.cs" />
     <Compile Include="DataAccess\Mappings\TaskMap.cs" />
     <Compile Include="DataAccess\Mappings\VendorEmailMap.cs" />
     <Compile Include="DataAccess\Mappings\VendorMap.cs" />
@@ -266,10 +238,6 @@
     <Compile Include="Extensions\ToDoTypeExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
-    <Compile Include="DataAccess\ConfigurationFactory.cs" />
-    <Compile Include="DataAccess\HbmMappingGenerator.cs" />
-    <Compile Include="DataAccess\IConfigurationFactory.cs" />
-    <Compile Include="Enumerations\GenericCompositeUserType.cs" />
     <Compile Include="Enumerations\Int32Enumeration.cs" />
     <Compile Include="Enumerations\IEnumeration.cs" />
     <Compile Include="Enumerations\Enumeration.cs" />
@@ -277,7 +245,6 @@
     <Compile Include="Enumerations\RequestType.cs" />
     <Compile Include="Extensions\MapperExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
-    <Compile Include="Extensions\PropertyPathExtensions.cs" />
     <Compile Include="Extensions\ReflectionExtensions.cs" />
     <Compile Include="Features\AdditionalContactsHandler.cs" />
     <Compile Include="Features\AddJobNote\AddJobNoteCommand.cs" />
@@ -538,7 +505,6 @@
     <Compile Include="Services\ResolveObjectAccount.cs" />
     <Compile Include="Services\SendSmtpMailMessage.cs" />
     <Compile Include="Services\ServiceCallCalculator.cs" />
-    <Compile Include="Net4Collection.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
@@ -569,6 +535,7 @@
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoPaymentRequestApprovalOutOfWarranty.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoPaymentStatusChanged.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoServiceCallApproval.cs" />
+    <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoServiceCallClosure.cs" />
     <Compile Include="ToDoInfrastructure\Interfaces\IToDo.cs" />
     <Compile Include="ToDoInfrastructure\IToDoAggregator.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoCommunityEmployeeAssignmentModel.cs" />
@@ -579,6 +546,7 @@
     <Compile Include="ToDoInfrastructure\Models\ToDoPaymentStatusChangedModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoServiceCallApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoJobChangedTaskModel.cs" />
+    <Compile Include="ToDoInfrastructure\Models\ToDoServiceCallClosureModel.cs" />
     <Compile Include="ToDoInfrastructure\ToDo.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoEscalationApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\ToDoAggregator.cs" />

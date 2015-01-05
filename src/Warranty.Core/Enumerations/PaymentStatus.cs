@@ -26,7 +26,7 @@
 
         public static PaymentStatus FromJdeCode(string code)
         {
-            return GetAll().SingleOrDefault(x => x.JdeCode.Equals(code));
+            return GetAll().SingleOrDefault(x => x.JdeCode.Equals(code)) ?? Pending;
         }
     }
 }

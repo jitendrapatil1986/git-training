@@ -314,21 +314,6 @@ require(['/Scripts/app/main.js'], function () {
                 self.createdBy = options.createdBy;
                 self.createdDate = options.createdDate;
                 self.serviceCallCommentTypeId = options.serviceCallCommentTypeId;
-
-                self.noteLineNumberWithProblemCode = ko.computed(function () {
-                    var lineIdToFilterNotes = options.serviceCallLineItemId;
-                    if (!lineIdToFilterNotes || lineIdToFilterNotes == "") {
-                        return "";
-                    } else {
-                        ko.utils.arrayForEach(viewModel.allLineItems(), function (i) {
-                            if (i.serviceCallLineItemId == lineIdToFilterNotes) {
-                                return i.lineNumber() + " - " + i.problemCode();
-                            }
-                            return "";
-                        });
-                        return "";
-                    }
-                });
             }
 
             function CallAttachmentsViewModel(options) {
