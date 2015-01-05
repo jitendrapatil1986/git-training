@@ -121,9 +121,9 @@ namespace Warranty.Core.ToDoInfrastructure
                                      LEFT OUTER JOIN (SELECT SUM(CASE WHEN ServiceCallLineItemStatusId = @0 THEN 1 ELSE 0 END) as NumberOfCompletedLineItems, SUM(CASE WHEN ServiceCallLineItemStatusId = @0 THEN 0 ELSE 1 END) as NumberOfIncompleteLineItems, ServiceCallId FROM ServiceCallLineItems GROUP BY ServiceCallId) li
                                        on wc.ServiceCallId = li.ServiceCallId
                                     where 
-                                        li.NumberOfCompletedLineItems = li.NumberOfIncompleteLineItems AND wc.ServiceCallStatusId <> @2
-                                    and 
-                                        ci.CityCode in ({0})
+                                        li.NumberOfIncompleteLineItems = 0
+                                    AND wc.ServiceCallStatusId <> @2
+                                    AND ci.CityCode in ({0})
                                     AND wc.ServiceCallType = @1";
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
