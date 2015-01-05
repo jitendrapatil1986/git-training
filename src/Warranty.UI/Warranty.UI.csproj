@@ -407,7 +407,6 @@
     <Content Include="Views\ServiceRep\_ClosedServiceCalls.cshtml" />
     <Content Include="Views\Home\_EscalatedCalls.cshtml" />
     <Content Include="Views\Home\AmountSpentWidget.cshtml" />
-    <Content Include="Views\Job\Index.cshtml" />
     <Content Include="css\less\toastr.less" />
     <Content Include="Views\Home\ToDoWidget.cshtml" />
     <Content Include="Views\Home\_ToDoPaymentRequestApprovalUnderWarranty.cshtml" />
