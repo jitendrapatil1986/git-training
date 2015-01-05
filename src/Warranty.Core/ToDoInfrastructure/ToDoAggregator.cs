@@ -36,6 +36,12 @@ namespace Warranty.Core.ToDoInfrastructure
                 var user = _userSession.GetCurrentUser();
                 var toDos = new List<IToDo>();
 
+                if (ToDoType.ServiceCallClosure.HasAccess(user.Roles))
+                {
+                    var serviceCallClosureToDos = GetServiceCallClosureToDos(user, _database);
+                    toDos.AddRange(serviceCallClosureToDos);
+                }
+
                 if (ToDoType.ServiceCallApproval.HasAccess(user.Roles))
                 {
                     var serviceCallApprovalToDos = GetServiceCallApprovalToDos(user, _database);
@@ -86,6 +92,46 @@ namespace Warranty.Core.ToDoInfrastructure
             }
         }
 
+        private IEnumerable<IToDo> GetServiceCallClosureToDos(IUser user, IDatabase database)
+        {
+            var userMarkets = user.Markets;
+            const string sql = @"SELECT
+                                         wc.CreatedDate as [Date]
+                                        ,ho.HomeOwnerName
+                                        ,ho.HomeOwnerNumber
+                                        ,j.AddressLine
+                                        ,wc.ServiceCallId
+                                        ,wc.ServiceCallNumber
+                                        ,j.JobId
+                                        ,j.JobNumber
+                                        ,DATEDIFF(yy, j.CloseDate, wc.CreatedDate) as YearsWithinWarranty
+                                        ,j.CloseDate as WarrantyStartDate
+                                    FROM 
+                                        [ServiceCalls] wc
+                                    INNER join Jobs j
+                                        ON wc.JobId = j.JobId
+                                    INNER join HomeOwners ho
+                                        ON j.CurrentHomeOwnerId = ho.HomeOwnerId
+                                    INNER join Employees e
+                                        ON wc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+                                    INNER JOIN Communities cm
+                                        ON j.CommunityId = cm.CommunityId
+                                    INNER JOIN Cities ci
+                                        ON cm.CityId = ci.CityId
+                                     LEFT OUTER JOIN (SELECT SUM(CASE WHEN ServiceCallLineItemStatusId = @0 THEN 1 ELSE 0 END) as NumberOfCompletedLineItems, SUM(CASE WHEN ServiceCallLineItemStatusId = @0 THEN 0 ELSE 1 END) as NumberOfIncompleteLineItems, ServiceCallId FROM ServiceCallLineItems GROUP BY ServiceCallId) li
+                                       on wc.ServiceCallId = li.ServiceCallId
+                                    where 
+                                        li.NumberOfIncompleteLineItems = 0
+                                    AND wc.ServiceCallStatusId <> @2
+                                    AND ci.CityCode in ({0})
+                                    AND wc.ServiceCallType = @1";
+
+            var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
+            var toDos = database.Fetch<ToDoServiceCallClosure, ToDoServiceCallClosureModel>(query, ServiceCallLineItemStatus.Complete.Value, RequestType.WarrantyRequest.DisplayName, ServiceCallStatus.Complete.Value);
+
+            return toDos;
+        }
+
         private static IEnumerable<IToDo> GetServiceCallApprovalToDos(IUser user, IDatabase database)
         {
             var userMarkets = user.Markets;
@@ -113,7 +159,7 @@ namespace Warranty.Core.ToDoInfrastructure
                                     INNER JOIN Cities ci
                                         ON cm.CityId = ci.CityId
                                     where 
-                                        wc.ServiceCallStatusId = @0    
+                                        wc.ServiceCallStatusId = @0
                                     and 
                                         ci.CityCode in ({0})
                                     AND wc.ServiceCallType = @1";
@@ -307,31 +353,31 @@ namespace Warranty.Core.ToDoInfrastructure
             UpdatePaymentStatusChangedTasks(database, PaymentStatus.Hold, user.EmployeeNumber);
 
             const string sql = @"SELECT DISTINCT
-								        p.CreatedDate as Date
+                                        p.CreatedDate as Date
                                         ,p.PaymentStatus
                                         ,p.Amount
                                         ,t.TaskId
-								        ,t.Description
+                                        ,t.Description
                                         ,ho.HomeOwnerName
                                         ,ho.HomeOwnerNumber
                                         ,j.AddressLine
                                         ,j.JobId
-								        ,j.JobNumber
-								        ,scli.ServiceCallLineItemId                                    
+                                        ,j.JobNumber
+                                        ,scli.ServiceCallLineItemId                                    
                                     FROM Tasks t
                                     INNER join Payments p
                                         ON t.ReferenceId = p.PaymentId
-							        INNER JOIN ServiceCallLineItems scli
-	                                   ON scli.ServiceCallLineItemId = p.ServiceCallLineItemId                                
+                                    INNER JOIN ServiceCallLineItems scli
+                                       ON scli.ServiceCallLineItemId = p.ServiceCallLineItemId                                
                                     INNER JOIN ServiceCalls sc
-	                                   ON sc.ServiceCallId = scli.ServiceCallId
+                                       ON sc.ServiceCallId = scli.ServiceCallId
                                     INNER JOIN Jobs j
                                         ON sc.JobId = j.JobId
-							        INNER join HomeOwners ho
+                                    INNER join HomeOwners ho
                                         ON j.CurrentHomeOwnerId = ho.HomeOwnerId   
                                     INNER JOIN Employees e
-	                                   ON e.EmployeeId = sc.WarrantyRepresentativeEmployeeId
-							        WHERE e.EmployeeNumber = @0 and t.TaskType= @1 and t.IsComplete = 0";
+                                       ON e.EmployeeId = sc.WarrantyRepresentativeEmployeeId
+                                    WHERE e.EmployeeNumber = @0 and t.TaskType= @1 and t.IsComplete = 0";
 
             var toDos = database.Fetch<ToDoPaymentStatusChanged, ToDoPaymentStatusChangedModel>(sql, user.EmployeeNumber, TaskType.PaymentStatusChanged.Value);
 
@@ -342,15 +388,15 @@ namespace Warranty.Core.ToDoInfrastructure
         {
             const string sql = @"SELECT p.PaymentId as ReferenceId, e.EmployeeId FROM Payments p
                                     LEFT JOIN Tasks t
-	                                   ON t.ReferenceId = p.PaymentId and t.TaskType = @0
+                                       ON t.ReferenceId = p.PaymentId and t.TaskType = @0
                                     INNER JOIN ServiceCallLineItems scli
-	                                   ON scli.ServiceCallLineItemId = p.ServiceCallLineItemId
+                                       ON scli.ServiceCallLineItemId = p.ServiceCallLineItemId
                                     INNER JOIN ServiceCalls sc
-	                                   ON sc.ServiceCallId = scli.ServiceCallId
+                                       ON sc.ServiceCallId = scli.ServiceCallId
                                     INNER JOIN Jobs j
                                         ON sc.JobId = j.JobId
                                     INNER JOIN Employees e
-	                                   ON e.EmployeeId = sc.WarrantyRepresentativeEmployeeId
+                                       ON e.EmployeeId = sc.WarrantyRepresentativeEmployeeId
                                     WHERE PaymentStatus = @1 AND e.EmployeeNumber =@2 AND t.TaskId IS NULL;";
 
             var newTasks = database.Fetch<Task>(sql, TaskType.PaymentStatusChanged.Value, paymentStatus.Value, employeeNumber);
