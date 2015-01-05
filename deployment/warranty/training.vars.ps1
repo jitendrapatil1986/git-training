@@ -4,7 +4,7 @@ $environment = "train"
 $web_directory = "C:\Applications\WarrantyTraining"
 $nsb_directory = "C:\Applications\Warranty.Server"
 
-$newRelicWarrantyName = "Warranty (Training)"
+$newRelicAppName = "Warranty (Training)"
 
 $db_server = "WKSQL3"
 $db_name = "WarrantyTraining"
