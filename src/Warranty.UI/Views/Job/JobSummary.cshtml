@@ -95,17 +95,17 @@
                                         @if (sc.NumberOfLineItems > 0)
                                         {
                                             <b>Line Item Problem Descriptions</b>
+                                            <ul>
+                                                @foreach (var summary in sc.SummaryOfLineItems)
+                                                {
+                                                    <li>@Html.Raw(summary)</li>
+                                                }
+                                            </ul>
                                         }
                                         else
                                         {
-                                            <em>This Service Call has no Line Items</em>
+                                            <p><em>This Service Call has no Line Items</em></p>
                                         }
-                                        <ul>
-                                            @foreach (var summary in sc.SummaryOfLineItems)
-                                            {
-                                                <li>@Html.Raw(summary)</li>
-                                            }
-                                        </ul>
                                         Assigned to @Html.DisplayFor(x => sc.AssignedTo)
                                         <br/>
                                         <span class="text-capitalize small">@(sc.CompletionDate == null ? "Date Added: " + Format.DateMonthDayYear(sc.CreatedDate) : "Date Completed: " + Format.DateMonthDayYear(sc.CompletionDate))</span>
