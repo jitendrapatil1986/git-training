@@ -4,11 +4,11 @@ using System.Data.SqlClient;
 
 namespace Warranty.JdeImport.Importers
 {
-    internal class ArchivedVendorImporter : ImporterTemplate
+    internal class AllVendorsImporter : ImporterTemplate
     {
         public override string ItemName
         {
-            get { return "Archived Vendors"; }
+            get { return "All Vendors"; }
         }
 
         public override string SelectionQuery
@@ -16,6 +16,46 @@ namespace Warranty.JdeImport.Importers
             get
             {
                 return @"SELECT DISTINCT 
+                            PHMCU AS JOBNUMBER 
+                            , COALESCE(TRIM(F1.abalph), '') AS VENDORNAME 
+                            , COALESCE(e.EMAIL, '') AS VENDOREMAIL
+                            , TRIM(COALESCE(F1.ABAN8, '')) AS VENDORNUMBER 
+                            , trim(COALESCE(wpphtp, '')) as PHONETYPE
+                            , COALESCE(trim(wpar1) || trim(wpph1), '') as PHONENUMBER 
+                            , PHDESC CostCodeDESCRIPTION 
+                            , PDSUB AS COSTCODE 
+                        FROM F4311 li /* PO Line Items */ 
+                        INNER JOIN F4301 f4301 /* PO Header */ ON 
+                            li.PDDOCO=PHDOCO 
+                            AND li.PDDCTO=PHDCTO 
+                            AND li.PDKCOO=PHKCOO 
+                        LEFT OUTER JOIN F58701 /* Used for item description */ ON 
+                            ($apdp1 =pdpdp1 OR pdpdp1=' ') 
+                            and $AAC01=PDPDp5 
+                            and $alitm = PDLITM 
+                        INNER JOIN F0101 F1 /* Vendor/Entity Table */ ON 
+                                f4301.PHAN8 = f1.aban8 
+                        LEFT OUTER JOIN F0115 F3  /* Phone Number */ 
+                                ON f1.aban8=f3.wpan8 
+                                AND  wpphtp in ('WORK','CAR','CELL','HOME',' ')
+                        LEFT OUTER JOIN /* Email */
+                                (SELECT email1.WPAN8, TRIM(email1.WPPH1) || COALESCE(TRIM(email2.WPPH1),'') || COALESCE(TRIM(email3.WPPH1), '') AS Email 
+                                    FROM F0115 email1
+                                    LEFT OUTER JOIN F0115 email2 ON
+                                        email1.wpan8=email2.wpan8 AND email2.WPPHTP='EML2'
+                                    LEFT OUTER JOIN F0115 email3 ON
+                                        email1.wpan8=email3.wpan8 AND email3.WPPHTP='EML3'
+                                    WHERE email1.WPPHTP='EML') e ON
+                                e.WPAN8 = aban8
+                        WHERE 
+                            abat1 = 'V'
+                            AND TRIM(aban8) <> ''
+                            AND PDLNID >= 1000 
+                            AND PDLTTR <> '980'
+
+                        UNION ALL
+
+                        SELECT DISTINCT 
                             PHMCU AS JOBNUMBER 
                             , COALESCE(TRIM(F1.abalph), '') AS VENDORNAME 
                             , COALESCE(e.EMAIL, '') AS VENDOREMAIL
