@@ -36,7 +36,7 @@ namespace Warranty.Core.Features.RepServiceCalls
                                         , wc.CompletionDate
                                         , ho.HomeOwnerName
                                         , ho.HomeOwnerNumber
-                                        , case when (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) < 0 then 0 else (7-DATEDIFF(d, wc.CreatedDate, GETDATE())) end as NumberOfDaysRemaining
+                                        , DATEDIFF(d, wc.CreatedDate, GETDATE()) as NumberOfDaysRemaining
                                         , NumberOfLineItems
                                         , ho.HomePhone as PhoneNumber
                                         , e.EmployeeName as AssignedTo
