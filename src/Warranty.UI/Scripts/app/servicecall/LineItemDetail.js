@@ -491,14 +491,13 @@
                             onlyIf: function () { return (self.isBackcharge() === true); }
                         },
                         validation: {
-                            validator: function (val, someOtherVal) {
+                            validator: function (val) {
                                 if (self.isBackcharge() === false)
                                     return true;
                                 
-                                return (Number(val) >= 0) && (Number(val) <= Number(someOtherVal()));
+                                return Number(val) > 0;
                             },
-                            message: 'Must be greater than 0 and less than or equal to payment amount.',
-                            params: self.amount
+                            message: 'Must be greater than 0',
                         }
                     });
                     self.backchargeReason = ko.observable('').extend({
