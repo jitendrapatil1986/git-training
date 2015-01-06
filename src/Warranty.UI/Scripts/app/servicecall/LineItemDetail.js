@@ -39,6 +39,7 @@
                     self.purchaseOrderNumber = options.purchaseOrderNumber;
                     self.vendorNumber = options.vendorNumber;
                     self.vendorName = options.vendorName;
+                    self.costCode = options.costCode;
                     self.createdDate = moment(options.createdDate).format("L");
                     self.totalCost = options.totalCost;
                     self.purchaseOrderStatusDisplayName = ko.observable(options.purchaseOrderStatusDisplayName);

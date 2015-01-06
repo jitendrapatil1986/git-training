@@ -94,6 +94,7 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public string PurchaseOrderNumber { get; set; }
             public string VendorNumber { get; set; }
             public string VendorName { get; set; }
+            public WarrantyCostCode CostCode { get; set; }
             public DateTime? CreatedDate { get; set; }
             public List<ServiceCallLineItemPurchaseOrderLine> ServiceCallLineItemPurchaseOrderLines { get; set; }
             public decimal TotalCost { get { return ServiceCallLineItemPurchaseOrderLines.Sum(x => x.Quantity * x.UnitCost); } }
