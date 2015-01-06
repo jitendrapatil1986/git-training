@@ -6,6 +6,7 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
     using System.Linq;
     using System.Web.Mvc;
     using Enumerations;
+    using Extensions;
 
     public class ServiceCallLineItemModel : UploadAttachmentBaseViewModel
     {
@@ -150,6 +151,9 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             {
                 return Number.GetHashCode();
             }
+
+            public string CostCodesSeparatedByComma {get { return CostCodes.Select(x => x.CostCodeDescription).CommaSeparate(); }}
+
         }
         public class CostCodeModel : IEquatable<CostCodeModel>
         {
