@@ -40,5 +40,10 @@
         public static readonly RootProblem Imported = new RootProblem(24, "Imported", WarrantyCostCode.DoNotUse);
         public static readonly RootProblem Hardwood = new RootProblem(25, "Hardwood", WarrantyCostCode.AllFlooring);
         public static readonly RootProblem Carpet = new RootProblem(26, "Carpet", WarrantyCostCode.AllFlooring);
+        public static readonly RootProblem Brick = new RootProblem(27, "Brick", WarrantyCostCode.Brick);
+        public static readonly RootProblem CustomerDelight = new RootProblem(28, "Customer Delight", WarrantyCostCode.MaterialDiscounts);
+        public static readonly RootProblem Mirror = new RootProblem(29, "Mirror", WarrantyCostCode.InteriorMisc);
+        public static readonly RootProblem SidingCornice = new RootProblem(30, "Siding/Cornice", WarrantyCostCode.ExteriorMisc);
+        public static readonly RootProblem TubShower = new RootProblem(31, "Tub/Shower", WarrantyCostCode.BathsMarbleTubs);
     }
 }
