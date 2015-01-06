@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Common.Security.Queries;
+    using Enumerations;
     using NPoco;
     using Entities;
 
@@ -33,16 +34,19 @@
 
                 var serviceCallMarket = _database.Single<string>(sql, query.ServiceCallId);
 
-                var warrantyEmployees = _database.Fetch<Employee>().Select(x => x.Number);
+                var warrantyEmployees = _database.Fetch<Employee>();
 
-                var employeesByServiceCallMarket = new GetUsersByMarketQuery(serviceCallMarket).Execute();
+                var employeesByServiceCallMarket =
+                    new GetUsersByMarketAndRolesQuery(serviceCallMarket, UserRoles.CustomerCareManagerRole,
+                                                      UserRoles.WarrantyCoordinatorRole,
+                                                      UserRoles.WarrantyServiceRepresentativeRole).Execute();
 
-                var employeesAssignableToServiceCall = employeesByServiceCallMarket.Where(x => warrantyEmployees.Contains(x.EmployeeNumber));
+                var employeesAssignableToServiceCall = warrantyEmployees.Where(x => employeesByServiceCallMarket.Select(y => y.EmployeeNumber).Contains(x.Number));
 
                 return employeesAssignableToServiceCall.Select(x => new ServiceCallSummaryModel.EmployeeViewModel
                                                                         {
-                                                                            DisplayName = x.DisplayName,
-                                                                            EmployeeNumber = x.EmployeeNumber
+                                                                            DisplayName = x.Name,
+                                                                            EmployeeNumber = x.Number
                                                                         }).ToList();
             }
         }
