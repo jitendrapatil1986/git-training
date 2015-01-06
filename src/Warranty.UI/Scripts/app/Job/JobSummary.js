@@ -1,5 +1,8 @@
 require(['/Scripts/app/main.js'], function () {
     require(['jquery', 'x-editable', 'ko', 'ko.x-editable', 'toastr', 'urls', 'modelData', 'enumeration/PhoneNumberType', 'enumeration/PaymentStatus', 'enumeration/BackchargeStatus', 'bootbox', 'jquery.maskedinput', 'app/formUploader', 'app/additionalContacts', 'app/approveServiceCalls', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, xeditable, ko, koxeditable, toastr, urls, modelData, phoneNumberTypeEnum, paymentStatusEnum, backchargeStatusEnum, bootbox) {
+        window.ko = ko; //manually set the global ko property.
+        require(['ko.validation'], function() {
+        
         $(function () {
             $.fn.editable.defaults.mode = 'inline';
             $.fn.editable.defaults.emptytext = 'Add';
@@ -38,7 +41,19 @@ require(['/Scripts/app/main.js'], function () {
 
             function clearNoteFields() {
                 $("#addJobNoteDescription").val('');
-                self.jobNoteDescriptionToAdd('');
+                viewModel.jobNoteDescriptionToAdd('');
+                viewModel.jobNoteDescriptionToAdd.isModified(false);
+            }
+            
+            function formHasErrors(theModel) {
+                var errors = ko.validation.group(theModel);
+                if (errors().length != 0) {
+                    viewModel.errors.showAllMessages(false);
+                    errors.showAllMessages();
+                    return true;
+                }
+                
+                return false;
             }
             
             function jobSummaryViewModel() {
@@ -46,7 +61,7 @@ require(['/Scripts/app/main.js'], function () {
 
                 self.jobId = ko.observable($("#jobId").val());
                 self.allJobNotes = ko.observableArray([]);
-                self.jobNoteDescriptionToAdd = ko.observable('');
+                self.jobNoteDescriptionToAdd = ko.observable('').extend({required: true});
                 self.vendors = ko.observableArray([]);
                 self.selectedCostCode = ko.observable();
                 self.costCodes = modelData.costCodes;
@@ -85,12 +100,8 @@ require(['/Scripts/app/main.js'], function () {
                     return rows;
                 }, this);
                 
-
-                
                 self.addJobNote = function () {
-                    var newNoteDescription = $("#addJobNoteDescription");
-                    if (newNoteDescription.val() == "") {
-                        $(newNoteDescription).parent().addClass("has-error");
+                    if (formHasErrors([self.jobNoteDescriptionToAdd])) {
                         return;
                     }
 
@@ -252,9 +263,15 @@ require(['/Scripts/app/main.js'], function () {
                     return "default";
                 });
             }
+
+            ko.validation.init({
+                errorElementClass: 'has-error',
+                errorMessageClass: 'help-block',
+                decorateElement: true,
+            });
             
             var viewModel = new jobSummaryViewModel();
-            ko.applyBindings(viewModel);
+            
             var persistedVendors = modelData.vendors;
 
             _(persistedVendors).each(function (vendor) {
@@ -278,6 +295,11 @@ require(['/Scripts/app/main.js'], function () {
             _(persistedAllJobPaymentsViewModel).each(function(payment) {
                 viewModel.allJobPayments.push(new JobPaymentViewModel(payment));
             });
+
+            viewModel.errors = ko.validation.group(viewModel);
+            
+            ko.applyBindings(viewModel);
+        }); 
         });
     });
 });
