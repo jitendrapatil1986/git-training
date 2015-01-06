@@ -1,6 +1,5 @@
 ﻿namespace Warranty.Core.Features.AddServiceCallPayment
 {
-    using System;
     using Configurations;
     using Entities;
     using Enumerations;
@@ -10,7 +9,7 @@
     using Security;
     using Services;
 
-    public class AddPaymentCommandHandler : ICommandHandler<AddPaymentCommand, Guid>
+    public class AddPaymentCommandHandler : ICommandHandler<AddPaymentCommand, AddPaymentCommandDto>
     {
         private readonly IDatabase _database;
         private readonly IBus _bus;
@@ -25,7 +24,7 @@
             _resolveObjectAccount = resolveObjectAccount;
         }
 
-        public Guid Handle(AddPaymentCommand message)
+        public AddPaymentCommandDto Handle(AddPaymentCommand message)
         {
             using (_database)
             {
@@ -43,7 +42,9 @@
                                                                 ON sc.ServiceCallId = scli.ServiceCallId
                                                             WHERE scli.ServiceCallLineItemId = @0", message.ServiceCallLineItemId);
 
-                
+                var rootProblem = _database.Single<string>("SELECT RootProblem FROM ServiceCallLineItems WHERE ServiceCallLineItemId=@0", message.ServiceCallLineItemId);
+
+                var costCode = RootProblem.FromDisplayName(rootProblem).CostCode;
                 var payment = new Payment
                 {
                     Amount = message.Amount,
@@ -54,7 +55,7 @@
                     VendorName = message.VendorName,
                     JobNumber = job.JobNumber,
                     CommunityNumber = string.IsNullOrEmpty(job.JobNumber) ? "" : job.JobNumber.Substring(0, 4),
-                    CostCode = WarrantyCostCode.FromValue(message.SelectedCostCode).CostCode,
+                    CostCode = costCode.CostCode,
                     ObjectAccount = _resolveObjectAccount.ResolveLaborObjectAccount(job, serviceCall),
                 };
 
@@ -82,7 +83,7 @@
                         PersonNotifiedPhoneNumber = message.PersonNotifiedPhoneNumber,
                         PersonNotifiedDate = message.PersonNotifiedDate,
                         BackchargeResponseFromVendor = message.BackchargeResponseFromVendor,
-                        CostCode = WarrantyCostCode.FromValue(message.SelectedCostCode).CostCode,
+                        CostCode = costCode.CostCode,
                         BackchargeStatus = BackchargeStatus.Requested,
                         Username = currentUser.LoginName,
                         EmployeeNumber = currentUser.EmployeeNumber
@@ -90,7 +91,7 @@
                     _database.Insert(backcharge);
                 }
 
-                return payment.PaymentId;
+                return new AddPaymentCommandDto {CostCode = costCode, PaymentId = payment.PaymentId};
             }
         }
     }

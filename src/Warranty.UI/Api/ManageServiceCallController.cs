@@ -92,7 +92,7 @@
         }
 
         [HttpPost]
-        public Guid AddPayment(AddPaymentCommand model)
+        public AddPaymentCommandDto AddPayment(AddPaymentCommand model)
         {
             return _mediator.Send(model); ;
         }
