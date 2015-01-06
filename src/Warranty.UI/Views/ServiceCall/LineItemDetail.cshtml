@@ -99,11 +99,13 @@
                     <div class="clearfix"></div>
                 </section>
                 <section>
-                    <h3 class="col-md-12">POs
+                    <h3 class="col-md-4">POs</h3>
+                    <div class="col-md-8">
                         <span>
-                            <button type="button" class="btn btn-default pull-right no-print hidden-sm hidden-xs" data-bind="click: createPurchaseOrder">Create PO</button>
+                            <button type="button" class="btn btn-default pull-right no-print hidden-sm hidden-xs" data-bind="enable: hasRootProblem, click: createPurchaseOrder">Create PO</button>
                         </span>
-                    </h3>
+                        <span data-bind="visible: !hasRootProblem()" class="pull-right alert alert-warning enable-button-warning">To create a PO, select a Root Problem</span>
+                    </div>
                     <div class="clearfix"></div>
                     <p class="padding-left-15" data-bind="visible: allPurchaseOrders().length < 1" ><em>No Purchase Orders Available</em></p>
                     <!-- ko foreach: allPurchaseOrders -->
@@ -113,12 +115,14 @@
                                 <br/>
                                 <span data-bind="text: purchaseOrderStatusDisplayName, css: 'label label-' + purchaseOrderStatusBadgeClassName()"></span>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
+                                <b data-bind="text: costCode.costCode + '-' + costCode.displayName"></b>
+                                <br/>
                                 <span data-bind="text: purchaseOrderNumber ? 'PO #:' + purchaseOrderNumber : 'PO #:'"></span>
                                 <br/>
-                                <span data-bind="text: 'Date:' + createdDate"></span>
+                                <span data-bind="text: 'Date:' + createdDate"></span><br/>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <h4 data-bind="currency: totalCost"></h4>
                             </div>
                     </div>
@@ -321,7 +325,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12 alert alert-warning no-bottom-margin" data-bind="visible: isHeld">
-                                            <strong><span data-bind="text: paymentStatusDisplayName"></span></strong> - <span data-bind="date: holdDate"></span>- <span data-bind="text: holdComments"></span>
+                                            <strong><span data-bind="text: paymentStatusDisplayName"></span></strong> - <span data-bind="date: holdDate"></span> - <span data-bind="text: holdComments"></span>
                                         </div>
                                     </li>
                                 </div>

@@ -207,6 +207,7 @@
         {
             const string sql = @"SELECT p.[PurchaseOrderId]
                                     ,[PurchaseOrderNumber]
+                                    ,[CostCode] 
                                     ,[VendorNumber]
                                     ,[VendorName]
                                     ,p.[CreatedDate]
