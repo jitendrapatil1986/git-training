@@ -217,12 +217,15 @@
                                 <div class="panel-body no-bottom-padding">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            @Html.TextArea("Description", null, new { id = "addJobNoteDescription", @class = "form-control", data_bind = "text: jobNoteDescriptionToAdd, value: jobNoteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
+                                            <div class="control-group" data-bind="validationElement: jobNoteDescriptionToAdd">
+                                                @Html.TextArea("Description", null, new { id = "addJobNoteDescription", @class = "form-control", data_bind = "text: jobNoteDescriptionToAdd, value: jobNoteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
+                                            </div>
+
                                         </div>
                                     </div>
                                     <br/>
                                     <div class="form-submit">
-                                        <button class="btn btn-primary" data-bind="click: addJobNote, enable: jobNoteDescriptionToAdd().length > 0">Add</button>
+                                        <button class="btn btn-primary" data-bind="click: addJobNote">Add</button>
                                         <button class="btn btn-link" data-toggle="collapse" data-target="#addJobNote" data-bind="click: cancelJobNote">Cancel</button>
                                     </div>
                                 </div>
