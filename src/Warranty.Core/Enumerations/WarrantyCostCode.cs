@@ -1,5 +1,7 @@
 ﻿namespace Warranty.Core.Enumerations
 {
+    using Yay.Enumerations;
+
     public class WarrantyCostCode : Enumeration<WarrantyCostCode>
     {
         public static readonly WarrantyCostCode ConcreteFlatwork = new WarrantyCostCode(1, "Concrete, Flatwork", "01");
@@ -29,7 +31,8 @@
         public static readonly WarrantyCostCode Structural = new WarrantyCostCode(25, "Structural ", "25");
         public static readonly WarrantyCostCode OneyrTouchUp = new WarrantyCostCode(26, "1 yr Touch Up ", "30");
         public static readonly WarrantyCostCode MaterialDiscounts = new WarrantyCostCode(27, "Material Discounts", "50");
-
+        [Deprecated]
+        public static readonly WarrantyCostCode DoNotUse = new WarrantyCostCode(28, "DO NOT USE", "");
 
 
         private WarrantyCostCode(int value, string displayName, string costCode)

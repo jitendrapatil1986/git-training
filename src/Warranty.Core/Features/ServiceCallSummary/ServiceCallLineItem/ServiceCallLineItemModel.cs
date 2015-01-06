@@ -83,6 +83,8 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public string BackchargeDenyComments { get; set; }
             public DateTime? BackchargeDenyDate { get; set; }
             public bool IsBackcharge { get; set; }
+            public WarrantyCostCode CostCode { get { return WarrantyCostCode.GetAll().SingleOrDefault(x => x.CostCode == JdeCostCode); }}
+            public string JdeCostCode { get; set; }
         }
 
         public class ServiceCallLineItemPurchaseOrder

@@ -76,9 +76,9 @@
                     self.holdDate = ko.observable(options.holdDate);
                     self.backchargeHoldDate = ko.observable(options.backchargeHoldDate);
                     self.backchargeDenyDate = ko.observable(options.backchargeDenyDate);
-                    self.selectedCostCode = options.selectedCostCode;
                     self.paymentStatusDisplayName = ko.observable(options.paymentStatusDisplayName);
                     self.backchargeStatusDisplayName = ko.observable(options.backchargeStatusDisplayName);
+                    self.costCode = options.costCode;
 
                     self.isBackchargeHeld = ko.computed(function () {
                         return self.backchargeStatusDisplayName() == backchargeStatusEnum.RequestedHold.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName;
@@ -317,7 +317,6 @@
                     self.personNotifiedPhoneNumber('');
                     self.personNotifiedDate('');
                     self.backchargeResponseFromVendor('');
-                    self.selectedCostCode(undefined);
                     self.errors.showAllMessages(false);
                 };
 
@@ -382,7 +381,6 @@
                     self.problemCode = ko.observable(modelData.initialServiceCallLineItem.problemCode);
                     self.problemDescription = ko.observable(modelData.initialServiceCallLineItem.problemDescription);
                     self.jobNumber = ko.observable(modelData.initialServiceCallLineItem.jobNumber);
-                    self.costCode = ko.observable(modelData.initialServiceCallLineItem.costCode);
                     self.constructionVendors = modelData.vendors;
                     
                     self.groupedConstructionVendors = ko.computed(function () {
@@ -487,8 +485,6 @@
                     self.invoiceNumber = ko.observable('').extend({ required: true });
                     self.amount = ko.observable().extend({ required: true, min: 0 });
                     self.isBackcharge = ko.observable(false);
-                    self.selectedCostCode = ko.observable(undefined).extend({ required: true });
-                    self.warrantyCostCodes = ko.observableArray(modelData.warrantyCostCodes);
                     self.backchargeAmount = ko.observable().extend({
                         required: {
                             onlyIf: function () { return (self.isBackcharge() === true); }
@@ -564,7 +560,6 @@
                         self.personNotifiedPhoneNumber('');
                         self.personNotifiedDate('');
                         self.backchargeResponseFromVendor('');
-                        self.selectedCostCode(undefined);
                         self.errors.showAllMessages(false);
                     };
 
@@ -600,7 +595,7 @@
 
                     self.addPayment = function () {
                         
-                        if (formHasErrors([self.invoiceNumber, self.amount, self.selectedCostCode, self.backchargeAmount, self.backchargeReason, self.personNotified, self.personNotifiedPhoneNumber, self.personNotifiedDate, self.backchargeResponseFromVendor, self.vendorNumber, self.backchargeVendorName, self.backchargeVendorNumber]))
+                        if (formHasErrors([self.invoiceNumber, self.amount, self.backchargeAmount, self.backchargeReason, self.personNotified, self.personNotifiedPhoneNumber, self.personNotifiedDate, self.backchargeResponseFromVendor, self.vendorNumber, self.backchargeVendorName, self.backchargeVendorNumber]))
                             return;
 
                         self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
@@ -623,7 +618,6 @@
                             backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
                             paymentStatusDisplayName: paymentStatusEnum.Requested.DisplayName,
                             backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
-                            selectedCostCode: self.selectedCostCode
                         });
 
                         var paymentData = ko.toJSON(newPayment);
@@ -640,8 +634,8 @@
                                 toastr.error("There was a problem adding the payment. Please try again.");
                             })
                             .done(function (response) {
-
-                                newPayment.paymentId = response;
+                                newPayment.paymentId = response.PaymentId;
+                                newPayment.costCode = {costCode: response.CostCode.CostCode, displayName: response.CostCode.DisplayName};
                                 self.allPayments.unshift(newPayment);
                                 toastr.success("Success! Payment added.");
                                 highlight($("#allServiceCallPayments").first());

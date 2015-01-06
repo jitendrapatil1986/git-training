@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class AddPaymentCommand : ICommand<Guid>
+    public class AddPaymentCommand : ICommand<AddPaymentCommandDto>
     {
         public Guid ServiceCallLineItemId { get; set; }
         public string VendorNumber { get; set; }
