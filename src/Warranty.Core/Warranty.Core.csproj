@@ -39,12 +39,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Accounting.Client.1.1.914.0\lib\net45\Accounting.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Core">
-      <HintPath>..\packages\Common.Core.1.1.57.0\lib\net45\Common.Core.dll</HintPath>
+    <Reference Include="Common.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Common.Core.1.1.82.0\lib\net45\Common.Core.dll</HintPath>
     </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Common.Security.1.1.57.0\lib\net45\Common.Security.dll</HintPath>
+      <HintPath>..\packages\Common.Security.1.1.83.0\lib\net45\Common.Security.dll</HintPath>
     </Reference>
     <Reference Include="CsvHelper">
       <HintPath>..\packages\CsvHelper.2.8.0\lib\net40-client\CsvHelper.dll</HintPath>
@@ -122,6 +123,7 @@
     <Compile Include="Calculator\MonthYearModel.cs" />
     <Compile Include="Calculator\SurveyDataResult.cs" />
     <Compile Include="Calculator\WarrantyCalculator.cs" />
+    <Compile Include="Features\AddServiceCallPayment\AddPaymentCommandDto.cs" />
     <Compile Include="Features\DeleteServiceCall\DeleteServiceCallCommand.cs" />
     <Compile Include="Features\DeleteServiceCall\DeleteServiceCallCommandHandler.cs" />
     <Compile Include="Features\SessionStart\VerifyEmployeeExistsCommandHandler.cs" />

@@ -48,15 +48,15 @@
                                     ON city.CityId = community.CityId
                                 LEFT JOIN CityCodeProblemCodeCostCodes cc
                                     ON cc.CityCode = city.CityCode AND cc.ProblemJdeCode = scli.ProblemJDECode  
-						  INNER JOIN JobVendorCostCodes jvcc
-							 ON jvcc.JobId = job.JobId and jvcc.CostCode = cc.CostCode
-						  INNER JOIN Vendors v
-							 ON v.VendorId = jvcc.VendorId
-						  INNER JOIN (SELECT VendorId, number as Value, Type as Type FROM VendorPhones
+                          INNER JOIN JobVendorCostCodes jvcc
+                             ON jvcc.JobId = job.JobId and jvcc.CostCode = cc.CostCode
+                          INNER JOIN Vendors v
+                             ON v.VendorId = jvcc.VendorId
+                          INNER JOIN (SELECT VendorId, number as Value, Type as Type FROM VendorPhones
                                     UNION
                                     SELECT VendorId, email as Value, 'E-mail' as Type FROM VendorEmails) as ci 
                                     on v.vendorid = ci.vendorid
-						  where scli.ServiceCallLineItemId = @0";
+                          where scli.ServiceCallLineItemId = @0";
 
             var result = _database.Fetch<VendorDto>(sql, serviceCallLineItemId);
 
@@ -174,6 +174,7 @@
                                     , b.DenyComments backchargeDenyComments
                                     , b.DenyDate backchargeDenyDate
                                     , CASE WHEN b.BackchargeVendorNumber IS NOT NULL THEN 1 ELSE 0 END AS IsBackcharge
+                                    , p.CostCode as JdeCostCode
                                 FROM payments p
                                     LEFT JOIN backcharges b
                                        ON p.PaymentId = b.PaymentId
@@ -206,6 +207,7 @@
         {
             const string sql = @"SELECT p.[PurchaseOrderId]
                                     ,[PurchaseOrderNumber]
+                                    ,[CostCode] 
                                     ,[VendorNumber]
                                     ,[VendorName]
                                     ,p.[CreatedDate]
