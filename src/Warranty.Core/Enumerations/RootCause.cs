@@ -11,7 +11,7 @@
         public static readonly RootCause CustomerDelight = new RootCause(2, "Customer Delight");
         public static readonly RootCause NaturalCauses = new RootCause(3, "Natural Causes");
         public static readonly RootCause ProductDefect = new RootCause(4, "Product Defect");
-        public static readonly RootCause WorkmanshipInstall = new RootCause(5, "Workmanship Install");
+        public static readonly RootCause WorkmanshipInstall = new RootCause(5, "Workmanship/Install");
         public static readonly RootCause Imported = new RootCause(6, "Imported");
     }
 }
