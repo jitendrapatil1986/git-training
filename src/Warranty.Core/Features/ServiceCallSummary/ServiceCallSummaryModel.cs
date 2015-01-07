@@ -75,7 +75,11 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public HomeownerVerificationType HomeownerVerificationType { get; set; }
             public string SpecialProjectReason { get; set; }
             public DateTime? SpecialProjectDate { get; set; }
-            public bool WasCreatedToday { get; set; }
+
+            public bool WasCreatedToday
+            {
+                get { return CreatedDate.ToShortDateString() == DateTime.UtcNow.ToShortDateString(); }
+            }
 
             public int PercentComplete
             {

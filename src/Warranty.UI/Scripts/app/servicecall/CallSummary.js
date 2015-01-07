@@ -665,7 +665,7 @@ require(['/Scripts/app/main.js'], function () {
                 });
                 
                 self.canBeDeleted = ko.computed(function () {
-                    return self.allLineItems().length == 0;
+                    return (self.callSummaryStatusRequested() || self.callSummaryStatusOpen()) && self.allLineItems().length == 0;
                 });
                 
                 self.homeownerVerificationSignature = ko.observable('').extend({ required: true });
