@@ -6,6 +6,7 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
     using System.Linq;
     using System.Web.Mvc;
     using Enumerations;
+    using Extensions;
 
     public class ServiceCallLineItemModel : UploadAttachmentBaseViewModel
     {
@@ -83,6 +84,8 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public string BackchargeDenyComments { get; set; }
             public DateTime? BackchargeDenyDate { get; set; }
             public bool IsBackcharge { get; set; }
+            public WarrantyCostCode CostCode { get { return WarrantyCostCode.GetAll().SingleOrDefault(x => x.CostCode == JdeCostCode); }}
+            public string JdeCostCode { get; set; }
         }
 
         public class ServiceCallLineItemPurchaseOrder
@@ -91,6 +94,7 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public string PurchaseOrderNumber { get; set; }
             public string VendorNumber { get; set; }
             public string VendorName { get; set; }
+            public WarrantyCostCode CostCode { get; set; }
             public DateTime? CreatedDate { get; set; }
             public List<ServiceCallLineItemPurchaseOrderLine> ServiceCallLineItemPurchaseOrderLines { get; set; }
             public decimal TotalCost { get { return ServiceCallLineItemPurchaseOrderLines.Sum(x => x.Quantity * x.UnitCost); } }
@@ -148,6 +152,9 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             {
                 return Number.GetHashCode();
             }
+
+            public string CostCodesSeparatedByComma {get { return CostCodes.Select(x => x.CostCodeDescription).CommaSeparate(); }}
+
         }
         public class CostCodeModel : IEquatable<CostCodeModel>
         {

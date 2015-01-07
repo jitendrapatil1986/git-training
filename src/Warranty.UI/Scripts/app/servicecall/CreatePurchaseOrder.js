@@ -57,8 +57,6 @@
                     self.deliveryInstructionCodes = ko.observableArray(modelData.deliveryInstructionCodes);
                     self.selectedDeliveryInstruction = ko.observable().extend({ required: true });
                     self.deliveryDate = ko.observable().extend({ required: true, minDate: now});
-                    self.warrantyCostCodes = ko.observableArray(modelData.warrantyCostCodes);
-                    self.selectedCostCode = ko.observable().extend({required: true});
                     self.isMaterialObjectAccount = ko.observable('true').extend({required: true});
                     self.jobNumber = ko.observable(modelData.initialPurchaseOrder.jobNumber);
                     self.address = ko.observable(modelData.initialPurchaseOrder.addressLine);
@@ -116,7 +114,6 @@
                             DeliveryInstructions: self.selectedDeliveryInstruction(),
                             DeliveryDate: self.deliveryDate(),
                             PurchaseOrderNote: self.notes(),
-                            CostCode: self.selectedCostCode(),
                             IsMaterialObjectAccount: self.isMaterialObjectAccount(),
                             ServiceCallLineItemPurchaseOrderLines: []
                         };

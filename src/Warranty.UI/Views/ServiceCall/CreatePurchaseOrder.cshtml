@@ -57,10 +57,6 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="control-group" data-bind="validationElement: selectedCostCode">
-                                    <label class="control-label" for="selectedCostCode">Cost Codes</label>
-                                    <select id="selectedCostCode" class="form-control" data-bind="options: warrantyCostCodes, optionsText: 'displayText', optionsValue: 'value', value: selectedCostCode, optionsCaption: 'Select Cost Code'"></select>
-                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -240,7 +236,6 @@
             return {
                 initialPurchaseOrder: @Html.Raw(Model.ToJson()),
                 deliveryInstructionCodes: @Html.Raw(@DeliveryInstruction.GetAll().OrderBy(x => x.DisplayName).Select(x => new {DisplayText = x.DisplayName, Value = x.Value}).ToJson()),
-                warrantyCostCodes: @Html.Raw(@WarrantyCostCode.GetAll().OrderBy(x => x.DisplayName).Select(x => new {DisplayText = x.DisplayName, Value = x.Value}).ToJson()),
             };
         });
 
