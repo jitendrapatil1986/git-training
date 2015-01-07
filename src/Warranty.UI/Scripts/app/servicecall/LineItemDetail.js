@@ -399,8 +399,8 @@
 
                     //Value saved in db is string but ddl needs id to set default value.
                     self.rootCause = ko.observable(modelData.initialServiceCallLineItem.rootCause);
-                    self.hasRootCause = ko.computed(function() {
-                        return self.rootCause() != null;
+                    self.hasRootCause = ko.computed(function () {
+                        return self.rootCause() != null && self.rootCause() != 'Imported';
                     });
                     
                     var selectedRootCause = ko.utils.arrayFirst(modelData.rootCauseCodes, function (item) {
@@ -416,7 +416,7 @@
                     
                     self.rootProblem = ko.observable(modelData.initialServiceCallLineItem.rootProblem);
                     self.hasRootProblem = ko.computed(function() {
-                        return self.rootProblem() != null;
+                        return self.rootProblem() != null && self.rootProblem() != 'Imported';
                     });
                     
                     var selectedRootProblem = ko.utils.arrayFirst(modelData.rootProblemCodes, function (item) {
