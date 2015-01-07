@@ -83,7 +83,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , wc.HomeownerVerificationTypeId as HomeownerVerificationType
                                     , wc.SpecialProjectReason
                                     , wc.SpecialProjectDate
-                                    
+                                    , convert(bit,case when CONVERT(date,wc.CreatedDate)=CONVERT(DATE,getdate()) then 1 else 0 end) as WasCreatedToday
                                 FROM [ServiceCalls] wc
                                 INNER JOIN Jobs j
                                 ON wc.JobId = j.JobId
