@@ -82,6 +82,11 @@ namespace Warranty.Core.Features.ServiceCallSummary
                 get { return string.Format("{0} #{1}", ServiceCallType, CallNumber); }
             }
 
+            public bool WasCreatedToday
+            {
+                get { return CreatedDate.Date == DateTime.Today.Date; }
+            }
+
             public int PercentComplete
             {
                 get { return ServiceCallCalculator.CalculatePercentComplete(NumberOfDaysRemaining); }
