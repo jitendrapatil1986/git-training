@@ -51,10 +51,10 @@ namespace Warranty.Core.Features.RepServiceCalls
                                         , j.JobNumber
                                      FROM [ServiceCalls] wc
                                      inner join Jobs j
-                                       on wc.JobId = j.JobId
+                                       on wc.JobId = j.JobId    
                                      inner join HomeOwners ho
                                        on j.CurrentHomeOwnerId = ho.HomeOwnerId
-                                     inner join (select COUNT(*) as NumberOfLineItems, ServiceCallId FROM ServiceCallLineItems group by ServiceCallId) li
+                                     left outer join (select COUNT(*) as NumberOfLineItems, ServiceCallId FROM ServiceCallLineItems group by ServiceCallId) li
                                        on wc.ServiceCallId = li.ServiceCallId
                                      inner join Employees e
                                        on wc.WarrantyRepresentativeEmployeeId = e.EmployeeId
