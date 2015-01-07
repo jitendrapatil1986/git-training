@@ -45,7 +45,7 @@
     </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Common.Security.1.1.82.0\lib\net45\Common.Security.dll</HintPath>
+      <HintPath>..\packages\Common.Security.1.1.83.0\lib\net45\Common.Security.dll</HintPath>
     </Reference>
     <Reference Include="CsvHelper">
       <HintPath>..\packages\CsvHelper.2.8.0\lib\net40-client\CsvHelper.dll</HintPath>
@@ -554,6 +554,7 @@
     <Compile Include="WarrantyCoreRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
