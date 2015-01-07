@@ -13,6 +13,7 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
         public Guid ServiceCallLineItemId { get; set; }
         public Guid ServiceCallId { get; set; }
         public string ServiceCallNumber { get; set; }
+        public String ServiceCallType { get; set; }
         public int LineNumber { get; set; }
         public string ProblemCode { get; set; }
         public string ProblemJdeCode { get; set; }
@@ -34,6 +35,11 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
         public IEnumerable<ServiceCallLineItemPayment> ServiceCallLineItemPayments { get; set; }
         public IEnumerable<ServiceCallLineItemPurchaseOrder> ServiceCallLineItemPurchaseOrders { get; set; }
         public IEnumerable<Vendor> Vendors { get; set; }
+        
+        public string ServiceCallTitle
+        {
+            get { return string.Format("{0} #{1}", ServiceCallType, ServiceCallNumber); }
+        }
 
         public class ServiceCallLineItemNote
         {

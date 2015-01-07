@@ -75,6 +75,12 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public HomeownerVerificationType HomeownerVerificationType { get; set; }
             public string SpecialProjectReason { get; set; }
             public DateTime? SpecialProjectDate { get; set; }
+            public string ServiceCallType { get; set; }
+
+            public string ServiceCallTitle
+            {
+                get { return string.Format("{0} #{1}", ServiceCallType, CallNumber); }
+            }
 
             public int PercentComplete
             {
