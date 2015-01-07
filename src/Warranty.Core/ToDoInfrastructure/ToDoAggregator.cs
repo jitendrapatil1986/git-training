@@ -309,6 +309,7 @@ namespace Warranty.Core.ToDoInfrastructure
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
             var toDos = database.Fetch<ToDoCommunityEmployeeAssignment, ToDoCommunityEmployeeAssignmentModel>(query);
+            
             var warrantyEmployees = database.Fetch<Employee>();
             var markets = toDos.Select(x => x.Model.Market).Distinct();
 
