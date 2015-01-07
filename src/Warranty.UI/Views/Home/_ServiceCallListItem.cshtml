@@ -6,7 +6,7 @@
     <div class="col-md-4">
         <strong>@Format.HomeOwner(Model.HomeownerName, Model.HomeownerNumber)</strong><br />@Model.Address
     </div>
-    <div class="col-md-2 mobile-margin"><a href="tel:@Model.PhoneNumber" class="hidden-lg hidden-md">@Format.PhoneNumber(Model.PhoneNumber)</a></div>
+    <div class="col-md-2 mobile-margin">@Format.PhoneNumberOnMobile(Model.PhoneNumber)</div>
     <div class="col-md-2 mobile-margin">
         <small class="text-muted">
             @Html.ActionLink(Model.JobNumber, "JobSummary", "Job", new { id = Model.JobId }, null)
