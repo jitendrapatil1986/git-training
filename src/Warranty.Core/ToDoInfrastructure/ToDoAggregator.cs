@@ -309,21 +309,24 @@ namespace Warranty.Core.ToDoInfrastructure
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
             var toDos = database.Fetch<ToDoCommunityEmployeeAssignment, ToDoCommunityEmployeeAssignmentModel>(query);
+            
+            var warrantyEmployees = database.Fetch<Employee>();
+            var markets = toDos.Select(x => x.Model.Market).Distinct();
 
-            var currentEmployees = database.Fetch<Employee>().Select(x=>x.Number);
-            var employeesByMarket = new List<KeyValuePair<string, List<SecurityUser>>>();
-            foreach (var market in user.Markets)
+            var employeesByMarket = new List<KeyValuePair<string, List<Employee>>>();
+            foreach (var market in markets)
             {
-                var employeesInMarket = new GetUsersByMarketQuery(market).Execute().Where(x=>currentEmployees.Contains(x.EmployeeNumber)).ToList();
-                employeesByMarket.Add(new KeyValuePair<string, List<SecurityUser>>(market, employeesInMarket));
+                var securityEmployeesInMarket = new GetUsersByMarketAndRolesQuery(market, UserRoles.WarrantyServiceRepresentativeRole).Execute();
+                var employeesInMarket = warrantyEmployees.Where(x => securityEmployeesInMarket.Select(y => y.EmployeeNumber).Contains(x.Number)).ToList();
+                employeesByMarket.Add(new KeyValuePair<string, List<Employee>>(market, employeesInMarket));
             }
 
             toDos.ForEach(
                 x =>
                 x.Model.Employees = employeesByMarket.Find(y => y.Key == x.Model.Market).Value.Select(securityUser => new ToDoCommunityEmployeeAssignmentModel.EmployeeViewModel
                                                          {
-                                                             DisplayName = securityUser.DisplayName,
-                                                             EmployeeNumber = securityUser.EmployeeNumber
+                                                             DisplayName = securityUser.Name,
+                                                             EmployeeNumber = securityUser.Number
                                                          }).OrderBy(u => u.DisplayName).ToList());
 
             return toDos;
