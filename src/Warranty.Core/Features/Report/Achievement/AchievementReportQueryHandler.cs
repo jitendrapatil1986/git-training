@@ -103,20 +103,15 @@
             {
                 var user = _userSession.GetCurrentUser();
 
-                const string sql = @"SELECT DISTINCT EmployeeNumber, WarrantyRepresentativeEmployeeId
-                                        , LOWER(e.EmployeeName) as EmployeeName
-                                    FROM [ServiceCalls] sc
-                                        INNER JOIN Employees e
-                                    ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-                                        INNER JOIN Jobs j
-                                    ON sc.JobId = j.JobId
-                                        INNER JOIN Communities cm
-                                    ON j.CommunityId = cm.CommunityId
-                                        INNER JOIN Cities ci
-                                    ON cm.CityId = ci.CityId
+                const string sql = @"SELECT DISTINCT e.EmployeeId as WarrantyRepresentativeEmployeeId, e.EmployeeNumber, LOWER(e.EmployeeName) as EmployeeName from CommunityAssignments ca
+                                    INNER join Communities c
+                                    ON ca.CommunityId = c.CommunityId
+                                    INNER join Employees e
+                                    ON ca.EmployeeId = e.EmployeeId
+                                    INNER JOIN Cities ci
+                                    ON c.CityId = ci.CityId
                                     WHERE CityCode IN ({0})
-                                        AND EmployeeNumber <> ''
-                                        ORDER BY EmployeeName";
+                                    ORDER BY EmployeeName";
 
                 var result = _database.Fetch<AchievementReportModel.EmployeeTiedToRepresentative>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()));
                 return result;
