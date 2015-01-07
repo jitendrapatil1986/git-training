@@ -49,6 +49,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
         {
             const string sql = @"SELECT 
                                     wc.ServiceCallId as ServiceCallId
+                                    , ServiceCallType
                                     , Servicecallnumber as CallNumber
                                     , j.AddressLine as [Address]
                                     , j.JobId
