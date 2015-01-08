@@ -140,8 +140,8 @@ namespace Warranty.Core.Calculator
             {
 
                 const string sql =
-                    @"SELECT COALESCE(SUM(Amount), 0) as Amount, month(datePosted)MonthNumber, year(dateposted) YearNumber
-                                                                    FROM WarrantyPayments p								
+                    @"SELECT COALESCE(SUM(Amount), 0) as Amount, month(p.CreatedDate) MonthNumber, year(p.CreatedDate) YearNumber
+                                                                    FROM Payments p
                                                                         INNER JOIN Jobs j
                                                                         ON p.JobNumber = j.JobNumber
                                                                         INNER JOIN Communities c
@@ -155,10 +155,10 @@ namespace Warranty.Core.Calculator
 								                                    AND EmployeeNumber=@2
                                                                 where 
                                                                 cc.CityCode IN ({0}) AND
-								                                DatePosted >= @0
-								                                AND DatePosted < @1
-							                                    group by month(datePosted), year(dateposted)
-							                                    order by year(dateposted), month(datePosted);";
+								                                p.CreatedDate >= @0
+								                                AND p.CreatedDate < @1
+							                                    group by month(p.CreatedDate), year(p.CreatedDate)
+							                                    order by year(p.CreatedDate), month(p.CreatedDate);";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
                 return result;
@@ -341,7 +341,7 @@ namespace Warranty.Core.Calculator
 
                 const string sql =
                     @"SELECT COALESCE(SUM(Amount), 0) as Amount, month(datePosted)MonthNumber, year(dateposted) YearNumber
-                                                                    FROM WarrantyPayments p								
+                                                                    FROM Payments p								
                                                                         INNER JOIN Jobs j
                                                                         ON p.JobNumber = j.JobNumber
                                                                         INNER JOIN Communities c
@@ -357,10 +357,10 @@ namespace Warranty.Core.Calculator
 								                                    AND d.DivisionName=@2
                                                                 where 
                                                                 cc.CityCode IN ({0}) AND
-								                                DatePosted >= @0
-								                                AND DatePosted < @1
-							                                    group by month(datePosted), year(dateposted)
-							                                    order by year(dateposted), month(datePosted);";
+								                                p.CreatedDate >= @0
+								                                AND p.CreatedDate < @1
+							                                    group by month(p.CreatedDate), year(p.CreatedDate)
+							                                    order by yearp.CreatedDate), month(p.CreatedDate);";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName);
                 return result;
@@ -537,7 +537,7 @@ namespace Warranty.Core.Calculator
 
                 const string sql =
                     @"SELECT COALESCE(SUM(Amount), 0) as Amount, month(datePosted)MonthNumber, year(dateposted) YearNumber
-                                                                    FROM WarrantyPayments p								
+                                                                    FROM Payments p								
                                                                         INNER JOIN Jobs j
                                                                         ON p.JobNumber = j.JobNumber
                                                                         INNER JOIN Communities c
@@ -553,10 +553,10 @@ namespace Warranty.Core.Calculator
 								                                    AND pr.ProjectName=@2
                                                                 where 
                                                                 cc.CityCode IN ({0}) AND
-								                                DatePosted >= @0
-								                                AND DatePosted < @1
-							                                    group by month(datePosted), year(dateposted)
-							                                    order by year(dateposted), month(datePosted);";
+								                                p.CreatedDate >= @0
+								                                AND p.CreatedDate < @1
+							                                    group by month(p.CreatedDate), year(p.CreatedDate)
+							                                    order by year(p.CreatedDate), month(p.CreatedDate);";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName);
                 return result;
