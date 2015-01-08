@@ -25,16 +25,14 @@
             using (_database)
             {
                 var serviceCall = _database.SingleById<ServiceCall>(message.ServiceCallId);
-                if (serviceCall.ServiceCallStatus == ServiceCallStatus.Requested)
-                {
-                    _database.Delete(serviceCall);
-                    _bus.Send(new NotifyServiceCallDeleted
-                        {
-                            ServiceCallId = serviceCall.ServiceCallId
-                        });
-                    _activityLogger.Write("Service Call deleted", string.Empty, serviceCall.ServiceCallId,
-                                          ActivityType.ServiceCallDelete, ReferenceType.ServiceCall);
-                }
+
+                _database.Delete(serviceCall);
+                _bus.Send(new NotifyServiceCallDeleted
+                              {
+                                  ServiceCallId = serviceCall.ServiceCallId
+                              });
+                _activityLogger.Write("Service Call deleted", string.Empty, serviceCall.ServiceCallId,
+                                      ActivityType.ServiceCallDelete, ReferenceType.ServiceCall);
             }
         }
     }
