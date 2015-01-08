@@ -3,6 +3,7 @@
 @using Warranty.Core.Extensions
 @using Warranty.Core.Features.JobSummary
 @using Warranty.UI.Core.Helpers
+@using Common.Extensions
 @model JobSummaryModel
 
 <div class="container">
@@ -56,6 +57,7 @@
                         <ul class="border-bottom-1-solid">
                             <li class="clearfix">Builder: @Html.DisplayFor(x => x.BuilderName)</li>
                             <li class="clearfix">Sales: @Html.DisplayFor(x => x.SalesConsultantName)</li>
+                            <li class="clearfix">Service Rep: @Model.ServiceRepName.ToTitleCase()</li>
                             <li class="clearfix">Close Date: <span class="text-danger">@Format.DateMonthDayYear(Model.CloseDate)</span></li>
                         </ul>
                     </div>

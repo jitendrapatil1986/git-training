@@ -33,7 +33,7 @@
 
     @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallStatus, new { id = "callSummaryServiceCallStatus"})
         <section class="margin-bottom-10">
-            <h2 class="pull-left no-margin">Service Call #@Model.ServiceCallSummary.CallNumber</h2>
+            <h2 class="pull-left no-margin">@Model.ServiceCallSummary.ServiceCallTitle</h2>
 
             <div class="warranty-header-buttons no-print">
                 @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
@@ -49,9 +49,12 @@
                         <a href='#' class='btn btn-default pull-right' data-action-with-popup='reopen' data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" id='btn_complete'>Complete</a>
                     </div>
                 }
-                <div data-bind="visible: canBeDeleted()">
-                    <a href='#' data-bind="click: deleteServiceCall" class='btn btn-default pull-right' id='btn_delete'>Delete</a>
-                </div>
+                @if (Model.ServiceCallSummary.WasCreatedToday)
+                {
+                    <div data-bind="visible: canBeDeleted()">
+                        <a href='#' data-bind="click: deleteServiceCall" class='btn btn-default pull-right' id='btn_delete'>Delete</a>
+                    </div>
+                }
             </div>
             
             <div class="clearfix"></div>

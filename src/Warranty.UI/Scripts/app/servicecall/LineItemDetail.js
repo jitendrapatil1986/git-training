@@ -782,8 +782,33 @@
                         self.lineJustCompleted(false);
                     };
                     
+                    self.createPurchaseOrderClicked = ko.observable().extend({
+                        required: {
+                            onlyIf: function () {
+                                return (self.hasRootProblem() === false);
+                            },
+                            message: 'To create a PO, select a Root Problem'
+                        }
+                    });
+                    
                     self.createPurchaseOrder = function () {
+                        if(formHasErrors([self.createPurchaseOrderClicked]))
+                            return;
+                        
                         window.location.href = urls.ServiceCall.CreatePurchaseOrder + '/' + self.serviceCallLineItemId;
+                    };
+                    
+                    self.expandPaymentClicked = ko.observable().extend({
+                        required: {
+                            onlyIf: function () {
+                                return (self.hasRootProblem() === false);
+                            },
+                            message: 'To add a payment, select a Root Problem'
+                        }
+                    });
+                    
+                    self.expandPayment = function (e) {
+                        formHasErrors([self.expandPaymentClicked]);
                     };
                 }
                 

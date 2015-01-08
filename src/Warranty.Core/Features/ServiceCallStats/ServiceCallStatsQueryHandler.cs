@@ -83,7 +83,7 @@
                                 (
                                     SELECT SUM(Amount) as TotalDollarsSpent
                                          , e.EmployeeId, EmployeeName, EmployeeNumber, CityCode
-                                    FROM WarrantyPayments p
+                                    FROM Payments p
                                         INNER JOIN Jobs j
                                         ON p.JobNumber = j.JobNumber
                                         INNER JOIN Communities c
@@ -94,7 +94,7 @@
                                         ON c.CommunityId = ca.CommunityId
                                         INNER JOIN Employees e
                                         ON ca.EmployeeId = e.EmployeeId
-                                    WHERE PostingMonth = MONTH(@0) AND PostingYear = YEAR(@0)
+                                    WHERE MONTH(p.CreatedDate) = MONTH(@0) AND YEAR(p.CreatedDate) = YEAR(@0)
                                     GROUP BY e.EmployeeId, EmployeeName, EmployeeNumber, CityCode
                                 ) as b
                                 ON a.EmployeeId = b.EmployeeId

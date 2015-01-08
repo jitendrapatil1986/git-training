@@ -22,7 +22,7 @@
 
             <section class="margin-bottom-10">
                 <h2 class="no-margin">
-                    <a class="bread-crumb" href="@Url.Action("CallSummary", "ServiceCall", new { id = Model.ServiceCallId })">Service Call #@Model.ServiceCallNumber</a>
+                    <a class="bread-crumb" href="@Url.Action("CallSummary", "ServiceCall", new { id = Model.ServiceCallId })">@Model.ServiceCallTitle</a>
                     @Model.LineNumber - <span data-bind="text: problemCode"></span>
                     <div class="pull-right no-right-padding no-print">
                         <button id="btn-complete-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: completeLine, visible: !isLineItemCompleted()">Complete</button>
@@ -73,7 +73,7 @@
                             <!-- ko foreach: groupedConstructionVendors-->
                             <div class="row" data-bind="foreach: $data">
                                 <div class="col-md-4">
-                                    <div class="panel panel-default">
+                                    <div class="panel panel-default margin-bottom-15">
                                         <div class="panel-heading"><div class="panel-title"><span class="panel-title text-capitalize" data-bind="text: name + ' (' + number + ')'"></span></div></div>
                                         <div class="panel-body">
                                             <strong>Work Performed</strong>
@@ -99,13 +99,12 @@
                     <div class="clearfix"></div>
                 </section>
                 <section>
-                    <h3 class="col-md-4">POs</h3>
-                    <div class="col-md-8">
+                    <h3 class="col-md-12">POs
                         <span>
-                            <button type="button" class="btn btn-default pull-right no-print hidden-sm hidden-xs" data-bind="enable: hasRootProblem, click: createPurchaseOrder">Create PO</button>
+                            <button type="button" class="btn btn-default pull-right no-print hidden-sm hidden-xs" data-bind="click: createPurchaseOrder">Create PO</button>
                         </span>
-                        <span data-bind="visible: !hasRootProblem()" class="pull-right alert alert-warning enable-button-warning">To create a PO, select a Root Problem</span>
-                    </div>
+                    </h3>
+                    <p data-bind="validationMessage: createPurchaseOrderClicked" class="pull-right alert alert-warning enable-button-warning hidden-sm hidden-xs"></p>
                     <div class="clearfix"></div>
                     <p class="padding-left-15" data-bind="visible: allPurchaseOrders().length < 1" ><em>No Purchase Orders Available</em></p>
                     <!-- ko foreach: allPurchaseOrders -->
@@ -130,14 +129,16 @@
                     <div class="clearfix"></div>
                 </section>
                     <section>
-                        <h3 class="col-md-4">Payments</h3>
-                        <div class="col-md-8">
+                        <h3 class="col-md-12">Payments
                             <span>
-                                <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Payments" data-toggle="collapse" data-target="#addPayment" data-bind="enable: hasRootProblem"><span class="glyphicon glyphicon-plus"></span></button>
+                                <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Payments" data-toggle="collapse" data-target="#addPayment" data-bind="visible: hasRootProblem()"><span class="glyphicon glyphicon-plus"></span></button>
+                                <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Payments" data-bind="visible: !hasRootProblem(), click: expandPayment"><span class="glyphicon glyphicon-plus"></span></button>
                             </span>
-                            <span data-bind="visible: !hasRootProblem()" class="pull-right alert alert-warning enable-button-warning">To add a payment, select a Root Problem</span>
-                        </div>
-                       <div class="clearfix"></div>
+                        </h3>
+                        <p data-bind="validationMessage: expandPaymentClicked" class="pull-right alert alert-warning enable-button-warning"></p>
+                        <div class="clearfix"></div>
+                        
+
                         <div id="addPayment" class="collapse">
                             <div class="panel-body">
                                 <div class="row">
@@ -222,7 +223,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        
                         <p class="padding-left-15" data-bind="visible: allPayments().length < 1"><em>No Payments Available</em></p>
                         <div class="remove-list-style">
                             <ul data-bind="foreach: allPayments">

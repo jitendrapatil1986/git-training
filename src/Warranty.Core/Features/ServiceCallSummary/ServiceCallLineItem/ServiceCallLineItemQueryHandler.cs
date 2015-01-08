@@ -99,6 +99,7 @@
             const string sql = @"SELECT li.[ServiceCallLineItemId],
                                     li.[ServiceCallId],
                                     sc.[ServiceCallNumber],
+                                    sc.[ServiceCallType],
                                     li.[LineNumber],
                                     li.[ProblemCode],
                                     li.[ProblemDescription],
