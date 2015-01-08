@@ -1,4 +1,5 @@
-﻿@using Warranty.UI.Core.Helpers
+﻿@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.PercentSurveyRecommendWidget.PercentSurveyRecommendWidgetModel
 
 <div class="panel panel-info dashboard-widget">
@@ -7,8 +8,12 @@
     </div>
     <div class="panel-body">
         @*<a href="@Url.Action("Index", "Stats", new{id=StatView.PercentClosed.DisplayName})">*@
-            <div class="dashboard-widget-number">@Format.Percentage(Model.PercentRecommendThisMonth)</div>
-            <div class="dashboard-widget-footnote">@Format.Percentage(Model.PercentRecommendLastMonth) last month</div>
+        <div class="dashboard-widget-number">@Format.Percentage(Model.PercentRecommendThisMonth)</div>
+        <div class="dashboard-widget-previous-number">@Format.Percentage(Model.PercentRecommendLastMonth) last month</div>
+        <div class="dashboard-widget-footnote">
+            <span class="pull-left">@Month.FromValue(DateTime.Today.AddMonths(-1).Month).Abbreviation: @Model.TotalSurveysLastMonth</span>
+            <span class="pull-right">@Month.FromValue(DateTime.Today.Month).Abbreviation: @Model.TotalSurveysThisMonth</span>
+        </div>
         @*</a>*@
     </div>
 </div>
