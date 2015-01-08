@@ -33,6 +33,7 @@
                                 ORDER BY HomeOwnerName";
 
             var result = _database.Fetch<QuickSearchJobModel>(string.Format(sqlTemplate, markets.CommaSeparateWrapWithSingleQuote()), query.Query);
+            result.ForEach(x => x.HomePhone = x.HomePhone.ToPhoneNumberWithExtension());
             return result;
         }
     }

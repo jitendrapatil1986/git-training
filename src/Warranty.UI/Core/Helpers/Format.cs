@@ -358,17 +358,7 @@ namespace Warranty.UI.Core.Helpers
 
         public static string PhoneNumberWithExtension(string phoneNumber)
         {
-            if (phoneNumber.Length < 10)
-                return string.Empty;
-
-            var area = phoneNumber.Substring(0, 3);
-            var major = phoneNumber.Substring(3, 3);
-            var minor = phoneNumber.Substring(6, 4);
-            var extension = " x" + phoneNumber.Substring(10, phoneNumber.Length - 10);
-
-            var format = "({0}) {1}-{2}" + (extension.Length > 2 ? extension : string.Empty);
-
-            return string.Format(format,area,major,minor);
+            return phoneNumber.ToPhoneNumberWithExtension();
         }
 
         public static MvcHtmlString PhoneNumberOnMobile(string phoneNumber)
