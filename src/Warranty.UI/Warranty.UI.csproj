@@ -454,6 +454,7 @@
     <Content Include="Views\Home\_MyTeamDropdown.cshtml" />
     <Content Include="Views\Home\_ToDoPaymentStatusChanged.cshtml" />
     <Content Include="Views\Home\_ToDoServiceCallClosure.cshtml" />
+    <Content Include="Views\WarrantyMailer\ServiceCallCompleted.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

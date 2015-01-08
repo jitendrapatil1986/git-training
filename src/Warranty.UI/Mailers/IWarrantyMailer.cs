@@ -8,5 +8,6 @@
     {
         MvcMailMessage NewServiceCallAssignedToWsr(NewServiceCallAssignedToWsrNotificationModel model);
         MvcMailMessage ServiceCallEscalated(ServiceCallToggleEscalateCommandResult model);
+        MvcMailMessage ServiceCallCompleted(ServiceCallCompleteWsrNotificationModel model);
     }
 }

@@ -21,6 +21,8 @@ namespace Warranty.UI.Mailers
             ViewBag.CommunityName = model.CommunityName;
             ViewBag.AddressLine = model.AddressLine;
             ViewBag.Comments = model.Comments;
+            ViewBag.ServiceCallNumber = model.ServiceCallNumber;
+            ViewBag.Url = model.Url;
 
             if (!ConfigurationManager.AppSettings["sendEmailsForTest"].IsNullOrEmpty())
                 model.WarrantyRepresentativeEmployeeEmail = ConfigurationManager.AppSettings["sendEmailsForTest"];
@@ -33,6 +35,27 @@ namespace Warranty.UI.Mailers
             });
         }
 
+        public MvcMailMessage ServiceCallCompleted(ServiceCallCompleteWsrNotificationModel model)
+        {
+            ViewBag.HomeOwnerName = model.HomeOwnerName;
+            ViewBag.HomePhone = model.HomePhone;
+            ViewBag.CommunityName = model.CommunityName;
+            ViewBag.AddressLine = model.AddressLine;
+            ViewBag.Comments = model.Comments;
+            ViewBag.ServiceCallNumber = model.ServiceCallNumber;
+            ViewBag.Url = model.Url;
+
+            if (!ConfigurationManager.AppSettings["sendEmailsForTest"].IsNullOrEmpty())
+                model.WarrantyRepresentativeEmployeeEmail = ConfigurationManager.AppSettings["sendEmailsForTest"];
+
+            return Populate(x =>
+            {
+                x.Subject = string.Format("Warranty Call # {0} has been completed.", model.ServiceCallNumber);
+                x.ViewName = "ServiceCallCompleted";
+                x.To.Add(model.WarrantyRepresentativeEmployeeEmail);
+            });
+        }
+        
         public MvcMailMessage ServiceCallEscalated(ServiceCallToggleEscalateCommandResult model)
         {
             ViewBag.CallNumber = model.CallNumber;

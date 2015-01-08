@@ -1,4 +1,4 @@
-﻿Here are the details of your newly assigned Warranty Service Call:<br />
+﻿Here are the details of the Warranty Service Call that was completed:<br />
 <br />
 
 <strong>Warranty Service Call: </strong> <a href="@ViewBag.Url">@ViewBag.ServiceCallNumber</a>
@@ -9,15 +9,15 @@
 <br />
 <strong>Community: </strong>@ViewBag.CommunityName
 <br />
-<strong>Address: </strong>@ViewBag.AddressLine<br />
-
+<strong>Address: </strong>@ViewBag.AddressLine
+<br />
 @if (((List<string>)@ViewBag.Comments).Any())
 {
-    <span>Comments:</span><br />
-    <br />
-
-    foreach (var comment in @ViewBag.Comments)
+    <strong>Comments:</strong>
+    <ul>
+    @foreach (var comment in @ViewBag.Comments)
     {
-        <p>@comment</p>
+        <li>@comment</li>
     }
+    </ul>
 }
