@@ -29,6 +29,7 @@ namespace Warranty.Core.Features.JobSummary
         public Guid? SalesConsultantEmployeeId { get; set; }
         public string SalesConsultantName { get; set; }
         public DateTime? WarrantyExpirationDate { get; set; }
+        public string ServiceRepName { get; set; }
         public bool DoNotContact { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string CreatedBy { get; set; }

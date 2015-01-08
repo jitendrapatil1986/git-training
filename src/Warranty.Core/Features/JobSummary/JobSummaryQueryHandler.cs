@@ -112,6 +112,7 @@ namespace Warranty.Core.Features.JobSummary
                                 ,se.EmployeeName as SalesConsultantName
                                 , DATEDIFF(yy, j.CloseDate, getdate()) as YearsWithinWarranty
                                 , j.CloseDate as WarrantyStartDate
+                                , wsr.EmployeeName as ServiceRepName
                             FROM Jobs j
                             INNER JOIN HomeOwners ho
                             ON j.JobId = ho.JobId
@@ -119,6 +120,10 @@ namespace Warranty.Core.Features.JobSummary
                             ON j.BuilderEmployeeId = be.EmployeeId
                             LEFT JOIN Employees se
                             ON j.SalesConsultantEmployeeId = se.EmployeeId
+                            LEFT OUTER JOIN CommunityAssignments ca
+                            ON j.CommunityId = ca.CommunityId
+                            LEFT OUTER JOIN Employees wsr
+                            ON ca.EmployeeId = wsr.EmployeeId
                             WHERE j.JobId = @0
                             ORDER BY ho.HomeownerNumber DESC";
 
