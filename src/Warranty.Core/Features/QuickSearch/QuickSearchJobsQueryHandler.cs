@@ -29,9 +29,7 @@
                                 ON j.CommunityId = c.CommunityId
                                 INNER JOIN Cities m
                                 ON c.CityId = m.CityId
-                                WHERE CityCode IN ({0}) AND 
-                                JobNumber+AddressLine+ISNULL(HomeOwnerName, '')+ REPLACE(REPLACE(REPLACE(REPLACE(ISNULL(HomePhone, ''), ')', ''), '(', ''), ' ', ''),'-','') + ISNULL(EmailAddress, '')  LIKE '%'+ @0 +'%' OR 
-                                JobNumber+AddressLine+ISNULL(HomeOwnerName, '')+ REPLACE(REPLACE(REPLACE(REPLACE(ISNULL(HomePhone, ''), ')', ''), '(', ''), ' ', ''),'-','') + ISNULL(EmailAddress, '')  LIKE '%'+ REPLACE(REPLACE(REPLACE(REPLACE('%'+ @0 +'%', ')', ''), '(', ''), ' ', ''),'-','') +'%'
+                                WHERE CityCode IN ({0}) AND JobNumber+AddressLine+ISNULL(HomeOwnerName, '')+ HomePhone + ISNULL(EmailAddress, '')  LIKE '%'+ @0 +'%' 
                                 ORDER BY HomeOwnerName";
 
             var result = _database.Fetch<QuickSearchJobModel>(string.Format(sqlTemplate, markets.CommaSeparateWrapWithSingleQuote()), query.Query);
