@@ -5,7 +5,7 @@
     Layout = null;
 }
 
-@if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+@if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
 {
     <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Team <b class="caret"></b></a>
