@@ -276,16 +276,17 @@ namespace Warranty.Core.Features.JobSummary
 
         private IEnumerable<JobSummaryModel.Vendor> GetJobVendors(Guid jobId)
         {
+            const string emailIdentifier = "E-mail";
             const string sql = @"SELECT v.VendorId, v.Number, v.Name, ci.Value, ci.Type, jbcc.CostCode, jbcc.CostCodeDescription FROM Vendors v
                                 INNER JOIN (SELECT VendorId, number as Value, Type as Type FROM VendorPhones WHERE number IS NOT NULL OR LTRIM(RTRIM(number)) <> ''
                                     UNION
-                                    SELECT VendorId, email as Value, 'E-mail' as Type FROM VendorEmails  WHERE LTRIM(RTRIM(email)) <> '') as ci
+                                    SELECT VendorId, email as Value, '{0}' as Type FROM VendorEmails  WHERE LTRIM(RTRIM(email)) <> '') as ci
                                     on v.vendorid = ci.vendorid
                                 INNER JOIN JobVendorCostCodes jbcc
                                 ON jbcc.VendorId = v.VendorId
                                 AND jbcc.JobId = @0";
 
-            var result = _database.Fetch<VendorDto>(sql, jobId).ToList();
+            var result = _database.Fetch<VendorDto>(string.Format(sql, emailIdentifier), jobId).ToList();
 
             var vendors =
             result.Select(x => new JobSummaryModel.Vendor
@@ -304,7 +305,7 @@ namespace Warranty.Core.Features.JobSummary
                 result.Where(v => v.VendorId == x.VendorId)
                                               .Select(cc => new JobSummaryModel.Vendor.ContactInfoModel()
                                               {
-                                                  Value = cc.Value,
+                                                  Value = cc.Type != emailIdentifier ? cc.Value.CleanPhoneNumber().ToPhoneNumberWithExtension():cc.Value,
                                                   Type = cc.Type
                                               }).Distinct().OrderBy(ob => ob.Value).ToList()
             }).Distinct().OrderBy(x => x.Name).ToList();
