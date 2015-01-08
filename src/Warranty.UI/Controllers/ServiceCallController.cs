@@ -99,7 +99,7 @@ namespace Warranty.UI.Controllers
             if (ModelState.IsValid)
             {
                 var newCallId = _mediator.Send(new CreateServiceCallCommand { JobId = model.JobId });
-                if (_userSession.GetCurrentUser().IsInRole(UserRoles.WarrantyServiceManager) || _userSession.GetCurrentUser().IsInRole(UserRoles.WarrantyServiceCoordinator))
+                if (_userSession.GetCurrentUser().IsInRole(UserRoles.CustomerCareManager) || _userSession.GetCurrentUser().IsInRole(UserRoles.WarrantyServiceCoordinator))
                 { 
                     var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery { ServiceCallId = newCallId });
                     if (notificationModel.WarrantyRepresentativeEmployeeEmail != null)

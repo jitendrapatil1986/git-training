@@ -28,8 +28,8 @@
             model.ProblemCodes = SharedQueries.ProblemCodes.GetProblemCodeList(_database);
             model.ServiceCallLineItemPayments = GetServiceCallLinePayments(query.ServiceCallLineItemId);
             model.ServiceCallLineItemPurchaseOrders = GetServiceCallLinePurchaseOrders(query.ServiceCallLineItemId);
-            model.CanReopenLines = user.IsInRole(UserRoles.WarrantyServiceManager) || user.IsInRole(UserRoles.WarrantyServiceCoordinator);
-            model.CanTakeActionOnPayments = user.IsInRole(UserRoles.WarrantyServiceManager);
+            model.CanReopenLines = user.IsInRole(UserRoles.CustomerCareManager) || user.IsInRole(UserRoles.WarrantyServiceCoordinator);
+            model.CanTakeActionOnPayments = user.IsInRole(UserRoles.CustomerCareManager);
             model.Vendors = GetLineItemVendors(query.ServiceCallLineItemId);
 
             return model;

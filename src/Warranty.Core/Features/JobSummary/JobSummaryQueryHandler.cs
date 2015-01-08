@@ -176,7 +176,7 @@ namespace Warranty.Core.Features.JobSummary
             result.ForEach(x =>
             {
                 x.CanApprove = user.IsInRole(UserRoles.WarrantyServiceCoordinator) ||
-                               user.IsInRole(UserRoles.WarrantyServiceManager);
+                               user.IsInRole(UserRoles.CustomerCareManager);
             });
 
             return result;

@@ -36,7 +36,7 @@
             <h2 class="pull-left no-margin">@Model.ServiceCallSummary.ServiceCallTitle</h2>
 
             <div class="warranty-header-buttons no-print">
-                @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
                 {
                     <div data-bind="visible: callSummaryStatusOpen()">
                         @Format.ServiceCallToggleButton("escalate", Model.ServiceCallSummary.IsEscalated, "Escalate", "De-escalate")
@@ -146,7 +146,7 @@
                 </div>
             </section>
                 
-            @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+            @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
             {
                 <section data-bind="visible: areAllLineItemsCompleted() && !callSummaryStatusComplete() && !callSummaryStatusSigned()">
                     <h3 class="col-md-12">Verify Homeowner Signature</h3>
@@ -296,7 +296,7 @@
                         <ul data-bind="foreach: allAttachments">
                             <li>
                                 <a class="attached-file" data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "ServiceCall")/' + serviceCallAttachmentId}">
-                                    @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                                    @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
                                     {
                                         <span data-url="" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "ServiceCall")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
                                     }
@@ -348,7 +348,7 @@
         </div>
 </div>
 </div>
-@if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+@if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
 {
     @Format.ActionwithPopup("special_project", @Url.Action("ToggleSpecialProject", "ServiceCall"), Model.ServiceCallSummary.ServiceCallId)
     @Format.ActionwithPopup("escalate", @Url.Action("ToggleEscalate", "ServiceCall"), Model.ServiceCallSummary.ServiceCallId)

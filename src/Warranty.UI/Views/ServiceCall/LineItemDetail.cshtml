@@ -363,7 +363,7 @@
                         <ul data-bind="foreach: allAttachments">
                             <li>
                                 <a class="attached-file" data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "ServiceCall")/' + serviceCallAttachmentId}">
-                                    @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                                    @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
                                     {
                                         <span data-url="" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "ServiceCall")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
                                     }

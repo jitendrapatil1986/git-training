@@ -26,7 +26,7 @@ namespace Warranty.Core.Features.CreateServiceCall
             var user = _userSession.GetCurrentUser();
 
             var status = ServiceCallStatus.Requested;
-            if (user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager))
+            if (user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.CustomerCareManager))
             {
                 status = ServiceCallStatus.Open;
             }

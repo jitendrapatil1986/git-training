@@ -128,7 +128,7 @@
         {
             var result = new List<WarrantyBonusSummaryModel.EmployeeTiedToRepresentative>();
 
-            if (user.IsInRole(UserRoles.WarrantyServiceManager) || user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyAdmin))
+            if (user.IsInRole(UserRoles.CustomerCareManager) || user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyAdmin))
             {
                 const string sql = @"SELECT DISTINCT e.EmployeeId as WarrantyRepresentativeEmployeeId, e.EmployeeNumber, LOWER(e.EmployeeName) as EmployeeName from CommunityAssignments ca
                                     INNER join Communities c
