@@ -22,9 +22,9 @@
                 @foreach (var item in NavHeaderItem.GetAll(key))
                 {
                     if( 
-                        (key == NavHeaderItem.Reports.Key && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))) ||
+                        (key == NavHeaderItem.Reports.Key && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) ||
                         (key == NavHeaderItem.Reports.Key && item.Value == NavHeaderItem.MailMergeReport.Value && User.IsInRole(UserRoles.WarrantyServiceRepresentative)) ||
-                        (item.Value != NavHeaderItem.ManageCostCode.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))) || 
+                        (item.Value != NavHeaderItem.ManageCostCode.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) || 
                         (item.Value == NavHeaderItem.ManageCostCode.Value && User.IsInRole(UserRoles.WarrantyAdmin))
                         )
                     {
@@ -103,7 +103,7 @@
                     <li class="divider divider-vertical hidden-xs"></li>
                     @NavItemSectionHelper(NavHeaderItem.Reports.Key)
                     <li class="divider divider-vertical hidden-xs"></li>
-                    @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager) || User.IsInRole(UserRoles.WarrantyAdmin))
+                    @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager) || User.IsInRole(UserRoles.WarrantyAdmin))
                     {
                         @NavItemSectionHelper(NavHeaderItem.Administration.Key)
                         <li class="divider divider-vertical hidden-xs"></li>

@@ -16,7 +16,7 @@
             <div class="pull-right">
                 @using (Html.BeginForm("Create", "ServiceCall", new {id = Model.JobId}))
                 {
-                    if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                    if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
                     {
                         @Html.ActionLink("Change Homeowner", "ChangeHomeowner", "Job", new { id = Model.JobId }, new { @class = "btn btn-default margin-right-10" })
                     }
@@ -196,7 +196,7 @@
                                 <ul data-bind="foreach: allJobAttachments">
                                     <li>
                                         <a class="attached-file" data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "Job")/' + jobAttachmentId}">
-                                        @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                                        @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
                                         {
                                             <span data-url="" data-bind="attr: { 'data-attachment-id': jobAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "Job")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
                                         }

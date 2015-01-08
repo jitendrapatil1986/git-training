@@ -10,6 +10,7 @@
 
 <div style="display: none;" data-bind="visible: true">
     <div class="container">
+        <div class="col-md-12">
             @Html.HiddenFor(model => model.ServiceCallLineItemStatus, new { id = "lineItemStatus" })
 
             @Html.HiddenFor(model => model.CanReopenLines, new { id = "userCanReopenCallLinesAnytime", @class = "form-control", data_bind = "value: userCanAlwaysReopenCallLines" })
@@ -36,40 +37,40 @@
             </section>
             <div id="serviceCallLineItemDetailPage">
                 <div class="panel panel-default">
-                <div class="panel-heading">
-                    <p class="panel-title text-capitalize margin-bottom-10 main-info">
-                        <strong>Status: </strong><span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
-                    </p>
-                    <p class="view margin-bottom-20" data-bind="text: problemDescription"></p>
-                    <p></p>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="control-group" data-bind="validationElement: rootProblemId, visible: !isLineItemCompleted()">
-                                <label class="control-label" for="rootProblemId">Root Problem</label>
-                                <select id="rootProblemId" class="form-control" data-bind="options: rootProblemCodes, value: rootProblemId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Root Problem'"></select>
+                    <div class="panel-heading">
+                        <p class="panel-title text-capitalize margin-bottom-10 main-info">
+                            <strong>Status: </strong><span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
+                        </p>
+                        <p class="view margin-bottom-20" data-bind="text: problemDescription"></p>
+                        <p></p>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="control-group" data-bind="validationElement: rootProblemId, visible: !isLineItemCompleted()">
+                                    <label class="control-label" for="rootProblemId">Root Problem</label>
+                                    <select id="rootProblemId" class="form-control" data-bind="options: rootProblemCodes, value: rootProblemId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Root Problem'"></select>
+                                </div>
+                                <div class="form-group no-margin" data-bind="visible: isLineItemCompleted()">
+                                    <label class="control-label">Root Problem</label>
+                                    <p class="form-control-static" data-bind="text: rootProblem"></p>
+                                </div>
                             </div>
-                            <div class="form-group no-margin" data-bind="visible: isLineItemCompleted()">
-                                <label class="control-label">Root Problem</label>
-                                <p class="form-control-static" data-bind="text: rootProblem"></p>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="control-group" data-bind="validationElement: rootCauseId, visible: !isLineItemCompleted()">
-                                <label class="control-label" for="rootCauseId">Root Cause</label>
-                                <select id="rootCauseId" class="form-control" data-bind="options: rootCauseCodes, value: rootCauseId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Root Cause'"></select>
-                            </div>
-                            <div class="form-group no-margin" data-bind="visible: isLineItemCompleted()">
-                                <label class="control-label">Root Cause</label>
-                                <p class="form-control-static" data-bind="text: rootCause"></p>
+                            <div class="col-md-3">
+                                <div class="control-group" data-bind="validationElement: rootCauseId, visible: !isLineItemCompleted()">
+                                    <label class="control-label" for="rootCauseId">Root Cause</label>
+                                    <select id="rootCauseId" class="form-control" data-bind="options: rootCauseCodes, value: rootCauseId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Root Cause'"></select>
+                                </div>
+                                <div class="form-group no-margin" data-bind="visible: isLineItemCompleted()">
+                                    <label class="control-label">Root Cause</label>
+                                    <p class="form-control-static" data-bind="text: rootCause"></p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <section>
-                    <h3 class="col-md-12">Vendors</h3>
-                    <p class="padding-left-15" data-bind="visible: constructionVendors.length < 1"><em>No Vendors Found</em></p>
-                    <div class="col-md-12">
+                    <section>
+                        <h3 class="col-md-12">Vendors</h3>
+                        <p class="padding-left-15" data-bind="visible: constructionVendors.length < 1"><em>No Vendors Found</em></p>
+                        <div class="col-md-12">
                             <!-- ko foreach: groupedConstructionVendors-->
                             <div class="row" data-bind="foreach: $data">
                                 <div class="col-md-4">
@@ -95,20 +96,20 @@
                                 </div>
                             </div>
                             <!-- /ko -->
-                    </div>
-                    <div class="clearfix"></div>
-                </section>
-                <section>
-                    <h3 class="col-md-12">POs
-                        <span>
-                            <button type="button" class="btn btn-default pull-right no-print hidden-sm hidden-xs" data-bind="click: createPurchaseOrder">Create PO</button>
-                        </span>
-                    </h3>
-                    <p data-bind="validationMessage: createPurchaseOrderClicked" class="pull-right alert alert-warning enable-button-warning hidden-sm hidden-xs"></p>
-                    <div class="clearfix"></div>
-                    <p class="padding-left-15" data-bind="visible: allPurchaseOrders().length < 1" ><em>No Purchase Orders Available</em></p>
-                    <!-- ko foreach: allPurchaseOrders -->
-                    <div class="row service-call-line">
+                        </div>
+                        <div class="clearfix"></div>
+                    </section>
+                    <section>
+                        <h3 class="col-md-12">POs
+                            <span>
+                                <button type="button" class="btn btn-default pull-right no-print hidden-sm hidden-xs" data-bind="click: createPurchaseOrder">Create PO</button>
+                            </span>
+                        </h3>
+                        <p data-bind="validationMessage: createPurchaseOrderClicked" class="pull-right alert alert-warning enable-button-warning hidden-sm hidden-xs"></p>
+                        <div class="clearfix"></div>
+                        <p class="padding-left-15" data-bind="visible: allPurchaseOrders().length < 1" ><em>No Purchase Orders Available</em></p>
+                        <!-- ko foreach: allPurchaseOrders -->
+                        <div class="row service-call-line">
                             <div class="col-md-4">
                                 <strong><span data-bind="text: vendorName"></span></strong>
                                 <br/>
@@ -124,10 +125,10 @@
                             <div class="col-md-1">
                                 <h4 data-bind="currency: totalCost"></h4>
                             </div>
-                    </div>
-                    <!-- /ko -->
-                    <div class="clearfix"></div>
-                </section>
+                        </div>
+                        <!-- /ko -->
+                        <div class="clearfix"></div>
+                    </section>
                     <section>
                         <h3 class="col-md-12">Payments
                             <span>
@@ -335,84 +336,85 @@
                     </section>
                 </div>
                 <div class="panel panel-default">
-                <section>
-                    <h3 class="col-md-12">Attachments
-                        <span>
-                            <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Attachments" data-toggle="collapse" data-target="#addAttachment"><span class="glyphicon glyphicon-plus"></span></button>
-                        </span>
-                    </h3>
-                    <div id="addAttachment" class="collapse">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    @using (Html.BeginForm("UploadAttachment", "ServiceCall"))
-                                    {
-                                        @Html.HiddenFor(x => Model.ServiceCallId, new { @Name = "ServiceCallId" })
-                                        @Html.HiddenFor(x => Model.ServiceCallLineItemId, new { @Name = "ServiceCallLineItemId" })
-                                        @Html.EditorFor(x => x.TempFiles)
-                                        <input type="submit" class="btn btn-primary trigger-file-uploader" value="Add" />
-                                        <button class="btn btn-link" data-toggle="collapse" data-target="#addAttachment">Cancel</button>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="padding-left-15" data-bind="visible: allAttachments().length < 1"><em>No Attachments Available</em></p>
-                    <div class="remove-list-style attachments row">
-                        <div class="clearfix"></div>
-                        <ul data-bind="foreach: allAttachments">
-                            <li>
-                                <a class="attached-file" data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "ServiceCall")/' + serviceCallAttachmentId}">
-                                    @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
-                                    {
-                                        <span data-url="" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "ServiceCall")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
-                                    }
-                                    <span class="download-attachment glyphicon glyphicon-file"></span>
-                                </a>
-                                <a href="#" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId}, editable: displayName, editableOptions: { pk: serviceCallAttachmentId, url: '@Url.Action("RenameAttachment", "ServiceCall")    '}"  class="attached-file-display-name"></a>
-                                <br />
-                                <p data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></p>
-                            </li>
-                        </ul>
-                    </div>
-                </section>
-
-                <section>
-                    <h3 class="col-md-12">Notes
-                        <span>
-                            <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Note" data-toggle="collapse" data-target="#addCallNote"><span class="glyphicon glyphicon-plus"></span></button>
-                        </span>
-                    </h3>
-                    <div class="clearfix"></div>
-                    <div id="addCallNote" class="collapse">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="control-group" data-bind="validationElement: noteDescriptionToAdd">
-                                        @Html.TextArea("Description", null, new { id = "addCallNoteDescription", @class = "form-control", data_bind = "text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
+                    <section>
+                        <h3 class="col-md-12">Attachments
+                            <span>
+                                <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Attachments" data-toggle="collapse" data-target="#addAttachment"><span class="glyphicon glyphicon-plus"></span></button>
+                            </span>
+                        </h3>
+                        <div id="addAttachment" class="collapse">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @using (Html.BeginForm("UploadAttachment", "ServiceCall"))
+                                        {
+                                            @Html.HiddenFor(x => Model.ServiceCallId, new { @Name = "ServiceCallId" })
+                                            @Html.HiddenFor(x => Model.ServiceCallLineItemId, new { @Name = "ServiceCallLineItemId" })
+                                            @Html.EditorFor(x => x.TempFiles)
+                                            <input type="submit" class="btn btn-primary trigger-file-uploader" value="Add" />
+                                            <button class="btn btn-link" data-toggle="collapse" data-target="#addAttachment">Cancel</button>
+                                        }
                                     </div>
                                 </div>
                             </div>
-                            <br />
-                            <div class="form-submit">
-                                <button class="btn btn-primary" data-bind="click: addCallNote">Add</button>
-                                <button class="btn btn-link" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</button>
-                            </div>
                         </div>
-                    </div>
-                    <p class="padding-left-15" data-bind="visible: allCallNotes().length < 1"><em>No Notes Available</em></p>
-                            <div data-bind="foreach: allCallNotes">
-                                <div id="allServiceCallNotes" class="service-call-line">
-                                                <div class="margin-bottom-5">
-                                                        <strong><small><span data-bind="text: createdBy"></span></small></strong>
-                                                        <small><span data-bind="text: moment(createdDate).format('L')"></span></small>
-                                                </div>
-                                               <p data-bind="text: note"></p>
+                        <p class="padding-left-15" data-bind="visible: allAttachments().length < 1"><em>No Attachments Available</em></p>
+                        <div class="remove-list-style attachments row">
+                            <div class="clearfix"></div>
+                            <ul data-bind="foreach: allAttachments">
+                                <li>
+                                    <a class="attached-file" data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "ServiceCall")/' + serviceCallAttachmentId}">
+                                        @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
+                                        {
+                                            <span data-url="" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "ServiceCall")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
+                                        }
+                                        <span class="download-attachment glyphicon glyphicon-file"></span>
+                                    </a>
+                                    <a href="#" data-bind="attr: { 'data-attachment-id': serviceCallAttachmentId}, editable: displayName, editableOptions: { pk: serviceCallAttachmentId, url: '@Url.Action("RenameAttachment", "ServiceCall")    '}"  class="attached-file-display-name"></a>
+                                    <br />
+                                    <p data-bind="text: createdBy + ' on ' + moment(createdDate).format('L'), css: 'attachment-info'"></p>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3 class="col-md-12">Notes
+                            <span>
+                                <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Note" data-toggle="collapse" data-target="#addCallNote"><span class="glyphicon glyphicon-plus"></span></button>
+                            </span>
+                        </h3>
+                        <div class="clearfix"></div>
+                        <div id="addCallNote" class="collapse">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="control-group" data-bind="validationElement: noteDescriptionToAdd">
+                                            @Html.TextArea("Description", null, new { id = "addCallNoteDescription", @class = "form-control", data_bind = "text: noteDescriptionToAdd, value: noteDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add note'}", @rows = 3 })
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="form-submit">
+                                    <button class="btn btn-primary" data-bind="click: addCallNote">Add</button>
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addCallNote" data-bind="click: cancelCallNote">Cancel</button>
                                 </div>
                             </div>
-                </section>
+                        </div>
+                        <p class="padding-left-15" data-bind="visible: allCallNotes().length < 1"><em>No Notes Available</em></p>
+                        <div data-bind="foreach: allCallNotes">
+                            <div id="allServiceCallNotes" class="service-call-line">
+                                <div class="margin-bottom-5">
+                                    <strong><small><span data-bind="text: createdBy"></span></small></strong>
+                                    <small><span data-bind="text: moment(createdDate).format('L')"></span></small>
+                                </div>
+                                <p data-bind="text: note"></p>
+                            </div>
+                        </div>
+                    </section>
                 </div>
-            </div>     
+            </div>
+        </div>
     </div>
 </div>
 <div data-bind="foreach: allPayments">
