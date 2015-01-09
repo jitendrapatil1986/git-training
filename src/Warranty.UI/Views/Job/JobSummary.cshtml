@@ -87,11 +87,9 @@
                             else
                             {
                                 var sc = (JobSummaryModel.JobServiceCall)line;
-                                <div class="service-call-line col-md-12">
+                                <div class="service-call-line col-md-12" onclick="location.href='@Url.Action("CallSummary", "ServiceCall", new { id = sc.ServiceCallId })'">
                                     <div class="col-md-1">
-                                        <small class="text-muted">
-                                            @Html.ActionLink(sc.CallNumber, "CallSummary", "ServiceCall", new { id = sc.ServiceCallId }, null)
-                                        </small>
+                                        <small class="text-muted">@sc.CallNumber</small>
                                     </div>
                                     <div class="col-md-7 text-capitalize small">
                                         @if (sc.NumberOfLineItems > 0)
