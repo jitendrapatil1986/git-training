@@ -6,7 +6,8 @@
     using Enumerations;
     using NPoco;
     using Security;
-    using Extensions;
+    using Common.Extensions;
+    
 
     public class ServiceCallStatsQueryHandler : IQueryHandler<ServiceCallStatsQuery, ServiceCallStatsModel>
     {
@@ -122,7 +123,10 @@
             var additionalWhereClause = isEmployeeSpecific ? " AND a.EmployeeNumber = '" + user.EmployeeNumber + "'" : "";
             var completedSql = string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote(), defaultView.OrderByColumnName, defaultView.SortOrder, additionalWhereClause);
 
-            return _database.Fetch<ServiceCallStatsModel.LineItem>(completedSql, date, -2);
+            var model = _database.Fetch<ServiceCallStatsModel.LineItem>(completedSql, date, -2);
+            model.ForEach(x => x.EmployeeName = x.EmployeeName.ToTitleCase());
+
+            return model;
         }
     }
 }
