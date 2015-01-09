@@ -9,15 +9,18 @@
 <br />
 <strong>Community: </strong>@ViewBag.CommunityName
 <br />
-<strong>Address: </strong>@ViewBag.AddressLine<br />
-
+<strong>Address: </strong>@ViewBag.AddressLine
+<br />
 @if (((List<string>)@ViewBag.Comments).Any())
 {
-    <span>Comments:</span><br />
-    <br />
-
-    foreach (var comment in @ViewBag.Comments)
+    <strong>Comments:</strong>
+    <ul>
+    @foreach (var comment in @ViewBag.Comments)
     {
-        <p>@comment</p>
+        if (!String.IsNullOrEmpty(comment))
+        {
+            <li>@comment</li>
+        }
     }
+    </ul>
 }

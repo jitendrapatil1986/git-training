@@ -17,7 +17,10 @@
     <ul>
     @foreach (var comment in @ViewBag.Comments)
     {
-        <li>@comment</li>
+        if (!String.IsNullOrEmpty(comment))
+        {
+            <li>@comment</li>
+        }
     }
     </ul>
 }
