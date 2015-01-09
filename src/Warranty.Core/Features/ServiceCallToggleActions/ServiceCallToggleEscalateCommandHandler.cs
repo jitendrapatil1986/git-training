@@ -47,13 +47,37 @@ namespace Warranty.Core.Features.ServiceCallToggleActions
 
                 var emails = GetEmails(serviceCall);
 
-                return new ServiceCallToggleEscalateCommandResult
-                    {
-                        CallNumber = serviceCall.ServiceCallNumber,
-                        IsEscalated = serviceCall.IsEscalated,
-                        Emails = emails,
-                        ShouldSendEmail = emails.Any()
-                    };
+                const string sql = @"SELECT ServiceCallId
+                            , ServiceCallNumber as CallNumber
+                            , WarrantyRepresentativeEmployeeId
+                            , ho.HomeOwnerName 
+                            , ho.HomePhone
+                            , c.CommunityName
+                            , j.AddressLine     
+                            , e.EmployeeNumber     
+                          FROM ServiceCalls sc
+                          INNER JOIN Jobs j
+                            ON sc.JobId = j.JobId
+                          INNER JOIN communities c
+                            ON c.CommunityId = j.CommunityId
+                          INNER JOIN HomeOwners ho
+                            ON j.CurrentHomeOwnerId = ho.HomeOwnerId
+                          LEFT OUTER JOIN Employees e
+                            ON e.EmployeeId = sc.WarrantyRepresentativeEmployeeId 
+                          WHERE sc.ServiceCallId = @0";
+
+                var model = _database.SingleOrDefault<ServiceCallToggleEscalateCommandResult>(sql, serviceCall.ServiceCallId);
+                model.IsEscalated = serviceCall.IsEscalated;
+                model.Emails = emails;
+                model.ShouldSendEmail = emails.Any();
+
+                const string sqlcomments = @"SELECT ServiceCallNote 
+                                             FROM ServiceCallNotes 
+                                             WHERE ServiceCallId = @0";
+
+                model.Comments = _database.Fetch<string>(sqlcomments, serviceCall.ServiceCallId);
+
+                return model;
             }
         }
 
