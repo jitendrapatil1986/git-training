@@ -156,7 +156,7 @@
                                         @Html.Label("Amount", new { @class = "control-label", @for = "amount" })
                                         <div class="input-group">
                                             <span class="input-group-addon">$</span>
-                                            <input type="text" class="form-control numeric" data-bind="value: amount" id="amount" />
+                                            <input type="text" class="form-control numeric" data-bind="value: amount, valueUpdate: 'blur'" id="amount" />
                                         </div>
                                         <span data-bind="validationMessage: amount" class="help-block"></span>
                                     </div>
@@ -183,7 +183,7 @@
                                             @Html.Label("Backcharge amount", new { @class = "control-label", @for = "backchargeAmount" })
                                             <div class="input-group">
                                                 <span class="input-group-addon">$</span>
-                                                <input type="text" class="form-control numeric" data-bind="value: backchargeAmount" id="backchargeAmount" />
+                                                <input type="text" class="form-control numeric" data-bind="value: backchargeAmount, valueUpdate: 'blur'" id="backchargeAmount" />
                                             </div>
                                             <span data-bind="validationMessage: backchargeAmount" class="help-block"></span>
                                         </div>
