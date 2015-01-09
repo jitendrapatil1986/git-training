@@ -58,7 +58,12 @@ namespace Warranty.UI.Mailers
         
         public MvcMailMessage ServiceCallEscalated(ServiceCallToggleEscalateCommandResult model)
         {
-            ViewBag.CallNumber = model.CallNumber;
+            ViewBag.HomeOwnerName = model.HomeOwnerName;
+            ViewBag.HomePhone = model.HomePhone;
+            ViewBag.CommunityName = model.CommunityName;
+            ViewBag.AddressLine = model.AddressLine;
+            ViewBag.Comments = model.Comments;
+            ViewBag.ServiceCallNumber = model.CallNumber;
             ViewBag.Url = model.Url;
 
             if (!ConfigurationManager.AppSettings["sendEmailsForTest"].IsNullOrEmpty())
