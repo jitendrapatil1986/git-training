@@ -13,6 +13,7 @@
             public string AddressLine { get; set; }
             public string City { get; set; }
             public string StateCode { get; set; }
+            public string PostalCode { get; set; }
             public string HomePhone { get; set; }
             public string CommunityName { get; set; }
             public string CloseDate { get; set; }
