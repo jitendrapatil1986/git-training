@@ -1,8 +1,7 @@
 ﻿using System.Linq;
 using NPoco;
-using Warranty.Core.Entities;
-using Warranty.Core.Extensions;
 using Warranty.Core.Security;
+using Common.Extensions;
 
 namespace Warranty.Core.Features.AssignWSRs
 {
@@ -44,6 +43,7 @@ namespace Warranty.Core.Features.AssignWSRs
                                          ORDER BY CommunityName";
 
                     var communities = _database.FetchOneToMany<AssignWSRsModel.Community, AssignedEmployee>(x => x.Id, sql, marketList);
+                    communities.ForEach(x => x.Employees.ForEach(y => y.Name = y.Name.ToTitleCase()));
 
                     model.Communities = communities.OrderBy(x => x.IsAssigned).ThenBy(x => x.Name).ToList();
                 }
