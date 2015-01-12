@@ -38,7 +38,7 @@
                             <li>@Html.DisplayFor(x => x.AddressLine)</li>
                             <li>@Model.City, @Model.StateCode @Model.PostalCode</li>
                             <li>
-                                @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.HomePhone, Url.Action("AddOrUpdatePhoneNumber", "Homeowner"), Model.HomeownerId)
+                                @Format.EditablePhoneNumber(PhoneNumberType.Home, Format.PhoneNumberWithExtension(Model.HomePhone), Url.Action("AddOrUpdatePhoneNumber", "Homeowner"), Model.HomeownerId)
                             </li>
                             <li>
                                 @Format.EditableEmailForJob(Model.EmailAddress, Url.Action("AddOrUpdateEmail", "Homeowner"), Model.HomeownerId)

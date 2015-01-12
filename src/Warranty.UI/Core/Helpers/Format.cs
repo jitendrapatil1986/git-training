@@ -356,6 +356,11 @@ namespace Warranty.UI.Core.Helpers
             return MvcHtmlString.Create("<span class=\"glyphicon glyphicon-earphone text-muted\"></span> " + phoneNumber);
         }
 
+        public static string PhoneNumberWithExtension(string phoneNumber)
+        {
+            return phoneNumber.ToPhoneNumberWithExtension();
+        }
+
         public static MvcHtmlString PhoneNumberOnMobile(string phoneNumber)
         {
             if (string.IsNullOrWhiteSpace(phoneNumber))
