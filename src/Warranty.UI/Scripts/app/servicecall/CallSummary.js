@@ -621,7 +621,7 @@ require(['/Scripts/app/main.js'], function () {
                                     toastr.success("Success! Service Call deleted.");
                                 })
                                 .done(function(response) {
-                                    window.location = urls.Home.Index;
+                                    window.location = urls.Job.JobSummary + '/' + modelData.jobId;
                                 });
                         }
                     });
