@@ -376,7 +376,8 @@
                 escalationDate: @Html.Raw(Model.ServiceCallSummary.EscalationDate.ToJson()),
                 canBeReopened: @Model.ServiceCallSummary.CanBeReopened.ToJson(),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
-                saveAdditionalContactsUrl: '@Url.Action("SaveAdditionalContacts","Homeowner")'
+                saveAdditionalContactsUrl: '@Url.Action("SaveAdditionalContacts","Homeowner")',
+                jobId: @Html.Raw(Model.ServiceCallSummary.JobId.ToJson()),
             }
         });
 
