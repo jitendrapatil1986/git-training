@@ -340,7 +340,7 @@ namespace Warranty.Core.Calculator
             {
 
                 const string sql =
-                    @"SELECT COALESCE(SUM(Amount), 0) as Amount, month(datePosted)MonthNumber, year(dateposted) YearNumber
+                    @"SELECT COALESCE(SUM(Amount), 0) as Amount, month(p.CreatedDate)MonthNumber, year(p.CreatedDate) YearNumber
                                                                     FROM Payments p								
                                                                         INNER JOIN Jobs j
                                                                         ON p.JobNumber = j.JobNumber
@@ -360,7 +360,7 @@ namespace Warranty.Core.Calculator
 								                                p.CreatedDate >= @0
 								                                AND p.CreatedDate < @1
 							                                    group by month(p.CreatedDate), year(p.CreatedDate)
-							                                    order by yearp.CreatedDate), month(p.CreatedDate);";
+							                                    order by year(p.CreatedDate), month(p.CreatedDate);";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName);
                 return result;
@@ -536,7 +536,7 @@ namespace Warranty.Core.Calculator
             {
 
                 const string sql =
-                    @"SELECT COALESCE(SUM(Amount), 0) as Amount, month(datePosted)MonthNumber, year(dateposted) YearNumber
+                    @"SELECT COALESCE(SUM(Amount), 0) as Amount, month(p.CreatedDate)MonthNumber, year(p.CreatedDate) YearNumber
                                                                     FROM Payments p								
                                                                         INNER JOIN Jobs j
                                                                         ON p.JobNumber = j.JobNumber
