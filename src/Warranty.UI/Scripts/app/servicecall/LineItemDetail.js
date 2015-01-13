@@ -5,10 +5,6 @@
         require(['ko.validation'], function () {
             $(function () {
 
-                $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
-                    $(this).hide();
-                });
-
                 $.fn.editable.defaults.mode = 'inline';
                 $.fn.editable.defaults.emptytext = 'Add';
                 
@@ -339,16 +335,7 @@
                         })
                         .done(function (response) {
                             line.serviceCallLineItemStatusDisplayName(response.DisplayName);
-
-                            //if user is not allowed to ALWAYS reopen Completed lines at anytime, then allow them to reopen only right after completing a line.
-                            if (!line.userCanAlwaysReopenCallLines()) {
-                                $("#undoLastCompletedLineItemAlert").attr('data-service-line-id-to-undo', line.serviceCallLineItemId);
-                                $("#undoLastCompletedLineItemAlert").show();
-                                viewModel.lineJustCompleted(true);
-                                $("#undoLastCompletedLineItemAlert").attr("tabindex", -1).focus(); //focus only after setting lineJustCompleted observable which visibly shows control on form first and then focus.
-                            } else {
-                                toastr.success("Success! Item completed.");
-                            }
+                            toastr.success("Success! Item completed.");
                         });
                 }
 
@@ -704,7 +691,6 @@
                     self.allAttachments = ko.observableArray([]);
                     self.allPurchaseOrders = ko.observableArray([]);
                     self.noteDescriptionToAdd = ko.observable('').extend({required: true});
-                    self.userCanAlwaysReopenCallLines = ko.observable(modelData.initialServiceCallLineItem.canReopenLines);
 
                     self.removeAttachment = function (e) {
                         bootbox.confirm(modelData.attachmentRemovalMessage, function (result) {
@@ -779,14 +765,6 @@
                         clearNoteFields();
                     };
 
-                    self.lineJustCompleted = ko.observable();
-
-                    //undo last line item which was completed.
-                    self.undoLastCompletedLine = function () {
-                        reopenServiceCallLineItem(this);
-                        self.lineJustCompleted(false);
-                    };
-                    
                     self.createPurchaseOrderClicked = ko.observable().extend({
                         required: {
                             onlyIf: function () {

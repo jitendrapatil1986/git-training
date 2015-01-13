@@ -253,10 +253,7 @@
                                     <button id="btn-edit-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="click: editLine, clickBubble: false, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>
                                     <button id="btn-edit-line-item" type="button" class="col-xs-4 btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="click: editLine, clickBubble: false, visible: !lineEditing() && !isLineItemCompleted()">Edit</button>
 
-                                    @if (Model.CanReopenLines)
-                                    {
-                                        <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: reopenLine, clickBubble: false, visible: !lineEditing() && isLineItemCompleted()">Reopen</button>
-                                    }
+                                    <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10" data-bind="click: reopenLine, clickBubble: false, visible: !lineEditing() && isLineItemCompleted()">Reopen</button>
                                 </div>
 
                             </div>
