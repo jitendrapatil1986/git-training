@@ -25,7 +25,6 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
         public string ProblemDescription { get; set; }
         public string CauseDescription { get; set; }
         public DateTime CreatedDate { get; set; }
-        public bool CanReopenLines { get; set; }
         public bool CanTakeActionOnPayments { get; set; }
         public string CityCode { get; set; }
         public ServiceCallLineItemStatus ServiceCallLineItemStatus { get; set; }
