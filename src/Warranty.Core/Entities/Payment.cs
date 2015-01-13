@@ -14,6 +14,7 @@ namespace Warranty.Core.Entities
         public string JobNumber { get; set; }
         public string CommunityNumber { get; set; }
         public string InvoiceNumber { get; set; }
+        public string Comments { get; set; }
         public string HoldComments { get; set; }
         public Guid? ServiceCallLineItemId { get; set; }
         public string CreatedBy { get; set; }

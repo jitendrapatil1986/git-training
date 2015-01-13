@@ -156,6 +156,7 @@
                                     , p.Amount
                                     , p.PaymentStatus
                                     , p.InvoiceNumber
+                                    , p.Comments
                                     , p.ServiceCallLineItemId
                                     , p.CreatedDate as PaymentCreatedDate
                                     , p.HoldComments

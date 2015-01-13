@@ -60,6 +60,7 @@
                     self.backchargeVendorNumber = options.backchargeVendorNumber;
                     self.backchargeVendorName = options.backchargeVendorName;
                     self.invoiceNumber = options.invoiceNumber;
+                    self.comments = options.comments;
                     self.amount = options.amount;
                     self.backchargeAmount = options.backchargeAmount;
                     self.backchargeId = options.backchargeId;
@@ -310,6 +311,7 @@
                     self.vendorNumber('');
                     self.backchargeVendorNumber('');
                     self.invoiceNumber('');
+                    self.comments('');
                     self.amount('');
                     self.backchargeAmount('');
                     self.isBackcharge(false);
@@ -484,6 +486,7 @@
                     });
 
                     self.invoiceNumber = ko.observable('').extend({ required: true });
+                    self.comments = ko.observable('');
                     self.amount = ko.observable().extend({ required: true, min: 0 });
                     self.isBackcharge = ko.observable(false);
                     self.backchargeAmount = ko.observable().extend({
@@ -552,6 +555,7 @@
                         self.vendorNumber('');
                         self.backchargeVendorNumber('');
                         self.invoiceNumber('');
+                        self.comments('');
                         self.amount('');
                         self.backchargeAmount('');
                         self.isBackcharge(false);
@@ -608,6 +612,7 @@
                             backchargeVendorNumber: self.backchargeVendorNumber(),
                             backchargeVendorName: self.backchargeVendorName(),
                             invoiceNumber: self.invoiceNumber(),
+                            comments: self.comments(),
                             amount: self.amount(),
                             backchargeAmount: self.backchargeAmount(),
                             isBackcharge: self.isBackcharge(),

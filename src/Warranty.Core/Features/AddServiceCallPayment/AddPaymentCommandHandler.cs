@@ -49,6 +49,7 @@
                 {
                     Amount = message.Amount,
                     InvoiceNumber = message.InvoiceNumber,
+                    Comments = message.Comments,
                     ServiceCallLineItemId = message.ServiceCallLineItemId,
                     PaymentStatus = PaymentStatus.Requested,
                     VendorNumber = message.VendorNumber,
