@@ -1,4 +1,5 @@
-﻿@model Warranty.Core.Features.Report.MailMerge.MailMergeQuery
+﻿@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.Report.MailMerge.MailMergeQuery
 
 @{
     ViewBag.Title = "Mail Merge Report";
@@ -59,10 +60,10 @@
                     <th>Address</th>
                     <th>City</th>
                     <th>State</th>
+                    <th>Zip Code</th>
                     <th>Home Phone</th>
                     <th>Community</th>
                     <th>Close Date</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -73,10 +74,10 @@
                         <td>@customer.AddressLine</td>
                         <td>@customer.City</td>
                         <td>@customer.StateCode</td>
+                        <td>@customer.PostalCode</td>
                         <td>@customer.HomePhone</td>
                         <td>@customer.CommunityName</td>
                         <td>@customer.CloseDate</td>
-                        <td>@customer.HomeownerName2</td>
                     </tr>
                 }
             </tbody>

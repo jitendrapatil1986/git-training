@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using NPoco;
+    using Common.Extensions;
 
     public class QuickSearchEmployeesQueryHandler : IQueryHandler<QuickSearchEmployeesQuery, IEnumerable<QuickSearchEmployeeModel>>
     {
@@ -22,6 +23,7 @@
                                 ORDER BY EmployeeName";
 
                 var result = _database.Fetch<QuickSearchEmployeeModel>(sqlTemplate, query.Query);
+                result.ForEach(x => x.Name = x.Name.ToTitleCase());
                 return result;
             }
         }

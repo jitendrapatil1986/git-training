@@ -39,7 +39,11 @@ require(['/Scripts/app/main.js'], function() {
                         $(element).empty();
                         return;
                     }
-                    var html = $('<div>').text(value.contactValue).html() + ' (' + $('<div>').text(value.contactLabel).html() + ')';
+                    var label = '';
+                    if (value.contactLabel) {
+                        label = ' (' + $('<div>').text(value.contactLabel).html() + ')';
+                    }
+                    var html = $('<div>').text(value.contactValue).html() + label ;
                     $(element).html(html);
                 },
 
@@ -173,6 +177,22 @@ require(['/Scripts/app/main.js'], function() {
                 $(this).mask("(999) 999-9999? x99999", { placeholder: " " });
             });
             
+            function formatPhoneNumber(phoneNumber) {
+                if (!phoneNumber || phoneNumber.length < 10)
+                    return phoneNumber;
+                var area = phoneNumber.substring(0, 3);
+                var major = phoneNumber.substring(3, 6);
+                var minor = phoneNumber.substring(6, 10);
+                var extension = " x" + phoneNumber.substring(10, phoneNumber.length );
+
+                return '(' + area + ') ' + major + '-' + minor + (extension.length > 2 ? extension : '');
+            }
+            
+            function isEmail(email) {
+                var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                return regex.test(email);
+            }
+            
             function AddtionalEmailContactViewModel(options) {
                 var self = this;
                 self.contactValue = options.contactValue;
@@ -184,7 +204,7 @@ require(['/Scripts/app/main.js'], function() {
 
             function AddtionalPhoneContactViewModel(options) {
                 var self = this;
-                self.contactValue = options.contactValue;
+                self.contactValue = formatPhoneNumber(options.contactValue);
                 self.contactLabel = options.contactLabel;
                 self.homeownerContactTypeValue = options.homeownerContactTypeValue;
                 self.homeownerId = options.homeownerId;
@@ -199,7 +219,6 @@ require(['/Scripts/app/main.js'], function() {
 
 
                 self.afterAdditionalContactRendered = function (element, index, data) {
-
                     var type;
                     if (index.homeownerContactTypeValue == homeownerContactTypeEnum.Phone.Value) {
                         type = 'additionalPhoneContact';
@@ -219,14 +238,19 @@ require(['/Scripts/app/main.js'], function() {
                             return params;
                         },
                         validate: function (value) {
-                            if ($.trim(value.contactValue) == '') {
                                 if (index.homeownerContactTypeValue == homeownerContactTypeEnum.Phone.Value) {
-                                    return 'Phone is required';
+                                    if (value.contactValue.length <10) {
+                                        return 'Phone is required';
+                                    }
                                 }
                                 else if (index.homeownerContactTypeValue == homeownerContactTypeEnum.Email.Value) {
-                                    return 'Email is required';
+                                    if ($.trim(value.contactValue) == '') {
+                                        return 'Email is required';
+                                    }
+                                    else if (!isEmail(value.contactValue)) {
+                                        return 'Invalid Email';
+                                    }
                                 }
-                            }
                         },
                         type: type,
                         success: function (response) {

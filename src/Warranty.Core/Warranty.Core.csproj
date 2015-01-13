@@ -126,6 +126,9 @@
     <Compile Include="Features\AddServiceCallPayment\AddPaymentCommandDto.cs" />
     <Compile Include="Features\DeleteServiceCall\DeleteServiceCallCommand.cs" />
     <Compile Include="Features\DeleteServiceCall\DeleteServiceCallCommandHandler.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallCompleteWsrNotificationModel.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallCompleteWsrNotificationQuery.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallCompleteWsrNotificationQueryHandler.cs" />
     <Compile Include="Features\SessionStart\VerifyEmployeeExistsCommandHandler.cs" />
     <Compile Include="Features\SessionStart\VerifyEmployeeExistsCommand.cs" />
     <Compile Include="JobServiceApiHelpers\ApiJsonConverter.cs" />

@@ -68,7 +68,7 @@
                             <ul class="no-print">
                                 <li class="text-capitalize">@Model.ServiceCallSummary.Address</li>
                                 <li>
-                                    @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.ServiceCallSummary.HomePhone,Url.Action("AddOrUpdatePhoneNumber","Homeowner"), Model.ServiceCallSummary.HomeownerId)
+                                    @Format.EditablePhoneNumber(PhoneNumberType.Home, Format.PhoneNumberWithExtension(Model.ServiceCallSummary.HomePhone),Url.Action("AddOrUpdatePhoneNumber","Homeowner"), Model.ServiceCallSummary.HomeownerId)
                                 </li>
                                 <li>
                                     @Format.EditableEmailForServiceCall(Model.ServiceCallSummary.EmailAddress, Url.Action("AddOrUpdateEmail","Homeowner"), Model.ServiceCallSummary.HomeownerId, Model.ServiceCallSummary.CallNumber)
@@ -376,7 +376,8 @@
                 escalationDate: @Html.Raw(Model.ServiceCallSummary.EscalationDate.ToJson()),
                 canBeReopened: @Model.ServiceCallSummary.CanBeReopened.ToJson(),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
-                saveAdditionalContactsUrl: '@Url.Action("SaveAdditionalContacts","Homeowner")'
+                saveAdditionalContactsUrl: '@Url.Action("SaveAdditionalContacts","Homeowner")',
+                jobId: @Html.Raw(Model.ServiceCallSummary.JobId.ToJson()),
             }
         });
 

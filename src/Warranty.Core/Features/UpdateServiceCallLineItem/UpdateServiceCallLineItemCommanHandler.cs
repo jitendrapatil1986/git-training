@@ -25,6 +25,7 @@
                 if (serviceCall.ServiceCallStatus == ServiceCallStatus.Complete || serviceCall.ServiceCallStatus == ServiceCallStatus.HomeownerSigned)
                 {
                     serviceCall.ServiceCallStatus = ServiceCallStatus.Open;
+                    serviceCall.CompletionDate = null;
                     _database.Update(serviceCall);
                 }
 

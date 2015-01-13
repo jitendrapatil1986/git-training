@@ -7,6 +7,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
     using NPoco;
     using Security;
     using Services;
+    using Common.Extensions;
 
     public class ServiceCallSummaryQueryHandler : IQueryHandler<ServiceCallSummaryQuery, ServiceCallSummaryModel>
     {
@@ -104,6 +105,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                 WHERE wc.ServiceCallId = @0";
 
             var result = _database.Single<ServiceCallSummaryModel.ServiceCall>(sql, serviceCallId.ToString());
+            result.AssignedTo = result.AssignedTo.ToTitleCase();
             
             return result;
         }

@@ -1,1 +1,26 @@
-﻿This call has been escalated: <a href="@ViewBag.Url"> @ViewBag.CallNumber</a>
+﻿Here are the details of the Warranty Service Call that has been escalated:<br />
+<br />
+
+<strong>Warranty Service Call: </strong> <a href="@ViewBag.Url">@ViewBag.ServiceCallNumber</a>
+<br />
+<strong>Home Owner's Name: </strong>@ViewBag.HomeOwnerName
+<br />
+<strong>Home Phone: </strong># @ViewBag.HomePhone
+<br />
+<strong>Community: </strong>@ViewBag.CommunityName
+<br />
+<strong>Address: </strong>@ViewBag.AddressLine
+<br />
+@if (((List<string>)@ViewBag.Comments).Any())
+{
+    <strong>Comments:</strong>
+    <ul>
+    @foreach (var comment in @ViewBag.Comments)
+    {
+        if (!String.IsNullOrEmpty(comment))
+        {
+            <li>@comment</li>
+        }
+    }
+    </ul>
+}

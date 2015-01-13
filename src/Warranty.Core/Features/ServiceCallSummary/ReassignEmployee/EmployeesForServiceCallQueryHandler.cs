@@ -6,6 +6,7 @@
     using Enumerations;
     using NPoco;
     using Entities;
+    using Common.Extensions;
 
     public class EmployeesForServiceCallQueryHandler : IQueryHandler<EmployeesForServiceCallQuery, List<ServiceCallSummaryModel.EmployeeViewModel>>
     {
@@ -45,7 +46,7 @@
 
                 return employeesAssignableToServiceCall.Select(x => new ServiceCallSummaryModel.EmployeeViewModel
                                                                         {
-                                                                            DisplayName = x.Name,
+                                                                            DisplayName = x.Name.ToTitleCase(),
                                                                             EmployeeNumber = x.Number
                                                                         }).ToList();
             }

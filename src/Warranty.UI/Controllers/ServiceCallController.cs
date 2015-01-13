@@ -3,19 +3,14 @@
 namespace Warranty.UI.Controllers
 {
     using System;
-    using System.Web;
     using System.Web.Mvc;
     using Mailers;
     using Warranty.Core;
-    using Warranty.Core.Entities;
     using Warranty.Core.Enumerations;
-    using Warranty.Core.Features.AddServiceCallLineItem;
-    using Warranty.Core.Features.AddServiceCallPayment;
     using Warranty.Core.Features.AddServiceCallPurchaseOrder;
     using Warranty.Core.Features.CreateServiceCall;
     using Warranty.Core.Features.CreateServiceCallCustomerSearch;
     using Warranty.Core.Features.CreateServiceCallVerifyCustomer;
-    using Warranty.Core.Features.DeleteServiceCall;
     using Warranty.Core.Features.ServiceCallSummary;
     using System.Linq;
     using Warranty.Core.Features.ServiceCallSummary.Attachments;
@@ -104,6 +99,7 @@ namespace Warranty.UI.Controllers
                     var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery { ServiceCallId = newCallId });
                     if (notificationModel.WarrantyRepresentativeEmployeeEmail != null)
                     {
+                        notificationModel.Url = GetServiceCallUrl(newCallId);
                         _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
                     }
                 }
@@ -124,6 +120,7 @@ namespace Warranty.UI.Controllers
             var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery { ServiceCallId = id });
             if (notificationModel.WarrantyRepresentativeEmployeeEmail != null)
             {
+                notificationModel.Url = GetServiceCallUrl(id);
                 _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
             }
 
@@ -160,10 +157,7 @@ namespace Warranty.UI.Controllers
 
             if (result.ShouldSendEmail)
             {
-                var url = ConfigurationManager.AppSettings["Warranty.BaseUri"];
-                var urlHelper = new UrlHelper(this.ControllerContext.RequestContext);
-                url += urlHelper.Action("CallSummary", "ServiceCall", new { id });
-                result.Url = url;
+                result.Url = GetServiceCallUrl(id);
                 _mailer.ServiceCallEscalated(result).SendAsync();
             }
             return Json(new { actionName = ActivityType.Escalation.DisplayName, actionMessage = message }, JsonRequestBehavior.AllowGet);
@@ -191,6 +185,14 @@ namespace Warranty.UI.Controllers
             {
                 ServiceCallId = id,
             });
+
+            var notificationModel = _mediator.Request(new ServiceCallCompleteWsrNotificationQuery {ServiceCallId = id});
+            if (notificationModel.WarrantyRepresentativeEmployeeEmail != null)
+            {
+                notificationModel.Url = GetServiceCallUrl(id);
+                _mailer.ServiceCallCompleted(notificationModel).SendAsync();
+            }
+
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
@@ -243,6 +245,14 @@ namespace Warranty.UI.Controllers
             var model = _mediator.Request(new AddServiceCallPurchaseOrderQuery { ServiceCallLineItemId = id });
 
             return View(model);
+        }
+
+        private string GetServiceCallUrl(Guid id)
+        {
+            var url = ConfigurationManager.AppSettings["Warranty.BaseUri"];
+            var urlHelper = new UrlHelper(ControllerContext.RequestContext);
+            url += urlHelper.Action("CallSummary", "ServiceCall", new { id });
+            return url;
         }
     }
 }
