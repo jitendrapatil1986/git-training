@@ -122,12 +122,11 @@ namespace Warranty.Core.ToDoInfrastructure
                                        on wc.ServiceCallId = li.ServiceCallId
                                     where 
                                         li.NumberOfIncompleteLineItems = 0
-                                    AND wc.ServiceCallStatusId <> @2
-                                    AND ci.CityCode in ({0})
-                                    AND wc.ServiceCallType = @1";
+                                    AND wc.ServiceCallStatusId <> @1
+                                    AND ci.CityCode in ({0})";
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
-            var toDos = database.Fetch<ToDoServiceCallClosure, ToDoServiceCallClosureModel>(query, ServiceCallLineItemStatus.Complete.Value, RequestType.WarrantyRequest.DisplayName, ServiceCallStatus.Complete.Value);
+            var toDos = database.Fetch<ToDoServiceCallClosure, ToDoServiceCallClosureModel>(query, ServiceCallLineItemStatus.Complete.Value, ServiceCallStatus.Complete.Value);
 
             return toDos;
         }

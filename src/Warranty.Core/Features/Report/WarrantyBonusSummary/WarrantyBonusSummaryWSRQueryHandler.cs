@@ -76,7 +76,7 @@
                                         SUM(CASE WHEN [ObjectAccount] = '9430' THEN Amount ELSE 0 END) as LaborDollarsSpent,
                                         SUM(CASE WHEN [ObjectAccount] = '9435' THEN Amount ELSE 0 END) as OtherMaterialDollarsSpent,
                                         SUM(CASE WHEN [ObjectAccount] = '9440' THEN Amount ELSE 0 END) as OtherLaborDollarsSpent
-                                        FROM WarrantyPayments p
+                                        FROM Payments p
                                         INNER JOIN Jobs j
                                         ON p.JobNumber = j.JobNumber
                                         INNER JOIN Communities c
@@ -87,7 +87,7 @@
                                         ON c.CommunityId = ca.CommunityId
                                         INNER JOIN Employees e
                                         ON ca.EmployeeId = e.EmployeeId
-                                        WHERE PostingMonth = MONTH(@1) AND PostingYear = YEAR(@1) AND EmployeeNumber=@2
+                                        WHERE MONTH(p.CreatedDate) = MONTH(@1) AND YEAR(p.CreatedDate) = YEAR(@1) AND EmployeeNumber=@2
                                         GROUP BY c.[CommunityId], e.[EmployeeId]
                                     ) a
                                     INNER JOIN Communities c
@@ -128,7 +128,7 @@
         {
             var result = new List<WarrantyBonusSummaryModel.EmployeeTiedToRepresentative>();
 
-            if (user.IsInRole(UserRoles.WarrantyServiceManager) || user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyAdmin))
+            if (user.IsInRole(UserRoles.CustomerCareManager) || user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyAdmin))
             {
                 const string sql = @"SELECT DISTINCT e.EmployeeId as WarrantyRepresentativeEmployeeId, e.EmployeeNumber, LOWER(e.EmployeeName) as EmployeeName from CommunityAssignments ca
                                     INNER join Communities c

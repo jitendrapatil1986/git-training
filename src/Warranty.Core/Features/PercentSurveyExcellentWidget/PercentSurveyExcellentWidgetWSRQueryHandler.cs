@@ -39,7 +39,9 @@
             return new PercentSurveyExcellentWidgetModel
             {
                 PercentExcellentLastMonth = ServiceCallCalculator.CalculatePercentage( totalLastMonthSurveysWithRecommend, totalLastMonthSurveys),
-                PercentExcellentThisMonth = ServiceCallCalculator.CalculatePercentage( totalThisMonthSurveysWithRecommend, totalThisMonthSurveys),
+                TotalSurveysLastMonth = totalLastMonthSurveys,
+                PercentExcellentThisMonth = ServiceCallCalculator.CalculatePercentage(totalThisMonthSurveysWithRecommend, totalThisMonthSurveys),
+                TotalSurveysThisMonth = totalThisMonthSurveys,
             };
         }
 

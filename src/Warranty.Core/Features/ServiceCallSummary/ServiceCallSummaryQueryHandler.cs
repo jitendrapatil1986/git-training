@@ -7,6 +7,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
     using NPoco;
     using Security;
     using Services;
+    using Common.Extensions;
 
     public class ServiceCallSummaryQueryHandler : IQueryHandler<ServiceCallSummaryQuery, ServiceCallSummaryModel>
     {
@@ -34,9 +35,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
                         ServicCallNotes = GetServiceCallNotes(query.ServiceCallId),
                         Attachments = GetServiceCallAttachments(query.ServiceCallId),
                         AddServiceCallLineItem = new ServiceCallSummaryModel.NewServiceCallLineItem(query.ServiceCallId, SharedQueries.ProblemCodes.GetProblemCodeList(_database)),
-                        CanApprove = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
-                        CanReassign = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
-                        CanReopenLines = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager),
+                        CanApprove = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.CustomerCareManager),
+                        CanReassign = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.CustomerCareManager),
                     };
 
                 result.AdditionalContacts = _homeownerAdditionalContactsService.Get(result.ServiceCallSummary.HomeownerId);
@@ -49,6 +49,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
         {
             const string sql = @"SELECT 
                                     wc.ServiceCallId as ServiceCallId
+                                    , ServiceCallType
                                     , Servicecallnumber as CallNumber
                                     , j.AddressLine as [Address]
                                     , j.JobId
@@ -82,8 +83,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , wc.HomeownerVerificationSignatureDate
                                     , wc.HomeownerVerificationTypeId as HomeownerVerificationType
                                     , wc.SpecialProjectReason
-                                    , wc.SpecialProjectDate
-                                    
+                                    , wc.SpecialProjectDate                                    
                                 FROM [ServiceCalls] wc
                                 INNER JOIN Jobs j
                                 ON wc.JobId = j.JobId
@@ -104,6 +104,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                 WHERE wc.ServiceCallId = @0";
 
             var result = _database.Single<ServiceCallSummaryModel.ServiceCall>(sql, serviceCallId.ToString());
+            result.AssignedTo = result.AssignedTo.ToTitleCase();
             
             return result;
         }

@@ -5,10 +5,6 @@
         require(['ko.validation'], function () {
             $(function () {
 
-                $("#undoLastCompletedLineItem, #undoLastCompletedLineItemAlert").blur(function () {
-                    $(this).hide();
-                });
-
                 $.fn.editable.defaults.mode = 'inline';
                 $.fn.editable.defaults.emptytext = 'Add';
                 
@@ -60,6 +56,7 @@
                     self.backchargeVendorNumber = options.backchargeVendorNumber;
                     self.backchargeVendorName = options.backchargeVendorName;
                     self.invoiceNumber = options.invoiceNumber;
+                    self.comments = options.comments;
                     self.amount = options.amount;
                     self.backchargeAmount = options.backchargeAmount;
                     self.backchargeId = options.backchargeId;
@@ -310,6 +307,7 @@
                     self.vendorNumber('');
                     self.backchargeVendorNumber('');
                     self.invoiceNumber('');
+                    self.comments('');
                     self.amount('');
                     self.backchargeAmount('');
                     self.isBackcharge(false);
@@ -337,16 +335,7 @@
                         })
                         .done(function (response) {
                             line.serviceCallLineItemStatusDisplayName(response.DisplayName);
-
-                            //if user is not allowed to ALWAYS reopen Completed lines at anytime, then allow them to reopen only right after completing a line.
-                            if (!line.userCanAlwaysReopenCallLines()) {
-                                $("#undoLastCompletedLineItemAlert").attr('data-service-line-id-to-undo', line.serviceCallLineItemId);
-                                $("#undoLastCompletedLineItemAlert").show();
-                                viewModel.lineJustCompleted(true);
-                                $("#undoLastCompletedLineItemAlert").attr("tabindex", -1).focus(); //focus only after setting lineJustCompleted observable which visibly shows control on form first and then focus.
-                            } else {
-                                toastr.success("Success! Item completed.");
-                            }
+                            toastr.success("Success! Item completed.");
                         });
                 }
 
@@ -484,6 +473,7 @@
                     });
 
                     self.invoiceNumber = ko.observable('').extend({ required: true });
+                    self.comments = ko.observable('');
                     self.amount = ko.observable().extend({ required: true, min: 0 });
                     self.isBackcharge = ko.observable(false);
                     self.backchargeAmount = ko.observable().extend({
@@ -552,6 +542,7 @@
                         self.vendorNumber('');
                         self.backchargeVendorNumber('');
                         self.invoiceNumber('');
+                        self.comments('');
                         self.amount('');
                         self.backchargeAmount('');
                         self.isBackcharge(false);
@@ -608,6 +599,7 @@
                             backchargeVendorNumber: self.backchargeVendorNumber(),
                             backchargeVendorName: self.backchargeVendorName(),
                             invoiceNumber: self.invoiceNumber(),
+                            comments: self.comments(),
                             amount: self.amount(),
                             backchargeAmount: self.backchargeAmount(),
                             isBackcharge: self.isBackcharge(),
@@ -699,7 +691,6 @@
                     self.allAttachments = ko.observableArray([]);
                     self.allPurchaseOrders = ko.observableArray([]);
                     self.noteDescriptionToAdd = ko.observable('').extend({required: true});
-                    self.userCanAlwaysReopenCallLines = ko.observable(modelData.initialServiceCallLineItem.canReopenLines);
 
                     self.removeAttachment = function (e) {
                         bootbox.confirm(modelData.attachmentRemovalMessage, function (result) {
@@ -774,14 +765,6 @@
                         clearNoteFields();
                     };
 
-                    self.lineJustCompleted = ko.observable();
-
-                    //undo last line item which was completed.
-                    self.undoLastCompletedLine = function () {
-                        reopenServiceCallLineItem(this);
-                        self.lineJustCompleted(false);
-                    };
-                    
                     self.createPurchaseOrderClicked = ko.observable().extend({
                         required: {
                             onlyIf: function () {

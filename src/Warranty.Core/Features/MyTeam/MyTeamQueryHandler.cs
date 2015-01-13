@@ -24,7 +24,7 @@
                 var user = _userSession.GetCurrentUser();
                 var result = new List<MyTeamModel>();
 
-                if (user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyServiceManager))
+                if (user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.CustomerCareManager))
                 {
                     const string sql = @"SELECT DISTINCT e.EmployeeId, LOWER(e.EmployeeName) as EmployeeName from CommunityAssignments ca
                                     INNER join Communities c

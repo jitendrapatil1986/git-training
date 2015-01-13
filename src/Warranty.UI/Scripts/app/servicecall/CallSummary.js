@@ -621,7 +621,7 @@ require(['/Scripts/app/main.js'], function () {
                                     toastr.success("Success! Service Call deleted.");
                                 })
                                 .done(function(response) {
-                                    window.location = urls.Home.Index;
+                                    window.location = urls.Job.JobSummary + '/' + modelData.jobId;
                                 });
                         }
                     });
@@ -665,12 +665,11 @@ require(['/Scripts/app/main.js'], function () {
                 });
                 
                 self.canBeDeleted = ko.computed(function () {
-
-                    return self.callSummaryStatusRequested() && self.allLineItems().length == 0;
+                    return (self.callSummaryStatusRequested() || self.callSummaryStatusOpen()) && self.allLineItems().length == 0;
                 });
-
+                
                 self.homeownerVerificationSignature = ko.observable('').extend({ required: true });
-                self.homeownerVerificationSignatureDate = ko.observable().extend({required: true}).extend({date: true});
+                self.homeownerVerificationSignatureDate = ko.observable(moment(new Date()).format('L')).extend({required: true}).extend({date: true});
                 self.homeownerVerificationCodes = dropdownData.verificationTypes;
                 self.homeownerVerificationTypeId = ko.observable().extend({ required: true });                
 

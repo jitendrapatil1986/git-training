@@ -5,6 +5,7 @@
     using System.Linq;
     using Entities;
     using Enumerations;
+    using Extensions;
     using NPoco;
 
     public class AddOrUpdateAdditionalContactCommand : ICommand<Guid>
@@ -38,8 +39,8 @@
                     var newcontact = new HomeownerContact
                         {
                             ContactType = HomeownerContactType.FromValue(message.HomeownerContactTypeValue),
-                            ContactValue = message.Value["contactValue"],
-                            ContactLabel = message.Value["contactLabel"],
+                            ContactValue = message.HomeownerContactTypeValue == HomeownerContactType.Phone.Value ? message.Value["contactValue"].CleanPhoneNumber() : message.Value["contactValue"],
+                            ContactLabel = message.Value["contactLabel"].Trim(),
                             HomeownerId = message.HomeownerId
                         };
                     _database.Insert(newcontact);
@@ -47,8 +48,10 @@
                 }
 
                 var contact = _database.SingleById<HomeownerContact>(message.HomeownerContactId);
-                contact.ContactValue = message.Value["contactValue"];
-                contact.ContactLabel = message.Value["contactLabel"];
+                contact.ContactValue = message.HomeownerContactTypeValue == HomeownerContactType.Phone.Value
+                                           ? message.Value["contactValue"].CleanPhoneNumber()
+                                           : message.Value["contactValue"];
+                contact.ContactLabel = message.Value["contactLabel"].Trim();
                 _database.Update(contact);
                 return contact.HomeownerContactId;
             }

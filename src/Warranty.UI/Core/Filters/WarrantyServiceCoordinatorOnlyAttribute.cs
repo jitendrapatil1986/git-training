@@ -8,7 +8,7 @@ namespace Warranty.UI.Core.Filters
     {
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-            return httpContext.User.IsInRole(UserRoles.WarrantyServiceCoordinator) || httpContext.User.IsInRole(UserRoles.WarrantyServiceManager);
+            return httpContext.User.IsInRole(UserRoles.WarrantyServiceCoordinator) || httpContext.User.IsInRole(UserRoles.CustomerCareManager);
         }
     }
 }

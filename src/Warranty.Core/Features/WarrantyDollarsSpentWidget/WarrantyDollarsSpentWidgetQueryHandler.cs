@@ -32,7 +32,7 @@
                             AND Ci.CityCode IN ({0})";
 
                 var sqlPayments = @"SELECT SUM(Amount) as TotalDollarsSpent
-                                    FROM WarrantyPayments p
+                                    FROM Payments p
                                         INNER JOIN Jobs j
                                         ON p.JobNumber = j.JobNumber
                                         INNER JOIN Communities c
@@ -43,7 +43,7 @@
                                         ON c.CommunityId = ca.CommunityId
                                         INNER JOIN Employees e
                                         ON ca.EmployeeId = e.EmployeeId
-                                    WHERE PostingMonth = MONTH(@0) AND PostingYear = YEAR(@0) AND CityCode IN ({0})";
+                                    WHERE MONTH(p.CreatedDate) = MONTH(@0) AND YEAR(p.CreatedDate) = YEAR(@0) AND CityCode IN ({0})";
 
                 var numberOfHomesThisMonth = _database.ExecuteScalar<int>(string.Format(sqlNumberOfHomes, user.Markets.CommaSeparateWrapWithSingleQuote()), -2, SystemTime.Today);
                 var totalPaymentsThisMonth = _database.ExecuteScalar<decimal>(string.Format(sqlPayments, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today);

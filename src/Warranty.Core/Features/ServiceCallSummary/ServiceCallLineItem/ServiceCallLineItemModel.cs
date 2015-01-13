@@ -13,6 +13,7 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
         public Guid ServiceCallLineItemId { get; set; }
         public Guid ServiceCallId { get; set; }
         public string ServiceCallNumber { get; set; }
+        public String ServiceCallType { get; set; }
         public int LineNumber { get; set; }
         public string ProblemCode { get; set; }
         public string ProblemJdeCode { get; set; }
@@ -24,7 +25,6 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
         public string ProblemDescription { get; set; }
         public string CauseDescription { get; set; }
         public DateTime CreatedDate { get; set; }
-        public bool CanReopenLines { get; set; }
         public bool CanTakeActionOnPayments { get; set; }
         public string CityCode { get; set; }
         public ServiceCallLineItemStatus ServiceCallLineItemStatus { get; set; }
@@ -34,6 +34,11 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
         public IEnumerable<ServiceCallLineItemPayment> ServiceCallLineItemPayments { get; set; }
         public IEnumerable<ServiceCallLineItemPurchaseOrder> ServiceCallLineItemPurchaseOrders { get; set; }
         public IEnumerable<Vendor> Vendors { get; set; }
+        
+        public string ServiceCallTitle
+        {
+            get { return string.Format("{0} #{1}", ServiceCallType, ServiceCallNumber); }
+        }
 
         public class ServiceCallLineItemNote
         {
@@ -65,6 +70,7 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public string PaymentStatusDisplayName { get { return PaymentStatus.DisplayName; }}
             public string BackchargeStatusDisplayName { get { return IsBackcharge ? BackchargeStatus.DisplayName : string.Empty; } }
             public string InvoiceNumber { get; set; }
+            public string Comments { get; set; }
             public Guid ServiceCallLineItemId { get; set; }
             public DateTime PaymentCreatedDate { get; set; }
             public Guid BackchargeId { get; set; }

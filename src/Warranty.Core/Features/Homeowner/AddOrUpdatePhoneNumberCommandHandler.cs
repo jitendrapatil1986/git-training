@@ -3,6 +3,7 @@
     using ActivityLogger;
     using Entities;
     using Enumerations;
+    using Extensions;
     using NPoco;
 
     public class AddOrUpdatePhoneNumberCommandHandler : ICommandHandler<AddOrUpdatePhoneNumberCommand>
@@ -24,19 +25,8 @@
 
                 var phoneNumberType = PhoneNumberType.FromValue(message.PhoneNumberTypeValue);
 
-                string oldPhone = string.Empty;
-
-                if (phoneNumberType == PhoneNumberType.Home)
-                {
-                    oldPhone = homeOwner.HomePhone;
-                    homeOwner.HomePhone = message.Value;
-
-                }
-                else if (phoneNumberType == PhoneNumberType.Mobile)
-                {
-                    oldPhone = homeOwner.OtherPhone;
-                    homeOwner.OtherPhone = message.Value;
-                }
+                var oldPhone= homeOwner.HomePhone;
+                homeOwner.HomePhone = message.Value.CleanPhoneNumber();
 
                 _database.Update(homeOwner);
 

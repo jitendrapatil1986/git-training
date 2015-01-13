@@ -225,7 +225,7 @@
     <Compile Include="Core\Filters\WarrantyServiceCoordinatorOnlyAttribute.cs" />
     <Compile Include="Core\Filters\WarrantyAuthorize.cs" />
     <Compile Include="Core\Filters\NavActionFilterAttribute.cs" />
-    <Compile Include="Core\Filters\WarrantyServiceManagerOnlyAttribute.cs" />
+    <Compile Include="Core\Filters\CustomerCareManagerOnlyAttribute.cs" />
     <Compile Include="Core\Filters\WarrantyServiceRepresentativeOnlyAttribute.cs" />
     <Compile Include="Core\Helpers\UploadHelper.cs" />
     <Compile Include="Core\Helpers\ModelBindingHelper.cs" />
@@ -267,6 +267,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="apple-touch-icon-120x120-precomposed.png" />
+    <Content Include="apple-touch-icon-120x120.png" />
+    <Content Include="apple-touch-icon-precomposed.png" />
+    <Content Include="apple-touch-icon.png" />
     <Content Include="App_Readme\Handlebarsjs_README.md" />
     <Content Include="App_Readme\Handlebarsjs_LICENSE" />
     <None Include="css\less\bootstrap-custom.less" />
@@ -450,6 +454,7 @@
     <Content Include="Views\Home\_MyTeamDropdown.cshtml" />
     <Content Include="Views\Home\_ToDoPaymentStatusChanged.cshtml" />
     <Content Include="Views\Home\_ToDoServiceCallClosure.cshtml" />
+    <Content Include="Views\WarrantyMailer\ServiceCallCompleted.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -73,7 +73,7 @@
                         <div class="row margin-bottom-10">
                             <div class="col-md-2">
                                 <div class="control-group" data-bind="validationElement: line1.quantity">
-                                    <input id="line1.quantity" type="text" class="form-control numeric" data-bind="value: line1.quantity"/>
+                                    <input id="line1.quantity" type="text" class="form-control numeric" data-bind="value: line1.quantity, valueUpdate: 'blur'"/>
                                 </div>
                             </div>
                             <div class="col-md-7">
@@ -83,7 +83,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="control-group" data-bind="validationElement: line1.unitCost">
-                                    <input type="text" class="form-control numeric" data-bind="value: line1.unitCost"/>
+                                    <input type="text" class="form-control numeric" data-bind="value: line1.unitCost, valueUpdate: 'blur'"/>
                                 </div>
                             </div>
                             <div class="col-md-1">
@@ -93,7 +93,7 @@
                         <div class="row margin-bottom-10">
                             <div class="col-md-2">
                                 <div class="control-group" data-bind="validationElement: line2.quantity">
-                                    <input type="text" class="form-control numeric" data-bind="value: line2.quantity"/>
+                                    <input type="text" class="form-control numeric" data-bind="value: line2.quantity, valueUpdate: 'blur'"/>
                                 </div>
                             </div>
                             <div class="col-md-7">
@@ -103,7 +103,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="control-group" data-bind="validationElement: line2.unitCost">
-                                    <input type="text" class="form-control numeric" data-bind="value: line2.unitCost"/>
+                                    <input type="text" class="form-control numeric" data-bind="value: line2.unitCost, valueUpdate: 'blur'"/>
                                 </div>
                             </div>
                             <div class="col-md-1">
@@ -113,7 +113,7 @@
                         <div class="row margin-bottom-10">
                             <div class="col-md-2">
                                 <div class="control-group" data-bind="validationElement: line3.quantity">
-                                    <input type="text" class="form-control numeric" data-bind="value: line3.quantity"/>
+                                    <input type="text" class="form-control numeric" data-bind="value: line3.quantity, valueUpdate: 'blur'"/>
                                 </div>
                             </div>
                             <div class="col-md-7">
@@ -123,7 +123,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="control-group" data-bind="validationElement: line3.unitCost">
-                                    <input type="text" class="form-control numeric" data-bind="value: line3.unitCost"/>
+                                    <input type="text" class="form-control numeric" data-bind="value: line3.unitCost, valueUpdate: 'blur'"/>
                                 </div>
                             </div>
                             <div class="col-md-1">
@@ -133,7 +133,7 @@
                         <div class="row margin-bottom-10">
                             <div class="col-md-2">
                                 <div class="control-group" data-bind="validationElement: line4.quantity">
-                                    <input type="text" class="form-control numeric" data-bind="value: line4.quantity"/>
+                                    <input type="text" class="form-control numeric" data-bind="value: line4.quantity, valueUpdate: 'blur'"/>
                                 </div>
                             </div>
                             <div class="col-md-7">
@@ -143,7 +143,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="control-group" data-bind="validationElement: line4.unitCost">
-                                    <input type="text" class="form-control numeric" data-bind="value: line4.unitCost"/>
+                                    <input type="text" class="form-control numeric" data-bind="value: line4.unitCost, valueUpdate: 'blur'"/>
                                 </div>
                             </div>
                             <div class="col-md-1">
@@ -153,7 +153,7 @@
                         <div class="row margin-bottom-10">
                             <div class="col-md-2">
                                 <div class="control-group" data-bind="validationElement: line5.quantity">
-                                    <input type="text" class="form-control numeric" data-bind="value: line5.quantity"/>
+                                    <input type="text" class="form-control numeric" data-bind="value: line5.quantity, valueUpdate: 'blur'"/>
                                 </div>
                             </div>
                             <div class="col-md-7">
@@ -163,7 +163,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="control-group" data-bind="validationElement: line5.unitCost">
-                                    <input type="text" class="form-control numeric" data-bind="value: line5.unitCost"/>
+                                    <input type="text" class="form-control numeric" data-bind="value: line5.unitCost, valueUpdate: 'blur'"/>
                                 </div>
                             </div>
                             <div class="col-md-1">
@@ -175,7 +175,7 @@
                         <div class="row margin-bottom-10">
                             <div class="col-md-2">
                                 <div class="control-group" data-bind="validationElement: quantity">
-                                    <input type="text" class="form-control" data-bind="value: quantity, attr: {id: 'quantity_' + lineNumber()}"/>
+                                    <input type="text" class="form-control" data-bind="value: quantity, attr: {id: 'quantity_' + lineNumber()}, valueUpdate: 'blur'"/>
                                 </div>
                             </div>
                             <div class="col-md-7">
@@ -185,7 +185,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="control-group" data-bind="validationElement: unitCost">
-                                    <input id="unitCost" type="text" class="form-control" data-bind="value: unitCost, attr: {id: 'unitCost_' + lineNumber()}"/>
+                                    <input id="unitCost" type="text" class="form-control" data-bind="value: unitCost, attr: {id: 'unitCost_' + lineNumber()}, valueUpdate: 'blur'"/>
                                 </div>
                             </div>
                             <div class="col-md-1">

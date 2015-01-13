@@ -54,11 +54,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
-    <Reference Include="JobService.Client">
-      <HintPath>..\packages\JobService.Client.1.0.426.0\lib\net45\JobService.Client.dll</HintPath>
+    <Reference Include="JobService.Client, Version=1.0.464.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\JobService.Client.1.0.464.0\lib\net45\JobService.Client.dll</HintPath>
     </Reference>
-    <Reference Include="JobService.Enumerations">
-      <HintPath>..\packages\JobService.Enumerations.1.0.423.0\lib\net45\JobService.Enumerations.dll</HintPath>
+    <Reference Include="JobService.Enumerations, Version=1.0.444.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\JobService.Enumerations.1.0.444.0\lib\net45\JobService.Enumerations.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel">
       <HintPath>..\..\..\purchasing\src\Purchasing.UI\bin\Microsoft.IdentityModel.dll</HintPath>
@@ -126,6 +128,9 @@
     <Compile Include="Features\AddServiceCallPayment\AddPaymentCommandDto.cs" />
     <Compile Include="Features\DeleteServiceCall\DeleteServiceCallCommand.cs" />
     <Compile Include="Features\DeleteServiceCall\DeleteServiceCallCommandHandler.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallCompleteWsrNotificationModel.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallCompleteWsrNotificationQuery.cs" />
+    <Compile Include="Features\ServiceCallToggleActions\ServiceCallCompleteWsrNotificationQueryHandler.cs" />
     <Compile Include="Features\SessionStart\VerifyEmployeeExistsCommandHandler.cs" />
     <Compile Include="Features\SessionStart\VerifyEmployeeExistsCommand.cs" />
     <Compile Include="JobServiceApiHelpers\ApiJsonConverter.cs" />

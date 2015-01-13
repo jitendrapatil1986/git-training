@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Warranty.Core.Features.CreateServiceCall
+﻿namespace Warranty.Core.Features.ServiceCallToggleActions
 {
-    public class NewServiceCallAssignedToWsrNotificationModel
+    using System;
+    using System.Collections.Generic;
+
+    public class ServiceCallCompleteWsrNotificationModel
     {
         public Guid ServiceCallId { get; set; }
         public string ServiceCallNumber { get; set; }
@@ -14,7 +14,7 @@ namespace Warranty.Core.Features.CreateServiceCall
         public string CommunityName { get; set; }
         public string AddressLine { get; set; }
         public string EmployeeNumber { get; set; }
-        public List<string> Comments { get; set; }
         public string Url { get; set; }
+        public List<string> Comments { get; set; }
     }
 }

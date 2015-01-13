@@ -3,6 +3,7 @@
 @using Warranty.Core.Extensions
 @using Warranty.Core.Features.JobSummary
 @using Warranty.UI.Core.Helpers
+@using Common.Extensions
 @model JobSummaryModel
 
 <div class="container">
@@ -15,7 +16,7 @@
             <div class="pull-right">
                 @using (Html.BeginForm("Create", "ServiceCall", new {id = Model.JobId}))
                 {
-                    if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                    if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
                     {
                         @Html.ActionLink("Change Homeowner", "ChangeHomeowner", "Job", new { id = Model.JobId }, new { @class = "btn btn-default margin-right-10" })
                     }
@@ -37,7 +38,7 @@
                             <li>@Html.DisplayFor(x => x.AddressLine)</li>
                             <li>@Model.City, @Model.StateCode @Model.PostalCode</li>
                             <li>
-                                @Format.EditablePhoneNumber(PhoneNumberType.Home, Model.HomePhone, Url.Action("AddOrUpdatePhoneNumber", "Homeowner"), Model.HomeownerId)
+                                @Format.EditablePhoneNumber(PhoneNumberType.Home, Format.PhoneNumberWithExtension(Model.HomePhone), Url.Action("AddOrUpdatePhoneNumber", "Homeowner"), Model.HomeownerId)
                             </li>
                             <li>
                                 @Format.EditableEmailForJob(Model.EmailAddress, Url.Action("AddOrUpdateEmail", "Homeowner"), Model.HomeownerId)
@@ -54,8 +55,9 @@
                     </div>
                     <div class="col-md-4">
                         <ul class="border-bottom-1-solid">
-                            <li class="clearfix">Builder: @Html.DisplayFor(x => x.BuilderName)</li>
-                            <li class="clearfix">Sales: @Html.DisplayFor(x => x.SalesConsultantName)</li>
+                            <li class="clearfix">Builder: @Model.BuilderName.ToTitleCase()</li>
+                            <li class="clearfix">Sales: @Model.SalesConsultantName.ToTitleCase()</li>
+                            <li class="clearfix">Service Rep: @Model.ServiceRepName.ToTitleCase()</li>
                             <li class="clearfix">Close Date: <span class="text-danger">@Format.DateMonthDayYear(Model.CloseDate)</span></li>
                         </ul>
                     </div>
@@ -85,11 +87,9 @@
                             else
                             {
                                 var sc = (JobSummaryModel.JobServiceCall)line;
-                                <div class="service-call-line col-md-12">
+                                <div class="service-call-line col-md-12" onclick="location.href='@Url.Action("CallSummary", "ServiceCall", new { id = sc.ServiceCallId })'">
                                     <div class="col-md-1">
-                                        <small class="text-muted">
-                                            @Html.ActionLink(sc.CallNumber, "CallSummary", "ServiceCall", new { id = sc.ServiceCallId }, null)
-                                        </small>
+                                        <small class="text-muted">@sc.CallNumber</small>
                                     </div>
                                     <div class="col-md-7 text-capitalize small">
                                         @if (sc.NumberOfLineItems > 0)
@@ -194,7 +194,7 @@
                                 <ul data-bind="foreach: allJobAttachments">
                                     <li>
                                         <a class="attached-file" data-bind="css: 'download-attachment', attr:{'href': '@Url.Action("DownloadAttachment", "Job")/' + jobAttachmentId}">
-                                        @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.WarrantyServiceManager))
+                                        @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
                                         {
                                             <span data-url="" data-bind="attr: { 'data-attachment-id': jobAttachmentId, 'data-url':'@Url.Action("DeleteAttachment", "Job")    '}, css: 'boxclose', click: $parent.removeAttachment.bind($parent)"></span>
                                         }

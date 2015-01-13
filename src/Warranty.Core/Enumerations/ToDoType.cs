@@ -9,7 +9,7 @@
                                                                            new List<string>
                                                                                {
                                                                                    UserRoles.WarrantyAdmin,
-                                                                                   UserRoles.WarrantyServiceManager,
+                                                                                   UserRoles.CustomerCareManager,
                                                                                    UserRoles.WarrantyServiceCoordinator
                                                                                });
 
@@ -17,7 +17,7 @@
                                                             new List<string>
                                                                 {
                                                                     UserRoles.WarrantyAdmin,
-                                                                    UserRoles.WarrantyServiceManager,
+                                                                    UserRoles.CustomerCareManager,
                                                                     UserRoles.WarrantyServiceCoordinator,
                                                                     UserRoles.WarrantyServiceRepresentative,
                                                                 });
@@ -26,21 +26,21 @@
                                                             new List<string>
                                                                 {
                                                                     UserRoles.WarrantyAdmin,
-                                                                    UserRoles.WarrantyServiceManager,
+                                                                    UserRoles.CustomerCareManager,
                                                                 });
         
         public static readonly ToDoType CommunityEmployeeAssignment = new ToDoType(4, "Community Employee Assignment",
                                                             new List<string>
                                                                 {
                                                                     UserRoles.WarrantyAdmin,
-                                                                    UserRoles.WarrantyServiceManager,
+                                                                    UserRoles.CustomerCareManager,
                                                                     UserRoles.WarrantyServiceCoordinator,
                                                                 });
 
         public static readonly ToDoType JobAnniversaryTask = new ToDoType(5, "Job Anniversary",
                                                     new List<string>
                                                                 {
-                                                                    UserRoles.WarrantyServiceManager,
+                                                                    UserRoles.CustomerCareManager,
                                                                     UserRoles.WarrantyServiceCoordinator,
                                                                 });
 
@@ -48,7 +48,7 @@
                                                     new List<string>
                                                                 {
                                                                     UserRoles.WarrantyAdmin,
-                                                                    UserRoles.WarrantyServiceManager,
+                                                                    UserRoles.CustomerCareManager,
                                                                 });
 
         public static readonly ToDoType PaymentStatusChanged = new ToDoType(7, "Payment Status Changed",
@@ -61,7 +61,7 @@
            new List<string>
                                                                                {
                                                                                    UserRoles.WarrantyAdmin,
-                                                                                   UserRoles.WarrantyServiceManager,
+                                                                                   UserRoles.CustomerCareManager,
                                                                                    UserRoles.WarrantyServiceCoordinator
                                                                                });
 

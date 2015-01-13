@@ -6,7 +6,8 @@
     using Enumerations;
     using NPoco;
     using Security;
-    using Extensions;
+    using Common.Extensions;
+    
 
     public class ServiceCallStatsQueryHandler : IQueryHandler<ServiceCallStatsQuery, ServiceCallStatsModel>
     {
@@ -83,7 +84,7 @@
                                 (
                                     SELECT SUM(Amount) as TotalDollarsSpent
                                          , e.EmployeeId, EmployeeName, EmployeeNumber, CityCode
-                                    FROM WarrantyPayments p
+                                    FROM Payments p
                                         INNER JOIN Jobs j
                                         ON p.JobNumber = j.JobNumber
                                         INNER JOIN Communities c
@@ -94,7 +95,7 @@
                                         ON c.CommunityId = ca.CommunityId
                                         INNER JOIN Employees e
                                         ON ca.EmployeeId = e.EmployeeId
-                                    WHERE PostingMonth = MONTH(@0) AND PostingYear = YEAR(@0)
+                                    WHERE MONTH(p.CreatedDate) = MONTH(@0) AND YEAR(p.CreatedDate) = YEAR(@0)
                                     GROUP BY e.EmployeeId, EmployeeName, EmployeeNumber, CityCode
                                 ) as b
                                 ON a.EmployeeId = b.EmployeeId
@@ -122,7 +123,10 @@
             var additionalWhereClause = isEmployeeSpecific ? " AND a.EmployeeNumber = '" + user.EmployeeNumber + "'" : "";
             var completedSql = string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote(), defaultView.OrderByColumnName, defaultView.SortOrder, additionalWhereClause);
 
-            return _database.Fetch<ServiceCallStatsModel.LineItem>(completedSql, date, -2);
+            var model = _database.Fetch<ServiceCallStatsModel.LineItem>(completedSql, date, -2);
+            model.ForEach(x => x.EmployeeName = x.EmployeeName.ToTitleCase());
+
+            return model;
         }
     }
 }
