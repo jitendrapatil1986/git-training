@@ -71,6 +71,7 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public string PaymentStatusDisplayName { get { return PaymentStatus.DisplayName; }}
             public string BackchargeStatusDisplayName { get { return IsBackcharge ? BackchargeStatus.DisplayName : string.Empty; } }
             public string InvoiceNumber { get; set; }
+            public string Comments { get; set; }
             public Guid ServiceCallLineItemId { get; set; }
             public DateTime PaymentCreatedDate { get; set; }
             public Guid BackchargeId { get; set; }
