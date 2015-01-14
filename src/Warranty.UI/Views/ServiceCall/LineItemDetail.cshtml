@@ -13,24 +13,13 @@
         <div class="col-md-12">
             @Html.HiddenFor(model => model.ServiceCallLineItemStatus, new { id = "lineItemStatus" })
 
-            @Html.HiddenFor(model => model.CanReopenLines, new { id = "userCanReopenCallLinesAnytime", @class = "form-control", data_bind = "value: userCanAlwaysReopenCallLines" })
-
-            <div id="undoLastCompletedLineItem" data-bind="visible: !userCanAlwaysReopenCallLines() && lineJustCompleted()" class="undo-alert">
-                <div id="undoLastCompletedLineItemAlert" class="alert alert-warning alert-dismissible padding-5" role="alert">
-                    Line item marked as complete. <a class="cursor-pointer" data-bind="click: undoLastCompletedLine">Undo mark as complete.</a>
-                </div>
-            </div>
-
             <section class="margin-bottom-10">
                 <h2 class="no-margin">
                     <a class="bread-crumb" href="@Url.Action("CallSummary", "ServiceCall", new { id = Model.ServiceCallId })">@Model.ServiceCallTitle</a>
                     @Model.LineNumber - <span data-bind="text: problemCode"></span>
                     <div class="pull-right no-right-padding no-print">
                         <button id="btn-complete-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: completeLine, visible: !isLineItemCompleted()">Complete</button>
-                        @if (Model.CanReopenLines)
-                        {
-                            <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: reopenLine, visible: isLineItemCompleted()">Reopen</button>
-                        }
+                        <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: reopenLine, visible: isLineItemCompleted()">Reopen</button>
                     </div>
                 </h2>
                 <div class="clearfix"></div>
@@ -160,6 +149,10 @@
                                         </div>
                                         <span data-bind="validationMessage: amount" class="help-block"></span>
                                     </div>
+                                    <div class="col-md-12">
+                                        @Html.Label("Comments", new { @class = "control-label" })
+                                        <textarea class="form-control" maxlength="255" data-bind="value: comments"></textarea>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-2 margin-top-10">
@@ -233,37 +226,49 @@
                                         <div class="col-md-12 margin-bottom-5">
                                             <div class="no-left-right-padding">
                                                 <div class="row payment-line">
-                                                    <div class="col-md-4">
-                                                        <strong><span data-bind="text: vendorName"></span></strong>
-                                                        <br />
-                                                        <span data-bind="text: paymentStatusDisplayName, css: 'label label-' + paymentStatusBadgeClassName()"></span>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <b data-bind="text: costCode.costCode + '-' + costCode.displayName"></b>
-                                                        <br/>
-                                                        <span data-bind="text: 'Invoice #: ' + invoiceNumber"></span>
-                                                        <br />
-                                                        <span data-bind="text: 'Date: ' + moment(paymentCreatedDate).format('L')"></span>
-                                                    </div>
-                                                    <div class="col-md-1">
-                                                        <h4 data-bind="currency: amount"></h4>
-                                                    </div>
+                                                    <div class="row col-md-12 ">
+                                                        <div class="col-md-4">
+                                                            <strong><span data-bind="text: vendorName"></span></strong>
+                                                            <br />
+                                                            <span data-bind="text: paymentStatusDisplayName, css: 'label label-' + paymentStatusBadgeClassName()"></span>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <b data-bind="text: costCode.costCode + '-' + costCode.displayName"></b>
+                                                            <br/>
+                                                            <span data-bind="text: 'Invoice #' + invoiceNumber"></span>
+                                                            <br />
+                                                            <span data-bind="text: 'Created Date: ' + moment(paymentCreatedDate).format('L')"></span>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <h4 data-bind="currency: amount"></h4>
+                                                        </div>
 
-                                                    <div class="col-md-4 margin-bottom-3 text-align-right no-right-padding no-print">
-                                                        @if (Model.CanTakeActionOnPayments)
-                                                        {
-                                                            <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="visible: shouldDisplayApprovePayment, click: approvePayment">Approve</a>
-                                                            <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10 btn-action-with-popup hidden-xs" data-bind="visible: shouldDisplayHoldPayment, attr: {id:'btn_hold-' + paymentId}, click: displayHold">Hold</a>
-                                                        }
-                                                        <button class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="visible: shouldDisplayDeletePayment, click:deletePayment">Delete</button>
+                                                        <div class="col-md-4 margin-bottom-3 text-align-right no-right-padding no-print">
+                                                            @if (Model.CanTakeActionOnPayments)
+                                                            {
+                                                                <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="visible: shouldDisplayApprovePayment, click: approvePayment">Approve</a>
+                                                                <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10 btn-action-with-popup hidden-xs" data-bind="visible: shouldDisplayHoldPayment, attr: {id:'btn_hold-' + paymentId}, click: displayHold">Hold</a>
+                                                            }
+                                                            <button class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="visible: shouldDisplayDeletePayment, click:deletePayment">Delete</button>
                                                     
-                                                        @if (Model.CanTakeActionOnPayments)
-                                                        {
-                                                            <a href="#" class="btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayApprovePayment, click: approvePayment">Approve</a>
-                                                            <a href="#" class="btn btn-default btn-sm margin-right-10 btn-action-with-popup hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayHoldPayment, attr: {id:'btn_hold-' + paymentId}, click: displayHold">Hold</a>
-                                                        }
-                                                        <button class="btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayDeletePayment, click:deletePayment">Delete</button>
+                                                            @if (Model.CanTakeActionOnPayments)
+                                                            {
+                                                                <a href="#" class="btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayApprovePayment, click: approvePayment">Approve</a>
+                                                                <a href="#" class="btn btn-default btn-sm margin-right-10 btn-action-with-popup hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayHoldPayment, attr: {id:'btn_hold-' + paymentId}, click: displayHold">Hold</a>
+                                                            }
+                                                            <button class="btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayDeletePayment, click:deletePayment">Delete</button>
+                                                        </div>
                                                     </div>
+                                                    <!-- ko if: comments -->
+                                                    <div class="row col-md-12 margin-top-10">
+                                                        <div class="col-md-12">
+                                                            <small>
+                                                                @Html.Label("Comments", new { @class = "control-label"})<br/>
+                                                                <span data-bind="text: comments"></span>
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /ko -->
                                                 
                                                 </div>
                                             </div>

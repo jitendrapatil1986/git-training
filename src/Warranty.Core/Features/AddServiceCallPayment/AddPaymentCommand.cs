@@ -10,6 +10,7 @@
         public string BackchargeVendorNumber { get; set; }
         public string BackchargeVendorName { get; set; }
         public string InvoiceNumber { get; set; }
+        public string Comments { get; set; }
         public bool IsBackcharge { get; set; }
         public decimal Amount { get; set; }
         public decimal BackchargeAmount { get; set; }

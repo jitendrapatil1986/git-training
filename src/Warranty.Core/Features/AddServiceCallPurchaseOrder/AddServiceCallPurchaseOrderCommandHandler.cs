@@ -43,14 +43,14 @@
                 var rootProblem = _database.Single<string>("SELECT RootProblem FROM ServiceCallLineItems WHERE ServiceCallLineItemId=@0", message.ServiceCallLineItemId);
                 var costCode = RootProblem.FromDisplayName(rootProblem).CostCode;
 
-                var limit = _database.Single<decimal>(@"SELECT c.PurchaseOrderMaxAmount FROM Cities c
+                var limit = _database.ExecuteScalar<decimal>(@"SELECT c.PurchaseOrderMaxAmount FROM Cities c
                                             INNER JOIN Communities co ON co.CityId = c.CityId
                                             INNER JOIN Jobs j ON j.CommunityId = co.CommunityId
                                             INNER JOIN ServiceCalls sc ON sc.JobId = j.JobId
                                             INNER JOIN ServiceCallLineItems scl ON scl.ServiceCallId = sc.ServiceCallId
                                             WHERE scl.ServiceCallLineItemId = @0", message.ServiceCallLineItemId);
 
-                if (message.ServiceCallLineItemPurchaseOrderLines.Sum(scl => scl.Quantity*scl.UnitCost) <= limit)
+                if (message.ServiceCallLineItemPurchaseOrderLines.Sum(scl => scl.Quantity*scl.UnitCost) <= limit || limit == 0)
                 {
                     var purchaseOrder = new PurchaseOrder
                     {
