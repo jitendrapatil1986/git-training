@@ -133,6 +133,8 @@
     <Compile Include="Features\ServiceCallToggleActions\ServiceCallCompleteWsrNotificationQueryHandler.cs" />
     <Compile Include="Features\SessionStart\VerifyEmployeeExistsCommandHandler.cs" />
     <Compile Include="Features\SessionStart\VerifyEmployeeExistsCommand.cs" />
+    <Compile Include="Features\ToDoWidget\ToDoLastSelectedFilterSaveCommand.cs" />
+    <Compile Include="Features\ToDoWidget\ToDoLastSelectedFilterSaveCommandHandler.cs" />
     <Compile Include="JobServiceApiHelpers\ApiJsonConverter.cs" />
     <Compile Include="JobServiceApiHelpers\EnumerationJsonConverter.cs" />
     <Compile Include="JobServiceApiHelpers\OptionAttributeDictionaryJsonConverter.cs" />
@@ -499,6 +501,8 @@
     <Compile Include="FileManagement\IFileSystemManager.cs" />
     <Compile Include="FileManagement\ITemporaryFileUploadsService.cs" />
     <Compile Include="Services\AccountingService.cs" />
+    <Compile Include="Services\ToDoFilterCookieManager.cs" />
+    <Compile Include="Services\IManageToDoFilterCookie.cs" />
     <Compile Include="Services\IServiceCallCreateService.cs" />
     <Compile Include="Services\ServiceCallCreateService.cs" />
     <Compile Include="Services\CommunityEmployeeService.cs" />

@@ -12,6 +12,8 @@ namespace Warranty.Core.Features.ToDoWidget
             ToDos = new List<IToDo>();
         }
         public IEnumerable<IToDo> ToDos { get; set; }
-        public IEnumerable<ToDoType> ToDoTypes { get; set; }    
+        public IEnumerable<ToDoType> ToDoTypes { get; set; }
+        public string SelectedToDo { get; set; }
+        
     }
 }
