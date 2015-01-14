@@ -14,6 +14,7 @@
         public static NavHeaderItem MailMergeReport = new NavHeaderItem(4, Reports.Key, Reports.Display.MailMergeReportName, "Report", "MailMerge");
         public static NavHeaderItem Achievement = new NavHeaderItem(5, Reports.Key, Reports.Display.AchievementReportName, "Report", "AchievementReport");
         public static NavHeaderItem Saltline = new NavHeaderItem(6, Reports.Key, Reports.Display.SaltlineReportName, "Report", "SaltlineReport");
+        public static NavHeaderItem WsrSummary = new NavHeaderItem(9, Reports.Key, Reports.Display.WsrSummaryReportName, "Report", "WSRSummaryReport");
         
         public static NavHeaderItem AssignWSR = new NavHeaderItem(7, Administration.Key, Administration.Display.AssignWSRName, "Admin", "ManageAssignments");
         public static NavHeaderItem ManageCostCode = new NavHeaderItem(8, Administration.Key, Administration.Display.MarketCostCodeName, "Admin", "ManageProblemCodeCostCodes");
@@ -58,6 +59,7 @@
                 public const string WsrBonusSummaryReportName = "WSR Bonus Summary Report";
                 public const string AchievementReportName = "Achievement Report";
                 public const string SaltlineReportName = "Saltline Report";
+                public const string WsrSummaryReportName = "WSR Summary Report";
             }
         }
 
