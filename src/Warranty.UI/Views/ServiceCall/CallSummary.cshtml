@@ -36,6 +36,7 @@
             <h2 class="pull-left no-margin">@Model.ServiceCallSummary.ServiceCallTitle</h2>
 
             <div class="warranty-header-buttons no-print">
+                <a href="javascript:window.print()" class="btn btn-default pull-right margin-botom-10 no-print"><span class="glyphicon glyphicon-print"></span> Print</a>
                 @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
                 {
                     <div data-bind="visible: callSummaryStatusOpen()">
@@ -65,17 +66,18 @@
                     <div class="row remove-list-style">
                         <div class="col-md-3 main-info">
                             <h3 class="panel-title text-capitalize">@Format.HomeOwner(Model.ServiceCallSummary.HomeownerName, Model.ServiceCallSummary.HomeownerNumber)</h3>
-                            <ul class="no-print">
+                            <ul>
                                 <li>@Model.ServiceCallSummary.CommunityName</li>
                                 <li class="text-capitalize">@Model.ServiceCallSummary.Address</li>
-                                <li>
+                                <li class="no-print">
                                     @Format.EditablePhoneNumber(PhoneNumberType.Home, Format.PhoneNumberWithExtension(Model.ServiceCallSummary.HomePhone),Url.Action("AddOrUpdatePhoneNumber","Homeowner"), Model.ServiceCallSummary.HomeownerId)
                                 </li>
-                                <li>
+                                <li class="no-print">
                                     @Format.EditableEmailForServiceCall(Model.ServiceCallSummary.EmailAddress, Url.Action("AddOrUpdateEmail","Homeowner"), Model.ServiceCallSummary.HomeownerId, Model.ServiceCallSummary.CallNumber)
                                 </li>
                             </ul>
                         </div>
+                        <hr class="print-only margin-top-10 margin-bottom-10"/>
                         <div class="col-md-3">
                             <ul class="border-bottom-1-solid">
                                 <li class="clearfix"><span class="pull-left">Created By:</span><span class="pull-right">@Model.ServiceCallSummary.CreatedBy</span></li>
@@ -264,7 +266,7 @@
 
             </div>
             <div class="panel panel-default padding-top-10">
-                <section class="margin-bottom-15">
+                <section class="margin-bottom-15 no-print">
                     <h3 class="col-md-12">Attachments
                         <span>
                             <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Attachments" data-toggle="collapse" data-target="#addAttachment"><span class="glyphicon glyphicon-plus"></span></button>
@@ -342,6 +344,11 @@
                         </div>
                     </div>
                 </section>
+            </div>
+            
+            <div class="print-only">
+                <br/>
+                <label>Signature: __________________________________________ &ensp; Date: _________________</label>
             </div>
         </div>
     </div>
