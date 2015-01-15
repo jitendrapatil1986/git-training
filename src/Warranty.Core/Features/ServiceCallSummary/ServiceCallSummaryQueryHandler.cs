@@ -52,6 +52,9 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , ServiceCallType
                                     , Servicecallnumber as CallNumber
                                     , j.AddressLine as [Address]
+                                    , j.City 
+                                    , j.StateCode
+                                    , j.PostalCode
                                     , j.JobId
                                     , j.JobNumber
                                     , wc.CreatedDate

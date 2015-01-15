@@ -43,6 +43,9 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public Guid JobId { get; set; }
             public string JobNumber { get; set; }
             public string Address { get; set; }
+            public string City { get; set; }
+            public string StateCode { get; set; }
+            public string PostalCode { get; set; }
             public string CallNumber { get; set; }
             public DateTime CreatedDate { get; set; }
             public string CreatedBy { get; set; }
