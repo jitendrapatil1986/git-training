@@ -35,6 +35,7 @@
                         <h3 class="panel-title text-capitalize">@Format.HomeOwner(Model.HomeOwnerName, Model.HomeOwnerNumber)</h3>
                         <ul>
                             <li></li>
+                            <li>@Html.DisplayFor(x => x.CommunityName)</li>
                             <li>@Html.DisplayFor(x => x.AddressLine)</li>
                             <li>@Model.City, @Model.StateCode @Model.PostalCode</li>
                             <li>
@@ -48,8 +49,8 @@
                     <div class="col-md-4">
                         <ul class="border-bottom-1-solid">
                             <li class="clearfix">@Html.DisplayFor(x => x.PlanTypeDescription)</li>
-                            <li class="clearfix">Plan Number: @Html.DisplayFor(x => x.PlanNumber)</li>
-                            <li class="clearfix">Elevation: @Html.DisplayFor(x => x.Elevation)</li>
+                            <li class="clearfix">Plan Number: @Html.DisplayFor(x => x.PlanNumber) - @Html.DisplayFor(x=>x.PlanName) - @Html.DisplayFor(x => x.Elevation)</li>
+                            <li class="clearfix">Project Name: @Html.DisplayFor(x => x.ProjectName)</li>
                             <li class="clearfix">Swing: @Html.DisplayFor(x => x.Swing)</li>
                         </ul>
                     </div>
@@ -87,7 +88,7 @@
                             else
                             {
                                 var sc = (JobSummaryModel.JobServiceCall)line;
-                                <div class="service-call-line col-md-12" onclick="location.href='@Url.Action("CallSummary", "ServiceCall", new { id = sc.ServiceCallId })'">
+                                <div class="service-call-line col-md-12 cursor-pointer" onclick="location.href='@Url.Action("CallSummary", "ServiceCall", new { id = sc.ServiceCallId })'">
                                     <div class="col-md-1">
                                         <small class="text-muted">@sc.CallNumber</small>
                                     </div>

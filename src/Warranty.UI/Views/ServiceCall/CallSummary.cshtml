@@ -69,6 +69,7 @@
                             <ul>
                                 <li>@Model.ServiceCallSummary.CommunityName</li>
                                 <li class="text-capitalize">@Model.ServiceCallSummary.Address</li>
+                                <li>@Model.ServiceCallSummary.City, @Model.ServiceCallSummary.StateCode @Model.ServiceCallSummary.PostalCode</li>
                                 <li class="no-print">
                                     @Format.EditablePhoneNumber(PhoneNumberType.Home, Format.PhoneNumberWithExtension(Model.ServiceCallSummary.HomePhone),Url.Action("AddOrUpdatePhoneNumber","Homeowner"), Model.ServiceCallSummary.HomeownerId)
                                 </li>
