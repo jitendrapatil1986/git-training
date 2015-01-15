@@ -8,6 +8,7 @@ namespace Warranty.UI.Controllers
     using Warranty.Core.Features.Report.MailMerge;
     using Warranty.Core.Features.Report.Saltline;
     using Warranty.Core.Features.Report.WSRLoadingReport;
+    using Warranty.Core.Features.Report.WSRSummary;
     using Warranty.Core.Features.Report.WarrantyBonusSummary;
 
     public class ReportController : Controller
@@ -106,6 +107,13 @@ namespace Warranty.UI.Controllers
         public ActionResult SaltlineReport(SaltlineReportModel model)
         {
             var resultModel = _mediator.Request(new SaltlineReportQuery { queryModel = model });
+
+            return View(resultModel);
+        }
+
+        public ActionResult WSRSummaryReport()
+        {
+            var resultModel = _mediator.Request(new WSRSummaryQuery());
 
             return View(resultModel);
         }

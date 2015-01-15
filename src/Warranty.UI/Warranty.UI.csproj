@@ -455,6 +455,7 @@
     <Content Include="Views\Home\_ToDoPaymentStatusChanged.cshtml" />
     <Content Include="Views\Home\_ToDoServiceCallClosure.cshtml" />
     <Content Include="Views\WarrantyMailer\ServiceCallCompleted.cshtml" />
+    <Content Include="Views\Report\WSRSummaryReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
