@@ -16,6 +16,7 @@ namespace Warranty.UI.Core.Initialization
     using Warranty.Core.Extensions;
     using Warranty.Core.FileManagement;
     using Warranty.Core.Security;
+    using Warranty.Core.Services;
 
     public class WarrantyWebsiteRegistry : Registry
     {
@@ -26,6 +27,7 @@ namespace Warranty.UI.Core.Initialization
             For<HttpRequest>().Use(() => HttpContext.Current.Request);
             For<IUserSession>().Use<WarrantyUserSession>();
             For<IWarrantyMailer>().Use<WarrantyMailer>();
+            For<IManageToDoFilterCookie>().Use<ToDoFilterCookieManager>();
             For(typeof(IFileSystemManager<>)).Use(typeof(FileSystemManager<>));
 
             var baseAccountingApiUri = ConfigurationManager.AppSettings["Accounting.API.BaseUri"];

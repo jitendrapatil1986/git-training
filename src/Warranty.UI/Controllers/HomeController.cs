@@ -170,6 +170,15 @@
             return PartialView(model);
         }
 
+        public ActionResult SaveLastSelectedToDoFilter(string value)
+        {
+            _mediator.Send(new ToDoLastSelectedFilterSaveCommand
+                {
+                    LastSelectedFilter = value
+                });
+            return Json(new { success = "true" }, JsonRequestBehavior.AllowGet);
+        }
+
         [ChildActionOnly]
         public string GetRequireJSUrl(ViewContext context)
         {

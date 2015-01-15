@@ -20,7 +20,6 @@ namespace Warranty.Server.Handlers.JobStages
             using (_database)
             {
                 var jobStage = _database.SingleByJdeId<JobStage>(message.JDEId);
-
                 jobStage.CompletionDate= message.ActualCompletionDate;
                 _database.Update(jobStage);
             }
