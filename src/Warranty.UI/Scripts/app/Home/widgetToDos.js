@@ -1,5 +1,6 @@
-define(['urls','jquery'], function(urls, $) {
+define(['urls', 'jquery'], function (urls, $) {
     $(function () {
+        
         $('.todo:lt(5)').removeClass('hide');
 
         $('.show-more-todos').click(function () {
@@ -7,15 +8,15 @@ define(['urls','jquery'], function(urls, $) {
             $("#Last_Display_Size").val(value);
             hideShowTodos();
         });
-        
+
         function hideShowTodos() {
             var classToIntersect = "";
             var selectedTodoType = $("#toDoSelect").find('option:selected').val();
-            
+
             if (selectedTodoType) {
                 classToIntersect = "." + selectedTodoType;
             }
-            
+
             var value = $("#Last_Display_Size").val();
             if (value == 'All') {
                 $('.todo').addClass('hide');
@@ -25,7 +26,7 @@ define(['urls','jquery'], function(urls, $) {
                 $('.todo').addClass('hide');
                 $('.todo' + classToIntersect + ':lt("' + show + '")').removeClass('hide');
             }
-            
+
             if ($('.todo' + classToIntersect).length >= 5) {
                 $('#ToDo_Display_Size_Controls').show();
             } else {
@@ -33,31 +34,47 @@ define(['urls','jquery'], function(urls, $) {
             }
         }
         
-        $('#toDoSelect').change(function () {
-            if ($(this).find('option:selected').text() == 'All') {
+        function changeToDo() {
+            if ($("#toDoSelect").find('option:selected').text() == 'All') {
                 $('.todo').removeClass('hide');
             } else {
-                var toDoToShow = $(this).find('option:selected').val();
+                var toDoToShow = $("#toDoSelect").find('option:selected').val();
                 $('.todo').addClass('hide');
                 $('.' + toDoToShow).removeClass('hide');
+                saveLastFilter(toDoToShow);
             }
             hideShowTodos();
+        }
+
+        $('#toDoSelect').val($("#initialToDo").val());
+        changeToDo();
+
+        $('#toDoSelect').change(function () {
+            changeToDo($(this));
         });
-            
+        
+        function saveLastFilter(value) {
+            $.ajax({
+                type: "POST",
+                url: urls.Home.SaveLastSelectedToDoFilter,
+                data: { value: value }
+            });
+        }
+
         $(".approve-button").click(function (e) {
             e.preventDefault();
             var serviceCallId = $(this).data("service-call-id");
             var url = urls.ServiceCall.Approve;
             executeApproval(url, serviceCallId);
         });
-            
+
         $(".deny-button").click(function (e) {
             e.preventDefault();
             var serviceCallId = $(this).data("service-call-id");
             var url = urls.ServiceCall.Deny;
             executeApproval(url, serviceCallId);
         });
-            
+
         function executeApproval(url, serviceCallId) {
             $.ajax({
                 type: "POST",
@@ -70,28 +87,28 @@ define(['urls','jquery'], function(urls, $) {
                 }
             });
         }
-        
+
         $(".assign-employee-community-button").click(function (e) {
             e.preventDefault();
             var communityId = $(this).data("community-id");
             var employeeNumber = $("#list_assignable_employee_" + communityId).val();
-            
+
             var url = urls.Community.AssignEmployee;
-            
+
             $.ajax({
                 type: "POST",
                 url: url,
                 data: { CommunityId: communityId, EmployeeNumber: employeeNumber },
                 success: function (result) {
                     if (result.success == true) {
-                            var element = $('#community-todo-' + communityId);
-                            element.remove();
-                            updateTodoWidgetElements(element);
-                        }
+                        var element = $('#community-todo-' + communityId);
+                        element.remove();
+                        updateTodoWidgetElements(element);
+                    }
                 }
             });
         });
-        
+
         function updateTodoWidgetElements(hiddenelement) {
             var cssClass = hiddenelement.attr('class').replace(/[\s]+/g, ' ').replace(/ /g, ".");
             var nextTodo = $("." + cssClass + ".hide").first();
@@ -99,7 +116,7 @@ define(['urls','jquery'], function(urls, $) {
                 nextTodo.removeClass("hide");
             }
         }
-        
+
         $(".complete-task").click(function (e) {
             e.preventDefault();
             var taskId = $(this).data("task-id");
