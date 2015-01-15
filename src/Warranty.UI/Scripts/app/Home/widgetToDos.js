@@ -38,7 +38,6 @@ define(['urls', 'jquery'], function (urls, $) {
             if ($("#toDoSelect").find('option:selected').text() == 'All') {
                 $('.todo').removeClass('hide');
             } else {
-                debugger;
                 var toDoToShow = $("#toDoSelect").find('option:selected').val();
                 $('.todo').addClass('hide');
                 $('.' + toDoToShow).removeClass('hide');
