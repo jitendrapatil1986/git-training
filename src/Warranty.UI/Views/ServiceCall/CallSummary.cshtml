@@ -36,7 +36,7 @@
             <h2 class="pull-left no-margin">@Model.ServiceCallSummary.ServiceCallTitle</h2>
 
             <div class="warranty-header-buttons no-print">
-                <a href="javascript:window.print()" class="btn btn-default pull-right margin-botom-10 no-print"><span class="glyphicon glyphicon-print"></span> Print</a>
+                <a href="javascript:window.print()" class="btn btn-default pull-right margin-botom-10 no-print hidden-xs hidden-sm"><span class="glyphicon glyphicon-print"></span> Print</a>
                 @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
                 {
                     <div data-bind="visible: callSummaryStatusOpen()">
