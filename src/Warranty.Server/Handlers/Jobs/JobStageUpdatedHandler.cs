@@ -1,7 +1,7 @@
 ﻿namespace Warranty.Server.Handlers.Jobs
 {
     using System;
-    using Accounting.Events.Job;
+    using Construction.Events.Jobs;
     using Core.Entities;
     using Core.TaskInfrastructure.Tasks;
     using Extensions;
@@ -23,7 +23,7 @@
         {
             using (_database)
             {
-                var job = _database.SingleByJdeId<Job>(message.JDEId);
+                var job = _database.SingleByJdeId<Job>(message.Job);
 
                 job.Stage = Convert.ToInt32(Convert.ToDecimal(message.Stage));
                 _database.Update(job);
