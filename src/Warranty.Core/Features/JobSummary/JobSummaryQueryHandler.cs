@@ -19,14 +19,12 @@ namespace Warranty.Core.Features.JobSummary
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
         private readonly IHomeownerAdditionalContactsService _homeownerAdditionalContactsService;
-        private readonly IAccountingService _accountingService;
 
-        public JobSummaryQueryHandler(IDatabase database, IUserSession userSession, IHomeownerAdditionalContactsService homeownerAdditionalContactsService, IAccountingService accountingService)
+        public JobSummaryQueryHandler(IDatabase database, IUserSession userSession, IHomeownerAdditionalContactsService homeownerAdditionalContactsService)
         {
             _database = database;
             _userSession = userSession;
             _homeownerAdditionalContactsService = homeownerAdditionalContactsService;
-            _accountingService = accountingService;
         }
 
         public JobSummaryModel Handle(JobSummaryQuery query)
@@ -113,6 +111,8 @@ namespace Warranty.Core.Features.JobSummary
                                 , DATEDIFF(yy, j.CloseDate, getdate()) as YearsWithinWarranty
                                 , j.CloseDate as WarrantyStartDate
                                 , wsr.EmployeeName as ServiceRepName
+                                , pr.ProjectName
+                                , co.CommunityName
                             FROM Jobs j
                             INNER JOIN HomeOwners ho
                             ON j.JobId = ho.JobId
@@ -124,6 +124,10 @@ namespace Warranty.Core.Features.JobSummary
                             ON j.CommunityId = ca.CommunityId
                             LEFT OUTER JOIN Employees wsr
                             ON ca.EmployeeId = wsr.EmployeeId
+                            LEFT OUTER JOIN Communities co
+                            ON co.CommunityId = ca.CommunityId
+                            LEFT OUTER JOIN Projects pr
+                            ON pr.ProjectId = co.ProjectId
                             WHERE j.JobId = @0
                             ORDER BY ho.HomeownerNumber DESC";
 

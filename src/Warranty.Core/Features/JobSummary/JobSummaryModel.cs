@@ -18,11 +18,13 @@ namespace Warranty.Core.Features.JobSummary
         public string LegalDescription { get; set; }
         public Guid CommunityId { get; set; }
         public Guid? CurrentHomeOwnerId { get; set; }
+        public string CommunityName { get; set; }
         public string PlanType { get; set; }
         public string PlanTypeDescription { get; set; }
         public string PlanName { get; set; }
         public string PlanNumber { get; set; }
         public string Elevation { get; set; }
+        public string ProjectName { get; set; }
         public string Swing { get; set; }
         public Guid? BuilderEmployeeId { get; set; }
         public string BuilderName { get; set; }

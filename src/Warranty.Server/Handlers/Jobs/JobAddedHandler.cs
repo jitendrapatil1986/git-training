@@ -31,7 +31,7 @@ namespace Warranty.Server.Handlers.Jobs
                         .Select(c => c.CommunityId)
                         .Single();
 
-                    job = new Job()
+                    job = new Job
                     {
                         JdeIdentifier = message.JDEId,
                         JobNumber = message.Job,
