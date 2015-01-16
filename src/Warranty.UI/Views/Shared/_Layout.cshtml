@@ -21,9 +21,10 @@
             <ul class="dropdown-menu">
                 @foreach (var item in NavHeaderItem.GetAll(key))
                 {
-                    if( 
-                        (key == NavHeaderItem.Reports.Key && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) ||
+                    if(
+                        (key == NavHeaderItem.Reports.Key && item.Value != NavHeaderItem.WsrCallSummary.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) ||
                         (key == NavHeaderItem.Reports.Key && item.Value == NavHeaderItem.MailMergeReport.Value && User.IsInRole(UserRoles.WarrantyServiceRepresentative)) ||
+                        (key == NavHeaderItem.Reports.Key && item.Value == NavHeaderItem.WsrCallSummary.Value && User.IsInRole(UserRoles.WarrantyServiceRepresentative)) ||
                         (item.Value != NavHeaderItem.ManageCostCode.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) || 
                         (item.Value == NavHeaderItem.ManageCostCode.Value && User.IsInRole(UserRoles.WarrantyAdmin))
                         )
@@ -127,6 +128,7 @@
             <hr/>
             <footer class="no-print">
                 <p class="text-center text-muted">
+                    <a class="visible-xs" href="#feedbackModal" data-toggle="modal">Contact Help Desk</a>
                     Version: @VersionHelper.ApplicationVersionNumber()
                 </p>
             </footer>
