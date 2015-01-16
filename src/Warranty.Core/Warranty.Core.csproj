@@ -365,9 +365,9 @@
     <Compile Include="Features\CreateServiceCall\RelatedProblemCode.cs" />
     <Compile Include="Features\CreateServiceCall\RelatedProblemCodeQuery.cs" />
     <Compile Include="Features\InlineEditCommandBase.cs" />
-    <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureServiceCallStatusModel.cs" />
-    <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureServiceCallStatusCommand.cs" />
-    <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureServiceCallStatusCommandHandler.cs" />
+    <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureAndCloseCallModel.cs" />
+    <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureAndCloseCallCommand.cs" />
+    <Compile Include="Features\EditServiceCallStatus\VerifyHomeownerSignatureAndCloseCallCommandHandler.cs" />
     <Compile Include="Features\JobSummary\Attachments\JobSummaryDeleteAttachmentCommand.cs" />
     <Compile Include="Features\JobSummary\Attachments\JobSummaryDeleteAttachmentCommandHandler.cs" />
     <Compile Include="Features\JobSummary\Attachments\JobSummaryDownloadAttachmentModel.cs" />
