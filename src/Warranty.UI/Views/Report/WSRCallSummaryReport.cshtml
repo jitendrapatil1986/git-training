@@ -1,0 +1,86 @@
+﻿@model Warranty.Core.Features.Report.WSRCallSummary.WSRCallSummaryModel
+
+<div class="container">
+    <section class="margin-bottom-10">
+        <h2 class="pull-left no-margin">WSR Call Summary Report</h2>
+        @if (Model.AnyResults)
+        {
+            <div class="warranty-header-buttons">
+                <a href="javascript:window.print()" class="btn btn-default pull-right margin-botom-10 no-print"><span class="glyphicon glyphicon-print"></span> Print</a>
+            </div>
+        }
+        <div class="clearfix"></div>
+    </section>
+
+    @if (!Model.AnyResults)
+    {
+        <p><em>No entries match report criteria</em></p>
+    }
+    else
+    {
+        <div class="row">
+            <div id="wsrCallSummary" class="col-md-12">
+                <h4>Employee: @Model.EmployeeName</h4>
+                <h5>Total Number Of Open Calls: @Model.TotalNumberOfOpenServiceCalls</h5>
+                <div class="row service-call-line no-bottom-padding">
+                    <h4 class="col-xs-3">Homeowner</h4>
+                    <h4 class="col-xs-3">Community</h4>
+                    <h4 class="col-xs-4">Address</h4>
+                    <h4 class="col-xs-2">Phone</h4>
+                </div>
+
+                @foreach (var serviceCall in Model.ServiceCalls)
+                {
+                    <div class="row small service-call-line">
+                        <div class="col-xs-3 margin-bottom-5">@serviceCall.HomeownerName</div>
+                        <div class="col-xs-3">@serviceCall.CommunityName</div>
+                        <div class="col-xs-4">@serviceCall.Address</div>
+                        <div class="col-xs-2">
+                            @if (!string.IsNullOrEmpty(serviceCall.HomePhone))
+                            {
+                                @serviceCall.HomePhone
+                                if (!string.IsNullOrEmpty(serviceCall.OtherPhone))
+                                {
+                                    <span> / </span>@serviceCall.OtherPhone
+                                }
+                            }
+                            else
+                            {
+                                @serviceCall.OtherPhone
+                            }
+                        </div>
+
+                        @if(serviceCall.ServiceCallLines.Any())
+                        {
+                            <br/>
+                            <ul class="col-xs-12 margin-left-15">
+                                <b>Line Item Problem Code and Description</b>
+                                <ul>
+                                    @foreach (var line in serviceCall.ServiceCallLines)
+                                    {
+                                        <li>@line.ProblemCode - @line.ProblemDescription</li>
+                                    }
+                                </ul>
+                            </ul>
+                        }
+
+                        @if(serviceCall.ServiceCallNotes.Any())
+                        {
+                            <br/>
+                            <ul class="col-xs-12 margin-left-15">
+                                <b>Notes</b>
+                                <ul>
+                                    @foreach (var note in serviceCall.ServiceCallNotes)
+                                    {
+                                        <li>@note.Note</li>
+                                    }
+                                </ul>
+                            </ul>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+        
+    }
+</div>
