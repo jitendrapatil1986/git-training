@@ -46,9 +46,6 @@
                     <div data-bind="visible: callSummaryStatusComplete() && canBeReopened()">
                         <a href='#' class='btn btn-default pull-right btn-action-with-popup' data-action-with-popup='reopen' id='btn_reopen'>Reopen</a>
                     </div>
-                    <div data-bind="visible: canBeCompleted()">
-                        <a href='#' class='btn btn-default pull-right' data-action-with-popup='reopen' data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" id='btn_complete'>Complete</a>
-                    </div>
                 }
                 @if (Model.ServiceCallSummary.WasCreatedToday)
                 {
@@ -173,7 +170,7 @@
                                             </div>
                                             <br/>
                                             <div class="col-md-1">
-                                                <button class="btn btn-primary" data-bind="click: saveVerifiedHomeownerSignature">Save</button>
+                                                <button class="btn btn-primary" data-bind="click: verifySignatureAndCloseCall">Verify & Close Call</button>
                                             </div>
                                         </form>
                                     </div>

@@ -235,6 +235,7 @@
     <Compile Include="Core\Helpers\Format.cs" />
     <Compile Include="Core\Helpers\HtmlHelperExtensions.cs" />
     <Compile Include="Core\Helpers\SystemConstants.cs" />
+    <Compile Include="Core\Helpers\UrlBuilderHelper.cs" />
     <Compile Include="Core\Helpers\VersionHelper.cs" />
     <Compile Include="Core\Initialization\BundleConfig.cs" />
     <Compile Include="Core\Initialization\Bundling\LessBundleTransform.cs" />

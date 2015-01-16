@@ -1,23 +1,27 @@
 ﻿namespace Warranty.Core.Features.EditServiceCallStatus
 {
+    using System;
+    using ActivityLogger;
     using Entities;
     using Enumerations;
     using InnerMessages;
     using NPoco;
     using NServiceBus;
 
-    public class VerifyHomeownerSignatureServiceCallStatusCommandHandler : ICommandHandler<VerifyHomeownerSignatureServiceCallStatusCommand, VerifyHomeownerSignatureServiceCallStatusModel>
+    public class VerifyHomeownerSignatureAndCloseCallCommandHandler : ICommandHandler<VerifyHomeownerSignatureAndCloseCallCommand, VerifyHomeownerSignatureAndCloseCallModel>
     {
         private readonly IDatabase _database;
         private readonly IBus _bus;
+        private readonly IActivityLogger _logger;
 
-        public VerifyHomeownerSignatureServiceCallStatusCommandHandler(IDatabase database, IBus bus)
+        public VerifyHomeownerSignatureAndCloseCallCommandHandler(IDatabase database, IBus bus, IActivityLogger logger)
         {
             _database = database;
             _bus = bus;
+            _logger = logger;
         }
 
-        public VerifyHomeownerSignatureServiceCallStatusModel Handle(VerifyHomeownerSignatureServiceCallStatusCommand message)
+        public VerifyHomeownerSignatureAndCloseCallModel Handle(VerifyHomeownerSignatureAndCloseCallCommand message)
         {
             using (_database)
             {
@@ -25,9 +29,8 @@
                 updateServiceCall.HomeownerVerificationSignature = message.HomeownerVerificationSignature;
                 updateServiceCall.HomeownerVerificationSignatureDate = message.HomeownerVerificationSignatureDate;
                 updateServiceCall.HomeownerVerificationType = HomeownerVerificationType.FromValue(message.HomeownerVerificationTypeId);
-
-                if (updateServiceCall.ServiceCallStatus != ServiceCallStatus.Complete)
-                    updateServiceCall.ServiceCallStatus = ServiceCallStatus.HomeownerSigned;
+                updateServiceCall.ServiceCallStatus = ServiceCallStatus.Complete;
+                updateServiceCall.CompletionDate = DateTime.UtcNow;
 
                 _database.Update(updateServiceCall);
                 
@@ -36,7 +39,16 @@
                         x.ServiceCallId = updateServiceCall.ServiceCallId;
                     });
 
-                var model = new VerifyHomeownerSignatureServiceCallStatusModel
+                _bus.Send<NotifyServiceCallCompleted>(x =>
+                {
+                    x.ServiceCallId = updateServiceCall.ServiceCallId;
+                });
+
+                const string activityName = "Service call was completed.";
+
+                _logger.Write(activityName, null, message.ServiceCallId, ActivityType.Complete, ReferenceType.ServiceCall);
+
+                var model = new VerifyHomeownerSignatureAndCloseCallModel
                     {
                         ServiceCallId = updateServiceCall.ServiceCallId,
                         ServiceCallStatus = updateServiceCall.ServiceCallStatus,
