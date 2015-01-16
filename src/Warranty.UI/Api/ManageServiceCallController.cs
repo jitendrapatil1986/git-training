@@ -2,6 +2,7 @@
 {
     using System;
     using System.Web.Mvc;
+    using Core.Helpers;
     using Mailers;
     using Warranty.Core;
     using Warranty.Core.Enumerations;
@@ -12,6 +13,7 @@
     using Warranty.Core.Features.CompleteServiceCallLineItem;
     using Warranty.Core.Features.DeleteServiceCall;
     using Warranty.Core.Features.EditServiceCallLineItem;
+    using Warranty.Core.Features.ServiceCallToggleActions;
     using Warranty.Core.Features.SharedQueries;
     using Warranty.Core.Features.UpdateServiceCallLineItem;
     using Warranty.Core.Features.EditServiceCallStatus;
@@ -20,16 +22,25 @@
     public class ManageServiceCallController: ApiController
     {
         private readonly IMediator _mediator;
+        private readonly IWarrantyMailer _mailer;
 
         public ManageServiceCallController(IMediator mediator, IWarrantyMailer mailer, IUserSession userSession)
         {
             _mediator = mediator;
+            _mailer = mailer;
         }
 
         [HttpPost]
-        public VerifyHomeownerSignatureServiceCallStatusModel VerifyHomeownerSignatureServiceCall(VerifyHomeownerSignatureServiceCallStatusCommand model)
+        public VerifyHomeownerSignatureAndCloseCallModel VerifyHomeownerSignatureAndCloseCall(VerifyHomeownerSignatureAndCloseCallCommand model)
         {
             var resultModel = _mediator.Send(model);
+
+            var notificationModel = _mediator.Request(new ServiceCallCompleteWsrNotificationQuery { ServiceCallId = model.ServiceCallId });
+            if (notificationModel.WarrantyRepresentativeEmployeeEmail != null)
+            {
+                notificationModel.Url = UrlBuilderHelper.GetUrl("ServiceCall", "CallSummary", new { id = model.ServiceCallId });
+                _mailer.ServiceCallCompleted(notificationModel).SendAsync();
+            }
 
             return resultModel;
         }
