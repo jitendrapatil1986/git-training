@@ -100,19 +100,6 @@ require(['/Scripts/app/main.js'], function () {
                 });
             });
 
-            $('#btn_complete').click(function (e) {
-                var serviceCallId = $(this).data('service-call-id');
-                var url = urls.ServiceCall.Complete;
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: { id: serviceCallId },
-                    success: function (data) {
-                        completeServiceCall();
-                    }
-                });
-            });
-
             function reOpenServiceCall() {
                 viewModel.callSummaryServiceCallStatus(serviceCallStatusData.Open.DisplayName);
                 toastr.success("Success! Service Call has been succesfully reopened.");
@@ -660,10 +647,6 @@ require(['/Scripts/app/main.js'], function () {
                         return false;
                 });
 
-                self.canBeCompleted = ko.computed(function () {
-                    return self.areAllLineItemsCompleted() && !self.callSummaryStatusComplete() && self.callSummaryStatusSigned();
-                });
-                
                 self.canBeDeleted = ko.computed(function () {
                     return (self.callSummaryStatusRequested() || self.callSummaryStatusOpen()) && self.allLineItems().length == 0;
                 });
@@ -687,7 +670,7 @@ require(['/Scripts/app/main.js'], function () {
                     return result;
                 });
 
-                self.saveVerifiedHomeownerSignature = function () {
+                self.verifySignatureAndCloseCall = function () {
                     if (formHasErrors([self.homeownerVerificationSignature, self.homeownerVerificationSignatureDate, self.homeownerVerificationTypeId]))
                         return;
                     
@@ -700,7 +683,7 @@ require(['/Scripts/app/main.js'], function () {
                     });
 
                     $.ajax({
-                        url: urls.ManageServiceCall.VerifyHomeownerSignatureServiceCall,
+                        url: urls.ManageServiceCall.VerifyHomeownerSignatureAndCloseCall,
                         type: "POST",
                         data: verifySignatureData,
                         dataType: "json",
@@ -709,14 +692,15 @@ require(['/Scripts/app/main.js'], function () {
                     })
                         .fail(function (response) {
                             alert(JSON.stringify(response));
-                            toastr.error("There was an issue saving the homeowner verification. Please try again!");
+                            toastr.error("There was an issue verifying and completing the call. Please try again!");
                         })
                         .done(function (response) {
+                            self.canBeReopened(true);
                             self.callSummaryServiceCallStatus(response.ServiceCallStatus.DisplayName);
                             self.verifiedHomeownerSignature(response.HomeownerVerificationSignature);
                             self.verifiedHomeownerSignatureDate(response.HomeownerVerificationSignatureDate);
                             self.verifiedHomeownerType(response.HomeownerVerificationType.DisplayName);
-                            toastr.success("Success! Data saved.");
+                            toastr.success("Success! Service Call has been successfully verified and completed.");
 
                             $("#homeownerVerificationSignature").val('');
                             $("#homeownerVerificationSignatureDate").val('');
