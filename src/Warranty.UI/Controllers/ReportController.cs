@@ -7,6 +7,7 @@ namespace Warranty.UI.Controllers
     using Warranty.Core.Features.Report.Achievement;
     using Warranty.Core.Features.Report.MailMerge;
     using Warranty.Core.Features.Report.Saltline;
+    using Warranty.Core.Features.Report.WSRCallSummary;
     using Warranty.Core.Features.Report.WSRLoadingReport;
     using Warranty.Core.Features.Report.WSRSummary;
     using Warranty.Core.Features.Report.WarrantyBonusSummary;
@@ -114,6 +115,13 @@ namespace Warranty.UI.Controllers
         public ActionResult WSRSummaryReport()
         {
             var resultModel = _mediator.Request(new WSRSummaryQuery());
+
+            return View(resultModel);
+        }
+
+        public ActionResult WSRCallSummaryReport()
+        {
+            var resultModel = _mediator.Request(new WSRCallSummaryQuery());
 
             return View(resultModel);
         }
