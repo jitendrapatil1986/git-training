@@ -4,6 +4,7 @@
     using Enumerations;
     using NPoco;
     using Security;
+    using System.Linq;
 
     public class WSRCallSummaryQueryHandler : IQueryHandler<WSRCallSummaryQuery, WSRCallSummaryModel>
     {
@@ -26,7 +27,7 @@
                     {
                         EmployeeName = user.UserName,
                         EmployeeNumber = user.EmployeeNumber,
-                        ServiceCalls = GetWSRServiceCalls(user.EmployeeNumber),
+                        ServiceCalls = GetWSRServiceCalls(user.EmployeeNumber).OrderBy(x => x.CommunityName).ThenBy(x => x.NumberOfDaysRemaining).ThenBy(x => x.HomeownerName),
                     };
 
                 return model;
@@ -40,6 +41,7 @@
                 const string sql = @"SELECT 
                                         sc.ServiceCallId as ServiceCallId
                                         , Servicecallnumber as CallNumber
+                                        , sc.CreatedDate
                                         , j.AddressLine as [Address]
                                         , j.City 
                                         , j.StateCode

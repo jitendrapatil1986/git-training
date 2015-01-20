@@ -1,4 +1,6 @@
-﻿@model Warranty.Core.Features.Report.WSRCallSummary.WSRCallSummaryModel
+﻿@using Warranty.Core.Configurations
+@using Warranty.Core.Extensions
+@model Warranty.Core.Features.Report.WSRCallSummary.WSRCallSummaryModel
 
 <div class="container">
     <section class="margin-bottom-10">
@@ -23,32 +25,34 @@
                 <h4>Employee: @Model.EmployeeName</h4>
                 <h5>Total Number Of Open Calls: @Model.TotalNumberOfOpenServiceCalls</h5>
                 <div class="row service-call-line no-bottom-padding">
-                    <h4 class="col-xs-3">Homeowner</h4>
                     <h4 class="col-xs-3">Community</h4>
-                    <h4 class="col-xs-4">Address</h4>
+                    <h4 class="col-xs-3">Homeowner</h4>
+                    <h4 class="col-xs-3">Address</h4>
                     <h4 class="col-xs-2">Phone</h4>
+                    <h4 class="col-md-1 text-right">Days Open</h4>
                 </div>
 
                 @foreach (var serviceCall in Model.ServiceCalls)
                 {
                     <div class="row small service-call-line">
-                        <div class="col-xs-3 margin-bottom-5">@serviceCall.HomeownerName</div>
-                        <div class="col-xs-3">@serviceCall.CommunityName</div>
-                        <div class="col-xs-4">@serviceCall.Address</div>
+                        <div class="col-xs-3 margin-bottom-5">@serviceCall.CommunityName</div>
+                        <div class="col-xs-3">@serviceCall.HomeownerName</div>
+                        <div class="col-xs-3">@serviceCall.Address</div>
                         <div class="col-xs-2">
                             @if (!string.IsNullOrEmpty(serviceCall.HomePhone))
                             {
-                                @serviceCall.HomePhone
+                                @serviceCall.HomePhone.CleanPhoneNumber().ToPhoneNumberWithExtension()
                                 if (!string.IsNullOrEmpty(serviceCall.OtherPhone))
                                 {
-                                    <span> / </span>@serviceCall.OtherPhone
+                                    <span> / </span>@serviceCall.OtherPhone.CleanPhoneNumber().ToPhoneNumberWithExtension()
                                 }
                             }
                             else
                             {
-                                @serviceCall.OtherPhone
+                                @serviceCall.OtherPhone.CleanPhoneNumber().ToPhoneNumberWithExtension()
                             }
                         </div>
+                        <div class="col-md-1 text-right">@(Math.Abs(serviceCall.NumberOfDaysRemaining) + WarrantyConstants.NumberOfDaysAllowedToCloseServiceCall)</div>
 
                         @if(serviceCall.ServiceCallLines.Any())
                         {
