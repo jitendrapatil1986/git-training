@@ -25,8 +25,8 @@
                         (key == NavHeaderItem.Reports.Key && item.Value != NavHeaderItem.WsrCallSummary.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) ||
                         (key == NavHeaderItem.Reports.Key && item.Value == NavHeaderItem.MailMergeReport.Value && User.IsInRole(UserRoles.WarrantyServiceRepresentative)) ||
                         (key == NavHeaderItem.Reports.Key && item.Value == NavHeaderItem.WsrCallSummary.Value && User.IsInRole(UserRoles.WarrantyServiceRepresentative)) ||
-                        (item.Value != NavHeaderItem.ManageCostCode.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) || 
-                        (item.Value == NavHeaderItem.ManageCostCode.Value && User.IsInRole(UserRoles.WarrantyAdmin))
+                        (key == NavHeaderItem.Administration.Key && item.Value != NavHeaderItem.ManageCostCode.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) ||
+                        (key == NavHeaderItem.Administration.Key && item.Value == NavHeaderItem.ManageCostCode.Value && User.IsInRole(UserRoles.WarrantyAdmin))
                         )
                     {
                         if (item.HasDivider)
