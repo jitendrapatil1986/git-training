@@ -4,6 +4,7 @@ namespace Warranty.UI.Controllers
 {
     using System;
     using System.Web.Mvc;
+    using Core.Helpers;
     using Mailers;
     using Warranty.Core;
     using Warranty.Core.Enumerations;
@@ -99,7 +100,7 @@ namespace Warranty.UI.Controllers
                     var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery { ServiceCallId = newCallId });
                     if (notificationModel.WarrantyRepresentativeEmployeeEmail != null)
                     {
-                        notificationModel.Url = GetServiceCallUrl(newCallId);
+                        notificationModel.Url = UrlBuilderHelper.GetUrl("ServiceCall", "CallSummary", new { id = newCallId });
                         _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
                     }
                 }
@@ -120,7 +121,7 @@ namespace Warranty.UI.Controllers
             var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery { ServiceCallId = id });
             if (notificationModel.WarrantyRepresentativeEmployeeEmail != null)
             {
-                notificationModel.Url = GetServiceCallUrl(id);
+                notificationModel.Url = UrlBuilderHelper.GetUrl("ServiceCall", "CallSummary", new { id });
                 _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
             }
 
@@ -157,7 +158,7 @@ namespace Warranty.UI.Controllers
 
             if (result.ShouldSendEmail)
             {
-                result.Url = GetServiceCallUrl(id);
+                result.Url = UrlBuilderHelper.GetUrl("ServiceCall", "CallSummary", new {id});
                 _mailer.ServiceCallEscalated(result).SendAsync();
             }
             return Json(new { actionName = ActivityType.Escalation.DisplayName, actionMessage = message }, JsonRequestBehavior.AllowGet);
@@ -176,23 +177,6 @@ namespace Warranty.UI.Controllers
         public ActionResult InlineReassign(ReassignEmployeeCommand command)
         {
             _mediator.Send(command);
-            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult Complete(Guid id)
-        {
-            _mediator.Send(new ServiceCallCompleteCommand()
-            {
-                ServiceCallId = id,
-            });
-
-            var notificationModel = _mediator.Request(new ServiceCallCompleteWsrNotificationQuery {ServiceCallId = id});
-            if (notificationModel.WarrantyRepresentativeEmployeeEmail != null)
-            {
-                notificationModel.Url = GetServiceCallUrl(id);
-                _mailer.ServiceCallCompleted(notificationModel).SendAsync();
-            }
-
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
@@ -245,14 +229,6 @@ namespace Warranty.UI.Controllers
             var model = _mediator.Request(new AddServiceCallPurchaseOrderQuery { ServiceCallLineItemId = id });
 
             return View(model);
-        }
-
-        private string GetServiceCallUrl(Guid id)
-        {
-            var url = ConfigurationManager.AppSettings["Warranty.BaseUri"];
-            var urlHelper = new UrlHelper(ControllerContext.RequestContext);
-            url += urlHelper.Action("CallSummary", "ServiceCall", new { id });
-            return url;
         }
     }
 }

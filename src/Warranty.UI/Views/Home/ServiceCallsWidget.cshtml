@@ -1,8 +1,12 @@
-﻿@using Warranty.UI.Core.Helpers
+﻿@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.ServiceCallsWidget.ServiceCallsWidgetModel
     <ul class="nav nav-tabs responsive" role="tablist">
         <li class="active"><a href="#my_service_calls" role="tab" data-toggle="tab">My <span class="label label-default">@Model.MyServiceCalls.Count()</span></a></li>
-        <li><a href="#overdue_calls" role="tab" data-toggle="tab">Overdue @Format.ShowRedLabelIfCountGreaterThanZero(Model.OverdueServiceCalls.Count())</a></li>
+        @if (User.IsInRole(UserRoles.CustomerCareManager) || User.IsInRole(UserRoles.WarrantyServiceCoordinator))
+        {
+            <li><a href="#open_calls" role="tab" data-toggle="tab">Open @Format.ShowRedLabelIfCountGreaterThanZero(Model.OpenServiceCalls.Count())</a></li>
+        }
         <li><a href="#escalated_calls" role="tab" data-toggle="tab">Escalated @Format.ShowRedLabelIfCountGreaterThanZero(Model.EscalatedServiceCalls.Count())</a></li>
         <li><a href="#special_projects" role="tab" data-toggle="tab">Special Projects <span class="label label-default">@Model.SpecialProjectServiceCalls.Count()</span></a></li>
         <li class="pull-right"><span class="widget-header">Service Calls</span></li>
@@ -12,9 +16,12 @@
         <div class="tab-pane active" id="my_service_calls">
             @Html.Partial("_MyServiceCalls", Model)
         </div>
-        <div class="tab-pane" id="overdue_calls">
-            @Html.Partial("_OverdueCalls", Model)
-        </div>
+        @if (User.IsInRole(UserRoles.CustomerCareManager) || User.IsInRole(UserRoles.WarrantyServiceCoordinator))
+        {
+            <div class="tab-pane" id="open_calls">
+                @Html.Partial("_OpenCalls", Model)
+            </div>
+        }
         <div class="tab-pane" id="escalated_calls">
             @Html.Partial("_EscalatedCalls", Model)
         </div>

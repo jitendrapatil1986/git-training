@@ -235,6 +235,7 @@
     <Compile Include="Core\Helpers\Format.cs" />
     <Compile Include="Core\Helpers\HtmlHelperExtensions.cs" />
     <Compile Include="Core\Helpers\SystemConstants.cs" />
+    <Compile Include="Core\Helpers\UrlBuilderHelper.cs" />
     <Compile Include="Core\Helpers\VersionHelper.cs" />
     <Compile Include="Core\Initialization\BundleConfig.cs" />
     <Compile Include="Core\Initialization\Bundling\LessBundleTransform.cs" />
@@ -402,7 +403,7 @@
     <Content Include="Views\ServiceCall\Close.cshtml" />
     <Content Include="Views\ServiceCall\RequestPayment.cshtml" />
     <Content Include="Views\Home\_MyServiceCalls.cshtml" />
-    <Content Include="Views\Home\_OverdueCalls.cshtml" />
+    <Content Include="Views\Home\_OpenCalls.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Home\_SpecialProjects.cshtml" />
     <Content Include="Views\Home\MyTeamWidget.cshtml" />

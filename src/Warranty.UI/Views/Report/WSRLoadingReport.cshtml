@@ -1,4 +1,5 @@
 ﻿@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.Report.WSRLoadingReport.WSRLoadingReportModel
 
 <div class="container">
@@ -63,7 +64,9 @@
                 <thead>
                     <tr>
                         <th>Community Name</th>
-                        <th>Warrantable Homes</th>
+                        <th>Warrantable Homes Under 1 Year</th>
+                        <th>Warrantable Homes Under 2 Year</th>
+                        <th>Non-Warrantable Homes</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,12 +74,16 @@
                     {
                         <tr>
                             <td>@Html.DisplayFor(model => line.CommunityName)</td>
-                            <td>@Html.DisplayFor(model => line.NumberOfWarrantableHomes)</td>
+                            <td>@Html.DisplayFor(model => line.NumberOfWarrantableHomesUnderOneYear)</td>
+                            <td>@Html.DisplayFor(model => line.NumberOfWarrantableHomesUnderTwoYear)</td>
+                            <td>@Html.DisplayFor(model => line.NumberOfNonWarrantableHomes)</td>
                         </tr>
                     }
                     <tr class="totalLine">
                         <td>Total</td>
-                        <td>@Html.DisplayFor(model => model.TotalNumberOfWarrantableHomes)</td>
+                        <td>@Html.DisplayFor(model => model.TotalWarrantableHomesUnderOneYear)</td>
+                        <td>@Html.DisplayFor(model => model.TotalWarrantableHomesUnderTwoYear)</td>
+                        <td>@Html.DisplayFor(model => model.TotalNonWarrantableHomes)</td>
                     </tr>
                 </tbody>
             </table>
