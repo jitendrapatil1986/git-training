@@ -35,7 +35,9 @@
                 model.LoadingSummaries = GetWSRLoadingSummary(query.queryModel != null ? query.queryModel.SelectedEmployeeNumber : "").ToList();
             }
             
-            model.TotalNumberOfWarrantableHomes = model.LoadingSummaries.Sum(lines => lines.NumberOfWarrantableHomes);
+            model.TotalWarrantableHomesUnderOneYear = model.LoadingSummaries.Sum(lines => lines.NumberOfWarrantableHomesUnderOneYear);
+            model.TotalWarrantableHomesUnderTwoYear = model.LoadingSummaries.Sum(lines => lines.NumberOfWarrantableHomesUnderTwoYear);
+            model.TotalNonWarrantableHomes = model.LoadingSummaries.Sum(lines => lines.NumberOfNonWarrantableHomes);
             model.AnyResults = model.LoadingSummaries.Any();
 
             return model;
@@ -46,31 +48,41 @@
             var user = _userSession.GetCurrentUser();
             using (_database)
             {
-                const string sql = @"SELECT e.EmployeeName, e.EmployeeNumber, c.CommunityName, a.*
-                                    FROM
-                                    (
-                                        SELECT COUNT(*) as NumberOfWarrantableHomes, j.CommunityId, e.EmployeeId
-                                        FROM Jobs j
-                                        INNER JOIN Communities c
-                                        ON j.CommunityId = c.CommunityId
-                                        INNER JOIN Cities Ci
-                                        ON c.CityId = Ci.CityId
-                                        INNER JOIN CommunityAssignments ca
-                                        ON c.CommunityId = ca.CommunityId
-                                        INNER JOIN Employees e
-                                        ON ca.EmployeeId = e.EmployeeId
-                                        WHERE CloseDate >= DATEADD(yy, @0, @1)
-                                        AND CloseDate <= @1
-                                        AND Ci.CityCode IN ({0})
-                                        AND EmployeeNumber=@2
-                                        GROUP BY j.CommunityId, e.EmployeeId
-                                    ) a
-                                    INNER JOIN Communities c
-                                    ON a.CommunityId = c.CommunityId
-                                    INNER JOIN Employees e
-                                    ON a.EmployeeId = e.EmployeeId";
+                const string sql = @"; WITH AllWSRCommunities (JobId, CloseDate, CommunityId, EmployeeId)
+                                        AS
+                                        (
+                                            SELECT j.JobId, j.CloseDate, j.CommunityId, e.EmployeeId
+                                            FROM Jobs j
+                                            INNER JOIN Communities c
+                                            ON j.CommunityId = c.CommunityId
+                                            INNER JOIN Cities Ci
+                                            ON c.CityId = Ci.CityId
+                                            INNER JOIN CommunityAssignments ca
+                                            ON c.CommunityId = ca.CommunityId
+                                            INNER JOIN Employees e
+                                            ON ca.EmployeeId = e.EmployeeId
+                                            WHERE CloseDate <= @0
+                                            AND Ci.CityCode IN ({0})
+                                            AND EmployeeNumber = @3
+                                        )
 
-                var result = _database.Fetch<WSRLoadingReportModel.LoadingSummary>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()), -2, SystemTime.Today, employeeNumber);
+                                        SELECT e.EmployeeName, e.EmployeeNumber, c.CommunityName, a.*
+                                        FROM
+                                        (
+                                            SELECT CommunityId, EmployeeId,
+                                                SUM(CASE WHEN CloseDate >= DATEADD(yy, @1, @0) THEN 1 ELSE 0 END) as NumberOfWarrantableHomesUnderOneYear,
+                                                SUM(CASE WHEN CloseDate >= DATEADD(yy, @2, @0) THEN 1 ELSE 0 END) as NumberOfWarrantableHomesUnderTwoYear,
+                                                SUM(CASE WHEN CloseDate < DATEADD(yy, @2, @0) THEN 1 ELSE 0 END) as NumberOfNonWarrantableHomes
+                                            FROM AllWSRCommunities
+                                            GROUP BY CommunityId, EmployeeId
+                                        ) a
+                                        INNER JOIN Communities c
+                                        ON a.CommunityId = c.CommunityId
+                                        INNER JOIN Employees e
+                                        ON a.EmployeeId = e.EmployeeId
+                                        ORDER BY c.CommunityName";
+
+                var result = _database.Fetch<WSRLoadingReportModel.LoadingSummary>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today, -1, -2, employeeNumber);
 
                 return result;
             }
