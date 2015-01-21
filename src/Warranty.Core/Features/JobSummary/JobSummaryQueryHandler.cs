@@ -41,6 +41,7 @@ namespace Warranty.Core.Features.JobSummary
             model.CostCodes = model.Vendors.SelectMany(cc => cc.CostCodes)
                                    .Distinct()
                                    .OrderBy(x => x.CostCodeDescription);
+            model.Tasks = GetJobTasks(query.JobId);
 
             return model;
         }
@@ -235,6 +236,27 @@ namespace Warranty.Core.Features.JobSummary
             var result = _database.Fetch<JobSummaryModel.Homeowner>(sql, jobId);
 
             return result;
+        }
+
+        private IEnumerable<JobSummaryModel.Task> GetJobTasks(Guid jobId)
+        {
+            const string sql = @"SELECT e.EmployeeName
+                                    , t.Description
+                                    , t.TaskType
+                                    , t.CreatedDate 
+                                FROM Tasks t
+                                INNER JOIN Jobs j
+                                ON t.ReferenceId = j.JobId
+                                INNER JOIN Employees e
+                                ON t.EmployeeId = e.EmployeeId
+                                WHERE j.JobId = @0
+                                AND t.IsComplete = 1
+                                ORDER BY t.CreatedDate";
+
+            var result = _database.Fetch<JobSummaryModel.Task>(sql, jobId);
+
+            return result.Where(x => (x.TaskType.Value == TaskType.JobStage3.Value) || (x.TaskType.Value == TaskType.JobStage7.Value) ||
+                                     (x.TaskType.Value == TaskType.JobStage9.Value) || (x.TaskType.Value == TaskType.Job10MonthAnniversary.Value)).ToList(); ;
         }
 
         private IEnumerable<JobSummaryModel.JobPayment> GetJobPayments(Guid jobId)
