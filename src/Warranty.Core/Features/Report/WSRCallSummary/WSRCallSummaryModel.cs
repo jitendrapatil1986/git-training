@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Services;
 
     public class WSRCallSummaryModel
     {
@@ -16,6 +17,7 @@
         {
             public Guid ServiceCallId { get; set; }
             public string ServiceCallNumber { get; set; }
+            public DateTime CreatedDate { get; set; }
             public string HomeownerName { get; set; }
             public string CommunityName { get; set; }
             public string Address { get; set; }
@@ -24,6 +26,7 @@
             public string PostalCode { get; set; }
             public string HomePhone { get; set; }
             public string OtherPhone { get; set; }
+            public int NumberOfDaysRemaining { get { return ServiceCallCalculator.CalculateNumberOfDaysRemaining(CreatedDate); } }
             public List<ServiceCallLine> ServiceCallLines { get; set; }
             public IEnumerable<ServiceCallNote> ServiceCallNotes { get; set; }
         }

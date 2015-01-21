@@ -309,7 +309,7 @@ namespace Warranty.Core.Features.JobSummary
                 result.Where(v => v.VendorId == x.VendorId)
                                               .Select(cc => new JobSummaryModel.Vendor.ContactInfoModel()
                                               {
-                                                  Value = cc.Type != emailIdentifier ? cc.Value.CleanPhoneNumber().ToPhoneNumberWithExtension():cc.Value,
+                                                  Value = cc.Type != emailIdentifier ? cc.Value.ToPhoneNumberWithExtension():cc.Value,
                                                   Type = cc.Type
                                               }).Distinct().OrderBy(ob => ob.Value).ToList()
             }).Distinct().OrderBy(x => x.Name).ToList();

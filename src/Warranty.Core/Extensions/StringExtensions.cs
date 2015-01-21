@@ -19,6 +19,8 @@
 
         public static string ToPhoneNumberWithExtension(this string phoneNumber)
         {
+            phoneNumber = CleanPhoneNumber(phoneNumber);
+
             if (phoneNumber == null || phoneNumber.Length < 10)
                 return string.Empty;
 
