@@ -12,7 +12,6 @@ using Warranty.Core.ToDoInfrastructure.Models;
 namespace Warranty.Core.ToDoInfrastructure
 {
     using System;
-    using Common.Security.Entities;
     using Entities;
     using Services;
 
@@ -73,13 +72,8 @@ namespace Warranty.Core.ToDoInfrastructure
                     toDos.AddRange(paymentRequestApprovalToDos);
                 }
 
-
-
                 if (ToDoType.JobAnniversaryTask.HasAccess(user.Roles))
                 {
-                    toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job3MonthAnniversary, 3));
-                    toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job5MonthAnniversary, 5));
-                    toDos.AddRange(GetJobAnniversaryTaskToDos(user, _database, TaskType.Job9MonthAnniversary, 9));
                     toDos.AddRange(GetTenMonthJobAnniversaryTaskToDos(user, _database, _serviceCallCreateService));
                 }
 
@@ -174,49 +168,6 @@ namespace Warranty.Core.ToDoInfrastructure
             return GetToDoTasks<ToDoJobStageChangedTask, ToDoJobChangedTaskModel>(user, database, taskType);
         }
 
-        private static IEnumerable<IToDo> GetJobAnniversaryTaskToDos(IUser user, IDatabase database, TaskType taskType, int months)
-        {
-            var employeeId = database.ExecuteScalar<Guid>("SELECT EmployeeId FROM Employees where employeeNumber = @0", user.EmployeeNumber);
-            if(employeeId != Guid.Empty)
-            {
-
-                const string sqlAnniversaries = @"SELECT j.JobId as ReferenceId, j.JobNumber
-                                                FROM Jobs j                                    
-                                                    INNER JOIN Communities cm
-                                                        ON j.CommunityId = cm.CommunityId
-                                                    INNER JOIN Cities ci
-                                                        ON cm.CityId = ci.CityId
-                                                    LEFT JOIN Tasks t
-                                                        ON j.JobId = t.ReferenceId and t.EmployeeId = @0
-                                                    AND t.TaskType = @1
-                                                    WHERE CityCode IN ({0}) 
-                                                        AND (MONTH(CloseDate) = MONTH( DATEADD(MM,@2, getdate() )) AND YEAR(CloseDate) = YEAR( DATEADD(MM, @2, getdate())))
-                                                        AND t.TaskId IS NULL";
-
-                var sqlNewTasks = string.Format(sqlAnniversaries, user.Markets.CommaSeparateWrapWithSingleQuote());
-                var newTasks = database.Fetch<Task>(sqlNewTasks, employeeId, taskType.Value, -months);
-                newTasks.ForEach(x =>
-                {
-                    x.EmployeeId = employeeId;
-                    x.Description = taskType.DisplayName;
-                    x.TaskType = taskType;
-                    database.Insert(x);
-                });
-
-                var toDos = GetToDoTasks<ToDoJobAnniversaryTask, ToDoJobAnniversaryTaskModel>(user, database, taskType);
-
-                toDos.ForEach(x =>
-                {
-                    x.Model.NumberOfMonths = months;
-                });
-
-                return toDos;
-            }
-            return new List<ToDoJobAnniversaryTask>();
-        }
-
-
-
         private static IEnumerable<IToDo> GetTenMonthJobAnniversaryTaskToDos(IUser user, IDatabase database, IServiceCallCreateService serviceCallCreateService)
         {
             var employeeId = database.ExecuteScalar<Guid>("SELECT EmployeeId FROM Employees where employeeNumber = @0", user.EmployeeNumber);
@@ -225,20 +176,25 @@ namespace Warranty.Core.ToDoInfrastructure
 
                 var taskType = TaskType.Job10MonthAnniversary;
                 const string sqlAnniversaries = @"SELECT j.JobId as ReferenceId, j.JobNumber
-                                                FROM Jobs j                                    
-                                                    INNER JOIN Communities cm
-                                                        ON j.CommunityId = cm.CommunityId
-                                                    INNER JOIN Cities ci
-                                                        ON cm.CityId = ci.CityId
-                                                    LEFT JOIN Tasks t
-                                                        ON j.JobId = t.ReferenceId
-                                                    AND t.TaskType = @0
-                                                    WHERE CityCode IN ({0}) 
-                                                        AND (MONTH(CloseDate) = MONTH( DATEADD(MM,@1, getdate() )) AND YEAR(CloseDate) = YEAR( DATEADD(MM, @1, getdate())))
-                                                        AND t.TaskId IS NULL";
+                                                FROM Jobs j
+                                                INNER JOIN Communities cm
+                                                    ON j.CommunityId = cm.CommunityId
+                                                INNER JOIN Cities ci
+                                                    ON cm.CityId = ci.CityId
+                                                INNER JOIN CommunityAssignments ca
+                                                    ON cm.CommunityId = ca.CommunityId
+                                                INNER JOIN Employees e
+                                                    ON ca.EmployeeId = e.EmployeeId
+                                                LEFT JOIN Tasks t
+                                                    ON j.JobId = t.ReferenceId
+                                                AND t.TaskType = @0
+                                                WHERE CityCode IN ({0}) 
+                                                    AND (MONTH(CloseDate) = MONTH( DATEADD(MM,@1, getdate() )) AND YEAR(CloseDate) = YEAR( DATEADD(MM, @1, getdate())))
+                                                    AND e.EmployeeId = @2
+                                                    AND t.TaskId IS NULL";
 
                 var sqlNewTasks = string.Format(sqlAnniversaries, user.Markets.CommaSeparateWrapWithSingleQuote());
-                var newTasks = database.Fetch<Task>(sqlNewTasks, taskType.Value, -10);
+                var newTasks = database.Fetch<Task>(sqlNewTasks, taskType.Value, -10, employeeId);
                 newTasks.ForEach(x =>
                 {
                     x.EmployeeId = employeeId;
@@ -261,16 +217,17 @@ namespace Warranty.Core.ToDoInfrastructure
                                     INNER join Jobs j
                                         ON t.ReferenceId = j.JobId
                                     INNER join HomeOwners ho
-                                        ON j.CurrentHomeOwnerId = ho.HomeOwnerId                                   
+                                        ON j.CurrentHomeOwnerId = ho.HomeOwnerId
                                     INNER JOIN Communities cm
                                         ON j.CommunityId = cm.CommunityId
                                     INNER JOIN Cities ci
                                         ON cm.CityId = ci.CityId
-                                    where 
-                                        ci.CityCode in ({0}) and TaskType=@0";
+                                    WHERE ci.CityCode in ({0})
+                                        AND TaskType=@0
+                                        AND t.EmployeeId = @1";
 
                 var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
-                var toDos = database.Fetch<ToDoJob10MonthAnniversary, ToDoJob10MonthAnniversaryModel>(query, taskType.Value);
+                var toDos = database.Fetch<ToDoJob10MonthAnniversary, ToDoJob10MonthAnniversaryModel>(query, taskType.Value, employeeId);
 
                 return toDos;
             }

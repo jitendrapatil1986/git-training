@@ -42,6 +42,7 @@
                                                                 {
                                                                     UserRoles.CustomerCareManager,
                                                                     UserRoles.WarrantyServiceCoordinator,
+                                                                    UserRoles.WarrantyServiceRepresentative,
                                                                 });
 
         public static readonly ToDoType PaymentRequestApprovalOutOfWarranty = new ToDoType(6, "Closed Out Payments",
