@@ -26,7 +26,7 @@
                 return new ServiceCallsWidgetModel
                            {
                                MyServiceCalls = GetMyServiceCalls(user),
-                               OverdueServiceCalls = GetOverdueServiceCalls(user),
+                               OpenServiceCalls = GetOpenServiceCalls(user),
                                SpecialProjectServiceCalls = GetSpecialProjects(user),
                                EscalatedServiceCalls = GetEscalatedServiceCalls(user),
                            };
@@ -66,11 +66,11 @@
                                      {0} /* WHERE */
                                      {1} /* ORDER BY */";
 
-        private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetOverdueServiceCalls(IUser user)
+        private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetOpenServiceCalls(IUser user)
         {
             var markets = user.Markets;
 
-            var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId<>@0 AND DATEADD(dd, 7, wc.CreatedDate) <= getdate() AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ")", "ORDER BY EmployeeName, wc.CreatedDate");
+            var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId<>@0 AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ")", "ORDER BY EmployeeName, wc.CreatedDate");
 
             var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, ServiceCallStatus.Complete.Value);
             return result;
