@@ -65,23 +65,23 @@ define(['urls', 'jquery'], function (urls, $) {
             e.preventDefault();
             var serviceCallId = $(this).data("service-call-id");
             var url = urls.ServiceCall.Approve;
-            executeApproval(url, serviceCallId);
+            executeApproval(url, serviceCallId, '#service-call-approval-todo-');
         });
 
         $(".deny-button").click(function (e) {
             e.preventDefault();
             var serviceCallId = $(this).data("service-call-id");
             var url = urls.ServiceCall.Deny;
-            executeApproval(url, serviceCallId);
+            executeApproval(url, serviceCallId, '#service-call-approval-todo-');
         });
 
-        function executeApproval(url, serviceCallId) {
+        function executeApproval(url, dataId, elementPrefix) {
             $.ajax({
                 type: "POST",
                 url: url,
-                data: { id: serviceCallId },
+                data: { id: dataId },
                 success: function (result) {
-                    var element = $('#service-call-approval-todo-' + serviceCallId);
+                    var element = $(elementPrefix + dataId);
                     element.remove();
                     updateTodoWidgetElements(element);
                 }
@@ -121,16 +121,14 @@ define(['urls', 'jquery'], function (urls, $) {
             e.preventDefault();
             var taskId = $(this).data("task-id");
             var url = urls.Task.Complete;
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: { id: taskId },
-                success: function (result) {
-                    var element = $('#task-todo-' + taskId);
-                    element.remove();
-                    updateTodoWidgetElements(element);
-                }
-            });
+            executeApproval(url, taskId, '#task-todo-');
+        });
+
+        $(".no-action-task").click(function (e) {
+            e.preventDefault();
+            var taskId = $(this).data("task-id");
+            var url = urls.Task.NoAction;
+            executeApproval(url, taskId, '#task-todo-');
         });
     });
 });

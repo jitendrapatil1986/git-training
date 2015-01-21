@@ -200,7 +200,6 @@ namespace Warranty.Core.ToDoInfrastructure
                     x.EmployeeId = employeeId;
                     x.Description = taskType.DisplayName;
                     x.TaskType = taskType;
-                    x.IsComplete = true;
                     database.Insert(x);
                 });
 
@@ -224,7 +223,9 @@ namespace Warranty.Core.ToDoInfrastructure
                                         ON cm.CityId = ci.CityId
                                     WHERE ci.CityCode in ({0})
                                         AND TaskType=@0
-                                        AND t.EmployeeId = @1";
+                                        AND t.EmployeeId = @1
+                                        AND t.IsComplete = 0
+                                        AND t.IsNoAction = 0";
 
                 var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
                 var toDos = database.Fetch<ToDoJob10MonthAnniversary, ToDoJob10MonthAnniversaryModel>(query, taskType.Value, employeeId);

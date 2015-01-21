@@ -243,7 +243,7 @@ namespace Warranty.Core.Features.JobSummary
             const string sql = @"SELECT e.EmployeeName
                                     , t.Description
                                     , t.TaskType
-                                    , t.CreatedDate 
+                                    , t.UpdatedDate as CompletedDate
                                 FROM Tasks t
                                 INNER JOIN Jobs j
                                 ON t.ReferenceId = j.JobId
