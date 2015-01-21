@@ -26,7 +26,7 @@
                 return new ServiceCallsWidgetModel
                            {
                                MyServiceCalls = GetMyServiceCalls(user),
-                               OverdueServiceCalls = GetOverdueServiceCalls(user),
+                               OpenServiceCalls = GetOverdueServiceCalls(user),
                                SpecialProjectServiceCalls = GetSpecialProjects(user),
                                EscalatedServiceCalls = GetEscalatedServiceCalls(user),
                            };
