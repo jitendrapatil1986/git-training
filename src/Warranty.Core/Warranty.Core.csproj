@@ -139,6 +139,8 @@
     <Compile Include="Features\ServiceCallToggleActions\ServiceCallCompleteWsrNotificationQueryHandler.cs" />
     <Compile Include="Features\SessionStart\VerifyEmployeeExistsCommandHandler.cs" />
     <Compile Include="Features\SessionStart\VerifyEmployeeExistsCommand.cs" />
+    <Compile Include="Features\TaskNoAction\TaskNoActionCommand.cs" />
+    <Compile Include="Features\TaskNoAction\TaskNoActionCommandHandler.cs" />
     <Compile Include="Features\ToDoWidget\ToDoLastSelectedFilterSaveCommand.cs" />
     <Compile Include="Features\ToDoWidget\ToDoLastSelectedFilterSaveCommandHandler.cs" />
     <Compile Include="JobServiceApiHelpers\ApiJsonConverter.cs" />
