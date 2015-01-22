@@ -1,4 +1,6 @@
-﻿namespace Warranty.Server.Handlers.Jobs
+﻿using System;
+
+namespace Warranty.Server.Handlers.Jobs
 {
     using Accounting.Events.Job;
     using Core.Entities;
@@ -25,7 +27,9 @@
                     builder = new Employee
                     {
                         Name = message.PrimaryBuilderName,
-                        Number = message.PrimaryBuilderNumber
+                        Number = message.PrimaryBuilderNumber,
+                        CreatedBy = "JobPrimaryBuilderUpdatedHandler",
+                        CreatedDate = DateTime.UtcNow
                     };
                                     
                     _database.Insert(builder);
