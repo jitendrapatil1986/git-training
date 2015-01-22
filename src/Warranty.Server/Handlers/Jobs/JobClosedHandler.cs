@@ -15,13 +15,11 @@ namespace Warranty.Server.Handlers.Jobs
     public class JobClosedHandler : IHandleMessages<JobClosed>
     {
         private readonly IDatabase _database;
-        private readonly JobClosedContactHomeownerTask _jobClosedContactHomeownerTask;
         private readonly IAccountingService _accountingService;
 
-        public JobClosedHandler(IDatabase database, JobClosedContactHomeownerTask jobClosedContactHomeownerTask, IAccountingService accountingService)
+        public JobClosedHandler(IDatabase database, IAccountingService accountingService)
         {
             _database = database;
-            _jobClosedContactHomeownerTask = jobClosedContactHomeownerTask;
             _accountingService = accountingService;
         }
 
@@ -32,7 +30,6 @@ namespace Warranty.Server.Handlers.Jobs
                 var job = _database.SingleByJdeId<Job>(message.JDEId);
                 job.CloseDate = message.CloseDate;
                 _database.Update(job);
-                _jobClosedContactHomeownerTask.Create(job);
 
                 StoreVendorsForJob(job);
             }
