@@ -55,8 +55,9 @@ namespace Warranty.Core.ToDoInfrastructure
 
                 if (ToDoType.JobChangedTask.HasAccess(user.Roles))
                 {
-                    var taskJobChangedToDos = GetJobChangedTaskToDos(user, _database, TaskType.JobStageChanged).ToList();
-                    taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobClosed));
+                    var taskJobChangedToDos = GetJobChangedTaskToDos(user, _database, TaskType.JobStage3).ToList();
+                    taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage7));
+                    taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage9));
                     toDos.AddRange(taskJobChangedToDos);
                 }
 
