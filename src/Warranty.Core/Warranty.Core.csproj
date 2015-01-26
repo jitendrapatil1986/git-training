@@ -139,6 +139,8 @@
     <Compile Include="Features\ServiceCallToggleActions\ServiceCallCompleteWsrNotificationQueryHandler.cs" />
     <Compile Include="Features\SessionStart\VerifyEmployeeExistsCommandHandler.cs" />
     <Compile Include="Features\SessionStart\VerifyEmployeeExistsCommand.cs" />
+    <Compile Include="Features\TaskNoAction\TaskNoActionCommand.cs" />
+    <Compile Include="Features\TaskNoAction\TaskNoActionCommandHandler.cs" />
     <Compile Include="Features\ToDoWidget\ToDoLastSelectedFilterSaveCommand.cs" />
     <Compile Include="Features\ToDoWidget\ToDoLastSelectedFilterSaveCommandHandler.cs" />
     <Compile Include="JobServiceApiHelpers\ApiJsonConverter.cs" />
@@ -541,7 +543,6 @@
     <Compile Include="Security\WarrantyUser.cs" />
     <Compile Include="StructureMapValidatorFactory.cs" />
     <Compile Include="SystemTime.cs" />
-    <Compile Include="TaskInfrastructure\Tasks\JobClosedContactHomeownerTask.cs" />
     <Compile Include="TaskInfrastructure\Interfaces\ITask.cs" />
     <Compile Include="TaskInfrastructure\Tasks\JobStageUpdatedContactBuilderTask.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoJob10MonthAnniversary.cs" />

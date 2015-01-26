@@ -10,6 +10,7 @@ namespace Warranty.Core.Entities
         public virtual Guid ReferenceId { get; set; }
         public virtual string Description { get; set; }
         public virtual bool IsComplete { get; set; }
+        public virtual bool IsNoAction { get; set; }
         public virtual TaskType TaskType { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
