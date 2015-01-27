@@ -29,7 +29,7 @@
                     {
                         JobNumber = payment.JobNumber,
                         Amount = payment.Amount,
-                        CommunityNumber = payment.JobNumber,  //accounting pulls the substring
+                        CommunityNumber = payment.CommunityNumber,  //accounting pulls the substring
                         InvoiceDate = payment.CreatedDate,
                         InvoiceNumber = payment.InvoiceNumber,
                         Username = message.Username,

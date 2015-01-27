@@ -4,6 +4,7 @@
     using System.Web.Mvc;
     using Warranty.Core;
     using Warranty.Core.Features.TaskCompletion;
+    using Warranty.Core.Features.TaskNoAction;
 
     public class TaskController : Controller
     {
@@ -22,6 +23,16 @@
             });
 
             return Json (new { success = "true"}, JsonRequestBehavior.AllowGet );
+        }
+
+        public ActionResult NoAction(Guid id)
+        {
+            _mediator.Send(new TaskNoActionCommand
+            {
+                TaskId = id
+            });
+
+            return Json(new {success = "true"}, JsonRequestBehavior.AllowGet);
         }
     }
 }

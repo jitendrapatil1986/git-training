@@ -13,6 +13,7 @@ namespace Warranty.Core.DataAccess.Mappings
                         x.Column(y => y.EmployeeId);
                         x.Column(y => y.Description);
                         x.Column(y => y.IsComplete);
+                        x.Column(y => y.IsNoAction);
                         x.Column(y => y.ReferenceId);
                         x.Column(y => y.TaskType);
                     });
