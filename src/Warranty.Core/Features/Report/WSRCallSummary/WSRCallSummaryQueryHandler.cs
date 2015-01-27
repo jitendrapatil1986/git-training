@@ -42,6 +42,7 @@
                                         sc.ServiceCallId as ServiceCallId
                                         , Servicecallnumber as CallNumber
                                         , sc.CreatedDate
+                                        , sc.SpecialProject as IsSpecialProject
                                         , j.AddressLine as [Address]
                                         , j.City 
                                         , j.StateCode
@@ -52,8 +53,8 @@
                                         , cm.CommunityName
                                         , li.LineNumber
                                         , li.ProblemCode
-	                                    , li.ProblemDescription
-                                    FROM ServiceCalls sc
+                                        , li.ProblemDescription
+                                        FROM ServiceCalls sc
                                     INNER JOIN Jobs j
                                     ON sc.JobId = j.JobId
                                     INNER JOIN HomeOwners ho
@@ -65,10 +66,10 @@
                                     INNER JOIN Communities cm
                                     ON j.CommunityId = cm.CommunityId
                                     WHERE e.EmployeeNumber = @0
-                                    AND sc.ServiceCallStatusId = 2
+                                    AND sc.ServiceCallStatusId = @1
                                     ORDER BY cm.CommunityName, ho.HomeOwnerName, j.AddressLine";
 
-                var serviceCalls = _database.FetchOneToMany<WSRCallSummaryModel.ServiceCall, WSRCallSummaryModel.ServiceCallLine>(x => x.ServiceCallId, sql, employeeNumber);
+                var serviceCalls = _database.FetchOneToMany<WSRCallSummaryModel.ServiceCall, WSRCallSummaryModel.ServiceCallLine>(x => x.ServiceCallId, sql, employeeNumber, ServiceCallStatus.Open.Value);
                 
                 foreach (var serviceCall in serviceCalls)
                 {

@@ -50,6 +50,7 @@
                                         , DATEDIFF(yy, j.CloseDate, wc.CreatedDate) as YearsWithinWarranty
                                         , j.CloseDate as WarrantyStartDate
                                         , j.JobNumber
+                                        , wc.SpecialProject as IsSpecialProject
                                      FROM [ServiceCalls] wc
                                      inner join Jobs j
                                        on wc.JobId = j.JobId

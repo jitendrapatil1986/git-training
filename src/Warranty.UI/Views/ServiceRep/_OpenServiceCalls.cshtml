@@ -21,14 +21,17 @@
             </div>
             <div class="col-md-1">@Format.Escalated(line.IsEscalated, line.EscalationReason, line.EscalationDate)</div>
             <div class="col-md-2">@Format.SpecialProject(line.IsSpecialProject)</div>
-            <div class="col-md-2 pull-right has-bottom-tooltip" title="@Format.DateForServiceCallWiget(line.CreatedDate)">
-                <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@line.NumberOfDaysRemaining)<br />
-                <div class="progress time-remaining-progress hidden-sm hidden-xs">
-                    <div class="progress-bar @Css.ServiceCallProgressBar(line.NumberOfDaysRemaining)" role="progressbar" style="width: @line.PercentComplete%">
-                        <span class="sr-only">@line.PercentComplete% Complete</span>
+            @if (!line.IsSpecialProject)
+            {
+                <div class="col-md-2 pull-right has-bottom-tooltip" title="@Format.DateForServiceCallWiget(line.CreatedDate)">
+                    <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@line.NumberOfDaysRemaining)<br />
+                    <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                        <div class="progress-bar @Css.ServiceCallProgressBar(line.NumberOfDaysRemaining)" role="progressbar" style="width: @line.PercentComplete%">
+                            <span class="sr-only">@line.PercentComplete% Complete</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
             <div class="clearfix"></div>
         </div>
     }

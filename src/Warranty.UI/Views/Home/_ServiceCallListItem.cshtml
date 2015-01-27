@@ -15,13 +15,16 @@
     <div class="col-md-1 hidden-sm hidden-xs">
         @Format.NumberOfLineItems(Model.NumberOfLineItems)
     </div>
-    <div class="col-md-3 float-right-non-xs-screen has-bottom-tooltip" title="@Format.DateForServiceCallWiget(Model.CreatedDate)">
-        <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@Model.NumberOfDaysRemaining)<br />
-        <div class="progress time-remaining-progress hidden-sm hidden-xs">
-            <div class="progress-bar @Css.ServiceCallProgressBar(Model.NumberOfDaysRemaining)" role="progressbar" style="width: @Model.PercentComplete%">
-                <span class="sr-only">@Model.PercentComplete% Complete</span>
+    @if (!Model.IsSpecialProject)
+    {
+        <div class="col-md-3 float-right-non-xs-screen has-bottom-tooltip" title="@Format.DateForServiceCallWiget(Model.CreatedDate)">
+            <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@Model.NumberOfDaysRemaining)<br />
+            <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                <div class="progress-bar @Css.ServiceCallProgressBar(Model.NumberOfDaysRemaining)" role="progressbar" style="width: @Model.PercentComplete%">
+                    <span class="sr-only">@Model.PercentComplete% Complete</span>
+                </div>
             </div>
         </div>
-    </div>
+    }
     <div class="clearfix"></div>
 </div>
