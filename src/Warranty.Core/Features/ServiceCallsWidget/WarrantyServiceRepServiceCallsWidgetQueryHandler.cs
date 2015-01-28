@@ -110,7 +110,7 @@
 
         private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetClosedServiceCalls(IUser user)
         {
-            var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId=@1 and EmployeeNumber=@0", "ORDER BY (7-DATEDIFF(d, wc.CreatedDate, GETDATE())), wc.CreatedDate, NumberOfLineItems DESC");
+            var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId=@1 and EmployeeNumber=@0", "ORDER BY CompletionDate DESC, wc.CreatedDate, NumberOfLineItems DESC");
 
             var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, user.EmployeeNumber, ServiceCallStatus.Complete.Value);
             return result;
