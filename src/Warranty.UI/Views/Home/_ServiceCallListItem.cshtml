@@ -28,15 +28,18 @@
     }
     else
     {
-        <div class="col-md-3 has-bottom-tooltip">
-            <div class="col-md-5 float-right-non-xs-screen no-left-padding">
-                <div>@Format.DaysOpenedFor(Model.DaysOpenedFor, Model.CreatedDate, Model.CompletionDate)</div>
-            </div>
-            <div class="col-md-7 no-left-padding">
-                <div>@Format.SpecialProject(Model.IsSpecialProject)</div>
-                <div>@Format.Escalated(Model.IsEscalated, Model.EscalationReason, Model.EscalationDate)</div>
-            </div>
-        </div>
+         if (Model.CompletionDate != null)
+         {
+             <div class="col-md-3 has-bottom-tooltip">
+                 <div class="col-md-5 float-right-non-xs-screen no-left-padding">
+                     <div>@Format.DaysOpenedFor(Model.DaysOpenedFor, Model.CreatedDate, Model.CompletionDate)</div>
+                 </div>
+                 <div class="col-md-7 no-left-padding">
+                     <div>@Format.SpecialProject(Model.IsSpecialProject)</div>
+                     <div>@Format.Escalated(Model.IsEscalated, Model.EscalationReason, Model.EscalationDate)</div>
+                 </div>
+             </div>
+         }
     }
     <div class="clearfix"></div>
 </div>
