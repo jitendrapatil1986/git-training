@@ -71,6 +71,7 @@ require(['/Scripts/app/main.js'], function () {
                     url: actionUrl,
                     data: { id: serviceCallId, message: message },
                     success: function (result) {
+                        viewModel.canUndoSpecialProject(true);
                         updateUI(result.actionName, result.actionMessage);
                         changeButtonText(parentButton);
                         parentButton.removeClass("active");
@@ -105,12 +106,6 @@ require(['/Scripts/app/main.js'], function () {
                 toastr.success("Success! Service Call has been succesfully reopened.");
             }
 
-            function completeServiceCall() {
-                viewModel.callSummaryServiceCallStatus(serviceCallStatusData.Complete.DisplayName);
-                viewModel.canBeReopened(true);
-                toastr.success("Success! Service Call has been succesfully completed.");
-            }
-            
             function updateUI(actionName, actionMessage) {
 
                 if (actionName == activityTypeEnum.Escalation.DisplayName) {
@@ -388,6 +383,7 @@ require(['/Scripts/app/main.js'], function () {
                 self.isSpecialProject = ko.observable(modelData.isSpecialProject);
                 self.specialProjectReason = ko.observable(modelData.specialProjectReason);
                 self.specialProjectDate = ko.observable(modelData.specialProjectDate);
+                self.canUndoSpecialProject = ko.observable(modelData.canUndoSpecialProject);
                 self.isEscalated = ko.observable(modelData.isEscalated);
                 self.escalationReason = ko.observable(modelData.escalationReason);
                 self.escalationDate = ko.observable(modelData.escalationDate);

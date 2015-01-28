@@ -15,7 +15,7 @@
     <div class="col-md-1 hidden-sm hidden-xs">
         @Format.NumberOfLineItems(Model.NumberOfLineItems)
     </div>
-    @if (Model.CompletionDate == null)
+    @if (Model.CompletionDate == null && !Model.IsSpecialProject)
     {
         <div class="col-md-3 float-right-non-xs-screen has-bottom-tooltip" title="@Format.DateForServiceCallWiget(Model.CreatedDate)">
             <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@Model.NumberOfDaysRemaining)<br />

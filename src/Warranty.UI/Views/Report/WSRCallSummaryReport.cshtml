@@ -52,7 +52,14 @@
                                 @serviceCall.OtherPhone.ToPhoneNumberWithExtension()
                             }
                         </div>
-                        <div class="col-md-1 text-right">@(Math.Abs(serviceCall.NumberOfDaysRemaining) + WarrantyConstants.NumberOfDaysAllowedToCloseServiceCall)</div>
+                        @if (serviceCall.IsSpecialProject)
+                        {
+                            <div class="col-md-1 text-right">Special Project</div>
+                        }
+                        else
+                        {
+                            <div class="col-md-1 text-right">@(Math.Abs(serviceCall.NumberOfDaysRemaining) + WarrantyConstants.NumberOfDaysAllowedToCloseServiceCall)</div>
+                        }
 
                         @if(serviceCall.ServiceCallLines.Any())
                         {
