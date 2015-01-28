@@ -9,6 +9,10 @@
         }
         <li><a href="#escalated_calls" role="tab" data-toggle="tab">Escalated @Format.ShowRedLabelIfCountGreaterThanZero(Model.EscalatedServiceCalls.Count())</a></li>
         <li><a href="#special_projects" role="tab" data-toggle="tab">Special Projects <span class="label label-default">@Model.SpecialProjectServiceCalls.Count()</span></a></li>
+        @if (User.IsInRole(UserRoles.WarrantyServiceRepresentative))
+        {
+            <li><a href="#closed_calls" role="tab" data-toggle="tab">Closed <span class="label label-default">@Model.ClosedServiceCalls.Count()</span></a></li>
+        }
         <li class="pull-right"><span class="widget-header">Service Calls</span></li>
     </ul>
         
@@ -28,4 +32,10 @@
         <div class="tab-pane" id="special_projects">
             @Html.Partial("_SpecialProjects", Model)
         </div>
+        @if (User.IsInRole(UserRoles.WarrantyServiceRepresentative))
+        {
+            <div class="tab-pane" id="closed_calls">
+                @Html.Partial("_ClosedCalls", Model)
+            </div>
+        }
     </div>

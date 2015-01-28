@@ -1,0 +1,34 @@
+﻿@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.ServiceCallsWidget.ServiceCallsWidgetModel
+
+@if (!Model.ClosedServiceCalls.Any())
+{
+    <div class="well-sm">
+        <em>No Closed calls.</em>
+    </div>
+}
+else
+{
+    foreach (var line in Model.ClosedServiceCalls)
+    {
+        <div class="my-closed-call hide">
+            @Html.Partial("_ServiceCallListItem", line)
+        </div>
+    }
+    
+    if (Model.ClosedServiceCalls.Count() > 5)
+    {
+        <div class="padding-5">
+            <span class="text-muted">Show:</span> 
+            <a href="#" class="show-more-closed-calls">5</a>
+            @if (Model.ClosedServiceCalls.Count() > 5)
+            {
+                <span> | <a href="#" class="show-more-closed-calls">10</a></span>
+            }
+            @if (Model.ClosedServiceCalls.Count() > 10)
+            {
+                <span> | <a href="#" class="show-more-closed-calls">All</a></span>
+            }
+        </div>
+    }
+}
