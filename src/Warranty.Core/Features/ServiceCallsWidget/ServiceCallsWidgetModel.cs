@@ -13,12 +13,14 @@
             OpenServiceCalls = new List<ServiceCall>();
             SpecialProjectServiceCalls = new List<ServiceCall>();
             EscalatedServiceCalls = new List<ServiceCall>();
+            ClosedServiceCalls = new List<ServiceCall>();
         }
 
         public IEnumerable<ServiceCall> MyServiceCalls { get; set; }
         public IEnumerable<ServiceCall> OpenServiceCalls { get; set; }
         public IEnumerable<ServiceCall> SpecialProjectServiceCalls { get; set; }
         public IEnumerable<ServiceCall> EscalatedServiceCalls { get; set; }
+        public IEnumerable<ServiceCall> ClosedServiceCalls { get; set; } 
 
         public IEnumerable<RepresentativeWithCallCount> RepresentativesWithOpenCalls
         {
@@ -82,6 +84,9 @@
             public DateTime? EscalationDate { get; set; }
             public string EscalationReason { get; set; }
             public bool IsSpecialProject { get; set; }
+            public bool IsEscalated { get; set; }
+            public int DaysOpenedFor { get; set; }
+            public DateTime? CompletionDate { get; set; }
 
             public int PercentComplete
             {
