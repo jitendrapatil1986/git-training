@@ -81,6 +81,7 @@
             public string PhoneNumber { get; set; }
             public DateTime? EscalationDate { get; set; }
             public string EscalationReason { get; set; }
+            public bool IsSpecialProject { get; set; }
 
             public int PercentComplete
             {

@@ -41,7 +41,12 @@
                 {
                     <div data-bind="visible: callSummaryStatusOpen()">
                         @Format.ServiceCallToggleButton("escalate", Model.ServiceCallSummary.IsEscalated, "Escalate", "De-escalate")
-                        @Format.ServiceCallToggleButton("special_project", Model.ServiceCallSummary.IsSpecialProject, "Special Project", "Not Special Project")
+                        <div data-bind="visible: !isSpecialProject()">
+                            <a href='#' class='btn btn-default pull-right btn-action-with-popup' data-action-with-popup='special_project' id='btn_special_project'>Special Project</a>
+                        </div>
+                        <div data-bind="visible: isSpecialProject() && canUndoSpecialProject()">
+                            <a href='#' class='btn btn-default pull-right btn-action-with-popup' data-action-with-popup='special_project' id='btn_undo_special_project'>Not Special Project</a>
+                        </div>
                     </div>
                     <div data-bind="visible: callSummaryStatusComplete() && canBeReopened()">
                         <a href='#' class='btn btn-default pull-right btn-action-with-popup' data-action-with-popup='reopen' id='btn_reopen'>Reopen</a>
@@ -112,16 +117,17 @@
                                 {
                                     <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" data-display-status="true" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
                                     <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" data-display-status="true" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
-                                    
                                 }
                                 else
                                 {
                                     <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus") </span>
                                 }
                             </div>
-
-                            @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
                             
+                            @if (!Model.ServiceCallSummary.IsSpecialProject)
+                            {
+                                @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
+                            }
                         </div>
                     </div>
                 </div>
@@ -381,6 +387,7 @@
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
                 saveAdditionalContactsUrl: '@Url.Action("SaveAdditionalContacts","Homeowner")',
                 jobId: @Html.Raw(Model.ServiceCallSummary.JobId.ToJson()),
+                canUndoSpecialProject: @Model.ServiceCallSummary.CanUndoSpecialProject.ToJson(),
             }
         });
 

@@ -26,6 +26,7 @@
             public string PostalCode { get; set; }
             public string HomePhone { get; set; }
             public string OtherPhone { get; set; }
+            public bool IsSpecialProject { get; set; }
             public int NumberOfDaysRemaining { get { return ServiceCallCalculator.CalculateNumberOfDaysRemaining(CreatedDate); } }
             public List<ServiceCallLine> ServiceCallLines { get; set; }
             public IEnumerable<ServiceCallNote> ServiceCallNotes { get; set; }
