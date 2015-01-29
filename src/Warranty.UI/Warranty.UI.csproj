@@ -459,6 +459,7 @@
     <Content Include="Views\Report\WSRSummaryReport.cshtml" />
     <Content Include="Views\Report\WSRCallSummaryReport.cshtml" />
     <Content Include="Views\Home\_ClosedCalls.cshtml" />
+    <Content Include="Views\Home\_ToDoJobChangedTaskApproval.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
