@@ -59,6 +59,10 @@ namespace Warranty.Core.ToDoInfrastructure
                     taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage7));
                     taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage9));
 
+                    //Pull deprecated job task type ToDos for users to complete for those created before the new job task types.
+                    taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStageChanged));
+                    taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobClosed));
+
                     toDos.AddRange(taskJobChangedToDos);
                 }
                 
@@ -268,7 +272,7 @@ namespace Warranty.Core.ToDoInfrastructure
 
         private static IEnumerable<TTask> GetToDoTasks<TTask, TModel>(IUser user, IDatabase database, TaskType taskType) where TTask : IToDo where TModel : class
         {
-            const string query = @"SELECT t.CreatedDate [Date], Description, TaskId,  j.JobId, j.JobNumber
+            const string query = @"SELECT t.CreatedDate [Date], TaskType, Description, TaskId,  j.JobId, j.JobNumber
                                     FROM 
                                         [Tasks] t
                                     INNER join Employees e
