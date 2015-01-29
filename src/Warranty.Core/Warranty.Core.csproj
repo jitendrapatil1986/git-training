@@ -141,6 +141,8 @@
     <Compile Include="Features\SessionStart\VerifyEmployeeExistsCommand.cs" />
     <Compile Include="Features\TaskNoAction\TaskNoActionCommand.cs" />
     <Compile Include="Features\TaskNoAction\TaskNoActionCommandHandler.cs" />
+    <Compile Include="Features\TaskSubmitForApproval\TaskSubmitForApprovalCommand.cs" />
+    <Compile Include="Features\TaskSubmitForApproval\TaskSubmitForApprovalCommandHandler.cs" />
     <Compile Include="Features\ToDoWidget\ToDoLastSelectedFilterSaveCommand.cs" />
     <Compile Include="Features\ToDoWidget\ToDoLastSelectedFilterSaveCommandHandler.cs" />
     <Compile Include="JobServiceApiHelpers\ApiJsonConverter.cs" />
@@ -559,6 +561,7 @@
     <Compile Include="ToDoInfrastructure\Models\ToDoCommunityEmployeeAssignmentModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoJob10MonthAnniversaryModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoJobAnniversaryTaskModel.cs" />
+    <Compile Include="ToDoInfrastructure\Models\ToDoJobChangedTaskApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoPaymentRequestApprovalUnderWarrantyModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoPaymentRequestApprovalOutOfWarrantyModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoPaymentStatusChangedModel.cs" />
@@ -568,6 +571,7 @@
     <Compile Include="ToDoInfrastructure\ToDo.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoEscalationApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\ToDoAggregator.cs" />
+    <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoJobChangedTaskApproval.cs" />
     <Compile Include="WarrantyCoreRegistry.cs" />
   </ItemGroup>
   <ItemGroup>

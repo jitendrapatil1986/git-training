@@ -25,5 +25,6 @@
         public static readonly TaskType JobStage3 = new TaskType(8, "Job Stage 3 - Warranty Introduction");
         public static readonly TaskType JobStage7 = new TaskType(9, "Job Stage 7 - 244 Walk");
         public static readonly TaskType JobStage9 = new TaskType(10, "Job Stage 9 - Warranty Orientation");
+        public static readonly TaskType JobStage9Approval = new TaskType(11, "Job Stage 9 - Warranty Orientation Approval");
     }
 }

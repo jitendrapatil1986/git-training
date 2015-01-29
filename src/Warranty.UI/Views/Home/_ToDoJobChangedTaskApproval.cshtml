@@ -1,0 +1,35 @@
+﻿@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
+@model Warranty.Core.ToDoInfrastructure.Models.ToDoJobChangedTaskApprovalModel
+<div class="todo @Css.ToDoClass(ToDoType.JobChangedTaskApproval) hide" id="task-todo-@Model.TaskId">
+
+    <div class="todo-widget-data-container">
+        <div class="task-icon">
+            T
+        </div>
+
+        <div class="todo-widget-separator-line">
+        </div>
+
+        <div class="todo-widget-element">
+            <small class="text-muted">@Model.Description</small>
+            <p class="text-muted margin-bottom-5 small-text">Orientation is pending approval</p>
+        </div>
+        <div class="todo-widget-element  margin-top-10">
+            <small class="text-muted">
+                <strong>Job # </strong>@Html.ActionLink(Model.JobNumber, "JobSummary", "Job", new {id = Model.JobId}, null)
+            </small>
+        </div>
+        <div class="todo-widget-action-buttons margin-top-10">
+            @if (User.IsInRole(UserRoles.WarrantyServiceRepresentative))
+            {
+                <a href="#" data-task-id="@Model.TaskId" class="submit-for-approval-task"><span class="glyphicon glyphicon-thumbs-up submit-for-approval-todo"></span>&nbsp;Complete</a>
+            }
+            else
+            {
+                <a href="#" data-task-id="@Model.TaskId" class="complete-task"><span class="glyphicon glyphicon-thumbs-up complete-todo"></span>&nbsp;Approve</a>
+            }
+        </div>
+    </div>
+
+</div>
