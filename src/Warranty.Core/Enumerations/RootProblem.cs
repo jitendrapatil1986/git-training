@@ -41,9 +41,16 @@
         public static readonly RootProblem Hardwood = new RootProblem(25, "Hardwood", WarrantyCostCode.AllFlooring);
         public static readonly RootProblem Carpet = new RootProblem(26, "Carpet", WarrantyCostCode.AllFlooring);
         public static readonly RootProblem Brick = new RootProblem(27, "Brick", WarrantyCostCode.Brick);
-        public static readonly RootProblem CustomerDelight = new RootProblem(28, "Customer Delight", WarrantyCostCode.MaterialDiscounts);
+        public static readonly RootProblem CustomerDelight = new RootProblem(28, "Customer Delight", WarrantyCostCode.AllCleaning);
         public static readonly RootProblem Mirror = new RootProblem(29, "Mirror", WarrantyCostCode.InteriorMisc);
         public static readonly RootProblem SidingCornice = new RootProblem(30, "Siding/Cornice", WarrantyCostCode.ExteriorMisc);
         public static readonly RootProblem TubShower = new RootProblem(31, "Tub/Shower", WarrantyCostCode.BathsMarbleTubs);
+        public static readonly RootProblem Garage = new RootProblem(32, "Garage", WarrantyCostCode.Weatherstrip);
+        public static readonly RootProblem FinalGrade = new RootProblem(33, "Final Grade", WarrantyCostCode.ExteriorMisc);
+        public static readonly RootProblem Fence = new RootProblem(34, "Fence", WarrantyCostCode.LscapeFenceTrees);
+        public static readonly RootProblem Frame = new RootProblem(35, "Frame", WarrantyCostCode.FrameCornice);
+        public static readonly RootProblem Sprinkler = new RootProblem(36, "Sprinkler", WarrantyCostCode.LscapeFenceTrees);
+        public static readonly RootProblem Gutter = new RootProblem(37, "Gutter", WarrantyCostCode.ExteriorMisc);
+        public static readonly RootProblem HardwareFixture = new RootProblem(38, "Hardware/Fixture", WarrantyCostCode.FixturesHardware);
     }
 }
