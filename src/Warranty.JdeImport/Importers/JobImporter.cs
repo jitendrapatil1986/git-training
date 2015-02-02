@@ -52,9 +52,9 @@ namespace Warranty.JdeImport.Importers
                             FROM F58300 f1
                             INNER JOIN F0006 f2
                                   ON f1.$hmcu = f2.mcmcu
-                            INNER JOIN F0006 f2c
+                            LEFT OUTER JOIN F0006 f2c
                                   ON f1.$H$MCU = f2c.mcmcu
-                            INNER JOIN F57002 f3
+                            LEFT OUTER JOIN F57002 f3
                                   ON f1.$hmcu = f3.$2mcu
                             LEFT OUTER JOIN F0101 f4
                                   ON f1.$h$byr = f4.aban8
@@ -73,13 +73,13 @@ namespace Warranty.JdeImport.Importers
                                             ON email1.wpan8=email3.wpan8 AND email3.WPPHTP='EML3'
                                       WHERE email1.WPPHTP='EML') e
                                   ON e.WPAN8 = $h$byr
-                            INNER JOIN F57001 cpl
+                            LEFT OUTER JOIN F57001 cpl
                                   ON f1.$h$mcu = cpl.$1$mcu AND f1.$h$pln = cpl.$1$pev AND f1.$h$elv = cpl.$1$hse
                             LEFT OUTER JOIN F57001 des
                                   ON des.$1$mcu = '      DESIGN' AND $h$pln = des.$1$pev AND SUBSTRING($h$elv,1,1) = CASE WHEN SUBSTRING(des.$1$hse,1,1) = '' THEN SUBSTRING($h$elv,1,1) ELSE SUBSTRING(des.$1$hse,1,1) END
-                            INNER JOIN f0101 job
+                            LEFT OUTER JOIN f0101 job
                                   ON f1.$hmcu = '    ' || job.aban8
-                            INNER JOIN F0116 jobadd
+                            LEFT OUTER JOIN F0116 jobadd
                                   ON job.aban8 = jobadd.alan8 AND job.abeftb = jobadd.aleftb
                             LEFT OUTER JOIN f0101 designer
                                   ON $H$DS1 = designer.aban8
@@ -167,7 +167,7 @@ namespace Warranty.JdeImport.Importers
        
                                                         SELECT DISTINCT SalesConsultantEmployeeNumber, SalesConsultantEmployeeName
                                                         FROM imports.JobStage
-                                                    ) EmpList GROUP BY Number) AS LIST
+                                                    ) EmpList WHERE Number IS NOT NULL AND LEN(Number) > 0 GROUP BY Number) AS LIST
                                             ON TARGET.EmployeeNumber = LIST.Number
                                             WHEN NOT MATCHED BY TARGET THEN INSERT (EmployeeNumber, EmployeeName)
                                                                                 VALUES (Number, Name)
@@ -184,13 +184,13 @@ namespace Warranty.JdeImport.Importers
                                                                                     , ROW_NUMBER() OVER (PARTITION BY JdeIdentifier ORDER BY JobStageId DESC) AS rowNum
                                                                             FROM imports.JobStage
                                                                         ) removeDups
-                                                                    INNER JOIN nonDupEmps builder ON
-                                                                        removeDups.BuilderEmployeeNumber = builder.EmployeeNumber
-                                                                    INNER JOIN nonDupEmps sales ON
-                                                                        removeDups.SalesConsultantEmployeeNumber = sales.EmployeeNumber
+                                                                    LEFT JOIN nonDupEmps builder ON
+                                                                        removeDups.BuilderEmployeeNumber = builder.EmployeeNumber AND removeDups.BuilderEmployeeNumber IS NOT NULL AND LEN(LTRIM(RTRIM(removeDups.BuilderEmployeeNumber))) > 0
+                                                                    LEFT JOIN nonDupEmps sales ON
+                                                                        removeDups.SalesConsultantEmployeeNumber = sales.EmployeeNumber AND removeDups.SalesConsultantEmployeeNumber IS NOT NULL AND LEN(LTRIM(RTRIM(removeDups.SalesConsultantEmployeeNumber))) > 0
                                                                     INNER JOIN nonDupCom com ON
-                                                                        LEFT(removeDups.CommunityNumber, 4) = com.CommunityNumber
-                                                            WHERE rowNum = 1)
+                                                                        LEFT(removeDups.CommunityNumber, 4) = com.CommunityNumber AND LEFT(removeDups.CommunityNumber, 4) IS NOT NULL AND LEN(LTRIM(RTRIM(removeDups.CommunityNumber))) > 0
+                                                            WHERE rowNum = 1 AND JdeIdentifier IS NOT NULL)
                                             MERGE INTO Jobs AS TARGET
                                             USING stage AS LIST
                                             ON TARGET.JdeIdentifier = LIST.JdeIdentifier
@@ -224,7 +224,7 @@ namespace Warranty.JdeImport.Importers
                                                         , JS.BuyerEmail
                                                     FROM imports.JobStage JS
                                                     INNER JOIN Jobs J ON
-                                                        JS.JobNumber = J.JobNumber
+                                                        JS.JobNumber = J.JobNumber AND JS.JobNumber IS NOT NULL AND JS.BuyerName IS NOT NULL AND LEN(LTRIM(RTRIM(JS.BuyerName))) > 0
                                                     ) AS LIST
                                             ON TARGET.JobId = LIST.JobId
                                             WHEN NOT MATCHED THEN INSERT (JobId, HomeOwnerNumber, HomeOwnerName, EmailAddress, CreatedDate, CreatedBy)
