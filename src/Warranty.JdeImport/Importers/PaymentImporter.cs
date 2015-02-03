@@ -16,8 +16,8 @@ namespace Warranty.JdeImport.Importers
         {
             get
             {
-                return @"select
-                            T5AN8 as VendorNumber
+                return @"SELECT
+                             T5AN8 as VendorNumber
                             , T5PAAP * .01 as Amount
                             , CASE WHEN T5TRDJ IS NULL THEN NULL ELSE qgpl.jded2date(T5TRDJ) END AS CreatedDate
                             , 'Warranty JDE Import' AS CreatedBy
@@ -28,84 +28,91 @@ namespace Warranty.JdeImport.Importers
                             , T5VINV as InvoiceNumber
                             , trim(coalesce(m1.T6SRDS, '')) || trim(coalesce(m2.T6SRDS, '')) || trim(coalesce(m3.T6SRDS, '')) || trim(coalesce(m4.T6SRDS, '')) as HoldComments
                             , trim(coalesce(vp1.T6SRDS, '')) || trim(coalesce(vp2.T6SRDS, '')) || trim(coalesce(vp3.T6SRDS, '')) || trim(coalesce(vp4.T6SRDS, '')) as VarianceExplanation
-                            from f58235 p
-                            left outer join f58235M m1 on p.T5MCU = m1.T6MCU 
-                                and p.T5$OPT = m1.T6$OPT 
-                                and p.T5SUB = m1.T6SUB 
-                                and p.T5OBJ = m1.T6OBJ 
-                                and p.T5DCTO = m1.T6DCTO 
-                                and p.T5DOCO = m1.T6DOCO 
-                                and p.T5SFX = m1.T6SFX 
-                                and trim(m1.T6$LIN) = 1 
-                                and trim(m1.T6FLAG) = 'H'
-                            left outer join f58235M m2 on p.T5MCU = m2.T6MCU 
-                                and p.T5$OPT = m2.T6$OPT 
-                                and p.T5SUB = m2.T6SUB 
-                                and p.T5OBJ = m2.T6OBJ 
-                                and p.T5DCTO = m2.T6DCTO 
-                                and p.T5DOCO = m2.T6DOCO 
-                                and p.T5SFX = m2.T6SFX 
-                                and trim(m2.T6$LIN) = 2 
-                                and trim(m2.T6FLAG) = 'H'
-                            left outer join f58235M m3 on p.T5MCU = m3.T6MCU 
-                                and p.T5$OPT = m3.T6$OPT 
-                                and p.T5SUB = m3.T6SUB 
-                                and p.T5OBJ = m3.T6OBJ 
-                                and p.T5DCTO = m3.T6DCTO 
-                                and p.T5DOCO = m3.T6DOCO 
-                                and p.T5SFX = m3.T6SFX 
-                                and trim(m3.T6$LIN) = 3 
-                                and trim(m3.T6FLAG) = 'H'
-                            left outer join f58235M m4 on p.T5MCU = m4.T6MCU 
-                                and p.T5$OPT = m4.T6$OPT 
-                                and p.T5SUB = m4.T6SUB 
-                                and p.T5OBJ = m4.T6OBJ 
-                                and p.T5DCTO = m4.T6DCTO 
-                                and p.T5DOCO = m4.T6DOCO 
-                                and p.T5SFX = m4.T6SFX 
-                                and trim(m4.T6$LIN) = 4 
-                                and trim(m4.T6FLAG) = 'H'
-                            left outer join f58235M vp1 on p.T5MCU = vp1.T6MCU 
-                                and p.T5$OPT = vp1.T6$OPT 
-                                and p.T5SUB = vp1.T6SUB 
-                                and p.T5OBJ = vp1.T6OBJ 
-                                and p.T5DCTO = vp1.T6DCTO 
-                                and p.T5DOCO = vp1.T6DOCO 
-                                and p.T5SFX = vp1.T6SFX 
-                                and trim(vp1.T6$LIN) = 1
-                                and trim(vp1.T6PDS1) <> ''
-                                and trim(vp1.T6DCTO)  ='$W'
-                            left outer join f58235M vp2 on p.T5MCU = vp2.T6MCU 
-                                and p.T5$OPT = vp2.T6$OPT 
-                                and p.T5SUB = vp2.T6SUB 
-                                and p.T5OBJ = vp2.T6OBJ 
-                                and p.T5DCTO = vp2.T6DCTO 
-                                and p.T5DOCO = vp2.T6DOCO 
-                                and p.T5SFX = vp2.T6SFX 
-                                and trim(vp2.T6$LIN) = 2
-                                and trim(vp2.T6PDS1) <> ''
-                                and trim(vp2.T6DCTO) = '$W'
-                            left outer join f58235M vp3 on p.T5MCU = vp3.T6MCU 
-                                and p.T5$OPT = vp3.T6$OPT 
-                                and p.T5SUB = vp3.T6SUB 
-                                and p.T5OBJ = vp3.T6OBJ 
-                                and p.T5DCTO = vp3.T6DCTO 
-                                and p.T5DOCO = vp3.T6DOCO 
-                                and p.T5SFX = vp3.T6SFX 
-                                and trim(vp3.T6$LIN) = 3
-                                and trim(vp3.T6PDS1) <> ''
-                                and trim(vp3.T6DCTO) = '$W'
-                            left outer join f58235M vp4 on p.T5MCU = vp4.T6MCU 
-                                and p.T5$OPT = vp4.T6$OPT 
-                                and p.T5SUB = vp4.T6SUB 
-                                and p.T5OBJ = vp4.T6OBJ 
-                                and p.T5DCTO = vp4.T6DCTO 
-                                and p.T5DOCO = vp4.T6DOCO 
-                                and p.T5SFX = vp4.T6SFX 
-                                and trim(vp4.T6$LIN) = 4
-                                and trim(vp4.T6PDS1) <> ''
-                                and trim(vp4.T6DCTO) = '$W'
-                                WHERE TRIM(T5OBJ) IN ('9425', '9430', '9435', '9440')";
+                            , CAST(CASE WHEN T5APV IS NULL THEN NULL ELSE qgpl.jded2date(T5APV) END AS DATE) AS ApprovedDate
+                            , CAST(CASE WHEN rmdmtj IS NULL THEN NULL ELSE qgpl.jded2date(rmdmtj) END AS DATE) AS PaidDate
+                            ,TRIM(T5OBJ) as ObjectAccount
+                        FROM F58235 p
+                        LEFT OUTER JOIN  F0411 on rpan8=t5an8 and rpvinv=t5vinv and t5$opt=rpsbl and t5mcu=rpmcu and t5obj=rpobj and t5sub=rpsub and t5paap=rpag and t5divj=rpdivj 
+                        LEFT OUTER JOIN  F0414 on rpdoc = rndoc and rpdct = rndct
+                        LEFT OUTER JOIN  F0413 on rnpyid = rmpyid
+                        LEFT OUTER JOIN f58235M m1 on p.T5MCU = m1.T6MCU 
+                            and p.T5$OPT = m1.T6$OPT 
+                            and p.T5SUB = m1.T6SUB 
+                            and p.T5OBJ = m1.T6OBJ 
+                            and p.T5DCTO = m1.T6DCTO 
+                            and p.T5DOCO = m1.T6DOCO 
+                            and p.T5SFX = m1.T6SFX 
+                            and trim(m1.T6$LIN) = 1 
+                            and trim(m1.T6FLAG) = 'H'
+                        LEFT OUTER JOIN f58235M m2 on p.T5MCU = m2.T6MCU 
+                            and p.T5$OPT = m2.T6$OPT 
+                            and p.T5SUB = m2.T6SUB 
+                            and p.T5OBJ = m2.T6OBJ 
+                            and p.T5DCTO = m2.T6DCTO 
+                            and p.T5DOCO = m2.T6DOCO 
+                            and p.T5SFX = m2.T6SFX 
+                            and trim(m2.T6$LIN) = 2 
+                            and trim(m2.T6FLAG) = 'H'
+                        LEFT OUTER JOIN f58235M m3 on p.T5MCU = m3.T6MCU 
+                            and p.T5$OPT = m3.T6$OPT 
+                            and p.T5SUB = m3.T6SUB 
+                            and p.T5OBJ = m3.T6OBJ 
+                            and p.T5DCTO = m3.T6DCTO 
+                            and p.T5DOCO = m3.T6DOCO 
+                            and p.T5SFX = m3.T6SFX 
+                            and trim(m3.T6$LIN) = 3 
+                            and trim(m3.T6FLAG) = 'H'
+                        LEFT OUTER JOIN f58235M m4 on p.T5MCU = m4.T6MCU 
+                            and p.T5$OPT = m4.T6$OPT 
+                            and p.T5SUB = m4.T6SUB 
+                            and p.T5OBJ = m4.T6OBJ 
+                            and p.T5DCTO = m4.T6DCTO 
+                            and p.T5DOCO = m4.T6DOCO 
+                            and p.T5SFX = m4.T6SFX 
+                            and trim(m4.T6$LIN) = 4 
+                            and trim(m4.T6FLAG) = 'H'
+                        LEFT OUTER JOIN f58235M vp1 on p.T5MCU = vp1.T6MCU 
+                            and p.T5$OPT = vp1.T6$OPT 
+                            and p.T5SUB = vp1.T6SUB 
+                            and p.T5OBJ = vp1.T6OBJ 
+                            and p.T5DCTO = vp1.T6DCTO 
+                            and p.T5DOCO = vp1.T6DOCO 
+                            and p.T5SFX = vp1.T6SFX 
+                            and trim(vp1.T6$LIN) = 1
+                            and trim(vp1.T6PDS1) <> ''
+                            and trim(vp1.T6DCTO)  ='$W'
+                        LEFT OUTER JOIN f58235M vp2 on p.T5MCU = vp2.T6MCU 
+                            and p.T5$OPT = vp2.T6$OPT 
+                            and p.T5SUB = vp2.T6SUB 
+                            and p.T5OBJ = vp2.T6OBJ 
+                            and p.T5DCTO = vp2.T6DCTO 
+                            and p.T5DOCO = vp2.T6DOCO 
+                            and p.T5SFX = vp2.T6SFX 
+                            and trim(vp2.T6$LIN) = 2
+                            and trim(vp2.T6PDS1) <> ''
+                            and trim(vp2.T6DCTO) = '$W'
+                        LEFT OUTER JOIN f58235M vp3 on p.T5MCU = vp3.T6MCU 
+                            and p.T5$OPT = vp3.T6$OPT 
+                            and p.T5SUB = vp3.T6SUB 
+                            and p.T5OBJ = vp3.T6OBJ 
+                            and p.T5DCTO = vp3.T6DCTO 
+                            and p.T5DOCO = vp3.T6DOCO 
+                            and p.T5SFX = vp3.T6SFX 
+                            and trim(vp3.T6$LIN) = 3
+                            and trim(vp3.T6PDS1) <> ''
+                            and trim(vp3.T6DCTO) = '$W'
+                        LEFT OUTER JOIN f58235M vp4 on p.T5MCU = vp4.T6MCU 
+                            and p.T5$OPT = vp4.T6$OPT 
+                            and p.T5SUB = vp4.T6SUB 
+                            and p.T5OBJ = vp4.T6OBJ 
+                            and p.T5DCTO = vp4.T6DCTO 
+                            and p.T5DOCO = vp4.T6DOCO 
+                            and p.T5SFX = vp4.T6SFX 
+                            and trim(vp4.T6$LIN) = 4
+                            and trim(vp4.T6PDS1) <> ''
+                            and trim(vp4.T6DCTO) = '$W'
+                        WHERE TRIM(T5OBJ) IN ('9425', '9430', '9435', '9440')
+                        ORDER BY t5an8 Asc,t5vinv Asc";
             }
         }
 
@@ -141,6 +148,9 @@ namespace Warranty.JdeImport.Importers
                     new KeyValuePair<string, string>("VarianceExplanation", "VarianceExplanation"),
                     new KeyValuePair<string, string>("CreatedDate", "CreatedDate"),
                     new KeyValuePair<string, string>("CreatedBy", "CreatedBy"),
+                    new KeyValuePair<string, string>("ApprovedDate", "ApprovedDate"),
+                    new KeyValuePair<string, string>("PaidDate", "PaidDate"),
+                    new KeyValuePair<string, string>("ObjectAccount", "ObjectAccount"),
                 };
             }
         }
@@ -176,8 +186,8 @@ namespace Warranty.JdeImport.Importers
                                                 MERGE INTO Payments AS TARGET
                                                 USING stage AS LIST
                                                 ON TARGET.JdeIdentifier = LIST.JdeIdentifier
-                                                WHEN NOT MATCHED BY TARGET THEN INSERT (VendorNumber, Amount, PaymentStatus, JobNumber, JdeIdentifier, CreatedDate, CreatedBy, CommunityNumber, InvoiceNumber, HoldComments, VarianceExplanation)
-                                                                                    VALUES (VendorNumber, Amount, StatusId, JobNumber, JdeIdentifier, CreatedDate, CreatedBy, CommunityNumber, InvoiceNumber, HoldComments, VarianceExplanation)
+                                                WHEN NOT MATCHED BY TARGET THEN INSERT (VendorNumber, Amount, PaymentStatus, JobNumber, JdeIdentifier, CreatedDate, CreatedBy, CommunityNumber, InvoiceNumber, HoldComments, VarianceExplanation, ApprovedDate, PaidDate, ObjectAccount)
+                                                                                    VALUES (VendorNumber, Amount, StatusId, JobNumber, JdeIdentifier, CreatedDate, CreatedBy, CommunityNumber, InvoiceNumber, HoldComments, VarianceExplanation, ApprovedDate, PaidDate, ObjectAccount)
                                                 WHEN MATCHED THEN UPDATE SET TARGET.VendorNumber = LIST.VendorNumber
                                                                             , TARGET.Amount = LIST.Amount
                                                                             , TARGET.PaymentStatus = LIST.StatusId
@@ -188,7 +198,10 @@ namespace Warranty.JdeImport.Importers
                                                                             , TARGET.CommunityNumber = LIST.CommunityNumber
                                                                             , TARGET.InvoiceNumber = LIST.InvoiceNumber
                                                                             , TARGET.HoldComments = LIST.HoldComments
-                                                                            , TARGET.VarianceExplanation = LIST.VarianceExplanation;
+                                                                            , TARGET.VarianceExplanation = LIST.VarianceExplanation
+                                                                            , TARGET.ApprovedDate = LIST.ApprovedDate
+                                                                            , TARGET.PaidDate = LIST.PaidDate
+                                                                            , TARGET.ObjectAccount = LIST.ObjectAccount;
             ";
 
             var deletePayments = @"DELETE FROM Payments 
