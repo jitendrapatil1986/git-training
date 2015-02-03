@@ -1,8 +1,7 @@
 ﻿namespace Warranty.Core.Features.AddServiceCallPurchaseOrder
 {
-
     using System.Linq;
-
+    using Configurations;
     using Entities;
     using Enumerations;
     using InnerMessages;
@@ -10,6 +9,7 @@
     using Security;
     using Services;
     using NServiceBus;
+    using Extensions;
 
     public class AddServiceCallPurchaseOrderCommandHandler : ICommandHandler<AddServiceCallPurchaseOrderCommand>
     {
@@ -84,6 +84,7 @@
                         if (purchaseOrderLineItem.Quantity != 0 && !string.IsNullOrEmpty(purchaseOrderLineItem.Description) && purchaseOrderLineItem.UnitCost != 0)
                         {
                             purchaseOrderLineItem.LineNumber = lineNumber;
+                            purchaseOrderLineItem.Description = purchaseOrderLineItem.Description.Truncate(WarrantyConstants.DefaultJdePurchaseOrderLineItemDescriptionLength);
                             lineNumber += 1;
                             _database.Insert(purchaseOrderLineItem);
                         }

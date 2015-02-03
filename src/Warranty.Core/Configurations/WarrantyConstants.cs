@@ -9,6 +9,7 @@
         public const int NumberOfYearsHomeIsWarrantable = 10;
         public const string AttachmentRemovalMessage = "Are you sure you want to remove this attachment?";
         public const string DefaultActiveCommunityCode = "A";
+        public static readonly int DefaultJdePurchaseOrderLineItemDescriptionLength = 30;
 
         public static readonly List<string> LaborObjectAccounts = new List<string> { "9430", "9440" };
         public static readonly List<string> MaterialObjectAccounts = new List<string> { "9425", "9435" };

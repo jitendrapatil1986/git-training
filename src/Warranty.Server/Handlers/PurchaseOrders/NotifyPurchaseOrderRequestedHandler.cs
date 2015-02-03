@@ -10,6 +10,7 @@
     using NPoco;
     using NServiceBus;
     using System.Linq;
+    using Core.Extensions;
 
     public class NotifyPurchaseOrderRequestedHandler : IHandleMessages<NotifyPurchaseOrderRequested>
     {
@@ -62,7 +63,7 @@
                             {
                                 Quantity = y.Quantity,
                                 UnitPrice = y.UnitCost,
-                                ItemDescription = y.Description,
+                                ItemDescription = y.Description.Truncate(WarrantyConstants.DefaultJdePurchaseOrderLineItemDescriptionLength),
                                 VarianceCode = WarrantyConstants.VarianceCode
                             })
                     };

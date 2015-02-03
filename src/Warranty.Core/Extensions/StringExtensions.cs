@@ -14,7 +14,7 @@
 
         public static string CleanPhoneNumber(this string val)
         {
-            return val == null ? string.Empty : val.Replace("(", "").Replace(")", "").Replace(" ", "").Replace("-", "").Replace("x", "").Trim();
+            return val == null ? String.Empty : val.Replace("(", "").Replace(")", "").Replace(" ", "").Replace("-", "").Replace("x", "").Trim();
         }
 
         public static string ToPhoneNumberWithExtension(this string phoneNumber)
@@ -22,16 +22,21 @@
             phoneNumber = CleanPhoneNumber(phoneNumber);
 
             if (phoneNumber == null || phoneNumber.Length < 10)
-                return string.Empty;
+                return String.Empty;
 
             var area = phoneNumber.Substring(0, 3);
             var major = phoneNumber.Substring(3, 3);
             var minor = phoneNumber.Substring(6, 4);
             var extension = " x" + phoneNumber.Substring(10, phoneNumber.Length - 10);
 
-            var format = "({0}) {1}-{2}" + (extension.Length > 2 ? extension : string.Empty);
+            var format = "({0}) {1}-{2}" + (extension.Length > 2 ? extension : String.Empty);
 
-            return string.Format(format, area, major, minor);
+            return String.Format(format, area, major, minor);
+        }
+
+        public static string Truncate(this string stringToTruncate, int maxLength)
+        {
+            return stringToTruncate.Length >= maxLength ? stringToTruncate.Substring(0, maxLength) : stringToTruncate;
         }
     }
 }
