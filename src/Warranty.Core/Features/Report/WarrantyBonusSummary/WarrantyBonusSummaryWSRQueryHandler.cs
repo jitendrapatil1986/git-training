@@ -65,106 +65,70 @@
 
                 using (_database)
                 {
-                    const string sql = @"SELECT d.DivisionName, e.EmployeeName, e.EmployeeNumber, c.[CommunityName], b.NumberOfWarrantableHomes, a.*,
-                                            (b.NumberofWarrantableHomes * @3) as TotalWarrantyAllowance,
-                                            ((b.NumberOfWarrantableHomes * @3) - a.TotalDollarsSpent) as TotalWarrantyDifference
-                                        FROM
-                                        (
-                                            --Payments made in Warranty system tied to Service Call Line item.
-                                            SELECT  c.[CommunityId],
-                                                e.[EmployeeId],
-                                                SUM(Amount) as TotalDollarsSpent,
-                                                SUM(CASE WHEN [ObjectAccount] = '9425' THEN Amount ELSE 0 END) as MaterialDollarsSpent,
-                                                SUM(CASE WHEN [ObjectAccount] = '9430' THEN Amount ELSE 0 END) as LaborDollarsSpent,
-                                                SUM(CASE WHEN [ObjectAccount] = '9435' THEN Amount ELSE 0 END) as OtherMaterialDollarsSpent,
-                                                SUM(CASE WHEN [ObjectAccount] = '9440' THEN Amount ELSE 0 END) as OtherLaborDollarsSpent
-                                            FROM Payments p
-                                            INNER JOIN ServiceCallLineItems li
-                                            ON li.ServiceCallLineItemId = p.ServiceCallLineItemId
-                                            INNER JOIN ServiceCalls sc
-                                            ON sc.ServiceCallId = li.ServiceCallId
-                                            INNER JOIN Jobs j
-                                            ON p.JobNumber = j.JobNumber
+                    const string sql = @"SELECT d.DivisionName, e.EmployeeName, e.EmployeeNumber, a.CommunityId, c.CommunityName, a.NumberOfWarrantableHomes, e.EmployeeId, ISNULL(b.TotalDollarsSpent, 0) as TotalDollarsSpent,
+                                            ISNULL(b.MaterialDollarsSpent, 0) as MaterialDollarsSpent, ISNULL(b.LaborDollarsSpent, 0) as LaborDollarsSpent, ISNULL(b.OtherMaterialDollarsSpent, 0) as OtherMaterialDollarsSpent, 
+                                            ISNULL(b.OtherLaborDollarsSpent, 0) as OtherLaborDollarsSpent,
+                                            ISNULL((a.NumberofWarrantableHomes * @4), 0) as TotalWarrantyAllowance,
+                                            (ISNULL((a.NumberOfWarrantableHomes * @4), 0) - ISNULL(b.TotalDollarsSpent, 0)) as TotalWarrantyDifference
+                                            FROM
+                                            (
+                                                SELECT COUNT(*) as NumberOfWarrantableHomes, j.CommunityId, e.EmployeeId
+                                                FROM Jobs j
+                                                INNER JOIN Communities c
+                                                ON j.CommunityId = c.CommunityId
+                                                INNER JOIN Cities Ci
+                                                ON c.CityId = Ci.CityId
+                                                INNER JOIN CommunityAssignments ca
+                                                ON c.CommunityId = ca.CommunityId
+                                                INNER JOIN Employees e
+                                                ON ca.EmployeeId = e.EmployeeId
+                                                WHERE CloseDate >= DATEADD(yy, -@0, @1)
+                                                AND CloseDate <= @2
+                                                AND Ci.CityCode = @5
+                                                AND EmployeeNumber=@3
+                                                GROUP BY j.CommunityId, e.EmployeeId
+                                            ) a
                                             INNER JOIN Communities c
-                                            ON j.CommunityId = c.CommunityId
-                                            INNER JOIN Cities cc
-                                            ON c.CityId = cc.CityId
-                                            INNER JOIN CommunityAssignments ca
-                                            ON c.CommunityId = ca.CommunityId
+                                            ON c.CommunityId = a.CommunityId
+                                            LEFT JOIN
+                                            (
+                                                SELECT  c.[CommunityId],
+                                                        e.[EmployeeId],
+                                                        SUM(Amount) as TotalDollarsSpent,
+                                                        SUM(CASE WHEN [ObjectAccount] = '9425' THEN Amount ELSE 0 END) as MaterialDollarsSpent,
+                                                        SUM(CASE WHEN [ObjectAccount] = '9430' THEN Amount ELSE 0 END) as LaborDollarsSpent,
+                                                        SUM(CASE WHEN [ObjectAccount] = '9435' THEN Amount ELSE 0 END) as OtherMaterialDollarsSpent,
+                                                        SUM(CASE WHEN [ObjectAccount] = '9440' THEN Amount ELSE 0 END) as OtherLaborDollarsSpent
+                                                FROM Payments p
+                                                INNER JOIN Jobs j
+                                                ON p.JobNumber = j.JobNumber
+                                                INNER JOIN Communities c
+                                                ON j.CommunityId = c.CommunityId
+                                                INNER JOIN Cities cc
+                                                ON c.CityId = cc.CityId
+                                                INNER JOIN CommunityAssignments ca
+                                                ON c.CommunityId = ca.CommunityId
+                                                INNER JOIN Employees e
+                                                ON ca.EmployeeId = e.EmployeeId
+                                                    AND EmployeeNumber = @3
+                                                WHERE
+                                                cc.CityCode = @5
+                                                AND MONTH(p.PaidDate) = MONTH(@1)
+                                                AND YEAR(p.PaidDate) = YEAR(@1)
+                                                AND p.PaidDate >= j.CloseDate
+                                                AND p.PaidDate <= DATEADD(yy, @0, j.CloseDate)
+                                                AND p.PaymentStatus = @6
+                                                AND p.PaidDate IS NOT NULL
+                                                GROUP BY c.[CommunityId], e.[EmployeeId]
+                                            ) b
+                                            ON a.[CommunityId] = b.[CommunityId]
+                                            INNER JOIN Divisions d
+                                            ON c.DivisionId = d.DivisionId
                                             INNER JOIN Employees e
-                                            ON ca.EmployeeId = e.EmployeeId
-                                                AND EmployeeNumber = @2
-                                            WHERE 
-                                            cc.CityCode = @4
-                                            AND p.ServiceCallLineItemId IS NOT NULL
-                                            AND MONTH(sc.CreatedDate) = MONTH(@1) 
-                                            AND YEAR(sc.CreatedDate) = YEAR(@1)
-                                            AND sc.CreatedDate >= j.CloseDate
-                                            AND sc.CreatedDate <= DATEADD(yy, 2, j.CloseDate)
-                                            AND p.PaymentStatus = @5
-                                            AND sc.SpecialProject = 0
-                                            GROUP BY c.[CommunityId], e.[EmployeeId]
+                                            ON a.EmployeeId = e.EmployeeId
+                                            ORDER BY c.CommunityName";
 
-                                            UNION
-
-                                            --Payments made outside Warranty system not tied to Service Call Line item.
-                                            SELECT  c.[CommunityId],
-                                                    e.[EmployeeId],
-                                                    SUM(Amount) as TotalDollarsSpent,
-                                                    SUM(CASE WHEN [ObjectAccount] = '9425' THEN Amount ELSE 0 END) as MaterialDollarsSpent,
-                                                    SUM(CASE WHEN [ObjectAccount] = '9430' THEN Amount ELSE 0 END) as LaborDollarsSpent,
-                                                    SUM(CASE WHEN [ObjectAccount] = '9435' THEN Amount ELSE 0 END) as OtherMaterialDollarsSpent,
-                                                    SUM(CASE WHEN [ObjectAccount] = '9440' THEN Amount ELSE 0 END) as OtherLaborDollarsSpent
-                                            FROM Payments p
-                                            INNER JOIN Jobs j
-                                            ON p.JobNumber = j.JobNumber
-                                            INNER JOIN Communities c
-                                            ON j.CommunityId = c.CommunityId
-                                            INNER JOIN Cities cc
-                                            ON c.CityId = cc.CityId
-                                            INNER JOIN CommunityAssignments ca
-                                            ON c.CommunityId = ca.CommunityId
-                                            INNER JOIN Employees e
-                                            ON ca.EmployeeId = e.EmployeeId
-                                                AND EmployeeNumber = @2
-                                            WHERE
-                                            cc.CityCode = @4
-                                            AND p.ServiceCallLineItemId IS NULL
-                                            AND MONTH(p.CreatedDate) = MONTH(@1) 
-                                            AND YEAR(p.CreatedDate) = YEAR(@1)
-                                            AND p.CreatedDate >= j.CloseDate
-                                            AND p.CreatedDate <= DATEADD(yy, @0, j.CloseDate)
-                                            AND p.PaymentStatus = @5
-                                            GROUP BY c.[CommunityId], e.[EmployeeId]
-                                        ) a
-                                        INNER JOIN Communities c
-                                        ON c.CommunityId = a.CommunityId
-                                        INNER JOIN
-                                        (
-                                            SELECT COUNT(*) as NumberOfWarrantableHomes, j.CommunityId
-                                            FROM Jobs j
-                                            INNER JOIN Communities c
-                                            ON j.CommunityId = c.CommunityId
-                                            INNER JOIN Cities Ci
-                                            ON c.CityId = Ci.CityId
-                                            INNER JOIN CommunityAssignments ca
-                                            ON c.CommunityId = ca.CommunityId
-                                            INNER JOIN Employees e
-                                            ON ca.EmployeeId = e.EmployeeId
-                                            WHERE CloseDate >= DATEADD(yy, -@0, @1)
-                                            AND CloseDate <= @1
-                                            AND Ci.CityCode = @4
-                                            AND EmployeeNumber=@2
-                                            GROUP BY j.CommunityId
-                                        ) b
-                                        ON a.[CommunityId] = b.[CommunityId]
-                                        INNER JOIN Divisions d
-                                        ON c.DivisionId = d.DivisionId
-                                        INNER JOIN Employees e
-                                        ON a.EmployeeId = e.EmployeeId
-                                        ORDER BY c.CommunityName";
-
-                    result = _database.Fetch<WarrantyBonusSummaryModel.BonusSummary>(sql, 2, query.Model.StartDate, employeeNumber, dollarsSpent, market, PaymentStatus.Paid.Value);
+                    result = _database.Fetch<WarrantyBonusSummaryModel.BonusSummary>(sql, 2, query.Model.StartDate, query.Model.EndDate, employeeNumber, dollarsSpent, market, PaymentStatus.Paid.Value);
                 }
             }
 
