@@ -37,7 +37,7 @@
                         required: {
                             onlyIf: function() { return (self.quantity() || self.unitCost()); }
                         },
-                        maxLength: 30
+                        maxLength: modelData.maxPurchaseOrderLineItemDescriptionLength
                     });
                     
                     self.subTotal = ko.computed(function () {
@@ -66,7 +66,7 @@
                     self.postalCode = ko.observable(modelData.initialPurchaseOrder.postalCode);
                     self.purchaseOrderMaxAmount = ko.observable(modelData.initialPurchaseOrder.purchaseOrderMaxAmount);
                     
-                    self.notes = ko.observable();
+                    self.notes = ko.observable().extend({ maxLength: modelData.maxPurchaseOrderNotesLength });
                     self.line1 = new PurchaseOrderLineViewModel();
                     self.line2 = new PurchaseOrderLineViewModel();
                     self.line3 = new PurchaseOrderLineViewModel();
