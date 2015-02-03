@@ -62,7 +62,7 @@
                             {
                                 Quantity = y.Quantity,
                                 UnitPrice = y.UnitCost,
-                                ItemDescription = y.Description,
+                                ItemDescription = y.Description.Length >= WarrantyConstants.DefaultJdePurchaseOrderLineItemDescriptionLength ? y.Description.Substring(0, WarrantyConstants.DefaultJdePurchaseOrderLineItemDescriptionLength) : y.Description,
                                 VarianceCode = WarrantyConstants.VarianceCode
                             })
                     };

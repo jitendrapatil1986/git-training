@@ -36,7 +36,8 @@
                     self.description.extend({
                         required: {
                             onlyIf: function() { return (self.quantity() || self.unitCost()); }
-                        }
+                        },
+                        maxLength: 30
                     });
                     
                     self.subTotal = ko.computed(function () {
