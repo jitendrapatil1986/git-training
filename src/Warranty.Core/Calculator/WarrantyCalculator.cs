@@ -5,6 +5,7 @@ namespace Warranty.Core.Calculator
 {
     using System.Linq;
     using Configurations;
+    using Enumerations;
     using Extensions;
     using NPoco;
     using Security;
@@ -109,25 +110,26 @@ namespace Warranty.Core.Calculator
                                             , CONVERT(DATE,DATEADD(YY, -2, DATEADD(MM, -number, DATEADD(DD, -DAY(@1) + 1, @1)))) AS FirstOfMonthTwoYearsAgo
                                             , CONVERT(DATE,DATEADD(MM, -number + 1, DATEADD(DD, -DAY(@1) + 1, @1))) AS NextMonth
                                             FROM n
-                                            WHERE DATEADD(MM, -number + 1, DATEADD(DD, -DAY(@1) + 1, @1)) > CONVERT(DATE, DATEADD(MM, 1, DATEADD(DD, -DAY(@0) + 1, @0))))
-                            , houses as (SELECT j.CloseDate, J.JobNumber FROM Jobs j 						  
-                                                                INNER JOIN Communities c
-                                                                ON j.CommunityId = c.CommunityId
-                                                                INNER JOIN Cities Ci
-                                                                ON c.CityId = Ci.CityId
-                                                                INNER JOIN CommunityAssignments ca
-                                                                ON c.CommunityId = ca.CommunityId
-                                                                INNER JOIN Employees e
-                                                                ON ca.EmployeeId = e.EmployeeId
-                                                                WHERE Ci.CityCode IN ({0})
-                                                                AND EmployeeNumber=@2)
-                                    SELECT COALESCE(COUNT(CloseDate), 0) as Amount, DateMonth MonthNumber, DateYear YearNumber
-                                                                FROM months dpm			
-					                                        LEFT JOIN houses ON		   
-						                                        CloseDate >= FirstOfMonthTwoYearsAgo 
-						                                        AND CloseDate < NextMonth
-					                                        group by DateMonth, DateYear
-                                                            order by DateYear, DateMonth;";
+                                            WHERE DATEADD(MM, -number + 2, DATEADD(DD, -DAY(@1) + 1, @1)) > CONVERT(DATE, DATEADD(MM, 1, DATEADD(DD, -DAY(@0) + 1, @0))))
+                            , houses as (SELECT j.CloseDate, J.JobNumber FROM Jobs j
+                                            INNER JOIN Communities c
+                                            ON j.CommunityId = c.CommunityId
+                                            INNER JOIN Cities Ci
+                                            ON c.CityId = Ci.CityId
+                                            INNER JOIN CommunityAssignments ca
+                                            ON c.CommunityId = ca.CommunityId
+                                            INNER JOIN Employees e
+                                            ON ca.EmployeeId = e.EmployeeId
+                                            WHERE Ci.CityCode IN ({0})
+                                            AND EmployeeNumber=@2)
+                                    
+                            SELECT COALESCE(COUNT(CloseDate), 0) as Amount, DateMonth MonthNumber, DateYear YearNumber
+                            FROM months dpm
+                            LEFT JOIN houses ON
+                                CloseDate >= FirstOfMonthTwoYearsAgo 
+                                AND CloseDate < NextMonth
+                            group by DateMonth, DateYear
+                            order by DateYear, DateMonth;";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
                 return result;
@@ -138,29 +140,32 @@ namespace Warranty.Core.Calculator
         {
             using (_database)
             {
-
                 const string sql =
-                    @"SELECT COALESCE(SUM(Amount), 0) as Amount, month(p.CreatedDate) MonthNumber, year(p.CreatedDate) YearNumber
-                                                                    FROM Payments p
-                                                                        INNER JOIN Jobs j
-                                                                        ON p.JobNumber = j.JobNumber
-                                                                        INNER JOIN Communities c
-                                                                        ON j.CommunityId = c.CommunityId
-                                                                        INNER JOIN Cities cc
-                                                                        ON c.CityId = cc.CityId
-                                                                        INNER JOIN CommunityAssignments ca
-                                                                        ON c.CommunityId = ca.CommunityId
-                                                                        INNER JOIN Employees e
-                                                                        ON ca.EmployeeId = e.EmployeeId                                    
-								                                    AND EmployeeNumber=@2
-                                                                where 
-                                                                cc.CityCode IN ({0}) AND
-								                                p.CreatedDate >= @0
-								                                AND p.CreatedDate < @1
-							                                    group by month(p.CreatedDate), year(p.CreatedDate)
-							                                    order by year(p.CreatedDate), month(p.CreatedDate);";
+                    @"SELECT COALESCE(SUM(Amount), 0) as Amount, MONTH(p.PaidDate) MonthNumber, YEAR(p.PaidDate) YearNumber
+                        FROM Payments p
+                        INNER JOIN Jobs j
+                            ON p.JobNumber = j.JobNumber
+                        INNER JOIN Communities c
+                            ON j.CommunityId = c.CommunityId
+                        INNER JOIN Cities cc
+                            ON c.CityId = cc.CityId
+                        INNER JOIN CommunityAssignments ca
+                            ON c.CommunityId = ca.CommunityId
+                        INNER JOIN Employees e
+                            ON ca.EmployeeId = e.EmployeeId
+                            AND EmployeeNumber=@2
+                        WHERE
+                            cc.CityCode IN ({0})
+                            AND p.PaidDate >= @0
+                            AND p.PaidDate <= @1
+                            AND p.PaidDate >= j.CloseDate
+                            AND p.PaidDate <= DATEADD(yy, 2, j.CloseDate)
+                            AND p.PaymentStatus = @3
+                            AND p.PaidDate IS NOT NULL
+                            GROUP BY MONTH(p.PaidDate), YEAR(p.PaidDate)
+                        ORDER BY YearNumber, MonthNumber";
 
-                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber, PaymentStatus.Paid.Value);
                 return result;
             }
         }
@@ -307,27 +312,28 @@ namespace Warranty.Core.Calculator
                                             , CONVERT(DATE,DATEADD(YY, -2, DATEADD(MM, -number, DATEADD(DD, -DAY(@1) + 1, @1)))) AS FirstOfMonthTwoYearsAgo
                                             , CONVERT(DATE,DATEADD(MM, -number + 1, DATEADD(DD, -DAY(@1) + 1, @1))) AS NextMonth
                                             FROM n
-                                            WHERE DATEADD(MM, -number + 1, DATEADD(DD, -DAY(@1) + 1, @1)) > CONVERT(DATE, DATEADD(MM, 1, DATEADD(DD, -DAY(@0) + 1, @0))))
-                            , houses as (SELECT j.CloseDate, J.JobNumber FROM Jobs j 						  
-                                                                INNER JOIN Communities c
-                                                                ON j.CommunityId = c.CommunityId
-                                                                INNER JOIN Cities Ci
-                                                                ON c.CityId = Ci.CityId
-                                                                INNER JOIN CommunityAssignments ca
-                                                                ON c.CommunityId = ca.CommunityId
-                                                                INNER JOIN Divisions d
-                                                                ON c.DivisionId = d.DivisionId
-                                                                INNER JOIN Employees e
-                                                                ON ca.EmployeeId = e.EmployeeId
-                                                                WHERE Ci.CityCode IN ({0})
-                                                                AND d.DivisionName=@2)
-                                    SELECT COALESCE(COUNT(CloseDate), 0) as Amount, DateMonth MonthNumber, DateYear YearNumber
-                                                                FROM months dpm			
-					                                        LEFT JOIN houses ON		   
-						                                        CloseDate >= FirstOfMonthTwoYearsAgo 
-						                                        AND CloseDate < NextMonth
-					                                        group by DateMonth, DateYear
-                                                            order by DateYear, DateMonth;";
+                                            WHERE DATEADD(MM, -number + 2, DATEADD(DD, -DAY(@1) + 1, @1)) > CONVERT(DATE, DATEADD(MM, 1, DATEADD(DD, -DAY(@0) + 1, @0))))
+                            , houses as (SELECT j.CloseDate, J.JobNumber FROM Jobs j
+                                            INNER JOIN Communities c
+                                            ON j.CommunityId = c.CommunityId
+                                            INNER JOIN Cities Ci
+                                            ON c.CityId = Ci.CityId
+                                            INNER JOIN CommunityAssignments ca
+                                            ON c.CommunityId = ca.CommunityId
+                                            INNER JOIN Divisions d
+                                            ON c.DivisionId = d.DivisionId
+                                            INNER JOIN Employees e
+                                            ON ca.EmployeeId = e.EmployeeId
+                                            WHERE Ci.CityCode IN ({0})
+                                            AND d.DivisionName=@2)
+
+                            SELECT COALESCE(COUNT(CloseDate), 0) as Amount, DateMonth MonthNumber, DateYear YearNumber
+                            FROM months dpm
+                            LEFT JOIN houses ON
+                                CloseDate >= FirstOfMonthTwoYearsAgo 
+                                AND CloseDate < NextMonth
+                            group by DateMonth, DateYear
+                            order by DateYear, DateMonth;";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName);
                 return result;
@@ -338,31 +344,34 @@ namespace Warranty.Core.Calculator
         {
             using (_database)
             {
-
                 const string sql =
-                    @"SELECT COALESCE(SUM(Amount), 0) as Amount, month(p.CreatedDate)MonthNumber, year(p.CreatedDate) YearNumber
-                                                                    FROM Payments p								
-                                                                        INNER JOIN Jobs j
-                                                                        ON p.JobNumber = j.JobNumber
-                                                                        INNER JOIN Communities c
-                                                                        ON j.CommunityId = c.CommunityId
-                                                                        INNER JOIN Divisions d
-                                                                        ON c.DivisionId = d.DivisionId
-                                                                        INNER JOIN Cities cc
-                                                                        ON c.CityId = cc.CityId
-                                                                        INNER JOIN CommunityAssignments ca
-                                                                        ON c.CommunityId = ca.CommunityId
-                                                                        INNER JOIN Employees e
-                                                                        ON ca.EmployeeId = e.EmployeeId                                    
-								                                    AND d.DivisionName=@2
-                                                                where 
-                                                                cc.CityCode IN ({0}) AND
-								                                p.CreatedDate >= @0
-								                                AND p.CreatedDate < @1
-							                                    group by month(p.CreatedDate), year(p.CreatedDate)
-							                                    order by year(p.CreatedDate), month(p.CreatedDate);";
+                    @"SELECT COALESCE(SUM(Amount), 0) as Amount, MONTH(p.PaidDate) MonthNumber, YEAR(p.PaidDate) YearNumber
+                        FROM Payments p
+                        INNER JOIN Jobs j
+                            ON p.JobNumber = j.JobNumber
+                        INNER JOIN Communities c
+                            ON j.CommunityId = c.CommunityId
+                        INNER JOIN Divisions d
+                            ON c.DivisionId = d.DivisionId
+                        INNER JOIN Cities cc
+                            ON c.CityId = cc.CityId
+                        INNER JOIN CommunityAssignments ca
+                            ON c.CommunityId = ca.CommunityId
+                        INNER JOIN Employees e
+                            ON ca.EmployeeId = e.EmployeeId
+                            AND d.DivisionName=@2
+                        WHERE
+                            cc.CityCode IN ({0})
+                            AND p.PaidDate >= @0
+                            AND p.PaidDate <= @1
+                            AND p.PaidDate >= j.CloseDate
+                            AND p.PaidDate <= DATEADD(yy, 2, j.CloseDate)
+                            AND p.PaymentStatus = @3
+                            AND p.PaidDate IS NOT NULL
+                            GROUP BY MONTH(p.PaidDate), YEAR(p.PaidDate)
+                        ORDER BY YearNumber, MonthNumber";
 
-                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName);
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName, PaymentStatus.Paid.Value);
                 return result;
             }
         }
@@ -503,27 +512,28 @@ namespace Warranty.Core.Calculator
                                             , CONVERT(DATE,DATEADD(YY, -2, DATEADD(MM, -number, DATEADD(DD, -DAY(@1) + 1, @1)))) AS FirstOfMonthTwoYearsAgo
                                             , CONVERT(DATE,DATEADD(MM, -number + 1, DATEADD(DD, -DAY(@1) + 1, @1))) AS NextMonth
                                             FROM n
-                                            WHERE DATEADD(MM, -number + 1, DATEADD(DD, -DAY(@1) + 1, @1)) > CONVERT(DATE, DATEADD(MM, 1, DATEADD(DD, -DAY(@0) + 1, @0))))
-                            , houses as (SELECT j.CloseDate, J.JobNumber FROM Jobs j 						  
-                                                                INNER JOIN Communities c
-                                                                ON j.CommunityId = c.CommunityId
-                                                                INNER JOIN Cities Ci
-                                                                ON c.CityId = Ci.CityId
-                                                                INNER JOIN CommunityAssignments ca
-                                                                ON c.CommunityId = ca.CommunityId
-                                                                INNER JOIN Projects pr
-                                                                ON c.ProjectId = pr.ProjectId
-                                                                INNER JOIN Employees e
-                                                                ON ca.EmployeeId = e.EmployeeId
-                                                                WHERE Ci.CityCode IN ({0})
-                                                                AND pr.ProjectName=@2)
-                                    SELECT COALESCE(COUNT(CloseDate), 0) as Amount, DateMonth MonthNumber, DateYear YearNumber
-                                                                FROM months dpm			
-					                                        LEFT JOIN houses ON		   
-						                                        CloseDate >= FirstOfMonthTwoYearsAgo 
-						                                        AND CloseDate < NextMonth
-					                                        group by DateMonth, DateYear
-                                                            order by DateYear, DateMonth;";
+                                            WHERE DATEADD(MM, -number + 2, DATEADD(DD, -DAY(@1) + 1, @1)) > CONVERT(DATE, DATEADD(MM, 1, DATEADD(DD, -DAY(@0) + 1, @0))))
+                            , houses as (SELECT j.CloseDate, J.JobNumber FROM Jobs j
+                                            INNER JOIN Communities c
+                                            ON j.CommunityId = c.CommunityId
+                                            INNER JOIN Cities Ci
+                                            ON c.CityId = Ci.CityId
+                                            INNER JOIN CommunityAssignments ca
+                                            ON c.CommunityId = ca.CommunityId
+                                            INNER JOIN Projects pr
+                                            ON c.ProjectId = pr.ProjectId
+                                            INNER JOIN Employees e
+                                            ON ca.EmployeeId = e.EmployeeId
+                                            WHERE Ci.CityCode IN ({0})
+                                            AND pr.ProjectName=@2)
+
+                            SELECT COALESCE(COUNT(CloseDate), 0) as Amount, DateMonth MonthNumber, DateYear YearNumber
+                            FROM months dpm
+                            LEFT JOIN houses ON
+                                CloseDate >= FirstOfMonthTwoYearsAgo 
+                                AND CloseDate < NextMonth
+                            group by DateMonth, DateYear
+                            order by DateYear, DateMonth;";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName);
                 return result;
@@ -534,31 +544,34 @@ namespace Warranty.Core.Calculator
         {
             using (_database)
             {
-
                 const string sql =
-                    @"SELECT COALESCE(SUM(Amount), 0) as Amount, month(p.CreatedDate)MonthNumber, year(p.CreatedDate) YearNumber
-                                                                    FROM Payments p								
-                                                                        INNER JOIN Jobs j
-                                                                        ON p.JobNumber = j.JobNumber
-                                                                        INNER JOIN Communities c
-                                                                        ON j.CommunityId = c.CommunityId
-                                                                        INNER JOIN Projects pr
-                                                                        ON c.ProjectId = pr.ProjectId
-                                                                        INNER JOIN Cities cc
-                                                                        ON c.CityId = cc.CityId
-                                                                        INNER JOIN CommunityAssignments ca
-                                                                        ON c.CommunityId = ca.CommunityId
-                                                                        INNER JOIN Employees e
-                                                                        ON ca.EmployeeId = e.EmployeeId                                    
-								                                    AND pr.ProjectName=@2
-                                                                where 
-                                                                cc.CityCode IN ({0}) AND
-								                                p.CreatedDate >= @0
-								                                AND p.CreatedDate < @1
-							                                    group by month(p.CreatedDate), year(p.CreatedDate)
-							                                    order by year(p.CreatedDate), month(p.CreatedDate);";
+                    @"SELECT COALESCE(SUM(Amount), 0) as Amount, MONTH(p.PaidDate) MonthNumber, YEAR(p.PaidDate) YearNumber
+                        FROM Payments p
+                        INNER JOIN Jobs j
+                            ON p.JobNumber = j.JobNumber
+                        INNER JOIN Communities c
+                            ON j.CommunityId = c.CommunityId
+                        INNER JOIN Projects pr
+                            ON c.ProjectId = pr.ProjectId
+                        INNER JOIN Cities cc
+                            ON c.CityId = cc.CityId
+                        INNER JOIN CommunityAssignments ca
+                            ON c.CommunityId = ca.CommunityId
+                        INNER JOIN Employees e
+                            ON ca.EmployeeId = e.EmployeeId
+                            AND pr.ProjectName=@2
+                        WHERE
+                            cc.CityCode IN ({0})
+                            AND p.PaidDate >= @0
+                            AND p.PaidDate <= @1
+                            AND p.PaidDate >= j.CloseDate
+                            AND p.PaidDate <= DATEADD(yy, 2, j.CloseDate)
+                            AND p.PaymentStatus = @3
+                            AND p.PaidDate IS NOT NULL
+                            GROUP BY MONTH(p.PaidDate), YEAR(p.PaidDate)
+                        ORDER BY YearNumber, MonthNumber";
 
-                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName);
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName, PaymentStatus.Paid.Value);
                 return result;
             }
         }
