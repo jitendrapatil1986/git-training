@@ -58,7 +58,7 @@
                         DeliveryDate = message.DeliveryDate,
                         DeliveryInstructions = DeliveryInstruction.FromValue(message.DeliveryInstructions),
                         JobNumber = job.JobNumber,
-                        PurchaseOrderNote = message.PurchaseOrderNote,
+                        PurchaseOrderNote = message.PurchaseOrderNote.Truncate(WarrantyConstants.DefaultJdePurchaseOrderNotesLength),
                         ServiceCallLineItemId = message.ServiceCallLineItemId,
                         VendorName = message.VendorName,
                         VendorNumber = message.VendorNumber,

@@ -48,7 +48,7 @@
                         CostCode = model.CostCode.CostCode,
                         VendorNumber = model.VendorNumber,
                         DeliveryInstructions = model.DeliveryInstructions.JdeCode,
-                        VendorNotes = model.PurchaseOrderNote,
+                        VendorNotes = model.PurchaseOrderNote.Truncate(WarrantyConstants.DefaultJdePurchaseOrderNotesLength),
                         CostCenter = model.JobNumber.Length >= 4 ? model.JobNumber.Substring(0, model.JobNumber.Length - 4) + WarrantyConstants.DefaultWarrantyJobNumberSuffix : model.JobNumber,
                         ShipToJobNumber = int.TryParse(model.JobNumber, out number) ? number : 0,
                         Market = model.CityCode,
