@@ -9,6 +9,7 @@
     using Security;
     using Services;
     using NServiceBus;
+    using Extensions;
 
     public class AddServiceCallPurchaseOrderCommandHandler : ICommandHandler<AddServiceCallPurchaseOrderCommand>
     {
@@ -83,9 +84,7 @@
                         if (purchaseOrderLineItem.Quantity != 0 && !string.IsNullOrEmpty(purchaseOrderLineItem.Description) && purchaseOrderLineItem.UnitCost != 0)
                         {
                             purchaseOrderLineItem.LineNumber = lineNumber;
-                            purchaseOrderLineItem.Description = purchaseOrderLineItem.Description.Length >= WarrantyConstants.DefaultJdePurchaseOrderLineItemDescriptionLength
-                                                                    ? purchaseOrderLineItem.Description.Substring(0, WarrantyConstants.DefaultJdePurchaseOrderLineItemDescriptionLength)
-                                                                    : purchaseOrderLineItem.Description;
+                            purchaseOrderLineItem.Description = purchaseOrderLineItem.Description.Truncate(WarrantyConstants.DefaultJdePurchaseOrderLineItemDescriptionLength);
                             lineNumber += 1;
                             _database.Insert(purchaseOrderLineItem);
                         }
