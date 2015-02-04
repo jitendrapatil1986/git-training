@@ -1,5 +1,5 @@
 ﻿require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'moment', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/DeliveryInstruction', 'jquery.maskedinput', 'bootbox', 'app/serviceCall/SearchVendor', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, moment, urls, toastr, modelData, dropdownData, xeditable, deliveryInstructionEnum, maskedInput, bootbox) {
+    require(['jquery', 'ko', 'ko.x-editable', 'moment', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/DeliveryInstruction', 'jquery.maskedinput', 'bootbox', 'app/serviceCall/SearchVendor', '/Scripts/lib/jquery.color-2.1.0.min.js', 'maxlength'], function ($, ko, koxeditable, moment, urls, toastr, modelData, dropdownData, xeditable, deliveryInstructionEnum, maskedInput, bootbox) {
         window.ko = ko; //manually set the global ko property.
 
         require(['ko.validation'], function () {
@@ -12,7 +12,13 @@
                         return date.valueOf() < now.valueOf() ? 'disabled' : '';
                     }
                 });
-                
+
+                $('.max-length').maxlength({
+                    alwaysShow: true,
+                    separator: ' of ',
+                    postText: ' characters remaining',
+                });
+
                 function PurchaseOrderLineViewModel() {
                     var self = this;
                     
@@ -20,6 +26,7 @@
                     self.quantity = ko.observable();
                     self.unitCost = ko.observable();
                     self.description = ko.observable();
+                    self.maxPurchaseOrderLineItemDescriptionLength = modelData.maxPurchaseOrderLineItemDescriptionLength;
 
                     self.quantity.extend({
                         required: {
@@ -65,7 +72,8 @@
                     self.stateCode = ko.observable(modelData.initialPurchaseOrder.stateCode);
                     self.postalCode = ko.observable(modelData.initialPurchaseOrder.postalCode);
                     self.purchaseOrderMaxAmount = ko.observable(modelData.initialPurchaseOrder.purchaseOrderMaxAmount);
-                    
+                    self.maxPurchaseOrderNotesLength = modelData.maxPurchaseOrderNotesLength;
+
                     self.notes = ko.observable().extend({ maxLength: modelData.maxPurchaseOrderNotesLength });
                     self.line1 = new PurchaseOrderLineViewModel();
                     self.line2 = new PurchaseOrderLineViewModel();
