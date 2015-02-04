@@ -12,6 +12,7 @@
         public static readonly string DefaultWarrantyJobNumberSuffix = "9999";
         public static readonly int DefaultJdePurchaseOrderLineItemDescriptionLength = 30;
         public static readonly int DefaultJdePurchaseOrderNotesLength = 60;
+        public static readonly int DefaultJdePurchaseOrderCommunityLength = 4;
 
         public static readonly List<string> LaborObjectAccounts = new List<string> { "9430", "9440"  };
         public static readonly List<string> MaterialObjectAccounts = new List<string> { "9425", "9435" };
