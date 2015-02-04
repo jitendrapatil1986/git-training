@@ -16,8 +16,8 @@
                 $('body').on('focus', '.max-length', function() {
                     $(this).maxlength({
                         alwaysShow: true,
-                        separator: ' of ',
-                        postText: ' characters remaining',
+                        separator: ' out of ',
+                        postText: ' characters entered',
                     });
                 });
 
