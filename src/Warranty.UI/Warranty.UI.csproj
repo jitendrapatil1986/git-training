@@ -323,6 +323,8 @@
     <Content Include="Scripts\config\vendor-search.js" />
     <Content Include="Scripts\config\customer-search.js" />
     <Content Include="Scripts\lib\bootstrap-editable.min.js" />
+    <Content Include="Scripts\lib\bootstrap-maxlength.js" />
+    <Content Include="Scripts\lib\bootstrap-maxlength.min.js" />
     <Content Include="Scripts\lib\jquery.hideseek.min.js" />
     <Content Include="Scripts\lib\knockout.x-editable.min.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />

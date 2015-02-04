@@ -79,7 +79,7 @@
                             </div>
                             <div class="col-md-7">
                                 <div class="control-group" data-bind="validationElement: line1.description">
-                                    <input id="line1.description" type="text" class="form-control" data-bind="value: line1.description"/>
+                                    <input id="line1.description" type="text" class="form-control max-length" data-bind="attr:{maxlength: line1.maxPurchaseOrderLineItemDescriptionLength}, value: line1.description"/>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -99,7 +99,7 @@
                             </div>
                             <div class="col-md-7">
                                 <div class="control-group" data-bind="validationElement: line2.description">
-                                    <input type="text" class="form-control" data-bind="value: line2.description"/>
+                                    <input type="text" class="form-control max-length" data-bind="attr:{maxlength: line2.maxPurchaseOrderLineItemDescriptionLength}, value: line2.description"/>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -119,7 +119,7 @@
                             </div>
                             <div class="col-md-7">
                                 <div class="control-group" data-bind="validationElement: line3.description">
-                                    <input type="text" class="form-control" data-bind="value: line3.description"/>
+                                    <input type="text" class="form-control max-length" data-bind="attr:{maxlength: line3.maxPurchaseOrderLineItemDescriptionLength}, value: line3.description"/>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -139,7 +139,7 @@
                             </div>
                             <div class="col-md-7">
                                 <div class="control-group" data-bind="validationElement: line4.description">
-                                    <input type="text" class="form-control" data-bind="value: line4.description"/>
+                                    <input type="text" class="form-control max-length" data-bind="attr:{maxlength: line4.maxPurchaseOrderLineItemDescriptionLength}, value: line4.description"/>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -159,7 +159,7 @@
                             </div>
                             <div class="col-md-7">
                                 <div class="control-group" data-bind="validationElement: line5.description">
-                                    <input type="text" class="form-control" data-bind="value: line5.description"/>
+                                    <input type="text" class="form-control max-length" data-bind="attr:{maxlength: line5.maxPurchaseOrderLineItemDescriptionLength}, value: line5.description"/>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -181,7 +181,7 @@
                             </div>
                             <div class="col-md-7">
                                 <div class="control-group" data-bind="validationElement: description">
-                                    <input id="description" type="text" class="form-control" data-bind="value: description"/>
+                                    <input id="description" type="text" class="form-control max-length" data-bind="attr:{maxlength: maxPurchaseOrderLineItemDescriptionLength}, value: description"/>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -214,7 +214,7 @@
                             <div class="col-md-12">
                                 <div class="form-group" data-bind="validationElement: notes">
                                     <label class="control-label" for="notes">Notes</label>
-                                    <textarea id="notes" class="form-control" data-bind="value: notes" rows="2"></textarea>
+                                    <textarea id="notes" class="form-control max-length" data-bind="attr:{maxlength: maxPurchaseOrderNotesLength}, value: notes" rows="2"></textarea>
                                 </div>
                             </div>
                         </div>
