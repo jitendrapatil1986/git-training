@@ -30,6 +30,8 @@
         {
             using (_database)
             {
+                var user = _userSession.GetCurrentUser();
+
                 var job = _database.Single<Job>(@"SELECT j.* FROM Jobs j 
                                             INNER JOIN ServiceCalls sc ON sc.JobId = j.JobId
                                             INNER JOIN ServiceCallLineItems scl ON scl.ServiceCallId = sc.ServiceCallId
@@ -89,10 +91,20 @@
                             _database.Insert(purchaseOrderLineItem);
                         }
                     }
+
+                    var community = _database.SingleOrDefaultById<Community>(job.CommunityId);
+                    var communityNumber = community.CommunityNumber;
+
+                    if (job.IsOutOfWarranty && community.CommunityStatusCode != WarrantyConstants.DefaultActiveCommunityCode)
+                    {
+                        communityNumber = WarrantyConfigSection.GetCity(user.Markets.FirstOrDefault()).ClosedOutCommunity;
+                    }
+
                     _bus.Send<NotifyPurchaseOrderRequested>(x =>
                     {
                         x.PurchaseOrderId = purchaseOrder.PurchaseOrderId;
-                        x.LoginName = _userSession.GetCurrentUser().LoginName;
+                        x.LoginName = user.LoginName;
+                        x.CommunityNumber = communityNumber;
                     });
                 }
             }
