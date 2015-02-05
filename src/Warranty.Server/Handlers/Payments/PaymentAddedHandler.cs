@@ -35,6 +35,9 @@ namespace Warranty.Server.Handlers.Payments
                     PaymentStatus = PaymentStatus.FromJdeCode(message.Status),
                     JobNumber = message.CostCenter,
                     JdeIdentifier = message.JDEId,
+                    ObjectAccount = message.ObjectAccount,
+                    CostCode = message.CostCode,
+                    InvoiceNumber = message.InvoiceNumber,
                 });
             }
         }
