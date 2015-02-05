@@ -2,11 +2,11 @@
 using NPoco;
 using NServiceBus;
 using Warranty.Core.Entities;
-using Warranty.Server.Configuration;
 using Warranty.Server.Extensions;
 
 namespace Warranty.Server.Handlers.Payments
 {
+    using Configuration;
     using Core.Enumerations;
 
     public class PaymentAddedHandler : IHandleMessages<PaymentAdded>
@@ -20,7 +20,7 @@ namespace Warranty.Server.Handlers.Payments
 
         public void Handle(PaymentAdded message)
         {
-            if (!WarrantyConstants.LaborObjectAccounts.Contains(message.ObjectAccount))
+            if (!WarrantyConstants.LaborObjectAccounts.Contains(message.ObjectAccount) && !WarrantyConstants.MaterialObjectAccounts.Contains(message.ObjectAccount)) 
                 return;
 
             using (_database)
@@ -35,6 +35,9 @@ namespace Warranty.Server.Handlers.Payments
                     PaymentStatus = PaymentStatus.FromJdeCode(message.Status),
                     JobNumber = message.CostCenter,
                     JdeIdentifier = message.JDEId,
+                    ObjectAccount = message.ObjectAccount,
+                    CostCode = message.CostCode,
+                    InvoiceNumber = message.InvoiceNumber,
                 });
             }
         }

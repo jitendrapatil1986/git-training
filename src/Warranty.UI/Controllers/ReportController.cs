@@ -125,5 +125,13 @@ namespace Warranty.UI.Controllers
 
             return View(resultModel);
         }
+
+        [HttpPost]
+        public ActionResult WSRCallSummaryReport(WSRCallSummaryModel model)
+        {
+            var resultModel = _mediator.Request(new WSRCallSummaryQuery() { queryModel = model });
+
+            return View(resultModel);
+        }
     }
 }

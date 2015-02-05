@@ -86,7 +86,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , wc.HomeownerVerificationSignatureDate
                                     , wc.HomeownerVerificationTypeId as HomeownerVerificationType
                                     , wc.SpecialProjectReason
-                                    , wc.SpecialProjectDate                                    
+                                    , wc.SpecialProjectDate
+                                    , CASE WHEN (DATEDIFF(d, wc.SpecialProjectDate, getdate()) = 0) THEN 1 ELSE 0 END CanUndoSpecialProject
                                 FROM [ServiceCalls] wc
                                 INNER JOIN Jobs j
                                 ON wc.JobId = j.JobId

@@ -5,6 +5,7 @@
     using NPoco;
     using Security;
     using System.Linq;
+    using Common.Extensions;
 
     public class WSRCallSummaryQueryHandler : IQueryHandler<WSRCallSummaryQuery, WSRCallSummaryModel>
     {
@@ -21,17 +22,28 @@
         {
             var user = _userSession.GetCurrentUser();
 
-            using (_database)
+            if (!user.IsInRole(UserRoles.WarrantyServiceRepresentative) && query.queryModel.SelectedEmployeeNumber == null)
             {
-                var model = new WSRCallSummaryModel
+                return new WSRCallSummaryModel
                     {
-                        EmployeeName = user.UserName,
-                        EmployeeNumber = user.EmployeeNumber,
-                        ServiceCalls = GetWSRServiceCalls(user.EmployeeNumber).OrderBy(x => x.CommunityName).ThenBy(x => x.NumberOfDaysRemaining).ThenBy(x => x.HomeownerName),
+                        EmployeeTiedToRepresentatives = GetEmployeesTiedToRepresentatives(user),
                     };
-
-                return model;
             }
+
+            var employeeNumber = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? user.EmployeeNumber : query.queryModel.SelectedEmployeeNumber;
+            
+            var model = new WSRCallSummaryModel()
+            {
+                EmployeeNumber = employeeNumber,
+                EmployeeTiedToRepresentatives = GetEmployeesTiedToRepresentatives(user),
+                ServiceCalls = GetWSRServiceCalls(employeeNumber).OrderBy(x => x.CommunityName).ThenBy(x => x.NumberOfDaysRemaining).ThenBy(x => x.HomeownerName),
+            };
+
+            model.EmployeeName = user.IsInRole(UserRoles.WarrantyServiceRepresentative) 
+                ? user.UserName 
+                : model.EmployeeTiedToRepresentatives.First(x => x.EmployeeNumber == model.EmployeeNumber).EmployeeName.ToTitleCase();
+
+            return model;
         }
 
         private IEnumerable<WSRCallSummaryModel.ServiceCall> GetWSRServiceCalls(string employeeNumber)
@@ -42,6 +54,7 @@
                                         sc.ServiceCallId as ServiceCallId
                                         , Servicecallnumber as CallNumber
                                         , sc.CreatedDate
+                                        , sc.SpecialProject as IsSpecialProject
                                         , j.AddressLine as [Address]
                                         , j.City 
                                         , j.StateCode
@@ -52,8 +65,8 @@
                                         , cm.CommunityName
                                         , li.LineNumber
                                         , li.ProblemCode
-	                                    , li.ProblemDescription
-                                    FROM ServiceCalls sc
+                                        , li.ProblemDescription
+                                        FROM ServiceCalls sc
                                     INNER JOIN Jobs j
                                     ON sc.JobId = j.JobId
                                     INNER JOIN HomeOwners ho
@@ -65,10 +78,10 @@
                                     INNER JOIN Communities cm
                                     ON j.CommunityId = cm.CommunityId
                                     WHERE e.EmployeeNumber = @0
-                                    AND sc.ServiceCallStatusId = 2
+                                    AND sc.ServiceCallStatusId = @1
                                     ORDER BY cm.CommunityName, ho.HomeOwnerName, j.AddressLine";
 
-                var serviceCalls = _database.FetchOneToMany<WSRCallSummaryModel.ServiceCall, WSRCallSummaryModel.ServiceCallLine>(x => x.ServiceCallId, sql, employeeNumber);
+                var serviceCalls = _database.FetchOneToMany<WSRCallSummaryModel.ServiceCall, WSRCallSummaryModel.ServiceCallLine>(x => x.ServiceCallId, sql, employeeNumber, ServiceCallStatus.Open.Value);
                 
                 foreach (var serviceCall in serviceCalls)
                 {
@@ -78,6 +91,26 @@
                 }
 
                 return serviceCalls;
+            }
+        }
+
+        private IEnumerable<WSRCallSummaryModel.EmployeeTiedToRepresentative> GetEmployeesTiedToRepresentatives(IUser user)
+        {
+            const string sql = @"SELECT DISTINCT e.EmployeeId as WarrantyRepresentativeEmployeeId, e.EmployeeNumber, LOWER(e.EmployeeName) as EmployeeName from CommunityAssignments ca
+                                    INNER join Communities c
+                                    ON ca.CommunityId = c.CommunityId
+                                    INNER join Employees e
+                                    ON ca.EmployeeId = e.EmployeeId
+                                    INNER JOIN Cities ci
+                                    ON c.CityId = ci.CityId
+                                    WHERE CityCode IN ({0})
+                                    ORDER BY EmployeeName";
+
+            using (_database)
+            {
+                var result = _database.Fetch<WSRCallSummaryModel.EmployeeTiedToRepresentative>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()));
+
+                return result;
             }
         }
     }

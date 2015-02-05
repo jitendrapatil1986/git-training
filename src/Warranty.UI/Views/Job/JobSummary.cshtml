@@ -125,14 +125,17 @@
                                     <div class="col-md-2">
                                     @if (sc.CompletionDate == null)
                                     {
-                                        <div class="has-bottom-tooltip pull-right" style="float:right" title="@Format.DateForServiceCallWiget(sc.CreatedDate)">
-                                            <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@sc.NumberOfDaysRemaining)<br/>
-                                            <div class="progress time-remaining-progress hidden-sm hidden-xs">
-                                                <div class="progress-bar @Css.ServiceCallProgressBar(sc.NumberOfDaysRemaining)" role="progressbar" style="width: @sc.PercentComplete%">
-                                                    <span class="sr-only">@sc.PercentComplete% Complete</span>
+                                        if (!sc.IsSpecialProject)
+                                        {
+                                            <div class="has-bottom-tooltip pull-right" style="float: right" title="@Format.DateForServiceCallWiget(sc.CreatedDate)">
+                                                <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@sc.NumberOfDaysRemaining)<br/>
+                                                <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                                                    <div class="progress-bar @Css.ServiceCallProgressBar(sc.NumberOfDaysRemaining)" role="progressbar" style="width: @sc.PercentComplete%">
+                                                        <span class="sr-only">@sc.PercentComplete% Complete</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        }
                                     }
                                     else
                                     {

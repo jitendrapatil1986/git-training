@@ -58,7 +58,19 @@ namespace Warranty.Core.ToDoInfrastructure
                     var taskJobChangedToDos = GetJobChangedTaskToDos(user, _database, TaskType.JobStage3).ToList();
                     taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage7));
                     taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage9));
+
+                    //Pull deprecated job task type ToDos for users to complete for those created before the new job task types.
+                    taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStageChanged));
+                    taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobClosed));
+
                     toDos.AddRange(taskJobChangedToDos);
+                }
+                
+                if (ToDoType.JobChangedTaskApproval.HasAccess(user.Roles))
+                {
+                    var taskJobChangedApprovalToDos = GetStage9JobApprovalToDos(user, _database);
+
+                    toDos.AddRange(taskJobChangedApprovalToDos);
                 }
 
                 if (ToDoType.PaymentRequestApprovalUnderWarranty.HasAccess(user.Roles))
@@ -169,6 +181,27 @@ namespace Warranty.Core.ToDoInfrastructure
             return GetToDoTasks<ToDoJobStageChangedTask, ToDoJobChangedTaskModel>(user, database, taskType);
         }
 
+        private IEnumerable<IToDo> GetStage9JobApprovalToDos(IUser user, IDatabase database)
+        {
+            var userMarkets = user.Markets;
+            const string sql = @"SELECT t.CreatedDate [Date], Description, TaskId, j.JobId, j.JobNumber
+                                FROM Tasks t
+                                INNER JOIN Jobs j
+                                    ON t.ReferenceId = j.JobId
+                                INNER JOIN Communities cm
+                                    ON j.CommunityId = cm.CommunityId
+                                INNER JOIN Cities c
+                                    ON cm.CityId = c.CityId
+                                WHERE c.CityCode IN ({0})
+                                AND TaskType = @0
+                                AND IsComplete = 0";
+
+            var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
+            var toDos = database.Fetch<ToDoJobChangedTaskApproval, ToDoJobChangedTaskApprovalModel>(query, TaskType.JobStage9Approval.Value);
+
+            return toDos;
+        }
+
         private static IEnumerable<IToDo> GetTenMonthJobAnniversaryTaskToDos(IUser user, IDatabase database, IServiceCallCreateService serviceCallCreateService)
         {
             var employeeId = database.ExecuteScalar<Guid>("SELECT EmployeeId FROM Employees where employeeNumber = @0", user.EmployeeNumber);
@@ -239,7 +272,7 @@ namespace Warranty.Core.ToDoInfrastructure
 
         private static IEnumerable<TTask> GetToDoTasks<TTask, TModel>(IUser user, IDatabase database, TaskType taskType) where TTask : IToDo where TModel : class
         {
-            const string query = @"SELECT t.CreatedDate [Date], Description, TaskId,  j.JobId, j.JobNumber
+            const string query = @"SELECT t.CreatedDate [Date], TaskType, Description, TaskId,  j.JobId, j.JobNumber
                                     FROM 
                                         [Tasks] t
                                     INNER join Employees e

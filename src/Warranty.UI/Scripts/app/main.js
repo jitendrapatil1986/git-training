@@ -26,7 +26,8 @@ require.config({
         'responsive.tabs': 'lib/responsive.tabs',
         'ko.x-editable': 'lib/knockout.x-editable.min',
         'ko.validation': 'lib/knockout.validation.min',
-        'hideseek': 'lib/jquery.hideseek.min'
+        'hideseek': 'lib/jquery.hideseek.min',
+        'maxlength': 'lib/bootstrap-maxlength.min',
     },
     shim: {
         'jquery.validate': ['jquery'],
@@ -45,6 +46,7 @@ require.config({
         'responsive.tabs': { deps: ['bootstrap'] },
         'jquery.maskedinput': ['jquery'],
         'hideseek': ['jquery'],
+        'maxlength': ['jquery'],
     },
     callback: function () {
         require(['app/feedbackForm', 'app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields', 'app/responsiveTabs']);

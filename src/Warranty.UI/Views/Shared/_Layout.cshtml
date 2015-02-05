@@ -22,7 +22,7 @@
                 @foreach (var item in NavHeaderItem.GetAll(key))
                 {
                     if(
-                        (key == NavHeaderItem.Reports.Key && item.Value != NavHeaderItem.WsrCallSummary.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) ||
+                        (key == NavHeaderItem.Reports.Key && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) ||
                         (key == NavHeaderItem.Reports.Key && item.Value == NavHeaderItem.MailMergeReport.Value && User.IsInRole(UserRoles.WarrantyServiceRepresentative)) ||
                         (key == NavHeaderItem.Reports.Key && item.Value == NavHeaderItem.WsrCallSummary.Value && User.IsInRole(UserRoles.WarrantyServiceRepresentative)) ||
                         (key == NavHeaderItem.Administration.Key && item.Value != NavHeaderItem.ManageCostCode.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) ||

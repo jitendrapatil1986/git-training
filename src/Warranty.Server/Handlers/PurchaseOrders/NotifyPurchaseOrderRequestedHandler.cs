@@ -10,6 +10,7 @@
     using NPoco;
     using NServiceBus;
     using System.Linq;
+    using Core.Extensions;
 
     public class NotifyPurchaseOrderRequestedHandler : IHandleMessages<NotifyPurchaseOrderRequested>
     {
@@ -47,11 +48,11 @@
                         CostCode = model.CostCode.CostCode,
                         VendorNumber = model.VendorNumber,
                         DeliveryInstructions = model.DeliveryInstructions.JdeCode,
-                        VendorNotes = model.PurchaseOrderNote,
-                        CostCenter = model.JobNumber.Length >= 4 ? model.JobNumber.Substring(0, model.JobNumber.Length - 4) + WarrantyConstants.DefaultWarrantyJobNumberSuffix : model.JobNumber,
+                        VendorNotes = model.PurchaseOrderNote.Truncate(WarrantyConstants.DefaultJdePurchaseOrderNotesLength),
+                        CostCenter = message.CommunityNumber.Length <= 4 ? message.CommunityNumber + WarrantyConstants.DefaultWarrantyJobNumberSuffix : message.CommunityNumber,
                         ShipToJobNumber = int.TryParse(model.JobNumber, out number) ? number : 0,
                         Market = model.CityCode,
-                        CommunityNumber = model.CommunityNumber,
+                        CommunityNumber = message.CommunityNumber.Truncate(WarrantyConstants.DefaultJdePurchaseOrderCommunityLength),
                         ObjectAccount = model.ObjectAccount,
                         IsCommunityLevel = false,
                         CopyToBuilder = false,
@@ -62,7 +63,7 @@
                             {
                                 Quantity = y.Quantity,
                                 UnitPrice = y.UnitCost,
-                                ItemDescription = y.Description,
+                                ItemDescription = y.Description.Truncate(WarrantyConstants.DefaultJdePurchaseOrderLineItemDescriptionLength),
                                 VarianceCode = WarrantyConstants.VarianceCode
                             })
                     };

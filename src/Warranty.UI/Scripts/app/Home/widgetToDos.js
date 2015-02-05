@@ -130,5 +130,12 @@ define(['urls', 'jquery'], function (urls, $) {
             var url = urls.Task.NoAction;
             executeApproval(url, taskId, '#task-todo-');
         });
+        
+        $(".submit-for-approval-task").click(function (e) {
+            e.preventDefault();
+            var taskId = $(this).data("task-id");
+            var url = urls.Task.SubmitForApproval;
+            executeApproval(url, taskId, '#task-todo-');
+        });
     });
 });

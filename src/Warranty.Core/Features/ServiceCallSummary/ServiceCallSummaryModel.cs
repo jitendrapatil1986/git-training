@@ -78,6 +78,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public string SpecialProjectReason { get; set; }
             public DateTime? SpecialProjectDate { get; set; }
             public string ServiceCallType { get; set; }
+            public bool CanUndoSpecialProject { get; set; }
 
             public string ServiceCallTitle
             {
