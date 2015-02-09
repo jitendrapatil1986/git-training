@@ -13,5 +13,6 @@
         public static readonly ReferenceType Homeowner = new ReferenceType(4, "Homeowner");
         public static readonly ReferenceType ServiceCallAttachment = new ReferenceType(5, "Service Call Attachment");
         public static readonly ReferenceType Payment = new ReferenceType(6, "Payment");
+        public static readonly ReferenceType ServiceCallLineItem = new ReferenceType(7, "Service Call Line Item");
     }
 }
