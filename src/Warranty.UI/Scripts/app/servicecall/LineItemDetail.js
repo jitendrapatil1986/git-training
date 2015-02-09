@@ -335,6 +335,7 @@
                         })
                         .done(function (response) {
                             line.serviceCallLineItemStatusDisplayName(response.DisplayName);
+                            line.hasEverBeenCompleted(true);
                             toastr.success("Success! Item completed.");
                         });
                 }
@@ -372,6 +373,8 @@
                     self.problemDescription = ko.observable(modelData.initialServiceCallLineItem.problemDescription);
                     self.jobNumber = ko.observable(modelData.initialServiceCallLineItem.jobNumber);
                     self.constructionVendors = modelData.vendors;
+                    self.hasEverBeenCompleted = ko.observable(modelData.initialServiceCallLineItem.hasEverBeenCompleted);
+                    self.hasAnyPayments = ko.observable(modelData.initialServiceCallLineItem.hasAnyPayments);
                     
                     self.groupedConstructionVendors = ko.computed(function () {
                         var rows = [], current = [];
@@ -631,6 +634,7 @@
                                 self.allPayments.unshift(newPayment);
                                 toastr.success("Success! Payment added.");
                                 highlight($("#allServiceCallPayments").first());
+                                self.hasAnyPayments(true);
                                 self.clearPaymentFields();
                             });
                     };
