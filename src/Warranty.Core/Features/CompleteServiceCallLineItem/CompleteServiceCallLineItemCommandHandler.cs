@@ -1,5 +1,6 @@
 ﻿namespace Warranty.Core.Features.CompleteServiceCallLineItem
 {
+    using System;
     using ActivityLogger;
     using Entities;
     using Enumerations;
@@ -27,6 +28,7 @@
                 var completeServiceCallLineItem = _database.SingleById<ServiceCallLineItem>(message.ServiceCallLineItemId);
                 var currentLineItemStatus = completeServiceCallLineItem.ServiceCallLineItemStatus;
                 completeServiceCallLineItem.ServiceCallLineItemStatus = ServiceCallLineItemStatus.Complete;
+                completeServiceCallLineItem.LastCompletedDate = DateTime.Now;
                 _database.Update(completeServiceCallLineItem);
 
                 _bus.Send<NotifyServiceCallLineItemCompleted>(x =>

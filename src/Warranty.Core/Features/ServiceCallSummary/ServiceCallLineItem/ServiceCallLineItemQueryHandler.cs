@@ -31,7 +31,6 @@
             model.ServiceCallLineItemPurchaseOrders = GetServiceCallLinePurchaseOrders(query.ServiceCallLineItemId);
             model.CanTakeActionOnPayments = user.IsInRole(UserRoles.CustomerCareManager);
             model.Vendors = GetLineItemVendors(query.ServiceCallLineItemId);
-            model.HasEverBeenCompleted = model.ServiceCallLineItemStatus == ServiceCallLineItemStatus.Complete || GetServiceCallLineCompletedPreviously(query.ServiceCallLineItemId);
 
             return model;
         }
@@ -112,6 +111,7 @@
                                     li.[ProblemDetailCode],
                                     li.[RootCause],
                                     li.[RootProblem],
+                                    li.[LastCompletedDate],
                                     cc.[CostCode],
                                     job.[JobNumber],
                                     city.CityCode
@@ -228,21 +228,6 @@
             var result = _database.FetchOneToMany<ServiceCallLineItemModel.ServiceCallLineItemPurchaseOrder,ServiceCallLineItemModel.ServiceCallLineItemPurchaseOrderLine>(x => x.PurchaseOrderId, sql, serviceCallLineItemId);
 
             return result;
-        }
-
-        private bool GetServiceCallLineCompletedPreviously(Guid serviceCallLineItemId)
-        {
-            using (_database)
-            {
-                const string sql = @"SELECT * FROM ActivityLog
-                                    WHERE ReferenceId = @0
-                                    AND ReferenceType = @1
-                                    AND ActivityType = @2";
-
-                var result = _database.Fetch<ActivityLog>(sql, serviceCallLineItemId, ReferenceType.ServiceCallLineItem.Value, ActivityType.Complete.Value);
-
-                return result.Any();
-            }
         }
     }
 }
