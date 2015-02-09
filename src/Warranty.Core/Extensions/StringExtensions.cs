@@ -36,7 +36,7 @@
 
         public static string Truncate(this string stringToTruncate, int maxLength)
         {
-            return stringToTruncate.Length >= maxLength ? stringToTruncate.Substring(0, maxLength) : stringToTruncate;
+            return stringToTruncate == null ? String.Empty : stringToTruncate.Length >= maxLength ? stringToTruncate.Substring(0, maxLength) : stringToTruncate;
         }
     }
 }
