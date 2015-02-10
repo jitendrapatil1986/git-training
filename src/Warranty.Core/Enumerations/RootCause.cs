@@ -14,5 +14,6 @@
         public static readonly RootCause WorkmanshipInstall = new RootCause(5, "Workmanship/Install");
         public static readonly RootCause Imported = new RootCause(6, "Imported");
         public static readonly RootCause WearTear = new RootCause(7, "Wear/Tear");
+        public static readonly RootCause NoAction = new RootCause(8, "No Action");
     }
 }
