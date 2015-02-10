@@ -9,6 +9,7 @@ namespace Warranty.UI.Controllers
     using Warranty.Core.Features.Report.Saltline;
     using Warranty.Core.Features.Report.WSRCallSummary;
     using Warranty.Core.Features.Report.WSRLoadingReport;
+    using Warranty.Core.Features.Report.WSROpenedClosedCalls;
     using Warranty.Core.Features.Report.WSRSummary;
     using Warranty.Core.Features.Report.WarrantyBonusSummary;
 
@@ -130,6 +131,21 @@ namespace Warranty.UI.Controllers
         public ActionResult WSRCallSummaryReport(WSRCallSummaryModel model)
         {
             var resultModel = _mediator.Request(new WSRCallSummaryQuery() { queryModel = model });
+
+            return View(resultModel);
+        }
+
+        public ActionResult WSROpenedClosedCallReport()
+        {
+            var resultModel = _mediator.Request(new WSROpenedClosedCallsQuery());
+
+            return View(resultModel);
+        }
+
+        [HttpPost]
+        public ActionResult WSROpenedClosedCallReport(WSROpenedClosedCallsModel model)
+        {
+            var resultModel = _mediator.Request(new WSROpenedClosedCallsQuery() { queryModel = model });
 
             return View(resultModel);
         }

@@ -16,6 +16,7 @@
         public static NavHeaderItem Saltline = new NavHeaderItem(6, Reports.Key, Reports.Display.SaltlineReportName, "Report", "SaltlineReport");
         public static NavHeaderItem WsrSummary = new NavHeaderItem(9, Reports.Key, Reports.Display.WsrSummaryReportName, "Report", "WSRSummaryReport");
         public static NavHeaderItem WsrCallSummary = new NavHeaderItem(10, Reports.Key, Reports.Display.WsrCallSummaryReportName, "Report", "WSRCallSummaryReport");
+        public static NavHeaderItem WsrOpenedClosedCalls = new NavHeaderItem(11, Reports.Key, Reports.Display.WsrOpenedClosedCallReportName, "Report", "WSROpenedClosedCallReport");
         
         public static NavHeaderItem AssignWSR = new NavHeaderItem(7, Administration.Key, Administration.Display.AssignWSRName, "Admin", "ManageAssignments");
         public static NavHeaderItem ManageCostCode = new NavHeaderItem(8, Administration.Key, Administration.Display.MarketCostCodeName, "Admin", "ManageProblemCodeCostCodes");
@@ -62,6 +63,7 @@
                 public const string SaltlineReportName = "Saltline Report";
                 public const string WsrSummaryReportName = "WSR Summary Report";
                 public const string WsrCallSummaryReportName = "WSR Call Summary Report";
+                public const string WsrOpenedClosedCallReportName = "WSR Opened/Closed Call Report";
             }
         }
 
