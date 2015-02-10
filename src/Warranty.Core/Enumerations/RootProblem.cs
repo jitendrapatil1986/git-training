@@ -52,5 +52,6 @@
         public static readonly RootProblem Sprinkler = new RootProblem(36, "Sprinkler", WarrantyCostCode.LscapeFenceTrees);
         public static readonly RootProblem Gutter = new RootProblem(37, "Gutter", WarrantyCostCode.ExteriorMisc);
         public static readonly RootProblem HardwareFixture = new RootProblem(38, "Hardware/Fixture", WarrantyCostCode.FixturesHardware);
+        public static readonly RootProblem NoAction = new RootProblem(39, "No Action", WarrantyCostCode.AllCleaning);
     }
 }

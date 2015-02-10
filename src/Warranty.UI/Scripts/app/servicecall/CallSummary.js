@@ -268,7 +268,10 @@ require(['/Scripts/app/main.js'], function () {
                 }
 
                 self.lineItemStatusCSS = ko.computed(function () {
-                    return self.serviceCallLineItemStatusDisplayName() ? 'label label-' + self.serviceCallLineItemStatusDisplayName().toLowerCase() + '-service-line-item' : '';
+                    var displayName = self.serviceCallLineItemStatusDisplayName().toLowerCase();
+                    displayName = displayName.replace(' ', '-');
+                    
+                    return self.serviceCallLineItemStatusDisplayName() ? 'label label-' + displayName + '-service-line-item' : '';
                 });
 
                 self.isLineItemCompleted = function () {
@@ -276,6 +279,13 @@ require(['/Scripts/app/main.js'], function () {
                         return false;
 
                     return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase() ? true : false;
+                };
+                
+                self.isLineItemNoAction = function () {
+                    if (!self.serviceCallLineItemStatusDisplayName())
+                        return false;
+
+                    return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.NoAction.DisplayName.toLowerCase() ? true : false;
                 };
 
                 self.jumpToServiceCallLineDetailPage = function () {
