@@ -31,7 +31,8 @@
                     "-wp",
                     "-p",
                     "-j",
-                    "-js"
+                    "-js",
+                    "-c",
                 };
             }
 
@@ -41,6 +42,7 @@
             if (options.Contains("-js")) new JobStageImporter().CustomImport();
             if (options.Contains("-av")) new AllVendorsImporter().CustomImport();
             if (options.Contains("-cd")) new CommunityCleanUp().CustomImport();
+            if (options.Contains("-c")) new CommunityImporter().CustomImport();
 
             stopWatch.Stop();
             Console.WriteLine("\n\nTOTAL TIME: {0}\n", stopWatch.Elapsed);
@@ -58,6 +60,7 @@
             Console.WriteLine("-js\tJob Stage History");
             Console.WriteLine("-av\tAll Vendors");
             Console.WriteLine("-cd\tRemove Invalid Communities");
+            Console.WriteLine("-c\tCommunities");
         }
     }
 }
