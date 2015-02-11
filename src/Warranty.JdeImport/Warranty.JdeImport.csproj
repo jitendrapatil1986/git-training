@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Importers\ArchivedVendorImporter.cs" />
     <Compile Include="Importers\CommunityCleanUp.cs" />
+    <Compile Include="Importers\CommunityImporter.cs" />
     <Compile Include="Importers\JobImporter.cs" />
     <Compile Include="Importers\JobStageImport.cs" />
     <Compile Include="Importers\PaymentImporter.cs" />

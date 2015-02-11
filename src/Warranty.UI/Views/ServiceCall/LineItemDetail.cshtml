@@ -18,7 +18,8 @@
                     <a class="bread-crumb" href="@Url.Action("CallSummary", "ServiceCall", new { id = Model.ServiceCallId })">@Model.ServiceCallTitle</a>
                     @Model.LineNumber - <span data-bind="text: problemCode"></span>
                     <div class="pull-right no-right-padding no-print">
-                        <button id="btn-complete-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: completeLine, visible: !isLineItemCompleted()">Complete</button>
+                        <button id="btn-no-action-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: noActionForLine, visible: !hasEverBeenCompleted() && !isLineItemNoAction()">No Action</button>
+                        <button id="btn-complete-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: completeLine, visible: !isLineItemCompleted() && !isLineItemNoAction()">Complete</button>
                         <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: reopenLine, visible: isLineItemCompleted()">Reopen</button>
                     </div>
                 </h2>
@@ -36,7 +37,7 @@
                             <div class="col-md-3">
                                 <div class="control-group" data-bind="validationElement: rootProblemId, visible: !isLineItemCompleted()">
                                     <label class="control-label" for="rootProblemId">Root Problem</label>
-                                    <select id="rootProblemId" class="form-control" data-bind="options: rootProblemCodes, value: rootProblemId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Root Problem'"></select>
+                                    <select id="rootProblemId" class="form-control" data-bind="options: rootProblemCodes, value: rootProblemId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Root Problem', enable: enableRootProblem()"></select>
                                 </div>
                                 <div class="form-group no-margin" data-bind="visible: isLineItemCompleted()">
                                     <label class="control-label">Root Problem</label>
@@ -46,7 +47,7 @@
                             <div class="col-md-3">
                                 <div class="control-group" data-bind="validationElement: rootCauseId, visible: !isLineItemCompleted()">
                                     <label class="control-label" for="rootCauseId">Root Cause</label>
-                                    <select id="rootCauseId" class="form-control" data-bind="options: rootCauseCodes, value: rootCauseId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Root Cause'"></select>
+                                    <select id="rootCauseId" class="form-control" data-bind="options: rootCauseCodes, value: rootCauseId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Root Cause', enable: enableRootCause()"></select>
                                 </div>
                                 <div class="form-group no-margin" data-bind="visible: isLineItemCompleted()">
                                     <label class="control-label">Root Cause</label>
@@ -453,6 +454,8 @@
                 vendors: @Html.Raw(Model.Vendors.ToJson()),
                 rootCauseCodes: @Html.Raw(@RootCause.GetAll().Where(x=>x.Value != @RootCause.Imported.Value).OrderBy(x=>x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName, }).ToJson()),
                 rootProblemCodes: @Html.Raw(@RootProblem.GetAllNonDeprecated().OrderBy(x=>x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName}).ToJson()),
+                noActionRootCauseCode: @Html.Raw(@RootCause.NoAction.ToJson()),
+                noActionRootProblemCode: @Html.Raw(@RootProblem.NoAction.ToJson()),
             }
         });
 

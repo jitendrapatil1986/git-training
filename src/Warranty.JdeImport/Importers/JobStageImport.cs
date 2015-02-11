@@ -25,15 +25,7 @@ namespace Warranty.JdeImport.Importers
                                  ON f1.$hmcu = f2.mcmcu
                          INNER JOIN F5547H f3
                                  ON f1.$hmcu = f3.GHMCU
-                         INNER JOIN F57002 f3r
-                                 ON f1.$hmcu = f3r.$2mcu
-                         INNER JOIN F57001 cpl
-                                 ON f1.$h$mcu = cpl.$1$mcu AND f1.$h$pln = cpl.$1$pev AND f1.$h$elv = cpl.$1$hse
-                         INNER JOIN f0101 job
-                                 ON f1.$hmcu = '    ' || job.aban8
-                         INNER JOIN F0116 jobadd
-                                 ON job.aban8 = jobadd.alan8 AND job.abeftb = jobadd.aleftb
-                         WHERE f2.mcstyl='JB'
+                         WHERE f2.mcstyl IN ('JB', 'BD')
                          GROUP BY f3.GHMCU, f3.GH$STG";
             }
         }

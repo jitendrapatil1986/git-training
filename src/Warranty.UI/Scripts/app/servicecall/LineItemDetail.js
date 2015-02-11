@@ -335,6 +335,7 @@
                         })
                         .done(function (response) {
                             line.serviceCallLineItemStatusDisplayName(response.DisplayName);
+                            line.hasEverBeenCompleted(true);
                             toastr.success("Success! Item completed.");
                         });
                 }
@@ -358,6 +359,30 @@
                             line.serviceCallLineItemStatusDisplayName(response.ServiceCallLineItemStatus.DisplayName);
                         });
                 }
+                
+                function noActionServiceCallLineItem(line) {
+                    var lineData = ko.toJSON(line);
+
+                    $.ajax({
+                        url: urls.ManageServiceCall.NoActionLineItem,
+                        type: "POST",
+                        data: lineData,
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    })
+                        .fail(function (response) {
+                            toastr.error("There was an issue setting the line item to no action. Please try again!");
+                        })
+                        .done(function (response) {
+                            line.serviceCallLineItemStatusDisplayName(response.DisplayName);
+                            line.rootProblemId(modelData.noActionRootProblemCode.value);
+                            line.rootProblem(modelData.noActionRootProblemCode.displayName);
+                            line.rootCauseId(modelData.noActionRootCauseCode.value);
+                            line.rootCause(modelData.noActionRootCauseCode.displayName);
+                            toastr.success("Success! Item set to no action.");
+                        });
+                }
 
                 function serviceCallLineItemViewModel() {
                     var self = this;
@@ -372,6 +397,8 @@
                     self.problemDescription = ko.observable(modelData.initialServiceCallLineItem.problemDescription);
                     self.jobNumber = ko.observable(modelData.initialServiceCallLineItem.jobNumber);
                     self.constructionVendors = modelData.vendors;
+                    self.hasEverBeenCompleted = ko.observable(modelData.initialServiceCallLineItem.hasEverBeenCompleted);
+                    self.hasAnyPayments = ko.observable(modelData.initialServiceCallLineItem.hasAnyPayments);
                     
                     self.groupedConstructionVendors = ko.computed(function () {
                         var rows = [], current = [];
@@ -631,6 +658,7 @@
                                 self.allPayments.unshift(newPayment);
                                 toastr.success("Success! Payment added.");
                                 highlight($("#allServiceCallPayments").first());
+                                self.hasAnyPayments(true);
                                 self.clearPaymentFields();
                             });
                     };
@@ -659,6 +687,11 @@
                         reopenServiceCallLineItem(this);
                     };
 
+                    //set line item to no action.
+                    self.noActionForLine = function () {
+                        noActionServiceCallLineItem(this);
+                    };
+                    
                     self.lineNumber = ko.observable(modelData.initialServiceCallLineItem.lineNumber);
 
                     self.lineNumberWithProblemCode = ko.computed(function () {
@@ -676,7 +709,10 @@
                     }
 
                     self.lineItemStatusCSS = ko.computed(function () {
-                        return self.serviceCallLineItemStatusDisplayName() ? 'label label-' + self.serviceCallLineItemStatusDisplayName().toLowerCase() + '-service-line-item' : '';
+                        var displayName = self.serviceCallLineItemStatusDisplayName().toLowerCase();
+                        displayName = displayName.replace(' ', '-');
+                        
+                        return self.serviceCallLineItemStatusDisplayName() ? 'label label-' + displayName + '-service-line-item' : '';
                     });
 
                     self.isLineItemCompleted = function () {
@@ -686,12 +722,27 @@
                         return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase() ? true : false;
                     };
 
+                    self.isLineItemNoAction = function () {
+                        if (!self.serviceCallLineItemStatusDisplayName())
+                            return false;
+
+                        return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.NoAction.DisplayName.toLowerCase() ? true : false;
+                    };
+                    
                     self.theLookups = dropdownData.availableLookups; //dropdown list does not need to be observable. Only the actual elements w/i the array do.
                     self.allCallNotes = ko.observableArray([]);
                     self.allAttachments = ko.observableArray([]);
                     self.allPurchaseOrders = ko.observableArray([]);
-                    self.noteDescriptionToAdd = ko.observable('').extend({required: true});
+                    self.noteDescriptionToAdd = ko.observable('').extend({ required: true });
 
+                    self.enableRootProblem = ko.computed(function () {
+                        return !(self.hasEverBeenCompleted() || self.hasAnyPayments() || self.isLineItemNoAction());
+                    });
+
+                    self.enableRootCause = ko.computed(function () {
+                        return !(self.hasEverBeenCompleted() || self.hasAnyPayments() || self.isLineItemNoAction()) || !self.hasRootCause();
+                    });
+                    
                     self.removeAttachment = function (e) {
                         bootbox.confirm(modelData.attachmentRemovalMessage, function (result) {
                             if (result) {

@@ -17,6 +17,7 @@
     using Warranty.Core.Features.SharedQueries;
     using Warranty.Core.Features.UpdateServiceCallLineItem;
     using Warranty.Core.Features.EditServiceCallStatus;
+    using Warranty.Core.Features.NoActionServiceCallLineItem;
     using Warranty.Core.Security;
 
     public class ManageServiceCallController: ApiController
@@ -85,6 +86,17 @@
                 {
                     ServiceCallLineItemId = model.ServiceCallLineItemId,
                 });
+
+            return result;
+        }
+
+        [HttpPost]
+        public ServiceCallLineItemStatus NoActionLineItem(NoActionServiceCallLineItemModel model)
+        {
+            var result = _mediator.Send(new NoActionServiceCallLineItemCommand
+            {
+                ServiceCallLineItemId = model.ServiceCallLineItemId,
+            });
 
             return result;
         }

@@ -128,6 +128,12 @@
     <Compile Include="Features\AddServiceCallPayment\AddPaymentCommandDto.cs" />
     <Compile Include="Features\DeleteServiceCall\DeleteServiceCallCommand.cs" />
     <Compile Include="Features\DeleteServiceCall\DeleteServiceCallCommandHandler.cs" />
+    <Compile Include="Features\NoActionServiceCallLineItem\NoActionServiceCallLineItemCommand.cs" />
+    <Compile Include="Features\NoActionServiceCallLineItem\NoActionServiceCallLineItemCommandHandler.cs" />
+    <Compile Include="Features\NoActionServiceCallLineItem\NoActionServiceCallLineItemModel.cs" />
+    <Compile Include="Features\Report\WSROpenedClosedCalls\WSROpenedClosedCallsModel.cs" />
+    <Compile Include="Features\Report\WSROpenedClosedCalls\WSROpenedClosedCallsQuery.cs" />
+    <Compile Include="Features\Report\WSROpenedClosedCalls\WSROpenedClosedCallsQueryHandler.cs" />
     <Compile Include="Features\Report\WSRCallSummary\WSRCallSummaryModel.cs" />
     <Compile Include="Features\Report\WSRCallSummary\WSRCallSummaryQuery.cs" />
     <Compile Include="Features\Report\WSRCallSummary\WSRCallSummaryQueryHandler.cs" />
