@@ -1,5 +1,5 @@
 using System;
-using Accounting.Events.Job;
+using Construction.Events.Jobs;
 using NUnit.Framework;
 using Should;
 using Warranty.Core.Entities;
@@ -19,8 +19,8 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 
             Send(x =>
             {
-                x.JDEId = _job.JdeIdentifier;
-                x.Stage = "5.0";
+                x.Job = _job.JdeIdentifier;
+                x.Stage = Convert.ToInt32(Convert.ToDecimal("5.0"));
             });
         }
 
