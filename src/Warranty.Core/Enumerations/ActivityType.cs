@@ -25,5 +25,7 @@
         public static readonly ActivityType BackchargeDeny = new ActivityType(16, "Backcharge Deny");
         public static readonly ActivityType ServiceCallDelete = new ActivityType(17, "Service Call Delete");
         public static readonly ActivityType NoAction = new ActivityType(18, "No Action");
+        public static readonly ActivityType ChangeNote = new ActivityType(19, "Change Note");
+        public static readonly ActivityType DeleteNote = new ActivityType(20, "Delete Note");
     }
 }
