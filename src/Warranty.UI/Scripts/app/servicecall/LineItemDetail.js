@@ -399,6 +399,7 @@
                     self.constructionVendors = modelData.vendors;
                     self.hasEverBeenCompleted = ko.observable(modelData.initialServiceCallLineItem.hasEverBeenCompleted);
                     self.hasAnyPayments = ko.observable(modelData.initialServiceCallLineItem.hasAnyPayments);
+                    self.hasAnyPurchaseOrders = ko.observable(modelData.initialServiceCallLineItem.hasAnyPurchaseOrders);
                     
                     self.groupedConstructionVendors = ko.computed(function () {
                         var rows = [], current = [];
@@ -671,7 +672,6 @@
                         self.personNotifiedDate(moment(e.date).format("L"));
                     });
 
-                    //complete line item.
                     self.completeLine = function () {
                         self.completeButtonClicked(true);
 
@@ -682,12 +682,10 @@
                         completeServiceCallLineItem(this);
                     };
 
-                    //reopen line item.
                     self.reopenLine = function () {
                         reopenServiceCallLineItem(this);
                     };
 
-                    //set line item to no action.
                     self.noActionForLine = function () {
                         noActionServiceCallLineItem(this);
                     };
@@ -736,11 +734,11 @@
                     self.noteDescriptionToAdd = ko.observable('').extend({ required: true });
 
                     self.enableRootProblem = ko.computed(function () {
-                        return !(self.hasEverBeenCompleted() || self.hasAnyPayments() || self.isLineItemNoAction());
+                        return !(self.hasEverBeenCompleted() || self.hasAnyPayments() || self.hasAnyPurchaseOrders() || self.isLineItemNoAction());
                     });
 
                     self.enableRootCause = ko.computed(function () {
-                        return !(self.hasEverBeenCompleted() || self.hasAnyPayments() || self.isLineItemNoAction()) || !self.hasRootCause();
+                        return !(self.hasEverBeenCompleted() || self.hasAnyPayments() || self.hasAnyPurchaseOrders() || self.isLineItemNoAction()) || !self.hasRootCause();
                     });
                     
                     self.removeAttachment = function (e) {
