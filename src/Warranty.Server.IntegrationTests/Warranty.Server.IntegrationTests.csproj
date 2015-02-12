@@ -45,6 +45,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Accounting.Events.1.1.914.0\lib\net45\Accounting.Events.dll</HintPath>
     </Reference>
+    <Reference Include="Construction.Events, Version=1.4.99.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Construction.Events.1.4.99.0\lib\net45\Construction.Events.dll</HintPath>
+    </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.3.1.229\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
