@@ -279,10 +279,70 @@
                     self.serviceCallNoteId = options.serviceCallNoteId;
                     self.serviceCallId = options.serviceCallId;
                     self.serviceCallLineItemId = ko.observable(options.serviceCallLineItemId);
-                    self.note = options.note;
+                    self.note = ko.observable(options.note).extend({required: true});
                     self.createdBy = options.createdBy;
                     self.createdDate = options.createdDate;
                     self.serviceCallCommentTypeId = options.serviceCallCommentTypeId;
+                    self.editingNote = ko.observable(false);
+                    self.currentNote = ko.observable(options.note);
+                    
+                    self.saveNoteChanges = function () {
+                        var errors = ko.validation.group(self);
+
+                        if (errors().length != 0) {
+                            viewModel.errors.showAllMessages(false);
+                            self.errors.showAllMessages();
+                            return;
+                        }
+
+                        var noteData = ko.toJSON(self);
+
+                        $.ajax({
+                            url: urls.ManageServiceCall.EditServiceCallLineItemNote,
+                            type: "POST",
+                            data: noteData,
+                            dataType: "json",
+                            processData: false,
+                            contentType: "application/json; charset=utf-8"
+                        })
+                            .fail(function (response) {
+                                toastr.error("There was an issue updating the note. Please try again!");
+                            })
+                            .done(function (response) {
+                                toastr.success("Success! Note updated.");
+                                self.editingNote(false);
+                                self.currentNote(self.note());
+                            });
+                    };
+
+                    self.cancelNoteChanges = function () {
+                        this.note(this.currentNote());
+                        this.editingNote(false);
+                    };
+
+                    self.deleteNote = function (e) {
+                        var note = ko.toJSON(e);
+
+                        bootbox.confirm("Are you sure you want to delete this note?", function (result) {
+                            if (result) {
+                                $.ajax({
+                                    url: urls.ManageServiceCall.DeleteServiceCallLineItemNote,
+                                    type: "DELETE",
+                                    data: note,
+                                    dataType: "json",
+                                    processData: false,
+                                    contentType: "application/json; charset=utf-8"
+                                })
+                                .fail(function (response) {
+                                    toastr.error("There was an issue deleting the note. Please try again!");
+                                })
+                                .done(function (response) {
+                                    viewModel.allCallNotes.remove(e);
+                                    toastr.success("Success! Note deleted.");
+                                });
+                            }
+                        });
+                    };
                 }
 
                 function CallAttachmentsViewModel(options) {
