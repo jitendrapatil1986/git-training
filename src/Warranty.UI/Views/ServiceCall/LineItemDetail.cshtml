@@ -18,7 +18,7 @@
                     <a class="bread-crumb" href="@Url.Action("CallSummary", "ServiceCall", new { id = Model.ServiceCallId })">@Model.ServiceCallTitle</a>
                     @Model.LineNumber - <span data-bind="text: problemCode"></span>
                     <div class="pull-right no-right-padding no-print">
-                        <button id="btn-no-action-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: noActionForLine, visible: !hasEverBeenCompleted() && !isLineItemNoAction()">No Action</button>
+                        <button id="btn-no-action-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: noActionForLine, visible: !hasEverBeenCompleted() && !isLineItemCompleted() && !isLineItemNoAction()">No Action</button>
                         <button id="btn-complete-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: completeLine, visible: !isLineItemCompleted() && !isLineItemNoAction()">Complete</button>
                         <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: reopenLine, visible: isLineItemCompleted()">Reopen</button>
                     </div>
@@ -409,12 +409,33 @@
                         </div>
                         <p class="padding-left-15" data-bind="visible: allCallNotes().length < 1"><em>No Notes Available</em></p>
                         <div data-bind="foreach: allCallNotes">
-                            <div id="allServiceCallNotes" class="service-call-line">
-                                <div class="margin-bottom-5">
-                                    <strong><small><span data-bind="text: createdBy"></span></small></strong>
-                                    <small><span data-bind="text: moment(createdDate).format('L')"></span></small>
+                            <div id="allServiceCallNotes" class="service-call-line edit-line-item row line-detail">
+                                <div class="col-md-9">
+                                    <div class="editor" data-bind="css: { editing: editingNote }">
+                                        <div class="margin-bottom-5">
+                                            <strong><small><span data-bind="text: createdBy"></span></small></strong>
+                                            <small><span data-bind="text: moment(createdDate).format('L')"></span></small>
+                                        </div>
+                                        <div class="form-group" data-bind="validationElement: note">
+                                            @Html.TextArea( "Description", null, new { id = "editLineNote", @class = "form-control edit", data_bind = "text: note, value: note, valueUpdate: 'afterkeydown'", @rows = 3 })
+                                        </div>
+                                        <p data-bind="text: note" class="view"></p>
+                                    </div>
+                                    <div class="editor margin-bottom-10" data-bind="css: { editing: editingNote }">
+                                        <button type="submit" class="btn btn-primary edit" data-bind="click: saveNoteChanges, clickBubble: false">Save</button>
+                                        <button class="btn btn-link edit" data-bind="click: cancelNoteChanges, clickBubble: false">Cancel</button>
+                                    </div>
                                 </div>
-                                <p data-bind="text: note"></p>
+                                <div class="col-md-3 margin-bottom-3 text-align-right no-right-padding no-print">
+                                    @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
+                                    {
+                                        <button id="btn-edit-line-note" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="click: function() { editingNote(!editingNote()); }, visible: !editingNote()">Edit</button>
+                                        <button id="btn-edit-line-note" type="button" class="col-xs-4 btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="click: function() { editingNote(!editingNote()); }, visible: !editingNote()">Edit</button>
+                                    
+                                        <button id="btn-delete-line-note" type="button" class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="click: deleteNote, visible: !editingNote()">Delete</button>
+                                        <button id="btn-delete-line-note" type="button" class="col-xs-4 btn btn-default btn-sm margin-right-10 margin-bottom-10 hidden-sm hidden-md hidden-lg" data-bind="">Delete</button>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </section>
@@ -452,8 +473,8 @@
                 initialServiceCallLinePurchaseOrders: @Html.Raw(Model.ServiceCallLineItemPurchaseOrders.ToJson()),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
                 vendors: @Html.Raw(Model.Vendors.ToJson()),
-                rootCauseCodes: @Html.Raw(@RootCause.GetAll().Where(x=>x.Value != @RootCause.Imported.Value).OrderBy(x=>x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName, }).ToJson()),
-                rootProblemCodes: @Html.Raw(@RootProblem.GetAllNonDeprecated().OrderBy(x=>x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName}).ToJson()),
+                rootCauseCodes: @Html.Raw(@RootCause.GetAll().Where(x => x.Value != @RootCause.Imported.Value).OrderBy(x => x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName, }).ToJson()),
+                rootProblemCodes: @Html.Raw(@RootProblem.GetAllNonDeprecated().OrderBy(x => x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName }).ToJson()),
                 noActionRootCauseCode: @Html.Raw(@RootCause.NoAction.ToJson()),
                 noActionRootProblemCode: @Html.Raw(@RootProblem.NoAction.ToJson()),
             }
