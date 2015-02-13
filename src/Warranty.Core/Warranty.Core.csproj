@@ -54,9 +54,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
-    <Reference Include="JobService.Client, Version=1.0.464.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="JobService.Client, Version=1.0.546.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\JobService.Client.1.0.464.0\lib\net45\JobService.Client.dll</HintPath>
+      <HintPath>..\packages\JobService.Client.1.0.546.0\lib\net45\JobService.Client.dll</HintPath>
     </Reference>
     <Reference Include="JobService.Enumerations, Version=1.0.444.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
