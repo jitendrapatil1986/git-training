@@ -1,4 +1,5 @@
-﻿@model Warranty.Core.Features.Report.WSROpenedClosedCalls.WSROpenedClosedCallsModel
+﻿@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.Report.WSROpenedClosedCalls.WSROpenedClosedCallsModel
 
 <div class="container">
     <section class="margin-bottom-10">
@@ -45,6 +46,8 @@
     {
         <div class="row">
             <div id="wsrOpenedClosedCallSummary" class="col-md-12">
+                <div class="col-xs-4 print-only">@Html.LabelFor(x => x.StartDate) : @Format.DateMonthDayYear(Model.StartDate)</div>
+                <div class="col-xs-4 print-only">@Html.LabelFor(x => x.EndDate) : @Format.DateMonthDayYear(Model.EndDate)</div>
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-striped table-bordered text-right table-wsr-summary">
                     <thead>
                         <tr>
