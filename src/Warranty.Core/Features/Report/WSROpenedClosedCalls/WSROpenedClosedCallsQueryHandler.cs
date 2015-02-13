@@ -2,10 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using Common.Security.Queries;
+    using Entities;
     using Security;
     using Enumerations;
     using NPoco;
     using Common.Extensions;
+    using System.Linq;
 
     public class WSROpenedClosedCallsQueryHandler : IQueryHandler<WSROpenedClosedCallsQuery, WSROpenedClosedCallsModel>
     {
@@ -33,6 +36,9 @@
                 };
 
             model.WSRSummaryLines.ForEach(x => x.EmployeeName = x.EmployeeName.ToTitleCase());
+            model.StartDate = query.queryModel.StartDate;
+            model.EndDate = query.queryModel.EndDate;
+
             return model;
         }
 
@@ -65,6 +71,19 @@
 
                 var results = _database.Fetch<WSROpenedClosedCallsModel.WSRSummaryLine>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()), startdate, endDate,
                                 ServiceCallStatus.Requested.Value, ServiceCallStatus.Open.Value, ServiceCallStatus.Complete.Value);
+
+                var serviceCallMarket = user.Markets.First();
+
+                var warrantyEmployees = _database.Fetch<Employee>();
+
+                var employeesByServiceCallMarket =
+                    new GetUsersByMarketAndRolesQuery(serviceCallMarket, UserRoles.CustomerCareManagerRole,
+                                                      UserRoles.WarrantyCoordinatorRole,
+                                                      UserRoles.WarrantyServiceRepresentativeRole).Execute();
+
+                var employeesAssignableToServiceCall = warrantyEmployees.Where(x => employeesByServiceCallMarket.Select(y => y.EmployeeNumber).Contains(x.Number));
+
+                results = results.Where(x => employeesAssignableToServiceCall.Select(y => y.Number).Contains(x.EmployeeNumber)).ToList();
 
                 return results;
             }
