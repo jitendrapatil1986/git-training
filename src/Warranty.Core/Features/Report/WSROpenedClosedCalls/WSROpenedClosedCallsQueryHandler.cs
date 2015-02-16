@@ -61,16 +61,17 @@
                                     ON j.CommunityId = cm.CommunityId
                                     INNER JOIN Cities ci
                                     ON cm.CityId = ci.CityId
-                                    INNEr JOIN Employees e
+                                    INNER JOIN Employees e
                                     ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
                                     WHERE ci.CityCode IN ({0})
                                     AND sc.CreatedDate <= @1
+                                    AND e.EmployeeNumber <> @5
                                     GROUP BY e.EmployeeNumber, e.EmployeeName
                                     ) a
                                     ORDER BY EmployeeName";
 
                 var results = _database.Fetch<WSROpenedClosedCallsModel.WSRSummaryLine>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()), startdate, endDate,
-                                ServiceCallStatus.Requested.Value, ServiceCallStatus.Open.Value, ServiceCallStatus.Complete.Value);
+                                ServiceCallStatus.Requested.Value, ServiceCallStatus.Open.Value, ServiceCallStatus.Complete.Value, user.EmployeeNumber);
 
                 var serviceCallMarket = user.Markets.First();
 
