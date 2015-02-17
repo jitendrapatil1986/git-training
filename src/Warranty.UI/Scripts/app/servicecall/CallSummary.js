@@ -466,12 +466,13 @@ require(['/Scripts/app/main.js'], function () {
                 self.relatedCalls = ko.observableArray([]);
 
 
-                self.areAllLineItemsCompleted = ko.computed(function () {
-                    var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
-                        return (i.serviceCallLineItemStatusDisplayName().toLowerCase() != serviceCallStatusData.Complete.DisplayName.toLowerCase());
+                self.areAllLineItemsCompletedOrNoAction = ko.computed(function () {
+                    var anyNonCompletedOrNoActionLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
+                        return ((i.serviceCallLineItemStatusDisplayName().toLowerCase() != serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase()) &&
+                                (i.serviceCallLineItemStatusDisplayName().toLowerCase() != serviceCallLineItemStatusData.NoAction.DisplayName.toLowerCase()));
                     });
 
-                    if (anyNonCompletedLineItem)
+                    if (anyNonCompletedOrNoActionLineItem)
                         return false;
                     else
                         return true;

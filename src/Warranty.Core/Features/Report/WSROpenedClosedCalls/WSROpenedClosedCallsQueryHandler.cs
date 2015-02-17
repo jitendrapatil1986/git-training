@@ -2,10 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using Common.Security.Queries;
+    using Entities;
     using Security;
     using Enumerations;
     using NPoco;
     using Common.Extensions;
+    using System.Linq;
 
     public class WSROpenedClosedCallsQueryHandler : IQueryHandler<WSROpenedClosedCallsQuery, WSROpenedClosedCallsModel>
     {
@@ -33,6 +36,9 @@
                 };
 
             model.WSRSummaryLines.ForEach(x => x.EmployeeName = x.EmployeeName.ToTitleCase());
+            model.StartDate = query.queryModel.StartDate;
+            model.EndDate = query.queryModel.EndDate;
+
             return model;
         }
 
@@ -55,16 +61,30 @@
                                     ON j.CommunityId = cm.CommunityId
                                     INNER JOIN Cities ci
                                     ON cm.CityId = ci.CityId
-                                    INNEr JOIN Employees e
+                                    INNER JOIN Employees e
                                     ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
                                     WHERE ci.CityCode IN ({0})
                                     AND sc.CreatedDate <= @1
+                                    AND e.EmployeeNumber <> @5
                                     GROUP BY e.EmployeeNumber, e.EmployeeName
                                     ) a
                                     ORDER BY EmployeeName";
 
                 var results = _database.Fetch<WSROpenedClosedCallsModel.WSRSummaryLine>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()), startdate, endDate,
-                                ServiceCallStatus.Requested.Value, ServiceCallStatus.Open.Value, ServiceCallStatus.Complete.Value);
+                                ServiceCallStatus.Requested.Value, ServiceCallStatus.Open.Value, ServiceCallStatus.Complete.Value, user.EmployeeNumber);
+
+                var serviceCallMarket = user.Markets.First();
+
+                var warrantyEmployees = _database.Fetch<Employee>();
+
+                var employeesByServiceCallMarket =
+                    new GetUsersByMarketAndRolesQuery(serviceCallMarket, UserRoles.CustomerCareManagerRole,
+                                                      UserRoles.WarrantyCoordinatorRole,
+                                                      UserRoles.WarrantyServiceRepresentativeRole).Execute();
+
+                var employeesAssignableToServiceCall = warrantyEmployees.Where(x => employeesByServiceCallMarket.Select(y => y.EmployeeNumber).Contains(x.Number));
+
+                results = results.Where(x => employeesAssignableToServiceCall.Select(y => y.Number).Contains(x.EmployeeNumber)).ToList();
 
                 return results;
             }

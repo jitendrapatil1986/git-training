@@ -63,7 +63,7 @@ namespace Warranty.Core.Features.JobSummary
                 {
                     OptionNumber = x.OptionNumber,
                     OptionDescription = x.Description
-                });
+                }).OrderBy(x => x.OptionNumber);
             }
             catch (HttpRequestException)
             {
