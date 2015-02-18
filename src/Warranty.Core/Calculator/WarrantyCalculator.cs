@@ -91,7 +91,7 @@ namespace Warranty.Core.Calculator
                     Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
-                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount : 0
+                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount.Value : 0
                 });
             }
             return list;
@@ -173,11 +173,12 @@ namespace Warranty.Core.Calculator
         public IEnumerable<CalculatorResult> GetEmployeeExcellentWarrantyService(DateTime startDate, DateTime endDate, string employeeNumber)
         {
             var surveyData = GetEmployeeSurveyData(startDate, endDate, employeeNumber);
+
             return
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") , l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -192,7 +193,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9") / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9"), l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -207,7 +208,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.DefinitelyWillRecommend != null && x.DefinitelyWillRecommend.ToUpper() == SurveyConstants.DefinitelyWillThreshold) / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.DefinitelyWillRecommend != null && x.DefinitelyWillRecommend.ToUpper() == SurveyConstants.DefinitelyWillThreshold), l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -293,7 +294,7 @@ namespace Warranty.Core.Calculator
                     Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
-                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount : 0
+                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount.Value : 0
                 });
             }
             return list;
@@ -383,7 +384,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") , l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -398,7 +399,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9") / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9"), l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -413,7 +414,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.DefinitelyWillRecommend != null && x.DefinitelyWillRecommend.ToUpper() == SurveyConstants.DefinitelyWillThreshold) / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.DefinitelyWillRecommend != null && x.DefinitelyWillRecommend.ToUpper() == SurveyConstants.DefinitelyWillThreshold) , l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -493,7 +494,7 @@ namespace Warranty.Core.Calculator
                     Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
-                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount : 0
+                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount.Value : 0
                 });
             }
             return list;
@@ -583,7 +584,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") , l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -598,7 +599,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9") / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9") , l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -613,7 +614,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.DefinitelyWillRecommend != null && x.DefinitelyWillRecommend.ToUpper() == SurveyConstants.DefinitelyWillThreshold) / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.DefinitelyWillRecommend != null && x.DefinitelyWillRecommend.ToUpper() == SurveyConstants.DefinitelyWillThreshold), l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -650,7 +651,7 @@ namespace Warranty.Core.Calculator
                     return 0;
                 }
 
-                return dollarSpentInMonth.Amount / warrantableHomesInMonth.Amount;
+                return dollarSpentInMonth.Amount.Value / warrantableHomesInMonth.Amount.Value;
             }
             return 0;
         }
