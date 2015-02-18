@@ -128,9 +128,8 @@
 
                                  <td class="text-capitalize">@wsr.EmployeeName</td>
                                  <td class="text-right">@wsr.NmberOfSurveys</td>
-                                 <td class="text-right">@Format.Percentage(wsr.DefinetelyWouldRecommend)</td>
                                  <td class="text-right">@Format.Percentage(wsr.ExcellentWarrantyService)</td>
-
+                                 <td class="text-right">@Format.Percentage(wsr.DefinetelyWouldRecommend)</td>
                              </tr>
                          }
                      </tbody>
@@ -151,9 +150,8 @@
 
                                  <td class="text-capitalize">@wsr.ProjectName</td>
                                  <td class="text-right">@wsr.NmberOfSurveys</td>
-                                 <td class="text-right">@Format.Percentage(wsr.DefinetelyWouldRecommend)</td>
                                  <td class="text-right">@Format.Percentage(wsr.ExcellentWarrantyService)</td>
-
+                                 <td class="text-right">@Format.Percentage(wsr.DefinetelyWouldRecommend)</td>
                              </tr>
                          }
                      </tbody>
@@ -171,12 +169,10 @@
                          @foreach (var wsr in Model.DivisionSaltlineSummary)
                          {
                              <tr>
-
-                                 <td class="text-capitalize">@wsr.DivisionName</td>
-                                 <td class="text-right">@wsr.NmberOfSurveys</td>
-                                 <td class="text-right">@Format.Percentage(wsr.DefinetelyWouldRecommend)</td>
-                                 <td class="text-right">@Format.Percentage(wsr.ExcellentWarrantyService)</td>
-
+                                <td class="text-capitalize">@wsr.DivisionName</td>
+                                <td class="text-right">@wsr.NmberOfSurveys</td>
+                                <td class="text-right">@Format.Percentage(wsr.ExcellentWarrantyService)</td>
+                                <td class="text-right">@Format.Percentage(wsr.DefinetelyWouldRecommend)</td>
                              </tr>
                          }
                      </tbody>

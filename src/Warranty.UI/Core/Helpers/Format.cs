@@ -229,6 +229,9 @@ namespace Warranty.UI.Core.Helpers
 
         public static string Percentage(decimal? value)
         {
+            if (!value.HasValue)
+                return "N/A";
+
             return value.HasValue ? value.Value.ToString("##0") + "%" : String.Empty;
         }
 
