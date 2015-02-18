@@ -48,7 +48,7 @@
                     });
                 }
                 
-                function PaymentViewModel(options) {
+                function PaymentAndBackchargeViewModel(options) {
                     var self = this;
                     self.serviceCallLineItemId = options.serviceCallLineItemId;
                     self.vendorNumber = options.vendorNumber;
@@ -58,16 +58,17 @@
                     self.invoiceNumber = options.invoiceNumber;
                     self.comments = options.comments;
                     self.amount = options.amount;
+                    self.isBackcharge = options.isBackcharge;
                     self.backchargeAmount = options.backchargeAmount;
                     self.backchargeId = options.backchargeId;
-                    self.isBackcharge = options.isBackcharge;
+                    self.backchargeServiceCallLineItemId = options.backchargeServiceCallLineItemId;
                     self.backchargeReason = options.backchargeReason;
                     self.personNotified = options.personNotified;
                     self.personNotifiedPhoneNumber = options.personNotifiedPhoneNumber;
                     self.personNotifiedDate = options.personNotifiedDate;
                     self.backchargeResponseFromVendor = options.backchargeResponseFromVendor;
                     self.paymentId = options.paymentId;
-                    self.paymentCreatedDate = options.paymentCreatedDate;
+                    self.createdDate = options.createdDate ? options.createdDate : options.backchargeCreatedDate;
                     self.holdComments = ko.observable(options.holdComments);
                     self.backchargeHoldComments = ko.observable(options.backchargeHoldComments);
                     self.backchargeDenyComments = ko.observable(options.backchargeDenyComments);
@@ -76,8 +77,9 @@
                     self.backchargeDenyDate = ko.observable(options.backchargeDenyDate);
                     self.paymentStatusDisplayName = ko.observable(options.paymentStatusDisplayName);
                     self.backchargeStatusDisplayName = ko.observable(options.backchargeStatusDisplayName);
-                    self.costCode = options.costCode;
-
+                    self.costCode = options.costCode ? options.costCode : options.backchargeCostCode;
+                    self.standAloneBackcharge = ko.observable(!options.paymentId);
+                    
                     self.isBackchargeHeld = ko.computed(function () {
                         return self.backchargeStatusDisplayName() == backchargeStatusEnum.RequestedHold.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName;
                     });
@@ -91,26 +93,25 @@
                     });
 
                     self.displayHold = function (item, event) {
-                        displayPopoUp('hold', item, event);
+                        displayPopUp('hold', item, event);
                     };
                     
                     self.displayHoldBackcharge = function (item, event) {
-                        displayPopoUp('holdBackcharge', item, event, true);
+                        displayPopUp('holdBackcharge', item, event, true, true);
                     };
                     
                     self.displayDenyBackcharge = function (item, event) {
-                        displayPopoUp('denyBackcharge', item, event, true);
+                        displayPopUp('denyBackcharge', item, event, true, true);
                     };
 
-
-                    var displayPopoUp = function (name, item, event, displayToTheRight) {
+                    var displayPopUp = function (name, item, event, forBackcharge, displayToTheRight) {
                         var button = $(event.target);
                         $('.btn-action-with-popup').removeClass('active');
                         button.removeClass('btn-hover-show');
                         button.addClass("active");
                         $('.popup-action-with-message').hide();
                         var right = ($(window).width() - (button.offset().left + button.outerWidth()));
-                        var actionwithPopup = name + '-' + item.paymentId;
+                        var actionwithPopup = name + '-' + (forBackcharge ? item.backchargeId : item.paymentId);
                         if (displayToTheRight) {
                             right = right - 250;
                         }
@@ -120,7 +121,6 @@
                             'top': button.offset().top + button.height() + 15
                         }).show();
                     };
-                    
 
                     self.approvePayment = function (item, event) {
                         var actionUrl = urls.ManageServiceCall.ApprovePayment;
@@ -146,7 +146,7 @@
                                     url: actionUrl,
                                     data: { PaymentId: payment.paymentId },
                                     success: function () {
-                                        viewModel.allPayments.remove(payment);
+                                        viewModel.allPaymentsAndBackcharges.remove(payment);
                                         toastr.success("Success! Payment deleted.");
                                     }
                                 });
@@ -355,30 +355,6 @@
                     self.createdDate = options.createdDate;
                 }
 
-                self.allPayments = ko.observableArray([]);
-
-                self.canAddPayment = ko.computed(function () {
-                    return true;
-                });
-
-                self.clearPaymentFields = function () {
-                    $('#vendor-search').val('');
-                    $('#backcharge-vendor-search').val('');
-                    self.vendorNumber('');
-                    self.backchargeVendorNumber('');
-                    self.invoiceNumber('');
-                    self.comments('');
-                    self.amount('');
-                    self.backchargeAmount('');
-                    self.isBackcharge(false);
-                    self.backchargeReason('');
-                    self.personNotified('');
-                    self.personNotifiedPhoneNumber('');
-                    self.personNotifiedDate('');
-                    self.backchargeResponseFromVendor('');
-                    self.errors.showAllMessages(false);
-                };
-
                 function completeServiceCallLineItem(line) {
                     var lineData = ko.toJSON(line);
 
@@ -560,17 +536,34 @@
                         }
                     });
 
-                    self.invoiceNumber = ko.observable('').extend({ required: true });
+                    self.paymentTypes = ko.observableArray(modelData.paymentTypes);
+                    self.paymentTypeId = ko.observable();
+                    self.isStandAloneBackcharge = ko.computed(function () {
+                        return self.paymentTypeId() === modelData.standAloneBackchargePaymentType.value;
+                    });
+                    self.isPayment = ko.computed(function () {
+                        return self.paymentTypeId() === modelData.paymentPaymentType.value;
+                    });
+                    
+                    self.invoiceNumber = ko.observable('').extend({
+                        required: {
+                            onlyIf: function () { return self.isPayment() === true; }
+                        }
+                    });
                     self.comments = ko.observable('');
-                    self.amount = ko.observable().extend({ required: true, min: 0 });
+                    self.amount = ko.observable().extend({
+                        required: {
+                            onlyIf: function () { return self.isPayment() === true; }
+                        }, min: 0
+                    });
                     self.isBackcharge = ko.observable(false);
                     self.backchargeAmount = ko.observable().extend({
                         required: {
-                            onlyIf: function () { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
                         },
                         validation: {
                             validator: function (val) {
-                                if (self.isBackcharge() === false)
+                                if (self.isBackcharge() === false || self.isStandAloneBackcharge() === false)
                                     return true;
                                 
                                 return Number(val) > 0;
@@ -580,45 +573,61 @@
                     });
                     self.backchargeReason = ko.observable('').extend({
                         required: {
-                            onlyIf: function () { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
                         }
                     });
                     self.personNotified = ko.observable('').extend({
                         required: {
-                            onlyIf: function () { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
                         }
                     });
                     self.personNotifiedPhoneNumber = ko.observable('').extend({
                         required: {
-                            onlyIf: function () { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
                         }
                     });
                     self.personNotifiedDate = ko.observable('').extend({
                         required: {
-                            onlyIf: function () { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
                         }
                     });
                     self.backchargeResponseFromVendor = ko.observable('').extend({
                         required: {
-                            onlyIf: function () { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
                         }
                     });
                     self.vendorOnHold = ko.observable(false);
-                    self.vendorName = ko.observable('').extend({ required: true });
-                    self.vendorNumber = ko.observable('').extend({ required: true, vendorIsOnHold: self.vendorOnHold });
+                    self.vendorName = ko.observable('').extend({
+                        required: {
+                            onlyIf: function () { return self.isPayment() === true; }
+                        }
+                    });
+                    self.vendorNumber = ko.observable('').extend({
+                        required: {
+                            onlyIf: function () { return self.isPayment() === true; }
+                        },
+                        vendorIsOnHold: self.vendorOnHold
+                    });
 
                     self.backchargeVendorOnHold = ko.observable(false);
                     self.backchargeVendorName = ko.observable('').extend({
                         required: {
-                            onlyIf: function () { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
                         }
                     });
                     self.backchargeVendorNumber = ko.observable('').extend({
                         required: {
-                            onlyIf: function () { return (self.isBackcharge() === true); }
+                            onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
                         }, vendorIsOnHold: self.backchargeVendorOnHold
                     });
-                    self.allPayments = ko.observableArray([]);
+                    
+                    self.allPaymentsAndBackcharges = ko.observableArray([]);
+
+                    //self.sortedPaymentsAndBackcharges = ko.computed(function() {
+                    //    return self.allPaymentsAndBackcharges().sort(function (left, right) {
+                    //        return left.createdDate == right.createdDate ? 0 : (left.createdDate < right.createdDate ? -1 : 1);
+                    //    });
+                    //});
 
                     self.canAddPayment = ko.computed(function () {
                         return true;
@@ -680,7 +689,7 @@
                         self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
                         self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
 
-                        var newPayment = new PaymentViewModel({
+                        var newPayment = new PaymentAndBackchargeViewModel({
                             serviceCallLineItemId: self.serviceCallLineItemId,
                             vendorNumber: self.vendorNumber(),
                             vendorName: self.vendorName(),
@@ -715,15 +724,67 @@
                             })
                             .done(function (response) {
                                 newPayment.paymentId = response.PaymentId;
-                                newPayment.costCode = {costCode: response.CostCode.CostCode, displayName: response.CostCode.DisplayName};
-                                self.allPayments.unshift(newPayment);
+                                newPayment.costCode = { costCode: response.CostCode.CostCode, displayName: response.CostCode.DisplayName };
+                                newPayment.standAloneBackcharge(false);
+                                
+                                if (response.BackchargeId) {
+                                    newPayment.BackchargeId = response.BackchargeId;
+                                }
+                                
+                                self.allPaymentsAndBackcharges.unshift(newPayment);
                                 toastr.success("Success! Payment added.");
-                                highlight($("#allServiceCallPayments").first());
+                                highlight($("#allServiceCallPaymentsAndBackcharges").first());
                                 self.hasAnyPayments(true);
                                 self.clearPaymentFields();
                             });
                     };
 
+                    self.addStandAloneBackcharge = function () {
+
+                        if (formHasErrors([self.backchargeAmount, self.backchargeReason, self.personNotified, self.personNotifiedPhoneNumber, self.personNotifiedDate, self.backchargeResponseFromVendor, self.backchargeVendorName, self.backchargeVendorNumber]))
+                            return;
+
+                        self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
+                        self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
+
+                        var newStandAloneBackcharge = new PaymentAndBackchargeViewModel({
+                            serviceCallLineItemId: self.serviceCallLineItemId,
+                            backchargeVendorNumber: self.backchargeVendorNumber(),
+                            backchargeVendorName: self.backchargeVendorName(),
+                            backchargeAmount: self.backchargeAmount(),
+                            backchargeReason: self.backchargeReason(),
+                            personNotified: self.personNotified(),
+                            personNotifiedPhoneNumber: self.personNotifiedPhoneNumber(),
+                            personNotifiedDate: self.personNotifiedDate(),
+                            backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
+                            backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
+                        });
+
+                        var standAloneBackchargeData = ko.toJSON(newStandAloneBackcharge);
+                        
+                        $.ajax({
+                            url: urls.ManageServiceCall.AddStandAloneBackcharge,
+                            type: "POST",
+                            data: standAloneBackchargeData,
+                            dataType: "json",
+                            processData: false,
+                            contentType: "application/json; charset=utf-8"
+                        })
+                            .fail(function (response) {
+                                toastr.error("There was a problem adding the stand alone backcharge. Please try again.");
+                            })
+                            .done(function (response) {
+                                newStandAloneBackcharge.backchargeId = response.BackchargeId;
+                                newStandAloneBackcharge.costCode = { costCode: response.CostCode.CostCode, displayName: response.CostCode.DisplayName };
+                                newStandAloneBackcharge.standAloneBackcharge(true);
+                                self.allPaymentsAndBackcharges.unshift(newStandAloneBackcharge);
+                                toastr.success("Success! Stand alone backcharge added.");
+                                highlight($("#allServiceCallPaymentsAndBackcharges").first());
+                                self.hasAnyPayments(true);
+                                self.clearPaymentFields();
+                            });
+                    };
+                    
                     $("#Person_Notified_Date").datepicker({
                         format: 'm/d/yyyy'
                     });
@@ -939,10 +1000,16 @@
                     viewModel.allAttachments.push(new CallAttachmentsViewModel(attachment));
                 });
 
-                var persistedAllPaymentsViewModel = modelData.initialServiceCallLinePayments;
+                var persistedAllPaymentsAndBackchargesViewModel = modelData.initialServiceCallLinePayments;
 
-                _(persistedAllPaymentsViewModel).each(function (payment) {
-                    viewModel.allPayments.push(new PaymentViewModel(payment));
+                _(persistedAllPaymentsAndBackchargesViewModel).each(function (payment) {
+                    viewModel.allPaymentsAndBackcharges.push(new PaymentAndBackchargeViewModel(payment));
+                });
+
+                var persistedAllStandAloneBackchargesViewModel = modelData.initialServiceCallLineStandAloneBackcharges;
+
+                _(persistedAllStandAloneBackchargesViewModel).each(function (backcharge) {
+                    viewModel.allPaymentsAndBackcharges.push(new PaymentAndBackchargeViewModel(backcharge));
                 });
 
                 var persistedAllPurchaseOrdersViewModel = modelData.initialServiceCallLinePurchaseOrders;

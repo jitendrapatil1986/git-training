@@ -125,7 +125,11 @@
     <Compile Include="Calculator\MonthYearModel.cs" />
     <Compile Include="Calculator\SurveyDataResult.cs" />
     <Compile Include="Calculator\WarrantyCalculator.cs" />
+    <Compile Include="Enumerations\PaymentTypes.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddPaymentCommandDto.cs" />
+    <Compile Include="Features\AddServiceCallPayment\AddStandAloneBackchargeCommand.cs" />
+    <Compile Include="Features\AddServiceCallPayment\AddStandAloneBackchargeCommandDto.cs" />
+    <Compile Include="Features\AddServiceCallPayment\AddStandAloneBackchargeCommandHandler.cs" />
     <Compile Include="Features\DeleteServiceCallLineNote\DeleteServiceCallLineNoteCommand.cs" />
     <Compile Include="Features\DeleteServiceCallLineNote\DeleteServiceCallLineNoteCommandHandler.cs" />
     <Compile Include="Features\DeleteServiceCallLineNote\DeleteServiceCallLineNoteModel.cs" />

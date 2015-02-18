@@ -37,6 +37,8 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
         public IEnumerable<ServiceCallLineItemAttachment> ServiceCallLineItemAttachments { get; set; }
         public IEnumerable<ServiceCallLineItemPayment> ServiceCallLineItemPayments { get; set; }
         public IEnumerable<ServiceCallLineItemPurchaseOrder> ServiceCallLineItemPurchaseOrders { get; set; }
+        public IEnumerable<ServiceCallLineItemStandAloneBackcharge> ServiceCallLineItemStandAloneBackcharges { get; set; }
+
         public IEnumerable<Vendor> Vendors { get; set; }
         
         public string ServiceCallTitle
@@ -96,6 +98,29 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public bool IsBackcharge { get; set; }
             public WarrantyCostCode CostCode { get { return WarrantyCostCode.GetAll().SingleOrDefault(x => x.CostCode == JdeCostCode); }}
             public string JdeCostCode { get; set; }
+        }
+
+        public class ServiceCallLineItemStandAloneBackcharge
+        {
+            public Guid BackchargeId { get; set; }
+            public Guid BackchargeServiceCallLineItemId { get; set; }
+            public DateTime BackchargeCreatedDate { get; set; }
+            public BackchargeStatus BackchargeStatus { get; set; }
+            public string BackchargeStatusDisplayName { get { return BackchargeStatus.DisplayName; } }
+            public string BackchargeVendorNumber { get; set; }
+            public decimal BackchargeAmount { get; set; }
+            public string BackchargeReason { get; set; }
+            public string PersonNotified { get; set; }
+            public string PersonNotifiedPhoneNumber { get; set; }
+            public DateTime PersonNotifiedDate { get; set; }
+            public string BackchargeResponseFromVendor { get; set; }
+            public string BackchargeVendorName { get; set; }
+            public string BackchargeHoldComments { get; set; }
+            public DateTime? BackchargeHoldDate { get; set; }
+            public string BackchargeDenyComments { get; set; }
+            public DateTime? BackchargeDenyDate { get; set; }
+            public WarrantyCostCode BackchargeCostCode { get { return WarrantyCostCode.GetAll().SingleOrDefault(x => x.CostCode == BackchargeJdeCostCode); } }
+            public string BackchargeJdeCostCode { get; set; }
         }
 
         public class ServiceCallLineItemPurchaseOrder
