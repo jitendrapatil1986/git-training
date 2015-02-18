@@ -26,9 +26,10 @@
                 return new ServiceCallsWidgetModel
                            {
                                MyServiceCalls = GetMyServiceCalls(user),
-                               OverdueServiceCalls = GetOverdueServiceCalls(user),
+                               OpenServiceCalls = GetOverdueServiceCalls(user),
                                SpecialProjectServiceCalls = GetSpecialProjects(user),
                                EscalatedServiceCalls = GetEscalatedServiceCalls(user),
+                               ClosedServiceCalls = GetClosedServiceCalls(user),
                            };
             }
         }
@@ -49,12 +50,16 @@
                                         , DATEDIFF(yy, j.CloseDate, wc.CreatedDate) as YearsWithinWarranty
                                         , j.CloseDate as WarrantyStartDate
                                         , j.JobNumber
+                                        , wc.CompletionDate
+                                        , wc.SpecialProject as IsSpecialProject
+                                        , wc.Escalated as IsEscalated
+                                        , DATEDIFF(dd, wc.CreatedDate, wc.CompletionDate) as DaysOpenedFor
                                      FROM [ServiceCalls] wc
                                      inner join Jobs j
                                        on wc.JobId = j.JobId
                                      inner join HomeOwners ho
                                        on j.CurrentHomeOwnerId = ho.HomeOwnerId
-                                     inner join (select COUNT(*) as NumberOfLineItems, ServiceCallId FROM ServiceCallLineItems group by ServiceCallId) li
+                                     left join (select COUNT(*) as NumberOfLineItems, ServiceCallId FROM ServiceCallLineItems group by ServiceCallId) li
                                        on wc.ServiceCallId = li.ServiceCallId
                                      inner join Employees e
                                        on wc.WarrantyRepresentativeEmployeeId = e.EmployeeId
@@ -98,6 +103,14 @@
             var markets = user.Markets;
 
             var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId<>@1 AND EmployeeNumber=@0 AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ") AND Escalated = 1", "ORDER BY EmployeeName, wc.CreatedDate");
+
+            var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, user.EmployeeNumber, ServiceCallStatus.Complete.Value);
+            return result;
+        }
+
+        private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetClosedServiceCalls(IUser user)
+        {
+            var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId=@1 and EmployeeNumber=@0", "ORDER BY CompletionDate DESC, wc.CreatedDate, NumberOfLineItems DESC");
 
             var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, user.EmployeeNumber, ServiceCallStatus.Complete.Value);
             return result;

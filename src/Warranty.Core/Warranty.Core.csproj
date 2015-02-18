@@ -54,9 +54,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
-    <Reference Include="JobService.Client, Version=1.0.464.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="JobService.Client, Version=1.0.546.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\JobService.Client.1.0.464.0\lib\net45\JobService.Client.dll</HintPath>
+      <HintPath>..\packages\JobService.Client.1.0.546.0\lib\net45\JobService.Client.dll</HintPath>
     </Reference>
     <Reference Include="JobService.Enumerations, Version=1.0.444.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -126,8 +126,26 @@
     <Compile Include="Calculator\SurveyDataResult.cs" />
     <Compile Include="Calculator\WarrantyCalculator.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddPaymentCommandDto.cs" />
+    <Compile Include="Features\DeleteServiceCallLineNote\DeleteServiceCallLineNoteCommand.cs" />
+    <Compile Include="Features\DeleteServiceCallLineNote\DeleteServiceCallLineNoteCommandHandler.cs" />
+    <Compile Include="Features\DeleteServiceCallLineNote\DeleteServiceCallLineNoteModel.cs" />
+    <Compile Include="Features\DeleteServiceCallNote\DeleteServiceCallNoteCommand.cs" />
+    <Compile Include="Features\DeleteServiceCallNote\DeleteServiceCallNoteCommandHandler.cs" />
     <Compile Include="Features\DeleteServiceCall\DeleteServiceCallCommand.cs" />
     <Compile Include="Features\DeleteServiceCall\DeleteServiceCallCommandHandler.cs" />
+    <Compile Include="Features\DeleteServiceCallNote\DeleteServiceCallNoteModel.cs" />
+    <Compile Include="Features\EditServiceCallLineItemNote\EditServiceCallLineItemNoteCommand.cs" />
+    <Compile Include="Features\EditServiceCallLineItemNote\EditServiceCallLineItemNoteCommandHandler.cs" />
+    <Compile Include="Features\EditServiceCallLineItemNote\EditServiceCallLineItemNoteModel.cs" />
+    <Compile Include="Features\EditServiceCallNote\EditServiceCallNoteCommand.cs" />
+    <Compile Include="Features\EditServiceCallNote\EditServiceCallNoteCommandHandler.cs" />
+    <Compile Include="Features\EditServiceCallNote\EditServiceCallNoteModel.cs" />
+    <Compile Include="Features\NoActionServiceCallLineItem\NoActionServiceCallLineItemCommand.cs" />
+    <Compile Include="Features\NoActionServiceCallLineItem\NoActionServiceCallLineItemCommandHandler.cs" />
+    <Compile Include="Features\NoActionServiceCallLineItem\NoActionServiceCallLineItemModel.cs" />
+    <Compile Include="Features\Report\WSROpenedClosedCalls\WSROpenedClosedCallsModel.cs" />
+    <Compile Include="Features\Report\WSROpenedClosedCalls\WSROpenedClosedCallsQuery.cs" />
+    <Compile Include="Features\Report\WSROpenedClosedCalls\WSROpenedClosedCallsQueryHandler.cs" />
     <Compile Include="Features\Report\WSRCallSummary\WSRCallSummaryModel.cs" />
     <Compile Include="Features\Report\WSRCallSummary\WSRCallSummaryQuery.cs" />
     <Compile Include="Features\Report\WSRCallSummary\WSRCallSummaryQueryHandler.cs" />
@@ -139,6 +157,10 @@
     <Compile Include="Features\ServiceCallToggleActions\ServiceCallCompleteWsrNotificationQueryHandler.cs" />
     <Compile Include="Features\SessionStart\VerifyEmployeeExistsCommandHandler.cs" />
     <Compile Include="Features\SessionStart\VerifyEmployeeExistsCommand.cs" />
+    <Compile Include="Features\TaskNoAction\TaskNoActionCommand.cs" />
+    <Compile Include="Features\TaskNoAction\TaskNoActionCommandHandler.cs" />
+    <Compile Include="Features\TaskSubmitForApproval\TaskSubmitForApprovalCommand.cs" />
+    <Compile Include="Features\TaskSubmitForApproval\TaskSubmitForApprovalCommandHandler.cs" />
     <Compile Include="Features\ToDoWidget\ToDoLastSelectedFilterSaveCommand.cs" />
     <Compile Include="Features\ToDoWidget\ToDoLastSelectedFilterSaveCommandHandler.cs" />
     <Compile Include="JobServiceApiHelpers\ApiJsonConverter.cs" />
@@ -541,7 +563,6 @@
     <Compile Include="Security\WarrantyUser.cs" />
     <Compile Include="StructureMapValidatorFactory.cs" />
     <Compile Include="SystemTime.cs" />
-    <Compile Include="TaskInfrastructure\Tasks\JobClosedContactHomeownerTask.cs" />
     <Compile Include="TaskInfrastructure\Interfaces\ITask.cs" />
     <Compile Include="TaskInfrastructure\Tasks\JobStageUpdatedContactBuilderTask.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoJob10MonthAnniversary.cs" />
@@ -558,6 +579,7 @@
     <Compile Include="ToDoInfrastructure\Models\ToDoCommunityEmployeeAssignmentModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoJob10MonthAnniversaryModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoJobAnniversaryTaskModel.cs" />
+    <Compile Include="ToDoInfrastructure\Models\ToDoJobChangedTaskApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoPaymentRequestApprovalUnderWarrantyModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoPaymentRequestApprovalOutOfWarrantyModel.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoPaymentStatusChangedModel.cs" />
@@ -567,6 +589,7 @@
     <Compile Include="ToDoInfrastructure\ToDo.cs" />
     <Compile Include="ToDoInfrastructure\Models\ToDoEscalationApprovalModel.cs" />
     <Compile Include="ToDoInfrastructure\ToDoAggregator.cs" />
+    <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoJobChangedTaskApproval.cs" />
     <Compile Include="WarrantyCoreRegistry.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Entities;
     using Enumerations;
     using NPoco;
     using Security;
@@ -110,6 +111,7 @@
                                     li.[ProblemDetailCode],
                                     li.[RootCause],
                                     li.[RootProblem],
+                                    li.[LastCompletedDate],
                                     cc.[CostCode],
                                     job.[JobNumber],
                                     city.CityCode

@@ -22,11 +22,11 @@
                 @foreach (var item in NavHeaderItem.GetAll(key))
                 {
                     if(
-                        (key == NavHeaderItem.Reports.Key && item.Value != NavHeaderItem.WsrCallSummary.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) ||
+                        (key == NavHeaderItem.Reports.Key && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) ||
                         (key == NavHeaderItem.Reports.Key && item.Value == NavHeaderItem.MailMergeReport.Value && User.IsInRole(UserRoles.WarrantyServiceRepresentative)) ||
                         (key == NavHeaderItem.Reports.Key && item.Value == NavHeaderItem.WsrCallSummary.Value && User.IsInRole(UserRoles.WarrantyServiceRepresentative)) ||
-                        (item.Value != NavHeaderItem.ManageCostCode.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) || 
-                        (item.Value == NavHeaderItem.ManageCostCode.Value && User.IsInRole(UserRoles.WarrantyAdmin))
+                        (key == NavHeaderItem.Administration.Key && item.Value != NavHeaderItem.ManageCostCode.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) ||
+                        (key == NavHeaderItem.Administration.Key && item.Value == NavHeaderItem.ManageCostCode.Value && User.IsInRole(UserRoles.WarrantyAdmin))
                         )
                     {
                         if (item.HasDivider)
@@ -112,7 +112,7 @@
                     @{ Html.RenderAction("MyTeamDropdown", "Home"); }
                 </ul>
                 <div class="main-search nav-extra">
-                    <div class="input-group">
+                    <div class="input-group vertical-menu-scroll">
                         <input id="searchBar" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder=""/>
                         <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
                     </div>

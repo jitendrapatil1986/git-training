@@ -213,19 +213,19 @@ section.line-items {
 
 .opened-for {
     &-eight-plus-day {
-        background-color: #d9534f;
+        background-color: #999;
     }
 }
 
 .opened-for {
     &-less-seven-day {
-        background-color: #5cb85c;
+        background-color: #999;
     }
 }
 
 .opened-for {
     &-seven-day {
-        background-color: #0044cc;
+        background-color: #999;
     }
 }
 
@@ -383,12 +383,12 @@ section.line-items {
     font-weight: bold;
 }
 
-.deny-todo {
+.deny-todo, .no-action-todo {
     color: #d9534f;
     font-weight: bold;
 }
 
-.complete-todo {
+.complete-todo, .submit-for-approval-todo {
     color: #5cb85c;
     font-weight: bold;
 }
@@ -452,7 +452,7 @@ section.line-items {
     margin: 0;
 }
 
-.vertical-menu-scroll {
+.vertical-menu-scroll .tt-dropdown-menu{
     max-height: 30em;
     overflow-y: auto;
 }
@@ -470,7 +470,7 @@ section.line-items {
 }
 
 .label, badge {
-    &-complete-service-call, &-complete-service-line-item {
+    &-complete-service-call, &-complete-service-line-item, &-no-action-service-line-item {
         background-color: #BDC3C7;
     }
 }
@@ -1022,7 +1022,7 @@ span.boxclose{
     margin-right: 10px;
 }
 
-.additional-contacts-heading {
+.additional-contacts-heading, .job-milestones-heading {
     background-color: #ebebeb;
     padding: 10px;
     margin-top: 0px;

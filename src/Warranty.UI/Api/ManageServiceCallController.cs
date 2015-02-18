@@ -12,11 +12,16 @@
     using Warranty.Core.Features.AddServiceCallPurchaseOrder;
     using Warranty.Core.Features.CompleteServiceCallLineItem;
     using Warranty.Core.Features.DeleteServiceCall;
+    using Warranty.Core.Features.DeleteServiceCallLineNote;
+    using Warranty.Core.Features.DeleteServiceCallNote;
     using Warranty.Core.Features.EditServiceCallLineItem;
+    using Warranty.Core.Features.EditServiceCallLineItemNote;
+    using Warranty.Core.Features.EditServiceCallNote;
     using Warranty.Core.Features.ServiceCallToggleActions;
     using Warranty.Core.Features.SharedQueries;
     using Warranty.Core.Features.UpdateServiceCallLineItem;
     using Warranty.Core.Features.EditServiceCallStatus;
+    using Warranty.Core.Features.NoActionServiceCallLineItem;
     using Warranty.Core.Security;
 
     public class ManageServiceCallController: ApiController
@@ -85,6 +90,17 @@
                 {
                     ServiceCallLineItemId = model.ServiceCallLineItemId,
                 });
+
+            return result;
+        }
+
+        [HttpPost]
+        public ServiceCallLineItemStatus NoActionLineItem(NoActionServiceCallLineItemModel model)
+        {
+            var result = _mediator.Send(new NoActionServiceCallLineItemCommand
+            {
+                ServiceCallLineItemId = model.ServiceCallLineItemId,
+            });
 
             return result;
         }
@@ -161,6 +177,34 @@
         public PostResponseModel DeleteServiceCall(DeleteServiceCallCommand command)
         {
             _mediator.Send(command);
+            return new PostResponseModel { Success = true };
+        }
+
+        [HttpDelete]
+        public PostResponseModel DeleteServiceCallNote(DeleteServiceCallNoteCommand model)
+        {
+            _mediator.Send(model);
+            return new PostResponseModel {Success = true};
+        }
+
+        [HttpDelete]
+        public PostResponseModel DeleteServiceCallLineItemNote(DeleteServiceCallLineNoteCommand model)
+        {
+            _mediator.Send(model);
+            return new PostResponseModel { Success = true };
+        }
+
+        [HttpPost]
+        public PostResponseModel EditServiceCallNote(EditServiceCallNoteCommand model)
+        {
+            _mediator.Send(model);
+            return new PostResponseModel { Success = true };
+        }
+
+        [HttpPost]
+        public PostResponseModel EditServiceCallLineItemNote(EditServiceCallLineItemNoteCommand model)
+        {
+            _mediator.Send(model);
             return new PostResponseModel { Success = true };
         }
     }

@@ -55,7 +55,7 @@ namespace Warranty.Core.Features.JobSummary
         public IEnumerable<Homeowner> Homeowners { get; set; }
         public IEnumerable<Vendor> Vendors { get; set; }
         public IEnumerable<CostCodeModel> CostCodes { get; set; }
-        
+        public IEnumerable<Task> Tasks { get; set; }
 
         public class JobPayment
         {
@@ -225,6 +225,14 @@ namespace Warranty.Core.Features.JobSummary
             public string HomeownerName { get; set; }
             public string CreatedBy { get; set; }
             public DateTime? CreatedDate { get; set; }
+        }
+
+        public class Task
+        {
+            public string EmployeeName { get; set; }
+            public string Description { get; set; }
+            public TaskType TaskType { get; set; }
+            public DateTime? CompletedDate { get; set; }
         }
     }
 }

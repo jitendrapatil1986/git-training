@@ -1,0 +1,27 @@
+﻿@using Warranty.UI.Core.Helpers
+@model Warranty.Core.Features.ServiceCallsWidget.ServiceCallsWidgetModel
+
+@if (!Model.OpenServiceCalls.Any())
+{
+    <div class="well-sm">
+        <em>No calls are overdue. Hooray!</em>
+    </div>
+}
+else
+{
+<div class="panel-group" id="overdue_list">
+    @foreach (var employee in Model.RepresentativesWithOpenCalls)
+    {
+        <div class="panel list-group-item">
+            <a data-toggle="collapse" data-parent="#overdue_list" href="#collapseOpenCalls@(employee.EmployeeNumber)" class="text-capitalize accordion-toggle collapsed">@employee.Name</a> <span class="badge">@employee.ServiceCallsCount</span>
+            <div id="collapseOpenCalls@(employee.EmployeeNumber)" class="collapse panel-body">
+                @foreach (var line in Model.OpenServiceCalls.Where(x => x.AssignedToEmployeeNumber == employee.EmployeeNumber))
+                {
+                    @Html.Partial("_ServiceCallListItem", line)
+                }
+            </div>
+        </div>
+
+    }
+</div>
+}

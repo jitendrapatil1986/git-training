@@ -17,5 +17,12 @@ namespace Warranty.Core.Configurations
             get { return (decimal)this["WarrantyAmount"]; }
             set { this["WarrantyAmount"] = value; }
         }
+
+        [ConfigurationProperty("ClosedOutCommunity", IsRequired = true)]
+        public string ClosedOutCommunity
+        {
+            get { return this["ClosedOutCommunity"] as string; }
+            set { this["ClosedOutCommunity"] = value; }
+        }
     }
 }

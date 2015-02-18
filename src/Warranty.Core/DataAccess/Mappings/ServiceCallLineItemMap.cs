@@ -20,6 +20,7 @@
                     x.Column(y => y.ServiceCallLineItemStatus).WithName("ServiceCallLineItemStatusId");
                     x.Column(y => y.RootCause);
                     x.Column(y => y.RootProblem);
+                    x.Column(y => y.LastCompletedDate);
                 });
         }
     }

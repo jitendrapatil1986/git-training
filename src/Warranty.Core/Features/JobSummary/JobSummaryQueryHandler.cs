@@ -41,6 +41,7 @@ namespace Warranty.Core.Features.JobSummary
             model.CostCodes = model.Vendors.SelectMany(cc => cc.CostCodes)
                                    .Distinct()
                                    .OrderBy(x => x.CostCodeDescription);
+            model.Tasks = GetJobTasks(query.JobId);
 
             return model;
         }
@@ -62,7 +63,7 @@ namespace Warranty.Core.Features.JobSummary
                 {
                     OptionNumber = x.OptionNumber,
                     OptionDescription = x.Description
-                });
+                }).OrderBy(x => x.OptionNumber);
             }
             catch (HttpRequestException)
             {
@@ -237,6 +238,27 @@ namespace Warranty.Core.Features.JobSummary
             return result;
         }
 
+        private IEnumerable<JobSummaryModel.Task> GetJobTasks(Guid jobId)
+        {
+            const string sql = @"SELECT e.EmployeeName
+                                    , t.Description
+                                    , t.TaskType
+                                    , t.UpdatedDate as CompletedDate
+                                FROM Tasks t
+                                INNER JOIN Jobs j
+                                ON t.ReferenceId = j.JobId
+                                INNER JOIN Employees e
+                                ON t.EmployeeId = e.EmployeeId
+                                WHERE j.JobId = @0
+                                AND t.IsComplete = 1
+                                ORDER BY t.CreatedDate";
+
+            var result = _database.Fetch<JobSummaryModel.Task>(sql, jobId);
+
+            return result.Where(x => (x.TaskType.Value == TaskType.JobStage3.Value) || (x.TaskType.Value == TaskType.JobStage7.Value) ||
+                                     (x.TaskType.Value == TaskType.JobStage9.Value) || (x.TaskType.Value == TaskType.Job10MonthAnniversary.Value)).ToList(); ;
+        }
+
         private IEnumerable<JobSummaryModel.JobPayment> GetJobPayments(Guid jobId)
         {
             const string sql = @"SELECT sc.ServiceCallNumber,
@@ -309,7 +331,7 @@ namespace Warranty.Core.Features.JobSummary
                 result.Where(v => v.VendorId == x.VendorId)
                                               .Select(cc => new JobSummaryModel.Vendor.ContactInfoModel()
                                               {
-                                                  Value = cc.Type != emailIdentifier ? cc.Value.CleanPhoneNumber().ToPhoneNumberWithExtension():cc.Value,
+                                                  Value = cc.Type != emailIdentifier ? cc.Value.ToPhoneNumberWithExtension():cc.Value,
                                                   Type = cc.Type
                                               }).Distinct().OrderBy(ob => ob.Value).ToList()
             }).Distinct().OrderBy(x => x.Name).ToList();

@@ -18,13 +18,14 @@
         </div>
 
         <div class="todo-widget-element">
-            <p class="text-muted margin-bottom-5 margin-top-10 small-text">Reminder to create one year service call for this job</p>
+            <p class="text-muted margin-bottom-5 margin-top-10 small-text">Reminder to create one year walk-through for this job</p>
             <strong>@Format.HomeOwner(Model.HomeOwnerName, Model.HomeOwnerNumber)</strong>
             <br />
             @Model.AddressLine
         </div>
         <div class="todo-widget-action-buttons margin-top-10">
             <a href="#" data-task-id="@Model.TaskId" class="complete-task"><span class="glyphicon glyphicon-thumbs-up complete-todo"></span>&nbsp;Complete</a>
+            <a href="#" data-task-id="@Model.TaskId" class="no-action-task"><span class="glyphicon glyphicon-thumbs-down no-action-todo"></span>&nbsp;No Action</a>
         </div>
 
     </div>

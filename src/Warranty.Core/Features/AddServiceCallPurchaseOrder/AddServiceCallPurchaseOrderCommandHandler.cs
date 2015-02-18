@@ -1,8 +1,7 @@
 ﻿namespace Warranty.Core.Features.AddServiceCallPurchaseOrder
 {
-
     using System.Linq;
-
+    using Configurations;
     using Entities;
     using Enumerations;
     using InnerMessages;
@@ -10,6 +9,7 @@
     using Security;
     using Services;
     using NServiceBus;
+    using Extensions;
 
     public class AddServiceCallPurchaseOrderCommandHandler : ICommandHandler<AddServiceCallPurchaseOrderCommand>
     {
@@ -30,6 +30,8 @@
         {
             using (_database)
             {
+                var user = _userSession.GetCurrentUser();
+
                 var job = _database.Single<Job>(@"SELECT j.* FROM Jobs j 
                                             INNER JOIN ServiceCalls sc ON sc.JobId = j.JobId
                                             INNER JOIN ServiceCallLineItems scl ON scl.ServiceCallId = sc.ServiceCallId
@@ -58,7 +60,7 @@
                         DeliveryDate = message.DeliveryDate,
                         DeliveryInstructions = DeliveryInstruction.FromValue(message.DeliveryInstructions),
                         JobNumber = job.JobNumber,
-                        PurchaseOrderNote = message.PurchaseOrderNote,
+                        PurchaseOrderNote = message.PurchaseOrderNote.Truncate(WarrantyConstants.DefaultJdePurchaseOrderNotesLength),
                         ServiceCallLineItemId = message.ServiceCallLineItemId,
                         VendorName = message.VendorName,
                         VendorNumber = message.VendorNumber,
@@ -84,14 +86,25 @@
                         if (purchaseOrderLineItem.Quantity != 0 && !string.IsNullOrEmpty(purchaseOrderLineItem.Description) && purchaseOrderLineItem.UnitCost != 0)
                         {
                             purchaseOrderLineItem.LineNumber = lineNumber;
+                            purchaseOrderLineItem.Description = purchaseOrderLineItem.Description.Truncate(WarrantyConstants.DefaultJdePurchaseOrderLineItemDescriptionLength);
                             lineNumber += 1;
                             _database.Insert(purchaseOrderLineItem);
                         }
                     }
+
+                    var community = _database.SingleOrDefaultById<Community>(job.CommunityId);
+                    var communityNumber = community.CommunityNumber;
+
+                    if (job.IsOutOfWarranty && community.CommunityStatusCode != WarrantyConstants.DefaultActiveCommunityCode)
+                    {
+                        communityNumber = WarrantyConfigSection.GetCity(user.Markets.FirstOrDefault()).ClosedOutCommunity;
+                    }
+
                     _bus.Send<NotifyPurchaseOrderRequested>(x =>
                     {
                         x.PurchaseOrderId = purchaseOrder.PurchaseOrderId;
-                        x.LoginName = _userSession.GetCurrentUser().LoginName;
+                        x.LoginName = user.LoginName;
+                        x.CommunityNumber = communityNumber;
                     });
                 }
             }

@@ -1,4 +1,5 @@
 ﻿@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.Report.WSRLoadingReport.WSRLoadingReportModel
 
 <div class="container">
@@ -12,7 +13,6 @@
         }
     <div class="clearfix"></div>
         </section>
-    <h4 class="margin-bottom-20">Homes Under 2 Years Warranty</h4>
 @if (!User.IsInRole(UserRoles.WarrantyServiceRepresentative))
 {
     <div class="panel panel-default no-print">
@@ -48,12 +48,12 @@
         <div id="wsrLoadingSummary" class="col-md-12">
             <div class="row">
                 <div class="col-md-6">
-                    @Html.Label("Employee Name: ")
+                    @Html.Label("Team Member Name: ")
                     @Html.DisplayFor(model => model.LoadingSummaries.FirstOrDefault().EmployeeName)
                 </div>
                 <div class="col-md-6">
                     <div class="pull-right">
-                        @Html.Label("Employee Number: ")
+                        @Html.Label("Team Member Number: ")
                         @Html.DisplayFor(model => model.LoadingSummaries.FirstOrDefault().EmployeeNumber)
                     </div>
                 </div>
@@ -63,7 +63,9 @@
                 <thead>
                     <tr>
                         <th>Community Name</th>
-                        <th>Warrantable Homes</th>
+                        <th>Homes Under 1 Year</th>
+                        <th>Homes Under 2 Year</th>
+                        <th>Homes Over 2 Year</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,12 +73,16 @@
                     {
                         <tr>
                             <td>@Html.DisplayFor(model => line.CommunityName)</td>
-                            <td>@Html.DisplayFor(model => line.NumberOfWarrantableHomes)</td>
+                            <td>@Html.DisplayFor(model => line.NumberOfWarrantableHomesUnderOneYear)</td>
+                            <td>@Html.DisplayFor(model => line.NumberOfWarrantableHomesUnderTwoYear)</td>
+                            <td>@Html.DisplayFor(model => line.NumberOfNonWarrantableHomes)</td>
                         </tr>
                     }
                     <tr class="totalLine">
                         <td>Total</td>
-                        <td>@Html.DisplayFor(model => model.TotalNumberOfWarrantableHomes)</td>
+                        <td>@Html.DisplayFor(model => model.TotalWarrantableHomesUnderOneYear)</td>
+                        <td>@Html.DisplayFor(model => model.TotalWarrantableHomesUnderTwoYear)</td>
+                        <td>@Html.DisplayFor(model => model.TotalNonWarrantableHomes)</td>
                     </tr>
                 </tbody>
             </table>

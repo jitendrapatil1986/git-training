@@ -8,6 +8,7 @@
     using NServiceBus;
     using Security;
     using Services;
+    using System.Linq;
 
     public class AddPaymentCommandHandler : ICommandHandler<AddPaymentCommand, AddPaymentCommandDto>
     {
@@ -28,6 +29,8 @@
         {
             using (_database)
             {
+                var currentUser = _userSession.GetCurrentUser();
+
                 var job = _database.Single<Job>(@"SELECT j.*
                                                             FROM ServiceCallLineItems scli
                                                             INNER JOIN ServiceCalls sc
@@ -45,6 +48,16 @@
                 var rootProblem = _database.Single<string>("SELECT RootProblem FROM ServiceCallLineItems WHERE ServiceCallLineItemId=@0", message.ServiceCallLineItemId);
 
                 var costCode = RootProblem.FromDisplayName(rootProblem).CostCode;
+
+                var community = _database.SingleOrDefaultById<Community>(job.CommunityId);
+
+                var communityNumber = job.JobNumber;  //community is first 4 chs of job but accounting needs job and pulls substring.
+
+                if (job.IsOutOfWarranty && community.CommunityStatusCode != WarrantyConstants.DefaultActiveCommunityCode)
+                {
+                    communityNumber = WarrantyConfigSection.GetCity(currentUser.Markets.FirstOrDefault()).ClosedOutCommunity;
+                }
+
                 var payment = new Payment
                 {
                     Amount = message.Amount,
@@ -55,14 +68,12 @@
                     VendorNumber = message.VendorNumber,
                     VendorName = message.VendorName,
                     JobNumber = job.JobNumber,
-                    CommunityNumber = string.IsNullOrEmpty(job.JobNumber) ? "" : job.JobNumber.Substring(0, 4),
+                    CommunityNumber = communityNumber,
                     CostCode = costCode.CostCode,
                     ObjectAccount = _resolveObjectAccount.ResolveLaborObjectAccount(job, serviceCall),
                 };
 
                 _database.Insert(payment);
-
-                var currentUser = _userSession.GetCurrentUser();    
 
                 _bus.Send<NotifyPaymentRequested>(x =>
                 {

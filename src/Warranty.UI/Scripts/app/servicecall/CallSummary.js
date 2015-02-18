@@ -71,6 +71,7 @@ require(['/Scripts/app/main.js'], function () {
                     url: actionUrl,
                     data: { id: serviceCallId, message: message },
                     success: function (result) {
+                        viewModel.canUndoSpecialProject(true);
                         updateUI(result.actionName, result.actionMessage);
                         changeButtonText(parentButton);
                         parentButton.removeClass("active");
@@ -105,12 +106,6 @@ require(['/Scripts/app/main.js'], function () {
                 toastr.success("Success! Service Call has been succesfully reopened.");
             }
 
-            function completeServiceCall() {
-                viewModel.callSummaryServiceCallStatus(serviceCallStatusData.Complete.DisplayName);
-                viewModel.canBeReopened(true);
-                toastr.success("Success! Service Call has been succesfully completed.");
-            }
-            
             function updateUI(actionName, actionMessage) {
 
                 if (actionName == activityTypeEnum.Escalation.DisplayName) {
@@ -273,7 +268,10 @@ require(['/Scripts/app/main.js'], function () {
                 }
 
                 self.lineItemStatusCSS = ko.computed(function () {
-                    return self.serviceCallLineItemStatusDisplayName() ? 'label label-' + self.serviceCallLineItemStatusDisplayName().toLowerCase() + '-service-line-item' : '';
+                    var displayName = self.serviceCallLineItemStatusDisplayName().toLowerCase();
+                    displayName = displayName.replace(' ', '-');
+                    
+                    return self.serviceCallLineItemStatusDisplayName() ? 'label label-' + displayName + '-service-line-item' : '';
                 });
 
                 self.isLineItemCompleted = function () {
@@ -281,6 +279,13 @@ require(['/Scripts/app/main.js'], function () {
                         return false;
 
                     return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase() ? true : false;
+                };
+                
+                self.isLineItemNoAction = function () {
+                    if (!self.serviceCallLineItemStatusDisplayName())
+                        return false;
+
+                    return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.NoAction.DisplayName.toLowerCase() ? true : false;
                 };
 
                 self.jumpToServiceCallLineDetailPage = function () {
@@ -297,10 +302,70 @@ require(['/Scripts/app/main.js'], function () {
                 self.serviceCallNoteId = options.serviceCallNoteId;
                 self.serviceCallId = options.serviceCallId;
                 self.serviceCallLineItemId = ko.observable(options.serviceCallLineItemId);
-                self.note = options.note;
+                self.note = ko.observable(options.note).extend({ required: true });
                 self.createdBy = options.createdBy;
                 self.createdDate = options.createdDate;
                 self.serviceCallCommentTypeId = options.serviceCallCommentTypeId;
+                self.editingNote = ko.observable(false);
+                self.currentNote = ko.observable(options.note);
+
+                self.saveNoteChanges = function () {
+                    var errors = ko.validation.group(self);
+
+                    if (errors().length != 0) {
+                        viewModel.errors.showAllMessages(false);
+                        self.errors.showAllMessages();
+                        return;
+                    }
+
+                    var noteData = ko.toJSON(self);
+
+                    $.ajax({
+                        url: urls.ManageServiceCall.EditServiceCallNote,
+                        type: "POST",
+                        data: noteData,
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    })
+                        .fail(function (response) {
+                            toastr.error("There was an issue updating the note. Please try again!");
+                        })
+                        .done(function (response) {
+                            toastr.success("Success! Note updated.");
+                            self.editingNote(false);
+                            self.currentNote(self.note());
+                        });
+                };
+
+                self.cancelNoteChanges = function () {
+                    this.note(this.currentNote());
+                    this.editingNote(false);
+                };
+                
+                self.deleteNote = function (e) {
+                    var note = ko.toJSON(e);
+                    
+                    bootbox.confirm("Are you sure you want to delete this note?", function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: urls.ManageServiceCall.DeleteServiceCallNote,
+                                type: "DELETE",
+                                data: note,
+                                dataType: "json",
+                                processData: false,
+                                contentType: "application/json; charset=utf-8"
+                            })
+                            .fail(function (response) {
+                                toastr.error("There was an issue deleting the note. Please try again!");
+                            })
+                            .done(function (response) {
+                                viewModel.allCallNotes.remove(e);
+                                toastr.success("Success! Note deleted.");
+                            });
+                        }
+                    });
+                };
             }
 
             function CallAttachmentsViewModel(options) {
@@ -388,6 +453,7 @@ require(['/Scripts/app/main.js'], function () {
                 self.isSpecialProject = ko.observable(modelData.isSpecialProject);
                 self.specialProjectReason = ko.observable(modelData.specialProjectReason);
                 self.specialProjectDate = ko.observable(modelData.specialProjectDate);
+                self.canUndoSpecialProject = ko.observable(modelData.canUndoSpecialProject);
                 self.isEscalated = ko.observable(modelData.isEscalated);
                 self.escalationReason = ko.observable(modelData.escalationReason);
                 self.escalationDate = ko.observable(modelData.escalationDate);
@@ -400,12 +466,13 @@ require(['/Scripts/app/main.js'], function () {
                 self.relatedCalls = ko.observableArray([]);
 
 
-                self.areAllLineItemsCompleted = ko.computed(function () {
-                    var anyNonCompletedLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
-                        return (i.serviceCallLineItemStatusDisplayName().toLowerCase() != serviceCallStatusData.Complete.DisplayName.toLowerCase());
+                self.areAllLineItemsCompletedOrNoAction = ko.computed(function () {
+                    var anyNonCompletedOrNoActionLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
+                        return ((i.serviceCallLineItemStatusDisplayName().toLowerCase() != serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase()) &&
+                                (i.serviceCallLineItemStatusDisplayName().toLowerCase() != serviceCallLineItemStatusData.NoAction.DisplayName.toLowerCase()));
                     });
 
-                    if (anyNonCompletedLineItem)
+                    if (anyNonCompletedOrNoActionLineItem)
                         return false;
                     else
                         return true;

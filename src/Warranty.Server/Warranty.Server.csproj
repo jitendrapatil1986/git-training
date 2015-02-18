@@ -105,6 +105,9 @@
     <Compile Include="Configuration\WarrantyConstants.cs" />
     <Compile Include="EndpointConfig.cs" />
     <Compile Include="Extensions\DatabaseExtensions.cs" />
+    <Compile Include="Handlers\Communities\CommunityAddedHandler.cs" />
+    <Compile Include="Handlers\Communities\DivisionNameUpdatedHandler.cs" />
+    <Compile Include="Handlers\Communities\ProjectNameUpdatedHandler.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateAddedHandler.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobElevationUpdatedHandler.cs" />
@@ -118,6 +121,7 @@
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandler.cs" />
+    <Compile Include="Handlers\Jobs\ShowcaseAddedHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyPaymentDeletedHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyBackchargeRequestedHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyBackchargeApprovedHandler.cs" />

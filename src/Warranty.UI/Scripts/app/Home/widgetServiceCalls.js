@@ -10,4 +10,16 @@ define(['jquery'], function ($) {
             $('.my-service-call:gt("' + show + '")').addClass('hide');
         }
     });
+
+    $('.my-closed-call:lt(5)').removeClass('hide');
+
+    $('.show-more-closed-calls').click(function () {
+        if ($(this).text() == 'All') {
+            $('.my-closed-call').removeClass('hide');
+        } else {
+            var show = $(this).text() - 1;
+            $('.my-closed-call').removeClass('hide');
+            $('.my-closed-call:gt("' + show + '")').addClass('hide');
+        }
+    });
 });

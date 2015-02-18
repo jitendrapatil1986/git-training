@@ -64,17 +64,17 @@
                     </div>
                 </div>
             </div>
-                        @Html.Partial("_AdditionalContacts", Model.HomeownerId)
-    
+            @Html.Partial("_AdditionalContacts", Model.HomeownerId)
+
             <div class="col-md-12 no-left-right-padding margin-top-10">
                 <ul class="nav nav-tabs responsive" role="tablist">
                     <li class="active"><a href="#job_service_calls" role="tab" data-toggle="tab">Call History <span class="label label-default">@Model.JobServiceCalls.Count()</span></a></li>
-@* TODO: Uncomment when selections api is in production  <li><a href="#job_selections" role="tab" data-toggle="tab">Options <span class="label label-default">@Model.JobSelections.Count()</span></a></li>*@
+                    <li><a href="#job_selections" role="tab" data-toggle="tab">Options <span class="label label-default">@Model.JobSelections.Count()</span></a></li>
                     <li><a href="#job_vendors" role="tab" data-toggle="tab">Vendors <span class="label label-default">@Model.Vendors.Count()</span></a></li>
                     <li><a href="#job_payments" role="tab" data-toggle="tab">Payments <span class="label label-default">@Model.JobPayments.Count()</span></a></li>
+                    <li><a href="#job_milestones" role="tab" data-toggle="tab">Milestones <span class="label label-default">@Model.Tasks.Count()</span></a></li>
                 </ul>
 
-        
                 <div class="tab-content responsive">
                     <div class="tab-pane active" id="job_service_calls">
                         @foreach (var line in Model.JobServiceCalls.Union<dynamic>(Model.Homeowners).OrderByDescending(x => x.CreatedDate))
@@ -125,14 +125,17 @@
                                     <div class="col-md-2">
                                     @if (sc.CompletionDate == null)
                                     {
-                                        <div class="has-bottom-tooltip pull-right" style="float:right" title="@Format.DateForServiceCallWiget(sc.CreatedDate)">
-                                            <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@sc.NumberOfDaysRemaining)<br/>
-                                            <div class="progress time-remaining-progress hidden-sm hidden-xs">
-                                                <div class="progress-bar @Css.ServiceCallProgressBar(sc.NumberOfDaysRemaining)" role="progressbar" style="width: @sc.PercentComplete%">
-                                                    <span class="sr-only">@sc.PercentComplete% Complete</span>
+                                        if (!sc.IsSpecialProject)
+                                        {
+                                            <div class="has-bottom-tooltip pull-right" style="float: right" title="@Format.DateForServiceCallWiget(sc.CreatedDate)">
+                                                <span class="glyphicon glyphicon-time text-muted"></span> @Format.ServiceCallDaysLeft(@sc.NumberOfDaysRemaining)<br/>
+                                                <div class="progress time-remaining-progress hidden-sm hidden-xs">
+                                                    <div class="progress-bar @Css.ServiceCallProgressBar(sc.NumberOfDaysRemaining)" role="progressbar" style="width: @sc.PercentComplete%">
+                                                        <span class="sr-only">@sc.PercentComplete% Complete</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        }
                                     }
                                     else
                                     {
@@ -325,7 +328,7 @@
                         </div>
                     </div>
                     <div class="tab-pane" id="job_payments">
-                            <em data-bind="visible: allJobPayments().length < 1" class="padding-left-15 padding-top-7 pull-left">No Payments Available</em>
+                        <em data-bind="visible: allJobPayments().length < 1" class="padding-left-15 padding-top-7 pull-left">No Payments Available</em>
                         <div class="remove-list-style">
                             <div class="clearfix"></div>
                             <br />
@@ -397,6 +400,14 @@
                                 </div>
                             </ul>
                         </div>
+                    </div>
+                    <div class="tab-pane active" id="job_milestones">
+                        @foreach (var task in Model.Tasks)
+                        {
+                            <div class="service-call-line col-md-12 no-padding">
+                                <div class="alert alert-info no-bottom-margin"><strong>@task.Description</strong> completed by @task.EmployeeName on @Format.DateMonthDayYear(task.CompletedDate)</div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

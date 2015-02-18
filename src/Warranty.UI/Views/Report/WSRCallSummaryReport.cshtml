@@ -1,4 +1,7 @@
-﻿@model Warranty.Core.Features.Report.WSRCallSummary.WSRCallSummaryModel
+﻿@using Warranty.Core.Configurations
+@using Warranty.Core.Enumerations
+@using Warranty.Core.Extensions
+@model Warranty.Core.Features.Report.WSRCallSummary.WSRCallSummaryModel
 
 <div class="container">
     <section class="margin-bottom-10">
@@ -11,6 +14,31 @@
         }
         <div class="clearfix"></div>
     </section>
+    
+    @if (!User.IsInRole(UserRoles.WarrantyServiceRepresentative))
+    {
+    <div class="panel panel-default no-print">
+        <div class="panel-heading">
+            <div id="wsrLoadingReportFilter">
+                <div class="no-bottom-padding">
+                    <div class="row">
+                        <div class="col-md-12">
+                            @using (Html.BeginForm("WSRCallSummaryReport", "Report", FormMethod.Post, new { @class = "form-inline" }))
+                            {
+                                <div class="form-group">
+                                    @Html.DropDownList("SelectedEmployeeNumber", Model.EmployeeTiedToRepresentatives.Select(c => new SelectListItem { Text = c.EmployeeName, Value = c.EmployeeNumber.ToString() }), "Select Representative", new { @class = "form-control text-capitalize" })
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-primary" value="Run Report" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
 
     @if (!Model.AnyResults)
     {
@@ -20,35 +48,44 @@
     {
         <div class="row">
             <div id="wsrCallSummary" class="col-md-12">
-                <h4>Employee: @Model.EmployeeName</h4>
+                <h4>Team Member: @Model.EmployeeName</h4>
                 <h5>Total Number Of Open Calls: @Model.TotalNumberOfOpenServiceCalls</h5>
                 <div class="row service-call-line no-bottom-padding">
-                    <h4 class="col-xs-3">Homeowner</h4>
                     <h4 class="col-xs-3">Community</h4>
-                    <h4 class="col-xs-4">Address</h4>
+                    <h4 class="col-xs-3">Homeowner</h4>
+                    <h4 class="col-xs-3">Address</h4>
                     <h4 class="col-xs-2">Phone</h4>
+                    <h4 class="col-md-1 text-right">Days Open</h4>
                 </div>
 
                 @foreach (var serviceCall in Model.ServiceCalls)
                 {
                     <div class="row small service-call-line">
-                        <div class="col-xs-3 margin-bottom-5">@serviceCall.HomeownerName</div>
-                        <div class="col-xs-3">@serviceCall.CommunityName</div>
-                        <div class="col-xs-4">@serviceCall.Address</div>
+                        <div class="col-xs-3 margin-bottom-5">@serviceCall.CommunityName</div>
+                        <div class="col-xs-3">@serviceCall.HomeownerName</div>
+                        <div class="col-xs-3">@serviceCall.Address</div>
                         <div class="col-xs-2">
                             @if (!string.IsNullOrEmpty(serviceCall.HomePhone))
                             {
-                                @serviceCall.HomePhone
+                                @serviceCall.HomePhone.ToPhoneNumberWithExtension()
                                 if (!string.IsNullOrEmpty(serviceCall.OtherPhone))
                                 {
-                                    <span> / </span>@serviceCall.OtherPhone
+                                    <span> / </span>@serviceCall.OtherPhone.ToPhoneNumberWithExtension()
                                 }
                             }
                             else
                             {
-                                @serviceCall.OtherPhone
+                                @serviceCall.OtherPhone.ToPhoneNumberWithExtension()
                             }
                         </div>
+                        @if (serviceCall.IsSpecialProject)
+                        {
+                            <div class="col-md-1 text-right">Special Project</div>
+                        }
+                        else
+                        {
+                            <div class="col-md-1 text-right">@(Math.Abs((DateTime.Today - serviceCall.CreatedDate.Date).TotalDays))</div>
+                        }
 
                         @if(serviceCall.ServiceCallLines.Any())
                         {

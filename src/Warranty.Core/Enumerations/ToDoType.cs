@@ -16,9 +16,6 @@
         public static readonly ToDoType JobChangedTask = new ToDoType(2, "Job Changed Task",
                                                             new List<string>
                                                                 {
-                                                                    UserRoles.WarrantyAdmin,
-                                                                    UserRoles.CustomerCareManager,
-                                                                    UserRoles.WarrantyServiceCoordinator,
                                                                     UserRoles.WarrantyServiceRepresentative,
                                                                 });
 
@@ -42,6 +39,7 @@
                                                                 {
                                                                     UserRoles.CustomerCareManager,
                                                                     UserRoles.WarrantyServiceCoordinator,
+                                                                    UserRoles.WarrantyServiceRepresentative,
                                                                 });
 
         public static readonly ToDoType PaymentRequestApprovalOutOfWarranty = new ToDoType(6, "Closed Out Payments",
@@ -64,6 +62,15 @@
                                                                                    UserRoles.CustomerCareManager,
                                                                                    UserRoles.WarrantyServiceCoordinator
                                                                                });
+
+        public static readonly ToDoType JobChangedTaskApproval = new ToDoType(9, "Job Changed Task Approval",
+                                                            new List<string>
+                                                                {
+                                                                    UserRoles.WarrantyAdmin,
+                                                                    UserRoles.CustomerCareManager,
+                                                                    UserRoles.WarrantyServiceCoordinator,
+                                                                });
+
 
         private ToDoType(int value, string displayName, IEnumerable<string> userRolesWithAccess)
             : base(value, displayName)

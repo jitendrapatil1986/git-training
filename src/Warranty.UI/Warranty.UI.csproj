@@ -323,6 +323,8 @@
     <Content Include="Scripts\config\vendor-search.js" />
     <Content Include="Scripts\config\customer-search.js" />
     <Content Include="Scripts\lib\bootstrap-editable.min.js" />
+    <Content Include="Scripts\lib\bootstrap-maxlength.js" />
+    <Content Include="Scripts\lib\bootstrap-maxlength.min.js" />
     <Content Include="Scripts\lib\jquery.hideseek.min.js" />
     <Content Include="Scripts\lib\knockout.x-editable.min.js" />
     <Content Include="Scripts\lib\handlebars.amd.js" />
@@ -403,7 +405,7 @@
     <Content Include="Views\ServiceCall\Close.cshtml" />
     <Content Include="Views\ServiceCall\RequestPayment.cshtml" />
     <Content Include="Views\Home\_MyServiceCalls.cshtml" />
-    <Content Include="Views\Home\_OverdueCalls.cshtml" />
+    <Content Include="Views\Home\_OpenCalls.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Home\_SpecialProjects.cshtml" />
     <Content Include="Views\Home\MyTeamWidget.cshtml" />
@@ -458,6 +460,9 @@
     <Content Include="Views\WarrantyMailer\ServiceCallCompleted.cshtml" />
     <Content Include="Views\Report\WSRSummaryReport.cshtml" />
     <Content Include="Views\Report\WSRCallSummaryReport.cshtml" />
+    <Content Include="Views\Home\_ClosedCalls.cshtml" />
+    <Content Include="Views\Home\_ToDoJobChangedTaskApproval.cshtml" />
+    <Content Include="Views\Report\WSROpenedClosedCallReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

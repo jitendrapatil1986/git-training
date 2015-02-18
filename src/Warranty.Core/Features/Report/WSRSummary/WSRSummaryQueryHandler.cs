@@ -1,5 +1,6 @@
 ﻿namespace Warranty.Core.Features.Report.WSRSummary
 {
+    using Enumerations;
     using NPoco;
     using Security;
     using Common.Extensions;
@@ -43,7 +44,7 @@
                                     SELECT e.EmployeeId, COUNT(*) as NumberOfOpenServiceCalls from ServiceCalls sc
                                     INNER JOIN Employees e
                                     ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-                                    WHERE sc.ServiceCallStatusId = 2
+                                    WHERE sc.ServiceCallStatusId = @2
                                     GROUP BY e.EmployeeId
                                     ) a
                                     INNER JOIN
@@ -87,7 +88,7 @@
                                     ON wsr.EmployeeId = summary.EmployeeId
                                     ORDER BY EmployeeName";
                 
-                model.WSRSummaryLines = _database.Fetch<WSRSummaryModel.WSRSummaryLine>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()), -2, SystemTime.Today);
+                model.WSRSummaryLines = _database.Fetch<WSRSummaryModel.WSRSummaryLine>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()), -2, SystemTime.Today, ServiceCallStatus.Open.Value);
                 model.WSRSummaryLines.ForEach(x => x.EmployeeName = x.EmployeeName.ToTitleCase());
                 return model;
             }

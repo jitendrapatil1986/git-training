@@ -11,7 +11,9 @@
 
         public string SelectedEmployeeNumber { get; set; }
         public bool AnyResults { get; set; }
-        public int TotalNumberOfWarrantableHomes { get; set; }
+        public int TotalWarrantableHomesUnderOneYear { get; set; }
+        public int TotalWarrantableHomesUnderTwoYear { get; set; }
+        public int TotalNonWarrantableHomes { get; set; }
 
         public class LoadingSummary
         {
@@ -19,7 +21,9 @@
             public string EmployeeName { get; set; }
             public Guid CommunityId { get; set; }
             public string CommunityName { get; set; }
-            public int NumberOfWarrantableHomes { get; set; }
+            public int NumberOfWarrantableHomesUnderOneYear { get; set; }
+            public int NumberOfWarrantableHomesUnderTwoYear { get; set; }
+            public int NumberOfNonWarrantableHomes { get; set; }
         }
 
         public class EmployeeTiedToRepresentative
