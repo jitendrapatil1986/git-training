@@ -34,7 +34,7 @@
 
                 _database.Update(backcharge);
 
-                _activityLogger.Write("Backcharge approval requested", string.Empty, backcharge.PaymentId, ActivityType.BackchargeApprove, ReferenceType.LineItem);
+                _activityLogger.Write("Backcharge approval requested", string.Empty, backcharge.PaymentId ?? backcharge.BackchargeId, ActivityType.BackchargeApprove, ReferenceType.LineItem);
 
                 _bus.Send<NotifyBackchargeApproved>(x =>
                     {

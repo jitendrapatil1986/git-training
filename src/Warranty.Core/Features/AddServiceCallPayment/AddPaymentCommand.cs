@@ -20,5 +20,6 @@
         public DateTime PersonNotifiedDate { get; set; }
         public string BackchargeResponseFromVendor { get; set; }
         public int SelectedCostCode { get; set; }
+        public bool IsStandAloneBackcharge { get; set; }
     }
 }
