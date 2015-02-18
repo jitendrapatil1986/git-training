@@ -126,10 +126,10 @@
                         Month = range.MonthNumber,
                         Year = range.YearNumber,
                         NumerOfCalls = averageDays.Sum(x=>x.TotalElements),
-                        NmberOfSurveys = excellentService.Sum(x=>x.TotalElements),
+                        NumberOfSurveys = excellentService.Sum(x=>x.TotalElements),
                     });
             }
-            var lalo = new SaltlineReportModel.SaltlineSummary
+            return new SaltlineReportModel.SaltlineSummary
             {
                 AmountSpentPerHome = list.Average(x => x.AmountSpentPerHome),
                 AverageDaysClosing = list.Average(x => x.AverageDaysClosing),
@@ -138,11 +138,9 @@
                 RightTheFirstTime = list.Where(x=>x.RightTheFirstTime != null).Average(x => x.RightTheFirstTime),
                 PercentComplete7Days = list.Average(x => x.PercentComplete7Days),
                 NumerOfCalls = averageDays.Sum(x => x.TotalElements),
-                NmberOfSurveys = excellentService.Sum(x => x.TotalElements),
+                NumberOfSurveys = excellentService.Sum(x => x.TotalElements),
                 NumberOfHomes = amountSpent.Sum(x => x.TotalElements)
             };
-
-            return lalo;
         }
 
         private decimal? GetValueForMonth(IEnumerable<CalculatorResult> results, MonthYearModel range)
