@@ -57,7 +57,7 @@ namespace Warranty.Core.ToDoInfrastructure
                 {
                     var taskJobChangedToDos = GetJobChangedTaskToDos(user, _database, TaskType.JobStage3).ToList();
                     taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage7));
-                    taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage9));
+                    taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage10));
 
                     //Pull deprecated job task type ToDos for users to complete for those created before the new job task types.
                     taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStageChanged));
@@ -197,7 +197,7 @@ namespace Warranty.Core.ToDoInfrastructure
                                 AND IsComplete = 0";
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
-            var toDos = database.Fetch<ToDoJobChangedTaskApproval, ToDoJobChangedTaskApprovalModel>(query, TaskType.JobStage9Approval.Value);
+            var toDos = database.Fetch<ToDoJobChangedTaskApproval, ToDoJobChangedTaskApprovalModel>(query, TaskType.JobStage10Approval.Value);
 
             return toDos;
         }

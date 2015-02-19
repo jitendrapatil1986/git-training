@@ -20,7 +20,7 @@
             using (_database)
             {
                 var employeeId = _database.ExecuteScalar<Guid>("Select EmployeeId from CommunityAssignments where CommunityId = @0", entity.CommunityId);
-                if (employeeId != Guid.Empty && (entity.Stage == 3 || entity.Stage == 7 || entity.Stage == 9))
+                if (employeeId != Guid.Empty && (entity.Stage == 3 || entity.Stage == 7 || entity.Stage == 10))
                 {
                     var description = String.Empty;
                     var taskType = TaskType.JobStageChanged;
@@ -35,9 +35,9 @@
                             description = "Contact builder to coordinate a 244 walk. Job # {0}";
                             taskType = TaskType.JobStage7;
                             break;
-                        case 9:
+                        case 10:
                             description = "Contact homeowner to coordinate warranty orientation. Job # {0}";
-                            taskType = TaskType.JobStage9;
+                            taskType = TaskType.JobStage10;
                             break;
                     }
 
