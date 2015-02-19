@@ -65,11 +65,49 @@
 
                 using (_database)
                 {
-                    const string sql = @"SELECT d.DivisionName, e.EmployeeName, e.EmployeeNumber, a.CommunityId, c.CommunityName, a.NumberOfWarrantableHomes, e.EmployeeId, ISNULL(b.TotalDollarsSpent, 0) as TotalDollarsSpent,
-                                            ISNULL(b.MaterialDollarsSpent, 0) as MaterialDollarsSpent, ISNULL(b.LaborDollarsSpent, 0) as LaborDollarsSpent, ISNULL(b.OtherMaterialDollarsSpent, 0) as OtherMaterialDollarsSpent, 
-                                            ISNULL(b.OtherLaborDollarsSpent, 0) as OtherLaborDollarsSpent,
-                                            ISNULL((a.NumberofWarrantableHomes * @4), 0) as TotalWarrantyAllowance,
-                                            (ISNULL((a.NumberOfWarrantableHomes * @4), 0) - ISNULL(b.TotalDollarsSpent, 0)) as TotalWarrantyDifference
+                    const string sql = @"; WITH AllWarrantyPayments (FiscalYear, Month, Year, CostCenter, ObjectAccount, Amount, CommunityNumber, FirstDayOfMonth, LastDayOfMonth)
+                                            AS
+                                            (
+                                                SELECT *, 
+                                                    SUBSTRING(CostCenter, 1, 4) as CommunityNumber,
+                                                    CONVERT(DATE, CONVERT(VARCHAR, Month) + '-1-' + CONVERT(VARCHAR, Year)) as FirstDayOfMonth ,
+                                                    DATEADD(DD, -1, DATEADD(MM, 1, CONVERT(DATE, CONVERT(VARCHAR, Month) + '-1-' + CONVERT(VARCHAR, Year)))) as LastDayOfMonth 
+                                                FROM
+                                                (
+                                                    SELECT GBFY as FiscalYear,
+                                                        CASE WHEN MonthAbbr = 'JAN' THEN 1
+                                                            WHEN MonthAbbr = 'FEB' THEN 2
+                                                            WHEN MonthAbbr = 'MAR' THEN 3
+                                                            WHEN MonthAbbr = 'APR' THEN 4
+                                                            WHEN MonthAbbr = 'MAY' THEN 5
+                                                            WHEN MonthAbbr = 'JUN' THEN 6
+                                                            WHEN MonthAbbr = 'JUL' THEN 7
+                                                            WHEN MonthAbbr = 'AUG' THEN 8
+                                                            WHEN MonthAbbr = 'SEP' THEN 9
+                                                            WHEN MonthAbbr = 'OCT' THEN 10
+                                                            WHEN MonthAbbr = 'NOV' THEN 11
+                                                            WHEN MonthAbbr = 'DEC' THEN 12
+                                                            ELSE 0
+                                                        END as Month,
+                                                        CASE WHEN LEN(GBFY) = 1 THEN RIGHT('200' + CAST(GBFY as VARCHAR(4)), 4)
+                                                            WHEN LEN(GBFY) = 2 THEN RIGHT('20' + CAST(GBFY as VARCHAR(4)), 4)
+                                                            ELSE 0
+                                                        END as Year,
+                                                        LTRIM(GBMCU) as CostCenter,
+                                                        GBOBJ as ObjectAccount,
+                                                        Amount
+                                                    FROM tmp_JDE_GL_War_Buckets
+                                                    UNPIVOT (Amount
+                                                    FOR MonthAbbr IN (JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, [DEC]))
+                                                    AS UNPVTTable
+                                                ) a
+                                            )
+
+                                            SELECT d.DivisionName, e.EmployeeName, e.EmployeeNumber, a.CommunityId, c.CommunityName, a.NumberOfWarrantableHomes, e.EmployeeId, ISNULL(b.TotalDollarsSpent, 0) as TotalDollarsSpent,
+                                                ISNULL(b.MaterialDollarsSpent, 0) as MaterialDollarsSpent, ISNULL(b.LaborDollarsSpent, 0) as LaborDollarsSpent, ISNULL(b.OtherMaterialDollarsSpent, 0) as OtherMaterialDollarsSpent, 
+                                                ISNULL(b.OtherLaborDollarsSpent, 0) as OtherLaborDollarsSpent,
+                                                ISNULL((a.NumberofWarrantableHomes * @4), 0) as TotalWarrantyAllowance,
+                                                (ISNULL((a.NumberOfWarrantableHomes * @4), 0) - ISNULL(b.TotalDollarsSpent, 0)) as TotalWarrantyDifference
                                             FROM
                                             (
                                                 SELECT COUNT(*) as NumberOfWarrantableHomes, j.CommunityId, e.EmployeeId
@@ -92,34 +130,34 @@
                                             ON c.CommunityId = a.CommunityId
                                             LEFT JOIN
                                             (
-                                                SELECT  c.[CommunityId],
-                                                        e.[EmployeeId],
-                                                        SUM(Amount) as TotalDollarsSpent,
-                                                        SUM(CASE WHEN [ObjectAccount] = '9425' THEN Amount ELSE 0 END) as MaterialDollarsSpent,
-                                                        SUM(CASE WHEN [ObjectAccount] = '9430' THEN Amount ELSE 0 END) as LaborDollarsSpent,
-                                                        SUM(CASE WHEN [ObjectAccount] = '9435' THEN Amount ELSE 0 END) as OtherMaterialDollarsSpent,
-                                                        SUM(CASE WHEN [ObjectAccount] = '9440' THEN Amount ELSE 0 END) as OtherLaborDollarsSpent
-                                                FROM Payments p
-                                                INNER JOIN Jobs j
-                                                ON p.JobNumber = j.JobNumber
-                                                INNER JOIN Communities c
-                                                ON j.CommunityId = c.CommunityId
-                                                INNER JOIN Cities cc
-                                                ON c.CityId = cc.CityId
-                                                INNER JOIN CommunityAssignments ca
-                                                ON c.CommunityId = ca.CommunityId
-                                                INNER JOIN Employees e
-                                                ON ca.EmployeeId = e.EmployeeId
-                                                    AND EmployeeNumber = @3
-                                                WHERE
-                                                cc.CityCode = @5
-                                                AND MONTH(p.PaidDate) = MONTH(@1)
-                                                AND YEAR(p.PaidDate) = YEAR(@1)
-                                                AND p.PaidDate >= j.CloseDate
-                                                AND p.PaidDate <= DATEADD(yy, @0, j.CloseDate)
-                                                AND p.PaymentStatus = @6
-                                                AND p.PaidDate IS NOT NULL
-                                                GROUP BY c.[CommunityId], e.[EmployeeId]
+                                                SELECT [CommunityId],
+                                                    [EmployeeId],
+                                                    SUM(Amount) as TotalDollarsSpent,
+                                                    SUM(CASE WHEN [ObjectAccount] = '9425' THEN Amount ELSE 0 END) as MaterialDollarsSpent,
+                                                    SUM(CASE WHEN [ObjectAccount] = '9430' THEN Amount ELSE 0 END) as LaborDollarsSpent,
+                                                    SUM(CASE WHEN [ObjectAccount] = '9435' THEN Amount ELSE 0 END) as OtherMaterialDollarsSpent,
+                                                    SUM(CASE WHEN [ObjectAccount] = '9440' THEN Amount ELSE 0 END) as OtherLaborDollarsSpent
+                                                FROM 
+                                                (
+                                                    SELECT DISTINCT p.*, c.CommunityId, e.EmployeeId FROM AllWarrantyPayments p
+                                                    INNER JOIN Communities c
+                                                        ON p.CommunityNumber = c.CommunityNumber
+                                                    INNER JOIN Jobs j
+                                                        ON c.CommunityId = j.CommunityId
+                                                    INNER JOIN Cities cc
+                                                        ON c.CityId = cc.CityId
+                                                    INNER JOIN CommunityAssignments ca
+                                                        ON c.CommunityId = ca.CommunityId
+                                                    INNER JOIN Employees e
+                                                        ON ca.EmployeeId = e.EmployeeId
+                                                        AND EmployeeNumber=@3
+                                                    WHERE
+                                                        cc.CityCode = @5
+                                                        AND p.FirstDayOfMonth >= @1
+                                                        AND p.LastDayOfMonth <= @2
+                                                        AND p.LastDayOfMonth <= DATEADD(yy, @0, j.CloseDate)
+                                                ) payments
+                                                GROUP BY [CommunityId], [EmployeeId]
                                             ) b
                                             ON a.[CommunityId] = b.[CommunityId]
                                             INNER JOIN Divisions d
@@ -128,7 +166,7 @@
                                             ON a.EmployeeId = e.EmployeeId
                                             ORDER BY c.CommunityName";
 
-                    result = _database.Fetch<WarrantyBonusSummaryModel.BonusSummary>(sql, 2, query.Model.StartDate, query.Model.EndDate, employeeNumber, dollarsSpent, market, PaymentStatus.Paid.Value);
+                    result = _database.Fetch<WarrantyBonusSummaryModel.BonusSummary>(sql, 2, query.Model.StartDate, query.Model.EndDate, employeeNumber, dollarsSpent, market);
                 }
             }
 
