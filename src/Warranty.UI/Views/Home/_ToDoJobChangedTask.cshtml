@@ -13,6 +13,20 @@
 
         <div class="todo-widget-element">
             <small class="text-muted">@Model.Description</small>
+            @if (Model.TaskType.Value == TaskType.JobStage10.Value)
+            {
+                <br/>
+                <small class="text-capitalize margin-top-10">
+                    <strong>@Model.HomeownerName</strong>
+                    <br/>
+                    @Format.PhoneNumberOnMobile(Format.PhoneNumberWithExtension(Model.HomePhone))
+                    <span class="hidden-xs">
+                        @Format.PhoneNumber(Format.PhoneNumberWithExtension(Model.HomePhone))
+                        <br/>
+                    </span>
+                    @Model.Address, @Model.City, @Model.StateCode @Model.PostalCode
+                </small>
+            }
         </div>
         <div class="todo-widget-element  margin-top-10">
             <small class="text-muted">

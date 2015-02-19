@@ -272,15 +272,28 @@ namespace Warranty.Core.ToDoInfrastructure
 
         private static IEnumerable<TTask> GetToDoTasks<TTask, TModel>(IUser user, IDatabase database, TaskType taskType) where TTask : IToDo where TModel : class
         {
-            const string query = @"SELECT t.CreatedDate [Date], TaskType, Description, TaskId,  j.JobId, j.JobNumber
-                                    FROM 
-                                        [Tasks] t
-                                    INNER join Employees e
-                                        ON e.EmployeeId = t.EmployeeId
-                                    INNER JOIN Jobs j
-                                        ON t.ReferenceId = j.JobId
-                                    where 
-                                        e.EmployeeNumber = @0 and t.TaskType=@1 and t.IsComplete = 0";
+            var query = @"SELECT t.CreatedDate [Date], TaskType, Description, TaskId,  j.JobId, j.JobNumber
+                            FROM 
+                                [Tasks] t
+                            INNER join Employees e
+                                ON e.EmployeeId = t.EmployeeId
+                            INNER JOIN Jobs j
+                                ON t.ReferenceId = j.JobId
+                            where 
+                                e.EmployeeNumber = @0 and t.TaskType=@1 and t.IsComplete = 0";
+
+            if (taskType == TaskType.JobStage10)
+            {
+                query = @"SELECT t.CreatedDate [Date], TaskType, Description, TaskId,  j.JobId, j.JobNumber, j.AddressLine Address, j.City, j.StateCode, j.PostalCode, ho.HomeownerName, ho.HomePhone
+                            FROM [Tasks] t
+                            INNER join Employees e
+                                ON e.EmployeeId = t.EmployeeId
+                            INNER JOIN Jobs j
+                                ON t.ReferenceId = j.JobId
+                            LEFT JOIN HomeOwners ho
+                                ON j.CurrentHomeOwnerId = ho.HomeOwnerId
+                            where e.EmployeeNumber = @0 and t.TaskType=@1 and t.IsComplete = 0";
+            }
 
             var toDos = database.Fetch<TTask, TModel>(query, user.EmployeeNumber, taskType.Value);
 
