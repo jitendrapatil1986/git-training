@@ -6,7 +6,7 @@
     public class Backcharge : IAuditableEntity
     {
         public Guid BackchargeId { get; set; }
-        public Guid PaymentId { get; set; }
+        public Guid? PaymentId { get; set; }
         public string BackchargeVendorNumber { get; set; }
         public string BackchargeVendorName { get; set; }
         public decimal BackchargeAmount { get; set; }
@@ -28,5 +28,8 @@
         public BackchargeStatus BackchargeStatus { get; set; }
         public string Username { get; set; }
         public string EmployeeNumber { get; set; }
+        public string JobNumber { get; set; }
+        public Guid? ServiceCallLineItemId { get; set; }
+        public string ObjectAccount { get; set; }
     }
 }

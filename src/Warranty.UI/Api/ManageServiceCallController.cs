@@ -153,6 +153,12 @@
         }
 
         [HttpPost]
+        public AddStandAloneBackchargeCommandDto AddStandAloneBackcharge(AddStandAloneBackchargeCommand model)
+        {
+            return _mediator.Send(model); ;
+        }
+
+        [HttpPost]
         public string ApproveBackcharge(ApproveBackchargeCommand model)
         {
             var response = _mediator.Send(model);
