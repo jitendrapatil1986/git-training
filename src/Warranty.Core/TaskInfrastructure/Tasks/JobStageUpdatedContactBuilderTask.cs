@@ -28,15 +28,15 @@
                     switch (entity.Stage)
                     {
                         case 3:
-                            description = "Contact builder to coordinate a warranty introduction. Job # {0}";
+                            description = "Job is at Stage 3 - time to schedule a warranty introduction.";
                             taskType = TaskType.JobStage3;
                             break;
                         case 7:
-                            description = "Contact builder to coordinate a 244 walk. Job # {0}";
+                            description = "Job is at Stage 7 - time to schedule a 244 walk.";
                             taskType = TaskType.JobStage7;
                             break;
                         case 10:
-                            description = "Contact homeowner to coordinate warranty orientation. Job # {0}";
+                            description = "Job is at Stage 10 - time to schedule a warranty orientation.";
                             taskType = TaskType.JobStage10;
                             break;
                     }
@@ -44,7 +44,7 @@
                     var task = new Task
                     {
                         EmployeeId = employeeId,
-                        Description = String.Format(description, entity.JobNumber),
+                        Description = description,
                         ReferenceId = entity.JobId,
                         TaskType = taskType,
                     };
