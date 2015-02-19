@@ -26,8 +26,8 @@
                     var jobStage9ApprovalTask = new Task
                         {
                             EmployeeId = task.EmployeeId,
-                            TaskType = TaskType.JobStage9Approval,
-                            Description = TaskType.JobStage9Approval.DisplayName,
+                            TaskType = TaskType.JobStage10Approval,
+                            Description = TaskType.JobStage10Approval.DisplayName,
                             ReferenceId = task.ReferenceId,
                         };
                     _database.Insert(jobStage9ApprovalTask);
