@@ -47,6 +47,7 @@ require.config({
         'jquery.maskedinput': ['jquery'],
         'hideseek': ['jquery'],
         'maxlength': ['jquery'],
+        'typeahead': ['jquery'],
     },
     callback: function () {
         require(['app/feedbackForm', 'app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields', 'app/responsiveTabs']);
