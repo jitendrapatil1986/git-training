@@ -38,7 +38,7 @@
                     PaymentAmount = payment == null ? 0 : payment.Amount,
                     PaymentInvoiceNumber = payment == null ? "" : payment.InvoiceNumber,
                     Username = message.Username,
-                    PaymentVendorNumber = payment == null ? "" : payment.VendorNumber,
+                    PaymentVendorNumber = payment == null ? null : payment.VendorNumber,
                     CostCode = backcharge.CostCode,
                     ProgramId = WarrantyConstants.ProgramId,
                     ObjectAccount = payment == null ? backcharge.ObjectAccount : payment.ObjectAccount,
