@@ -47,13 +47,13 @@
             using (_database)
             {
                 const string sql = @"SELECT EmployeeNumber, EmployeeName, NumberCallsBeforeTimeframe, NumberCallsOpenedDuringTimeframe, NumberCallsClosedDuringTimeframe,
-                                        NumberCallsBeforeTimeframe + NumberCallsOpenedDuringTimeframe + NumberCallsClosedDuringTimeframe AS NumberCallsAfterTimeframe
+                                        NumberCallsBeforeTimeframe + NumberCallsOpenedDuringTimeframe - NumberCallsClosedDuringTimeframe AS NumberCallsAfterTimeframe
                                     FROM
                                     (
                                     SELECT e.EmployeeNumber, e.EmployeeName,
-                                        SUM(CASE WHEN (sc.CreatedDate < @0) AND (sc.ServiceCallStatusId <> @2) THEN 1 ELSE 0 END) as NumberCallsBeforeTimeframe,
-                                        SUM(CASE WHEN (sc.CreatedDate BETWEEN @0 AND @1) AND (sc.ServiceCallStatusId = @3) THEN 1 ELSE 0 END) as NumberCallsOpenedDuringTimeframe,
-                                        SUM(CASE WHEN (sc.CreatedDate BETWEEN @0 AND @1) AND (sc.ServiceCallStatusId = @4) THEN 1 ELSE 0 END) as NumberCallsClosedDuringTimeframe
+                                        SUM(CASE WHEN (sc.CreatedDate < @0) AND (sc.ServiceCallStatusId = @2) THEN 1 ELSE 0 END) as NumberCallsBeforeTimeframe,
+                                        SUM(CASE WHEN (sc.CreatedDate BETWEEN @0 AND @1) AND (sc.ServiceCallStatusId = @2) THEN 1 ELSE 0 END) as NumberCallsOpenedDuringTimeframe,
+                                        SUM(CASE WHEN (sc.CreatedDate BETWEEN @0 AND @1) AND (sc.ServiceCallStatusId = @3) THEN 1 ELSE 0 END) as NumberCallsClosedDuringTimeframe
                                     FROM ServiceCalls sc
                                     INNER JOIN Jobs j
                                     ON sc.JobId = j.JobId
@@ -65,13 +65,13 @@
                                     ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
                                     WHERE ci.CityCode IN ({0})
                                     AND sc.CreatedDate <= @1
-                                    AND e.EmployeeNumber <> @5
+                                    AND e.EmployeeNumber <> @4
                                     GROUP BY e.EmployeeNumber, e.EmployeeName
                                     ) a
                                     ORDER BY EmployeeName";
 
                 var results = _database.Fetch<WSROpenedClosedCallsModel.WSRSummaryLine>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()), startdate, endDate,
-                                ServiceCallStatus.Requested.Value, ServiceCallStatus.Open.Value, ServiceCallStatus.Complete.Value, user.EmployeeNumber);
+                                ServiceCallStatus.Open.Value, ServiceCallStatus.Complete.Value, user.EmployeeNumber);
 
                 var serviceCallMarket = user.Markets.First();
 
