@@ -130,6 +130,8 @@
     <Compile Include="Features\AddServiceCallPayment\AddStandAloneBackchargeCommand.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddStandAloneBackchargeCommandDto.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddStandAloneBackchargeCommandHandler.cs" />
+    <Compile Include="Features\AddServiceCallPayment\DeleteBackchargeCommand.cs" />
+    <Compile Include="Features\AddServiceCallPayment\DeleteBackchargeCommandHandler.cs" />
     <Compile Include="Features\DeleteServiceCallLineNote\DeleteServiceCallLineNoteCommand.cs" />
     <Compile Include="Features\DeleteServiceCallLineNote\DeleteServiceCallLineNoteCommandHandler.cs" />
     <Compile Include="Features\DeleteServiceCallLineNote\DeleteServiceCallLineNoteModel.cs" />

@@ -253,15 +253,23 @@
                                                             {
                                                                 <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="visible: shouldDisplayApproveBackcharge, click: approveBackcharge">Approve</a>
                                                                 <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10 btn-action-with-popup hidden-xs" data-bind="visible: shouldDisplayHoldBackcharge, attr: {id:'btn_holdBackcharge-' + backchargeId}, click: displayHoldBackcharge">Hold</a>
+                                                                <button class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="visible: shouldDisplayDenyBackcharge, click:displayDenyBackcharge">Deny</button>
                                                             }
-                                                            <button class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="visible: shouldDisplayDenyBackcharge, click:displayDenyBackcharge">Deny</button>
+                                                            else
+                                                            {
+                                                                <button class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="visible: shouldDisplayDeleteBackcharge, click:deleteBackcharge">Delete</button>
+                                                            }
                                                     
                                                             @if (Model.CanTakeActionOnPayments)
                                                             {
                                                                 <a href="#" class="btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayApproveBackcharge, click: approveBackcharge">Approve</a>
                                                                 <a href="#" class="btn btn-default btn-sm margin-right-10 btn-action-with-popup hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayHoldBackcharge, attr: {id:'btn_denyBackcharge-' + backchargeId}, click: displayHoldBackcharge">Hold</a>
+                                                                <button class="btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayDenyBackcharge, click:displayDenyBackcharge">Deny</button>
                                                             }
-                                                            <button class="btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayDenyBackcharge, click:displayDenyBackcharge">Deny</button>
+                                                            else
+                                                            {
+                                                                <button class="btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayDeleteBackcharge, click:deleteBackcharge">Delete</button>
+                                                            }
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12 margin-top-10 margin-bottom-10">
@@ -322,7 +330,7 @@
                                                     <div class="row col-md-12 margin-top-10">
                                                         <div class="col-md-12">
                                                             <small>
-                                                                @Html.Label("Comments", new { @class = "control-label"})<br/>
+                                                                @Html.Label("Comments", new { @class = "control-label" })<br/>
                                                                 <span data-bind="text: comments"></span>
                                                             </small>
                                                         </div>
@@ -474,7 +482,7 @@
                                             <small><span data-bind="text: moment(createdDate).format('L')"></span></small>
                                         </div>
                                         <div class="form-group" data-bind="validationElement: note">
-                                            @Html.TextArea( "Description", null, new { id = "editLineNote", @class = "form-control edit", data_bind = "text: note, value: note, valueUpdate: 'afterkeydown'", @rows = 3 })
+                                            @Html.TextArea("Description", null, new { id = "editLineNote", @class = "form-control edit", data_bind = "text: note, value: note, valueUpdate: 'afterkeydown'", @rows = 3 })
                                         </div>
                                         <p data-bind="text: note" class="view"></p>
                                     </div>
@@ -535,7 +543,7 @@
                 rootProblemCodes: @Html.Raw(@RootProblem.GetAllNonDeprecated().OrderBy(x => x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName }).ToJson()),
                 noActionRootCauseCode: @Html.Raw(@RootCause.NoAction.ToJson()),
                 noActionRootProblemCode: @Html.Raw(@RootProblem.NoAction.ToJson()),
-                paymentTypes: @Html.Raw(@PaymentTypes.GetAll().OrderBy(x => x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName}).ToJson()),
+                paymentTypes: @Html.Raw(@PaymentTypes.GetAll().OrderBy(x => x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName }).ToJson()),
                 standAloneBackchargePaymentType: @Html.Raw(@PaymentTypes.StandAloneBackcharge.ToJson()),
                 paymentPaymentType: @Html.Raw(@PaymentTypes.Payment.ToJson()),
             }

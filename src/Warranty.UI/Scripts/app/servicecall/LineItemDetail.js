@@ -213,6 +213,24 @@
                         });
                     };
 
+                    self.deleteBackcharge = function () {
+                        var backcharge = this;
+                        bootbox.confirm("Are you sure you want to delete this backcharge?", function (result) {
+                            if (result) {
+                                var actionUrl = urls.ManageServiceCall.DeleteStandAloneBackcharge;
+                                $.ajax({
+                                    type: "DELETE",
+                                    url: actionUrl,
+                                    data: { BackchargeId: backcharge.backchargeId },
+                                    success: function () {
+                                        viewModel.allPaymentsAndBackcharges.remove(backcharge);
+                                        toastr.success("Success! Backcharge deleted.");
+                                    }
+                                });
+                            }
+                        });
+                    };
+                    
                     self.shouldDisplayHoldPayment = ko.computed(function () {
                         return self.paymentStatusDisplayName() == paymentStatusEnum.Pending.DisplayName;
                     });
@@ -258,6 +276,10 @@
                     
                     self.shouldDisplayHoldBackcharge = ko.computed(function () {
                         return self.backchargeStatusDisplayName() == backchargeStatusEnum.Pending.DisplayName;
+                    });
+                    
+                    self.shouldDisplayDeleteBackcharge = ko.computed(function () {
+                        return self.backchargeStatusDisplayName() == backchargeStatusEnum.Pending.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName;
                     });
                                         
                     self.cancelPopup = function (item, event) {
