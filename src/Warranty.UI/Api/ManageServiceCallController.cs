@@ -158,6 +158,13 @@
             return _mediator.Send(model); ;
         }
 
+        [System.Web.Http.HttpDelete]
+        public string DeleteStandAloneBackcharge(DeleteBackchargeCommand model)
+        {
+            _mediator.Send(model);
+            return "success";
+        }
+
         [HttpPost]
         public string ApproveBackcharge(ApproveBackchargeCommand model)
         {
