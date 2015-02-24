@@ -57,7 +57,7 @@ namespace Warranty.Core.ToDoInfrastructure
                 {
                     var taskJobChangedToDos = GetJobChangedTaskToDos(user, _database, TaskType.JobStage3).ToList();
                     taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage7));
-                    taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage9));
+                    taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage10));
 
                     //Pull deprecated job task type ToDos for users to complete for those created before the new job task types.
                     taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStageChanged));
@@ -197,7 +197,7 @@ namespace Warranty.Core.ToDoInfrastructure
                                 AND IsComplete = 0";
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
-            var toDos = database.Fetch<ToDoJobChangedTaskApproval, ToDoJobChangedTaskApprovalModel>(query, TaskType.JobStage9Approval.Value);
+            var toDos = database.Fetch<ToDoJobChangedTaskApproval, ToDoJobChangedTaskApprovalModel>(query, TaskType.JobStage10Approval.Value);
 
             return toDos;
         }
@@ -272,15 +272,28 @@ namespace Warranty.Core.ToDoInfrastructure
 
         private static IEnumerable<TTask> GetToDoTasks<TTask, TModel>(IUser user, IDatabase database, TaskType taskType) where TTask : IToDo where TModel : class
         {
-            const string query = @"SELECT t.CreatedDate [Date], TaskType, Description, TaskId,  j.JobId, j.JobNumber
-                                    FROM 
-                                        [Tasks] t
-                                    INNER join Employees e
-                                        ON e.EmployeeId = t.EmployeeId
-                                    INNER JOIN Jobs j
-                                        ON t.ReferenceId = j.JobId
-                                    where 
-                                        e.EmployeeNumber = @0 and t.TaskType=@1 and t.IsComplete = 0";
+            var query = @"SELECT t.CreatedDate [Date], TaskType, Description, TaskId,  j.JobId, j.JobNumber
+                            FROM 
+                                [Tasks] t
+                            INNER join Employees e
+                                ON e.EmployeeId = t.EmployeeId
+                            INNER JOIN Jobs j
+                                ON t.ReferenceId = j.JobId
+                            where 
+                                e.EmployeeNumber = @0 and t.TaskType=@1 and t.IsComplete = 0";
+
+            if (taskType == TaskType.JobStage10)
+            {
+                query = @"SELECT t.CreatedDate [Date], TaskType, Description, TaskId,  j.JobId, j.JobNumber, j.AddressLine Address, j.City, j.StateCode, j.PostalCode, ho.HomeownerName, ho.HomePhone
+                            FROM [Tasks] t
+                            INNER join Employees e
+                                ON e.EmployeeId = t.EmployeeId
+                            INNER JOIN Jobs j
+                                ON t.ReferenceId = j.JobId
+                            LEFT JOIN HomeOwners ho
+                                ON j.CurrentHomeOwnerId = ho.HomeOwnerId
+                            where e.EmployeeNumber = @0 and t.TaskType=@1 and t.IsComplete = 0";
+            }
 
             var toDos = database.Fetch<TTask, TModel>(query, user.EmployeeNumber, taskType.Value);
 

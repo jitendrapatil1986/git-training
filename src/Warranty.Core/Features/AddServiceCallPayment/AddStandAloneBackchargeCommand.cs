@@ -2,24 +2,16 @@
 {
     using System;
 
-    public class AddPaymentCommand : ICommand<AddPaymentCommandDto>
+    public class AddStandAloneBackchargeCommand : ICommand<AddStandAloneBackchargeCommandDto>
     {
         public Guid ServiceCallLineItemId { get; set; }
-        public string VendorNumber { get; set; }
-        public string VendorName { get; set; }
         public string BackchargeVendorNumber { get; set; }
         public string BackchargeVendorName { get; set; }
-        public string InvoiceNumber { get; set; }
-        public string Comments { get; set; }
-        public bool IsBackcharge { get; set; }
-        public decimal Amount { get; set; }
         public decimal BackchargeAmount { get; set; }
         public string BackchargeReason { get; set; }
         public string PersonNotified { get; set; }
         public string PersonNotifiedPhoneNumber { get; set; }
         public DateTime PersonNotifiedDate { get; set; }
         public string BackchargeResponseFromVendor { get; set; }
-        public int SelectedCostCode { get; set; }
-        public bool IsStandAloneBackcharge { get; set; }
     }
 }

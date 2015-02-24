@@ -28,6 +28,9 @@
                     x.Column(y => y.DenyDate);
                     x.Column(y => y.Username);
                     x.Column(y => y.EmployeeNumber);
+                    x.Column(y => y.JobNumber);
+                    x.Column(y => y.ServiceCallLineItemId);
+                    x.Column(y => y.ObjectAccount);
                 });
         }
     }

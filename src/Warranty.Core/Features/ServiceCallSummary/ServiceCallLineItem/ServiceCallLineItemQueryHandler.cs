@@ -28,6 +28,7 @@
             model.ServiceCallLineItemAttachments = GetServiceCallLineAttachments(query.ServiceCallLineItemId);
             model.ProblemCodes = SharedQueries.ProblemCodes.GetProblemCodeList(_database);
             model.ServiceCallLineItemPayments = GetServiceCallLinePayments(query.ServiceCallLineItemId);
+            model.ServiceCallLineItemStandAloneBackcharges = GetServiceCallLineStandAloneBackcharges(query.ServiceCallLineItemId);
             model.ServiceCallLineItemPurchaseOrders = GetServiceCallLinePurchaseOrders(query.ServiceCallLineItemId);
             model.CanTakeActionOnPayments = user.IsInRole(UserRoles.CustomerCareManager);
             model.Vendors = GetLineItemVendors(query.ServiceCallLineItemId);
@@ -186,6 +187,37 @@
                                 WHERE p.ServiceCallLineItemId = @0 ORDER BY p.CreatedDate desc";
 
             var result = _database.Fetch<ServiceCallLineItemModel.ServiceCallLineItemPayment>(sql, serviceCallLineItemId);
+
+            return result;
+        }
+
+        private IEnumerable<ServiceCallLineItemModel.ServiceCallLineItemStandAloneBackcharge> GetServiceCallLineStandAloneBackcharges(Guid serviceCallLineItemId)
+        {
+            const string sql = @"SELECT 
+                                    b.BackchargeId
+                                    , b.ServiceCallLineItemId as BackchargeServiceCallLineItemId
+                                    , b.CreatedDate as BackchargeCreatedDate
+                                    , b.BackchargeVendorNumber
+                                    , b.BackchargeVendorName
+                                    , b.BackchargeReason
+                                    , b.BackchargeAmount
+                                    , b.PersonNotified
+                                    , b.PersonNotifiedPhoneNumber
+                                    , b.PersonNotifiedDate
+                                    , b.BackchargeResponseFromVendor
+                                    , b.BackchargeStatus
+                                    , b.HoldComments as BackchargeHoldComments
+                                    , b.HoldDate as BackchargeHoldDate
+                                    , b.DenyComments as BackchargeDenyComments
+                                    , b.DenyDate as BackchargeDenyDate
+                                    , b.CostCode as BackchargeJdeCostCode
+                                FROM Backcharges b
+                                INNER JOIN ServiceCallLineItems scli
+                                    ON b.ServiceCallLineItemId = scli.ServiceCallLineItemId
+                                WHERE b.PaymentId IS NULL 
+                                    AND b.ServiceCallLineItemId = @0 ORDER BY b.CreatedDate DESC";
+
+            var result = _database.Fetch<ServiceCallLineItemModel.ServiceCallLineItemStandAloneBackcharge>(sql, serviceCallLineItemId);
 
             return result;
         }

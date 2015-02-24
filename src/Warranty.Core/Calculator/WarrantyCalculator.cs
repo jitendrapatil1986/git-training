@@ -91,7 +91,7 @@ namespace Warranty.Core.Calculator
                     Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
-                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount : 0
+                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount.Value : 0
                 });
             }
             return list;
@@ -141,12 +141,52 @@ namespace Warranty.Core.Calculator
             using (_database)
             {
                 const string sql =
-                    @"SELECT COALESCE(SUM(Amount), 0) as Amount, MONTH(p.PaidDate) MonthNumber, YEAR(p.PaidDate) YearNumber
-                        FROM Payments p
-                        INNER JOIN Jobs j
-                            ON p.JobNumber = j.JobNumber
+                    @"; WITH AllWarrantyPayments (FiscalYear, Month, Year, CostCenter, ObjectAccount, Amount, CommunityNumber, FirstDayOfMonth, LastDayOfMonth)
+                        AS
+                        (
+                            SELECT *, 
+                                SUBSTRING(CostCenter, 1, 4) as CommunityNumber,
+                                CONVERT(DATE, CONVERT(VARCHAR, Month) + '-1-' + CONVERT(VARCHAR, Year)) as FirstDayOfMonth ,
+                                DATEADD(DD, -1, DATEADD(MM, 1, CONVERT(DATE, CONVERT(VARCHAR, Month) + '-1-' + CONVERT(VARCHAR, Year)))) as LastDayOfMonth 
+                            FROM
+                            (
+                                SELECT GBFY as FiscalYear,
+                                    CASE WHEN MonthAbbr = 'JAN' THEN 1
+                                        WHEN MonthAbbr = 'FEB' THEN 2
+                                        WHEN MonthAbbr = 'MAR' THEN 3
+                                        WHEN MonthAbbr = 'APR' THEN 4
+                                        WHEN MonthAbbr = 'MAY' THEN 5
+                                        WHEN MonthAbbr = 'JUN' THEN 6
+                                        WHEN MonthAbbr = 'JUL' THEN 7
+                                        WHEN MonthAbbr = 'AUG' THEN 8
+                                        WHEN MonthAbbr = 'SEP' THEN 9
+                                        WHEN MonthAbbr = 'OCT' THEN 10
+                                        WHEN MonthAbbr = 'NOV' THEN 11
+                                        WHEN MonthAbbr = 'DEC' THEN 12
+                                        ELSE 0
+                                    END as Month,
+                                    CASE WHEN LEN(GBFY) = 1 THEN RIGHT('200' + CAST(GBFY as VARCHAR(4)), 4)
+                                        WHEN LEN(GBFY) = 2 THEN RIGHT('20' + CAST(GBFY as VARCHAR(4)), 4)
+                                        ELSE 0
+                                    END as Year,
+                                    LTRIM(GBMCU) as CostCenter,
+                                    GBOBJ as ObjectAccount,
+                                    Amount
+                                FROM tmp_JDE_GL_War_Buckets
+                                UNPIVOT (Amount
+                                FOR MonthAbbr IN (JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, [DEC]))
+                                AS UNPVTTable
+                            ) a
+                        )
+
+                        SELECT COALESCE(SUM(Amount), 0) as Amount, Month as MonthNumber, Year as YearNumber
+                        FROM 
+                        (
+                        SELECT DISTINCT p.* FROM AllWarrantyPayments p
                         INNER JOIN Communities c
-                            ON j.CommunityId = c.CommunityId
+                            ON p.CommunityNumber = c.CommunityNumber
+                        INNER JOIN Jobs j
+                            ON c.CommunityId = j.CommunityId
                         INNER JOIN Cities cc
                             ON c.CityId = cc.CityId
                         INNER JOIN CommunityAssignments ca
@@ -156,16 +196,13 @@ namespace Warranty.Core.Calculator
                             AND EmployeeNumber=@2
                         WHERE
                             cc.CityCode IN ({0})
-                            AND p.PaidDate >= @0
-                            AND p.PaidDate <= @1
-                            AND p.PaidDate >= j.CloseDate
-                            AND p.PaidDate <= DATEADD(yy, 2, j.CloseDate)
-                            AND p.PaymentStatus = @3
-                            AND p.PaidDate IS NOT NULL
-                            GROUP BY MONTH(p.PaidDate), YEAR(p.PaidDate)
-                        ORDER BY YearNumber, MonthNumber";
+                            AND p.FirstDayOfMonth >= @0
+                            AND p.LastDayOfMonth <= @1
+                            AND p.LastDayOfMonth <= DATEADD(yy, 2, j.CloseDate)
+                        ) a
+                        GROUP BY Month, Year";
 
-                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber, PaymentStatus.Paid.Value);
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
                 return result;
             }
         }
@@ -173,11 +210,12 @@ namespace Warranty.Core.Calculator
         public IEnumerable<CalculatorResult> GetEmployeeExcellentWarrantyService(DateTime startDate, DateTime endDate, string employeeNumber)
         {
             var surveyData = GetEmployeeSurveyData(startDate, endDate, employeeNumber);
+
             return
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") , l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -192,7 +230,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9") / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9"), l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -207,7 +245,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.DefinitelyWillRecommend != null && x.DefinitelyWillRecommend.ToUpper() == SurveyConstants.DefinitelyWillThreshold) / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.DefinitelyWillRecommend != null && x.DefinitelyWillRecommend.ToUpper() == SurveyConstants.DefinitelyWillThreshold), l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -293,7 +331,7 @@ namespace Warranty.Core.Calculator
                     Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
-                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount : 0
+                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount.Value : 0
                 });
             }
             return list;
@@ -345,12 +383,52 @@ namespace Warranty.Core.Calculator
             using (_database)
             {
                 const string sql =
-                    @"SELECT COALESCE(SUM(Amount), 0) as Amount, MONTH(p.PaidDate) MonthNumber, YEAR(p.PaidDate) YearNumber
-                        FROM Payments p
-                        INNER JOIN Jobs j
-                            ON p.JobNumber = j.JobNumber
+                    @"; WITH AllWarrantyPayments (FiscalYear, Month, Year, CostCenter, ObjectAccount, Amount, CommunityNumber, FirstDayOfMonth, LastDayOfMonth)
+                        AS
+                        (
+                            SELECT *, 
+                                SUBSTRING(CostCenter, 1, 4) as CommunityNumber,
+                                CONVERT(DATE, CONVERT(VARCHAR, Month) + '-1-' + CONVERT(VARCHAR, Year)) as FirstDayOfMonth ,
+                                DATEADD(DD, -1, DATEADD(MM, 1, CONVERT(DATE, CONVERT(VARCHAR, Month) + '-1-' + CONVERT(VARCHAR, Year)))) as LastDayOfMonth 
+                            FROM
+                            (
+                                SELECT GBFY as FiscalYear,
+                                    CASE WHEN MonthAbbr = 'JAN' THEN 1
+                                        WHEN MonthAbbr = 'FEB' THEN 2
+                                        WHEN MonthAbbr = 'MAR' THEN 3
+                                        WHEN MonthAbbr = 'APR' THEN 4
+                                        WHEN MonthAbbr = 'MAY' THEN 5
+                                        WHEN MonthAbbr = 'JUN' THEN 6
+                                        WHEN MonthAbbr = 'JUL' THEN 7
+                                        WHEN MonthAbbr = 'AUG' THEN 8
+                                        WHEN MonthAbbr = 'SEP' THEN 9
+                                        WHEN MonthAbbr = 'OCT' THEN 10
+                                        WHEN MonthAbbr = 'NOV' THEN 11
+                                        WHEN MonthAbbr = 'DEC' THEN 12
+                                        ELSE 0
+                                    END as Month,
+                                    CASE WHEN LEN(GBFY) = 1 THEN RIGHT('200' + CAST(GBFY as VARCHAR(4)), 4)
+                                        WHEN LEN(GBFY) = 2 THEN RIGHT('20' + CAST(GBFY as VARCHAR(4)), 4)
+                                        ELSE 0
+                                    END as Year,
+                                    LTRIM(GBMCU) as CostCenter,
+                                    GBOBJ as ObjectAccount,
+                                    Amount
+                                FROM tmp_JDE_GL_War_Buckets
+                                UNPIVOT (Amount
+                                FOR MonthAbbr IN (JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, [DEC]))
+                                AS UNPVTTable
+                            ) a
+                        )
+
+                        SELECT COALESCE(SUM(Amount), 0) as Amount, Month as MonthNumber, Year as YearNumber
+                        FROM 
+                        (
+                        SELECT DISTINCT p.* FROM AllWarrantyPayments p
                         INNER JOIN Communities c
-                            ON j.CommunityId = c.CommunityId
+                            ON p.CommunityNumber = c.CommunityNumber
+                        INNER JOIN Jobs j
+                            ON c.CommunityId = j.CommunityId
                         INNER JOIN Divisions d
                             ON c.DivisionId = d.DivisionId
                         INNER JOIN Cities cc
@@ -362,16 +440,13 @@ namespace Warranty.Core.Calculator
                             AND d.DivisionName=@2
                         WHERE
                             cc.CityCode IN ({0})
-                            AND p.PaidDate >= @0
-                            AND p.PaidDate <= @1
-                            AND p.PaidDate >= j.CloseDate
-                            AND p.PaidDate <= DATEADD(yy, 2, j.CloseDate)
-                            AND p.PaymentStatus = @3
-                            AND p.PaidDate IS NOT NULL
-                            GROUP BY MONTH(p.PaidDate), YEAR(p.PaidDate)
-                        ORDER BY YearNumber, MonthNumber";
+                            AND p.FirstDayOfMonth >= @0
+                            AND p.LastDayOfMonth <= @1
+                            AND p.LastDayOfMonth <= DATEADD(yy, 2, j.CloseDate)
+                        ) a
+                        GROUP BY Month, Year";
 
-                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName, PaymentStatus.Paid.Value);
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName);
                 return result;
             }
         }
@@ -383,7 +458,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") , l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -398,7 +473,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9") / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9"), l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -413,7 +488,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.DefinitelyWillRecommend != null && x.DefinitelyWillRecommend.ToUpper() == SurveyConstants.DefinitelyWillThreshold) / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.DefinitelyWillRecommend != null && x.DefinitelyWillRecommend.ToUpper() == SurveyConstants.DefinitelyWillThreshold) , l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -493,7 +568,7 @@ namespace Warranty.Core.Calculator
                     Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
-                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount : 0
+                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount.Value : 0
                 });
             }
             return list;
@@ -545,12 +620,52 @@ namespace Warranty.Core.Calculator
             using (_database)
             {
                 const string sql =
-                    @"SELECT COALESCE(SUM(Amount), 0) as Amount, MONTH(p.PaidDate) MonthNumber, YEAR(p.PaidDate) YearNumber
-                        FROM Payments p
-                        INNER JOIN Jobs j
-                            ON p.JobNumber = j.JobNumber
+                    @"; WITH AllWarrantyPayments (FiscalYear, Month, Year, CostCenter, ObjectAccount, Amount, CommunityNumber, FirstDayOfMonth, LastDayOfMonth)
+                        AS
+                        (
+                            SELECT *, 
+                                SUBSTRING(CostCenter, 1, 4) as CommunityNumber,
+                                CONVERT(DATE, CONVERT(VARCHAR, Month) + '-1-' + CONVERT(VARCHAR, Year)) as FirstDayOfMonth ,
+                                DATEADD(DD, -1, DATEADD(MM, 1, CONVERT(DATE, CONVERT(VARCHAR, Month) + '-1-' + CONVERT(VARCHAR, Year)))) as LastDayOfMonth 
+                            FROM
+                            (
+                                SELECT GBFY as FiscalYear,
+                                    CASE WHEN MonthAbbr = 'JAN' THEN 1
+                                        WHEN MonthAbbr = 'FEB' THEN 2
+                                        WHEN MonthAbbr = 'MAR' THEN 3
+                                        WHEN MonthAbbr = 'APR' THEN 4
+                                        WHEN MonthAbbr = 'MAY' THEN 5
+                                        WHEN MonthAbbr = 'JUN' THEN 6
+                                        WHEN MonthAbbr = 'JUL' THEN 7
+                                        WHEN MonthAbbr = 'AUG' THEN 8
+                                        WHEN MonthAbbr = 'SEP' THEN 9
+                                        WHEN MonthAbbr = 'OCT' THEN 10
+                                        WHEN MonthAbbr = 'NOV' THEN 11
+                                        WHEN MonthAbbr = 'DEC' THEN 12
+                                        ELSE 0
+                                    END as Month,
+                                    CASE WHEN LEN(GBFY) = 1 THEN RIGHT('200' + CAST(GBFY as VARCHAR(4)), 4)
+                                        WHEN LEN(GBFY) = 2 THEN RIGHT('20' + CAST(GBFY as VARCHAR(4)), 4)
+                                        ELSE 0
+                                    END as Year,
+                                    LTRIM(GBMCU) as CostCenter,
+                                    GBOBJ as ObjectAccount,
+                                    Amount
+                                FROM tmp_JDE_GL_War_Buckets
+                                UNPIVOT (Amount
+                                FOR MonthAbbr IN (JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, [DEC]))
+                                AS UNPVTTable
+                            ) a
+                        )
+
+                        SELECT COALESCE(SUM(Amount), 0) as Amount, Month as MonthNumber, Year as YearNumber
+                        FROM 
+                        (
+                        SELECT DISTINCT p.* FROM AllWarrantyPayments p
                         INNER JOIN Communities c
-                            ON j.CommunityId = c.CommunityId
+                            ON p.CommunityNumber = c.CommunityNumber
+                        INNER JOIN Jobs j
+                            ON c.CommunityId = j.CommunityId
                         INNER JOIN Projects pr
                             ON c.ProjectId = pr.ProjectId
                         INNER JOIN Cities cc
@@ -562,16 +677,13 @@ namespace Warranty.Core.Calculator
                             AND pr.ProjectName=@2
                         WHERE
                             cc.CityCode IN ({0})
-                            AND p.PaidDate >= @0
-                            AND p.PaidDate <= @1
-                            AND p.PaidDate >= j.CloseDate
-                            AND p.PaidDate <= DATEADD(yy, 2, j.CloseDate)
-                            AND p.PaymentStatus = @3
-                            AND p.PaidDate IS NOT NULL
-                            GROUP BY MONTH(p.PaidDate), YEAR(p.PaidDate)
-                        ORDER BY YearNumber, MonthNumber";
+                            AND p.FirstDayOfMonth >= @0
+                            AND p.LastDayOfMonth <= @1
+                            AND p.LastDayOfMonth <= DATEADD(yy, 2, j.CloseDate)
+                        ) a
+                        GROUP BY Month, Year";
 
-                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName, PaymentStatus.Paid.Value);
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName);
                 return result;
             }
         }
@@ -583,7 +695,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") , l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -598,7 +710,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9") / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9") , l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -613,7 +725,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = l.Count(x => x.DefinitelyWillRecommend != null && x.DefinitelyWillRecommend.ToUpper() == SurveyConstants.DefinitelyWillThreshold) / l.Count() * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.DefinitelyWillRecommend != null && x.DefinitelyWillRecommend.ToUpper() == SurveyConstants.DefinitelyWillThreshold), l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -650,7 +762,7 @@ namespace Warranty.Core.Calculator
                     return 0;
                 }
 
-                return dollarSpentInMonth.Amount / warrantableHomesInMonth.Amount;
+                return dollarSpentInMonth.Amount.Value / warrantableHomesInMonth.Amount.Value;
             }
             return 0;
         }

@@ -23,12 +23,11 @@
             using (_database)
             {
                 var backcharge = _database.SingleById<Backcharge>(message.BackchargeId);
-                var payment = _database.SingleById<Payment>(backcharge.PaymentId);
-                
+                var payment = _database.SingleOrDefaultById<Payment>(backcharge.PaymentId);
 
                 var backchargeRequest = new RequestBackcharge
                 {
-                    JobNumber = payment.JobNumber.Substring(0,4),
+                    JobNumber = payment == null ? backcharge.JobNumber.Substring(0, 4) : payment.JobNumber.Substring(0,4),
                     BackchargeAmount = backcharge.BackchargeAmount,
                     VendorNumber = backcharge.BackchargeVendorNumber,
                     ResponseFromVendor = backcharge.BackchargeResponseFromVendor,
@@ -36,15 +35,15 @@
                     PersonNotified = backcharge.PersonNotified,
                     DateNotified = backcharge.PersonNotifiedDate,
                     PhoneNumber = backcharge.PersonNotifiedPhoneNumber,
-                    PaymentAmount = payment.Amount,
-                    PaymentInvoiceNumber = payment.InvoiceNumber,
+                    PaymentAmount = payment == null ? 0 : payment.Amount,
+                    PaymentInvoiceNumber = payment == null ? "" : payment.InvoiceNumber,
                     Username = message.Username,
-                    PaymentVendorNumber = payment.VendorNumber,
+                    PaymentVendorNumber = payment == null ? null : payment.VendorNumber,
                     CostCode = backcharge.CostCode,
-                    ProgramId = Configuration.WarrantyConstants.ProgramId,
-                    ObjectAccount = payment.ObjectAccount,
+                    ProgramId = WarrantyConstants.ProgramId,
+                    ObjectAccount = payment == null ? backcharge.ObjectAccount : payment.ObjectAccount,
                     BuilderNumber = message.EmployeeNumber,
-                    OptionNumber = payment.JobNumber,
+                    OptionNumber = payment == null ? backcharge.JobNumber : payment.JobNumber,
                     BackchargeIdentifier = backcharge.BackchargeId.ToString()
                 };
 

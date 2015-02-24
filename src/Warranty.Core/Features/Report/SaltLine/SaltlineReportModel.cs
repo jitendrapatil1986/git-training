@@ -27,9 +27,9 @@
         public class SaltlineSummary
         {
             public decimal AmountSpentPerHome { get; set; }
-            public decimal DefinetelyWouldRecommend { get; set; }
-            public decimal RightTheFirstTime { get; set; }
-            public decimal ExcellentWarrantyService { get; set; }
+            public decimal? DefinetelyWouldRecommend { get; set; }
+            public decimal? RightTheFirstTime { get; set; }
+            public decimal? ExcellentWarrantyService { get; set; }
             public decimal PercentComplete7Days { get; set; }
             public decimal AverageDaysClosing { get; set; }
             public int Month { get; set; }
@@ -41,7 +41,7 @@
             public string ProjectNumber { get; set; }
             public string ProjectName { get; set; }
             public decimal NumerOfCalls { get; set; }
-            public decimal NmberOfSurveys { get; set; }
+            public decimal NumberOfSurveys { get; set; }
             public decimal NumberOfHomes { get; set; }
         }
 

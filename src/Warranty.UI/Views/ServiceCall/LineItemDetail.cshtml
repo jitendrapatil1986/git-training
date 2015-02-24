@@ -120,7 +120,7 @@
                         <div class="clearfix"></div>
                     </section>
                     <section>
-                        <h3 class="col-md-12">Payments
+                        <h3 class="col-md-12">Payments & Backcharges
                             <span>
                                 <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Payments" data-toggle="collapse" data-target="#addPayment" data-bind="visible: hasRootProblem()"><span class="glyphicon glyphicon-plus"></span></button>
                                 <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Payments" data-bind="visible: !hasRootProblem(), click: expandPayment"><span class="glyphicon glyphicon-plus"></span></button>
@@ -128,44 +128,51 @@
                         </h3>
                         <p data-bind="validationMessage: expandPaymentClicked" class="pull-right alert alert-warning enable-button-warning"></p>
                         <div class="clearfix"></div>
-                        
 
                         <div id="addPayment" class="collapse">
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="form-group col-md-3" data-bind="validationElement: vendorNumber, validationOptions: { insertMessages: false}">
-                                        @Html.Label("Vendor", new { @class = "control-label", @for = "vendor-search" })
-                                        <input type="text" id="vendor-search" class="form-control" autocomplete="off" data-city-code="@Model.CityCode" data-ip-code="WOS" placeholder="Type vendor name or vendor number" />
-                                        <span data-bind="validationMessage: vendorNumber" class="help-block"></span>
-                                    </div>
-                                    <div class="form-group col-md-3" data-bind="validationElement: invoiceNumber">
-                                        @Html.Label("Invoice #", new { @class = "control-label", @for = "invoiceNumber" })
-                                        <input type="text" class="form-control" id="invoiceNumber" data-bind="value: invoiceNumber" />
-                                    </div>
-                                    <div class="form-group col-md-3" data-bind="validationElement: amount, validationOptions: { insertMessages: false}">
-                                        @Html.Label("Amount", new { @class = "control-label", @for = "amount" })
-                                        <div class="input-group">
-                                            <span class="input-group-addon">$</span>
-                                            <input type="text" class="form-control numeric" data-bind="value: amount, valueUpdate: 'blur'" id="amount" />
-                                        </div>
-                                        <span data-bind="validationMessage: amount" class="help-block"></span>
-                                    </div>
-                                    <div class="col-md-12">
-                                        @Html.Label("Comments", new { @class = "control-label" })
-                                        <textarea class="form-control" maxlength="255" data-bind="value: comments"></textarea>
+                                    <div class="control-group col-md-3 margin-bottom-10">
+                                        <label class="control-label" for="paymentType">Type</label>
+                                        <select id="paymentType" class="form-control" data-bind="options: paymentTypes, value: paymentTypeId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Type'"></select>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="form-group col-md-2 margin-top-10">
-                                        <div class="checkbox-inline">
-                                            <label class="cursor-pointer">
-                                                <input type="checkbox" data-bind="checked: isBackcharge" />
-                                                Backcharge</label>
+                                <div data-bind="visible: isPayment()">
+                                    <div class="row" >
+                                        <div class="form-group col-md-3" data-bind="validationElement: vendorNumber, validationOptions: { insertMessages: false}">
+                                            @Html.Label("Vendor", new { @class = "control-label", @for = "vendor-search" })
+                                            <input type="text" id="vendor-search" class="form-control" autocomplete="off" data-city-code="@Model.CityCode" data-ip-code="WOS" placeholder="Type vendor name or vendor number" />
+                                            <span data-bind="validationMessage: vendorNumber" class="help-block"></span>
+                                        </div>
+                                        <div class="form-group col-md-3" data-bind="validationElement: invoiceNumber">
+                                            @Html.Label("Invoice #", new { @class = "control-label", @for = "invoiceNumber" })
+                                            <input type="text" class="form-control" id="invoiceNumber" data-bind="value: invoiceNumber" />
+                                        </div>
+                                        <div class="form-group col-md-3" data-bind="validationElement: amount, validationOptions: { insertMessages: false}">
+                                            @Html.Label("Amount", new { @class = "control-label", @for = "amount" })
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <input type="text" class="form-control numeric" data-bind="value: amount, valueUpdate: 'blur'" id="amount" />
+                                            </div>
+                                            <span data-bind="validationMessage: amount" class="help-block"></span>
+                                        </div>
+                                        <div class="col-md-12">
+                                            @Html.Label("Comments", new { @class = "control-label" })
+                                            <textarea class="form-control" maxlength="255" data-bind="value: comments"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-2 margin-top-10">
+                                            <div class="checkbox-inline">
+                                                <label class="cursor-pointer">
+                                                    <input type="checkbox" data-bind="checked: isBackcharge" />
+                                                    Backcharge</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div data-bind="visible: isBackcharge">
+                                <div data-bind="visible: isBackcharge() || isStandAloneBackcharge()">
                                     <div class="row">
                                         <div class="form-group col-md-4" data-bind="validationElement: backchargeVendorNumber, validationOptions: { insertMessages: false}">
                                             @Html.Label("Backcharge vendor", new { @class = "control-label", @for = "backcharge-vendor-search" })
@@ -213,32 +220,91 @@
                                     </div>
                                 </div>
                                 <div class="form-submit">
-                                    <button class="btn btn-primary" data-bind="click: addPayment, enable: canAddPayment" disabled="">Add</button>
-                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addPayment" data-bind="click: clearPaymentFields">Cancel</button>
+                                    <button class="btn btn-primary" data-bind="click: isPayment() ? addPayment : addStandAloneBackcharge, enable: canAddPayment, visible: isPayment() || isStandAloneBackcharge()" disabled="">Add</button>
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#addPayment" data-bind="click: clearPaymentFields, visible: isPayment() || isStandAloneBackcharge()">Cancel</button>
                                 </div>
                             </div>
                         </div>
-                        
-                        <p class="padding-left-15" data-bind="visible: allPayments().length < 1"><em>No Payments Available</em></p>
+                        <hr class="margin-top-10 margin-bottom-10"/>
+                        <p class="padding-left-15" data-bind="visible: allPaymentsAndBackcharges().length < 1"><em>No Payments/Backcharges Available</em></p>
                         <div class="remove-list-style">
-                            <ul data-bind="foreach: allPayments">
-                                <div id="allServiceCallPayments">
+                            <ul data-bind="foreach: allPaymentsAndBackcharges">
+                                <div id="allServiceCallPaymentsAndBackcharges">
                                     <li class="row service-call-line">
-                                        <div class="col-md-12 margin-bottom-5">
+                                        <div class="col-md-12" data-bind="visible: standAloneBackcharge()">
+                                            <div class="no-left-right-padding">
+                                                <div class="row payment-line">
+                                                    <div class="row col-md-12">
+                                                        <div class="col-md-4">
+                                                            <strong><span data-bind="text: backchargeVendorName"></span></strong>
+                                                            <br />
+                                                            <span data-bind="text: 'Backcharge ' + backchargeStatusDisplayName(), css: 'label label-' + backchargeStatusBadgeClassName()"></span>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <b data-bind="text: costCode.costCode + '-' + costCode.displayName"></b>
+                                                            <br />
+                                                            <span data-bind="text: 'Created Date: ' + moment(createdDate).format('L')"></span>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <h4 data-bind="currency: backchargeAmount"></h4>
+                                                        </div>
+                                                        <div class="col-md-4 margin-bottom-3 text-align-right no-right-padding no-print">
+                                                            @if (Model.CanTakeActionOnPayments)
+                                                            {
+                                                                <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="visible: shouldDisplayApproveBackcharge, click: approveBackcharge">Approve</a>
+                                                                <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10 btn-action-with-popup hidden-xs" data-bind="visible: shouldDisplayHoldBackcharge, attr: {id:'btn_holdBackcharge-' + backchargeId}, click: displayHoldBackcharge">Hold</a>
+                                                                <button class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="visible: shouldDisplayDenyBackcharge, click:displayDenyBackcharge">Deny</button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="visible: shouldDisplayDeleteBackcharge, click:deleteBackcharge">Delete</button>
+                                                            }
+                                                    
+                                                            @if (Model.CanTakeActionOnPayments)
+                                                            {
+                                                                <a href="#" class="btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayApproveBackcharge, click: approveBackcharge">Approve</a>
+                                                                <a href="#" class="btn btn-default btn-sm margin-right-10 btn-action-with-popup hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayHoldBackcharge, attr: {id:'btn_denyBackcharge-' + backchargeId}, click: displayHoldBackcharge">Hold</a>
+                                                                <button class="btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayDenyBackcharge, click:displayDenyBackcharge">Deny</button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button class="btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayDeleteBackcharge, click:deleteBackcharge">Delete</button>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 margin-top-10 margin-bottom-10">
+                                                        <small>
+                                                            <span data-bind="text: 'Notified ' + personNotified + ' on ' + personNotifiedDate"></span>
+                                                            <br />
+                                                            <strong>Phone: </strong><span data-bind="text: personNotifiedPhoneNumber"></span>
+                                                            <br />
+                                                            <strong>Response from Vendor: </strong><span data-bind="text: backchargeResponseFromVendor"></span>
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-md-12 alert alert-warning no-bottom-margin" data-bind="visible: isBackchargeHeld">
+                                                        <strong><span data-bind="text: backchargeStatusDisplayName"></span></strong> - <span data-bind="    date: backchargeHoldDate"></span>- <span data-bind="    text: backchargeHoldComments"></span>
+                                                    </div>
+                                                    <div class="col-md-12 alert alert-danger no-bottom-margin" data-bind="visible: isBackchargeDenied">
+                                                        <strong><span data-bind="text: backchargeStatusDisplayName"></span></strong> - <span data-bind="    date: backchargeDenyDate"></span>- <span data-bind="    text: backchargeDenyComments"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 margin-bottom-5" data-bind="visible: !standAloneBackcharge()">
                                             <div class="no-left-right-padding">
                                                 <div class="row payment-line">
                                                     <div class="row col-md-12 ">
                                                         <div class="col-md-4">
                                                             <strong><span data-bind="text: vendorName"></span></strong>
                                                             <br />
-                                                            <span data-bind="text: paymentStatusDisplayName, css: 'label label-' + paymentStatusBadgeClassName()"></span>
+                                                            <span data-bind="text: 'Payment ' + paymentStatusDisplayName(), css: 'label label-' + paymentStatusBadgeClassName()"></span>
                                                         </div>
                                                         <div class="col-md-3">
                                                             <b data-bind="text: costCode.costCode + '-' + costCode.displayName"></b>
                                                             <br/>
                                                             <span data-bind="text: 'Invoice #' + invoiceNumber"></span>
                                                             <br />
-                                                            <span data-bind="text: 'Created Date: ' + moment(paymentCreatedDate).format('L')"></span>
+                                                            <span data-bind="text: 'Created Date: ' + moment(createdDate).format('L')"></span>
                                                         </div>
                                                         <div class="col-md-1">
                                                             <h4 data-bind="currency: amount"></h4>
@@ -264,13 +330,12 @@
                                                     <div class="row col-md-12 margin-top-10">
                                                         <div class="col-md-12">
                                                             <small>
-                                                                @Html.Label("Comments", new { @class = "control-label"})<br/>
+                                                                @Html.Label("Comments", new { @class = "control-label" })<br/>
                                                                 <span data-bind="text: comments"></span>
                                                             </small>
                                                         </div>
                                                     </div>
                                                     <!-- /ko -->
-                                                
                                                 </div>
                                             </div>
                                         </div>
@@ -315,10 +380,10 @@
                                                                     <small><button class="btn btn-link" data-bind="click:approveBackcharge">Approve</button>|</small>
                                                                 </div>
                                                                 <div data-bind="visible: shouldDisplayHoldBackcharge" class="inline-block">
-                                                                    <small><a href="#" class="btn btn-link btn-action-with-popup" data-bind="attr: {id:'btn_holdBackcharge-' + paymentId}, click: displayHoldBackcharge">Hold</a>|</small>
+                                                                    <small><a href="#" class="btn btn-link btn-action-with-popup" data-bind="attr: {id:'btn_holdBackcharge-' + backchargeId}, click: displayHoldBackcharge">Hold</a>|</small>
                                                                 </div>
                                                                 <div data-bind="visible: shouldDisplayDenyBackcharge" class="inline-block">
-                                                                    <small><a href="#" class="btn btn-link btn-action-with-popup" data-bind="attr: {id:'btn_denyBackcharge-' + paymentId}, click: displayDenyBackcharge">Deny</a></small>
+                                                                    <small><a href="#" class="btn btn-link btn-action-with-popup" data-bind="attr: {id:'btn_denyBackcharge-' + backchargeId}, click: displayDenyBackcharge">Deny</a></small>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -417,7 +482,7 @@
                                             <small><span data-bind="text: moment(createdDate).format('L')"></span></small>
                                         </div>
                                         <div class="form-group" data-bind="validationElement: note">
-                                            @Html.TextArea( "Description", null, new { id = "editLineNote", @class = "form-control edit", data_bind = "text: note, value: note, valueUpdate: 'afterkeydown'", @rows = 3 })
+                                            @Html.TextArea("Description", null, new { id = "editLineNote", @class = "form-control edit", data_bind = "text: note, value: note, valueUpdate: 'afterkeydown'", @rows = 3 })
                                         </div>
                                         <p data-bind="text: note" class="view"></p>
                                     </div>
@@ -444,18 +509,18 @@
         </div>
     </div>
 </div>
-<div data-bind="foreach: allPayments">
+<div data-bind="foreach: allPaymentsAndBackcharges">
     <div data-bind="attr: {id: 'hold-' + paymentId}" class="popup-action-with-message">
         <textarea class="form-control margin-bottom-10" rows="5" placeholder="Enter reason" data-bind="value: holdComments"></textarea>
         <a href="#" class="btn btn-primary btn-execute-action" data-bind="click: holdPayment">Submit</a>
         <a href="#" class="btn-link btn-cancel-popup" data-bind="click: cancelPopup">Cancel</a>
     </div>
-    <div data-bind="attr: {id: 'holdBackcharge-' + paymentId}" class="popup-action-with-message">
+    <div data-bind="attr: {id: 'holdBackcharge-' + backchargeId}" class="popup-action-with-message">
         <textarea class="form-control margin-bottom-10" rows="5" placeholder="Enter reason" data-bind="value: backchargeHoldComments"></textarea>
         <a href="#" class="btn btn-primary btn-execute-action" data-bind="click: holdBackcharge">Submit</a>
         <a href="#" class="btn-link btn-cancel-popup" data-bind="click: cancelPopup">Cancel</a>
     </div>
-        <div data-bind="attr: {id: 'denyBackcharge-' + paymentId}" class="popup-action-with-message">
+        <div data-bind="attr: {id: 'denyBackcharge-' + backchargeId}" class="popup-action-with-message">
         <textarea class="form-control margin-bottom-10" rows="5" placeholder="Enter reason" data-bind="value: backchargeDenyComments"></textarea>
         <a href="#" class="btn btn-primary btn-execute-action" data-bind="click: denyBackcharge">Submit</a>
         <a href="#" class="btn-link btn-cancel-popup" data-bind="click: cancelPopup">Cancel</a>
@@ -470,6 +535,7 @@
                 initialServiceCallLineNotes: @Html.Raw(Model.ServiceCallLineItemNotes.ToJson()),
                 initialServiceCallLineAttachments: @Html.Raw(Model.ServiceCallLineItemAttachments.ToJson()),
                 initialServiceCallLinePayments: @Html.Raw(Model.ServiceCallLineItemPayments.ToJson()),
+                initialServiceCallLineStandAloneBackcharges: @Html.Raw(Model.ServiceCallLineItemStandAloneBackcharges.ToJson()),
                 initialServiceCallLinePurchaseOrders: @Html.Raw(Model.ServiceCallLineItemPurchaseOrders.ToJson()),
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
                 vendors: @Html.Raw(Model.Vendors.ToJson()),
@@ -477,6 +543,9 @@
                 rootProblemCodes: @Html.Raw(@RootProblem.GetAllNonDeprecated().OrderBy(x => x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName }).ToJson()),
                 noActionRootCauseCode: @Html.Raw(@RootCause.NoAction.ToJson()),
                 noActionRootProblemCode: @Html.Raw(@RootProblem.NoAction.ToJson()),
+                paymentTypes: @Html.Raw(@PaymentTypes.GetAll().OrderBy(x => x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName }).ToJson()),
+                standAloneBackchargePaymentType: @Html.Raw(@PaymentTypes.StandAloneBackcharge.ToJson()),
+                paymentPaymentType: @Html.Raw(@PaymentTypes.Payment.ToJson()),
             }
         });
 

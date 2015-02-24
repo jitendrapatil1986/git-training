@@ -78,9 +78,9 @@
             {
                 list.Add(new AchievementReportModel.AchievementSummary
                     {
-                        AverageDaysClosing = GetValueForMonth(averageDays, range),
-                        PercentComplete7Days = GetValueForMonth(percentClosedWithin7Days, range),
-                        AmountSpentPerHome = GetValueForMonth(amountSpent, range),
+                        AverageDaysClosing = GetValueForMonth(averageDays, range) ?? 0,
+                        PercentComplete7Days = GetValueForMonth(percentClosedWithin7Days, range)??0,
+                        AmountSpentPerHome = GetValueForMonth(amountSpent, range)??0,
                         ExcellentWarrantyService = GetValueForMonth(excellentService, range),
                         DefinetelyWouldRecommend = GetValueForMonth(definetelyWouldRecommend, range),
                         RightTheFirstTime = GetValueForMonth(rightTheFirstTime, range),
@@ -91,10 +91,10 @@
             return list.OrderByDescending(x => x.Year).ThenByDescending(x => x.Month);
         }
 
-        private decimal GetValueForMonth(IEnumerable<CalculatorResult> results, MonthYearModel range)
+        private decimal? GetValueForMonth(IEnumerable<CalculatorResult> results, MonthYearModel range)
         {
             var result =  results.SingleOrDefault(x => x.MonthNumber == range.MonthNumber && x.YearNumber == range.YearNumber);
-            return result != null ? result.Amount : 0;
+            return result != null ? result.Amount.Value : (decimal?)null;
         }
 
         private IEnumerable<AchievementReportModel.EmployeeTiedToRepresentative> GetEmployeesTiedToRepresentatives()

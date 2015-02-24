@@ -29,7 +29,7 @@
 
 
 <div style="display: none;" data-bind="visible: true">
-<div class="container">
+<div class="container"><img src="@Url.Content("~/img/DWH logo_color_233x34.png")" class="img-responsive print-only padding-left-15 margin-top-10 margin-bottom-10" />
     <div class="col-md-12">
     @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallStatus, new { id = "callSummaryServiceCallStatus"})
         <section class="margin-bottom-10">
@@ -104,7 +104,7 @@
                             <ul class="border-bottom-1-solid">
                                 <li class="clearfix"><span class="pull-left">Job Number:</span>
                                     <span class="pull-right">@Html.ActionLink(Model.ServiceCallSummary.JobNumber, "JobSummary", "Job", new { id = Model.ServiceCallSummary.JobId }, null)&nbsp;&nbsp;<span>@Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate)</span></span></li>
-                                <li class="clearfix"><span class="pull-left">Payments:</span><span class="pull-right">&nbsp;</span></li>
+                                <li class="clearfix no-print"><span class="pull-left">Payments:</span><span class="pull-right">&nbsp;</span></li>
                                 <li class="clearfix"><span class="pull-left">Division:</span><span class="pull-right">@Model.ServiceCallSummary.DivisionName</span></li>
                                 <li class="clearfix print-only"><span class="pull-left">Phone Number:</span><span class="pull-right">@Model.ServiceCallSummary.HomePhone</span></li>
                                 <li class="clearfix print-only"><span class="pull-left">E-mail:</span><span class="pull-right">@Model.ServiceCallSummary.EmailAddress</span></li>
@@ -195,7 +195,7 @@
                     <div class="clearfix"></div>
                     @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallId, new { id = "callSummaryServiceCallId", @class = "form-control" })
                     <div id="addCallLineItem" class="collapse">
-                        <div class="panel-body">
+                        <div class="panel-body no-print">
                             <div class="col-md-9">
                                 <div class="row">
                                     <div class="form-group" data-bind="validationElement: problemJdeCodeToAdd">
@@ -269,8 +269,8 @@
                 </section>
 
             </div>
-            <div class="panel panel-default padding-top-10">
-                <section class="margin-bottom-15 no-print">
+            <div class="panel panel-default padding-top-10 no-print">
+                <section class="margin-bottom-15">
                     <h3 class="col-md-12">Attachments
                         <span>
                             <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Attachments" data-toggle="collapse" data-target="#addAttachment"><span class="glyphicon glyphicon-plus"></span></button>

@@ -23,12 +23,12 @@
             using (_database)
             {
                 var backcharge = _database.SingleById<Backcharge>(message.BackchargeId);
-                var payment = _database.SingleById<Payment>(backcharge.PaymentId);
+                var payment = _database.SingleOrDefaultById<Payment>(backcharge.PaymentId);
 
                 var command = new Accounting.Commands.Backcharges.RequestBackchargeDenial()
                 {
                     BackchargeJdeIdentifier = backcharge.JdeIdentifier,
-                    PaymentJdeIdentifier = payment.JdeIdentifier,
+                    PaymentJdeIdentifier = payment == null ? null : payment.JdeIdentifier,
                     BackchargeId = backcharge.BackchargeId.ToString(),
                     ProgramId = WarrantyConstants.ProgramId,
                     DateDenied = DateTime.Today,

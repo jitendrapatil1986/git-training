@@ -52,6 +52,7 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="NotifyBackchargeApproved.cs" />
+    <Compile Include="NotifyBackchargeDeleted.cs" />
     <Compile Include="NotifyBackchargeDeny.cs" />
     <Compile Include="NotifyBackchargeOnHold.cs" />
     <Compile Include="NotifyJobHomeownerChanged.cs" />

@@ -101,6 +101,8 @@
                         EmployeeNumber = currentUser.EmployeeNumber
                     };
                     _database.Insert(backcharge);
+
+                    return new AddPaymentCommandDto { CostCode = costCode, PaymentId = payment.PaymentId, BackchargeId = backcharge.BackchargeId};
                 }
 
                 return new AddPaymentCommandDto {CostCode = costCode, PaymentId = payment.PaymentId};
