@@ -1,8 +1,6 @@
 ﻿namespace Warranty.Server.Handlers.ServiceCalls
 {
-    using System;
     using Core.Entities;
-    using Core.Enumerations;
     using Events;
     using InnerMessages;
     using NPoco;
@@ -24,7 +22,10 @@
         {
             using (_database)
             {
-                var serviceCall = _database.SingleById<ServiceCall>(message.ServiceCallId);
+                var serviceCall = _database.SingleOrDefaultById<ServiceCall>(message.ServiceCallId);
+                if (serviceCall == null)
+                    return; 
+
                 Employee employee = null;
                 if (serviceCall.WarrantyRepresentativeEmployeeId != null)
                 {
