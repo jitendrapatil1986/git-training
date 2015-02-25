@@ -1,6 +1,5 @@
 ﻿namespace Warranty.Core.Features.Report.MailMerge
 {
-    using Enumerations;
     using Extensions;
     using NPoco;
     using Security;
@@ -33,7 +32,6 @@
                                         , ho.HomePhone
                                         , c.CommunityName
                                         , CONVERT(varchar, j.CloseDate,101) CloseDate
-                                        , ho.HomeownerName HomeownerName2
                                     FROM Homeowners ho
                                         INNER JOIN Jobs j
 	                                       ON j.CurrentHomeownerId = ho.HomeownerId
