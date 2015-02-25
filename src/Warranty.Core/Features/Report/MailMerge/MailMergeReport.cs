@@ -17,7 +17,6 @@
             public string HomePhone { get; set; }
             public string CommunityName { get; set; }
             public string CloseDate { get; set; }
-            public string HomeownerName2 { get; set; }
         }
     }
 }
