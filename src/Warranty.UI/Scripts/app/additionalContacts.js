@@ -328,6 +328,7 @@ require(['/Scripts/app/main.js'], function() {
                     var element = $('.additional-contact-email').last();
                     element.text('+ Add additional email');
                     element.parent().removeClass('can-remove');
+                    element.parent().addClass('margin-top-10');
                 };
 
                 self.addPhoneContact = function () {
@@ -340,6 +341,7 @@ require(['/Scripts/app/main.js'], function() {
                     var element = $('.additional-contact-phone').last();
                     element.text('+ Add additional phone number');
                     element.parent().removeClass('can-remove');
+                    element.parent().addClass('margin-top-10');
                 };
             }
 
