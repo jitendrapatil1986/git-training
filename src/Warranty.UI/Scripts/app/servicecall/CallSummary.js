@@ -467,15 +467,12 @@ require(['/Scripts/app/main.js'], function () {
 
 
                 self.areAllLineItemsCompletedOrNoAction = ko.computed(function () {
-                    var anyNonCompletedOrNoActionLineItem = ko.utils.arrayFirst(self.allLineItems(), function (i) {
-                        return ((i.serviceCallLineItemStatusDisplayName().toLowerCase() != serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase()) &&
-                                (i.serviceCallLineItemStatusDisplayName().toLowerCase() != serviceCallLineItemStatusData.NoAction.DisplayName.toLowerCase()));
+                    var lineExistsThatIsNotCompletedAndNotNoAction = ko.utils.arrayFirst(self.allLineItems(), function (i) {
+                        return ((i.serviceCallLineItemStatusDisplayName().toLowerCase() !== serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase()) &&
+                                (i.serviceCallLineItemStatusDisplayName().toLowerCase() !== serviceCallLineItemStatusData.NoAction.DisplayName.toLowerCase()));
                     });
 
-                    if (anyNonCompletedOrNoActionLineItem)
-                        return false;
-                    else
-                        return true;
+                    return lineExistsThatIsNotCompletedAndNotNoAction === null ? true : false;
                 }).extend({ notify: 'always' });
 
 
