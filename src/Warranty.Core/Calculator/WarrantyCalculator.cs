@@ -5,7 +5,6 @@ namespace Warranty.Core.Calculator
 {
     using System.Linq;
     using Configurations;
-    using Enumerations;
     using Extensions;
     using NPoco;
     using Security;
@@ -41,7 +40,7 @@ namespace Warranty.Core.Calculator
                                             AND CompletionDate <= @1
                                                 AND CityCode IN ({0})
                                                 AND EmployeeNumber=@2
-									    group by month(completiondate), year(completionDate)";
+                                    group by month(completiondate), year(completionDate)";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
                 return result;
@@ -54,20 +53,20 @@ namespace Warranty.Core.Calculator
             {
                 const string sql =
                     @"SELECT count(*) as TotalElements, SUM(CASE WHEN DATEDIFF(DD, sc.CreatedDate, CompletionDate) <= 7 THEN 1 ELSE 0 END) * 100.0/COUNT(*) as Amount,  month(completiondate) MonthNumber, year(completionDate) YearNumber
-								FROM ServiceCalls sc
-								INNER JOIN Employees e
-								ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-								INNER JOIN Jobs j
-								ON sc.JobId = j.JobId
-								INNER JOIN Communities c
-								ON j.CommunityId = c.CommunityId
-								INNER JOIN Cities cc
-								ON c.CityId = cc.CityId
-						        WHERE CompletionDate >= @0
-                                        AND CompletionDate <= @1
-                                                AND CityCode IN ({0})
-                                                AND EmployeeNumber=@2
-									    group by month(completiondate), year(completionDate)";
+                        FROM ServiceCalls sc
+                        INNER JOIN Employees e
+                        ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+                        INNER JOIN Jobs j
+                        ON sc.JobId = j.JobId
+                        INNER JOIN Communities c
+                        ON j.CommunityId = c.CommunityId
+                        INNER JOIN Cities cc
+                        ON c.CityId = cc.CityId
+                        WHERE CompletionDate >= @0
+                            AND CompletionDate <= @1
+                                    AND CityCode IN ({0})
+                                    AND EmployeeNumber=@2
+                        group by month(completiondate), year(completionDate)";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
                 return result;
@@ -91,13 +90,13 @@ namespace Warranty.Core.Calculator
                     Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
-                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount.Value : 0
+                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.TotalElements : 0
                 });
             }
             return list;
         }
 
-        private IEnumerable<CalculatorResult> GetEmployeeWarrantableHomes(DateTime startDate, DateTime endDate, string employeeNumber)
+        public IEnumerable<CalculatorResult> GetEmployeeWarrantableHomes(DateTime startDate, DateTime endDate, string employeeNumber)
         {
             using (_database)
             {
@@ -123,7 +122,7 @@ namespace Warranty.Core.Calculator
                                             WHERE Ci.CityCode IN ({0})
                                             AND EmployeeNumber=@2)
                                     
-                            SELECT COALESCE(COUNT(CloseDate), 0) as Amount, DateMonth MonthNumber, DateYear YearNumber
+                            SELECT COALESCE(COUNT(CloseDate), 0) as TotalElements, DateMonth MonthNumber, DateYear YearNumber
                             FROM months dpm
                             LEFT JOIN houses ON
                                 CloseDate >= FirstOfMonthTwoYearsAgo 
@@ -292,22 +291,22 @@ namespace Warranty.Core.Calculator
             {
                 const string sql =
                     @"SELECT count(*) as TotalElements, SUM(CASE WHEN DATEDIFF(DD, sc.CreatedDate, CompletionDate) <= 7 THEN 1 ELSE 0 END) * 100.0/COUNT(*) as Amount,  month(completiondate) MonthNumber, year(completionDate) YearNumber
-								FROM ServiceCalls sc
-								INNER JOIN Employees e
-								ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-								INNER JOIN Jobs j
-								ON sc.JobId = j.JobId
-								INNER JOIN Communities c
-								ON j.CommunityId = c.CommunityId
-                                INNER JOIN Divisions d
-                                ON c.DivisionId = d.DivisionId
-								INNER JOIN Cities cc
-								ON c.CityId = cc.CityId
-						        WHERE CompletionDate >= @0
-                                        AND CompletionDate <= @1
-                                                AND CityCode IN ({0})
-                                                AND d.DivisionName=@2
-									    group by month(completiondate), year(completionDate)";
+                        FROM ServiceCalls sc
+                        INNER JOIN Employees e
+                        ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+                        INNER JOIN Jobs j
+                        ON sc.JobId = j.JobId
+                        INNER JOIN Communities c
+                        ON j.CommunityId = c.CommunityId
+                        INNER JOIN Divisions d
+                        ON c.DivisionId = d.DivisionId
+                        INNER JOIN Cities cc
+                        ON c.CityId = cc.CityId
+                        WHERE CompletionDate >= @0
+                        AND CompletionDate <= @1
+                                AND CityCode IN ({0})
+                                AND d.DivisionName=@2
+                        group by month(completiondate), year(completionDate)";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName);
                 return result;
@@ -331,13 +330,13 @@ namespace Warranty.Core.Calculator
                     Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
-                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount.Value : 0
+                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.TotalElements : 0
                 });
             }
             return list;
         }
 
-        private IEnumerable<CalculatorResult> GetDivisionWarrantableHomes(DateTime startDate, DateTime endDate, string divisionName)
+        public IEnumerable<CalculatorResult> GetDivisionWarrantableHomes(DateTime startDate, DateTime endDate, string divisionName)
         {
             using (_database)
             {
@@ -365,7 +364,7 @@ namespace Warranty.Core.Calculator
                                             WHERE Ci.CityCode IN ({0})
                                             AND d.DivisionName=@2)
 
-                            SELECT COALESCE(COUNT(CloseDate), 0) as Amount, DateMonth MonthNumber, DateYear YearNumber
+                            SELECT COALESCE(COUNT(CloseDate), 0) as TotalElements, DateMonth MonthNumber, DateYear YearNumber
                             FROM months dpm
                             LEFT JOIN houses ON
                                 CloseDate >= FirstOfMonthTwoYearsAgo 
@@ -496,7 +495,7 @@ namespace Warranty.Core.Calculator
 
         }
 
-        public IEnumerable<CalculatorResult> GetProjectAverageDaysClosed(DateTime startDate, DateTime endDate, string divisionName)
+        public IEnumerable<CalculatorResult> GetProjectAverageDaysClosed(DateTime startDate, DateTime endDate, string projectName)
         {
             using (_database)
             {
@@ -516,45 +515,45 @@ namespace Warranty.Core.Calculator
                                             AND CompletionDate <= @1
                                                 AND CityCode IN ({0})
                                                 AND pr.ProjectName=@2
-									    group by month(completiondate), year(completionDate)";
+                                            group by month(completiondate), year(completionDate)";
 
-                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName);
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, projectName);
                 return result;
             }
         }
 
-        public IEnumerable<CalculatorResult> GetProjectPercentClosedWithin7Days(DateTime startDate, DateTime endDate, string divisionName)
+        public IEnumerable<CalculatorResult> GetProjectPercentClosedWithin7Days(DateTime startDate, DateTime endDate, string projectName)
         {
             using (_database)
             {
                 const string sql =
                     @"SELECT count(*) as TotalElements, SUM(CASE WHEN DATEDIFF(DD, sc.CreatedDate, CompletionDate) <= 7 THEN 1 ELSE 0 END) * 100.0/COUNT(*) as Amount,  month(completiondate) MonthNumber, year(completionDate) YearNumber
-								FROM ServiceCalls sc
-								INNER JOIN Employees e
-								ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-								INNER JOIN Jobs j
-								ON sc.JobId = j.JobId
-								INNER JOIN Communities c
-								ON j.CommunityId = c.CommunityId
-                                INNER JOIN Projects pr
-                                ON c.ProjectId = pr.ProjectId
-								INNER JOIN Cities cc
-								ON c.CityId = cc.CityId
-						        WHERE CompletionDate >= @0
-                                        AND CompletionDate <= @1
-                                                AND CityCode IN ({0})
-                                                AND pr.ProjectName=@2
-									    group by month(completiondate), year(completionDate)";
+                        FROM ServiceCalls sc
+                        INNER JOIN Employees e
+                        ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+                        INNER JOIN Jobs j
+                        ON sc.JobId = j.JobId
+                        INNER JOIN Communities c
+                        ON j.CommunityId = c.CommunityId
+                        INNER JOIN Projects pr
+                        ON c.ProjectId = pr.ProjectId
+                        INNER JOIN Cities cc
+                        ON c.CityId = cc.CityId
+                        WHERE CompletionDate >= @0
+                        AND CompletionDate <= @1
+                                AND CityCode IN ({0})
+                                AND pr.ProjectName=@2
+                        group by month(completiondate), year(completionDate)";
 
-                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName);
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, projectName);
                 return result;
             }
         }
 
-        public IEnumerable<CalculatorResult> GetProjectAmountSpent(DateTime startDate, DateTime endDate, string divisionName)
+        public IEnumerable<CalculatorResult> GetProjectAmountSpent(DateTime startDate, DateTime endDate, string projectName)
         {
-            var warrantablehomes = GetProjectWarrantableHomes(startDate, endDate, divisionName).ToList();
-            var dollarsSpent = GetProjectDollarSpent(startDate, endDate, divisionName).ToList();
+            var warrantablehomes = GetProjectWarrantableHomes(startDate, endDate, projectName).ToList();
+            var dollarsSpent = GetProjectDollarSpent(startDate, endDate, projectName).ToList();
             var monthRange = GetMonthRange(startDate, endDate);
 
             var list = new List<CalculatorResult>();
@@ -568,13 +567,13 @@ namespace Warranty.Core.Calculator
                     Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
-                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.Amount.Value : 0
+                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.TotalElements : 0
                 });
             }
             return list;
         }
 
-        private IEnumerable<CalculatorResult> GetProjectWarrantableHomes(DateTime startDate, DateTime endDate, string divisionName)
+        public IEnumerable<CalculatorResult> GetProjectWarrantableHomes(DateTime startDate, DateTime endDate, string projectName)
         {
             using (_database)
             {
@@ -602,7 +601,7 @@ namespace Warranty.Core.Calculator
                                             WHERE Ci.CityCode IN ({0})
                                             AND pr.ProjectName=@2)
 
-                            SELECT COALESCE(COUNT(CloseDate), 0) as Amount, DateMonth MonthNumber, DateYear YearNumber
+                            SELECT COALESCE(COUNT(CloseDate), 0) as TotalElements, DateMonth MonthNumber, DateYear YearNumber
                             FROM months dpm
                             LEFT JOIN houses ON
                                 CloseDate >= FirstOfMonthTwoYearsAgo 
@@ -610,12 +609,12 @@ namespace Warranty.Core.Calculator
                             group by DateMonth, DateYear
                             order by DateYear, DateMonth;";
 
-                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName);
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, projectName);
                 return result;
             }
         }
 
-        private IEnumerable<CalculatorResult> GetProjectDollarSpent(DateTime startDate, DateTime endDate, string divisionName)
+        private IEnumerable<CalculatorResult> GetProjectDollarSpent(DateTime startDate, DateTime endDate, string projectName)
         {
             using (_database)
             {
@@ -683,14 +682,14 @@ namespace Warranty.Core.Calculator
                         ) a
                         GROUP BY Month, Year";
 
-                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName);
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, projectName);
                 return result;
             }
         }
 
-        public IEnumerable<CalculatorResult> GetProjectExcellentWarrantyService(DateTime startDate, DateTime endDate, string divisionName)
+        public IEnumerable<CalculatorResult> GetProjectExcellentWarrantyService(DateTime startDate, DateTime endDate, string projectName)
         {
-            var surveyData = GetProjectSurveyData(startDate, endDate, divisionName);
+            var surveyData = GetProjectSurveyData(startDate, endDate, projectName);
             return
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
@@ -703,9 +702,9 @@ namespace Warranty.Core.Calculator
 
         }
 
-        public IEnumerable<CalculatorResult> GetProjectRightTheFirstTime(DateTime startDate, DateTime endDate, string divisionName)
+        public IEnumerable<CalculatorResult> GetProjectRightTheFirstTime(DateTime startDate, DateTime endDate, string projectName)
         {
-            var surveyData = GetProjectSurveyData(startDate, endDate, divisionName);
+            var surveyData = GetProjectSurveyData(startDate, endDate, projectName);
             return
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
@@ -718,9 +717,9 @@ namespace Warranty.Core.Calculator
 
         }
 
-        public IEnumerable<CalculatorResult> GetProjectDefinetelyWouldRecommend(DateTime startDate, DateTime endDate, string divisionName)
+        public IEnumerable<CalculatorResult> GetProjectDefinetelyWouldRecommend(DateTime startDate, DateTime endDate, string projectName)
         {
-            var surveyData = GetProjectSurveyData(startDate, endDate, divisionName);
+            var surveyData = GetProjectSurveyData(startDate, endDate, projectName);
             return
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
@@ -757,12 +756,12 @@ namespace Warranty.Core.Calculator
         {
             if (dollarSpentInMonth != null && warrantableHomesInMonth != null)
             {
-                if (dollarSpentInMonth.Amount == 0 || warrantableHomesInMonth.Amount == 0)
+                if (dollarSpentInMonth.Amount == 0 || warrantableHomesInMonth.TotalElements == 0)
                 {
                     return 0;
                 }
 
-                return dollarSpentInMonth.Amount.Value / warrantableHomesInMonth.Amount.Value;
+                return dollarSpentInMonth.Amount.Value / warrantableHomesInMonth.TotalElements;
             }
             return 0;
         }
