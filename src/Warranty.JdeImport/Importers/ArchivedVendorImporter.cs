@@ -15,83 +15,35 @@ namespace Warranty.JdeImport.Importers
         {
             get
             {
-                return @"SELECT DISTINCT 
-                            PHMCU AS JOBNUMBER 
-                            , COALESCE(TRIM(F1.abalph), '') AS VENDORNAME 
+                return @"SELECT rpmcu AS JOBNUMBER 
+                            , COALESCE(TRIM(alph), '') AS VENDORNAME 
                             , COALESCE(e.EMAIL, '') AS VENDOREMAIL
-                            , TRIM(COALESCE(F1.ABAN8, '')) AS VENDORNUMBER 
-                            , trim(COALESCE(wpphtp, '')) as PHONETYPE
+                            , TRIM(COALESCE(rpan8 , '')) AS VENDORNUMBER 
+                            , TRIM(COALESCE(wpphtp, '')) as PHONETYPE
                             , COALESCE(trim(wpar1) || trim(wpph1), '') as PHONENUMBER 
-                            , PHDESC CostCodeDESCRIPTION 
-                            , PDSUB AS COSTCODE 
-                        FROM F4311 li /* PO Line Items */ 
-                        INNER JOIN F4301 f4301 /* PO Header */ ON 
-                            li.PDDOCO=PHDOCO 
-                            AND li.PDDCTO=PHDCTO 
-                            AND li.PDKCOO=PHKCOO 
-                        LEFT OUTER JOIN F58701 /* Used for item description */ ON 
-                            ($apdp1 =pdpdp1 OR pdpdp1=' ') 
-                            and $AAC01=PDPDp5 
-                            and $alitm = PDLITM 
-                        INNER JOIN F0101 F1 /* Vendor/Entity Table */ ON 
-                                f4301.PHAN8 = f1.aban8 
+                            , gl01 AS CostCodeDESCRIPTION 
+                            , rpsub AS COSTCODE 
+                        FROM
+                        (
+                            SELECT f0.rpmcu,f0.rpsub ,MIN(gmdl01) AS gl01 ,f0.rpan8 ,MIN(abalph) AS alph ,CAST(SUM(rpag*.01) AS DECIMAL (15,2)) AS ag 
+                            FROM   f0411 f0 
+                            LEFT OUTER JOIN f0101 f1 ON f0.rpan8=f1.aban8
+                            LEFT OUTER JOIN f0901 f2 ON f0.rpmcu=f2.gmmcu AND (CASE WHEN f0.rpobj=' ' THEN '1610' ELSE f0.rpobj END)=f2.gmobj AND f0.rpsub=f2.gmsub 
+                            --WHERE LENGTH(TRIM(f0.rpmcu)) = 8
+                            GROUP BY f0.rpmcu,f0.rpsub,f0.rpan8 
+                        ) a
                         LEFT OUTER JOIN F0115 F3  /* Phone Number */ 
-                                ON f1.aban8=f3.wpan8 
-                                AND  wpphtp in ('WORK','CAR','CELL','HOME',' ')
+                            ON rpan8=f3.wpan8 
+                            AND  wpphtp in ('WORK','CAR','CELL','HOME',' ')
                         LEFT OUTER JOIN /* Email */
-                                (SELECT email1.WPAN8, TRIM(email1.WPPH1) || COALESCE(TRIM(email2.WPPH1),'') || COALESCE(TRIM(email3.WPPH1), '') AS Email 
-                                    FROM F0115 email1
-                                    LEFT OUTER JOIN F0115 email2 ON
-                                        email1.wpan8=email2.wpan8 AND email2.WPPHTP='EML2'
-                                    LEFT OUTER JOIN F0115 email3 ON
-                                        email1.wpan8=email3.wpan8 AND email3.WPPHTP='EML3'
-                                    WHERE email1.WPPHTP='EML') e ON
-                                e.WPAN8 = aban8
-                        WHERE 
-                            abat1 = 'V'
-                            AND TRIM(aban8) <> ''
-                            AND PDLNID >= 1000 
-                            AND PDLTTR <> '980'
-
-                        UNION ALL
-
-                        SELECT DISTINCT 
-                            PHMCU AS JOBNUMBER 
-                            , COALESCE(TRIM(F1.abalph), '') AS VENDORNAME 
-                            , COALESCE(e.EMAIL, '') AS VENDOREMAIL
-                            , TRIM(COALESCE(F1.ABAN8, '')) AS VENDORNUMBER 
-                            , trim(COALESCE(wpphtp, '')) as PHONETYPE
-                            , COALESCE(trim(wpar1) || trim(wpph1), '') as PHONENUMBER 
-                            , PHDESC CostCodeDESCRIPTION 
-                            , PDSUB AS COSTCODE 
-                        FROM DWHPO.F4311 li /* PO Line Items */ 
-                        INNER JOIN DWHPO.F4301 f4301 /* PO Header */ ON 
-                            li.PDDOCO=PHDOCO 
-                            AND li.PDDCTO=PHDCTO 
-                            AND li.PDKCOO=PHKCOO 
-                        LEFT OUTER JOIN F58701 /* Used for item description */ ON 
-                            ($apdp1 =pdpdp1 OR pdpdp1=' ') 
-                            and $AAC01=PDPDp5 
-                            and $alitm = PDLITM 
-                        INNER JOIN F0101 F1 /* Vendor/Entity Table */ ON 
-                                f4301.PHAN8 = f1.aban8 
-                        LEFT OUTER JOIN F0115 F3  /* Phone Number */ 
-                                ON f1.aban8=f3.wpan8 
-                                AND  wpphtp in ('WORK','CAR','CELL','HOME',' ')
-                        LEFT OUTER JOIN /* Email */
-                                (SELECT email1.WPAN8, TRIM(email1.WPPH1) || COALESCE(TRIM(email2.WPPH1),'') || COALESCE(TRIM(email3.WPPH1), '') AS Email 
-                                    FROM F0115 email1
-                                    LEFT OUTER JOIN F0115 email2 ON
-                                        email1.wpan8=email2.wpan8 AND email2.WPPHTP='EML2'
-                                    LEFT OUTER JOIN F0115 email3 ON
-                                        email1.wpan8=email3.wpan8 AND email3.WPPHTP='EML3'
-                                    WHERE email1.WPPHTP='EML') e ON
-                                e.WPAN8 = aban8
-                        WHERE 
-                            abat1 = 'V'
-                            AND TRIM(aban8) <> ''
-                            AND PDLNID >= 1000 
-                            AND PDLTTR <> '980'";
+                            (SELECT email1.WPAN8, TRIM(email1.WPPH1) || COALESCE(TRIM(email2.WPPH1),'') || COALESCE(TRIM(email3.WPPH1), '') AS Email 
+                                FROM F0115 email1
+                                LEFT OUTER JOIN F0115 email2 ON
+                                    email1.wpan8=email2.wpan8 AND email2.WPPHTP='EML2'
+                                LEFT OUTER JOIN F0115 email3 ON
+                                    email1.wpan8=email3.wpan8 AND email3.WPPHTP='EML3'
+                                WHERE email1.WPPHTP='EML') e ON
+                            e.WPAN8 = rpan8";
             }
         }
 
@@ -135,7 +87,7 @@ namespace Warranty.JdeImport.Importers
             const string mergeScript = @"MERGE INTO Vendors AS TARGET
                                             USING (SELECT DISTINCT LTRIM(RTRIM(VendorNumber)) AS VendorNumber, LTRIM(RTRIM(VendorName)) as VendorName FROM imports.ArchivedVendorsStage) AS LIST
                                             ON TARGET.Number = LIST.VendorNumber
-                                            WHEN NOT MATCHED THEN 
+                                            WHEN NOT MATCHED AND LIST.LTRIM(RTRIM(VendorNumber)) = 8 THEN 
                                                 INSERT (Number, Name, CreatedBy, CreatedDate)
                                                 VALUES (LIST.VendorNumber, LIST.VendorName, 'Warranty Jde Importer', GETDATE());
 
