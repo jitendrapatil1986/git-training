@@ -230,7 +230,6 @@ namespace Warranty.Core.Features.JobSummary
                                 INNER JOIN [dbo].[Jobs] j
                                 ON h.JobId = j.JobId
                                 WHERE j.JobId = @0
-                                AND h.HomeownerNumber > 1
                                 ORDER BY h.CreatedDate DESC";
 
             var result = _database.Fetch<JobSummaryModel.Homeowner>(sql, jobId);
