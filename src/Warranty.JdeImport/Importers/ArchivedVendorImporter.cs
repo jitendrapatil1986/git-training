@@ -29,7 +29,7 @@ namespace Warranty.JdeImport.Importers
                             FROM   f0411 f0 
                             LEFT OUTER JOIN f0101 f1 ON f0.rpan8=f1.aban8
                             LEFT OUTER JOIN f0901 f2 ON f0.rpmcu=f2.gmmcu AND (CASE WHEN f0.rpobj=' ' THEN '1610' ELSE f0.rpobj END)=f2.gmobj AND f0.rpsub=f2.gmsub 
-                            --WHERE LENGTH(TRIM(f0.rpmcu)) = 8
+                            WHERE LENGTH(TRIM(f0.rpmcu)) = 8
                             GROUP BY f0.rpmcu,f0.rpsub,f0.rpan8 
                         ) a
                         LEFT OUTER JOIN F0115 F3  /* Phone Number */ 
@@ -87,7 +87,7 @@ namespace Warranty.JdeImport.Importers
             const string mergeScript = @"MERGE INTO Vendors AS TARGET
                                             USING (SELECT DISTINCT LTRIM(RTRIM(VendorNumber)) AS VendorNumber, LTRIM(RTRIM(VendorName)) as VendorName FROM imports.ArchivedVendorsStage) AS LIST
                                             ON TARGET.Number = LIST.VendorNumber
-                                            WHEN NOT MATCHED AND LIST.LTRIM(RTRIM(VendorNumber)) = 8 THEN 
+                                            WHEN NOT MATCHED THEN 
                                                 INSERT (Number, Name, CreatedBy, CreatedDate)
                                                 VALUES (LIST.VendorNumber, LIST.VendorName, 'Warranty Jde Importer', GETDATE());
 
