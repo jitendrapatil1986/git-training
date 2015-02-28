@@ -125,7 +125,7 @@
         @Html.HiddenFor(model => model.JobId, new { id = "jobId" })
 
         <section class="margin-bottom-10">
-            <h2 class="pull-left no-margin">Job #@Model.JobNumber <small>@Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate)</small>
+            <h2 class="pull-left no-margin">Job #@Model.JobNumber <small>@Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate, Model.Stage)</small>
             </h2>
             <div class="pull-right">
                 @using (Html.BeginForm("Create", "ServiceCall", new { id = Model.JobId }))

@@ -42,6 +42,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public string AssignedToEmployeeNumber { get; set; }
             public Guid JobId { get; set; }
             public string JobNumber { get; set; }
+            public int Stage { get; set; }
             public string Address { get; set; }
             public string City { get; set; }
             public string StateCode { get; set; }

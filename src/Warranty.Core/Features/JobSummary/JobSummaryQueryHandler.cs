@@ -98,6 +98,7 @@ namespace Warranty.Core.Features.JobSummary
                                 ,j.[UpdatedDate]
                                 ,j.[UpdatedBy]
                                 ,j.[JdeIdentifier]
+                                ,j.[Stage]
                                 ,ho.HomeownerId
                                 ,ho.HomeOwnerName
                                 ,ho.HomeOwnerNumber

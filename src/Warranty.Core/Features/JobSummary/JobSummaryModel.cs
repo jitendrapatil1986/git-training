@@ -10,6 +10,7 @@ namespace Warranty.Core.Features.JobSummary
     {
         public Guid JobId { get; set; }
         public string JobNumber { get; set; }
+        public int? Stage { get; set; }
         public DateTime? CloseDate { get; set; }
         public string AddressLine { get; set; }
         public string City { get; set; }

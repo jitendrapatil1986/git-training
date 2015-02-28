@@ -57,6 +57,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , j.PostalCode
                                     , j.JobId
                                     , j.JobNumber
+                                    , j.Stage
                                     , wc.CreatedDate
                                     , wc.CreatedBy
                                     , wc.CompletionDate
