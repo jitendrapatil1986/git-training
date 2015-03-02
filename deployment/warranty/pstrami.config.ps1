@@ -45,7 +45,7 @@ Role "Nsb" -Incremental {
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Accounting.Commands']/@Endpoint" "Accounting.Server@$accountingEndPointServer"
         
     #Install NSB Service
-    &"$nsb_directory\NServiceBus.Host.exe" "/install" "/serviceName:$nsb_service_name" "/username:dwh\svc-Warranty-nsb" "/password:O2I(?3J,5%!V1h24"
+    &"$nsb_directory\NServiceBus.Host.exe" "/install" "/serviceName:$nsb_service_name" "/username:dwh\svc-Warranty-nsb" "/password:O2I(?3J,5%!V1h24" "/dependsOn:MSMQ"
 
     #Start NSB Service
     Start-Service "$nsb_service_name"

@@ -281,7 +281,7 @@
     <Content Include="css\bootstrap-theme.min.css" />
     <Content Include="css\bootstrap.css" />
     <Content Include="css\bootstrap.min.css" />
-    <Content Include="css\datepicker.css" />
+    <Content Include="css\datepicker3.css" />
     <Content Include="css\font\fontawesome-webfont.svg" />
     <Content Include="css\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="favicon.ico" />
