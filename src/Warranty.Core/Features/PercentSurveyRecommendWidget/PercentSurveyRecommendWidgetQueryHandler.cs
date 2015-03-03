@@ -27,8 +27,11 @@
                                                                                                     EndDate = SystemTime.Today.ToLastDay(),
                                                                                                     EmployeeIds = employees}));
 
-            List<ApiResult> thisMonthSurveysInMarket = thisMonthRawSurveys.Details.ToObject<List<ApiResult>>();
-            
+            var thisMonthSurveysInMarket = new List<ApiResult>();
+            if (thisMonthRawSurveys != null)
+            {
+                thisMonthSurveysInMarket = thisMonthRawSurveys.Details.ToObject<List<ApiResult>>();
+            }
             var totalThisMonthSurveys = thisMonthSurveysInMarket.Count();
             var totalThisMonthSurveysWithRecommend = thisMonthSurveysInMarket.Count(x => string.Equals(x.DefinitelyWillRecommend, SurveyConstants.DefinitelyWillThreshold, StringComparison.CurrentCultureIgnoreCase));
 
@@ -37,7 +40,11 @@
                                                                                                     EndDate = SystemTime.Today.AddMonths(-1).ToLastDay(),
                                                                                                     EmployeeIds = employees}));
 
-            List<ApiResult> lastMonthSurveysInMarket = lastMonthRawSurveys.Details.ToObject<List<ApiResult>>();
+            var lastMonthSurveysInMarket = new List<ApiResult>();
+            if (lastMonthRawSurveys != null)
+            {
+                lastMonthSurveysInMarket = lastMonthRawSurveys.Details.ToObject<List<ApiResult>>();
+            }
 
             var totalLastMonthSurveys = lastMonthSurveysInMarket.Count();
             var totalLastMonthSurveysWithRecommend = lastMonthSurveysInMarket.Count(x => string.Equals(x.DefinitelyWillRecommend, SurveyConstants.DefinitelyWillThreshold, StringComparison.CurrentCultureIgnoreCase));

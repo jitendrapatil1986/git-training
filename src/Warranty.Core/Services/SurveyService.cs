@@ -7,10 +7,12 @@
     public class SurveyService : ISurveyService
     {
         private readonly ISurveyClient _surveyClient;
+        private readonly SurveyClientSystemMonitor _monitor;
 
-        public SurveyService(ISurveyClient surveyClient)
+        public SurveyService(ISurveyClient surveyClient, SurveyClientSystemMonitor monitor)
         {
             _surveyClient = surveyClient;
+            _monitor = monitor;
         }
 
         public TResponse Execute<TResponse>(Expression<Func<ISurveyClient, TResponse>> expression)
@@ -22,6 +24,7 @@
             }
             catch (Exception ex)
             {
+                _monitor.LogException(expression.Body.ToString(), ex);
                 return default(TResponse);
             }
         }
