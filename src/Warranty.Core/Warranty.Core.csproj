@@ -535,6 +535,10 @@
     <Compile Include="FileManagement\IFileSystemManager.cs" />
     <Compile Include="FileManagement\ITemporaryFileUploadsService.cs" />
     <Compile Include="Services\AccountingService.cs" />
+    <Compile Include="Services\EmployeeService.cs" />
+    <Compile Include="Services\IEmployeeService.cs" />
+    <Compile Include="Services\ISurveyService.cs" />
+    <Compile Include="Services\SurveyService.cs" />
     <Compile Include="Services\ToDoFilterCookieManager.cs" />
     <Compile Include="Services\IManageToDoFilterCookie.cs" />
     <Compile Include="Services\IServiceCallCreateService.cs" />

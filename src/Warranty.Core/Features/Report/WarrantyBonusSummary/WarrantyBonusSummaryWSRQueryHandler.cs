@@ -8,19 +8,19 @@
     using Extensions;
     using NPoco;
     using Security;
-    using Survey.Client;
+    using Services;
 
     public class WarrantyBonusSummaryWSRQueryHandler : IQueryHandler<WarrantyBonusSummaryWSRQuery, WarrantyBonusSummaryModel>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
-        private readonly ISurveyClient _survey;
+        private readonly ISurveyService _surveyService;
 
-        public WarrantyBonusSummaryWSRQueryHandler(IDatabase database, IUserSession userSession, ISurveyClient survey)
+        public WarrantyBonusSummaryWSRQueryHandler(IDatabase database, IUserSession userSession, ISurveyService surveyService)
         {
             _database = database;
             _userSession = userSession;
-            _survey = survey;
+            _surveyService = surveyService;
         }
 
         public WarrantyBonusSummaryModel Handle(WarrantyBonusSummaryWSRQuery query)
@@ -200,13 +200,13 @@
 
         private IEnumerable<SurveyDataResult> GetSurveyData(WarrantyBonusSummaryWSRQuery query, string employeeNumber)
         {
-            var surveyData = _survey.Get.ElevenMonthWarrantySurvey(new { query.Model.StartDate, query.Model.EndDate, EmployeeId = employeeNumber });
+            var surveyData = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new { query.Model.StartDate, query.Model.EndDate, EmployeeId = employeeNumber }));
             return surveyData.Details.ToObject<List<SurveyDataResult>>();
         }
 
         private IEnumerable<WarrantyBonusSummaryModel.ItemsComplete> GetAllItemsComplete(WarrantyBonusSummaryWSRQuery query, string employeeNumber)
         {
-            var surveyData = _survey.Get.OneMonthWarrantySurvey(new { query.Model.StartDate, query.Model.EndDate, EmployeeId = employeeNumber });
+            var surveyData = _surveyService.Execute(x => x.Get.OneMonthWarrantySurvey(new { query.Model.StartDate, query.Model.EndDate, EmployeeId = employeeNumber }));
 
             List<ItemsCompleteResult> itemsCompleteResults = surveyData.Details.ToObject<List<ItemsCompleteResult>>();
             var result = itemsCompleteResults.GroupBy(x => x.CommunityName)
