@@ -41,7 +41,7 @@ namespace Warranty.Core.Calculator
                                             AND CompletionDate <= @1
                                                 AND CityCode IN ({0})
                                                 AND EmployeeNumber=@2
-									    group by month(completiondate), year(completionDate)";
+                                        group by month(completiondate), year(completionDate)";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
                 return result;
