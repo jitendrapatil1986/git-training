@@ -100,3 +100,30 @@ UPDATE j SET CurrentHomeownerId = (SELECT HomeownerId
             UpdatedDate = GETDATE()
 FROM Jobs j
 WHERE CommunityId IN (SELECT CommunityId FROM #CommunitiesToDelete);
+
+;WITH EmailFix AS (
+        select * from (
+        select emailaddress, 
+        case when emailaddress = 'Eliot: eliotlaw@gmail.com
+        Sandy: sandyese123@aol.com' then 'eliotlaw@gmail.com'
+        when emailaddress = 'Marcia: mbpoller@gmail.com
+        Greg: gpooler@gmail.com' then 'mbpoller@gmail.com'
+        when emailaddress = 'TRAAV@HOTMAIL.COM/
+        SHIBAUGHNSTEVENS@YAHOO.COM' then 'TRAAV@HOTMAIL.COM'
+        when emailaddress = 'her:  sudtelgte@sbcglobal.net
+        his: tsudtelgte@t3energy.com' then 'sudtelgte@sbcglobal.net'
+        when emailaddress = 'rogersjg@@swbell.net' then 'rogersjg@swbell.net'
+        when emailaddress = 'djangell@icloud.comdavidangell80@icloud.com' then 'djangell@icloud.com'
+        else
+        substring(emailaddress, 1,
+             CASE 
+                WHEN charindex(' ', emailaddress) > 0 THEN CHARINDEX(' ', emailaddress) 
+                WHEN charindex(char(13), emailaddress) > 0 THEN CHARINDEX(char(13), emailaddress) 
+                else len(emailaddress) end) end as NewEmail
+        from homeowners (nolock)where emailaddress like '%@%@%'
+        ) as emailSet )
+UPDATE h SET EmailAddress = NewEmail FROM Homeowners h
+INNER JOIN emailFix ON
+    h.emailAddress = emailFix.emailAddress
+WHERE h.emailAddress IS NOT NULL
+AND h.emailAddress LIKE '%@%@%'

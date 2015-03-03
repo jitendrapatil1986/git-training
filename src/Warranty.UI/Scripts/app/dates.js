@@ -1,11 +1,8 @@
 ﻿define(['jquery', 'datepicker', 'bootstrap'], function ($) {
 
     $(".datepicker-input").datepicker({
-        format: 'm/d/yyyy'
-    });
-
-    $(document).on('changeDate', '.datepicker-input', function (e) {
-        $(e.currentTarget).datepicker('hide');
+        format: 'm/d/yyyy',
+        autoclose: true
     });
 
     $(document).on('click', '.datepicker-button', function (e) {
@@ -16,10 +13,8 @@
     $(".monthpicker-input").datepicker({
         format: "mm-yyyy",
         viewMode: 'months',
-        minViewMode: 'months'
+        minViewMode: 'months',
+        autoclose: true
     });
 
-    $(document).on('changeDate', '.monthpicker-input', function (e) {
-        $(e.currentTarget).datepicker('hide');
-    });
 });

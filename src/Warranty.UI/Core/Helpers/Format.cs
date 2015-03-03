@@ -152,8 +152,11 @@ namespace Warranty.UI.Core.Helpers
             return MvcHtmlString.Create(htmlString);
         }
 
-        public static MvcHtmlString YearsWithinWarranty(int years, DateTime closeDate)
+        public static MvcHtmlString YearsWithinWarranty(int years, DateTime closeDate, int? stage = null)
         {
+            if (closeDate == System.DateTime.MinValue && stage == null)
+                return MvcHtmlString.Empty;
+
             string cssClass;
             if (years <= 1)
                 cssClass = "warranty-one-year";
@@ -164,9 +167,12 @@ namespace Warranty.UI.Core.Helpers
             else
                 cssClass = "warranty-ten-plus-year";
 
-            var htmlString = string.Format(@"<span class='label label-{0} has-bottom-tooltip' title='Close Date'>{1}</span>",
-                                            cssClass, 
-                                            closeDate.ToShortDateString());
+            var htmlString = string.Format(@"<span class='label label-{0} has-bottom-tooltip' title='Close Date'>{1}</span>", cssClass, closeDate.ToShortDateString());
+
+            if (closeDate == System.DateTime.MinValue)
+            {
+                htmlString = string.Format("<span class='label label-warranty-one-year has-bottom-tooltip' title='Stage'>Stage {0}</span>", stage);
+            }
 
             return MvcHtmlString.Create(htmlString);
         }

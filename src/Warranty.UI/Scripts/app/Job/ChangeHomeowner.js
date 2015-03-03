@@ -9,8 +9,8 @@
 
                     self.jobId = $("#changeHomeownerJobId").val();
                     self.ownerName = ko.observable("").extend({ required: true });
-                    self.ownerPhone = ko.observable("").extend({ required: true });
-                    self.ownerEmail = ko.observable("").extend({ required: true, email: true });
+                    self.ownerPhone = ko.observable("");
+                    self.ownerEmail = ko.observable("").extend({ email: true });
                     self.additionalPhoneContacts = ko.observableArray([]);
                     self.additionalEmailContacts = ko.observableArray([]);
                     self.addPhoneContactDescription = ko.observable('');
