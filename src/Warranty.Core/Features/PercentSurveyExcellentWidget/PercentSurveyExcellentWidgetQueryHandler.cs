@@ -26,16 +26,14 @@
         public PercentSurveyExcellentWidgetModel Handle(PercentSurveyExcellentWidgetQuery query)
         {
             var employees = GetEmployeesInMarket();
-            var thisMonthRawSurveys = _surveyClient.Get.ElevenMonthWarrantySurvey(new {StartDate = DateTime.Today.ToFirstDay(), EndDate = DateTime.Today.ToLastDay(), EmployeeId = ""});
-            List<ApiResult> thisMonthSurveys = thisMonthRawSurveys.Details.ToObject<List<ApiResult>>();
-            var thisMonthSurveysInMarket = thisMonthSurveys.Where(x => employees.Contains(x.WarrantyServiceRepresentativeEmployeeId)).ToList();
-
+            var thisMonthRawSurveys = _surveyClient.Get.ElevenMonthWarrantySurvey(new { StartDate = SystemTime.Today.ToFirstDay(), EndDate = SystemTime.Today.ToLastDay(), EmployeeIds = employees });
+            List<ApiResult> thisMonthSurveysInMarket = thisMonthRawSurveys.Details.ToObject<List<ApiResult>>();
+            
             var totalThisMonthSurveys = thisMonthSurveysInMarket.Count();
             var totalThisMonthSurveysWithRecommend = thisMonthSurveysInMarket.Count(x => Convert.ToInt16(x.ExcellentWarrantyService) >= SurveyConstants.ExcellentWarrantyThreshold);
 
-            var lastMonthRawSurveys = _surveyClient.Get.ElevenMonthWarrantySurvey(new { StartDate = DateTime.Today.AddMonths(-1).ToFirstDay(), EndDate = DateTime.Today.AddMonths(-1).ToLastDay(), EmployeeId = "" });
-            List<ApiResult> lastMonthSurveys = lastMonthRawSurveys.Details.ToObject<List<ApiResult>>();
-            var lastMonthSurveysInMarket = lastMonthSurveys.Where(x => employees.Contains(x.WarrantyServiceRepresentativeEmployeeId)).ToList();
+            var lastMonthRawSurveys = _surveyClient.Get.ElevenMonthWarrantySurvey(new { StartDate = SystemTime.Today.AddMonths(-1).ToFirstDay(), EndDate = SystemTime.Today.AddMonths(-1).ToLastDay(), EmployeeIds = employees });
+            List<ApiResult> lastMonthSurveysInMarket = lastMonthRawSurveys.Details.ToObject<List<ApiResult>>();
 
             var totalLastMonthSurveys = lastMonthSurveysInMarket.Count();
             var totalLastMonthSurveysWithRecommend = lastMonthSurveysInMarket.Count(x => Convert.ToInt16(x.ExcellentWarrantyService) >= SurveyConstants.ExcellentWarrantyThreshold);
@@ -49,7 +47,7 @@
             };
         }
 
-        private List<string> GetEmployeesInMarket()
+        private string[] GetEmployeesInMarket()
         {
             var user = _userSession.GetCurrentUser();
 
@@ -66,7 +64,7 @@
                             WHERE CityCode IN ({0})";
 
                 var employeesInMarket = _database.Fetch<string>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()));
-                return employeesInMarket;
+                return employeesInMarket.ToArray();
             }
         } 
 
