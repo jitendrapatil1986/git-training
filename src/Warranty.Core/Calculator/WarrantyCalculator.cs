@@ -5,21 +5,22 @@ namespace Warranty.Core.Calculator
 {
     using System.Linq;
     using Configurations;
-    using Extensions;
     using NPoco;
-    using Security;
-    using Survey.Client;
+    using Services;
 
     public class WarrantyCalculator : IWarrantyCalculator
     {
         private readonly IDatabase _database;
-        private readonly ISurveyClient _surveyClient;
+        private readonly ISurveyService _surveyService;
+        private readonly IEmployeeService _employeeService;
         private readonly string _userMarkets;
-        public WarrantyCalculator(IDatabase database, IUserSession userSession, ISurveyClient surveyClient)
+
+        public WarrantyCalculator(IDatabase database,  ISurveyService surveyService, IEmployeeService employeeService)
         {
             _database = database;
-            _surveyClient = surveyClient;
-            _userMarkets = userSession.GetCurrentUser().Markets.CommaSeparateWrapWithSingleQuote();
+            _surveyService = surveyService;
+            _employeeService = employeeService;
+            _userMarkets = employeeService.GetEmployeeMarkets();
         }
 
         public IEnumerable<CalculatorResult> GetEmployeeAverageDaysClosed(DateTime startDate, DateTime endDate, string employeeNumber)
@@ -40,7 +41,7 @@ namespace Warranty.Core.Calculator
                                             AND CompletionDate <= @1
                                                 AND CityCode IN ({0})
                                                 AND EmployeeNumber=@2
-                                    group by month(completiondate), year(completionDate)";
+                                        group by month(completiondate), year(completionDate)";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
                 return result;
@@ -254,7 +255,7 @@ namespace Warranty.Core.Calculator
 
         private IEnumerable<SurveyDataResult> GetEmployeeSurveyData(DateTime startDate, DateTime endDate, string employeeNumber)
         {
-            var surveyData = _surveyClient.Get.ElevenMonthWarrantySurvey(new { startDate, endDate, EmployeeId = employeeNumber });
+            var surveyData = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new {startDate, endDate, EmployeeId = employeeNumber}));
             return surveyData.Details.ToObject<List<SurveyDataResult>>();
         }
 
@@ -278,7 +279,7 @@ namespace Warranty.Core.Calculator
                                             AND CompletionDate <= @1
                                                 AND CityCode IN ({0})
                                                 AND d.DivisionName=@2
-									    group by month(completiondate), year(completionDate)";
+                                        group by month(completiondate), year(completionDate)";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName);
                 return result;
@@ -734,14 +735,26 @@ namespace Warranty.Core.Calculator
 
         private IEnumerable<SurveyDataResult> GetDivisionSurveyData(DateTime startDate, DateTime endDate, string divisionName)
         {
-            var surveyData = _surveyClient.Get.ElevenMonthWarrantySurvey(new { startDate, endDate, EmployeeId = string.Empty });
+            var surveyData = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new
+            {
+                StartDate = startDate,
+                EndDate = endDate,
+                EmployeeIds = _employeeService.GetEmployeesInMarket(),
+            }));
+
             var surveyDataResult = (List<SurveyDataResult>)surveyData.Details.ToObject<List<SurveyDataResult>>();
             return surveyDataResult.Where(x => x.Division == divisionName);
         }
 
         private IEnumerable<SurveyDataResult> GetProjectSurveyData(DateTime startDate, DateTime endDate, string projectName)
         {
-            var surveyData = _surveyClient.Get.ElevenMonthWarrantySurvey(new { startDate, endDate, EmployeeId = string.Empty });
+            var surveyData = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new
+            {
+                StartDate = startDate,
+                EndDate = endDate,
+                EmployeeIds = _employeeService.GetEmployeesInMarket(),
+            }));
+
             var surveyDataResult = (List<SurveyDataResult>)surveyData.Details.ToObject<List<SurveyDataResult>>();
             return surveyDataResult.Where(x => x.Project == projectName);
         }

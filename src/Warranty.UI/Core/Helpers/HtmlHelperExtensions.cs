@@ -2,20 +2,27 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq.Expressions;
+    using System.Linq;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
     using Enumerations;
     using HtmlTags;
+    using Initialization;
     using Microsoft.Practices.ServiceLocation;
     using Warranty.Core;
     using Warranty.Core.Entities;
-    using Warranty.Core.Entities.Lookups;
     using Warranty.Core.Features.ProblemCodes;
-    using Yay.Enumerations;
+    using Warranty.Core.Services;
 
     public static class HtmlHelperExtensions
     {
+        public static IEnumerable<string> GetSystemMessages(this HtmlHelper htmlHelper)
+        {
+            ISystemMonitor surveymonitor = IoC.Container.GetInstance<SurveyClientSystemMonitor>();
+            ISystemMonitor accountingmonitor = IoC.Container.GetInstance<AccountingClientSystemMonitor>();
+            return surveymonitor.Messages.Concat(accountingmonitor.Messages);
+        }
+
         public static MvcHtmlString RenderToastMessage(this HtmlHelper htmlHelper)
         {
             var toastMessage = MvcHtmlString.Empty;
@@ -31,7 +38,9 @@
                 toastMessage = BuildToastMessage(toastData.Key, toastData.Value);
             }
 
-            return new MvcHtmlString(toastMessage.ToHtmlString());
+            var systemMessages = htmlHelper.GetSystemMessages().Aggregate("", (current, message) => current + BuildToastMessage(ToastType.Warning.Type, message));
+
+            return new MvcHtmlString(toastMessage + systemMessages);
         }
 
         private static string BuildGeneralValidationSummary(this HtmlHelper htmlHelper)
