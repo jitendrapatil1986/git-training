@@ -24,8 +24,39 @@
                     return;
 
                 var city = _database.SingleOrDefault<City>("WHERE CityCode=@0", message.Market.JDEId);
+                if (city == null)
+                {
+                    city = new City
+                               {
+                                   CityCode = message.Market.JDEId,
+                                   CityName = message.Market.Name,
+                               };
+                    _database.Insert(city);
+                }
+
                 var division = _database.SingleOrDefault<Division>("WHERE DivisionCode=@0", message.Division.JDEId);
+                if (division == null)
+                {
+                    division = new Division
+                                   {
+                                       DivisionCode = message.Division.JDEId,
+                                       DivisionName = message.Division.Name,
+                                       AreaCode = message.Area.JDEId,
+                                       AreaName = message.Area.Name,
+                                   };
+                    _database.Insert(division);
+                }
+
                 var project = _database.SingleOrDefault<Project>("WHERE ProjectNumber=@0", message.Project.JDEId);
+                if (project == null)
+                {
+                    project = new Project
+                                  {
+                                      ProjectNumber = message.Project.JDEId,
+                                      ProjectName = message.Project.Name,
+                                  };
+                    _database.Insert(project);
+                }
 
                 community = new Community
                 {
