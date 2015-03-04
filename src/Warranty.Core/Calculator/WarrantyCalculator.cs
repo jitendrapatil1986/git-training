@@ -256,7 +256,10 @@ namespace Warranty.Core.Calculator
         private IEnumerable<SurveyDataResult> GetEmployeeSurveyData(DateTime startDate, DateTime endDate, string employeeNumber)
         {
             var surveyData = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new {startDate, endDate, EmployeeId = employeeNumber}));
-            return surveyData.Details.ToObject<List<SurveyDataResult>>();
+            if(surveyData != null)
+                return surveyData.Details.ToObject<List<SurveyDataResult>>();
+
+            return new List<SurveyDataResult>();
         }
 
         public IEnumerable<CalculatorResult> GetDivisionAverageDaysClosed(DateTime startDate, DateTime endDate, string divisionName)
@@ -742,8 +745,13 @@ namespace Warranty.Core.Calculator
                 EmployeeIds = _employeeService.GetEmployeesInMarket(),
             }));
 
-            var surveyDataResult = (List<SurveyDataResult>)surveyData.Details.ToObject<List<SurveyDataResult>>();
-            return surveyDataResult.Where(x => x.Division == divisionName);
+            if (surveyData != null)
+            {
+                var surveyDataResult = (List<SurveyDataResult>) surveyData.Details.ToObject<List<SurveyDataResult>>();
+                return surveyDataResult.Where(x => x.Division == divisionName);
+            }
+
+            return new List<SurveyDataResult>();
         }
 
         private IEnumerable<SurveyDataResult> GetProjectSurveyData(DateTime startDate, DateTime endDate, string projectName)
@@ -755,8 +763,13 @@ namespace Warranty.Core.Calculator
                 EmployeeIds = _employeeService.GetEmployeesInMarket(),
             }));
 
-            var surveyDataResult = (List<SurveyDataResult>)surveyData.Details.ToObject<List<SurveyDataResult>>();
-            return surveyDataResult.Where(x => x.Project == projectName);
+            if (surveyData != null)
+            {
+                var surveyDataResult = (List<SurveyDataResult>) surveyData.Details.ToObject<List<SurveyDataResult>>();
+                return surveyDataResult.Where(x => x.Project == projectName);
+            }
+
+            return new List<SurveyDataResult>();
         }
 
         public IEnumerable<MonthYearModel> GetMonthRange(DateTime startDate, DateTime endDate)
