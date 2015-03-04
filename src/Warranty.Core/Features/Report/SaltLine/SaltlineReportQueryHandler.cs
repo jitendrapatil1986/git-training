@@ -28,10 +28,10 @@
                 return model;
 
             var employees = GetEmployeesForReport();
-            var divisions = GetDivisionsForReport();
             var projects = GetProjectsForReport();
+            var divisions = GetDivisionsForReport();
 
-            foreach (var employee in employees)
+            foreach (var employee in employees.OrderBy(x=>x.EmployeeName))
             {
                 var employeeMonthlySaltlineSummary = GetEmployeeSaltlineSummary(query, employee.EmployeeNumber);
                 employeeMonthlySaltlineSummary.EmployeeName = employee.EmployeeName;
@@ -39,20 +39,23 @@
                 model.EmployeeSaltlineSummary.Add(employeeMonthlySaltlineSummary);
             }
 
-            foreach (var division in divisions)
+            foreach (var project in projects.OrderBy(x => x.ProjectName))
+            {
+                var projectSaltlineSummary = GetProjectSaltlineSummary(query, project.ProjectName);
+                projectSaltlineSummary.ProjectName = project.ProjectName;
+                projectSaltlineSummary.ProjectNumber = project.ProjectNumber;
+                model.ProjectSaltlineSummary.Add(projectSaltlineSummary);
+            }
+
+            foreach (var division in divisions.OrderBy(x => x.DivisionName))
             {
                 var divisionSaltlineSummary = GetDivisionSaltlineSummary(query, division.DivisionName);
                 divisionSaltlineSummary.DivisionName = division.DivisionName;
                 divisionSaltlineSummary.DivisionId = division.DivisionCode;
-                model.DivisionSaltlineSummary.Add(divisionSaltlineSummary);
-            }
-
-            foreach (var project in projects)
-            {
-                var projectSaltlineSummary = GetProjectSaltlineSummary(query, project.ProjectName);
-                projectSaltlineSummary.ProjectName = project.ProjectName;
-                projectSaltlineSummary.ProjectNumber = project.ProojectNumber;
-                model.ProjectSaltlineSummary.Add(projectSaltlineSummary);
+                if (!model.DivisionSaltlineSummary.Any(x => x.DivisionName == divisionSaltlineSummary.DivisionName && x.NumberOfSurveys == divisionSaltlineSummary.NumberOfSurveys && x.DefinetelyWouldRecommend == divisionSaltlineSummary.DefinetelyWouldRecommend && x.ExcellentWarrantyService == divisionSaltlineSummary.ExcellentWarrantyService))
+                {
+                    model.DivisionSaltlineSummary.Add(divisionSaltlineSummary);
+                }
             }
 
             return model;
