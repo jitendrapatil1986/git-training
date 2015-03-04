@@ -149,6 +149,7 @@ namespace Warranty.JdeImport.Importers
                                                         GROUP BY LTRIM(RTRIM(ProjectCode)), LTRIM(RTRIM(Project))) AS Proj
                                                 WHERE rowNumber = 1) AS LIST
                                         ON TARGET.ProjectNumber = LIST.ProjectCode
+                                        WHEN MATCHED THEN UPDATE SET ProjectName = Project, UpdatedDate = GETUTCDATE(), UpdatedBy = @ImportUser
                                         WHEN NOT MATCHED THEN INSERT (ProjectId
                                                                         , ProjectNumber
                                                                         , ProjectName
