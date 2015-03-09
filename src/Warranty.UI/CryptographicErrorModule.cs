@@ -28,6 +28,9 @@ namespace Warranty.UI
 
             var error = context.Server.GetLastError();
             var cryptoError = error as CryptographicException;
+            if (cryptoError == null && error.InnerException is CryptographicException)
+                cryptoError = error.InnerException as CryptographicException;
+
             if (cryptoError == null)
                 return;
 
