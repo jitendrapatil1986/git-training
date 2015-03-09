@@ -255,6 +255,7 @@
     <Compile Include="Core\ModelBinders\EnumerationModelBinder.cs" />
     <Compile Include="Core\ModelBinders\EnumerationPropertyBinder.cs" />
     <Compile Include="Core\Security\WarrantyUserSession.cs" />
+    <Compile Include="CryptographicErrorModule.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
