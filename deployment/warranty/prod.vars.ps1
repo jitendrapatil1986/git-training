@@ -18,9 +18,9 @@ $header_image_file_name = "DWH logo_color_233x34_prod.png"
 
 $Warranty_identity_uri = "https://warranty.davidweekleyhomes.com"
 
-$sendFeedbackAddresses = "customercare@dwhomes.com, deran@headspring.com, eduardo@headspring.com, imorfey@dwhomes.com, rcarr@dwhomes.com, mroberts@dwhomes.com, kiet.huynh@headspring.com, ldeering@dwhomes.com"
+$sendFeedbackAddresses = "customercare@dwhomes.com, ldeering@dwhomes.com, sparker@dwhomes.com, llafferty@dwhomes.com, deran@headspring.com, eduardo@headspring.com, imorfey@dwhomes.com, rcarr@dwhomes.com, mroberts@dwhomes.com, kiet.huynh@headspring.com, ldeering@dwhomes.com, sparker@dwhomes.com"
 $sendEmailsForTest = ""
-$errorReportingEmailAddresses = "customercare@dwhomes.com, deran@headspring.com, eduardo@headspring.com, kiet.huynh@headspring.com"
+$errorReportingEmailAddresses = "app-notify@dwhomes.com, deran@headspring.com, eduardo@headspring.com, kiet.huynh@headspring.com"
 $errorReportingSubject = "Warranty Exception (prod)"
 
 $documentSharePath = "\\wkcorpdata1\warranty"

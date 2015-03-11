@@ -5,22 +5,24 @@
             <input type="hidden" value="@Model" id="HomeownerId"/>
             <div class="row" id="Additional_Contacts">
                 <div class="col-md-6">
-                                <div data-bind="foreach: { data: additionalPhoneContacts, afterRender: afterAdditionalContactRendered }">
-                                    <div class='inline-editable-text margin-bottom-5 additional-contact can-remove'>
-                                        <span class="glyphicon glyphicon-earphone additional-contact-icon"></span>
-                                        <a href="#" class="additional-contact-phone"></a>
-                                        <span class="glyphicon glyphicon-trash remove-additional-contact" data-bind="click: $parent.removeAdditionalContact"></span>
-                                    </div>
-                                </div>
+                    <div data-bind="foreach: { data: additionalPhoneContacts, afterRender: afterAdditionalContactRendered }">
+                        <div class='inline-editable-text margin-bottom-5 additional-contact can-remove'>
+                            <a class="glyphicon glyphicon-earphone hidden-sm hidden-md hidden-lg" data-bind="visible: contactValue(), attr: { 'href': 'tel:*67' + contactValue() }"></a>
+                            <span class="glyphicon glyphicon-earphone additional-contact-icon hidden-xs"></span>
+                            <a href="#" class="additional-contact-phone"></a>
+                            <span class="glyphicon glyphicon-trash remove-additional-contact hidden-xs" data-bind="click: $parent.removeAdditionalContact"></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6">
-                                <div data-bind="foreach: { data: additionalEmailContacts, afterRender: afterAdditionalContactRendered }">
-                                    <div class='inline-editable-text margin-bottom-5 additional-contact can-remove'>
-                                        <span class="glyphicon glyphicon-envelope additional-contact-icon"></span>
-                                        <a href="#" class="additional-contact-email"></a>
-                                        <span class="glyphicon glyphicon-trash remove-additional-contact" data-bind="click: $parent.removeAdditionalContact"></span>
-                                    </div>
-                                </div>
+                    <div data-bind="foreach: { data: additionalEmailContacts, afterRender: afterAdditionalContactRendered }">
+                        <div class="inline-editable-text margin-bottom-5 additional-contact can-remove">
+                            <a class="glyphicon glyphicon-envelope hidden-sm hidden-md hidden-lg" data-bind="visible: contactValue(), attr: { 'href': 'mailto:' + contactValue() + '?subject=David Weekley Homes Warranty' }"></a>
+                            <span class="glyphicon glyphicon-envelope additional-contact-icon hidden-xs"></span>
+                            <a href="#" class="additional-contact-email"></a>
+                            <span class="glyphicon glyphicon-trash remove-additional-contact hidden-xs" data-bind="click: $parent.removeAdditionalContact"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

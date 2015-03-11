@@ -43,7 +43,15 @@ require(['/Scripts/app/main.js'], function() {
                     if (value.contactLabel) {
                         label = ' (' + $('<div>').text(value.contactLabel).html() + ')';
                     }
-                    var html = $('<div>').text(value.contactValue).html() + label ;
+
+                    var contactValue;
+                    if (typeof(value.contactValue) === 'function') {  //means this is from ko observable when pg loads.
+                        contactValue = value.contactValue();
+                    } else {  //means this is a string from editing value.
+                        contactValue = value.contactValue;
+                    }
+                    
+                    var html = $('<div>').text(contactValue).html() + label;
                     $(element).html(html);
                 },
 
@@ -112,7 +120,7 @@ require(['/Scripts/app/main.js'], function() {
                     if (!value) {
                         return;
                     }
-                    this.$input.filter('[name="contactValue"]').val(value.contactValue);
+                    this.$input.filter('[name="contactValue"]').val(value.contactValue());
                     this.$input.filter('[name="contactLabel"]').val(value.contactLabel);
                 },
 
@@ -121,8 +129,7 @@ require(['/Scripts/app/main.js'], function() {
                  
                  @method input2value() 
                 **/
-                input2value: function() {
-                    
+                input2value: function () {
                     return {
                         contactValue: this.$input.filter('[name="contactValue"]').val(),
                         contactLabel: this.$input.filter('[name="contactLabel"]').val(),
@@ -195,7 +202,7 @@ require(['/Scripts/app/main.js'], function() {
             
             function AddtionalEmailContactViewModel(options) {
                 var self = this;
-                self.contactValue = options.contactValue;
+                self.contactValue = ko.observable(options.contactValue);
                 self.contactLabel = options.contactLabel;
                 self.homeownerContactTypeValue = options.homeownerContactTypeValue;
                 self.homeownerId = options.homeownerId;
@@ -204,7 +211,7 @@ require(['/Scripts/app/main.js'], function() {
 
             function AddtionalPhoneContactViewModel(options) {
                 var self = this;
-                self.contactValue = formatPhoneNumber(options.contactValue);
+                self.contactValue = ko.observable(formatPhoneNumber(options.contactValue));
                 self.contactLabel = options.contactLabel;
                 self.homeownerContactTypeValue = options.homeownerContactTypeValue;
                 self.homeownerId = options.homeownerId;
@@ -227,7 +234,9 @@ require(['/Scripts/app/main.js'], function() {
                         type = 'additionalEmailContact';
                     }
 
-                    $(element[1]).find("a").editable({
+                    var theContactValue;
+                    
+                    $(element[1]).find("a.additional-contact-email, a.additional-contact-phone").editable({
                         value: index,
                         url: urls.Homeowner.AddOrUpdateAdditionalContact,
                         send: 'always',
@@ -235,6 +244,7 @@ require(['/Scripts/app/main.js'], function() {
                             params.homeownerId = index.homeownerId;
                             params.homeownerContactTypeValue = index.homeownerContactTypeValue;
                             params.homeownerContactId = index.homeownerContactId;
+                            theContactValue = params.value.contactValue;
                             return params;
                         },
                         validate: function (value) {
@@ -265,12 +275,14 @@ require(['/Scripts/app/main.js'], function() {
                                     newDomelement.parent().addClass('can-remove');
                                     newElement = self.additionalPhoneContacts()[self.additionalPhoneContacts().length - 1];
                                     newElement.homeownerContactId = response.homeownerContactId;
+                                    newElement.contactValue(theContactValue);
                                     self.addPhoneContact();
                                 } else if (response.homeOwnercontactTypeVlue == homeownerContactTypeEnum.Email.Value) {
                                     newDomelement = $('.additional-contact-email').last();
                                     newDomelement.parent().addClass('can-remove');
                                     newElement = self.additionalEmailContacts()[self.additionalEmailContacts().length - 1];
                                     newElement.homeownerContactId = response.homeownerContactId;
+                                    newElement.contactValue(theContactValue);
                                     self.addEmailContact();
                                 }
                                 toastr.success("Success! Contact added.");
@@ -315,7 +327,9 @@ require(['/Scripts/app/main.js'], function() {
 
                     var element = $('.additional-contact-email').last();
                     element.text('+ Add additional email');
+                    element.parent().addClass('hidden-xs');
                     element.parent().removeClass('can-remove');
+                    element.parent().addClass('margin-top-10');
                 };
 
                 self.addPhoneContact = function () {
@@ -327,7 +341,9 @@ require(['/Scripts/app/main.js'], function() {
 
                     var element = $('.additional-contact-phone').last();
                     element.text('+ Add additional phone number');
+                    element.parent().addClass('hidden-xs');
                     element.parent().removeClass('can-remove');
+                    element.parent().addClass('margin-top-10');
                 };
             }
 
@@ -351,7 +367,6 @@ require(['/Scripts/app/main.js'], function() {
 
             viewModel.addPhoneContact();
             viewModel.addEmailContact();
-
         });
     });
 });

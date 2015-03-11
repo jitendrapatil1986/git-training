@@ -104,6 +104,10 @@
     <Reference Include="StructureMap">
       <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
     </Reference>
+    <Reference Include="Survey.Client, Version=1.0.0.42, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Survey.Client.1.0.0.42\lib\net45\Survey.Client.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -255,6 +259,7 @@
     <Compile Include="Core\ModelBinders\EnumerationModelBinder.cs" />
     <Compile Include="Core\ModelBinders\EnumerationPropertyBinder.cs" />
     <Compile Include="Core\Security\WarrantyUserSession.cs" />
+    <Compile Include="CryptographicErrorModule.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -281,7 +286,7 @@
     <Content Include="css\bootstrap-theme.min.css" />
     <Content Include="css\bootstrap.css" />
     <Content Include="css\bootstrap.min.css" />
-    <Content Include="css\datepicker.css" />
+    <Content Include="css\datepicker3.css" />
     <Content Include="css\font\fontawesome-webfont.svg" />
     <Content Include="css\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="favicon.ico" />

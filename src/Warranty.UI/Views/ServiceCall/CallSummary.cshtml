@@ -103,7 +103,7 @@
                         <div class="col-md-3">
                             <ul class="border-bottom-1-solid">
                                 <li class="clearfix"><span class="pull-left">Job Number:</span>
-                                    <span class="pull-right">@Html.ActionLink(Model.ServiceCallSummary.JobNumber, "JobSummary", "Job", new { id = Model.ServiceCallSummary.JobId }, null)&nbsp;&nbsp;<span>@Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate)</span></span></li>
+                                    <span class="pull-right">@Html.ActionLink(Model.ServiceCallSummary.JobNumber, "JobSummary", "Job", new { id = Model.ServiceCallSummary.JobId }, null)&nbsp;&nbsp;<span>@Format.YearsWithinWarranty(Model.ServiceCallSummary.YearsWithinWarranty, Model.ServiceCallSummary.WarrantyStartDate, Model.ServiceCallSummary.Stage)</span></span></li>
                                 <li class="clearfix no-print"><span class="pull-left">Payments:</span><span class="pull-right">&nbsp;</span></li>
                                 <li class="clearfix"><span class="pull-left">Division:</span><span class="pull-right">@Model.ServiceCallSummary.DivisionName</span></li>
                                 <li class="clearfix print-only"><span class="pull-left">Phone Number:</span><span class="pull-right">@Model.ServiceCallSummary.HomePhone</span></li>

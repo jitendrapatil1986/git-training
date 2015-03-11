@@ -42,7 +42,11 @@
             if (options.Contains("-js")) new JobStageImporter().CustomImport();
             if (options.Contains("-av")) new AllVendorsImporter().CustomImport();
             if (options.Contains("-cd")) new CommunityCleanUp().CustomImport();
-            if (options.Contains("-c")) new CommunityImporter().CustomImport();
+            if (options.Contains("-c"))
+            {
+                new CommunityImporter().CustomImport();
+                new CommunityCleanUp().CustomImport();
+            }
 
             stopWatch.Stop();
             Console.WriteLine("\n\nTOTAL TIME: {0}\n", stopWatch.Elapsed);

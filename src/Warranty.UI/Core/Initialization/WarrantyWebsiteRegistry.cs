@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
 using FluentValidation.Mvc;
 
-
-
 namespace Warranty.UI.Core.Initialization
 {
+    using System;
     using System.Configuration;
     using System.Web;
     using System.Web.Mvc;
@@ -12,6 +11,8 @@ namespace Warranty.UI.Core.Initialization
     using Mailers;
     using Security;
     using StructureMap.Configuration.DSL;
+    using StructureMap.Pipeline;
+    using Survey.Client;
     using Warranty.Core;
     using Warranty.Core.Extensions;
     using Warranty.Core.FileManagement;
@@ -31,12 +32,40 @@ namespace Warranty.UI.Core.Initialization
             For(typeof(IFileSystemManager<>)).Use(typeof(FileSystemManager<>));
 
             var baseAccountingApiUri = ConfigurationManager.AppSettings["Accounting.API.BaseUri"];
-            var timeoutInMilliseconds = ConfigurationManager.AppSettings["Accounting.API.TimeoutInMilliseconds"];
-            var timeout = timeoutInMilliseconds.TryParseNullable();
+            var accountingTimeoutInMilliseconds = ConfigurationManager.AppSettings["Accounting.API.TimeoutInMilliseconds"];
+            var accountingTimeout = accountingTimeoutInMilliseconds.TryParseNullable();
+            
+            var accountingFailures = ConfigurationManager.AppSettings["Accounting.API.FailuresToAssumeDown"];
+            var accountingFailuresToAssumeDown = accountingFailures.TryParseNullable() ?? 3;
+
+            var accountingTimeToTryAgainInSeconds = ConfigurationManager.AppSettings["Accounting.API.TimeToTryAgainInSeconds"];
+            var accountingTimeToTryAgain = accountingTimeToTryAgainInSeconds.TryParseNullable() ?? 30;
+
+            For<AccountingClientSystemMonitor>()
+                .LifecycleIs(new HybridLifecycle())
+                .Use(() => new AccountingClientSystemMonitor(accountingFailuresToAssumeDown, new TimeSpan(0, 0, 0, accountingTimeToTryAgain)));
 
             For<AccountingClientConfiguration>()
                 .Singleton()
-                .Use(() => new AccountingClientConfiguration(baseAccountingApiUri, timeout));
+                .Use(() => new AccountingClientConfiguration(baseAccountingApiUri, accountingTimeout));
+
+            var baseSurveyApiUri = ConfigurationManager.AppSettings["Survey.API.BaseUri"];
+            var surveyTimeoutInMilliseconds = ConfigurationManager.AppSettings["Survey.API.TimeoutInMilliseconds"];
+            var surveyTimeout = surveyTimeoutInMilliseconds.TryParseNullable();
+
+            var surveyFailures = ConfigurationManager.AppSettings["Survey.API.FailuresToAssumeDown"];
+            var surveyFailuresToAssumeDown = surveyFailures.TryParseNullable() ?? 3;
+
+            var surveyTimeToTryAgainInSeconds = ConfigurationManager.AppSettings["Survey.API.TimeToTryAgainInSeconds"];
+            var surveyTimeToTryAgain = surveyTimeToTryAgainInSeconds.TryParseNullable() ?? 30;
+
+            For<SurveyClientSystemMonitor>()
+                .LifecycleIs(new HybridLifecycle())
+                .Use(() => new SurveyClientSystemMonitor(surveyFailuresToAssumeDown, new TimeSpan(0, 0, 0, surveyTimeToTryAgain)));
+
+            For<SurveyClientConfiguration>()
+                .Singleton()
+                .Use(() => new SurveyClientConfiguration(baseSurveyApiUri, surveyTimeout));
         }
     }
 }

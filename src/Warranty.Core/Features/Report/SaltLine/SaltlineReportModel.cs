@@ -59,7 +59,7 @@
 
         public class ProjectModel
         {
-            public string ProojectNumber { get; set; }
+            public string ProjectNumber { get; set; }
             public string ProjectName { get; set; }
         }
     }

@@ -7,10 +7,12 @@
     public class AccountingService : IAccountingService
     {
         private readonly IAccountingClient _accountingClient;
+        private readonly AccountingClientSystemMonitor _monitor;
 
-        public AccountingService(IAccountingClient accountingClient)
+        public AccountingService(IAccountingClient accountingClient, AccountingClientSystemMonitor monitor)
         {
             _accountingClient = accountingClient;
+            _monitor = monitor;
         }
 
         public TResponse Execute<TResponse>(Expression<Func<IAccountingClient, TResponse>> expression)
@@ -22,6 +24,7 @@
             }
             catch (Exception ex)
             {
+                _monitor.LogException(expression.Body.ToString(), ex);
                 return default(TResponse);
             }
         }

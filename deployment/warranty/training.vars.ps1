@@ -24,7 +24,7 @@ $errorReportingSubject = "Warranty Exception (Training)"
 
 $documentSharePath = "C:\temp\dwh_files\warranty"
 $surveyApiBaseUri = "http://survey.davidweekleyhomes.com/api/"
-$accountingApiBaseUri = "http://accountingtest.davidweekleyhomes.com/api/"
+$accountingApiBaseUri = "http://accounting.davidweekleyhomes.com/api/"
 $jobServiceApiBaseUri = "http://jobservice.davidweekleyhomes.com"
 
 $accountingEndPointServer = "wkcorpapptrain1"
