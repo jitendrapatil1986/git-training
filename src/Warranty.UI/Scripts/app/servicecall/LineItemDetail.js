@@ -876,7 +876,20 @@
                     self.allPurchaseOrders = ko.observableArray([]);
                     self.noteDescriptionToAdd = ko.observable('').extend({ required: true });
 
+                    self.canRecodeImportedData = ko.computed(function () {
+                        return self.rootProblem() == 'Imported' && self.isLineItemCompleted();
+                    });
+
+                    self.recodeEnabled = ko.observable(false);
+                    self.enableRecode = function () {
+                        self.recodeEnabled(true);
+                    };
+
                     self.enableRootProblem = ko.computed(function () {
+                        // Enable root problem if it was imported and there are no payments
+                        if (self.recodeEnabled())
+                            return true;
+
                         return !(self.hasEverBeenCompleted() || self.hasAnyPayments() || self.hasAnyPurchaseOrders() || self.isLineItemNoAction());
                     });
 
