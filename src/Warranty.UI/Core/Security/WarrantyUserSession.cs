@@ -67,9 +67,9 @@
 
         private static List<string> GetMarkets(IEnumerable<string> roles)
         {
-            var markets = roles.Where(x => x.StartsWith(OrgMarketPrefix));
+            var markets = roles.Where(x => x.StartsWith(OrgMarketPrefix) || x.StartsWith(SecMarketPrefix));
 
-            return markets.Select(x => x.Replace(OrgMarketPrefix, "")).ToList();
+            return markets.Select(x => x.Replace(OrgMarketPrefix, "").Replace(SecMarketPrefix, "")).ToList();
         }
     }
 }
