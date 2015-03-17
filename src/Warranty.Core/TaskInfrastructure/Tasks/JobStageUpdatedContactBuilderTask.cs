@@ -19,9 +19,12 @@
         {
             using (_database)
             {
-                var employeeId = _database.ExecuteScalar<Guid>("Select EmployeeId from CommunityAssignments where CommunityId = @0", entity.CommunityId);
-                if (employeeId != Guid.Empty && (entity.Stage == 3 || entity.Stage == 7 || entity.Stage == 10))
+                if (entity.Stage == 3 || entity.Stage == 7 || entity.Stage == 10)
                 {
+                    var employeeId = _database.ExecuteScalar<Guid>("Select EmployeeId from CommunityAssignments where CommunityId = @0", entity.CommunityId);
+                    if (employeeId == Guid.Empty)
+                        throw new Exception("Employee not found");
+
                     var description = String.Empty;
                     var taskType = TaskType.JobStageChanged;
 
