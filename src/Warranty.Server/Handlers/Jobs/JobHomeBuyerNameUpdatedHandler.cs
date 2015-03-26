@@ -22,11 +22,15 @@ namespace Warranty.Server.Handlers.Jobs
             using (_database)
             {
                 var job = _database.SingleByJdeId<Job>(message.JDEId);
+
+                if (job == null)
+                    throw new Exception(string.Format("Job {0} not found in the Warranty database.", message.JDEId));
+
                 var homeOwner = _database.SingleById<HomeOwner>(job.CurrentHomeOwnerId);
 
-                var ownerNumber = Convert.ToInt32(message.HomeBuyerNumber);
+                if (homeOwner == null)
+                    throw new Exception(string.Format("Job {0} ({1}) has no current homeowner.", job.JobId, job.JdeIdentifier));
 
-                homeOwner.HomeOwnerNumber = (ownerNumber == 0) ? null : (int?)ownerNumber;
                 homeOwner.HomeOwnerName = (message.BuyerName.IsNullOrEmpty()) ? null : message.BuyerName;
                 _database.Update(homeOwner);
             }
