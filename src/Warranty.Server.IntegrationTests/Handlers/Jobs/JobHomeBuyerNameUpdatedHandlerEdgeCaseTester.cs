@@ -5,7 +5,7 @@ using Warranty.Core.Entities;
 
 namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 {
-    [TestFixture]
+    [TestFixture, Explicit]
     public class JobHomeBuyerNameUpdatedHandlerEdgeCaseTester : HandlerTester<JobHomeBuyerNameUpdated>
     {
         private HomeOwner _homeBuyer;
@@ -36,7 +36,6 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             var job = Get<Job>(_job.JobId);
             var homeBuyer = Get<HomeOwner>(job.CurrentHomeOwnerId);
             homeBuyer.HomeOwnerName.ShouldBeNull();
-            homeBuyer.HomeOwnerNumber.ShouldBeNull();
         }
     }
 }
