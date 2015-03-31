@@ -1,4 +1,6 @@
-﻿using NPoco;
+﻿using System;
+using NPoco;
+using NServiceBus.MessageMutator;
 using Warranty.Core.DataAccess;
 using Warranty.Core.Security;
 using Warranty.Server.Security;
@@ -26,6 +28,13 @@ namespace Warranty.Server
                 scanner.AssemblyContainingType<IAccountingClient>();
                 scanner.AddAllTypesOf((typeof(IAccountingClient)));
                 scanner.AddAllTypesOf<IMap>();
+
+                var loggingEnabled = ConfigurationManager.AppSettings["MessageLoggingEnabled"];
+                if (loggingEnabled != null && loggingEnabled.Equals("true", StringComparison.OrdinalIgnoreCase))
+                {
+                    For<IMutateIncomingMessages>().Singleton().Use<LoggingMutator>();
+                    For<IMutateIncomingTransportMessages>().Singleton().Use<LoggingTransportMutator>();
+                }
 
                 For<IDatabase>()
                     .LifecycleIs(new ThreadLocalStorageLifecycle())
