@@ -25,6 +25,7 @@
                     if (employeeId == Guid.Empty)
                         throw new Exception("Employee not found");
 
+
                     var description = String.Empty;
                     var taskType = TaskType.JobStageChanged;
 
@@ -44,15 +45,25 @@
                             break;
                     }
 
-                    var task = new Task
-                    {
-                        EmployeeId = employeeId,
-                        Description = description,
-                        ReferenceId = entity.JobId,
-                        TaskType = taskType,
-                    };
 
-                    _database.Insert(task);
+                    var taskId =
+                        _database.ExecuteScalar<Guid>(
+                            "SELECT TaskId FROM Tasks WHERE ReferenceId = @0 AND TaskType = @1", entity.JobId,
+                            taskType.Value);
+
+                    if (taskId == Guid.Empty)
+                    {
+                        var task = new Task
+                        {
+                            EmployeeId = employeeId,
+                            Description = description,
+                            ReferenceId = entity.JobId,
+                            TaskType = taskType
+                        };
+
+                        _database.Insert(task);
+                    }
+
                 }
             }
         }
