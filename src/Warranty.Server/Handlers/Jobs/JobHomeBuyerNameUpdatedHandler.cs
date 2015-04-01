@@ -29,9 +29,14 @@ namespace Warranty.Server.Handlers.Jobs
                 var homeOwner = _database.SingleById<HomeOwner>(job.CurrentHomeOwnerId);
 
                 if (homeOwner == null)
-                    throw new Exception(string.Format("Job {0} ({1}) has no current homeowner.", job.JobId, job.JdeIdentifier));
+                {
+                    homeOwner = new HomeOwner {HomeOwnerName = message.BuyerName, JobId = job.JobId};
+                }
+                else
+                {
+                    homeOwner.HomeOwnerName = (message.BuyerName.IsNullOrEmpty()) ? null : message.BuyerName;
+                }
 
-                homeOwner.HomeOwnerName = (message.BuyerName.IsNullOrEmpty()) ? null : message.BuyerName;
                 _database.Update(homeOwner);
             }
         }
