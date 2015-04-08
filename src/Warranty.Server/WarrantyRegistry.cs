@@ -3,6 +3,7 @@ using NPoco;
 using NServiceBus.MessageMutator;
 using Warranty.Core.DataAccess;
 using Warranty.Core.Security;
+using Warranty.Core.Services;
 using Warranty.Server.Security;
 
 namespace Warranty.Server
@@ -49,6 +50,16 @@ namespace Warranty.Server
                 For<AccountingClientConfiguration>()
                     .Singleton()
                     .Use(() => new AccountingClientConfiguration(baseAccountingApiUri, timeout));
+
+                var accountingFailures = ConfigurationManager.AppSettings["Accounting.API.FailuresToAssumeDown"];
+                var accountingFailuresToAssumeDown = accountingFailures.TryParseNullable() ?? 3;
+
+                var accountingTimeToTryAgainInSeconds = ConfigurationManager.AppSettings["Accounting.API.TimeToTryAgainInSeconds"];
+                var accountingTimeToTryAgain = accountingTimeToTryAgainInSeconds.TryParseNullable() ?? 30;
+
+                For<AccountingClientSystemMonitor>()
+                    .LifecycleIs(new HybridLifecycle())
+                    .Use(() => new AccountingClientSystemMonitor(accountingFailuresToAssumeDown, new TimeSpan(0, 0, 0, accountingTimeToTryAgain)));
             });
         }
     }
