@@ -3,6 +3,7 @@ using NPoco;
 using NServiceBus.MessageMutator;
 using Warranty.Core.DataAccess;
 using Warranty.Core.Security;
+using Warranty.Core.Services;
 using Warranty.Server.Security;
 
 namespace Warranty.Server
@@ -49,6 +50,7 @@ namespace Warranty.Server
                 For<AccountingClientConfiguration>()
                     .Singleton()
                     .Use(() => new AccountingClientConfiguration(baseAccountingApiUri, timeout));
+
             });
         }
     }

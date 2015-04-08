@@ -15,7 +15,7 @@
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
-            ObjectFactory.Initialize(x =>
+            ObjectFactory.Configure(x =>
             {
                 x.AddRegistry<WarrantyCoreRegistry>();
                 x.For<IUserSession>().Use<TestWarrantyUserSession>();

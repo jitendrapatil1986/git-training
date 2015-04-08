@@ -21,7 +21,7 @@ namespace Warranty.Server.IntegrationTests
     {
         public IntegrationSetUpFixture()
         {
-            ObjectFactory.Initialize(x =>
+            ObjectFactory.Configure(x =>
                                          {
                                              x.AddRegistry<WarrantyRegistry>();
                                              x.AddRegistry<WarrantyCoreRegistry>();
