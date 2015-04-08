@@ -172,6 +172,8 @@
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallSpecialProjectStatusChangedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\NotifyServiceCallStatusChangedHandler.cs" />
     <Compile Include="Handlers\ServiceCalls\RequestServiceCallHandler.cs" />
+    <Compile Include="LoggingMutator.cs" />
+    <Compile Include="LoggingTransportMutator.cs" />
     <Compile Include="Security\WarrantyServerUserSession.cs" />
     <Compile Include="StructureMapConfig.cs" />
     <Compile Include="WarrantyRegistry.cs" />
@@ -179,6 +181,7 @@
   <ItemGroup>
     <None Include="..\Log4Net.config">
       <Link>Log4Net.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
