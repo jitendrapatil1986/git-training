@@ -84,7 +84,7 @@
             }
         }
 
-        public decimal TotalAllItemsCompletePercent { get { return AllItemsCompletes.Any() ? Math.Round(AllItemsCompletes.Sum(x => x.CompletePercentage)/AllItemsCompletes.Count(), 2) : 0; }}
+        public decimal TotalAllItemsCompletePercent { get { return AllItemsCompletes.Any() ? Math.Round(AllItemsCompletes.Sum(x => x.CompletePercentage * x.Count)/AllItemsCompletes.Sum(x => x.Count), 2) : 0; }}
         public decimal TotalAllItemsCompleteBonusAmount { get { return IsBonusable ? SurveyConstants.AllItemsCompleteBonusAmount : 0; }}
         public bool IsBonusable { get { return TotalAllItemsCompletePercent >= SurveyConstants.AllItemsCompletePercentThreshold; }}
 
@@ -145,6 +145,7 @@
         {
             public string CommunityName { get; set; }
             public decimal CompletePercentage { get; set; }
+            public int Count { get; set; }
         }
     }
 }
