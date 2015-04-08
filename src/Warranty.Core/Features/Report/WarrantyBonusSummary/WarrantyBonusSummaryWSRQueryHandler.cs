@@ -214,6 +214,7 @@
                                              {
                                                  CommunityName = g.Key,
                                                  CompletePercentage = g.Average(y => string.Equals(y.ItemsCompleted, SurveyConstants.AllItemsCompleteThreshold, StringComparison.CurrentCultureIgnoreCase) ? 100m : 0m),
+                                                 Count = g.Count()
                                              }).OrderBy(o => o.CommunityName).ToList();
             return result;
         }
