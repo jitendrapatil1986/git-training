@@ -68,7 +68,7 @@
                     self.personNotifiedDate = options.personNotifiedDate;
                     self.backchargeResponseFromVendor = options.backchargeResponseFromVendor;
                     self.paymentId = options.paymentId;
-                    self.createdDate = options.createdDate ? options.createdDate : options.backchargeCreatedDate;
+                    self.createdDate = options.paymentCreatedDate ? options.paymentCreatedDate : options.backchargeCreatedDate;
                     self.holdComments = ko.observable(options.holdComments);
                     self.backchargeHoldComments = ko.observable(options.backchargeHoldComments);
                     self.backchargeDenyComments = ko.observable(options.backchargeDenyComments);
