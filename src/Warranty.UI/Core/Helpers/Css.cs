@@ -1,4 +1,5 @@
 ﻿using Warranty.Core.Enumerations;
+using Warranty.Core.ToDoInfrastructure.ConcreteTodos;
 
 namespace Warranty.UI.Core.Helpers
 {
@@ -39,6 +40,19 @@ namespace Warranty.UI.Core.Helpers
                 System.Text.RegularExpressions.Regex.Replace(toDoType.DisplayName, @"\s+", " ").ToLower().Trim();
 
             return string.Format("{0}{1}", "todo-", toDoDisplayNameWithSingleWhiteSpace.Replace(" ", "-"));
+        }
+
+        public static string ToDoJobStageChangedTaskClass(string description)
+        {
+            var toDoDisplayNameWithSingleWhiteSpace =
+                ToDoJobStageChangedTaskCleanDescription(description);
+
+            return string.Format("{0}{1}", "todo-", toDoDisplayNameWithSingleWhiteSpace.Replace(" ", "-").Replace(".", ""));
+        }
+
+        public static string ToDoJobStageChangedTaskCleanDescription(string description)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(description, @"(?i)Job # .*", "").Trim();
         }
     }
 }
