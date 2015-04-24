@@ -180,22 +180,28 @@
         }
 
         [ChildActionOnly]
-        public string GetRequireJSUrl(ViewContext context)
+        public string GetRequireJsUrl()
+        {
+            var requirePath = VirtualPathUtility.ToAbsolute("~/Scripts/lib/require.js");
+            var mainPath = VirtualPathUtility.ToAbsolute("~/Scripts/app/main.js");
+            return string.Format("<script data-main='{0}' src='{1}'></script>", mainPath , requirePath);
+        }
+
+        [ChildActionOnly]
+        public string GetPageRequireJs(ViewContext context)
         {
             var view = context.View as RazorView;
             var values = context.RouteData.Values;
             var controller = values["controller"].ToString().ToLower();
             var viewName = Path.GetFileNameWithoutExtension(view.ViewPath);
-            var requirePath = VirtualPathUtility.ToAbsolute("~/Scripts/lib/require.js");
-
             var loc = string.Format("~/Scripts/app/{0}/{1}.js", controller, viewName);
+            var script = "";
 
             if (System.IO.File.Exists(Server.MapPath(loc)))
             {
-                return "<script data-main='" + VirtualPathUtility.ToAbsolute(loc) + "' src='" + requirePath + "'></script>";
+                script = string.Format("<script src='{0}'></script>", VirtualPathUtility.ToAbsolute(loc));
             }
-
-            return "<script data-main='" + VirtualPathUtility.ToAbsolute("~/Scripts/app/Shared/Default.js") + "' src='" + requirePath + "'></script>";
+            return script;
         }
 
         public JsonResult SendFeedback(string subject, string body)
