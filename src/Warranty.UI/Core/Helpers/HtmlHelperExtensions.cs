@@ -142,6 +142,8 @@
              return MvcHtmlString.Create(button.ToString(TagRenderMode.Normal) + menu.ToString(TagRenderMode.Normal));
          }
 
+         #region Custom Script Rendering 
+         //Source:  http://stackoverflow.com/a/5433722/1042643
          public static MvcHtmlString Script(this HtmlHelper htmlHelper, Func<object, HelperResult> template)
          {
              htmlHelper.ViewContext.HttpContext.Items["_script_" + Guid.NewGuid()] = template;
@@ -163,5 +165,6 @@
              }
              return MvcHtmlString.Empty;
          }
+         #endregion
     }
 }
