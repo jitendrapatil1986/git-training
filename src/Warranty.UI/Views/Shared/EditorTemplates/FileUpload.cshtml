@@ -99,12 +99,15 @@
 
         @Html.Raw(uploader.Render())
     }
-    <script>
-        define('formUploadData', function() {
+</div>
+
+@Html.Script(
+    @<script>
+        define('formUploadData', function () {
             return {
                 fileUploaderId: '@fileUploaderId',
                 wrapperId: '@wrapperId',
             };
         });
     </script>
-</div>
+)
