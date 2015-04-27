@@ -209,12 +209,16 @@
             var surveyData = _surveyService.Execute(x => x.Get.OneMonthWarrantySurvey(new { query.Model.StartDate, query.Model.EndDate, EmployeeId = employeeNumber }));
 
             List<ItemsCompleteResult> itemsCompleteResults = surveyData.Details.ToObject<List<ItemsCompleteResult>>();
-            var result = itemsCompleteResults.GroupBy(x => x.CommunityName)
-                                             .Select(g => new WarrantyBonusSummaryModel.ItemsComplete
-                                             {
-                                                 CommunityName = g.Key,
-                                                 CompletePercentage = g.Average(y => string.Equals(y.ItemsCompleted, SurveyConstants.AllItemsCompleteThreshold, StringComparison.CurrentCultureIgnoreCase) ? 100m : 0m),
-                                             }).OrderBy(o => o.CommunityName).ToList();
+            var result = itemsCompleteResults
+                .Where(x => x.ItemsCompleted != null)
+                .GroupBy(x => x.CommunityName)
+                .Select(g => new WarrantyBonusSummaryModel.ItemsComplete
+                {
+                    CommunityName = g.Key,
+                    CompletePercentage = g.Average(y => string.Equals(y.ItemsCompleted, SurveyConstants.AllItemsCompleteThreshold, StringComparison.CurrentCultureIgnoreCase) ? 100m : 0m),
+                    Count = g.Count()
+                }).OrderBy(o => o.CommunityName).ToList();
+
             return result;
         }
 
