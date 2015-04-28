@@ -4,7 +4,7 @@ using Warranty.Core.Entities;
 
 namespace Warranty.Core.Features.CommunityEmployeeAssignment
 {
-    public class CommunityEmployeAssignmentCommandHandler : ICommandHandler<CommunityEmployeAssignmentCommand,bool>
+    public class CommunityEmployeAssignmentCommandHandler : ICommandHandler<CommunityEmployeeAssignmentCommand,bool>
     {
         private readonly IDatabase _database;
 
@@ -13,7 +13,7 @@ namespace Warranty.Core.Features.CommunityEmployeeAssignment
             _database = database;
         }
 
-        public bool Handle(CommunityEmployeAssignmentCommand message)
+        public bool Handle(CommunityEmployeeAssignmentCommand message)
         {
              using (_database)
              {

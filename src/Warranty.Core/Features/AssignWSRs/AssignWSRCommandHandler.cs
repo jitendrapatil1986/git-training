@@ -2,7 +2,7 @@
 using NPoco;
 using NServiceBus;
 using Warranty.Core.Entities;
-using Warranty.InnerMessages;
+using Warranty.Events;
 
 namespace Warranty.Core.Features.AssignWSRs
 {
@@ -50,7 +50,7 @@ namespace Warranty.Core.Features.AssignWSRs
 
                     _database.Insert(newCommunityAssignment);
 
-                    _bus.Send<NotifyWarrantyRepresentativeAssignedToCommunity>(x =>
+                    _bus.Publish<WarrantyRepresentativeAssignedToCommunity>(x =>
                     {
                         x.CommunityId = cmd.CommunityId;
                         x.CommunityNumber = communityNumber;
@@ -62,7 +62,7 @@ namespace Warranty.Core.Features.AssignWSRs
                 {
                     communityAssignment.EmployeeId = cmd.EmployeeId;
                     _database.Update(communityAssignment);
-                    _bus.Send<NotifyCommunityWarrantyServiceRepresentativeAssignmentChanged>(x =>
+                    _bus.Send<CommunityWarrantyRepresentativeAssignmentChanged>(x =>
                     {
                         x.CommunityId = cmd.CommunityId;
                         x.CommunityNumber = communityNumber;

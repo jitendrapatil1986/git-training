@@ -107,6 +107,8 @@
     <Compile Include="Extensions\DatabaseExtensions.cs" />
     <Compile Include="Handlers\Communities\CommunityAddedHandler.cs" />
     <Compile Include="Handlers\Communities\DivisionNameUpdatedHandler.cs" />
+    <Compile Include="Handlers\Communities\NotifyCommunityWarrantyRepresentativeAssignmentChangedHandler.cs" />
+    <Compile Include="Handlers\Communities\NotifyWarrantyRepresentativeAssignedToCommunityHandler.cs" />
     <Compile Include="Handlers\Communities\ProjectNameUpdatedHandler.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateAddedHandler.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateUpdatedHandler.cs" />

@@ -3,7 +3,7 @@ using NServiceBus;
 
 namespace Warranty.InnerMessages
 {
-    public class NotifyCommunityWarrantyServiceRepresentativeAssignmentChanged : ICommand
+    public class NotifyCommunityWarrantyRepresentativeAssignmentChanged : ICommand
     {
         public Guid CommunityId { get; set; }
         public string CommunityNumber { get; set; }
