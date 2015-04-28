@@ -40,11 +40,22 @@
                         PaymentIdentifier = payment.PaymentId.ToString(),
                         ProgramId = Configuration.WarrantyConstants.ProgramId,
                         ObjectAccount = payment.ObjectAccount,
-                        VarianceExplanation = ""
+                        VarianceExplanation = ToPaymentComment(payment.Comments)
                     };
 
                 _bus.Send(paymentRequest);
             }
+        }
+
+        private string ToPaymentComment(string comment)
+        {
+            if (comment == null)
+                return null;
+
+            if (string.IsNullOrWhiteSpace(comment) || comment.Length <= 240)
+                return comment.Trim(' ');
+
+            return comment.Substring(0, 240);
         }
     }
 }
