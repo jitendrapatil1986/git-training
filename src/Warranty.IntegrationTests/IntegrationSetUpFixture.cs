@@ -19,7 +19,7 @@
     {
         public IntegrationSetUpFixture()
         {
-            ObjectFactory.Configure(x =>
+            ObjectFactory.Initialize(x =>
                                          {
                                              x.AddRegistry<WarrantyCoreRegistry>();
                                              x.AddRegistry<WarrantyCoreRegistry>();
