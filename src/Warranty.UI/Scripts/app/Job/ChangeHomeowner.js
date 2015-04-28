@@ -1,8 +1,8 @@
 ﻿require(['/Scripts/app/main.js'], function () {    
-    require(['jquery', 'x-editable', 'ko', 'ko.x-editable', 'toastr', 'urls', 'enumeration/HomeownerContactType', 'enumeration/PhoneNumberType', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, xeditable, ko, koxeditable, toastr, urls, homeownerContactTypeEnum, phoneNumberTypeEnum) {
+    require(['jquery', 'x-editable', 'ko', 'ko.x-editable', 'toastr', 'urls', 'enumeration/HomeownerContactType', 'enumeration/PhoneNumberType'], function ($, xeditable, ko, koxeditable, toastr, urls, homeownerContactTypeEnum, phoneNumberTypeEnum) {
         window.ko = ko;  //manually set the global ko property.
 
-        require(['ko.validation'], function() {
+        require(['ko.validation', 'jquery.color'], function () {
             $(function() {
                 function changeHomeownerViewModel() {
                     var self = this;
