@@ -386,7 +386,7 @@
     <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationModel.cs" />
     <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationQuery.cs" />
     <Compile Include="Features\CreateServiceCall\NewServiceCallAssignedToWsrNotificationQueryHandler.cs" />
-    <Compile Include="Features\CommunityEmployeeAssignment\CommunityEmployeAssignmentCommand.cs" />
+    <Compile Include="Features\CommunityEmployeeAssignment\CommunityEmployeeAssignmentCommand.cs" />
     <Compile Include="Features\CommunityEmployeeAssignment\CommunityEmployeAssignmentCommandHandler.cs" />
     <Compile Include="Features\CreateServiceCall\RelatedProblemCodeQueryHandler.cs" />
     <Compile Include="Features\CreateServiceCall\CreateServiceCallCommand.cs" />
@@ -609,6 +609,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Warranty.Events\Warranty.Events.csproj">
+      <Project>{288B6502-98F6-47E7-8DFF-44F7F8CFF1D1}</Project>
+      <Name>Warranty.Events</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Warranty.InnerMessages\Warranty.InnerMessages.csproj">
       <Project>{1d13d0d6-bbc3-402a-b140-0330ac3f6627}</Project>
       <Name>Warranty.InnerMessages</Name>

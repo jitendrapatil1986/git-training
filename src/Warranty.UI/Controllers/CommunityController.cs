@@ -13,7 +13,7 @@ namespace Warranty.UI.Controllers
             _mediator = mediator;
         }
 
-        public ActionResult AssignEmployee(CommunityEmployeAssignmentCommand command)
+        public ActionResult AssignEmployee(CommunityEmployeeAssignmentCommand command)
         {
             var result  = _mediator.Send(command);
 

@@ -1,7 +1,7 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'x-editable', 'ko', 'ko.x-editable', 'toastr', 'urls', 'modelData', 'enumeration/PhoneNumberType', 'enumeration/PaymentStatus', 'enumeration/BackchargeStatus', 'bootbox', 'jquery.maskedinput', 'app/formUploader', 'app/additionalContacts', 'app/approveServiceCalls', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, xeditable, ko, koxeditable, toastr, urls, modelData, phoneNumberTypeEnum, paymentStatusEnum, backchargeStatusEnum, bootbox) {
+    require(['jquery', 'x-editable', 'ko', 'ko.x-editable', 'toastr', 'urls', 'modelData', 'enumeration/PhoneNumberType', 'enumeration/PaymentStatus', 'enumeration/BackchargeStatus', 'bootbox', 'jquery.maskedinput', 'app/formUploader', 'app/additionalContacts', 'app/approveServiceCalls'], function ($, xeditable, ko, koxeditable, toastr, urls, modelData, phoneNumberTypeEnum, paymentStatusEnum, backchargeStatusEnum, bootbox) {
         window.ko = ko; //manually set the global ko property.
-        require(['ko.validation'], function() {
+        require(['ko.validation', 'jquery.color'], function () {
         
         $(function () {
             $.fn.editable.defaults.mode = 'inline';

@@ -64,13 +64,15 @@
             <script src="/Scripts/lib/respond.min.js"></script>
         <![endif]-->
 
-        @{ Html.RenderAction("GetRequireJSUrl", "Home", new { context = ViewContext });}
+        @{ Html.RenderAction("GetRequireJsUrl", "Home");}
         <script>
             define('urls', [], function() {
                 return @{ Html.RenderAction("GetApiUrls", "Home");};
             });
         </script>
         @RenderSection("modules", required: false)
+        @Html.RenderScripts()
+        @{ Html.RenderAction("GetPageRequireJs", "Home", new { context = ViewContext });}
     </head>
     <body>
         <div class="navbar navbar-default navbar-fixed-top no-print">

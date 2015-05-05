@@ -1,7 +1,7 @@
 ﻿@using Warranty.Core.Enumerations
 @using Warranty.UI.Core.Helpers
 @model Warranty.Core.ToDoInfrastructure.Models.ToDoJobChangedTaskModel
-<div class="todo @Css.ToDoClass(ToDoType.JobChangedTask) hide" id="task-todo-@Model.TaskId">
+<div class="todo @Css.ToDoClass(ToDoType.JobChangedTask) @Css.ToDoJobStageChangedTaskClass(Model.Description) hide" id="task-todo-@Model.TaskId">
 
     <div class="todo-widget-data-container">
         <div class="task-icon">

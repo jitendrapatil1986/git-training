@@ -1,7 +1,7 @@
 require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'bootbox', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'enumeration/HomeownerVerificationType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/additionalContacts', 'app/formUploader', '/Scripts/lib/jquery.color-2.1.0.min.js'], function ($, ko, koxeditable, bootbox, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, homeownerVerificationTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, additionalContacts) {
+    require(['jquery', 'ko', 'ko.x-editable', 'bootbox', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'enumeration/HomeownerContactType', 'enumeration/HomeownerVerificationType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'app/additionalContacts', 'app/formUploader'], function ($, ko, koxeditable, bootbox, urls, toastr, modelData, dropdownData, xeditable, phoneNumberTypeEnum, activityTypeEnum, homeownerContactTypeEnum, homeownerVerificationTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, additionalContacts) {
         window.ko = ko; //manually set the global ko property.
-        require(['ko.validation'], function () {
+        require(['ko.validation', 'jquery.color'], function () {
 
          $(function () {
 
