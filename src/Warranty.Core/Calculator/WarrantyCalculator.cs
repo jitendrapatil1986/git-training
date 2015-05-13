@@ -207,15 +207,16 @@ namespace Warranty.Core.Calculator
             }
         }
 
-        public IEnumerable<CalculatorResult> GetEmployeeExcellentWarrantyService(DateTime startDate, DateTime endDate, string employeeNumber)
+        public IEnumerable<CalculatorResult> GetEmployeeOutstandingWarrantyService(DateTime startDate, DateTime endDate, string employeeNumber)
         {
             var surveyData = GetEmployeeSurveyData(startDate, endDate, employeeNumber);
 
             return
-                surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
+                surveyData.Where(x=>!string.IsNullOrEmpty(x.OutstandingWarrantyService))
+                          .GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = Decimal.Divide(l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") , l.Count()) * 100,
+                              Amount = Decimal.Divide(l.Count(x => Convert.ToInt16(x.OutstandingWarrantyService) == SurveyConstants.OutstandingWarrantyThreshold) , l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -454,14 +455,14 @@ namespace Warranty.Core.Calculator
             }
         }
 
-        public IEnumerable<CalculatorResult> GetDivisionExcellentWarrantyService(DateTime startDate, DateTime endDate, string divisionName)
+        public IEnumerable<CalculatorResult> GetDivisionOutstandingWarrantyService(DateTime startDate, DateTime endDate, string divisionName)
         {
             var surveyData = GetDivisionSurveyData(startDate, endDate, divisionName);
             return
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = Decimal.Divide(l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") , l.Count()) * 100,
+                              Amount = Decimal.Divide(l.Count(x => Convert.ToInt16(x.OutstandingWarrantyService)== SurveyConstants.OutstandingWarrantyThreshold) , l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -691,14 +692,14 @@ namespace Warranty.Core.Calculator
             }
         }
 
-        public IEnumerable<CalculatorResult> GetProjectExcellentWarrantyService(DateTime startDate, DateTime endDate, string projectName)
+        public IEnumerable<CalculatorResult> GetProjectOutstandingWarrantyService(DateTime startDate, DateTime endDate, string projectName)
         {
             var surveyData = GetProjectSurveyData(startDate, endDate, projectName);
             return
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = Decimal.Divide(l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") , l.Count()) * 100,
+                              Amount = Decimal.Divide(l.Count(x => Convert.ToInt16(x.OutstandingWarrantyService) == SurveyConstants.OutstandingWarrantyThreshold), l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()

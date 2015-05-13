@@ -27,7 +27,7 @@
             public decimal AmountSpentPerHome { get; set; }
             public decimal? DefinetelyWouldRecommend { get; set; }
             public decimal? RightTheFirstTime { get; set; }
-            public decimal? ExcellentWarrantyService { get; set; }
+            public decimal? OutstandingWarrantyService { get; set; }
             public decimal PercentComplete7Days { get; set; }
             public decimal AverageDaysClosing { get; set; }
             public int Month { get; set; }

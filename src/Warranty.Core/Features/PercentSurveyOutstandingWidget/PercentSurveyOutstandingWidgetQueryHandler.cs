@@ -1,4 +1,4 @@
-﻿namespace Warranty.Core.Features.PercentSurveyExcellentWidget
+﻿namespace Warranty.Core.Features.PercentSurveyOutstandingWidget
 {
     using System;
     using System.Collections.Generic;
@@ -7,18 +7,18 @@
     using Services;
     using System.Linq;
 
-    public class PercentSurveyExcellentWidgetQueryHandler : IQueryHandler<PercentSurveyExcellentWidgetQuery, PercentSurveyExcellentWidgetModel>
+    public class PercentSurveyOutstandingWidgetQueryHandler : IQueryHandler<PercentSurveyOutstandingWidgetQuery, PercentSurveyOutstandingWidgetModel>
     {
         private readonly IEmployeeService _employeeService;
         private readonly ISurveyService _surveyService;
 
-        public PercentSurveyExcellentWidgetQueryHandler(IEmployeeService employeeService, ISurveyService surveyService)
+        public PercentSurveyOutstandingWidgetQueryHandler(IEmployeeService employeeService, ISurveyService surveyService)
         {
             _employeeService = employeeService;
             _surveyService = surveyService;
         }
 
-        public PercentSurveyExcellentWidgetModel Handle(PercentSurveyExcellentWidgetQuery query)
+        public PercentSurveyOutstandingWidgetModel Handle(PercentSurveyOutstandingWidgetQuery query)
         {
             var employees = _employeeService.GetEmployeesInMarket();
             var thisMonthRawSurveys = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new {
@@ -31,9 +31,12 @@
             {
                 thisMonthSurveysInMarket = thisMonthRawSurveys.Details.ToObject<List<ApiResult>>();
             }
-            
-            var totalThisMonthSurveys = thisMonthSurveysInMarket.Count();
-            var totalThisMonthSurveysWithRecommend = thisMonthSurveysInMarket.Count(x => Convert.ToInt16(x.ExcellentWarrantyService) >= SurveyConstants.ExcellentWarrantyThreshold);
+
+            var totalThisMonthSurveys =
+               thisMonthSurveysInMarket.Count(x => !string.IsNullOrEmpty(x.OutstandingWarrantyService));
+
+            var totalThisMonthOutstandingServiceSurveys = thisMonthSurveysInMarket
+                .Count(x => Convert.ToInt16(x.OutstandingWarrantyService) >= SurveyConstants.OutstandingWarrantyThreshold);
 
             var lastMonthRawSurveys = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new {
                                                                                                         StartDate = SystemTime.Today.AddMonths(-1).ToFirstDay(),
@@ -46,14 +49,17 @@
                 lastMonthSurveysInMarket = lastMonthRawSurveys.Details.ToObject<List<ApiResult>>();
             }
 
-            var totalLastMonthSurveys = lastMonthSurveysInMarket.Count();
-            var totalLastMonthSurveysWithRecommend = lastMonthSurveysInMarket.Count(x => Convert.ToInt16(x.ExcellentWarrantyService) >= SurveyConstants.ExcellentWarrantyThreshold);
+            var totalLastMonthSurveys =
+                lastMonthSurveysInMarket.Count(x => !string.IsNullOrEmpty(x.OutstandingWarrantyService));
 
-            return new PercentSurveyExcellentWidgetModel
+            var totalLastMonthOutstandingServiceSurveys = lastMonthSurveysInMarket
+                .Count(x => Convert.ToInt16(x.OutstandingWarrantyService) >= SurveyConstants.OutstandingWarrantyThreshold);
+
+            return new PercentSurveyOutstandingWidgetModel
             {
-                PercentExcellentLastMonth = ServiceCallCalculator.CalculatePercentage(totalLastMonthSurveysWithRecommend, totalLastMonthSurveys),
+                PercentOutstandingLastMonth = ServiceCallCalculator.CalculatePercentage(totalLastMonthOutstandingServiceSurveys, totalLastMonthSurveys),
                 TotalSurveysLastMonth = totalLastMonthSurveys,
-                PercentExcellentThisMonth = ServiceCallCalculator.CalculatePercentage(totalThisMonthSurveysWithRecommend, totalThisMonthSurveys),
+                PercentOutstandingThisMonth = ServiceCallCalculator.CalculatePercentage(totalThisMonthOutstandingServiceSurveys, totalThisMonthSurveys),
                 TotalSurveysThisMonth = totalThisMonthSurveys,
             };
         }
@@ -62,6 +68,11 @@
         {
             public string WarrantyServiceRepresentativeEmployeeId { get; set; }
             public string ExcellentWarrantyService { get; set; }
+            public string OutstandingWarrantyService
+            {
+                get { return ExcellentWarrantyService; }
+                set { ExcellentWarrantyService = value; }
+            }
         }
     }
 }

@@ -446,7 +446,7 @@
     <Content Include="Views\Report\WSRLoadingReport.cshtml" />
     <Content Include="Views\Report\MailMerge.cshtml" />
     <Content Include="Views\Home\_PercentSurveyRecommendWidget.cshtml" />
-    <Content Include="Views\Home\_PercentSurveyExcellentWidget.cshtml" />
+    <Content Include="Views\Home\_PercentSurveyOutstandingWidget.cshtml" />
     <Content Include="Views\Job\ChangeHomeowner.cshtml" />
     <Content Include="Views\Home\_ServiceCallListItem.cshtml" />
     <Content Include="Views\Home\_ToDoJobChangedTask.cshtml" />
