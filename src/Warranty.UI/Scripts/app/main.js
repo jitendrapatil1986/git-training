@@ -28,6 +28,8 @@ require.config({
         'ko.validation': 'lib/knockout.validation.min',
         'hideseek': 'lib/jquery.hideseek.min',
         'maxlength': 'lib/bootstrap-maxlength.min',
+        'polyfill': 'lib/polyfill.min',
+        'main': 'app/main'
     },
     shim: {
         'jquery.validate': ['jquery'],

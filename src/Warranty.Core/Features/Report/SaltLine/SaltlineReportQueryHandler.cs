@@ -5,7 +5,7 @@
     using Calculator;
     using Extensions;
     using NPoco;
-    using Security;
+    using Common.Security.User.Session;
 
     public class SaltlineReportQueryHandler : IQueryHandler<SaltlineReportQuery, SaltlineReportModel>
     {

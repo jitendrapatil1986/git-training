@@ -5,7 +5,7 @@
     using Enumerations;
     using Extensions;
     using NPoco;
-    using Security;
+    using Common.Security.User.Session;
 
     public class WSRLoadingReportQueryHandler : IQueryHandler<WSRLoadingReportQuery, WSRLoadingReportModel>
     {

@@ -4,7 +4,8 @@
     using Enumerations;
     using Extensions;
     using NPoco;
-    using Security;
+    using Common.Security.User.Session;
+    using Common.Security.User;
 
     public class WarrantyServiceRepServiceCallsWidgetQueryHandler : IQueryHandler<WarrantyServiceRepServiceCallsWidgetQuery, ServiceCallsWidgetModel>
     {

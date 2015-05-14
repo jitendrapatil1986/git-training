@@ -8,10 +8,10 @@ namespace Warranty.Core.Features.JobSummary
     using Enumerations;
     using JobServiceApiHelpers;
     using NPoco;
-    using Security;
+    using Common.Security.User.Session;
     using Services;
     using System.Linq;
-    using Warranty.Core.Extensions;
+    using Extensions;
     using HttpApiClient = JobService.Client.Api.HttpApiClient;
 
     public class JobSummaryQueryHandler : IQueryHandler<JobSummaryQuery, JobSummaryModel>

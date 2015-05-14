@@ -1,0 +1,100 @@
+﻿@using Common.Security.User
+@if (User.IsInRole(Common.Security.User.UserRoles.Admin))
+{
+    <div id="impersonateUserModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 id="myModalLabel">Impersonate User</h3>
+        </div>
+
+        <div class="modal-body" style="overflow: visible;">
+            <p>Enter someone's name, username, or a job title:</p>
+            <input id="impersonateUserModal-nameInput" type="text" placeholder="User" />
+            <img id="impersonateUserModal-loadingIndicator" src="@Url.Content("/img/loader.gif")" />
+            <span id="impersonateUserModal-loadingName"></span>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+    </div>
+
+    <script>
+        require(['main'], function () {
+
+            require(['jquery', 'underscore', 'bootstrap'], function ($, _) {
+                var searchResultsUrl = "@Url.Action("SearchUsers", "Security", new {area = ""})";
+                var resultMap = {};
+                var searchResultTemplate = _.template(
+                    '<div class="typeahead impersonateUser-searchResult">' +
+                    '<%= Caption %>' +
+                    '<div class="title"><%= Title %></div>' +
+                    '</div>');
+
+                $(document).ready(function () {
+                    $("#impersonateUserModal-nameInput").typeahead({
+                        higlight: true
+                    },
+                    {
+                        name: 'users',
+                        source: fetchSearchResults,
+                        async: true,
+                        matcher: matchSearchResult,
+                        highlighter: generateSearchResultRow,
+                        updater: relocateToSearchResultView
+                    });
+
+                    $("#impersonateUserModal").on('shown', function () {
+                        $("#impersonateUserModal-nameInput").focus();
+                    });
+
+                    $("#impersonateUserModal-loadingIndicator").hide();
+                });
+
+                function fetchSearchResults(query, undefined, processResultsCallback) {
+                    $.ajax({
+                        url: searchResultsUrl,
+                        data: { query: query },
+                        cache: false,
+                        dataType: "json"
+                    }).done(function (results) {
+                        var items = processItems(results);
+                        processResultsCallback(items);
+                    });
+                }
+
+                function processItems(results) {
+                    resultMap = {};
+                    return results.map(function (item) {
+                        var key = item.Caption;
+                        resultMap[key] = item;
+                        return key;
+                    });
+                }
+
+                function matchSearchResult(key) {
+                    // matching is being done server side, so every result should be a match
+                    return true;
+                }
+
+                function generateSearchResultRow(key) {
+                    var item = resultMap[key];
+                    return searchResultTemplate(item);
+                }
+
+                function relocateToSearchResultView(key) {
+                    var item = resultMap[key];
+
+                    $("#impersonateUserModal-loadingIndicator").show();
+                    $("#impersonateUserModal-loadingName").text(item.Caption);
+
+                    window.location = item.Url;
+                }
+            });
+        });
+    </script>
+}
+@if (User.IsBeingImpersonated())
+{
+    <div id="impersonationBanner">You are impersonating <b>@User.Identity.Name</b></div>
+}

@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using Enumerations;
     using NPoco;
-    using Security;
+    using Common.Security.User.Session;
     using Extensions;
 
     public class MyTeamQueryHandler : IQueryHandler<MyTeamQuery, IEnumerable<MyTeamModel>>

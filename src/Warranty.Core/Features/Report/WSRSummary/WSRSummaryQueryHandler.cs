@@ -2,8 +2,8 @@
 {
     using Enumerations;
     using NPoco;
-    using Security;
     using Common.Extensions;
+    using Common.Security.User.Session;
 
     public class WSRSummaryQueryHandler : IQueryHandler<WSRSummaryQuery, WSRSummaryModel>
     {

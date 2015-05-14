@@ -6,7 +6,7 @@
     using Entities;
     using Enumerations;
     using NPoco;
-    using Security;
+    using Common.Security.User.Session;
 
     public class ServiceCallLineItemQueryHandler : IQueryHandler<ServiceCallLineItemQuery, ServiceCallLineItemModel>
     {

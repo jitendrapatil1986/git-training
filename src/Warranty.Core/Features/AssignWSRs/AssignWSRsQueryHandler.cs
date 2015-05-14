@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using NPoco;
-using Warranty.Core.Security;
+using Common.Security.User.Session;
 using Common.Extensions;
 
 namespace Warranty.Core.Features.AssignWSRs

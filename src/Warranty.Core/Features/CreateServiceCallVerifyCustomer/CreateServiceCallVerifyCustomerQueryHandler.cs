@@ -3,7 +3,7 @@
 namespace Warranty.Core.Features.CreateServiceCallVerifyCustomer
 {
     using NPoco;
-    using Security;
+    using Common.Security.User.Session;
 
     public class CreateServiceCallVerifyCustomerQueryHandler : IQueryHandler<CreateServiceCallVerifyCustomerQuery, CreateServiceCallVerifyCustomerModel>
     {
