@@ -33,10 +33,10 @@
             }
 
             var totalThisMonthSurveys =
-               thisMonthSurveysInMarket.Count(x => !string.IsNullOrEmpty(x.OutstandingWarrantyService));
+               thisMonthSurveysInMarket.Count(x => !string.IsNullOrEmpty(x.WarrantyServiceScore));
 
             var totalThisMonthOutstandingServiceSurveys = thisMonthSurveysInMarket
-                .Count(x => Convert.ToInt16(x.OutstandingWarrantyService) >= SurveyConstants.OutstandingWarrantyThreshold);
+                .Count(x => Convert.ToInt16(x.WarrantyServiceScore) >= SurveyConstants.OutstandingWarrantyThreshold);
 
             var lastMonthRawSurveys = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new {
                                                                                                         StartDate = SystemTime.Today.AddMonths(-1).ToFirstDay(),
@@ -50,10 +50,10 @@
             }
 
             var totalLastMonthSurveys =
-                lastMonthSurveysInMarket.Count(x => !string.IsNullOrEmpty(x.OutstandingWarrantyService));
+                lastMonthSurveysInMarket.Count(x => !string.IsNullOrEmpty(x.WarrantyServiceScore));
 
             var totalLastMonthOutstandingServiceSurveys = lastMonthSurveysInMarket
-                .Count(x => Convert.ToInt16(x.OutstandingWarrantyService) >= SurveyConstants.OutstandingWarrantyThreshold);
+                .Count(x => Convert.ToInt16(x.WarrantyServiceScore) >= SurveyConstants.OutstandingWarrantyThreshold);
 
             return new PercentSurveyOutstandingWidgetModel
             {
@@ -67,12 +67,7 @@
         internal class ApiResult
         {
             public string WarrantyServiceRepresentativeEmployeeId { get; set; }
-            public string ExcellentWarrantyService { get; set; }
-            public string OutstandingWarrantyService
-            {
-                get { return ExcellentWarrantyService; }
-                set { ExcellentWarrantyService = value; }
-            }
+            public string WarrantyServiceScore { get; set; }
         }
     }
 }

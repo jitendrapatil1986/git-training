@@ -35,10 +35,10 @@
             }
 
             var totalThisMonthSurveys =
-                thisMonthSurveys.Count(x => !string.IsNullOrEmpty(x.OutstandingWarrantyService));
+                thisMonthSurveys.Count(x => !string.IsNullOrEmpty(x.WarrantyServiceScore));
 
             var totalThisMonthOutstandingServiceSurveys = thisMonthSurveys
-                .Count(x => Convert.ToInt16(x.OutstandingWarrantyService) >= SurveyConstants.OutstandingWarrantyThreshold);
+                .Count(x => Convert.ToInt16(x.WarrantyServiceScore) >= SurveyConstants.OutstandingWarrantyThreshold);
 
             var lastMonthRawSurveys = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new {
                                                                                                     StartDate = DateTime.Today.AddMonths(-1).ToFirstDay(),
@@ -52,10 +52,10 @@
             }
 
             var totalLastMonthSurveys =
-                lastMonthSurveys.Count(x => !string.IsNullOrEmpty(x.OutstandingWarrantyService));
+                lastMonthSurveys.Count(x => !string.IsNullOrEmpty(x.WarrantyServiceScore));
 
             var totalLastMonthOutstandingServiceSurveys = lastMonthSurveys
-                .Count(x => Convert.ToInt16(x.OutstandingWarrantyService) >= SurveyConstants.OutstandingWarrantyThreshold);
+                .Count(x => Convert.ToInt16(x.WarrantyServiceScore) >= SurveyConstants.OutstandingWarrantyThreshold);
 
             return new PercentSurveyOutstandingWidgetModel
             {
@@ -69,12 +69,7 @@
         internal class ApiResult
         {
             public string WarrantyServiceRepresentativeEmployeeId { get; set; }
-            public string ExcellentWarrantyService { get; set; }
-            public string OutstandingWarrantyService 
-            { 
-                get { return ExcellentWarrantyService; }
-                set { ExcellentWarrantyService = value; } 
-            }
+            public string WarrantyServiceScore { get; set; }
         }
     }
 }

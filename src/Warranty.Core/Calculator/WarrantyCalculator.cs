@@ -212,11 +212,11 @@ namespace Warranty.Core.Calculator
             var surveyData = GetEmployeeSurveyData(startDate, endDate, employeeNumber);
 
             return
-                surveyData.Where(x=>!string.IsNullOrEmpty(x.OutstandingWarrantyService))
+                surveyData.Where(x => !string.IsNullOrEmpty(x.WarrantyServiceScore))
                           .GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = Decimal.Divide(l.Count(x => Convert.ToInt16(x.OutstandingWarrantyService) == SurveyConstants.OutstandingWarrantyThreshold) , l.Count()) * 100,
+                              Amount = Decimal.Divide(l.Count(x => Convert.ToInt16(x.WarrantyServiceScore) >= SurveyConstants.OutstandingWarrantyThreshold), l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -462,7 +462,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = Decimal.Divide(l.Count(x => Convert.ToInt16(x.OutstandingWarrantyService)== SurveyConstants.OutstandingWarrantyThreshold) , l.Count()) * 100,
+                              Amount = Decimal.Divide(l.Count(x => Convert.ToInt16(x.WarrantyServiceScore) >= SurveyConstants.OutstandingWarrantyThreshold), l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
@@ -699,7 +699,7 @@ namespace Warranty.Core.Calculator
                 surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = Decimal.Divide(l.Count(x => Convert.ToInt16(x.OutstandingWarrantyService) == SurveyConstants.OutstandingWarrantyThreshold), l.Count()) * 100,
+                              Amount = Decimal.Divide(l.Count(x => Convert.ToInt16(x.WarrantyServiceScore) >= SurveyConstants.OutstandingWarrantyThreshold), l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()

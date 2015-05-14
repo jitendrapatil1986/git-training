@@ -45,7 +45,7 @@
                     BonusSummaries = GetBonusByEmployeeAndCommunity(query, employeeNumber, market),
                     EmployeeTiedToRepresentatives = GetEmployeesTiedToRepresentatives(user),
                     DefinitelyWouldRecommendSurveys = surveyData.Select(x=> new WarrantyBonusSummaryModel.DefinitelyWouldRecommendSurvey{DefinitelyWillRecommend = x.DefinitelyWillRecommend, HomeownerName = x.HomeownerName, JobNumber = x.JobNumber}),
-                    OutstandingWarrantySurveys = surveyData.Select(x => new WarrantyBonusSummaryModel.OutstandingWarrantySurvey{OutstandingWarrantyService = x.OutstandingWarrantyService, HomeownerName = x.HomeownerName, JobNumber = x.JobNumber}),
+                    OutstandingWarrantySurveys = surveyData.Select(x => new WarrantyBonusSummaryModel.OutstandingWarrantySurvey { OutstandingWarrantyService = x.WarrantyServiceScore, HomeownerName = x.HomeownerName, JobNumber = x.JobNumber }),
                     AllItemsCompletes = GetAllItemsComplete(query, employeeNumber),
                 };
 
@@ -234,12 +234,7 @@
             public string DefinitelyWillRecommend { get; set; }
             public string HomeownerName { get; set; }
             public string JobNumber { get; set; }
-            public string ExcellentWarrantyService { get; set; }
-            public string OutstandingWarrantyService
-            {
-                get { return ExcellentWarrantyService; }
-                set { ExcellentWarrantyService = value; }
-            }
+            public string WarrantyServiceScore { get; set; }
         }
     }
 }
