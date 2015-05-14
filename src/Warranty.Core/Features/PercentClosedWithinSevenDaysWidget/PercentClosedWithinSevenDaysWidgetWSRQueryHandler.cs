@@ -2,7 +2,7 @@
 {
     using Extensions;
     using NPoco;
-    using Security;
+    using Common.Security.User.Session;
 
     public class PercentClosedWithinSevenDaysWidgetWSRQueryHandler : IQueryHandler<PercentClosedWithinSevenDaysWidgetWSRQuery, PercentClosedWithinSevenDaysWidgetModel>
     {

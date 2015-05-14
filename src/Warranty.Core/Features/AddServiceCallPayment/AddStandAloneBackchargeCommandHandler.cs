@@ -8,7 +8,7 @@ namespace Warranty.Core.Features.AddServiceCallPayment
     using InnerMessages;
     using NPoco;
     using NServiceBus;
-    using Security;
+    using Common.Security.User.Session;
     using Services;
 
     public class AddStandAloneBackchargeCommandHandler : ICommandHandler<AddStandAloneBackchargeCommand, AddStandAloneBackchargeCommandDto>

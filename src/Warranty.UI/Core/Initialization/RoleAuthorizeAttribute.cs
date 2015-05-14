@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
+using Common.Security.User.Session;
 using Microsoft.Practices.ServiceLocation;
-using Warranty.Core.Security;
 
 namespace Warranty.UI.Core.Initialization
 {

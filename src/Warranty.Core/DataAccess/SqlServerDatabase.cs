@@ -1,7 +1,7 @@
 ﻿using System;
 using NPoco;
 using Warranty.Core.Entities;
-using Warranty.Core.Security;
+using Common.Security.User.Session;
 
 namespace Warranty.Core.DataAccess
 {

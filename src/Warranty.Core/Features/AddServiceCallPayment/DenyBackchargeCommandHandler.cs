@@ -7,7 +7,7 @@
     using InnerMessages;
     using NPoco;
     using NServiceBus;
-    using Security;
+    using Common.Security.User.Session;
 
     public class DenyBackchargeCommandHandler : ICommandHandler<DenyBackchargeCommand, DenyBackchargeCommandHandler.DenyBackchargeCommandHandlerResponse>
     {

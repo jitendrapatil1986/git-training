@@ -5,7 +5,8 @@ namespace Warranty.Core.Features.AmountSpentWidget
     using System;
     using System.Collections.Generic;
     using NPoco;
-    using Security;
+    using Common.Security.User.Session;
+    using Common.Security.User;
     using Extensions;
     using System.Linq;
 

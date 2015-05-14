@@ -7,7 +7,8 @@
     using Enumerations;
     using Extensions;
     using NPoco;
-    using Security;
+    using Common.Security.User.Session;
+    using Common.Security.User;
     using Services;
 
     public class WarrantyBonusSummaryWSRQueryHandler : IQueryHandler<WarrantyBonusSummaryWSRQuery, WarrantyBonusSummaryModel>
@@ -26,7 +27,7 @@
         public WarrantyBonusSummaryModel Handle(WarrantyBonusSummaryWSRQuery query)
         {
             var user = _userSession.GetCurrentUser();
-            var employeeNumber = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? user.EmployeeNumber : query.Model.SelectedEmployeeNumber;
+            var employeeNumber = user.IsInRole(Enumerations.UserRoles.WarrantyServiceRepresentative) ? user.EmployeeNumber : query.Model.SelectedEmployeeNumber;
             var market = user.Markets.FirstOrDefault();
 
             if (!query.Model.FilteredDate.HasValue || String.IsNullOrEmpty(market))
@@ -177,7 +178,7 @@
         {
             var result = new List<WarrantyBonusSummaryModel.EmployeeTiedToRepresentative>();
 
-            if (user.IsInRole(UserRoles.CustomerCareManager) || user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.WarrantyAdmin))
+            if (user.IsInRole(Enumerations.UserRoles.CustomerCareManager) || user.IsInRole(Enumerations.UserRoles.WarrantyServiceCoordinator) || user.IsInRole(Enumerations.UserRoles.WarrantyAdmin))
             {
                 const string sql = @"SELECT DISTINCT e.EmployeeId as WarrantyRepresentativeEmployeeId, e.EmployeeNumber, LOWER(e.EmployeeName) as EmployeeName from CommunityAssignments ca
                                     INNER join Communities c

@@ -3,7 +3,7 @@
     using Enumerations;
     using Extensions;
     using NPoco;
-    using Security;
+    using Common.Security.User.Session;
 
     public class WarrantyDollarsSpentWidgetWSRQueryHandler : IQueryHandler<WarrantyDollarsSpentWidgetWSRQuery, WarrantyDollarsSpentWidgetModel>
     {

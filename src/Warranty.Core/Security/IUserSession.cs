@@ -1,9 +1,9 @@
-﻿namespace Warranty.Core.Security
-{
-    public interface IUserSession
-    {
-        IUser GetCurrentUser();
+﻿//namespace Warranty.Core.Security
+//{
+//    public interface IUserSession
+//    {
+//        IUser GetCurrentUser();
 
-        void LogOut();
-    }
-}
+//        void LogOut();
+//    }
+//}

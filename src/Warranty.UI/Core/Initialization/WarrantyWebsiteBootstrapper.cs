@@ -3,7 +3,6 @@
     using System.Configuration;
     using System.Web.Http;
     using System.Web.Mvc;
-    using Security;
     using FluentValidation.Mvc;
     using System.Web.Optimization;
     using System.Web.Routing;

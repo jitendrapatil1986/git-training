@@ -5,7 +5,7 @@
     using System.Linq;
     using Enumerations;
     using NPoco;
-    using Security;
+    using Common.Security.User.Session;
     using Common.Extensions;
     
 
@@ -61,7 +61,7 @@
         public List<ServiceCallStatsModel.LineItem> GetStats(StatView defaultView, DateTime date)
         {
             var user = _userSession.GetCurrentUser();
-            var isEmployeeSpecific = user.IsInRole(UserRoles.WarrantyServiceRepresentative);
+            var isEmployeeSpecific = user.IsInRole(Enumerations.UserRoles.WarrantyServiceRepresentative);
 
             var sql = @"SELECT COALESCE(AverageDaysClosed, 0) as AverageDaysClosed, COALESCE(PercentClosedWithinSevenDays, 0) as PercentClosedWithinSevenDays, COALESCE(TotalDollarsSpent, 0) as TotalDollarsSpent, NumberOfWarrantableHomes, COALESCE(TotalDollarsSpent/NumberOfWarrantableHomes, 0) as DollarsSpentPerHome, a.EmployeeId, a.EmployeeName, a.EmployeeNumber, a.CityCode
                                 FROM
