@@ -32,7 +32,8 @@
                                             INNER JOIN Cities cc
                                             ON c.CityId = cc.CityId
                                             WHERE MONTH(CompletionDate) = MONTH(@0) AND YEAR(CompletionDate) = YEAR(@0)
-                                              AND CityCode IN ({0})";
+                                              AND CityCode IN ({0})
+                                              AND sc.ServiceCallType = 'Warranty Service Request'";
 
                 var avgDaysClosedThisMonth = _database.ExecuteScalar<int>(string.Format(sqlAvgDays, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today);
                 var avgDaysClosedLastMonth = _database.ExecuteScalar<int>(string.Format(sqlAvgDays, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today.ToLastDay().AddMonths(-1));
