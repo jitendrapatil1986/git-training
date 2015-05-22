@@ -46,7 +46,7 @@
                     AmountSpentPerHome = achievementSummaryByTheMonth.Average(x => x.AmountSpentPerHome),
                     AverageDaysClosing = achievementSummaryByTheMonth.Average(x => x.AverageDaysClosing),
                     DefinetelyWouldRecommend = achievementSummaryByTheMonth.Average(x => x.DefinetelyWouldRecommend),
-                    ExcellentWarrantyService = achievementSummaryByTheMonth.Average(x => x.ExcellentWarrantyService),
+                    OutstandingWarrantyService = achievementSummaryByTheMonth.Average(x => x.OutstandingWarrantyService),
                     RightTheFirstTime = achievementSummaryByTheMonth.Average(x => x.RightTheFirstTime),
                     PercentComplete7Days = achievementSummaryByTheMonth.Average(x => x.PercentComplete7Days),
                 };
@@ -60,17 +60,17 @@
 
             var monthRange = _warrantyCalculator.GetMonthRange(startDate, endDate);
 
-            var excellentService = _warrantyCalculator.GetEmployeeExcellentWarrantyService(startDate, endDate, employeeNumber);
+            var outstandingService = _warrantyCalculator.GetEmployeeOutstandingWarrantyService(startDate, endDate, employeeNumber);
             var definetelyWouldRecommend = _warrantyCalculator.GetEmployeeDefinetelyWouldRecommend(startDate, endDate, employeeNumber);
             var rightTheFirstTime = _warrantyCalculator.GetEmployeeRightTheFirstTime(startDate, endDate, employeeNumber);
             var amountSpent = _warrantyCalculator.GetEmployeeAmountSpent(startDate, endDate, employeeNumber);
             var averageDays = _warrantyCalculator.GetEmployeeAverageDaysClosed(startDate, endDate, employeeNumber);
             var percentClosedWithin7Days = _warrantyCalculator.GetEmployeePercentClosedWithin7Days(startDate, endDate, employeeNumber);
 
-            return AgregateDataForReport(averageDays, percentClosedWithin7Days, amountSpent, excellentService, definetelyWouldRecommend, rightTheFirstTime, monthRange);
+            return AgregateDataForReport(averageDays, percentClosedWithin7Days, amountSpent, outstandingService, definetelyWouldRecommend, rightTheFirstTime, monthRange);
         }
 
-        private IEnumerable<AchievementReportModel.AchievementSummary> AgregateDataForReport(IEnumerable<CalculatorResult> averageDays, IEnumerable<CalculatorResult> percentClosedWithin7Days, IEnumerable<CalculatorResult> amountSpent, IEnumerable<CalculatorResult> excellentService, IEnumerable<CalculatorResult> definetelyWouldRecommend, IEnumerable<CalculatorResult> rightTheFirstTime, IEnumerable<MonthYearModel> monthRange)
+        private IEnumerable<AchievementReportModel.AchievementSummary> AgregateDataForReport(IEnumerable<CalculatorResult> averageDays, IEnumerable<CalculatorResult> percentClosedWithin7Days, IEnumerable<CalculatorResult> amountSpent, IEnumerable<CalculatorResult> outstandingService, IEnumerable<CalculatorResult> definetelyWouldRecommend, IEnumerable<CalculatorResult> rightTheFirstTime, IEnumerable<MonthYearModel> monthRange)
         {
             var list = new List<AchievementReportModel.AchievementSummary>();
             
@@ -81,7 +81,7 @@
                         AverageDaysClosing = GetValueForMonth(averageDays, range) ?? 0,
                         PercentComplete7Days = GetValueForMonth(percentClosedWithin7Days, range)??0,
                         AmountSpentPerHome = GetValueForMonth(amountSpent, range)??0,
-                        ExcellentWarrantyService = GetValueForMonth(excellentService, range),
+                        OutstandingWarrantyService = GetValueForMonth(outstandingService, range),
                         DefinetelyWouldRecommend = GetValueForMonth(definetelyWouldRecommend, range),
                         RightTheFirstTime = GetValueForMonth(rightTheFirstTime, range),
                         Month = range.MonthNumber,

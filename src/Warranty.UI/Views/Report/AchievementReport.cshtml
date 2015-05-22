@@ -56,7 +56,7 @@
                     <th class="text-right">Average Days to Closed</th>
                     <th class="text-right">% Within 7 Days</th>
                     <th class="text-right">Def. Would Recomm.</th>
-                    <th class="text-right">Exc. Warr. Service</th>
+                    <th class="text-right">Outs. Warr. Service</th>
                     <th class="text-right">Right The First Time</th>
                 </tr>
             </thead>
@@ -69,7 +69,7 @@
                         <td class="text-right">@achievementSummary.AverageDaysClosing</td>
                         <td class="text-right">@Format.Percentage(achievementSummary.PercentComplete7Days)</td>
                         <td class="text-right">@Format.Percentage(achievementSummary.DefinetelyWouldRecommend)</td>
-                        <td class="text-right">@Format.Percentage(achievementSummary.ExcellentWarrantyService)</td>
+                        <td class="text-right">@Format.Percentage(achievementSummary.OutstandingWarrantyService)</td>
                         <td class="text-right">@Format.Percentage(@achievementSummary.RightTheFirstTime)</td>
                     </tr>
                 }
@@ -79,7 +79,7 @@
                         <td class="text-right">@Format.WithOneDecimal(Model.PeriodAchievementSummary.AverageDaysClosing)</td>
                         <td class="text-right">@Format.Percentage(Model.PeriodAchievementSummary.PercentComplete7Days)</td>
                         <td class="text-right">@Format.Percentage(Model.PeriodAchievementSummary.DefinetelyWouldRecommend)</td>
-                        <td class="text-right">@Format.Percentage(Model.PeriodAchievementSummary.ExcellentWarrantyService)</td>
+                        <td class="text-right">@Format.Percentage(Model.PeriodAchievementSummary.OutstandingWarrantyService)</td>
                         <td class="text-right">@Format.Percentage(@Model.PeriodAchievementSummary.RightTheFirstTime)</td>
                     </tr>
             </tbody>
