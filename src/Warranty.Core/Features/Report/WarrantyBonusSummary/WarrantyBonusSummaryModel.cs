@@ -13,14 +13,14 @@
             BonusSummaries = new List<BonusSummary>();
             EmployeeTiedToRepresentatives = new List<EmployeeTiedToRepresentative>();
             DefinitelyWouldRecommendSurveys = new List<DefinitelyWouldRecommendSurvey>();
-            ExcellentWarrantySurveys = new List<ExcellentWarrantySurvey>();
+            WarrantySurveyResults = new List<WarrantySurveyResult>();
             AllItemsCompletes = new List<ItemsComplete>();
         }
 
         public IEnumerable<BonusSummary> BonusSummaries { get; set; }
         public IEnumerable<EmployeeTiedToRepresentative> EmployeeTiedToRepresentatives { get; set; }
         public IEnumerable<DefinitelyWouldRecommendSurvey> DefinitelyWouldRecommendSurveys { get; set; }
-        public IEnumerable<ExcellentWarrantySurvey> ExcellentWarrantySurveys { get; set; }
+        public IEnumerable<WarrantySurveyResult> WarrantySurveyResults { get; set; }
         public IEnumerable<ItemsComplete> AllItemsCompletes { get; set; }
         public string SelectedEmployeeNumber { get; set; }
         public DateTime? FilteredDate { get; set; }
@@ -67,12 +67,12 @@
             }
         }
         
-        public decimal TotalExcellentWarrantySurveyBonusAmount 
+        public decimal TotalOutstandingWarrantySurveyBonusAmount 
         { 
             get
             {
             return
-                ExcellentWarrantySurveys.Count(x => x.IsBonusable) * SurveyConstants.ExcellentWarrantyBonusAmount;
+                WarrantySurveyResults.Count(x => x.IsBonusable) * SurveyConstants.OutstandingWarrantyBonusAmount;
             } 
         }
 
@@ -80,7 +80,7 @@
         {
             get
             {
-                return BonusSummaries.Any() || DefinitelyWouldRecommendSurveys.Any() || ExcellentWarrantySurveys.Any() || AllItemsCompletes.Any();
+                return BonusSummaries.Any() || DefinitelyWouldRecommendSurveys.Any() || WarrantySurveyResults.Any() || AllItemsCompletes.Any();
             }
         }
 
@@ -126,17 +126,17 @@
             }
         }
 
-        public class ExcellentWarrantySurvey
+        public class WarrantySurveyResult
         {
             public string HomeownerName { get; set; }
             public string JobNumber { get; set; }
-            public string ExcellentWarrantyService { get; set; }
-            public decimal BonusAmount { get { return IsBonusable ? SurveyConstants.ExcellentWarrantyBonusAmount : 0; }}
+            public string WarrantyServiceScore { get; set; }
+            public decimal BonusAmount { get { return IsBonusable ? SurveyConstants.OutstandingWarrantyBonusAmount : 0; }}
             public bool IsBonusable 
             {
                 get
                 { 
-                    return Convert.ToInt16(ExcellentWarrantyService) >= SurveyConstants.ExcellentWarrantyThreshold;
+                    return Convert.ToInt16(WarrantyServiceScore) >= SurveyConstants.OutstandingWarrantyThreshold;
                 }
             }
         }
