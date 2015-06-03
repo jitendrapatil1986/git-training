@@ -28,7 +28,7 @@ namespace Warranty.Core.Calculator
             using (_database)
             {
                 const string sql = @"SELECT count(*) as TotalElements, AVG(DATEDIFF(DD, sc.CreatedDate, CompletionDate)) as Amount, month(completiondate) MonthNumber, year(completionDate) YearNumber
-                                            FROM ServiceCalls sc
+                                     FROM ServiceCalls sc
                                             INNER JOIN Employees e
                                             ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
                                             INNER JOIN Jobs j
@@ -37,11 +37,12 @@ namespace Warranty.Core.Calculator
                                             ON j.CommunityId = c.CommunityId
                                             INNER JOIN Cities cc
                                             ON c.CityId = cc.CityId
-                                            WHERE CompletionDate >= @0
+                                     WHERE CompletionDate >= @0
                                             AND CompletionDate <= @1
-                                                AND CityCode IN ({0})
-                                                AND EmployeeNumber=@2
-                                        group by month(completiondate), year(completionDate)";
+                                            AND CityCode IN ({0})
+                                            AND EmployeeNumber=@2
+                                            AND sc.ServiceCallType = 'Warranty Service Request'
+                                     GROUP BY month(completiondate), year(completionDate)";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
                 return result;
@@ -67,6 +68,7 @@ namespace Warranty.Core.Calculator
                             AND CompletionDate <= @1
                                     AND CityCode IN ({0})
                                     AND EmployeeNumber=@2
+                            AND sc.ServiceCallType = 'Warranty Service Request'
                         group by month(completiondate), year(completionDate)";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
