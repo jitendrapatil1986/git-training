@@ -212,7 +212,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var line in Model.WarrantySurveyResults.Where(w => Convert.ToInt16(w.WarrantyServiceScore) >= SurveyConstants.OutstandingWarrantyThreshold))
+                        @foreach (var line in Model.WarrantySurveyResults)
                         {
                             <tr>
                                 <td>@Html.DisplayFor(model => line.HomeownerName)</td>
