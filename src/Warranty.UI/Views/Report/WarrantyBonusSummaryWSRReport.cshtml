@@ -212,12 +212,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var line in Model.OutstandingWarrantySurveys)
+                        @foreach (var line in Model.WarrantySurveyResults)
                         {
                             <tr>
                                 <td>@Html.DisplayFor(model => line.HomeownerName)</td>
                                 <td>@Html.DisplayFor(model => line.JobNumber)</td>
-                                <td>@Html.DisplayFor(model => line.OutstandingWarrantyService)</td>
+                                <td>@Html.DisplayFor(model => line.WarrantyServiceScore)</td>
                                 <td>@Format.MoneyWithoutZero(line.BonusAmount)</td>
                             </tr>
                         }
