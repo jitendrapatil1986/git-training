@@ -5,7 +5,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
 {
     using Enumerations;
     using NPoco;
-    using Common.Security.User.Session;
+    using Common.Security.Session;
     using Services;
     using Common.Extensions;
 

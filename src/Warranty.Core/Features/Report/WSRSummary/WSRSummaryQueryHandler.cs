@@ -3,7 +3,7 @@
     using Enumerations;
     using NPoco;
     using Common.Extensions;
-    using Common.Security.User.Session;
+    using Common.Security.Session;
 
     public class WSRSummaryQueryHandler : IQueryHandler<WSRSummaryQuery, WSRSummaryModel>
     {

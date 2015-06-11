@@ -1,5 +1,5 @@
 ﻿using System.Web.Mvc;
-using Common.Security.User.Session;
+using Common.Security.Session;
 
 namespace Warranty.UI.Controllers
 {

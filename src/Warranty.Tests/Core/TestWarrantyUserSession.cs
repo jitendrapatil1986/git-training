@@ -1,6 +1,6 @@
 ﻿namespace Warranty.Tests.Core
 {
-    using Common.Security.User.Session;
+    using Common.Security.Session;
     using Common.Security.User;
 
     public class TestWarrantyUserSession : IUserSession

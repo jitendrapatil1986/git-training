@@ -8,7 +8,7 @@ namespace Warranty.Core.Features.JobSummary
     using Enumerations;
     using JobServiceApiHelpers;
     using NPoco;
-    using Common.Security.User.Session;
+    using Common.Security.Session;
     using Services;
     using System.Linq;
     using Extensions;

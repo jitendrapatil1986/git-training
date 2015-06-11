@@ -1,9 +1,9 @@
 ﻿using Common.Security.Queries;
-using Common.Security.User.Session;
+using Common.UI.Security.Session;
 
 namespace Warranty.UI.Controllers
 {
-    public class SecurityController : Common.Security.Controllers.SecurityController
+    public class SecurityController : Common.UI.Security.Controllers.SecurityController
     {
         public SecurityController(IWebUserSession userSession, UserSearchQuery searchQuery): base(userSession, searchQuery)
         {

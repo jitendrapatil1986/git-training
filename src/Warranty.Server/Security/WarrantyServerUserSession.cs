@@ -1,7 +1,7 @@
 ﻿namespace Warranty.Server.Security
 {
     using Common.Security.User;
-    using Common.Security.User.Session;
+    using Common.Security.Session;
 
     public class WarrantyServerUserSession : IUserSession
     {

@@ -2,7 +2,7 @@
 using NPoco;
 using NServiceBus.MessageMutator;
 using Warranty.Core.DataAccess;
-using Common.Security.User.Session;
+using Common.Security.Session;
 using Warranty.Core.Services;
 using Warranty.Server.Security;
 

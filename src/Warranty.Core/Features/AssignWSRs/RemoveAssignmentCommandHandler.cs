@@ -2,7 +2,7 @@
 using NPoco;
 using Warranty.Core.Entities;
 using Warranty.Core.Extensions;
-using Common.Security.User.Session;
+using Common.Security.Session;
 
 namespace Warranty.Core.Features.AssignWSRs
 {

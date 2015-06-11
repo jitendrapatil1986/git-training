@@ -6,7 +6,7 @@
     using InnerMessages;
     using NPoco;
     using NServiceBus;
-    using Common.Security.User.Session;
+    using Common.Security.Session;
 
     public class ApprovePaymentCommandHandler : ICommandHandler<ApprovePaymentCommand, string>
     {

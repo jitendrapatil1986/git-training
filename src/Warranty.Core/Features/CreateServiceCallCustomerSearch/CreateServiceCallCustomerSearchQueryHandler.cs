@@ -3,7 +3,7 @@
 namespace Warranty.Core.Features.CreateServiceCallCustomerSearch
 {
     using NPoco;
-    using Common.Security.User.Session;
+    using Common.Security.Session;
     using Extensions;
 
     public class CreateServiceCallCustomerSearchQueryHandler : IQueryHandler<CreateServiceCallCustomerSearchQuery, IEnumerable<CustomerSearchModel>>
