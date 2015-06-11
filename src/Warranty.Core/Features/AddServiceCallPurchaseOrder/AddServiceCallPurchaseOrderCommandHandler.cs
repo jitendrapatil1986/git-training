@@ -6,7 +6,7 @@
     using Enumerations;
     using InnerMessages;
     using NPoco;
-    using Common.Security.User.Session;
+    using Common.Security.Session;
     using Services;
     using NServiceBus;
     using Extensions;

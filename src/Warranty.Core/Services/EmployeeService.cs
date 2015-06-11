@@ -2,7 +2,7 @@
 {
     using Extensions;
     using NPoco;
-    using Common.Security.User.Session;
+    using Common.Security.Session;
 
     public class EmployeeService : IEmployeeService
     {

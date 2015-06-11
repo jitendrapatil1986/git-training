@@ -3,7 +3,7 @@ using Warranty.Core.ToDoInfrastructure;
 
 namespace Warranty.Core.Features.ToDoWidget
 {
-    using Common.Security.User.Session;
+    using Common.Security.Session;
     using Services;
 
     public class ToDoWidgetQueryHandler : IQueryHandler<ToDoWidgetQuery, ToDoWidgetModel>

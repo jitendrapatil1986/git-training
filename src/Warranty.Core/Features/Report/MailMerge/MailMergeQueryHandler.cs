@@ -2,7 +2,7 @@
 {
     using Extensions;
     using NPoco;
-    using Common.Security.User.Session;
+    using Common.Security.Session;
 
     public class MailMergeQueryHandler : IQueryHandler<MailMergeQuery, MailMergeQuery>
     {
@@ -34,11 +34,11 @@
                                         , CONVERT(varchar, j.CloseDate,101) CloseDate
                                     FROM Homeowners ho
                                         INNER JOIN Jobs j
-	                                       ON j.CurrentHomeownerId = ho.HomeownerId
+                                           ON j.CurrentHomeownerId = ho.HomeownerId
                                         INNER JOIN Communities c
-	                                       ON j.CommunityId = c.CommunityId
+                                           ON j.CommunityId = c.CommunityId
                                         INNER JOIN Cities cc
-	                                       ON cc.CityId = c.CityId
+                                           ON cc.CityId = c.CityId
                                     WHERE YEAR(j.CloseDate) = YEAR(@0) AND MONTH(j.CloseDate) = MONTH(@0)
                                         AND cc.CityCode in ({0})
                                         ORDER BY j.CloseDate";

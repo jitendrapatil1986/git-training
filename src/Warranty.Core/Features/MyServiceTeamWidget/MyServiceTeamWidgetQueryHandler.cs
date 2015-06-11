@@ -7,7 +7,7 @@ namespace Warranty.Core.Features.MyServiceTeamWidget
     using Enumerations;
     using Extensions;
     using NPoco;
-    using Common.Security.User.Session;
+    using Common.Security.Session;
     using Common.Security.User;
 
     public class MyServiceTeamWidgetQueryHandler : IQueryHandler<MyServiceTeamWidgetQuery, MyServiceTeamWidgetModel>

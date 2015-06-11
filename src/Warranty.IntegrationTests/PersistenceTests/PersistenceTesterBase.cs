@@ -3,7 +3,7 @@
     using System;
     using Core;
     using Core.DataAccess;
-    using Common.Security.User.Session;
+    using Common.Security.Session;
     using NPoco;
     using NUnit.Framework;
     using StructureMap;

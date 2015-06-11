@@ -3,7 +3,7 @@ namespace Warranty.Core.Features.QuickSearch
     using System.Collections.Generic;
     using Extensions;
     using NPoco;
-    using Common.Security.User.Session;
+    using Common.Security.Session;
 
     public class QuickSearchCallsQueryHandler : IQueryHandler<QuickSearchCallsQuery, IEnumerable<QuickSearchCallModel>>
     {

@@ -5,7 +5,7 @@
     using System.Linq;
     using Enumerations;
     using NPoco;
-    using Common.Security.User.Session;
+    using Common.Security.Session;
     using Common.Extensions;
     
 

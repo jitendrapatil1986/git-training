@@ -4,8 +4,7 @@
     using System.Collections.Generic;
     using Common.Security.Queries;
     using Entities;
-    using Common.Security.User.Session;
-    using Common.Security.User;
+    using Common.Security.Session;
     using Enumerations;
     using NPoco;
     using Common.Extensions;

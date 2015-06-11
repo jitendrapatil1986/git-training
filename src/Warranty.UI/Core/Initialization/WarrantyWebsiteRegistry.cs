@@ -1,4 +1,5 @@
-﻿using Common.Security.User.Session;
+﻿using Common.Security.Session;
+using Common.UI.Security.Session;
 using FluentValidation;
 using FluentValidation.Mvc;
 

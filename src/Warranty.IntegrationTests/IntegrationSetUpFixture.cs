@@ -4,7 +4,7 @@
     using Accounting.Client;
     using Core.DataAccess;
     using Core.Extensions;
-    using Common.Security.User.Session;
+    using Common.Security.Session;
     using MediatorMessagingTests;
     using MediatorMessagingTests.EntityBuilders;
     using NPoco;

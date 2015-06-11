@@ -2,10 +2,9 @@
 
 namespace Warranty.Core.Features.CreateServiceCall
 {
-    using Entities;
     using Enumerations;
     using NPoco;
-    using Common.Security.User.Session;
+    using Common.Security.Session;
     using Services;
 
     public class CreateServiceCallCommandHandler: ICommandHandler<CreateServiceCallCommand, Guid>
