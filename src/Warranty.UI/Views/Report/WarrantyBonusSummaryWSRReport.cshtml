@@ -193,12 +193,12 @@
             <section>
                 <div class="row">
                     <div class="col-md-12">
-                        @Html.Label("Outstanding Warranty (11 months)")
+                        @Html.Label("Truly Outstanding Warranty (11 months)")
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        @Html.Label(string.Format("$50 for each response of '{0}' to 'Outstanding Warranty' on 11 month survey", SurveyConstants.OutstandingWarrantyThreshold))
+                        @Html.Label(string.Format("$50 for each response of '{0}' to 'Truly Outstanding Warranty' on 11 month survey", SurveyConstants.OutstandingWarrantyThreshold))
                     </div>
                 </div>
                 <br/>
@@ -207,7 +207,7 @@
                         <tr>
                             <th>Customer Name</th>
                             <th>Job No.</th>
-                            <th>Outstanding Warranty (11 mo)</th>
+                            <th>Truly Outstanding Warranty (11 mo)</th>
                             <th>Bonus</th>
                         </tr>
                     </thead>
@@ -225,7 +225,7 @@
                 </table>
                 <div class="col-md-12 margin-bottom-10">
                     <div class="pull-right">
-                        @Html.Label("Outstanding Warranty (11 mo) Bonus: ")
+                        @Html.Label("Truly Outstanding Warranty (11 mo) Bonus: ")
                         @if (Model.TotalOutstandingWarrantySurveyBonusAmount > 0)
                         {
                             @Format.MoneyWithoutZero(Model.TotalOutstandingWarrantySurveyBonusAmount)
