@@ -53,5 +53,6 @@
         public static readonly RootProblem Gutter = new RootProblem(37, "Gutter", WarrantyCostCode.ExteriorMisc);
         public static readonly RootProblem HardwareFixture = new RootProblem(38, "Hardware/Fixture", WarrantyCostCode.FixturesHardware);
         public static readonly RootProblem NoAction = new RootProblem(39, "No Action", WarrantyCostCode.AllCleaning);
+        public static readonly RootProblem Septic = new RootProblem(40, "Septic", WarrantyCostCode.Plumbing);
     }
 }
