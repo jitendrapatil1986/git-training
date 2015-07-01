@@ -51,11 +51,13 @@
 
                 var community = _database.SingleOrDefaultById<Community>(job.CommunityId);
 
+                var city = _database.SingleOrDefaultById<City>(community.CityId);
+
                 var communityNumber = job.JobNumber;  //community is first 4 chs of job but accounting needs job and pulls substring.
 
-                if (job.IsOutOfWarranty && community.CommunityStatusCode != WarrantyConstants.DefaultActiveCommunityCode)
+                if (job.IsOutOfWarranty)
                 {
-                    communityNumber = WarrantyConfigSection.GetCity(currentUser.Markets.FirstOrDefault()).ClosedOutCommunity;
+                    communityNumber = WarrantyConfigSection.GetCity(city.CityCode.ToUpper()).ClosedOutCommunity;
                 }
 
                 var payment = new Payment

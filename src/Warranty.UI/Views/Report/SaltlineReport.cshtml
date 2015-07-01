@@ -116,9 +116,9 @@
                      <thead>
                          <tr>
                              <th>WSR</th>
-                             <th class="text-right"># of Surveys</th>
-                             <th class="text-right">EWS</th>
-                             <th class="text-right">DWR</th>
+                             <th class="text-right">Number of Surveys</th>
+                             <th class="text-right">Truly Outstanding Warranty Service</th>
+                             <th class="text-right">Definitely Would Recommend</th>
                          </tr>
                      </thead>
                      <tbody>
@@ -128,7 +128,7 @@
 
                                  <td class="text-capitalize">@wsr.EmployeeName</td>
                                  <td class="text-right">@wsr.NumberOfSurveys</td>
-                                 <td class="text-right">@Format.Percentage(wsr.ExcellentWarrantyService)</td>
+                                 <td class="text-right">@Format.Percentage(wsr.OutstandingWarrantyService)</td>
                                  <td class="text-right">@Format.Percentage(wsr.DefinetelyWouldRecommend)</td>
                              </tr>
                          }
@@ -150,7 +150,7 @@
 
                                  <td class="text-capitalize">@wsr.ProjectName</td>
                                  <td class="text-right">@wsr.NumberOfSurveys</td>
-                                 <td class="text-right">@Format.Percentage(wsr.ExcellentWarrantyService)</td>
+                                 <td class="text-right">@Format.Percentage(wsr.OutstandingWarrantyService)</td>
                                  <td class="text-right">@Format.Percentage(wsr.DefinetelyWouldRecommend)</td>
                              </tr>
                          }
@@ -171,7 +171,7 @@
                              <tr>
                                 <td class="text-capitalize">@wsr.DivisionName</td>
                                 <td class="text-right">@wsr.NumberOfSurveys</td>
-                                <td class="text-right">@Format.Percentage(wsr.ExcellentWarrantyService)</td>
+                                <td class="text-right">@Format.Percentage(wsr.OutstandingWarrantyService)</td>
                                 <td class="text-right">@Format.Percentage(wsr.DefinetelyWouldRecommend)</td>
                              </tr>
                          }

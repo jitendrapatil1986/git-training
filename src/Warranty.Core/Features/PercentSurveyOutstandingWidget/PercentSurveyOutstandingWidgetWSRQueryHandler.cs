@@ -1,4 +1,4 @@
-﻿namespace Warranty.Core.Features.PercentSurveyExcellentWidget
+﻿namespace Warranty.Core.Features.PercentSurveyOutstandingWidget
 {
     using System;
     using System.Collections.Generic;
@@ -8,18 +8,18 @@
     using Security;
     using Services;
 
-    public class PercentSurveyExcellentWidgetWSRQueryHandler : IQueryHandler<PercentSurveyExcellentWidgetWSRQuery, PercentSurveyExcellentWidgetModel>
+    public class PercentSurveyOutstandingWidgetWSRQueryHandler : IQueryHandler<PercentSurveyOutstandingWidgetWSRQuery, PercentSurveyOutstandingWidgetModel>
     {
         private readonly IUserSession _userSession;
         private readonly ISurveyService _surveyService;
 
-        public PercentSurveyExcellentWidgetWSRQueryHandler(IUserSession userSession, ISurveyService surveyService)
+        public PercentSurveyOutstandingWidgetWSRQueryHandler(IUserSession userSession, ISurveyService surveyService)
         {
             _userSession = userSession;
             _surveyService = surveyService;
         }
 
-        public PercentSurveyExcellentWidgetModel Handle(PercentSurveyExcellentWidgetWSRQuery query)
+        public PercentSurveyOutstandingWidgetModel Handle(PercentSurveyOutstandingWidgetWSRQuery query)
         {
             var user = _userSession.GetCurrentUser();
 
@@ -34,8 +34,11 @@
                 thisMonthSurveys = thisMonthRawSurveys.Details.ToObject<List<ApiResult>>();
             }
 
-            var totalThisMonthSurveys = thisMonthSurveys.Count();
-            var totalThisMonthSurveysWithRecommend = thisMonthSurveys.Count(x => Convert.ToInt16(x.ExcellentWarrantyService) >= SurveyConstants.ExcellentWarrantyThreshold);
+            var totalThisMonthSurveys =
+                thisMonthSurveys.Count(x => !string.IsNullOrEmpty(x.WarrantyServiceScore));
+
+            var totalThisMonthOutstandingServiceSurveys = thisMonthSurveys
+                .Count(x => Convert.ToInt16(x.WarrantyServiceScore) >= SurveyConstants.OutstandingWarrantyThreshold);
 
             var lastMonthRawSurveys = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new {
                                                                                                     StartDate = DateTime.Today.AddMonths(-1).ToFirstDay(),
@@ -48,14 +51,17 @@
                 lastMonthSurveys = lastMonthRawSurveys.Details.ToObject<List<ApiResult>>();
             }
 
-            var totalLastMonthSurveys = lastMonthSurveys.Count();
-            var totalLastMonthSurveysWithRecommend = lastMonthSurveys.Count(x => Convert.ToInt16(x.ExcellentWarrantyService) >= SurveyConstants.ExcellentWarrantyThreshold);
+            var totalLastMonthSurveys =
+                lastMonthSurveys.Count(x => !string.IsNullOrEmpty(x.WarrantyServiceScore));
 
-            return new PercentSurveyExcellentWidgetModel
+            var totalLastMonthOutstandingServiceSurveys = lastMonthSurveys
+                .Count(x => Convert.ToInt16(x.WarrantyServiceScore) >= SurveyConstants.OutstandingWarrantyThreshold);
+
+            return new PercentSurveyOutstandingWidgetModel
             {
-                PercentExcellentLastMonth = ServiceCallCalculator.CalculatePercentage( totalLastMonthSurveysWithRecommend, totalLastMonthSurveys),
+                PercentOutstandingLastMonth = ServiceCallCalculator.CalculatePercentage(totalLastMonthOutstandingServiceSurveys, totalLastMonthSurveys),
                 TotalSurveysLastMonth = totalLastMonthSurveys,
-                PercentExcellentThisMonth = ServiceCallCalculator.CalculatePercentage(totalThisMonthSurveysWithRecommend, totalThisMonthSurveys),
+                PercentOutstandingThisMonth = ServiceCallCalculator.CalculatePercentage(totalThisMonthOutstandingServiceSurveys, totalThisMonthSurveys),
                 TotalSurveysThisMonth = totalThisMonthSurveys,
             };
         }
@@ -63,7 +69,7 @@
         internal class ApiResult
         {
             public string WarrantyServiceRepresentativeEmployeeId { get; set; }
-            public string ExcellentWarrantyService { get; set; }
+            public string WarrantyServiceScore { get; set; }
         }
     }
 }

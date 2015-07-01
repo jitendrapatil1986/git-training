@@ -28,7 +28,7 @@ namespace Warranty.Core.Calculator
             using (_database)
             {
                 const string sql = @"SELECT count(*) as TotalElements, AVG(DATEDIFF(DD, sc.CreatedDate, CompletionDate)) as Amount, month(completiondate) MonthNumber, year(completionDate) YearNumber
-                                            FROM ServiceCalls sc
+                                     FROM ServiceCalls sc
                                             INNER JOIN Employees e
                                             ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
                                             INNER JOIN Jobs j
@@ -37,11 +37,12 @@ namespace Warranty.Core.Calculator
                                             ON j.CommunityId = c.CommunityId
                                             INNER JOIN Cities cc
                                             ON c.CityId = cc.CityId
-                                            WHERE CompletionDate >= @0
+                                     WHERE CompletionDate >= @0
                                             AND CompletionDate <= @1
-                                                AND CityCode IN ({0})
-                                                AND EmployeeNumber=@2
-                                        group by month(completiondate), year(completionDate)";
+                                            AND CityCode IN ({0})
+                                            AND EmployeeNumber=@2
+                                            AND sc.ServiceCallType = 'Warranty Service Request'
+                                     GROUP BY month(completiondate), year(completionDate)";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
                 return result;
@@ -67,6 +68,7 @@ namespace Warranty.Core.Calculator
                             AND CompletionDate <= @1
                                     AND CityCode IN ({0})
                                     AND EmployeeNumber=@2
+                            AND sc.ServiceCallType = 'Warranty Service Request'
                         group by month(completiondate), year(completionDate)";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
@@ -207,20 +209,10 @@ namespace Warranty.Core.Calculator
             }
         }
 
-        public IEnumerable<CalculatorResult> GetEmployeeExcellentWarrantyService(DateTime startDate, DateTime endDate, string employeeNumber)
+        public IEnumerable<CalculatorResult> GetEmployeeOutstandingWarrantyService(DateTime startDate, DateTime endDate, string employeeNumber)
         {
             var surveyData = GetEmployeeSurveyData(startDate, endDate, employeeNumber);
-
-            return
-                surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
-                          .Select(l => new CalculatorResult
-                          {
-                              Amount = Decimal.Divide(l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") , l.Count()) * 100,
-                              MonthNumber = l.Key.Month,
-                              YearNumber = l.Key.Year,
-                              TotalElements = l.Count()
-                          });
-
+            return GetOutstandingWarrantyResults(surveyData);
         }
 
         public IEnumerable<CalculatorResult> GetEmployeeRightTheFirstTime(DateTime startDate, DateTime endDate, string employeeNumber)
@@ -454,21 +446,26 @@ namespace Warranty.Core.Calculator
             }
         }
 
-        public IEnumerable<CalculatorResult> GetDivisionExcellentWarrantyService(DateTime startDate, DateTime endDate, string divisionName)
+        public IEnumerable<CalculatorResult> GetDivisionOutstandingWarrantyService(DateTime startDate, DateTime endDate, string divisionName)
         {
             var surveyData = GetDivisionSurveyData(startDate, endDate, divisionName);
+            return GetOutstandingWarrantyResults(surveyData);
+        }
+
+        private IEnumerable<CalculatorResult> GetOutstandingWarrantyResults(IEnumerable<SurveyDataResult> surveyData)
+        {
+            Int16 score = 0;
             return
-                surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
+                surveyData.Where(x => !string.IsNullOrEmpty(x.WarrantyServiceScore) && Int16.TryParse(x.WarrantyServiceScore, out score))
+                          .GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = Decimal.Divide(l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") , l.Count()) * 100,
+                              Amount = Decimal.Divide(l.Count(x => Convert.ToInt16(x.WarrantyServiceScore) >= SurveyConstants.OutstandingWarrantyThreshold), l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
                           });
-
         }
-
         public IEnumerable<CalculatorResult> GetDivisionRightTheFirstTime(DateTime startDate, DateTime endDate, string divisionName)
         {
             var surveyData = GetDivisionSurveyData(startDate, endDate, divisionName);
@@ -691,19 +688,10 @@ namespace Warranty.Core.Calculator
             }
         }
 
-        public IEnumerable<CalculatorResult> GetProjectExcellentWarrantyService(DateTime startDate, DateTime endDate, string projectName)
+        public IEnumerable<CalculatorResult> GetProjectOutstandingWarrantyService(DateTime startDate, DateTime endDate, string projectName)
         {
             var surveyData = GetProjectSurveyData(startDate, endDate, projectName);
-            return
-                surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
-                          .Select(l => new CalculatorResult
-                          {
-                              Amount = Decimal.Divide(l.Count(x => x.ExcellentWarrantyService == "10" || x.ExcellentWarrantyService == "9") , l.Count()) * 100,
-                              MonthNumber = l.Key.Month,
-                              YearNumber = l.Key.Year,
-                              TotalElements = l.Count()
-                          });
-
+            return GetOutstandingWarrantyResults(surveyData);
         }
 
         public IEnumerable<CalculatorResult> GetProjectRightTheFirstTime(DateTime startDate, DateTime endDate, string projectName)

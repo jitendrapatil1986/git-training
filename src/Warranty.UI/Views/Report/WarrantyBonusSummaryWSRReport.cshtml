@@ -1,4 +1,5 @@
-﻿@using Warranty.Core.Enumerations
+﻿@using Warranty.Core.Configurations
+@using Warranty.Core.Enumerations
 @using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.Report.WarrantyBonusSummary.WarrantyBonusSummaryModel
 
@@ -192,12 +193,12 @@
             <section>
                 <div class="row">
                     <div class="col-md-12">
-                        @Html.Label("Excellent Warranty (11 months)")
+                        @Html.Label("Truly Outstanding Warranty (11 months)")
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        @Html.Label("$50 for each response of '9 or 10' to 'Excellent Warranty' on 11 month survey")
+                        @Html.Label(string.Format("$50 for each response of '{0}' to 'Truly Outstanding Warranty' on 11 month survey", SurveyConstants.OutstandingWarrantyThreshold))
                     </div>
                 </div>
                 <br/>
@@ -206,17 +207,17 @@
                         <tr>
                             <th>Customer Name</th>
                             <th>Job No.</th>
-                            <th>Excellent Warranty (11 mo)</th>
+                            <th>Truly Outstanding Warranty (11 mo)</th>
                             <th>Bonus</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var line in Model.ExcellentWarrantySurveys)
+                        @foreach (var line in Model.WarrantySurveyResults)
                         {
                             <tr>
                                 <td>@Html.DisplayFor(model => line.HomeownerName)</td>
                                 <td>@Html.DisplayFor(model => line.JobNumber)</td>
-                                <td>@Html.DisplayFor(model => line.ExcellentWarrantyService)</td>
+                                <td>@Html.DisplayFor(model => line.WarrantyServiceScore)</td>
                                 <td>@Format.MoneyWithoutZero(line.BonusAmount)</td>
                             </tr>
                         }
@@ -224,10 +225,10 @@
                 </table>
                 <div class="col-md-12 margin-bottom-10">
                     <div class="pull-right">
-                        @Html.Label("Excellent Warranty (11 mo) Bonus: ")
-                        @if (Model.TotalExcellentWarrantySurveyBonusAmount > 0)
+                        @Html.Label("Truly Outstanding Warranty (11 mo) Bonus: ")
+                        @if (Model.TotalOutstandingWarrantySurveyBonusAmount > 0)
                         {
-                            @Format.MoneyWithoutZero(Model.TotalExcellentWarrantySurveyBonusAmount)
+                            @Format.MoneyWithoutZero(Model.TotalOutstandingWarrantySurveyBonusAmount)
                             ;
                         }
                     </div>

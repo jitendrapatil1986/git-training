@@ -87,9 +87,9 @@
     <Reference Include="StructureMap">
       <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
     </Reference>
-    <Reference Include="Survey.Client, Version=1.0.0.33, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Survey.Client, Version=1.0.0.56, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Survey.Client.1.0.0.33\lib\net45\Survey.Client.dll</HintPath>
+      <HintPath>..\packages\Survey.Client.1.0.0.56\lib\net45\Survey.Client.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -374,11 +374,11 @@
     <Compile Include="Features\ServiceCallSummary\ServiceCallLineItem\ServiceCallLineItemQueryHandler.cs" />
     <Compile Include="Features\TaskCompletion\TaskCompleteCommand.cs" />
     <Compile Include="Features\TaskCompletion\ServiceCallApproveCommandHandler.cs" />
-    <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetModel.cs" />
-    <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetQuery.cs" />
-    <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetQueryHandler.cs" />
-    <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetWSRQuery.cs" />
-    <Compile Include="Features\PercentSurveyExcellentWidget\PercentSurveyExcellentWidgetWSRQueryHandler.cs" />
+    <Compile Include="Features\PercentSurveyOutstandingWidget\PercentSurveyOutstandingWidgetModel.cs" />
+    <Compile Include="Features\PercentSurveyOutstandingWidget\PercentSurveyOutstandingWidgetQuery.cs" />
+    <Compile Include="Features\PercentSurveyOutstandingWidget\PercentSurveyOutstandingWidgetQueryHandler.cs" />
+    <Compile Include="Features\PercentSurveyOutstandingWidget\PercentSurveyOutstandingWidgetWSRQuery.cs" />
+    <Compile Include="Features\PercentSurveyOutstandingWidget\PercentSurveyOutstandingWidgetWSRQueryHandler.cs" />
     <Compile Include="Features\DownloadFileBase.cs" />
     <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemCommand.cs" />
     <Compile Include="Features\CompleteServiceCallLineItem\CompleteServiceCallLineItemCommandHandler.cs" />
