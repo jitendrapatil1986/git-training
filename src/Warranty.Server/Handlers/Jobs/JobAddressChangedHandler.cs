@@ -17,7 +17,7 @@
 
         public void Handle(LotAddressChanged message)
         {
-            var job = _repository.Query<Job>().Single(j => j.JobNumber == message.JdeIdentifier);
+            var job = _repository.Query<Job>().SingleOrDefault(j => j.JobNumber == message.JdeIdentifier);
 
             //We may not have the job in warranty yet so just return in that case
             if (job == null)
