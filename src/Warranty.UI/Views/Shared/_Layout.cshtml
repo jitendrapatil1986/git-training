@@ -21,7 +21,7 @@
             <ul class="dropdown-menu">
                 @foreach (var item in NavHeaderItem.GetAll(key))
                 {
-                    if(
+                    if (
                         (key == NavHeaderItem.Reports.Key && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) ||
                         (key == NavHeaderItem.Reports.Key && item.Value == NavHeaderItem.MailMergeReport.Value && User.IsInRole(UserRoles.WarrantyServiceRepresentative)) ||
                         (key == NavHeaderItem.Reports.Key && item.Value == NavHeaderItem.WsrCallSummary.Value && User.IsInRole(UserRoles.WarrantyServiceRepresentative)) ||
@@ -44,37 +44,37 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <title>@ViewBag.Title - Warranty - David Weekley Homes</title>
-    
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        @Styles.Render("~/css/less/main")
-        @Styles.Render("~/css/extra")
-        @Styles.Render("~/css/datepicker3.css")
-    
-        @Html.Partial("_RequireJsConfig")
-        @RenderSection("header", required: false)
+<head>
+    <title>@ViewBag.Title - Warranty - David Weekley Homes</title>
 
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-            <script src="/Scripts/lib/html5shiv.js"></script>
-            <script src="/Scripts/lib/respond.min.js"></script>
-        <![endif]-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @Styles.Render("~/css/less/main")
+    @Styles.Render("~/css/extra")
+    @Styles.Render("~/css/datepicker3.css")
 
-        @{ Html.RenderAction("GetRequireJsUrl", "Home");}
-        <script>
-            define('urls', [], function() {
-                return @{ Html.RenderAction("GetApiUrls", "Home");};
-            });
-        </script>
-        @RenderSection("modules", required: false)
-        @Html.RenderScripts()
-        @{ Html.RenderAction("GetPageRequireJs", "Home", new { context = ViewContext });}
-    </head>
-    <body>
+    @Html.Partial("_RequireJsConfig")
+    @RenderSection("header", required: false)
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="/Scripts/lib/html5shiv.js"></script>
+        <script src="/Scripts/lib/respond.min.js"></script>
+    <![endif]-->
+    @{ Html.RenderAction("GetRequireJsUrl", "Home");}
+    <script>
+        define('urls', [], function () {
+            return @{ Html.RenderAction("GetApiUrls", "Home");};
+        });
+    </script>
+    @RenderSection("modules", required: false)
+    @Html.RenderScripts()
+    @{ Html.RenderAction("GetPageRequireJs", "Home", new { context = ViewContext });}
+</head>
+<body>
+    <div id="session-tracker">
         <div class="navbar navbar-default navbar-fixed-top no-print">
             <div class="container">
                 <div class="navbar-header">
@@ -92,13 +92,13 @@
                             <li><a href="#feedbackModal" data-toggle="modal">Contact Help Desk</a></li>
                             <li class="divider"></li>
                         </ul>
-                    </li>                
+                    </li>
                 </ul>
                 <div class="navbar-brand pull-right hidden-xs">Warranty</div>
 
             </div>
         </div>
-        
+
         <div id="subNavMenu" class="subnav subnav-fixed no-print" role="navigation">
             <div class="container">
                 <ul class="nav navbar-nav hidden-xs">
@@ -115,19 +115,19 @@
                 </ul>
                 <div class="main-search nav-extra">
                     <div class="input-group vertical-menu-scroll">
-                        <input id="searchBar" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder=""/>
+                        <input id="searchBar" name="query" type="text" class="form-control main-search" autocomplete="off" placeholder="" />
                         <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <div class="container main-container">
-                @RenderBody()
+            @RenderBody()
         </div>
 
         <div class="container">
-            <hr/>
+            <hr />
             <footer class="no-print">
                 <p class="text-center text-muted">
                     <a class="visible-xs" href="#feedbackModal" data-toggle="modal">Contact Help Desk</a>
@@ -139,5 +139,6 @@
         @RenderSection("scripts", required: false)
 
         @Html.RenderToastMessage()
-    </body>
+    </div>
+</body>
 </html>
