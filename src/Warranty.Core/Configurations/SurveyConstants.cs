@@ -7,7 +7,7 @@ namespace Warranty.Core.Configurations
         public const decimal AllItemsCompleteBonusAmount = 100;
         public const string DefinitelyWillThreshold = "DEFINITELY WILL";
         public const decimal DefinitelyWillBonusAmount = 50;
-        public const int OutstandingWarrantyThreshold = 10;
+        public const int OutstandingWarrantyThreshold = 9;
         public const decimal OutstandingWarrantyBonusAmount = 50;
         public const string AllItemsCompleteThreshold = "YES";
     }
