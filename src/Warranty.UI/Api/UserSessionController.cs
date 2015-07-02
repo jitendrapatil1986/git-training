@@ -7,7 +7,7 @@ namespace Warranty.UI.Api
     public class UserSessionController : ApiController
     {
         [HttpGet]
-        public DateTime Ping()
+        public DateTime KeepAlive()
         {
             var sessionModule = FederatedAuthentication.SessionAuthenticationModule;
             return sessionModule.ContextSessionSecurityToken.ValidTo;

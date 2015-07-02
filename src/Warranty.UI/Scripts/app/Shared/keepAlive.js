@@ -26,7 +26,7 @@
                 clearTimeout(promptToContinueTimout);
             $.ajax({
                 type: 'GET',
-                url: urls.UserSession.Ping,
+                url: urls.UserSession.KeepAlive,
                 success: function (response) {
                     var tokenExpirationTime = new Date(response);
                     var promptCountDown = (2 * oneMinuteInMilliSeconds); //show prompt 2 minutes before expiration
