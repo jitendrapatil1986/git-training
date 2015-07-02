@@ -60,10 +60,11 @@
     </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\common\src\Common.Security\bin\Debug\Common.Security.dll</HintPath>
+      <HintPath>..\packages\Common.Security.1.1.109.0\lib\net45\Common.Security.dll</HintPath>
     </Reference>
-    <Reference Include="Common.UI.Security">
-      <HintPath>..\..\..\common\src\Common.UI.Security\bin\Debug\Common.UI.Security.dll</HintPath>
+    <Reference Include="Common.UI.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Common.UI.Security.1.1.109.0\lib\net45\Common.UI.Security.dll</HintPath>
     </Reference>
     <Reference Include="CuteWebUI.AjaxUploader">
       <HintPath>..\..\lib\AjaxUploader\CuteWebUI.AjaxUploader.dll</HintPath>

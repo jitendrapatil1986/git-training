@@ -47,7 +47,7 @@
     </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\common\src\Common.Security\bin\Debug\Common.Security.dll</HintPath>
+      <HintPath>..\packages\Common.Security.1.1.109.0\lib\net45\Common.Security.dll</HintPath>
     </Reference>
     <Reference Include="Construction.Events, Version=1.4.99.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
