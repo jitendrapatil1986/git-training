@@ -4,7 +4,7 @@
     var promptToContinueTimout;
     var oneMinuteInMilliSeconds = 60000;
     var sessionTrackerContainer = "#session-tracker";
-    var sessionTrackingEvents = "click scroll keyup";
+    var sessionTrackingEvents = "click keyup";
 
     setListener();
 
@@ -60,13 +60,7 @@
                 bootbox.hideAll();
                 bootbox.confirm("Your session has expired. Click OK to refresh the page", function (result) {
                     if (result) {
-                        $.ajax({
-                            type: 'GET',
-                            url: urls.UserSession.SignOut,
-                            success: function() {
-                                window.location.reload();
-                            }
-                        });
+                        window.location = urls.Help.SignOut;
                     }
                 });
             }
