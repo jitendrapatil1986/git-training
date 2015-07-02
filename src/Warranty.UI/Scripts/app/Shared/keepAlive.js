@@ -29,7 +29,7 @@
                 url: urls.UserSession.Ping,
                 success: function (response) {
                     var tokenExpirationTime = new Date(response);
-                    var promptCountDown = (.5 * oneMinuteInMilliSeconds);
+                    var promptCountDown = (2 * oneMinuteInMilliSeconds); //show prompt 2 minutes before expiration
                     var milliSecondsUntilPromptAppears = tokenExpirationTime.getTime() - now.getTime() - promptCountDown;
 
                     promptToContinueTimout = setTimeout(function () {

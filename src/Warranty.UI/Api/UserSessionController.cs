@@ -21,7 +21,7 @@ namespace Warranty.UI.Api
             var sessionModule = FederatedAuthentication.SessionAuthenticationModule;
             return (sessionModule != null ? 
                 sessionModule.ContextSessionSecurityToken.ValidTo.ToString() 
-                : DateTime.UtcNow.AddMinutes(1).ToString()) + " UTC";
+                : DateTime.UtcNow.AddMinutes(5).ToString()) + " UTC";
         }
 
         [HttpGet]
