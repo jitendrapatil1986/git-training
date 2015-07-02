@@ -18,10 +18,13 @@ namespace Warranty.UI.Api
         [HttpGet]
         public string Ping()
         {
+#if DEBUG
+            return DateTime.UtcNow.AddMinutes(5) + " UTC";
+#else
             var sessionModule = FederatedAuthentication.SessionAuthenticationModule;
-            return (sessionModule != null ? 
-                sessionModule.ContextSessionSecurityToken.ValidTo.ToString() 
-                : DateTime.UtcNow.AddMinutes(5).ToString()) + " UTC";
+            return sessionModule.ContextSessionSecurityToken.ValidTo + " UTC";
+#endif
+
         }
 
         [HttpGet]
