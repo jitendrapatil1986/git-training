@@ -48,10 +48,12 @@
       <HintPath>..\packages\Accounting.Events.1.1.914.0\lib\net45\Accounting.Events.dll</HintPath>
     </Reference>
     <Reference Include="Common.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Core.1.1.42.0\lib\net45\Common.Core.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Common.Core.1.1.109.0\lib\net45\Common.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\common\src\Common.Security\bin\Debug\Common.Security.dll</HintPath>
+      <HintPath>..\packages\Common.Security.1.1.109.0\lib\net45\Common.Security.dll</HintPath>
     </Reference>
     <Reference Include="Construction.Events">
       <HintPath>..\packages\Construction.Events.1.4.286.0\lib\net45\Construction.Events.dll</HintPath>
