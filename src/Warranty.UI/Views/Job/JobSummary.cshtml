@@ -130,12 +130,15 @@
             <div class="pull-right">
                 @using (Html.BeginForm("Create", "ServiceCall", new { id = Model.JobId }))
                 {
-                    if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
+                    if (Model.Stage >= 10)
                     {
-                        @Html.ActionLink("Change Homeowner", "ChangeHomeowner", "Job", new { id = Model.JobId }, new { @class = "btn btn-default margin-right-10" })
-                    }
+                        if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
+                        {
+                            @Html.ActionLink("Change Homeowner", "ChangeHomeowner", "Job", new {id = Model.JobId}, new {@class = "btn btn-default margin-right-10"})
+                        }
 
-                    <input type="submit" value="Create Call" class="btn btn-default pull-right"/>
+                        <input type="submit" value="Create Call" class="btn btn-default pull-right"/>
+                    }
                     @Html.HiddenFor(x => x.JobId)
                 }
             </div>
@@ -152,12 +155,15 @@
                             <li>@Html.DisplayFor(x => x.CommunityName)</li>
                             <li>@Html.DisplayFor(x => x.AddressLine)</li>
                             <li>@Model.City, @Model.StateCode @Model.PostalCode</li>
-                            <li>
-                                @Format.EditablePhoneNumber(PhoneNumberType.Home, Format.PhoneNumberWithExtension(Model.HomePhone), Url.Action("AddOrUpdatePhoneNumber", "Homeowner"), Model.HomeownerId)
-                            </li>
-                            <li>
-                                @Format.EditableEmailForJob(Model.EmailAddress, Url.Action("AddOrUpdateEmail", "Homeowner"), Model.HomeownerId)
-                            </li>
+                            @if (Model.Stage >= 10)
+                            {
+                                <li>
+                                    @Format.EditablePhoneNumber(PhoneNumberType.Home, Format.PhoneNumberWithExtension(Model.HomePhone), Url.Action("AddOrUpdatePhoneNumber", "Homeowner"), Model.HomeownerId)
+                                </li>
+                                <li>
+                                    @Format.EditableEmailForJob(Model.EmailAddress, Url.Action("AddOrUpdateEmail", "Homeowner"), Model.HomeownerId)
+                                </li>
+                            }
                         </ul>
                     </div>
                     <div class="col-md-4">

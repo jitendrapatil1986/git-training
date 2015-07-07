@@ -100,12 +100,12 @@ namespace Warranty.Core.Features.JobSummary
                                 ,j.[JdeIdentifier]
                                 ,j.[Stage]
                                 ,ho.HomeownerId
-                                ,ho.HomeOwnerName
-                                ,ho.HomeOwnerNumber
-                                ,ho.HomePhone as HomePhone
-                                ,ho.OtherPhone as OtherPhone
-                                ,ho.WorkPhone1 as WorkNumber
-                                ,ho.EmailAddress
+                                ,ISNULL(ho.HomeOwnerName, '') as HomeOwnerName
+                                ,ISNULL(ho.HomeOwnerNumber, '') as HomeOwnerNumber
+                                ,ISNULL(ho.HomePhone, '') as HomePhone
+                                ,ISNULL(ho.OtherPhone, '') as OtherPhone
+                                ,ISNULL(ho.WorkPhone1, '') as WorkNumber
+                                ,ISNULL(ho.EmailAddress, '') as EmailAddress
                                 ,be.EmployeeId as BuilderEmployeeId
                                 ,be.EmployeeName as BuilderName
                                 ,se.EmployeeId as SalesConsultantEmployeeId
@@ -116,7 +116,7 @@ namespace Warranty.Core.Features.JobSummary
                                 , pr.ProjectName
                                 , co.CommunityName
                             FROM Jobs j
-                            INNER JOIN HomeOwners ho
+                            LEFT JOIN HomeOwners ho
                             ON j.JobId = ho.JobId
                             LEFT JOIN Employees be
                             ON j.BuilderEmployeeId = be.EmployeeId
