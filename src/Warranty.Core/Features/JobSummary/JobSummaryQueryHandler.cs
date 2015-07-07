@@ -105,7 +105,7 @@ namespace Warranty.Core.Features.JobSummary
                                 ,ISNULL(ho.HomePhone, '') as HomePhone
                                 ,ISNULL(ho.OtherPhone, '') as OtherPhone
                                 ,ISNULL(ho.WorkPhone1, '') as WorkNumber
-                                ,ISNULL(ho.EmailAddress, '')
+                                ,ISNULL(ho.EmailAddress, '') as EmailAddress
                                 ,be.EmployeeId as BuilderEmployeeId
                                 ,be.EmployeeName as BuilderName
                                 ,se.EmployeeId as SalesConsultantEmployeeId
