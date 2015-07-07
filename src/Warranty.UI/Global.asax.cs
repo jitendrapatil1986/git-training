@@ -32,8 +32,8 @@ namespace Warranty.UI
             var sst = e.SessionToken;
             var validTo = sst.ValidTo;
             var validFrom = sst.ValidFrom;
-            const int sessionLifeInMinutes = 10;
-            const int reissueCookieWhenMinutesRemain = 5;
+            const int sessionLifeInMinutes = 60;
+            const int reissueCookieWhenMinutesRemain = 30;
 
             if ((validTo - validFrom).TotalMinutes > sessionLifeInMinutes
                 || ((now < validTo) && (now > validTo.AddMinutes(-(sessionLifeInMinutes - reissueCookieWhenMinutesRemain)))))
