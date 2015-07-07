@@ -50,6 +50,6 @@ require.config({
         'typeahead': ['jquery'],
     },
     callback: function () {
-        require(['app/feedbackForm', 'app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields', 'app/responsiveTabs']);
+        require(['app/feedbackForm', 'app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields', 'app/responsiveTabs', 'app/shared/keepAlive']);
     }
 });

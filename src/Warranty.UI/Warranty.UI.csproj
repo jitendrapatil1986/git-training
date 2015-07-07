@@ -112,6 +112,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.identitymodel.services" />
     <Reference Include="System.IdentityModel.Tokens.ValidatingIssuerNameRegistry">
       <HintPath>..\packages\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.4.5.1\lib\net45\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.dll</HintPath>
     </Reference>
@@ -213,6 +215,7 @@
     <Compile Include="Api\ManageServiceCallController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
+    <Compile Include="Api\UserSessionController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\EnumerationController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
@@ -324,6 +327,7 @@
     <Content Include="Scripts\app\servicecall\SearchVendor.js" />
     <Content Include="Scripts\app\servicecall\LineItemDetail.js" />
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
+    <Content Include="Scripts\app\shared\keepAlive.js" />
     <Content Include="Scripts\config\backcharge-vendor-search.js" />
     <Content Include="Scripts\config\vendor-search.js" />
     <Content Include="Scripts\config\customer-search.js" />

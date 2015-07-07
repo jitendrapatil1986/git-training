@@ -19,5 +19,11 @@ namespace Warranty.UI.Controllers
             return View(user);
         }
 
+        public ActionResult SignOut()
+        {
+            _userSession.LogOut();
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }

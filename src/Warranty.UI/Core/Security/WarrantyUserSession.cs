@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Security.Claims;
     using System.Web;
-    using Microsoft.IdentityModel.Web;
+    using System.IdentityModel.Services;
     using Warranty.Core.Security;
 
     public class WarrantyUserSession : IUserSession
