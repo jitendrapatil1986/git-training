@@ -3,9 +3,9 @@ using Common.UI.Security.Session;
 
 namespace Warranty.UI.Controllers
 {
-    public class SecurityController : Common.UI.Security.Controllers.SecurityController
+    public class UserSecurityController : Common.UI.Security.Controllers.SecurityController
     {
-        public SecurityController(IWebUserSession userSession, UserSearchQuery searchQuery): base(userSession, searchQuery)
+        public UserSecurityController(IWebUserSession userSession, UserSearchQuery searchQuery): base(userSession, searchQuery)
         {
             DefaultRedirectActionName = "Index";
             DefaultRedirectControllerName = "Home";

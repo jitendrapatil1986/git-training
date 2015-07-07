@@ -29,7 +29,8 @@ require.config({
         'hideseek': 'lib/jquery.hideseek.min',
         'maxlength': 'lib/bootstrap-maxlength.min',
         'polyfill': 'lib/polyfill.min',
-        'main': 'app/main'
+        'main': 'app/main',
+        'impersonateUser': 'app/impersonateUser'
     },
     shim: {
         'jquery.validate': ['jquery'],
@@ -51,6 +52,7 @@ require.config({
         'maxlength': ['jquery'],
         'typeahead': ['jquery'],
     },
+    deps: ['impersonateUser'],
     callback: function () {
         require(['app/feedbackForm', 'app/quickSearch', 'app/tooltips', 'app/ajaxEvents', 'app/dates', 'app/formInputs', 'app/toastrNotify', 'app/requiredFields', 'app/responsiveTabs', 'app/shared/keepAlive']);
     }
