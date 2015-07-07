@@ -225,7 +225,7 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
     <Compile Include="Api\UserSessionController.cs" />
-    <Compile Include="Controllers\SecurityController.cs" />
+    <Compile Include="Controllers\UserSecurityController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\EnumerationController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
@@ -325,6 +325,7 @@
     <Content Include="Scripts\app\approveServiceCalls.js" />
     <Content Include="Scripts\app\additionalContacts.js" />
     <Content Include="Scripts\app\formUploader.js" />
+    <Content Include="Scripts\app\impersonateUser.js" />
     <Content Include="Scripts\app\Job\ChangeHomeowner.js" />
     <Content Include="Scripts\app\Job\JobSummary.js" />
     <Content Include="Scripts\app\Report\WarrantyBonusSummaryWSRReport.js" />
