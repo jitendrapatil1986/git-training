@@ -125,15 +125,21 @@ namespace Warranty.Core.ToDoInfrastructure
                                         ON j.CommunityId = cm.CommunityId
                                     INNER JOIN Cities ci
                                         ON cm.CityId = ci.CityId
-                                     LEFT OUTER JOIN (SELECT SUM(CASE WHEN ServiceCallLineItemStatusId = @0 THEN 1 ELSE 0 END) as NumberOfCompletedLineItems, SUM(CASE WHEN ServiceCallLineItemStatusId = @0 THEN 0 ELSE 1 END) as NumberOfIncompleteLineItems, ServiceCallId FROM ServiceCallLineItems GROUP BY ServiceCallId) li
+                                     LEFT OUTER JOIN (SELECT SUM(CASE WHEN ServiceCallLineItemStatusId IN (@0) THEN 1 ELSE 0 END) as NumberOfCompletedLineItems, SUM(CASE WHEN ServiceCallLineItemStatusId IN (@0) THEN 0 ELSE 1 END) as NumberOfIncompleteLineItems, ServiceCallId FROM ServiceCallLineItems GROUP BY ServiceCallId) li
                                        on wc.ServiceCallId = li.ServiceCallId
                                     where 
                                         li.NumberOfIncompleteLineItems = 0
                                     AND wc.ServiceCallStatusId <> @1
                                     AND ci.CityCode in ({0})";
+            
+            var lineStatusesThatIndicateReadyForClose = new List<ServiceCallLineItemStatus>
+            {
+                ServiceCallLineItemStatus.Complete,
+                ServiceCallLineItemStatus.NoAction
+            }.CommaSeparate();
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
-            var toDos = database.Fetch<ToDoServiceCallClosure, ToDoServiceCallClosureModel>(query, ServiceCallLineItemStatus.Complete.Value, ServiceCallStatus.Complete.Value);
+            var toDos = database.Fetch<ToDoServiceCallClosure, ToDoServiceCallClosureModel>(query, lineStatusesThatIndicateReadyForClose, ServiceCallStatus.Complete.Value);
 
             return toDos;
         }
