@@ -132,10 +132,10 @@ namespace Warranty.Core.ToDoInfrastructure
                                     AND wc.ServiceCallStatusId <> @1
                                     AND ci.CityCode in ({0})";
             
-            var lineStatusesThatIndicateReadyForClose = new List<ServiceCallLineItemStatus>
+            var lineStatusesThatIndicateReadyForClose = new List<int>
             {
-                ServiceCallLineItemStatus.Complete,
-                ServiceCallLineItemStatus.NoAction
+                ServiceCallLineItemStatus.Complete.Value,
+                ServiceCallLineItemStatus.NoAction.Value
             }.CommaSeparate();
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
