@@ -136,7 +136,7 @@ namespace Warranty.Core.ToDoInfrastructure
             {
                 ServiceCallLineItemStatus.Complete.Value,
                 ServiceCallLineItemStatus.NoAction.Value
-            }.CommaSeparate();
+            };
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
             var toDos = database.Fetch<ToDoServiceCallClosure, ToDoServiceCallClosureModel>(query, lineStatusesThatIndicateReadyForClose, ServiceCallStatus.Complete.Value);
