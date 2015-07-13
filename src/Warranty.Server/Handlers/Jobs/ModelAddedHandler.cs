@@ -8,21 +8,21 @@ using Warranty.Server.Extensions;
 
 namespace Warranty.Server.Handlers.Jobs
 {
-    public class ShowcaseAddedHandler : IHandleMessages<ShowcaseAdded>
+    public class ModelAddedHandler : IHandleMessages<ModelAdded>
     {
         private readonly SqlServerDatabase _database;
 
-        public ShowcaseAddedHandler(IDatabase database)
+        public ModelAddedHandler(IDatabase database)
         {
             _database = (SqlServerDatabase) database;
         }
 
-        public void Handle(ShowcaseAdded message)
+        public void Handle(ModelAdded message)
         {
             using (_database)
             {
                 var job = _database.SingleOrDefaultByJdeId<Job>(message.JDEId);
-                
+
                 if (job == null)
                 {
                     var communityId =
@@ -48,7 +48,5 @@ namespace Warranty.Server.Handlers.Jobs
                 }
             }
         }
-
-        
     }
 }
