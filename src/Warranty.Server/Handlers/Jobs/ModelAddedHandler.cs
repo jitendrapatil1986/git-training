@@ -40,8 +40,7 @@ namespace Warranty.Server.Handlers.Jobs
                         AddressLine = message.AddressLine1,
                         City = message.City,
                         StateCode = message.State,
-                        PostalCode = message.Zip,
-                        PlanType = message.Plan,
+                        PostalCode = message.Zip
                     };
 
                     _database.Insert(job);
