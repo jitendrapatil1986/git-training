@@ -28,7 +28,7 @@ namespace Warranty.Server.Handlers.Jobs
 
                 HomeOwner homeOwner = null;
                 if (job.CurrentHomeOwnerId != null)
-                    homeOwner = _database.SingleById<HomeOwner>(job.CurrentHomeOwnerId);
+                    homeOwner = _database.SingleOrDefaultById<HomeOwner>(job.CurrentHomeOwnerId);
 
                 if (homeOwner == null)
                 {
