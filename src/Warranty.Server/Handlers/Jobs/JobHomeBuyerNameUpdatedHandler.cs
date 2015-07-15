@@ -26,7 +26,9 @@ namespace Warranty.Server.Handlers.Jobs
                 if (job == null)
                     throw new Exception(string.Format("Job {0} not found in the Warranty database.", message.JDEId));
 
-                var homeOwner = _database.SingleById<HomeOwner>(job.CurrentHomeOwnerId);
+                HomeOwner homeOwner = null;
+                if (job.CurrentHomeOwnerId != null)
+                    homeOwner = _database.SingleOrDefaultById<HomeOwner>(job.CurrentHomeOwnerId);
 
                 if (homeOwner == null)
                 {
