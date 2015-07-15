@@ -44,10 +44,5 @@ namespace Warranty.Tests.Core.Calculator
             Assert.AreEqual(now.Month, localResults.First().MonthNumber);
             Assert.AreEqual(now.Year, localResults.First().YearNumber);
         }
-
-        
-        //november to march
-        //march to may
-        //valid cases
     }
 }
