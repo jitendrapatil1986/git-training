@@ -41,8 +41,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Common.Security.1.1.109.0\lib\net45\Common.Security.dll</HintPath>
+      <HintPath>..\packages\Common.Security.1.1.110.0\lib\net45\Common.Security.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.3.1.229\lib\net45\FluentAssertions.dll</HintPath>
