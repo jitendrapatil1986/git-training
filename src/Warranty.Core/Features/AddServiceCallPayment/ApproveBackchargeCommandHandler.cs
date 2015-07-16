@@ -39,7 +39,7 @@
                 _bus.Send<NotifyBackchargeApproved>(x =>
                     {
                         x.BackchargeId = backcharge.BackchargeId;
-                        x.UserName = _userSession.GetCurrentUser().LoginName;
+                        x.UserName = _userSession.GetActualUser().LoginName;
                     });
 
                 return backcharge.BackchargeStatus.DisplayName;

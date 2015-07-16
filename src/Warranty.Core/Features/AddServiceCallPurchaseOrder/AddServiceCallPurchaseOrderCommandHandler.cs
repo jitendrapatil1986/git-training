@@ -30,7 +30,7 @@
         {
             using (_database)
             {
-                var user = _userSession.GetCurrentUser();
+                var user = _userSession.GetActualUser();
 
                 var job = _database.Single<Job>(@"SELECT j.* FROM Jobs j 
                                             INNER JOIN ServiceCalls sc ON sc.JobId = j.JobId

@@ -30,7 +30,7 @@ namespace Warranty.IntegrationTests.PersistenceTests
         public void ActivityLog_Should_Be_Inserted_With_Values()
         {
             var persistedActivityLog = Load<ActivityLog>(_activityLog.ActivityLogId);
-            var userName = new TestWarrantyUserSession().GetCurrentUser().UserName;
+            var userName = new TestWarrantyUserSession().GetActualUser().UserName;
 
             persistedActivityLog.ShouldNotBeNull();
             persistedActivityLog.ActivityName.ShouldEqual(_activityLog.ActivityName);

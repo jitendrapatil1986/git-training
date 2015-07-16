@@ -601,9 +601,6 @@
     <Compile Include="IQueryHandler.cs" />
     <Compile Include="IResultHandler.cs" />
     <Compile Include="Mediator.cs" />
-    <Compile Include="Security\IUser.cs" />
-    <Compile Include="Security\IUserSession.cs" />
-    <Compile Include="Security\WarrantyUser.cs" />
     <Compile Include="StructureMapValidatorFactory.cs" />
     <Compile Include="SystemTime.cs" />
     <Compile Include="TaskInfrastructure\Interfaces\ITask.cs" />
