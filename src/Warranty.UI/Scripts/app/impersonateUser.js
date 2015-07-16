@@ -1,4 +1,4 @@
-﻿require(['jquery', 'underscore', 'urls', 'bootstrap'], function ($, _, urls) {
+﻿require(['jquery', 'underscore', 'urls', 'bootstrap', 'bloodhound', 'typeahead'], function ($, _, urls) {
     var searchResultsUrl = urls.UserSecurity.SearchUsers;
     var resultMap = {};
     var searchResultTemplate = _.template(
@@ -16,19 +16,22 @@
             source: fetchSearchResults,
             async: true,
             matcher: matchSearchResult,
-            highlighter: generateSearchResultRow,
-            updater: relocateToSearchResultView
+            highlighter: generateSearchResultRow
         });
 
-        $("#impersonateUserModal").on('shown', function () {
+        $("#impersonateUserModal").on('shown.bs.modal', function () {
             $("#impersonateUserModal-nameInput").focus();
         });
 
         $("#impersonateUserModal-loadingIndicator").hide();
+
+        $("#impersonateUserModal-nameInput").bind('typeahead:selected', function(obj, datum, name) {
+            relocateToSearchResultView(datum.value);
+        });
     });
 
-    function fetchSearchResults(query, undefined, processResultsCallback) {
-        $.ajax({
+    function fetchSearchResults(query, processResultsCallback) {
+        return $.ajax({
             url: searchResultsUrl,
             data: { query: query },
             cache: false,
@@ -36,17 +39,19 @@
         }).done(function (results) {
             var items = processItems(results);
             if (processResultsCallback)
-                processResultsCallback(items);
+                return processResultsCallback(items);
+            return items;
         });
     }
 
     function processItems(results) {
         resultMap = {};
-        return results.map(function (item) {
-            var key = item.Caption;
+        var result =  results.map(function (item) {
+            var key = "<div><span>" + item.Caption + "</span><br /><span>" + item.Title + "</span></div>";
             resultMap[key] = item;
-            return key;
+            return { value: key };
         });
+        return result;
     }
 
     function matchSearchResult(key) {
