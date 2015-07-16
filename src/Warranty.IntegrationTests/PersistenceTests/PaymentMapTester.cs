@@ -98,7 +98,7 @@ namespace Warranty.IntegrationTests.PersistenceTests
         public void Payment_Should_Be_Inserted_With_Values()
         {
             var persistedPayment = Load<Payment>(_payment.PaymentId);
-            var userName = new TestWarrantyUserSession().GetCurrentUser().UserName;
+            var userName = new TestWarrantyUserSession().GetActualUser().UserName;
 
             persistedPayment.ShouldNotBeNull();
             persistedPayment.Amount.ShouldEqual(_payment.Amount);
@@ -118,7 +118,7 @@ namespace Warranty.IntegrationTests.PersistenceTests
             Update(_payment);
 
             var persistedPayment = Load<Payment>(_payment.PaymentId);
-            var userName = new TestWarrantyUserSession().GetCurrentUser().UserName;
+            var userName = new TestWarrantyUserSession().GetActualUser().UserName;
 
             persistedPayment.ShouldNotBeNull();
             persistedPayment.Amount.ShouldEqual(_payment.Amount);

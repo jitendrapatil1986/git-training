@@ -39,7 +39,7 @@
                 _bus.Send<NotifyPaymentApproved>(x =>
                 {
                     x.PaymentId = payment.PaymentId;
-                    x.UserName = _userSession.GetCurrentUser().LoginName;
+                    x.UserName = _userSession.GetActualUser().LoginName;
                 });
 
                 return payment.PaymentStatus.DisplayName;

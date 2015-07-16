@@ -44,7 +44,7 @@
                 _bus.Send<NotifyPaymentDeleted>(x =>
                 {
                     x.PaymentId = payment.PaymentId;
-                    x.UserName = _userSession.GetCurrentUser().LoginName;
+                    x.UserName = _userSession.GetActualUser().LoginName;
                 });
             }
         }
