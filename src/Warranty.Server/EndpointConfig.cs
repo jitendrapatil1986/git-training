@@ -1,3 +1,5 @@
+using System.Configuration;
+
 namespace Warranty.Server
 {
     using Core.DataAccess;
@@ -13,7 +15,10 @@ namespace Warranty.Server
             var container = StructureMapConfig.CreateContainer();
             DbFactory.Setup(container);
 
-            Configure.With().StructureMapBuilder(container);
+            Configure.With()
+                .StructureMapBuilder(container)
+                .DefiningDataBusPropertiesAs(t => t.Name.EndsWith("DataBus"))
+                .FileShareDataBus(ConfigurationManager.AppSettings["NServiceBus.FileShareDataBus"]);
         }
     }
 }
