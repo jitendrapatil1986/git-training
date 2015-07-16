@@ -23,7 +23,7 @@ namespace Warranty.Core.DataAccess
             if (auditableEntity != null)
             {
                 auditableEntity.UpdatedDate = DateTime.UtcNow;
-                auditableEntity.UpdatedBy = _userSession.GetCurrentUser().UserName;
+                auditableEntity.UpdatedBy = _userSession.GetActualUser().UserName;
             }
 
             return base.OnUpdating(updateContext);
@@ -38,7 +38,7 @@ namespace Warranty.Core.DataAccess
             if (auditableEntity != null)
             {
                 auditableEntity.CreatedDate = DateTime.UtcNow;
-                auditableEntity.CreatedBy = _userSession.GetCurrentUser().UserName;
+                auditableEntity.CreatedBy = _userSession.GetActualUser().UserName;
             }
 
             var auditCreatedEntity = insertContext.Poco as IAuditCreatedEntity;
@@ -46,7 +46,7 @@ namespace Warranty.Core.DataAccess
             if (auditCreatedEntity != null)
             {
                 auditCreatedEntity.CreatedDate = DateTime.UtcNow;
-                auditCreatedEntity.CreatedBy = _userSession.GetCurrentUser().UserName;
+                auditCreatedEntity.CreatedBy = _userSession.GetActualUser().UserName;
             }
 
             return base.OnInserting(insertContext);
