@@ -10,6 +10,11 @@
             return new UserInfo("TestUser");
         }
 
+        public IUser GetActualUser()
+        {
+            return GetCurrentUser();
+        }
+
         public void LogOut()
         {
             //Do nothing

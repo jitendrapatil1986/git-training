@@ -10,6 +10,11 @@
             return new UserInfo("Warranty.Server") { LoginName = "WARRANTY" };
         }
 
+        public IUser GetActualUser()
+        {
+            return GetCurrentUser();
+        }
+
         public void LogOut()
         {
         }
