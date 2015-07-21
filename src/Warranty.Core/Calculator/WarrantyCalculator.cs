@@ -762,6 +762,9 @@ namespace Warranty.Core.Calculator
 
         public IEnumerable<MonthYearModel> GetMonthRange(DateTime startDate, DateTime endDate)
         {
+            if (endDate < startDate)
+                throw new ArgumentException("Enddate cannot be before startdate");
+
             var numberOfMonths = (endDate.Month - startDate.Month) + 12 * (endDate.Year - startDate.Year) + 1;
             return Enumerable.Range(0, numberOfMonths).Select(startDate.AddMonths).TakeWhile(e => e <= endDate).Select(e => new MonthYearModel { MonthNumber = e.Month, YearNumber = e.Year });
         }

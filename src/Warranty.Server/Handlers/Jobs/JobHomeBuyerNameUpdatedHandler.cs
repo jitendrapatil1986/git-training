@@ -32,14 +32,17 @@ namespace Warranty.Server.Handlers.Jobs
 
                 if (homeOwner == null)
                 {
-                    homeOwner = new HomeOwner {HomeOwnerName = message.BuyerName, JobId = job.JobId};
+                    homeOwner = new HomeOwner { HomeOwnerName = message.BuyerName, JobId = job.JobId };
+                    _database.Insert(homeOwner);
+                    job.CurrentHomeOwnerId = homeOwner.HomeOwnerId;
+                    _database.Update(job);
                 }
                 else
                 {
                     homeOwner.HomeOwnerName = (message.BuyerName.IsNullOrEmpty()) ? null : message.BuyerName;
+                    _database.Update(homeOwner);
                 }
 
-                _database.Update(homeOwner);
             }
         }
     }

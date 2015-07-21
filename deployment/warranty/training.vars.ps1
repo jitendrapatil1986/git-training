@@ -28,3 +28,6 @@ $accountingApiBaseUri = "http://accounting.davidweekleyhomes.com/api/"
 $jobServiceApiBaseUri = "http://jobservice.davidweekleyhomes.com"
 
 $accountingEndPointServer = "wkcorpapptrain1"
+
+# Databaus configuration
+$fileShareDataBus = "\\wkcorpmgmt\DataBus\Train"

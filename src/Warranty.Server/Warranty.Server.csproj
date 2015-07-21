@@ -47,11 +47,19 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Accounting.Events.1.1.914.0\lib\net45\Accounting.Events.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Core.1.1.42.0\lib\net45\Common.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Construction.Events">
       <HintPath>..\packages\Construction.Events.1.4.286.0\lib\net45\Construction.Events.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Land.Events, Version=1.1.88.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Land.Events.1.1.88\lib\net45\Land.Events.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
@@ -112,6 +120,7 @@
     <Compile Include="Handlers\Communities\ProjectNameUpdatedHandler.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateAddedHandler.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateUpdatedHandler.cs" />
+    <Compile Include="Handlers\Jobs\JobAddressChangedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobElevationUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobClosedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobHomeBuyerNameUpdatedHandler.cs" />
