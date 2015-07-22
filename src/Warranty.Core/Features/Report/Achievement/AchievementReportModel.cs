@@ -25,7 +25,7 @@
         public class AchievementSummary
         {
             public decimal AmountSpentPerHome { get; set; }
-            public decimal? DefinetelyWouldRecommend { get; set; }
+            public decimal? DefinitelyWouldRecommend { get; set; }
             public decimal? RightTheFirstTime { get; set; }
             public decimal? OutstandingWarrantyService { get; set; }
             public decimal PercentComplete7Days { get; set; }
