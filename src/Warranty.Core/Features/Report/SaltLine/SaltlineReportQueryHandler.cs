@@ -52,7 +52,7 @@
                 var divisionSaltlineSummary = GetDivisionSaltlineSummary(query, division.DivisionName);
                 divisionSaltlineSummary.DivisionName = division.DivisionName;
                 divisionSaltlineSummary.DivisionId = division.DivisionCode;
-                if (!model.DivisionSaltlineSummary.Any(x => x.DivisionName == divisionSaltlineSummary.DivisionName && x.NumberOfSurveys == divisionSaltlineSummary.NumberOfSurveys && x.DefinetelyWouldRecommend == divisionSaltlineSummary.DefinetelyWouldRecommend && x.OutstandingWarrantyService == divisionSaltlineSummary.OutstandingWarrantyService))
+                if (!model.DivisionSaltlineSummary.Any(x => x.DivisionName == divisionSaltlineSummary.DivisionName && x.NumberOfSurveys == divisionSaltlineSummary.NumberOfSurveys && x.DefinitelyWouldRecommend == divisionSaltlineSummary.DefinitelyWouldRecommend && x.OutstandingWarrantyService == divisionSaltlineSummary.OutstandingWarrantyService))
                 {
                     model.DivisionSaltlineSummary.Add(divisionSaltlineSummary);
                 }
@@ -69,14 +69,14 @@
             var monthRange = _warrantyCalculator.GetMonthRange(startDate, endDate);
 
             var outstandingService = _warrantyCalculator.GetEmployeeOutstandingWarrantyService(startDate, endDate, employeeNumber);
-            var definetelyWouldRecommend = _warrantyCalculator.GetEmployeeDefinetelyWouldRecommend(startDate, endDate, employeeNumber);
+            var definitelyWouldRecommend = _warrantyCalculator.GetEmployeeDefinitelyWouldRecommend(startDate, endDate, employeeNumber);
             var rightTheFirstTime = _warrantyCalculator.GetEmployeeRightTheFirstTime(startDate, endDate, employeeNumber);
             var amountSpent = _warrantyCalculator.GetEmployeeAmountSpent(startDate, endDate, employeeNumber);
             var averageDays = _warrantyCalculator.GetEmployeeAverageDaysClosed(startDate, endDate, employeeNumber);
             var percentClosedWithin7Days = _warrantyCalculator.GetEmployeePercentClosedWithin7Days(startDate, endDate, employeeNumber);
             var numberOfHomes = _warrantyCalculator.GetEmployeeWarrantableHomes(startDate, endDate, employeeNumber);
 
-            return AgregateDataForReport(averageDays, percentClosedWithin7Days, amountSpent, outstandingService, definetelyWouldRecommend, rightTheFirstTime, monthRange, numberOfHomes);
+            return AgregateDataForReport(averageDays, percentClosedWithin7Days, amountSpent, outstandingService, definitelyWouldRecommend, rightTheFirstTime, monthRange, numberOfHomes);
         }
 
         private SaltlineReportModel.SaltlineSummary GetDivisionSaltlineSummary(SaltlineReportQuery query, string divisionName)
@@ -87,14 +87,14 @@
             var monthRange = _warrantyCalculator.GetMonthRange(startDate, endDate);
 
             var outstandingService = _warrantyCalculator.GetDivisionOutstandingWarrantyService(startDate, endDate, divisionName);
-            var definetelyWouldRecommend = _warrantyCalculator.GetDivisionDefinetelyWouldRecommend(startDate, endDate, divisionName);
+            var definitelyWouldRecommend = _warrantyCalculator.GetDivisionDefinitelyWouldRecommend(startDate, endDate, divisionName);
             var rightTheFirstTime = _warrantyCalculator.GetDivisionRightTheFirstTime(startDate, endDate, divisionName);
             var amountSpent = _warrantyCalculator.GetDivisionAmountSpent(startDate, endDate, divisionName);
             var averageDays = _warrantyCalculator.GetDivisionAverageDaysClosed(startDate, endDate, divisionName);
             var percentClosedWithin7Days = _warrantyCalculator.GetDivisionPercentClosedWithin7Days(startDate, endDate, divisionName);
             var numberOfHomes = _warrantyCalculator.GetDivisionWarrantableHomes(startDate, endDate, divisionName);
 
-            return AgregateDataForReport(averageDays, percentClosedWithin7Days, amountSpent, outstandingService, definetelyWouldRecommend, rightTheFirstTime, monthRange, numberOfHomes);
+            return AgregateDataForReport(averageDays, percentClosedWithin7Days, amountSpent, outstandingService, definitelyWouldRecommend, rightTheFirstTime, monthRange, numberOfHomes);
         }
 
         private SaltlineReportModel.SaltlineSummary GetProjectSaltlineSummary(SaltlineReportQuery query, string projectName)
@@ -105,17 +105,17 @@
             var monthRange = _warrantyCalculator.GetMonthRange(startDate, endDate);
 
             var outstandingService = _warrantyCalculator.GetProjectOutstandingWarrantyService(startDate, endDate, projectName);
-            var definetelyWouldRecommend = _warrantyCalculator.GetProjectDefinetelyWouldRecommend(startDate, endDate, projectName);
+            var definitelyWouldRecommend = _warrantyCalculator.GetProjectDefinitelyWouldRecommend(startDate, endDate, projectName);
             var rightTheFirstTime = _warrantyCalculator.GetProjectRightTheFirstTime(startDate, endDate, projectName);
             var amountSpent = _warrantyCalculator.GetProjectAmountSpent(startDate, endDate, projectName);
             var averageDays = _warrantyCalculator.GetProjectAverageDaysClosed(startDate, endDate, projectName);
             var percentClosedWithin7Days = _warrantyCalculator.GetProjectPercentClosedWithin7Days(startDate, endDate, projectName);
             var numberOfHomes = _warrantyCalculator.GetProjectWarrantableHomes(startDate, endDate, projectName);
 
-            return AgregateDataForReport(averageDays, percentClosedWithin7Days, amountSpent, outstandingService, definetelyWouldRecommend, rightTheFirstTime, monthRange, numberOfHomes);
+            return AgregateDataForReport(averageDays, percentClosedWithin7Days, amountSpent, outstandingService, definitelyWouldRecommend, rightTheFirstTime, monthRange, numberOfHomes);
         }
 
-        private SaltlineReportModel.SaltlineSummary AgregateDataForReport(IEnumerable<CalculatorResult> averageDays, IEnumerable<CalculatorResult> percentClosedWithin7Days, IEnumerable<CalculatorResult> amountSpent, IEnumerable<CalculatorResult> outstandingService, IEnumerable<CalculatorResult> definetelyWouldRecommend, IEnumerable<CalculatorResult> rightTheFirstTime, IEnumerable<MonthYearModel> monthRange, IEnumerable<CalculatorResult> numberOfHomes)
+        private SaltlineReportModel.SaltlineSummary AgregateDataForReport(IEnumerable<CalculatorResult> averageDays, IEnumerable<CalculatorResult> percentClosedWithin7Days, IEnumerable<CalculatorResult> amountSpent, IEnumerable<CalculatorResult> outstandingService, IEnumerable<CalculatorResult> definitelyWouldRecommend, IEnumerable<CalculatorResult> rightTheFirstTime, IEnumerable<MonthYearModel> monthRange, IEnumerable<CalculatorResult> numberOfHomes)
         {
             var list = new List<SaltlineReportModel.SaltlineSummary>();
             
@@ -127,7 +127,7 @@
                         PercentComplete7Days = GetValueForMonth(percentClosedWithin7Days, range) ?? 0,
                         AmountSpentPerHome = GetValueForMonth(amountSpent, range) ?? 0,
                         OutstandingWarrantyService = GetValueForMonth(outstandingService, range),
-                        DefinetelyWouldRecommend = GetValueForMonth(definetelyWouldRecommend, range),
+                        DefinitelyWouldRecommend = GetValueForMonth(definitelyWouldRecommend, range),
                         RightTheFirstTime = GetValueForMonth(rightTheFirstTime, range),
                         Month = range.MonthNumber,
                         Year = range.YearNumber,
@@ -140,7 +140,7 @@
             {
                 AmountSpentPerHome = list.Average(x => x.AmountSpentPerHome),
                 AverageDaysClosing = list.Average(x => x.AverageDaysClosing),
-                DefinetelyWouldRecommend = list.Where(x=>x.DefinetelyWouldRecommend != null).Average(x => x.DefinetelyWouldRecommend),
+                DefinitelyWouldRecommend = list.Where(x=>x.DefinitelyWouldRecommend != null).Average(x => x.DefinitelyWouldRecommend),
                 OutstandingWarrantyService = list.Where(x=>x.OutstandingWarrantyService != null).Average(x => x.OutstandingWarrantyService),
                 RightTheFirstTime = list.Where(x=>x.RightTheFirstTime != null).Average(x => x.RightTheFirstTime),
                 PercentComplete7Days = list.Average(x => x.PercentComplete7Days),
