@@ -24,25 +24,8 @@ namespace Warranty.Core.Calculator
         }
 
         #region Outstanding Warranty
-        public IEnumerable<CalculatorResult> GetEmployeeOutstandingWarrantyService(DateTime startDate, DateTime endDate, string employeeNumber)
-        {
-            var surveyData = GetEmployeeSurveyData(startDate, endDate, employeeNumber);
-            return GetOutstandingWarrantyResults(surveyData);
-        }
 
-        public IEnumerable<CalculatorResult> GetDivisionOutstandingWarrantyService(DateTime startDate, DateTime endDate, string divisionName)
-        {
-            var surveyData = GetDivisionSurveyData(startDate, endDate, divisionName);
-            return GetOutstandingWarrantyResults(surveyData);
-        }
-
-        public IEnumerable<CalculatorResult> GetProjectOutstandingWarrantyService(DateTime startDate, DateTime endDate, string projectName)
-        {
-            var surveyData = GetProjectSurveyData(startDate, endDate, projectName);
-            return GetOutstandingWarrantyResults(surveyData);
-        }
-
-        private IEnumerable<CalculatorResult> GetOutstandingWarrantyResults(IEnumerable<SurveyDataResult> surveyData)
+        public IEnumerable<CalculatorResult> GetOutstandingWarrantyResults(IEnumerable<SurveyDataResult> surveyData)
         {
             Int16 score = 0;
             return
@@ -67,24 +50,6 @@ namespace Warranty.Core.Calculator
         #endregion Outstanding Warranty
 
         #region Definitely Will Recommend
-        public IEnumerable<CalculatorResult> GetEmployeeDefinitelyWouldRecommend(DateTime startDate, DateTime endDate,
-            string employeeNumber)
-        {
-            var surveyData = GetEmployeeSurveyData(startDate, endDate, employeeNumber);
-            return GetDefinitelyWouldRecommend(surveyData);
-        }
-
-        public IEnumerable<CalculatorResult> GetDivisionDefinitelyWouldRecommend(DateTime startDate, DateTime endDate, string divisionName)
-        {
-            var surveyData = GetDivisionSurveyData(startDate, endDate, divisionName);
-            return GetDefinitelyWouldRecommend(surveyData);
-        }
-
-        public IEnumerable<CalculatorResult> GetProjectDefinitelyWouldRecommend(DateTime startDate, DateTime endDate, string projectName)
-        {
-            var surveyData = GetProjectSurveyData(startDate, endDate, projectName);
-            return GetDefinitelyWouldRecommend(surveyData);
-        }
         public IEnumerable<CalculatorResult> GetDefinitelyWouldRecommend(IEnumerable<SurveyDataResult> surveyData)
         {
             return
@@ -705,25 +670,8 @@ namespace Warranty.Core.Calculator
         #endregion WarrantableHomes
 
         #region RightTheFirstTime
-        public IEnumerable<CalculatorResult> GetEmployeeRightTheFirstTime(DateTime startDate, DateTime endDate, string employeeNumber)
-        {
-            var surveyData = GetEmployeeSurveyData(startDate, endDate, employeeNumber);
-            return GetRightTheFirstTimeWarrantyResults(surveyData);
-        }
 
-        public IEnumerable<CalculatorResult> GetDivisionRightTheFirstTime(DateTime startDate, DateTime endDate, string divisionName)
-        {
-            var surveyData = GetDivisionSurveyData(startDate, endDate, divisionName);
-            return GetRightTheFirstTimeWarrantyResults(surveyData);
-        }
-
-        public IEnumerable<CalculatorResult> GetProjectRightTheFirstTime(DateTime startDate, DateTime endDate, string projectName)
-        {
-            var surveyData = GetProjectSurveyData(startDate, endDate, projectName);
-            return GetRightTheFirstTimeWarrantyResults(surveyData);
-        }
-
-        private IEnumerable<CalculatorResult> GetRightTheFirstTimeWarrantyResults(IEnumerable<SurveyDataResult> surveyData)
+        public IEnumerable<CalculatorResult> GetRightTheFirstTimeWarrantyResults(IEnumerable<SurveyDataResult> surveyData)
         {
             Int16 score = 0;
             return
@@ -750,7 +698,7 @@ namespace Warranty.Core.Calculator
         #endregion RightTheFirstTime
 
         #region SurveyData
-        private IEnumerable<SurveyDataResult> GetEmployeeSurveyData(DateTime startDate, DateTime endDate, string employeeNumber)
+        public IEnumerable<SurveyDataResult> GetEmployeeSurveyData(DateTime startDate, DateTime endDate, string employeeNumber)
         {
             var surveyData = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new { startDate, endDate, EmployeeId = employeeNumber }));
             if (surveyData != null)
@@ -759,7 +707,7 @@ namespace Warranty.Core.Calculator
             return new List<SurveyDataResult>();
         }
 
-        private IEnumerable<SurveyDataResult> GetDivisionSurveyData(DateTime startDate, DateTime endDate, string divisionName)
+        public IEnumerable<SurveyDataResult> GetDivisionSurveyData(DateTime startDate, DateTime endDate, string divisionName)
         {
             var surveyData = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new
             {
@@ -777,7 +725,7 @@ namespace Warranty.Core.Calculator
             return new List<SurveyDataResult>();
         }
 
-        private IEnumerable<SurveyDataResult> GetProjectSurveyData(DateTime startDate, DateTime endDate, string projectName)
+        public IEnumerable<SurveyDataResult> GetProjectSurveyData(DateTime startDate, DateTime endDate, string projectName)
         {
             var surveyData = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new
             {
