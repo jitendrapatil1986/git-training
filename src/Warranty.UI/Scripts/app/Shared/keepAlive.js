@@ -29,8 +29,15 @@
                 url: urls.UserSession.KeepAlive,
                 success: function (response) {
                     var tokenExpirationTime = new Date(response);
-                    var promptCountDown = (2 * oneMinuteInMilliSeconds); //show prompt 2 minutes before expiration
-                    var milliSecondsUntilPromptAppears = tokenExpirationTime.getTime() - now.getTime() - promptCountDown;
+                    if (tokenExpirationTime <= now) {   /* Should trigger if the session wasn't renewed in time. 
+                                                        Note: this "now" is not a true now. Round trip to server makes this outdated, 
+                                                        but for calculations purposes, this should work.*/
+                        expireSession();
+                        return;
+                    }
+
+                    var promptCountDown = (2 * oneMinuteInMilliSeconds); //show countdown for 2 minutes. But prompt 3 minutes before actual expiration
+                    var milliSecondsUntilPromptAppears = tokenExpirationTime.getTime() - now.getTime() - promptCountDown - (oneMinuteInMilliSeconds); //promptCountDown + (oneMinuteInMilliSeconds) = 3 minutes
 
                     promptToContinueTimout = setTimeout(function () {
                         $(sessionTrackerContainer).off(sessionTrackingEvents);
@@ -57,15 +64,19 @@
             time = time - 1000;
             if (time < 0) {
                 clearInterval(interval);
-                bootbox.hideAll();
-                bootbox.confirm("Your session has expired. Click OK to refresh the page", function (result) {
-                    if (result) {
-                        window.location = urls.Help.SignOut;
-                    }
-                });
+                expireSession();
             }
         }, 1000);
         return interval;
+    }
+
+    function expireSession() {
+        bootbox.hideAll();
+        bootbox.confirm("Your session has expired. Click OK to refresh the page", function (result) {
+            if (result) {
+                window.location = urls.Help.SignOut;
+            }
+        });
     }
 
     function formatMinutes(date) {
