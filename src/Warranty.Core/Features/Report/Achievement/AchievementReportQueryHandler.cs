@@ -32,29 +32,23 @@
 
             var monthlyAchievementSummary = GetMonthlyAchievementSummary(query);
             var periodAchievementSummary = GetPeriodAchievementSummary(monthlyAchievementSummary);
-
+            
             model.MonthlyAchievementSummary = monthlyAchievementSummary.AchievementSummaries;
             model.PeriodAchievementSummary = periodAchievementSummary;
-
+            
             return model;
         }
 
         private AchievementReportModel.AchievementSummary GetPeriodAchievementSummary(SurveyReportData surveyReportData)
         {
-            var def = surveyReportData.DefinitelyWouldRecommend.Any()
-                    ? (surveyReportData.DefinitelyWouldRecommend.Sum(w => w.TotalCalculableElements) /
-                       surveyReportData.DefinitelyWouldRecommend.Sum(w => w.TotalElements)) * 100
-                    : 0;
+            var def = (surveyReportData.DefinitelyWouldRecommend.Sum(w => w.TotalCalculableElements) /
+                      surveyReportData.DefinitelyWouldRecommend.Sum(w => w.TotalElements)) * 100;
 
-            var outs = surveyReportData.OutstandingService.Any()
-                    ? surveyReportData.OutstandingService.Sum(w => w.TotalCalculableElements) /
-                      surveyReportData.OutstandingService.Sum(w => w.TotalElements) * 100
-                    : 0;
-
-            var right = surveyReportData.RightTheFirstTime.Any()
-                ? (surveyReportData.RightTheFirstTime.Sum(w => w.TotalCalculableElements) /
-                   surveyReportData.RightTheFirstTime.Sum(w => w.TotalElements)) * 100
-                : 0;
+            var outs = (surveyReportData.OutstandingService.Sum(w => w.TotalCalculableElements) /
+                      surveyReportData.OutstandingService.Sum(w => w.TotalElements)) * 100;
+            
+            var right = (surveyReportData.RightTheFirstTime.Sum(w => w.TotalCalculableElements) /
+                      surveyReportData.RightTheFirstTime.Sum(w => w.TotalElements)) * 100;
 
             return new AchievementReportModel.AchievementSummary
                 {
@@ -77,7 +71,7 @@
 
             var monthRange = _warrantyCalculator.GetMonthRange(startDate, endDate);
 
-            var surveyResults = _warrantyCalculator.GetEmployeeSurveyData(startDate, endDate, employeeNumber).ToList();
+            var surveyResults = _warrantyCalculator.GetDivisionSurveyData(startDate, endDate, employeeNumber).ToList();
 
             surveyReportData.OutstandingService = _warrantyCalculator.GetOutstandingWarrantyResults(surveyResults);
             surveyReportData.DefinitelyWouldRecommend = _warrantyCalculator.GetDefinitelyWouldRecommend(surveyResults);

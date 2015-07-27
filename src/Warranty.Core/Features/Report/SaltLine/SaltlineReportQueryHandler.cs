@@ -150,20 +150,14 @@
                     });
             }
 
-            var def = surveyReportData.DefinitelyWouldRecommend.Any()
-                ? (surveyReportData.DefinitelyWouldRecommend.Sum(w => w.TotalCalculableElements) /
-                surveyReportData.DefinitelyWouldRecommend.Sum(w => w.TotalElements)) * 100
-                : 0;
+            var def = (surveyReportData.DefinitelyWouldRecommend.Sum(w => w.TotalCalculableElements) /
+                      surveyReportData.DefinitelyWouldRecommend.Sum(w => w.TotalElements)) * 100;
 
-            var outs = surveyReportData.OutstandingService.Any()
-                ? (surveyReportData.OutstandingService.Sum(w => w.TotalCalculableElements) /
-                surveyReportData.OutstandingService.Sum(w => w.TotalElements)) * 100
-                : 0;
+            var outs = (surveyReportData.OutstandingService.Sum(w => w.TotalCalculableElements) /
+                      surveyReportData.OutstandingService.Sum(w => w.TotalElements)) * 100;
 
-            var right = surveyReportData.RightTheFirstTime.Any()
-                ? (surveyReportData.RightTheFirstTime.Sum(w => w.TotalCalculableElements) /
-                surveyReportData.RightTheFirstTime.Sum(w => w.TotalElements)) * 100
-                : 0;
+            var right = (surveyReportData.RightTheFirstTime.Sum(w => w.TotalCalculableElements) /
+                      surveyReportData.RightTheFirstTime.Sum(w => w.TotalElements)) * 100;
 
             return new SaltlineReportModel.SaltlineSummary
             {
