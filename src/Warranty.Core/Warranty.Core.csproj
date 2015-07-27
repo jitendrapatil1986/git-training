@@ -121,6 +121,7 @@
     <Compile Include="ApprovalInfrastructure\Interfaces\IApprovalService.cs" />
     <Compile Include="Attributes\CuteUiFileUploadOptionsAttribute.cs" />
     <Compile Include="Calculator\CalculatorResult.cs" />
+    <Compile Include="Calculator\SurveyReportData.cs" />
     <Compile Include="Calculator\IWarrantyCalculator.cs" />
     <Compile Include="Calculator\MonthYearModel.cs" />
     <Compile Include="Calculator\SurveyDataResult.cs" />
