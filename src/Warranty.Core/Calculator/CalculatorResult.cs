@@ -4,5 +4,6 @@
     {
         public decimal? Amount { get; set; }
         public decimal TotalElements { get; set; }
+        public decimal TotalCalculableElements { get; set; }
     }
 }

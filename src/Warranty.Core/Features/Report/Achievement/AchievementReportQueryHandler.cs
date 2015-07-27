@@ -13,7 +13,7 @@
         private readonly IUserSession _userSession;
         private readonly IWarrantyCalculator _warrantyCalculator;
 
-        public AchievementReportQueryHandler(IDatabase database, IUserSession userSession, IWarrantyCalculator warrantyCalculator )
+        public AchievementReportQueryHandler(IDatabase database, IUserSession userSession, IWarrantyCalculator warrantyCalculator)
         {
             _database = database;
             _userSession = userSession;
@@ -32,58 +32,78 @@
 
             var monthlyAchievementSummary = GetMonthlyAchievementSummary(query);
             var periodAchievementSummary = GetPeriodAchievementSummary(monthlyAchievementSummary);
-            
-            model.MonthlyAchievementSummary = monthlyAchievementSummary;
+
+            model.MonthlyAchievementSummary = monthlyAchievementSummary.AchievementSummaries;
             model.PeriodAchievementSummary = periodAchievementSummary;
-            
+
             return model;
         }
 
-        private AchievementReportModel.AchievementSummary GetPeriodAchievementSummary(IEnumerable<AchievementReportModel.AchievementSummary> achievementSummaryByTheMonth)
+        private AchievementReportModel.AchievementSummary GetPeriodAchievementSummary(SurveyReportData surveyReportData)
         {
+            var def = surveyReportData.DefinitelyWouldRecommend.Any()
+                    ? (surveyReportData.DefinitelyWouldRecommend.Sum(w => w.TotalCalculableElements) /
+                       surveyReportData.DefinitelyWouldRecommend.Sum(w => w.TotalElements)) * 100
+                    : 0;
+
+            var outs = surveyReportData.OutstandingService.Any()
+                    ? surveyReportData.OutstandingService.Sum(w => w.TotalCalculableElements) /
+                      surveyReportData.OutstandingService.Sum(w => w.TotalElements) * 100
+                    : 0;
+
+            var right = surveyReportData.RightTheFirstTime.Any()
+                ? (surveyReportData.RightTheFirstTime.Sum(w => w.TotalCalculableElements) /
+                   surveyReportData.RightTheFirstTime.Sum(w => w.TotalElements)) * 100
+                : 0;
+
             return new AchievementReportModel.AchievementSummary
                 {
-                    AmountSpentPerHome = achievementSummaryByTheMonth.Average(x => x.AmountSpentPerHome),
-                    AverageDaysClosing = achievementSummaryByTheMonth.Average(x => x.AverageDaysClosing),
-                    DefinetelyWouldRecommend = achievementSummaryByTheMonth.Average(x => x.DefinetelyWouldRecommend),
-                    OutstandingWarrantyService = achievementSummaryByTheMonth.Average(x => x.OutstandingWarrantyService),
-                    RightTheFirstTime = achievementSummaryByTheMonth.Average(x => x.RightTheFirstTime),
-                    PercentComplete7Days = achievementSummaryByTheMonth.Average(x => x.PercentComplete7Days),
+                    AmountSpentPerHome = surveyReportData.AchievementSummaries.Average(x => x.AmountSpentPerHome),
+                    AverageDaysClosing = surveyReportData.AchievementSummaries.Average(x => x.AverageDaysClosing),
+                    DefinitelyWouldRecommend = def,
+                    OutstandingWarrantyService = outs,
+                    RightTheFirstTime = right,
+                    PercentComplete7Days = surveyReportData.AchievementSummaries.Average(x => x.PercentComplete7Days),
                 };
         }
 
-        private IEnumerable<AchievementReportModel.AchievementSummary> GetMonthlyAchievementSummary(AchievementReportQuery query)
+        private SurveyReportData GetMonthlyAchievementSummary(AchievementReportQuery query)
         {
+            var surveyReportData = new SurveyReportData();
+
             var employeeNumber = query.queryModel.SelectedEmployeeNumber;
             var startDate = query.queryModel.StartDate.Value;
             var endDate = query.queryModel.EndDate.Value.ToLastDay();
 
             var monthRange = _warrantyCalculator.GetMonthRange(startDate, endDate);
 
-            var outstandingService = _warrantyCalculator.GetEmployeeOutstandingWarrantyService(startDate, endDate, employeeNumber);
-            var definetelyWouldRecommend = _warrantyCalculator.GetEmployeeDefinetelyWouldRecommend(startDate, endDate, employeeNumber);
-            var rightTheFirstTime = _warrantyCalculator.GetEmployeeRightTheFirstTime(startDate, endDate, employeeNumber);
-            var amountSpent = _warrantyCalculator.GetEmployeeAmountSpent(startDate, endDate, employeeNumber);
-            var averageDays = _warrantyCalculator.GetEmployeeAverageDaysClosed(startDate, endDate, employeeNumber);
-            var percentClosedWithin7Days = _warrantyCalculator.GetEmployeePercentClosedWithin7Days(startDate, endDate, employeeNumber);
+            var surveyResults = _warrantyCalculator.GetEmployeeSurveyData(startDate, endDate, employeeNumber).ToList();
 
-            return AgregateDataForReport(averageDays, percentClosedWithin7Days, amountSpent, outstandingService, definetelyWouldRecommend, rightTheFirstTime, monthRange);
+            surveyReportData.OutstandingService = _warrantyCalculator.GetOutstandingWarrantyResults(surveyResults);
+            surveyReportData.DefinitelyWouldRecommend = _warrantyCalculator.GetDefinitelyWouldRecommend(surveyResults);
+            surveyReportData.RightTheFirstTime = _warrantyCalculator.GetRightTheFirstTimeWarrantyResults(surveyResults);
+            surveyReportData.AmountSpent = _warrantyCalculator.GetEmployeeAmountSpent(startDate, endDate, employeeNumber);
+            surveyReportData.AverageDays = _warrantyCalculator.GetEmployeeAverageDaysClosed(startDate, endDate, employeeNumber);
+            surveyReportData.PercentClosedWithin7Days = _warrantyCalculator.GetEmployeePercentClosedWithin7Days(startDate, endDate, employeeNumber);
+            surveyReportData.AchievementSummaries = AgregateDataForReport(surveyReportData, monthRange);
+
+            return surveyReportData;
         }
 
-        private IEnumerable<AchievementReportModel.AchievementSummary> AgregateDataForReport(IEnumerable<CalculatorResult> averageDays, IEnumerable<CalculatorResult> percentClosedWithin7Days, IEnumerable<CalculatorResult> amountSpent, IEnumerable<CalculatorResult> outstandingService, IEnumerable<CalculatorResult> definetelyWouldRecommend, IEnumerable<CalculatorResult> rightTheFirstTime, IEnumerable<MonthYearModel> monthRange)
+        private IEnumerable<AchievementReportModel.AchievementSummary> AgregateDataForReport(SurveyReportData surveyReportData, IEnumerable<MonthYearModel> monthRange)
         {
             var list = new List<AchievementReportModel.AchievementSummary>();
-            
+
             foreach (var range in monthRange)
             {
                 list.Add(new AchievementReportModel.AchievementSummary
                     {
-                        AverageDaysClosing = GetValueForMonth(averageDays, range) ?? 0,
-                        PercentComplete7Days = GetValueForMonth(percentClosedWithin7Days, range)??0,
-                        AmountSpentPerHome = GetValueForMonth(amountSpent, range)??0,
-                        OutstandingWarrantyService = GetValueForMonth(outstandingService, range),
-                        DefinetelyWouldRecommend = GetValueForMonth(definetelyWouldRecommend, range),
-                        RightTheFirstTime = GetValueForMonth(rightTheFirstTime, range),
+                        AverageDaysClosing = GetValueForMonth(surveyReportData.AverageDays, range) ?? 0,
+                        PercentComplete7Days = GetValueForMonth(surveyReportData.PercentClosedWithin7Days, range) ?? 0,
+                        AmountSpentPerHome = GetValueForMonth(surveyReportData.AmountSpent, range) ?? 0,
+                        OutstandingWarrantyService = GetValueForMonth(surveyReportData.OutstandingService, range),
+                        DefinitelyWouldRecommend = GetValueForMonth(surveyReportData.DefinitelyWouldRecommend, range),
+                        RightTheFirstTime = GetValueForMonth(surveyReportData.RightTheFirstTime, range),
                         Month = range.MonthNumber,
                         Year = range.YearNumber
                     });
@@ -93,7 +113,7 @@
 
         private decimal? GetValueForMonth(IEnumerable<CalculatorResult> results, MonthYearModel range)
         {
-            var result =  results.SingleOrDefault(x => x.MonthNumber == range.MonthNumber && x.YearNumber == range.YearNumber);
+            var result = results.SingleOrDefault(x => x.MonthNumber == range.MonthNumber && x.YearNumber == range.YearNumber);
             return result != null ? result.Amount.Value : (decimal?)null;
         }
 
