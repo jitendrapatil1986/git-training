@@ -15,7 +15,7 @@ namespace Warranty.Core.Calculator
         private readonly IEmployeeService _employeeService;
         private readonly string _userMarkets;
 
-        public WarrantyCalculator(IDatabase database, ISurveyService surveyService, IEmployeeService employeeService)
+        public WarrantyCalculator(IDatabase database,  ISurveyService surveyService, IEmployeeService employeeService)
         {
             _database = database;
             _surveyService = surveyService;
@@ -218,7 +218,16 @@ namespace Warranty.Core.Calculator
         public IEnumerable<CalculatorResult> GetEmployeeRightTheFirstTime(DateTime startDate, DateTime endDate, string employeeNumber)
         {
             var surveyData = GetEmployeeSurveyData(startDate, endDate, employeeNumber);
-            return GetRightTheFirstTimeWarrantyResults(surveyData);
+            return
+                surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
+                          .Select(l => new CalculatorResult
+                          {
+                              Amount = Decimal.Divide(l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9"), l.Count()) * 100,
+                              MonthNumber = l.Key.Month,
+                              YearNumber = l.Key.Year,
+                              TotalElements = l.Count()
+                          });
+
         }
 
         public IEnumerable<CalculatorResult> GetEmployeeDefinetelyWouldRecommend(DateTime startDate, DateTime endDate, string employeeNumber)
@@ -238,8 +247,8 @@ namespace Warranty.Core.Calculator
 
         private IEnumerable<SurveyDataResult> GetEmployeeSurveyData(DateTime startDate, DateTime endDate, string employeeNumber)
         {
-            var surveyData = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new { startDate, endDate, EmployeeId = employeeNumber }));
-            if (surveyData != null)
+            var surveyData = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new {startDate, endDate, EmployeeId = employeeNumber}));
+            if(surveyData != null)
                 return surveyData.Details.ToObject<List<SurveyDataResult>>();
 
             return new List<SurveyDataResult>();
@@ -272,7 +281,7 @@ namespace Warranty.Core.Calculator
             }
         }
 
-        public IEnumerable<CalculatorResult> GetDivisionPercentClosedWithin7Days(DateTime startDate, DateTime endDate, string divisionName)
+        public IEnumerable<CalculatorResult> GetDivisionPercentClosedWithin7Days(DateTime startDate, DateTime endDate, string divisionName) 
         {
             using (_database)
             {
@@ -457,25 +466,19 @@ namespace Warranty.Core.Calculator
                               TotalElements = l.Count()
                           });
         }
-
-        private IEnumerable<CalculatorResult> GetRightTheFirstTimeWarrantyResults(IEnumerable<SurveyDataResult> surveyData)
+        public IEnumerable<CalculatorResult> GetDivisionRightTheFirstTime(DateTime startDate, DateTime endDate, string divisionName)
         {
-            Int16 score = 0;
+            var surveyData = GetDivisionSurveyData(startDate, endDate, divisionName);
             return
-                surveyData.Where(x => !string.IsNullOrEmpty(x.WarrantyServiceScore) && Int16.TryParse(x.WarrantyServiceScore, out score))
-                          .GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
+                surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
                           .Select(l => new CalculatorResult
                           {
-                              Amount = Decimal.Divide(l.Count(x => Convert.ToInt16(x.RightFirstTime) >= SurveyConstants.RightTheFirstTimeThreshold), l.Count()) * 100,
+                              Amount = Decimal.Divide(l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9"), l.Count()) * 100,
                               MonthNumber = l.Key.Month,
                               YearNumber = l.Key.Year,
                               TotalElements = l.Count()
                           });
-        }
-        public IEnumerable<CalculatorResult> GetDivisionRightTheFirstTime(DateTime startDate, DateTime endDate, string divisionName)
-        {
-            var surveyData = GetDivisionSurveyData(startDate, endDate, divisionName);
-            return GetRightTheFirstTimeWarrantyResults(surveyData);
+
         }
 
         public IEnumerable<CalculatorResult> GetDivisionDefinetelyWouldRecommend(DateTime startDate, DateTime endDate, string divisionName)
@@ -694,7 +697,16 @@ namespace Warranty.Core.Calculator
         public IEnumerable<CalculatorResult> GetProjectRightTheFirstTime(DateTime startDate, DateTime endDate, string projectName)
         {
             var surveyData = GetProjectSurveyData(startDate, endDate, projectName);
-            return GetRightTheFirstTimeWarrantyResults(surveyData);
+            return
+                surveyData.GroupBy(x => new { x.SurveyDate.Month, x.SurveyDate.Year })
+                          .Select(l => new CalculatorResult
+                          {
+                              Amount = Decimal.Divide(l.Count(x => x.RightFirstTime == "10" || x.RightFirstTime == "9") , l.Count()) * 100,
+                              MonthNumber = l.Key.Month,
+                              YearNumber = l.Key.Year,
+                              TotalElements = l.Count()
+                          });
+
         }
 
         public IEnumerable<CalculatorResult> GetProjectDefinetelyWouldRecommend(DateTime startDate, DateTime endDate, string projectName)
@@ -723,7 +735,7 @@ namespace Warranty.Core.Calculator
 
             if (surveyData != null)
             {
-                var surveyDataResult = (List<SurveyDataResult>)surveyData.Details.ToObject<List<SurveyDataResult>>();
+                var surveyDataResult = (List<SurveyDataResult>) surveyData.Details.ToObject<List<SurveyDataResult>>();
                 return surveyDataResult.Where(x => x.Division == divisionName);
             }
 
@@ -741,7 +753,7 @@ namespace Warranty.Core.Calculator
 
             if (surveyData != null)
             {
-                var surveyDataResult = (List<SurveyDataResult>)surveyData.Details.ToObject<List<SurveyDataResult>>();
+                var surveyDataResult = (List<SurveyDataResult>) surveyData.Details.ToObject<List<SurveyDataResult>>();
                 return surveyDataResult.Where(x => x.Project == projectName);
             }
 

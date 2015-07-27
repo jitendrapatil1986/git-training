@@ -10,6 +10,5 @@ namespace Warranty.Core.Configurations
         public const int OutstandingWarrantyThreshold = 9;
         public const decimal OutstandingWarrantyBonusAmount = 50;
         public const string AllItemsCompleteThreshold = "YES";
-        public const int RightTheFirstTimeThreshold = 9;
     }
 }
