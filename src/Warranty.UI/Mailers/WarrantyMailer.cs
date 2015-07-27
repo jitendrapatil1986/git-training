@@ -6,12 +6,16 @@ namespace Warranty.UI.Mailers
     using Warranty.Core.Extensions;
     using Warranty.Core.Features.CreateServiceCall;
     using Warranty.Core.Features.ServiceCallToggleActions;
+    using Common.Security.Session;
 
     public class WarrantyMailer : MailerBase, IWarrantyMailer
     {
-        public WarrantyMailer()
+        private IUserSession _userSession;
+
+        public WarrantyMailer(IUserSession userSession)
         {
             MasterName = "_Layout";
+            _userSession = userSession;
         }
 
         public MvcMailMessage NewServiceCallAssignedToWsr(NewServiceCallAssignedToWsrNotificationModel model)
@@ -25,7 +29,9 @@ namespace Warranty.UI.Mailers
             ViewBag.Url = model.Url;
 
             if (!ConfigurationManager.AppSettings["sendEmailsForTest"].IsNullOrEmpty())
-                model.WarrantyRepresentativeEmployeeEmail = ConfigurationManager.AppSettings["sendEmailsForTest"];
+            {
+                model.WarrantyRepresentativeEmployeeEmail = _userSession.GetActualUser().Email;
+            }
 
             return Populate(x =>
             {
@@ -46,7 +52,9 @@ namespace Warranty.UI.Mailers
             ViewBag.Url = model.Url;
 
             if (!ConfigurationManager.AppSettings["sendEmailsForTest"].IsNullOrEmpty())
-                model.WarrantyRepresentativeEmployeeEmail = ConfigurationManager.AppSettings["sendEmailsForTest"];
+            {
+                model.WarrantyRepresentativeEmployeeEmail = _userSession.GetActualUser().Email;
+            }
 
             return Populate(x =>
             {
@@ -67,7 +75,7 @@ namespace Warranty.UI.Mailers
             ViewBag.Url = model.Url;
 
             if (!ConfigurationManager.AppSettings["sendEmailsForTest"].IsNullOrEmpty())
-                model.Emails = new[] {ConfigurationManager.AppSettings["sendEmailsForTest"]};
+                model.Emails = new[] { _userSession.GetActualUser().Email };
 
             return Populate(x =>
             {
