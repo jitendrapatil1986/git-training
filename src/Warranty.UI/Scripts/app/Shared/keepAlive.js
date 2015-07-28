@@ -74,7 +74,7 @@
         bootbox.hideAll();
         bootbox.confirm("Your session has expired. Click OK to refresh the page", function (result) {
             if (result) {
-                window.location = urls.Help.SignOut;
+                window.location = urls.Help.SignOut + "?redirect=" + window.location.pathname;
             }
         });
     }
