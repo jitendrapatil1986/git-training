@@ -3,8 +3,8 @@
     var minimumPingIntervalInMinutes = 1;//every 1 minute
     var promptToContinueTimout;
     var oneMinuteInMilliSeconds = 60000;
-    var sessionTrackerContainer = "#session-tracker";
-    var sessionTrackingEvents = "click keyup";
+    var sessionTrackerContainer = document;
+    var sessionTrackingEvents = "click.keepAlive keyup.keepAlive mousemove.keepAlive scroll.keepAlive touchend.keepAlive";
 
     setListener();
 
