@@ -3,7 +3,7 @@ using Warranty.Core.Entities;
 
 namespace Warranty.Core.DataAccess.Mappings
 {
-    public class CommunityAssignmentMap : Map<CommunityAssignment>
+    public class CommunityAssignmentMap : AuditableEntityMap<CommunityAssignment>
     {
         public CommunityAssignmentMap()
         {
