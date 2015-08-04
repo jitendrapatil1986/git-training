@@ -30,6 +30,11 @@
                 cache: false,
                 success: function (response) {
                     var tokenExpirationTime = new Date(response);
+
+                    if (isNaN(tokenExpirationTime)) {
+                        tokenExpirationTime = new Date(Date.parse(response));
+                    }
+
                     if (tokenExpirationTime <= now) {   /* Should trigger if the session wasn't renewed in time. 
                                                         Note: this "now" is not a true now. Round trip to server makes this outdated, 
                                                         but for calculations purposes, this should work.*/
@@ -86,6 +91,7 @@
     }
 
     function expireSession() {
+        $(sessionTrackerContainer).off(sessionTrackingEvents);
         bootbox.hideAll();
         bootbox.confirm("Your session has expired. Click OK to refresh the page", function (result) {
             if (result) {
