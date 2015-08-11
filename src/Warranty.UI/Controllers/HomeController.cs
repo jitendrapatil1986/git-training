@@ -204,11 +204,11 @@
             return script;
         }
 
-        public JsonResult SendFeedback(string subject, string body)
+        public JsonResult SendFeedback(string subject, string body, string uiversion)
         {
             var request = HttpContext.Request;
             var urlReferrer = request.UrlReferrer;
-            var browser = request.Browser.Browser;
+            var browser = request.Browser;
             var userAgent = request.UserAgent;
             var hostAddress = request.UserHostAddress;
             var hostName = request.UserHostName;
@@ -219,29 +219,29 @@
                 Body = "Message: " + body
                 + "\n\n\nUser: " + User.Identity.Name
                 + "\nURL: " + urlReferrer
-                + "\nBrowser: " + browser
+                + "\nUI Version: " + uiversion
+                + "\nBrowser: " + browser.Browser + " " + (browser.Version ?? "")
                 + "\nUser Agent: " + userAgent
                 + "\nHost Address: " + hostAddress
                 + "\nHost Name: " + hostName
             };
 
-            var result = new JsonResult();
+            var result = new JsonResult
+            {
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
 
             mailMessage.To.Add(ConfigurationManager.AppSettings["sendFeedbackAddresses"]);
 
             try
             {
                 _mediator.Send(new SendFeedbackCommand {MailMessage = mailMessage});
+                result.Data = "success";
             }
             catch (Exception)
             {
                 result.Data = "error";
-                result.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
-                return result;
             }
-
-            result.Data = "success";
-            result.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
 
             return result;
         }
