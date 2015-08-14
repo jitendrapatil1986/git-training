@@ -645,12 +645,6 @@
                     
                     self.allPaymentsAndBackcharges = ko.observableArray([]);
 
-                    //self.sortedPaymentsAndBackcharges = ko.computed(function() {
-                    //    return self.allPaymentsAndBackcharges().sort(function (left, right) {
-                    //        return left.createdDate == right.createdDate ? 0 : (left.createdDate < right.createdDate ? -1 : 1);
-                    //    });
-                    //});
-
                     self.canAddPayment = ko.computed(function () {
                         return true;
                     });
