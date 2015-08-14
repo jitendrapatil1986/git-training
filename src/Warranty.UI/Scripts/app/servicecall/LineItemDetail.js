@@ -640,7 +640,7 @@
                     self.backchargeVendorNumber = ko.observable('').extend({
                         required: {
                             onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
-                        }, vendorIsOnHold: self.backchargeVendorOnHold
+                        }
                     });
                     
                     self.allPaymentsAndBackcharges = ko.observableArray([]);
