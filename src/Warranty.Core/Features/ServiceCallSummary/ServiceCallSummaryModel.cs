@@ -88,7 +88,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
 
             public bool WasCreatedToday
             {
-                get { return CreatedDate.Date == DateTime.Today.Date; }
+                get { return CreatedDate.ToLocalTime().Date == DateTime.Today.Date; }
             }
 
             public int PercentComplete

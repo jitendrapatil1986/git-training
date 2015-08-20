@@ -52,7 +52,7 @@
                         <a href='#' class='btn btn-default pull-right btn-action-with-popup' data-action-with-popup='reopen' id='btn_reopen'>Reopen</a>
                     </div>
                 }
-                @if (Model.ServiceCallSummary.WasCreatedToday)
+                @if (Model.ServiceCallSummary.WasCreatedToday || User.IsInRole(UserRoles.WarrantyAdmin))
                 {
                     <div data-bind="visible: canBeDeleted()">
                         <a href='#' data-bind="click: deleteServiceCall" class='btn btn-default pull-right' id='btn_delete'>Delete</a>
