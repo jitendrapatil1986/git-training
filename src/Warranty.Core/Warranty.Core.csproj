@@ -138,7 +138,9 @@
     <Compile Include="Features\DeleteServiceCallLineNote\DeleteServiceCallLineNoteModel.cs" />
     <Compile Include="Features\DeleteServiceCallNote\DeleteServiceCallNoteCommand.cs" />
     <Compile Include="Features\DeleteServiceCallNote\DeleteServiceCallNoteCommandHandler.cs" />
+    <Compile Include="Features\DeleteServiceCall\AdminDeleteServiceCallCommand.cs" />
     <Compile Include="Features\DeleteServiceCall\DeleteServiceCallCommand.cs" />
+    <Compile Include="Features\DeleteServiceCall\AdminDeleteServiceCallCommandHandler.cs" />
     <Compile Include="Features\DeleteServiceCall\DeleteServiceCallCommandHandler.cs" />
     <Compile Include="Features\DeleteServiceCallNote\DeleteServiceCallNoteModel.cs" />
     <Compile Include="Features\EditServiceCallLineItemNote\EditServiceCallLineItemNoteCommand.cs" />

@@ -187,6 +187,13 @@
         }
 
         [HttpDelete]
+        public PostResponseModel AdminDeleteServiceCall(AdminDeleteServiceCallCommand command)
+        {
+            _mediator.Send(command);
+            return new PostResponseModel { Success = true };
+        }
+
+        [HttpDelete]
         public PostResponseModel DeleteServiceCall(DeleteServiceCallCommand command)
         {
             _mediator.Send(command);

@@ -34,6 +34,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
                         ServiceCallLines = GetServiceCallLines(query.ServiceCallId),
                         ServicCallNotes = GetServiceCallNotes(query.ServiceCallId),
                         Attachments = GetServiceCallAttachments(query.ServiceCallId),
+                        Payments = GetServiceCallPayments(query.ServiceCallId),
+                        PurchaseOrders = GetServiceCallPurchaseOrders(query.ServiceCallId),
                         AddServiceCallLineItem = new ServiceCallSummaryModel.NewServiceCallLineItem(query.ServiceCallId, SharedQueries.ProblemCodes.GetProblemCodeList(_database)),
                         CanApprove = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.CustomerCareManager),
                         CanReassign = user.IsInRole(UserRoles.WarrantyServiceCoordinator) || user.IsInRole(UserRoles.CustomerCareManager),
@@ -171,6 +173,32 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                 AND ServiceCallLineItemId = CAST(0 AS BINARY)";
 
             var result = _database.Fetch<ServiceCallSummaryModel.Attachment>(sql, serviceCallId.ToString());
+
+            return result;
+        }
+
+        private int GetServiceCallPayments(Guid serviceCallId)
+        {
+            const string sql = @"SELECT count(*)
+                                FROM ServiceCalls SC
+                                INNER JOIN ServiceCallLineItems SCLI on SCLI.ServiceCallId = SC.ServiceCallId
+                                INNER JOIN Payments P on SCLI.ServiceCallLineItemId = P.ServiceCallLineItemId                         
+                                WHERE SC.ServiceCallId = @0";
+
+            var result = _database.First<int>(sql, serviceCallId.ToString());
+
+            return result;
+        }
+
+        private int GetServiceCallPurchaseOrders(Guid serviceCallId)
+        {
+            const string sql = @"SELECT count(*)
+                                FROM ServiceCalls SC
+                                INNER JOIN ServiceCallLineItems SCLI on SCLI.ServiceCallId = SC.ServiceCallId
+                                INNER JOIN PurchaseOrders P on SCLI.ServiceCallLineItemId = P.ServiceCallLineItemId                         
+                                WHERE SC.ServiceCallId = @0";
+
+            var result = _database.First<int>(sql, serviceCallId.ToString());
 
             return result;
         }

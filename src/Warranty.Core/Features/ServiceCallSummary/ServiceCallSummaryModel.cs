@@ -18,6 +18,9 @@ namespace Warranty.Core.Features.ServiceCallSummary
         public bool CanApprove { get; set; }
         public bool CanReassign { get; set; }
 
+        public int Payments { get; set; }
+        public int PurchaseOrders { get; set; }
+
         public class NewServiceCallLineItem
         {
             public NewServiceCallLineItem(Guid serviceCallId, IEnumerable<SelectListItem> problemCodes)
