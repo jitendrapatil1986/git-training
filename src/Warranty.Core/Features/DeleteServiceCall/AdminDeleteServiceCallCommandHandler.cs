@@ -25,11 +25,11 @@
             using (_database.Transaction)
             {
                 _database.BeginTransaction();
-
-                _database.DeleteWhere<ServiceCallLineItem>("ServiceCallId = ?", message.ServiceCallId);
-                _database.DeleteWhere<ServiceCallNote>("ServiceCallId = ?", message.ServiceCallId);
-                _database.DeleteWhere<ServiceCallAttachment>("ServiceCallId = ?", message.ServiceCallId);
-                _database.DeleteWhere<ServiceCall>("ServiceCallId = ?", message.ServiceCallId);
+                
+                _database.DeleteWhere<ServiceCallLineItem>("ServiceCallId = @0", message.ServiceCallId);
+                _database.DeleteWhere<ServiceCallNote>("ServiceCallId = @0", message.ServiceCallId);
+                _database.DeleteWhere<ServiceCallAttachment>("ServiceCallId = @0", message.ServiceCallId);
+                _database.DeleteWhere<ServiceCall>("ServiceCallId = @0", message.ServiceCallId);
 
                 _bus.Send(new NotifyServiceCallDeleted
                 {

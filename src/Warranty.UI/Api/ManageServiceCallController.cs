@@ -186,7 +186,7 @@
             return response;
         }
 
-        [HttpDelete]
+        [HttpPost]
         public PostResponseModel AdminDeleteServiceCall(AdminDeleteServiceCallCommand command)
         {
             _mediator.Send(command);
