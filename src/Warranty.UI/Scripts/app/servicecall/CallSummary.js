@@ -685,7 +685,7 @@ require(['/Scripts/app/main.js'], function () {
                         if (result) {
                             $.ajax({
                                 url: urls.ManageServiceCall.AdminDeleteServiceCall,
-                                type: "DELETE",
+                                type: "POST",
                                 data: { serviceCallId: $("#callSummaryServiceCallId").val() }
                             })
                                 .fail(function (response) {
