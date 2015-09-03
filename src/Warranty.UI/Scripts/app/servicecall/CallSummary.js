@@ -459,6 +459,8 @@ require(['/Scripts/app/main.js'], function () {
                 self.escalationDate = ko.observable(modelData.escalationDate);
                 self.allCallNotes = ko.observableArray([]);
                 self.allAttachments = ko.observableArray([]);
+                self.payments = ko.observable(0);
+                self.purchaseOrders = ko.observable(0);
 
                 self.noteDescriptionToAdd = ko.observable('').extend({ required: true});
 
@@ -678,6 +680,27 @@ require(['/Scripts/app/main.js'], function () {
                     });
                 };
 
+                self.adminDeleteServiceCall = function () {
+                    bootbox.confirm("Are you sure you want to delete this service call?", function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: urls.ManageServiceCall.AdminDeleteServiceCall,
+                                type: "POST",
+                                data: { serviceCallId: $("#callSummaryServiceCallId").val() }
+                            })
+                                .fail(function (response) {
+                                    toastr.error("There was an issue deleting the service call. Please try again!");
+                                })
+                                .success(function () {
+                                    toastr.success("Success! Service Call deleted.");
+                                })
+                                .done(function (response) {
+                                    window.location = urls.Job.JobSummary + '/' + modelData.jobId;
+                                });
+                        }
+                    });
+                };
+
                 self.cssforCallSummaryServiceCallStatus = ko.computed(function () {
                     var className = self.callSummaryServiceCallStatus().toLowerCase().replace(/\ /g, '-');
                     return 'label label-' + className + '-service-call';
@@ -713,6 +736,10 @@ require(['/Scripts/app/main.js'], function () {
 
                 self.canBeDeleted = ko.computed(function () {
                     return (self.callSummaryStatusRequested() || self.callSummaryStatusOpen()) && self.allLineItems().length == 0;
+                });
+
+                self.adminCanDelete = ko.computed(function () {
+                    return (self.callSummaryStatusRequested() || self.callSummaryStatusOpen()) && self.payments() === 0 && self.purchaseOrders() === 0;
                 });
                 
                 self.homeownerVerificationSignature = ko.observable('').extend({ required: true });
@@ -802,6 +829,9 @@ require(['/Scripts/app/main.js'], function () {
             _(persistedAllAttachmentsViewModel).each(function (attachment) {
                 viewModel.allAttachments.push(new CallAttachmentsViewModel(attachment));
             });
+
+            viewModel.payments(modelData.payments);
+            viewModel.purchaseOrders(modelData.purchaseOrders);
 
             viewModel.errors = ko.validation.group(viewModel);
              

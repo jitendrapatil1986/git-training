@@ -58,6 +58,12 @@
                         <a href='#' data-bind="click: deleteServiceCall" class='btn btn-default pull-right' id='btn_delete'>Delete</a>
                     </div>
                 }
+                else if (User.IsInRole(UserRoles.WarrantyAdmin))
+                {
+                    <div data-bind="visible: adminCanDelete()">
+                        <a href='#' data-bind="click: adminDeleteServiceCall" class='btn btn-default pull-right' id='btn_delete'>Delete</a>
+                    </div>
+                }
             </div>
             
             <div class="clearfix"></div>
@@ -409,6 +415,8 @@
                 saveAdditionalContactsUrl: '@Url.Action("SaveAdditionalContacts", "Homeowner")',
                 jobId: @Html.Raw(Model.ServiceCallSummary.JobId.ToJson()),
                 canUndoSpecialProject: @Model.ServiceCallSummary.CanUndoSpecialProject.ToJson(),
+                payments: @Model.Payments,
+                purchaseOrders: @Model.PurchaseOrders
             }
         });
 
