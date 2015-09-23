@@ -59,6 +59,7 @@
                         PurchaseOrderTypeJdeIdentifier = WarrantyConstants.DefaultPurchaseOrderType,
                         RequestedDate = model.DeliveryDate ?? SystemTime.Now.Date,
                         UserId = message.LoginName,
+                        BuilderNumber = message.EmployeeNumber,
                         LineItems = purchaseOrderLineItems.Select(y => new RequestPurchaseOrder.LineItem
                             {
                                 Quantity = y.Quantity,
