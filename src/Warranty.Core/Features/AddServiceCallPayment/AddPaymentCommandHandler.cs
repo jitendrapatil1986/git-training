@@ -100,7 +100,8 @@
                         CostCode = costCode.CostCode,
                         BackchargeStatus = BackchargeStatus.Requested,
                         Username = currentUser.LoginName,
-                        EmployeeNumber = currentUser.EmployeeNumber
+                        EmployeeNumber = currentUser.EmployeeNumber,
+                        ServiceCallLineItemId = message.ServiceCallLineItemId
                     };
                     _database.Insert(backcharge);
 
