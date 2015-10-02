@@ -105,6 +105,7 @@
                         x.PurchaseOrderId = purchaseOrder.PurchaseOrderId;
                         x.LoginName = user.LoginName;
                         x.CommunityNumber = communityNumber;
+                        x.EmployeeNumber = user.EmployeeNumber;
                     });
                 }
             }
