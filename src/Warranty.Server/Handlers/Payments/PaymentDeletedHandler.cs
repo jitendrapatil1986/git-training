@@ -21,7 +21,16 @@ namespace Warranty.Server.Handlers.Payments
             {
                 var payment = _database.SingleOrDefaultByJdeId<Payment>(message.JDEId);
                 if (payment != null)
+                {
+                    var backcharges = _database.Fetch<Backcharge>(string.Format("WHERE PaymentId = {0}", payment.PaymentId));
+                    foreach (var backcharge in backcharges)
+                    {
+                        backcharge.PaymentId = null;
+                        _database.Update(backcharge);
+                    }
+
                     _database.Delete(payment);
+                }
             }
         }
     }
