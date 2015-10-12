@@ -101,7 +101,8 @@
                         BackchargeStatus = BackchargeStatus.Requested,
                         Username = currentUser.LoginName,
                         EmployeeNumber = currentUser.EmployeeNumber,
-                        ServiceCallLineItemId = message.ServiceCallLineItemId
+                        ServiceCallLineItemId = message.ServiceCallLineItemId,
+                        CommunityNumber = communityNumber
                     };
                     _database.Insert(backcharge);
 
