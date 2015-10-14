@@ -70,7 +70,7 @@
                     VendorNumber = message.VendorNumber,
                     VendorName = message.VendorName,
                     JobNumber = job.JobNumber,
-                    CommunityNumber = communityNumber,
+                    CommunityNumber = string.IsNullOrEmpty(communityNumber) ? string.Empty : communityNumber.Substring(0, 4),
                     CostCode = costCode.CostCode,
                     ObjectAccount = _resolveObjectAccount.ResolveLaborObjectAccount(job, serviceCall),
                 };

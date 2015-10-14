@@ -79,7 +79,7 @@ namespace Warranty.Core.Features.AddServiceCallPayment
                     Username = currentUser.LoginName,
                     EmployeeNumber = currentUser.EmployeeNumber,
                     ObjectAccount = _resolveObjectAccount.ResolveLaborObjectAccount(job, serviceCall),
-                    CommunityNumber = communityNumber
+                    CommunityNumber = string.IsNullOrEmpty(communityNumber) ? string.Empty : communityNumber.Substring(0, 4)
                 };
                 _database.Insert(backcharge);
 
