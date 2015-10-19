@@ -26,8 +26,8 @@ namespace Warranty.UI.Core.Initialization
             For<IValidatorFactory>().Use<StructureMapValidatorFactory>();
             For<ModelValidatorProvider>().Use<FluentValidationModelValidatorProvider>();
             For<HttpRequest>().Use(() => HttpContext.Current.Request);
-            For<IUserSession>().Use<WebUserSession>();
-            For<IWebUserSession>().Use<WebUserSession>();
+            For<IUserSession>().HttpContextScoped().Use<WebUserSession>();
+            Forward<IUserSession, IWebUserSession>();
             For<IWarrantyMailer>().Use<WarrantyMailer>();
             For<IManageToDoFilterCookie>().Use<ToDoFilterCookieManager>();
             For(typeof(IFileSystemManager<>)).Use(typeof(FileSystemManager<>));
