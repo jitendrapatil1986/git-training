@@ -53,7 +53,7 @@
 
                 var city = _database.SingleOrDefaultById<City>(community.CityId);
 
-                var communityNumber = job.JobNumber;  //community is first 4 chs of job but accounting needs job and pulls substring.
+                var communityNumber = community.CommunityNumber;
 
                 if (job.IsOutOfWarranty)
                 {

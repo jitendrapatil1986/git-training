@@ -54,7 +54,7 @@ namespace Warranty.Core.Features.AddServiceCallPayment
 
                 var city = _database.SingleOrDefaultById<City>(community.CityId);
 
-                var communityNumber = job.JobNumber;
+                var communityNumber = community.CommunityNumber;
 
                 if (job.IsOutOfWarranty)
                 {
