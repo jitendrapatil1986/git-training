@@ -4,7 +4,7 @@ using Common.Security.Queries;
 using NPoco;
 using Warranty.Core.Enumerations;
 using Warranty.Core.Extensions;
-using Warranty.Core.Security;
+using Common.Security.Session;
 using Warranty.Core.ToDoInfrastructure.ConcreteTodos;
 using Warranty.Core.ToDoInfrastructure.Interfaces;
 using Warranty.Core.ToDoInfrastructure.Models;
@@ -326,7 +326,7 @@ namespace Warranty.Core.ToDoInfrastructure
             var employeesByMarket = new List<KeyValuePair<string, List<Employee>>>();
             foreach (var market in markets)
             {
-                var securityEmployeesInMarket = new GetUsersByMarketAndRolesQuery(market, UserRoles.WarrantyServiceRepresentativeRole).Execute();
+                var securityEmployeesInMarket = new GetUsersByMarketAndRolesQuery(market, Enumerations.UserRoles.WarrantyServiceRepresentativeRole).Execute();
                 var employeesInMarket = warrantyEmployees.Where(x => securityEmployeesInMarket.Select(y => y.EmployeeNumber).Contains(x.Number)).ToList();
                 employeesByMarket.Add(new KeyValuePair<string, List<Employee>>(market, employeesInMarket));
             }
@@ -362,7 +362,7 @@ namespace Warranty.Core.ToDoInfrastructure
                                 ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
                                 WHERE CloseDate >= DATEADD(yy, -2, sc.CreatedDate) {0} /* WHERE */";
 
-            var query = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? string.Format(sql, "AND c.CityCode IN (" + userMarkets.CommaSeparateWrapWithSingleQuote() + ") AND p.PaymentStatus = " + PaymentStatus.Hold.Value + " AND e.EmployeeNumber = " + user.EmployeeNumber)
+            var query = user.IsInRole(Enumerations.UserRoles.WarrantyServiceRepresentative) ? string.Format(sql, "AND c.CityCode IN (" + userMarkets.CommaSeparateWrapWithSingleQuote() + ") AND p.PaymentStatus = " + PaymentStatus.Hold.Value + " AND e.EmployeeNumber = " + user.EmployeeNumber)
                                                                                : string.Format(sql, "AND c.CityCode IN (" + userMarkets.CommaSeparateWrapWithSingleQuote() + ") AND p.PaymentStatus = " + PaymentStatus.Pending.Value);
 
             var toDos = database.Fetch<ToDoPaymentRequestApprovalUnderWarranty, ToDoPaymentRequestApprovalUnderWarrantyModel>(query);
@@ -451,7 +451,7 @@ namespace Warranty.Core.ToDoInfrastructure
                                 ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
                                 WHERE CloseDate < DATEADD(yy, -2, sc.CreatedDate) {0} /* WHERE */";
 
-            var query = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? string.Format(sql, "AND c.CityCode IN (" + userMarkets.CommaSeparateWrapWithSingleQuote() + ") AND p.PaymentStatus = " + PaymentStatus.Hold.Value + " AND e.EmployeeNumber = " + user.EmployeeNumber)
+            var query = user.IsInRole(Enumerations.UserRoles.WarrantyServiceRepresentative) ? string.Format(sql, "AND c.CityCode IN (" + userMarkets.CommaSeparateWrapWithSingleQuote() + ") AND p.PaymentStatus = " + PaymentStatus.Hold.Value + " AND e.EmployeeNumber = " + user.EmployeeNumber)
                                                                                : string.Format(sql, "AND c.CityCode IN (" + userMarkets.CommaSeparateWrapWithSingleQuote() + ") AND p.PaymentStatus = " + PaymentStatus.Pending.Value);
 
             var toDos = database.Fetch<ToDoPaymentRequestApprovalOutOfWarranty, ToDoPaymentRequestApprovalOutOfWarrantyModel>(query);

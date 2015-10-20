@@ -11,7 +11,7 @@ namespace Warranty.Server.IntegrationTests
     using Core;
     using Core.DataAccess;
     using Core.Extensions;
-    using Core.Security;
+    using Common.Security.Session;
     using NPoco.FluentMappings;
     using Server.Handlers.Payments;
     using Tests.Core;

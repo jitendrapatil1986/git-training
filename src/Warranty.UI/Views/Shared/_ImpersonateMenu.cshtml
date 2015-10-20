@@ -1,0 +1,9 @@
+﻿@using Common.Security.User
+@if (User.IsInRole(Common.Security.User.UserRoles.Admin))
+{
+    <li><a href="#impersonateUserModal" data-toggle="modal">Impersonate User &hellip;</a></li>
+}
+@if (User.IsBeingImpersonated())
+{
+    <li><a href="@Url.Action("StopImpersonating", "UserSecurity", new{ area = ""})">Stop Impersonating</a></li>
+}

@@ -7,7 +7,7 @@
     using InnerMessages;
     using NPoco;
     using NServiceBus;
-    using Security;
+    using Common.Security.Session;
 
     public class HoldBackchargeCommandHandler : ICommandHandler<HoldBackchargeCommand, HoldBackchargeCommandHandler.HoldBackchargeCommandHandlerResponse>
     {
@@ -42,7 +42,7 @@
                 _bus.Send<NotifyBackchargeOnHold>(x =>
                 {
                     x.BackchargeId = backcharge.BackchargeId;
-                    x.UserName = _userSession.GetCurrentUser().LoginName;
+                    x.UserName = _userSession.GetActualUser().LoginName;
                 });
 
                 return new HoldBackchargeCommandHandlerResponse

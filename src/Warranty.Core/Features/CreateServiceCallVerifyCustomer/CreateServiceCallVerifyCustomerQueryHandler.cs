@@ -3,7 +3,7 @@
 namespace Warranty.Core.Features.CreateServiceCallVerifyCustomer
 {
     using NPoco;
-    using Security;
+    using Common.Security.Session;
 
     public class CreateServiceCallVerifyCustomerQueryHandler : IQueryHandler<CreateServiceCallVerifyCustomerQuery, CreateServiceCallVerifyCustomerModel>
     {
@@ -19,8 +19,6 @@ namespace Warranty.Core.Features.CreateServiceCallVerifyCustomer
 
         public CreateServiceCallVerifyCustomerModel Handle(CreateServiceCallVerifyCustomerQuery query)
         {
-            var user = _userSession.GetCurrentUser();
-
             using (_database)
             {
                 var model = GetCustomerById(query.HomeOwnerId);

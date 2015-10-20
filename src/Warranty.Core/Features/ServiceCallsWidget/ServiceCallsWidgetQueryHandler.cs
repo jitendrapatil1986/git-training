@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using Enumerations;
     using NPoco;
-    using Security;
+    using Common.Security.Session;
     using Extensions;
 
     public class ServiceCallsWidgetQueryHandler : IQueryHandler<ServiceCallsWidgetQuery, ServiceCallsWidgetModel>

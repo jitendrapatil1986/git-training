@@ -2,7 +2,7 @@
 {
     using Extensions;
     using NPoco;
-    using Security;
+    using Common.Security.Session;
 
     public class AverageDaysClosedWidgetWSRQueryHandler : IQueryHandler<AverageDaysClosedWidgetWSRQuery, AverageDaysClosedWidgetModel>
     {

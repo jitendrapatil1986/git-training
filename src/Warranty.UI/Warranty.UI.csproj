@@ -58,6 +58,14 @@
     <Reference Include="AutoMapper.Net4">
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Common.Security.1.1.112.0\lib\net45\Common.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.UI.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Common.UI.Security.1.1.112.0\lib\net45\Common.UI.Security.dll</HintPath>
+    </Reference>
     <Reference Include="CuteWebUI.AjaxUploader">
       <HintPath>..\..\lib\AjaxUploader\CuteWebUI.AjaxUploader.dll</HintPath>
     </Reference>
@@ -83,8 +91,9 @@
     <Reference Include="Microsoft.IdentityModel">
       <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Mvc.Mailer">
       <HintPath>..\packages\MvcMailer.4.5\lib\45\Mvc.Mailer.dll</HintPath>
@@ -139,6 +148,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.30506.0\lib\net40\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Optimization">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.0\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
@@ -166,10 +179,6 @@
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Mvc">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -217,6 +226,7 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
     <Compile Include="Api\UserSessionController.cs" />
+    <Compile Include="Controllers\UserSecurityController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\EnumerationController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
@@ -262,7 +272,6 @@
     <Compile Include="Core\ModelBinders\EnumerationCollectionPropertyBinder.cs" />
     <Compile Include="Core\ModelBinders\EnumerationModelBinder.cs" />
     <Compile Include="Core\ModelBinders\EnumerationPropertyBinder.cs" />
-    <Compile Include="Core\Security\WarrantyUserSession.cs" />
     <Compile Include="CryptographicErrorModule.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -316,6 +325,7 @@
     <Content Include="Scripts\app\approveServiceCalls.js" />
     <Content Include="Scripts\app\additionalContacts.js" />
     <Content Include="Scripts\app\formUploader.js" />
+    <Content Include="Scripts\app\impersonateUser.js" />
     <Content Include="Scripts\app\Job\ChangeHomeowner.js" />
     <Content Include="Scripts\app\Job\JobSummary.js" />
     <Content Include="Scripts\app\Report\WarrantyBonusSummaryWSRReport.js" />
@@ -362,6 +372,7 @@
     <Content Include="Scripts\app\shared\confirmMessage.js" />
     <Content Include="Scripts\app\shared\Default.js" />
     <Content Include="Scripts\lib\jquery.color-2.1.0.min.js" />
+    <Content Include="Scripts\lib\polyfill.min.js" />
     <Content Include="Scripts\lib\responsive.tabs.js" />
     <Content Include="Scripts\lib\text.js" />
     <Content Include="Scripts\templates\call-search-item.html" />
@@ -473,6 +484,8 @@
     <Content Include="Views\Home\_ClosedCalls.cshtml" />
     <Content Include="Views\Home\_ToDoJobChangedTaskApproval.cshtml" />
     <Content Include="Views\Report\WSROpenedClosedCallReport.cshtml" />
+    <Content Include="Views\Shared\_ImpersonateMenu.cshtml" />
+    <Content Include="Views\Shared\_ImpersonateUserModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

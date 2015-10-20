@@ -1,4 +1,6 @@
-﻿namespace Warranty.UI.Api
+﻿using Common.Security.Session;
+
+namespace Warranty.UI.Api
 {
     using System;
     using System.Web.Mvc;
@@ -22,7 +24,6 @@
     using Warranty.Core.Features.UpdateServiceCallLineItem;
     using Warranty.Core.Features.EditServiceCallStatus;
     using Warranty.Core.Features.NoActionServiceCallLineItem;
-    using Warranty.Core.Security;
 
     public class ManageServiceCallController: ApiController
     {

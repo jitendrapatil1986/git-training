@@ -9,6 +9,8 @@ $newRelicAppName = "Warranty (Prod)"
 # db settings
 $db_server = "WKSQL1"
 $db_name = "Warranty"
+$security_db_server="WKSQL1"
+$security_db_name="Security"
 $db_nsb_application_name = "Warranty.Server"
 $db_web_application_name = "Warranty.UI"
 

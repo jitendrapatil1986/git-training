@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using Common.Security.Queries;
     using Entities;
-    using Security;
+    using Common.Security.Session;
     using Enumerations;
     using NPoco;
     using Common.Extensions;
@@ -78,9 +78,9 @@
                 var warrantyEmployees = _database.Fetch<Employee>();
 
                 var employeesByServiceCallMarket =
-                    new GetUsersByMarketAndRolesQuery(serviceCallMarket, UserRoles.CustomerCareManagerRole,
-                                                      UserRoles.WarrantyCoordinatorRole,
-                                                      UserRoles.WarrantyServiceRepresentativeRole).Execute();
+                    new GetUsersByMarketAndRolesQuery(serviceCallMarket, Enumerations.UserRoles.CustomerCareManagerRole,
+                                                      Enumerations.UserRoles.WarrantyCoordinatorRole,
+                                                      Enumerations.UserRoles.WarrantyServiceRepresentativeRole).Execute();
 
                 var employeesAssignableToServiceCall = warrantyEmployees.Where(x => employeesByServiceCallMarket.Select(y => y.EmployeeNumber).Contains(x.Number));
 
