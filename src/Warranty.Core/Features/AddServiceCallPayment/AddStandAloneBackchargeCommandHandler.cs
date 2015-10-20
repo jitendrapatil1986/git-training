@@ -1,4 +1,6 @@
-﻿namespace Warranty.Core.Features.AddServiceCallPayment
+﻿using Warranty.Core.Configurations;
+
+namespace Warranty.Core.Features.AddServiceCallPayment
 {
     using System;
     using Entities;
@@ -48,6 +50,17 @@
 
                 var costCode = RootProblem.FromDisplayName(rootProblem).CostCode;
 
+                var community = _database.SingleOrDefaultById<Community>(job.CommunityId);
+
+                var city = _database.SingleOrDefaultById<City>(community.CityId);
+
+                var communityNumber = community.CommunityNumber;
+
+                if (job.IsOutOfWarranty)
+                {
+                    communityNumber = WarrantyConfigSection.GetCity(city.CityCode.ToUpper()).ClosedOutCommunity;
+                }
+
                 var backcharge = new Backcharge
                 {
                     PaymentId = null,
@@ -66,6 +79,7 @@
                     Username = currentUser.LoginName,
                     EmployeeNumber = currentUser.EmployeeNumber,
                     ObjectAccount = _resolveObjectAccount.ResolveLaborObjectAccount(job, serviceCall),
+                    CommunityNumber = string.IsNullOrEmpty(communityNumber) ? string.Empty : communityNumber.Substring(0, 4)
                 };
                 _database.Insert(backcharge);
 

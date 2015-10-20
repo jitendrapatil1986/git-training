@@ -31,5 +31,6 @@
         public string JobNumber { get; set; }
         public Guid? ServiceCallLineItemId { get; set; }
         public string ObjectAccount { get; set; }
+        public string CommunityNumber { get; set; }
     }
 }

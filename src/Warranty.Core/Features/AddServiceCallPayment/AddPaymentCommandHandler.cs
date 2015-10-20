@@ -53,7 +53,7 @@
 
                 var city = _database.SingleOrDefaultById<City>(community.CityId);
 
-                var communityNumber = job.JobNumber;  //community is first 4 chs of job but accounting needs job and pulls substring.
+                var communityNumber = community.CommunityNumber;
 
                 if (job.IsOutOfWarranty)
                 {
@@ -70,7 +70,7 @@
                     VendorNumber = message.VendorNumber,
                     VendorName = message.VendorName,
                     JobNumber = job.JobNumber,
-                    CommunityNumber = communityNumber,
+                    CommunityNumber = string.IsNullOrEmpty(communityNumber) ? string.Empty : communityNumber.Substring(0, 4),
                     CostCode = costCode.CostCode,
                     ObjectAccount = _resolveObjectAccount.ResolveLaborObjectAccount(job, serviceCall),
                 };
@@ -101,7 +101,8 @@
                         BackchargeStatus = BackchargeStatus.Requested,
                         Username = currentUser.LoginName,
                         EmployeeNumber = currentUser.EmployeeNumber,
-                        ServiceCallLineItemId = message.ServiceCallLineItemId
+                        ServiceCallLineItemId = message.ServiceCallLineItemId,
+                        CommunityNumber = communityNumber
                     };
                     _database.Insert(backcharge);
 

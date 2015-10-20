@@ -25,9 +25,10 @@
                 var backcharge = _database.SingleById<Backcharge>(message.BackchargeId);
                 var payment = _database.SingleOrDefaultById<Payment>(backcharge.PaymentId);
 
-                var backchargeRequest = new RequestBackcharge
+                var backchargeRequest = new RequestWarrantyBackcharge
                 {
-                    JobNumber = payment == null ? backcharge.JobNumber.Substring(0, 4) : payment.JobNumber.Substring(0,4),
+                    BackchargeIdentifier = backcharge.BackchargeId.ToString(),
+                    CommunityNumber = backcharge.CommunityNumber,
                     BackchargeAmount = backcharge.BackchargeAmount,
                     VendorNumber = backcharge.BackchargeVendorNumber,
                     ResponseFromVendor = backcharge.BackchargeResponseFromVendor,
@@ -43,10 +44,8 @@
                     ProgramId = WarrantyConstants.ProgramId,
                     ObjectAccount = payment == null ? backcharge.ObjectAccount : payment.ObjectAccount,
                     BuilderNumber = message.EmployeeNumber,
-                    OptionNumber = payment == null ? backcharge.JobNumber : payment.JobNumber,
-                    BackchargeIdentifier = backcharge.BackchargeId.ToString()
+                    OptionNumber = payment == null ? backcharge.JobNumber : payment.JobNumber
                 };
-
                 _bus.Send(backchargeRequest);
             }
         }
