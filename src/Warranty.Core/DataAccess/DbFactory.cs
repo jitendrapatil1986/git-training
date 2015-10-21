@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 using NPoco.FluentMappings;
-using Warranty.Core.Security;
+using Common.Security.Session;
 
 namespace Warranty.Core.DataAccess
 {

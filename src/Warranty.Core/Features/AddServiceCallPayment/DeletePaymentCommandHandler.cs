@@ -6,7 +6,7 @@
     using InnerMessages;
     using NPoco;
     using NServiceBus;
-    using Security;
+    using Common.Security.Session;
 
     public class DeletePaymentCommandHandler : ICommandHandler<DeletePaymentCommand>
     {
@@ -44,7 +44,7 @@
                 _bus.Send<NotifyPaymentDeleted>(x =>
                 {
                     x.PaymentId = payment.PaymentId;
-                    x.UserName = _userSession.GetCurrentUser().LoginName;
+                    x.UserName = _userSession.GetActualUser().LoginName;
                 });
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using Common.Security.Session;
 
 namespace Warranty.UI.Controllers
 {
@@ -16,7 +17,6 @@ namespace Warranty.UI.Controllers
     using System.Linq;
     using Warranty.Core.Features.ServiceCallSummary.Attachments;
     using Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem;
-    using Warranty.Core.Security;
     using Warranty.Core.Features.ServiceCallApproval;
     using Warranty.Core.Features.ServiceCallSummary.ReassignEmployee;
     using Warranty.Core.Features.ServiceCallToggleActions;

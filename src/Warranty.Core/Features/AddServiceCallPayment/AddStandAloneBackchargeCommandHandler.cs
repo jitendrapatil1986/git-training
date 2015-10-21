@@ -6,7 +6,7 @@
     using InnerMessages;
     using NPoco;
     using NServiceBus;
-    using Security;
+    using Common.Security.Session;
     using Services;
 
     public class AddStandAloneBackchargeCommandHandler : ICommandHandler<AddStandAloneBackchargeCommand, AddStandAloneBackchargeCommandDto>
@@ -28,7 +28,7 @@
         {
             using (_database)
             {
-                var currentUser = _userSession.GetCurrentUser();
+                var currentUser = _userSession.GetActualUser();
 
                 var job = _database.Single<Job>(@"SELECT j.*
                                                             FROM ServiceCallLineItems scli

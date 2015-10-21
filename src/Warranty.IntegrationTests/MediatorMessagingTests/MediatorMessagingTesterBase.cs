@@ -4,7 +4,6 @@
     using Core;
     using Core.DataAccess;
     using Core.Entities;
-    using Core.Security;
     using MediatorMessagingTests;
     using MediatorMessagingTests.EntityBuilders;
     using NPoco;

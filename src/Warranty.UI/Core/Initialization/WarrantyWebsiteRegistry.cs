@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using Common.Security.Session;
+using Common.UI.Security.Session;
+using FluentValidation;
 using FluentValidation.Mvc;
 
 namespace Warranty.UI.Core.Initialization
@@ -9,14 +11,12 @@ namespace Warranty.UI.Core.Initialization
     using System.Web.Mvc;
     using Accounting.Client;
     using Mailers;
-    using Security;
     using StructureMap.Configuration.DSL;
     using StructureMap.Pipeline;
     using Survey.Client;
     using Warranty.Core;
     using Warranty.Core.Extensions;
     using Warranty.Core.FileManagement;
-    using Warranty.Core.Security;
     using Warranty.Core.Services;
 
     public class WarrantyWebsiteRegistry : Registry
@@ -26,7 +26,8 @@ namespace Warranty.UI.Core.Initialization
             For<IValidatorFactory>().Use<StructureMapValidatorFactory>();
             For<ModelValidatorProvider>().Use<FluentValidationModelValidatorProvider>();
             For<HttpRequest>().Use(() => HttpContext.Current.Request);
-            For<IUserSession>().Use<WarrantyUserSession>();
+            For<IUserSession>().HttpContextScoped().Use<WebUserSession>();
+            Forward<IUserSession, IWebUserSession>();
             For<IWarrantyMailer>().Use<WarrantyMailer>();
             For<IManageToDoFilterCookie>().Use<ToDoFilterCookieManager>();
             For(typeof(IFileSystemManager<>)).Use(typeof(FileSystemManager<>));

@@ -72,6 +72,7 @@ Role "Web" -Incremental {
 
     # config
     poke-xml "$web_directory\web.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_web_application_name;"
+	poke-xml "$web_directory\web.config" "configuration/connectionStrings/add[@name='SecurityDB']/@connectionString" "Data Source=$security_db_server;Initial Catalog=$security_db_name;Integrated Security=True;"
     poke-xml "$web_directory\web.config" "configuration/system.identityModel/identityConfiguration/audienceUris/add/@value" $warranty_identity_uri
     poke-xml "$web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@realm" $warranty_identity_uri
     poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Environment']/@value" $environment

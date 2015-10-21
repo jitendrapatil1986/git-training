@@ -7,7 +7,7 @@
     using InnerMessages;
     using NPoco;
     using NServiceBus;
-    using Security;
+    using Common.Security.Session;
 
     public class HoldPaymentCommandHandler : ICommandHandler<HoldPaymentCommand, HoldPaymentCommandHandler.HoldPaymentCommandHandlerResponse>
     {
@@ -42,7 +42,7 @@
                 _bus.Send<NotifyPaymentOnHold>(x =>
                 {
                     x.PaymentId = payment.PaymentId;
-                    x.Username = _userSession.GetCurrentUser().LoginName;
+                    x.Username = _userSession.GetActualUser().LoginName;
                 });
 
                 return new HoldPaymentCommandHandlerResponse

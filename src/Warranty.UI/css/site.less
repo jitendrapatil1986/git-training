@@ -2,6 +2,8 @@
 @danger-bg: #f2dede;
 @highlight-bg: #d4dde3; //#FFF2A8;
 @gray-lighter: #f7f7f7;
+@white: #ffffff;
+@red: #D92929;
 
 a {
    outline: 0;
@@ -1202,4 +1204,17 @@ a.boxclose {
         -webkit-transform: rotate(359deg);
         transform: rotate(359deg);
     }
+}
+
+#impersonationBanner {
+  background-color: @red;
+  color: @white;
+  font-size: 0.9em;
+  position: absolute;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  right: 0;
+  padding: 0 5px;
+  border-bottom-left-radius: 5px;
 }

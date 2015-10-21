@@ -6,7 +6,7 @@
     using InnerMessages;
     using NPoco;
     using NServiceBus;
-    using Security;
+    using Common.Security.Session;
 
     public class ApprovePaymentCommandHandler : ICommandHandler<ApprovePaymentCommand, string>
     {
@@ -39,7 +39,7 @@
                 _bus.Send<NotifyPaymentApproved>(x =>
                 {
                     x.PaymentId = payment.PaymentId;
-                    x.UserName = _userSession.GetCurrentUser().LoginName;
+                    x.UserName = _userSession.GetActualUser().LoginName;
                 });
 
                 return payment.PaymentStatus.DisplayName;

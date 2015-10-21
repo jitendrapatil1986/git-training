@@ -2,7 +2,7 @@
 {
     using Entities;
     using NPoco;
-    using Security;
+    using Common.Security.Session;
 
     public class VerifyEmployeeExistsCommandHandler : ICommandHandler<VerifyEmployeeExistsCommand>
     {

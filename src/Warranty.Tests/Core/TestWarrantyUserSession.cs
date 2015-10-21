@@ -1,12 +1,18 @@
 ﻿namespace Warranty.Tests.Core
 {
-    using Warranty.Core.Security;
+    using Common.Security.Session;
+    using Common.Security.User;
 
     public class TestWarrantyUserSession : IUserSession
     {
         public IUser GetCurrentUser()
         {
-            return new WarrantyUser("TestUser");
+            return new UserInfo("TestUser");
+        }
+
+        public IUser GetActualUser()
+        {
+            return GetCurrentUser();
         }
 
         public void LogOut()

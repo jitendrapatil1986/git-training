@@ -5,7 +5,7 @@
     using Calculator;
     using Extensions;
     using NPoco;
-    using Security;
+    using Common.Security.Session;
 
     public class AchievementReportQueryHandler : IQueryHandler<AchievementReportQuery, AchievementReportModel>
     {

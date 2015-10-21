@@ -93,7 +93,7 @@ namespace Warranty.IntegrationTests.PersistenceTests
         public void ServiceCall_Should_Be_Inserted_With_Values()
         {
             var persistedServiceCall = Load<ServiceCall>(_serviceCall.ServiceCallId);
-            var userName = new TestWarrantyUserSession().GetCurrentUser().UserName;
+            var userName = new TestWarrantyUserSession().GetActualUser().UserName;
 
             persistedServiceCall.ShouldNotBeNull();
             persistedServiceCall.CompletionDate.ShouldEqual(_serviceCall.CompletionDate);
@@ -120,7 +120,7 @@ namespace Warranty.IntegrationTests.PersistenceTests
             Update(_serviceCall);
 
             var persistedServiceCall = Load<ServiceCall>(_serviceCall.ServiceCallId);
-            var userName = new TestWarrantyUserSession().GetCurrentUser().UserName;
+            var userName = new TestWarrantyUserSession().GetActualUser().UserName;
 
             persistedServiceCall.ShouldNotBeNull();
             persistedServiceCall.CompletionDate.ShouldEqual(_serviceCall.CompletionDate);

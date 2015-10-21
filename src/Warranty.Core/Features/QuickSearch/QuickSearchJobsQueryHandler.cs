@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using NPoco;
-    using Security;
+    using Common.Security.Session;
     using Extensions;
 
     public class QuickSearchJobsQueryHandler : IQueryHandler<QuickSearchJobsQuery, IEnumerable<QuickSearchJobModel>>

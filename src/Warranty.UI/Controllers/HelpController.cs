@@ -1,8 +1,8 @@
 ﻿using System.Web.Mvc;
+using Common.Security.Session;
 
 namespace Warranty.UI.Controllers
 {
-    using Warranty.Core.Security;
 
     public class HelpController : Controller
     {

@@ -5,7 +5,7 @@
     using System.Linq;
     using Configurations;
     using Extensions;
-    using Security;
+    using Common.Security.Session;
     using Services;
 
     public class PercentSurveyOutstandingWidgetWSRQueryHandler : IQueryHandler<PercentSurveyOutstandingWidgetWSRQuery, PercentSurveyOutstandingWidgetModel>

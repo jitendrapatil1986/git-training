@@ -7,7 +7,7 @@
     using InnerMessages;
     using NPoco;
     using NServiceBus;
-    using Security;
+    using Common.Security.Session;
 
     public class DenyBackchargeCommandHandler : ICommandHandler<DenyBackchargeCommand, DenyBackchargeCommandHandler.DenyBackchargeCommandHandlerResponse>
     {
@@ -42,7 +42,7 @@
                 _bus.Send<NotifyBackchargeDeny>(x =>
                     {
                         x.BackchargeId = backcharge.BackchargeId;
-                        x.UserName = _userSession.GetCurrentUser().LoginName;
+                        x.UserName = _userSession.GetActualUser().LoginName;
                     });
 
                 return new DenyBackchargeCommandHandlerResponse
