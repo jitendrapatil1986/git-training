@@ -130,7 +130,7 @@
             <div class="pull-right">
                 @using (Html.BeginForm("Create", "ServiceCall", new { id = Model.JobId }))
                 {
-                    if (Model.Stage >= 10)
+                    if (Model.Stage >= 10 && Model.CloseDate != null)
                     {
                         if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
                         {
