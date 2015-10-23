@@ -6,7 +6,7 @@
     var sessionTrackerContainer = document;
     var sessionTrackingEvents = "click.keepAlive keyup.keepAlive mousemove.keepAlive scroll.keepAlive touchend.keepAlive";
 
-    setListener();
+    //setListener();
 
 
     function setListener() {
