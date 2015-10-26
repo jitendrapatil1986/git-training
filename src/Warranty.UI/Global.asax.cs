@@ -30,25 +30,18 @@ namespace Warranty.UI
         {
             var now = DateTime.UtcNow;
             var sst = e.SessionToken;
-            var validTo = sst.ValidTo;
-            var validFrom = sst.ValidFrom;
-            const int sessionLifeInMinutes = 60;
-            const int reissueCookieWhenMinutesRemain = 30;
+            const int sessionLifeInMinutes = 20;
 
-            if ((validTo - validFrom).TotalMinutes > sessionLifeInMinutes
-                || ((now < validTo) && (now > validTo.AddMinutes(-(sessionLifeInMinutes - reissueCookieWhenMinutesRemain)))))
-            {
-                var sam = sender as SessionAuthenticationModule;
-                if (sam == null) 
-                    return;
+            var sam = sender as SessionAuthenticationModule;
+            if (sam == null)
+                return;
 
-                e.SessionToken = sam.CreateSessionSecurityToken(sst.ClaimsPrincipal,
-                    sst.Context,
-                    now,
-                    now.AddMinutes(sessionLifeInMinutes),
-                    sst.IsPersistent);
-                e.ReissueCookie = true;
-            }
+            e.SessionToken = sam.CreateSessionSecurityToken(sst.ClaimsPrincipal,
+                sst.Context,
+                now,
+                now.AddMinutes(sessionLifeInMinutes),
+                sst.IsPersistent);
+            e.ReissueCookie = true;
         }
     }
 }
