@@ -9,10 +9,8 @@
     setListener();
 
 
-    function setListener(force) {
-        previousPingTime = force
-            ? moment().subtract(minimumPingInterval + 1) //going back the minimum interval, plus some for good measure
-            : moment();
+    function setListener() {
+        previousPingTime = moment();
         makeRequest();
         $(sessionTrackerContainer).on(sessionTrackingEvents, function () {
             makeRequest();
@@ -55,7 +53,7 @@
                         bootbox.confirm("Your session will expire in <span id='session-timeout-minutes'>" + formatMinutes(moment(promptCountDown)) + "</span> minutes. Click OK to continue. Click Cancel to let it expire.",
                             function (result) {
                                 if (result) {
-                                    setListener(true);
+                                    setListener();
                                     clearInterval(interval);
                                 }
                             });
