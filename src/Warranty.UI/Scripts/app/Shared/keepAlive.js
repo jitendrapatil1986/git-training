@@ -10,7 +10,7 @@
 
 
     function setListener() {
-        previousPingTime = moment();
+        previousPingTime = moment().subtract(1, 'hours'); //whenever setListener is called, we want to make a KeepAlive request
         makeRequest();
         $(sessionTrackerContainer).on(sessionTrackingEvents, function () {
             makeRequest();
@@ -29,7 +29,7 @@
                 url: urls.UserSession.KeepAlive,
                 cache: false,
                 success: function (response) {
-                    var tokenExpirationTime = moment(response);
+                    var tokenExpirationTime = moment.utc(response);
                     if (tokenExpirationTime <= now) {   /* Should trigger if the session wasn't renewed in time. 
                                                         Note: this "now" is not a true now. Round trip to server makes this outdated, 
                                                         but for calculations purposes, this should work.*/
