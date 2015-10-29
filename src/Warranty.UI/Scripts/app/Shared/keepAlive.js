@@ -29,7 +29,8 @@
                 url: urls.UserSession.KeepAlive,
                 cache: false,
                 success: function (response) {
-                    var tokenExpirationTime = moment.utc(response);
+                    var sessionExpiresInMilliSecondsFromNow = response;
+                    var tokenExpirationTime = moment().add(sessionExpiresInMilliSecondsFromNow, "ms");
                     if (tokenExpirationTime <= now) {   /* Should trigger if the session wasn't renewed in time. 
                                                         Note: this "now" is not a true now. Round trip to server makes this outdated, 
                                                         but for calculations purposes, this should work.*/
@@ -38,8 +39,7 @@
                     }
 
                     var promptCountDown = (2 * oneMinuteInMilliSeconds); //show countdown for 2 minutes. But prompt 3 minutes before actual expiration
-                    var whenToShowPrompt = moment(tokenExpirationTime - promptCountDown - oneMinuteInMilliSeconds); //promptCountDown + (oneMinuteInMilliSeconds) = 3 minutes //3 minutes before expiration
-                    var milliSecondsUntilPromptAppears = whenToShowPrompt - now; //promptCountDown + (oneMinuteInMilliSeconds) = 3 minutes
+                    var milliSecondsUntilPromptAppears = sessionExpiresInMilliSecondsFromNow - promptCountDown - oneMinuteInMilliSeconds; //promptCountDown + (oneMinuteInMilliSeconds) = 3 minutes //3 minutes before expiration
 
                     promptToContinueTimout = setTimeout(function () {
                         $(sessionTrackerContainer).off(sessionTrackingEvents);
