@@ -32,15 +32,15 @@
                     switch (entity.Stage)
                     {
                         case 3:
-                            description = "Job is at Stage 3 - time to schedule a warranty introduction.";
+                            description = TaskType.JobStage3.DisplayName;
                             taskType = TaskType.JobStage3;
                             break;
                         case 7:
-                            description = "Job is at Stage 7 - time to schedule a 244 walk.";
+                            description = TaskType.JobStage7.DisplayName;
                             taskType = TaskType.JobStage7;
                             break;
                         case 10:
-                            description = "Job is at Stage 10 - time to schedule a warranty orientation.";
+                            description = TaskType.JobStage10.DisplayName;
                             taskType = TaskType.JobStage10;
                             break;
                     }
