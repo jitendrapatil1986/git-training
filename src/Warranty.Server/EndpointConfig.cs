@@ -1,4 +1,6 @@
 using System.Configuration;
+using Common.Extensions;
+using Common.Messages;
 
 namespace Warranty.Server
 {
@@ -18,6 +20,9 @@ namespace Warranty.Server
             Configure.With()
                 .StructureMapBuilder(container)
                 .DefiningDataBusPropertiesAs(t => t.Name.EndsWith("DataBus"))
+                .DefiningMessagesAs(t => (t.IsAssignableTo<IMessage>() && !(t.IsAssignableTo<ICommand>() || t.IsAssignableTo<IEvent>())) || t.IsBusMessage())
+                .DefiningCommandsAs(t => t.IsAssignableTo<ICommand>() || t.IsBusCommand())
+                .DefiningEventsAs(t => t.IsAssignableTo<IEvent>() || t.IsBusEvent())
                 .FileShareDataBus(ConfigurationManager.AppSettings["NServiceBus.FileShareDataBus"]);
         }
     }

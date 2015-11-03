@@ -15,7 +15,7 @@
         public static readonly WarrantyCostCode Weatherstrip = new WarrantyCostCode(9, "Weatherstrip", "09");
         public static readonly WarrantyCostCode Plumbing = new WarrantyCostCode(10, "Plumbing ", "10");
         public static readonly WarrantyCostCode Hvac = new WarrantyCostCode(11, "HVAC", "11");
-        public static readonly WarrantyCostCode AllCleaning = new WarrantyCostCode(12, "All Cleaning", "12");
+        public static readonly WarrantyCostCode CustomerDelight = new WarrantyCostCode(12, "Customer Delight", "12");
         public static readonly WarrantyCostCode AllFlooring = new WarrantyCostCode(13, "All Flooring", "13");
         public static readonly WarrantyCostCode Wallpaper = new WarrantyCostCode(14, "Wallpaper", "14");
         public static readonly WarrantyCostCode LscapeFenceTrees = new WarrantyCostCode(15, "Lscape, Fence, Trees", "15");
