@@ -377,20 +377,16 @@ namespace Warranty.UI.Core.Helpers
                 return MvcHtmlString.Empty;
             }
 
-            const string blockCallPrefix = "*67";
-
             var htmlString =
-                string.Format("<a href='tel:{0} {1}' class='visible-xs'><span class=\"glyphicon glyphicon-earphone text-muted\"></span> {1}</a>", blockCallPrefix, phoneNumber);
+                string.Format("<a href='tel:{0}' class='visible-xs'><span class=\"glyphicon glyphicon-earphone text-muted\"></span> {0}</a>", phoneNumber);
 
             return MvcHtmlString.Create(htmlString);
         }
 
         public static MvcHtmlString EditablePhoneNumber(PhoneNumberType phoneNumberType, string phoneNumber, string postUrl, Guid homeownerId)
         {
-            const string blockCallPrefix = "*67";
-
             var htmlString =
-                string.Format("<div class='inline-editable-text'><a href='tel:{5} {4}'><span class='glyphicon glyphicon-{0} text-muted visible-xs'></span></a><span class='glyphicon glyphicon-{0} text-muted hidden-xs'></span> <a href='#' class='hidden-xs phone-number-with-extension' data-type='text' data-emptytext='Add Primary Phone' id='{1}_Phone' data-url='{2}' data-pk='{3}' data-clear='false' data-value='{4}'>{4}</a><span class='hidden-xs'> (Primary)</span></div>", phoneNumberType.Icon, phoneNumberType.DisplayName, postUrl, homeownerId, phoneNumber, blockCallPrefix);
+                string.Format("<div class='inline-editable-text'><a href='tel:{4}'><span class='glyphicon glyphicon-{0} text-muted visible-xs'></span></a><span class='glyphicon glyphicon-{0} text-muted hidden-xs'></span> <a href='#' class='hidden-xs phone-number-with-extension' data-type='text' data-emptytext='Add Primary Phone' id='{1}_Phone' data-url='{2}' data-pk='{3}' data-clear='false' data-value='{4}'>{4}</a><span class='hidden-xs'> (Primary)</span></div>", phoneNumberType.Icon, phoneNumberType.DisplayName, postUrl, homeownerId, phoneNumber);
 
             return MvcHtmlString.Create(htmlString);
         }
