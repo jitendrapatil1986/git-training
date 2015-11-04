@@ -37,15 +37,15 @@ namespace Warranty.Core.Features.AssignWSRs
                                     T.UpdatedBy,
                                     T.IsNoAction
                                 FROM Tasks T 
-									INNER JOIN Jobs J
-										ON T.ReferenceId = J.JobId
-									INNER JOIN Communities C 
-										ON J.CommunityId = C.CommunityId
-									INNER JOIN Employees E
-										ON E.EmployeeId = T.EmployeeId
-							    WHERE 
-									C.CommunityNumber = {0}
-									AND T.IsComplete = 0";
+                                    INNER JOIN Jobs J
+                                        ON T.ReferenceId = J.JobId
+                                    INNER JOIN Communities C 
+                                        ON J.CommunityId = C.CommunityId
+                                    INNER JOIN Employees E
+                                        ON E.EmployeeId = T.EmployeeId
+                                WHERE 
+                                    C.CommunityNumber = {0}
+                                    AND T.IsComplete = 0";
             return _database.Fetch<Task>(String.Format(sql, communityNumber));
         } 
 
