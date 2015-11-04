@@ -13,25 +13,23 @@
 
         <div class="todo-widget-element">
             <small class="text-muted">@Model.Description</small>
-            @if (Model.TaskType.Value == TaskType.JobStage10.Value)
-            {
+            <br/>
+            <small class="text-capitalize margin-top-10">
+                <strong>@Model.HomeownerName</strong>
                 <br/>
-                <small class="text-capitalize margin-top-10">
-                    <strong>@Model.HomeownerName</strong>
+                @Model.Address, @Model.City, @Model.StateCode @Model.PostalCode
+                @if (Model.HomePhone != null)
+                {
                     <br/>
-                    @Model.Address, @Model.City, @Model.StateCode @Model.PostalCode
-                    @if (Model.HomePhone != null)
-                    {
+                    Format.PhoneNumberOnMobile(Format.PhoneNumberWithExtension(Model.HomePhone));
+                    <span class="hidden-xs">
+                        @Format.PhoneNumber(Format.PhoneNumberWithExtension(Model.HomePhone))
                         <br/>
-                        Format.PhoneNumberOnMobile(Format.PhoneNumberWithExtension(Model.HomePhone));
-                        <span class="hidden-xs">
-                            @Format.PhoneNumber(Format.PhoneNumberWithExtension(Model.HomePhone))
-                            <br/>
-                        </span>
-                    }
-                </small>
-            }
+                    </span>
+                }
+            </small>
         </div>
+
         <div class="todo-widget-element  margin-top-10">
             <small class="text-muted">
                 <strong>Job # </strong>@Html.ActionLink(Model.JobNumber, "JobSummary", "Job", new {id = Model.JobId}, null)
@@ -47,10 +45,7 @@
                 <a href="#" data-task-id="@Model.TaskId" class="complete-task"><span class="glyphicon glyphicon-thumbs-up complete-todo"></span>&nbsp;Complete</a>
             }
         </div>
-        @if (Model.TaskType.Value == TaskType.JobStage10.Value)
-        {
-            <br/>
-        }
+        <br/>
     </div>
 
 </div>
