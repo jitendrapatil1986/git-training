@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Extensions;
 using NPoco;
 using NPoco.Expressions;
 using NServiceBus;
 using Warranty.Core.Entities;
-using Warranty.Core.Features.JobSummary;
-using Warranty.Events;
+using Warranty.Core.Enumerations;
 using Warranty.InnerMessages;
 
 namespace Warranty.Core.Features.AssignWSRs
@@ -94,13 +94,24 @@ namespace Warranty.Core.Features.AssignWSRs
                 {
                     communityAssignment.EmployeeId = cmd.EmployeeId;
                     var tasks = GetTasksForCommunity(communityNumber);
-
+                    var taskTypesToUpdate = new List<object>
+                    {
+                        TaskType.Job3MonthAnniversary.Value,
+                        TaskType.Job5MonthAnniversary.Value,
+                        TaskType.Job9MonthAnniversary.Value,
+                        TaskType.Job10MonthAnniversary.Value,
+                        TaskType.JobStage3.Value,
+                        TaskType.JobStage7.Value,
+                        TaskType.JobStage10.Value,
+                        TaskType.JobStage10Approval.Value
+                    };
                     using (_database.Transaction)
                     {
                         _database.BeginTransaction();
                         _database.Update(communityAssignment);
                         _database.UpdateMany<Task>()
                             .Where(x => x.TaskId.In(tasks.Select(y => y.TaskId)))
+                            .Where(x=>x.TaskType.In(taskTypesToUpdate))
                             .OnlyFields(x => x.EmployeeId)
                             .Execute(new Task { EmployeeId = cmd.EmployeeId });
                         _database.CompleteTransaction();
