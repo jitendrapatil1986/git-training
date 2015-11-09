@@ -12,22 +12,18 @@
         </div>
 
         <div class="todo-widget-element">
-            <small class="text-muted">@Model.Description</small>
-            <br/>
-            <small class="text-capitalize margin-top-10">
-                <strong>@Model.HomeownerName</strong>
+            <p class="text-muted margin-bottom-5 margin-top-10 small-text">@Model.Description</p>
+            <strong>@Format.HomeOwner(Model.HomeownerName, 0)</strong>
+            @if (Model.HomePhone != null)
+            {
                 <br/>
-                @Model.Address, @Model.City, @Model.StateCode @Model.PostalCode
-                @if (Model.HomePhone != null)
-                {
-                    <br/>
-                    Format.PhoneNumberOnMobile(Format.PhoneNumberWithExtension(Model.HomePhone));
-                    <span class="hidden-xs">
-                        @Format.PhoneNumber(Format.PhoneNumberWithExtension(Model.HomePhone))
-                        <br/>
-                    </span>
-                }
-            </small>
+                Format.PhoneNumberOnMobile(Format.PhoneNumberWithExtension(Model.HomePhone));
+                <span class="hidden-xs">
+                    @Format.PhoneNumber(Format.PhoneNumberWithExtension(Model.HomePhone))
+                </span>
+            }
+            <br />
+            @Model.Address, @Model.City, @Model.StateCode @Model.PostalCode
         </div>
 
         <div class="todo-widget-element  margin-top-10">
