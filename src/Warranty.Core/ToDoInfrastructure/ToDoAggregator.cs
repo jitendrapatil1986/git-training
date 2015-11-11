@@ -278,7 +278,7 @@ namespace Warranty.Core.ToDoInfrastructure
 
         private static IEnumerable<TTask> GetToDoTasks<TTask, TModel>(IUser user, IDatabase database, TaskType taskType) where TTask : IToDo where TModel : class
         {
-            var query = @"SELECT t.CreatedDate [Date], TaskType, Description, TaskId,  j.JobId, j.JobNumber
+            var query = @"SELECT t.CreatedDate [Date], TaskType, Description, TaskId,  j.JobId, j.JobNumber, j.AddressLine Address, j.City, j.StateCode, j.PostalCode
                             FROM 
                                 [Tasks] t
                             INNER join Employees e
