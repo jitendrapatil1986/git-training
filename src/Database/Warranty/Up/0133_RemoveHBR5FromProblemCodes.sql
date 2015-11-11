@@ -1,2 +1,2 @@
-DELETE FROM [WarrantyTest].[dbo].[ProblemCodes] 
+DELETE FROM [ProblemCodes] 
 WHERE [JdeCode] = 'HBR5'
