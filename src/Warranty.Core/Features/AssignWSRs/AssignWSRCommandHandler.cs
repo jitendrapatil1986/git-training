@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Common.Extensions;
 using NPoco;
+using NPoco.Expressions;
 using NServiceBus;
 using Warranty.Core.Entities;
-using Warranty.Events;
+using Warranty.Core.Enumerations;
 using Warranty.InnerMessages;
 
 namespace Warranty.Core.Features.AssignWSRs
@@ -17,6 +21,33 @@ namespace Warranty.Core.Features.AssignWSRs
             _database = database;
             _bus = bus;
         }
+
+        public List<Task> GetTasksForCommunity(string communityNumber)
+        {
+            const string sql = @"SELECT 
+                                    T.TaskId,
+                                    T.EmployeeId,
+                                    T.ReferenceId,
+                                    T.Description,
+                                    T.IsComplete,
+                                    T.TaskType,
+                                    T.CreatedDate,
+                                    T.CreatedBy,
+                                    T.UpdatedDate,
+                                    T.UpdatedBy,
+                                    T.IsNoAction
+                                FROM Tasks T 
+                                    INNER JOIN Jobs J
+                                        ON T.ReferenceId = J.JobId
+                                    INNER JOIN Communities C 
+                                        ON J.CommunityId = C.CommunityId
+                                    INNER JOIN Employees E
+                                        ON E.EmployeeId = T.EmployeeId
+                                WHERE 
+                                    C.CommunityNumber = {0}
+                                    AND T.IsComplete = 0";
+            return _database.Fetch<Task>(String.Format(sql, communityNumber));
+        } 
 
         public void Handle(AssignWSRCommand cmd)
         {
@@ -62,7 +93,30 @@ namespace Warranty.Core.Features.AssignWSRs
                 else
                 {
                     communityAssignment.EmployeeId = cmd.EmployeeId;
-                    _database.Update(communityAssignment);
+                    var tasks = GetTasksForCommunity(communityNumber);
+                    var taskTypesToUpdate = new List<object>
+                    {
+                        TaskType.Job3MonthAnniversary.Value,
+                        TaskType.Job5MonthAnniversary.Value,
+                        TaskType.Job9MonthAnniversary.Value,
+                        TaskType.Job10MonthAnniversary.Value,
+                        TaskType.JobStage3.Value,
+                        TaskType.JobStage7.Value,
+                        TaskType.JobStage10.Value,
+                        TaskType.JobStage10Approval.Value
+                    };
+                    using (_database.Transaction)
+                    {
+                        _database.BeginTransaction();
+                        _database.Update(communityAssignment);
+                        _database.UpdateMany<Task>()
+                            .Where(x => x.TaskId.In(tasks.Select(y => y.TaskId)))
+                            .Where(x=>x.TaskType.In(taskTypesToUpdate))
+                            .OnlyFields(x => x.EmployeeId)
+                            .Execute(new Task { EmployeeId = cmd.EmployeeId });
+                        _database.CompleteTransaction();
+                    }
+                   
                     _bus.Send<NotifyCommunityWarrantyRepresentativeAssignmentChanged>(x =>
                     {
                         x.CommunityId = cmd.CommunityId;
