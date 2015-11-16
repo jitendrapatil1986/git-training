@@ -884,11 +884,11 @@
                         if (self.recodeEnabled())
                             return true;
 
-                        return !(self.hasEverBeenCompleted() || self.hasAnyPayments() || self.hasAnyPurchaseOrders() || self.isLineItemNoAction());
+                        return !(self.hasAnyPayments() || self.hasAnyPurchaseOrders() || self.isLineItemNoAction());
                     });
 
                     self.enableRootCause = ko.computed(function () {
-                        return !(self.hasEverBeenCompleted() || self.hasAnyPayments() || self.hasAnyPurchaseOrders() || self.isLineItemNoAction()) || !self.hasRootCause();
+                        return !(self.hasAnyPayments() || self.hasAnyPurchaseOrders() || self.isLineItemNoAction()) || !self.hasRootCause();
                     });
                     
                     self.removeAttachment = function (e) {
