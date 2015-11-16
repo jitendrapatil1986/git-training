@@ -1,9 +1,8 @@
 ﻿namespace Warranty.Core.Features.CompleteServiceCallLineItem
 {
-    using System;
+    using EditServiceCallLineItem;
 
-    public class CompleteServiceCallLineItemModel
+    public class CompleteServiceCallLineItemModel : EditServiceCallLineCommand
     {
-        public Guid ServiceCallLineItemId { get; set; } 
     }
 }

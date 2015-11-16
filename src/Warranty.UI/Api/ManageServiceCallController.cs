@@ -76,6 +76,14 @@ namespace Warranty.UI.Api
         [HttpPost]
         public ServiceCallLineItemStatus CompleteLineItem(CompleteServiceCallLineItemModel model)
         {
+            if (RootProblem.FromDisplayNameOrDefault(model.RootProblem) == null)
+                throw new ArgumentException("Root problem must be selected.", "model.RootProblem");
+
+            RootCause rootCause;
+
+            if (!RootCause.TryParse(model.RootCause, out rootCause))
+                throw new ArgumentException("Root cause must be selected.", "model.RootCause");
+
             var result = _mediator.Send(new CompleteServiceCallLineItemCommand
                 {
                     ServiceCallLineItemId = model.ServiceCallLineItemId
