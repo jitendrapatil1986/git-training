@@ -151,9 +151,9 @@
       <Project>{1F88DA00-AE07-4355-8368-37E3A1D6C7A2}</Project>
       <Name>Warranty.Server</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Warranty.Tests\Warranty.Tests.csproj">
+    <ProjectReference Include="..\Warranty.Tests\Warranty.Core.Tests.csproj">
       <Project>{C3CDE3C8-278C-44F6-A498-344A6E666454}</Project>
-      <Name>Warranty.Tests</Name>
+      <Name>Warranty.Core.Tests</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
