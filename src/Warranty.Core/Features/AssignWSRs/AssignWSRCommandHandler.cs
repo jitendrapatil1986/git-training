@@ -111,11 +111,11 @@ namespace Warranty.Core.Features.AssignWSRs
                         {
                             _database.BeginTransaction();
                             _database.Update(communityAssignment);
-                            _database.UpdateMany<Task>()
-                                .Where(x => x.TaskId.In(tasks.Select(y => y.TaskId)))
-                                .Where(x => x.TaskType.In(taskTypesToUpdate))
-                                .OnlyFields(x => x.EmployeeId)
-                                .Execute(new Task {EmployeeId = cmd.EmployeeId});
+                            foreach (var task in tasks.Where(x => x.TaskType.Value.In(taskTypesToUpdate)))
+                            {
+                                task.EmployeeId = cmd.EmployeeId;
+                                _database.Update(task);
+                            }
                             _database.CompleteTransaction();
                         }
                     }
