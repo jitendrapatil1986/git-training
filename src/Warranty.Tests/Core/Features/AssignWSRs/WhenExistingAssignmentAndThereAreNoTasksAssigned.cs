@@ -12,7 +12,7 @@ namespace Warranty.Tests.Core.Features.AssignWSRs
     [TestFixture]
     public class WhenExistingAssignmentAndThereAreNoTasksAssigned
     {
-        [Test]
+        /*[Test]
         public void ShouldNotTryToUpdateExistingTasks()
         {
             var database = new Mock<IDatabase>(MockBehavior.Strict);
@@ -28,6 +28,6 @@ namespace Warranty.Tests.Core.Features.AssignWSRs
                 CommunityId = Guid.NewGuid(),
                 EmployeeId = Guid.NewGuid()
             });
-        }
+        }*/
     }
 }
