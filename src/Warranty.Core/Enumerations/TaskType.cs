@@ -30,6 +30,6 @@
             IsTransferable = isTransferable;
         }
 
-        public bool IsTransferable { get; set; }
+        public bool IsTransferable { get; private set; }
     }
 }

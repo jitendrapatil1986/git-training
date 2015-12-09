@@ -100,7 +100,9 @@ namespace Warranty.Core.Features.AssignWSRs
                         _database.BeginTransaction();
                         _database.Update(communityAssignment);
 
-                        foreach (var task in tasks.Where(x => x.TaskType.Value.In(TaskType.GetAll().Where(t => t.IsTransferable).Select(t => t.Value))))
+                        var taskTypesToTransfer =
+                            TaskType.GetAll().Where(t => t.IsTransferable).ToDictionary(x => x.Value);
+                        foreach (var task in tasks.Where(x => taskTypesToTransfer.ContainsKey(x.TaskType.Value)))
                         {
                             task.EmployeeId = cmd.EmployeeId;
                             _database.Update(task);
