@@ -94,22 +94,13 @@ namespace Warranty.Core.Features.AssignWSRs
                 {
                     communityAssignment.EmployeeId = cmd.EmployeeId;
                     var tasks = GetTasksForCommunity(communityNumber);
-                    var taskTypesToUpdate = new List<object>
-                    {
-                        TaskType.Job3MonthAnniversary.Value,
-                        TaskType.Job5MonthAnniversary.Value,
-                        TaskType.Job9MonthAnniversary.Value,
-                        TaskType.Job10MonthAnniversary.Value,
-                        TaskType.JobStage3.Value,
-                        TaskType.JobStage7.Value,
-                        TaskType.JobStage10.Value,
-                        TaskType.JobStage10Approval.Value
-                    };
+
                     using (_database.Transaction)
                     {
                         _database.BeginTransaction();
                         _database.Update(communityAssignment);
-                        foreach (var task in tasks.Where(x => x.TaskType.Value.In(taskTypesToUpdate)))
+
+                        foreach (var task in tasks.Where(x => x.TaskType.Value.In(TaskType.GetAll().Where(t => t.IsTransferable).Select(t => t.Value))))
                         {
                             task.EmployeeId = cmd.EmployeeId;
                             _database.Update(task);
