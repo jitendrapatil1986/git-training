@@ -60,56 +60,66 @@
                     communityNumber = WarrantyConfigSection.GetCity(city.CityCode.ToUpper()).ClosedOutCommunity;
                 }
 
-                var payment = new Payment
+                using (_database.Transaction)
                 {
-                    Amount = message.Amount,
-                    InvoiceNumber = message.InvoiceNumber,
-                    Comments = message.Comments,
-                    ServiceCallLineItemId = message.ServiceCallLineItemId,
-                    PaymentStatus = PaymentStatus.Requested,
-                    VendorNumber = message.VendorNumber,
-                    VendorName = message.VendorName,
-                    JobNumber = job.JobNumber,
-                    CommunityNumber = string.IsNullOrEmpty(communityNumber) ? string.Empty : communityNumber.Substring(0, 4),
-                    CostCode = costCode.CostCode,
-                    ObjectAccount = _resolveObjectAccount.ResolveLaborObjectAccount(job, serviceCall),
-                };
-
-                _database.Insert(payment);
-
-                _bus.Send<NotifyPaymentRequested>(x =>
-                {
-                    x.PaymentId = payment.PaymentId;
-                    x.Username = currentUser.LoginName;
-                });
-
-                if (message.IsBackcharge)
-                {
-                    var backcharge = new Backcharge
+                    var payment = new Payment
                     {
-                        PaymentId = payment.PaymentId,
-
-                        BackchargeVendorNumber = message.BackchargeVendorNumber,
-                        BackchargeVendorName = message.BackchargeVendorName,
-                        BackchargeAmount = message.BackchargeAmount,
-                        BackchargeReason = message.BackchargeReason,
-                        PersonNotified = message.PersonNotified,
-                        PersonNotifiedPhoneNumber = message.PersonNotifiedPhoneNumber,
-                        PersonNotifiedDate = message.PersonNotifiedDate,
-                        BackchargeResponseFromVendor = message.BackchargeResponseFromVendor,
-                        CostCode = costCode.CostCode,
-                        BackchargeStatus = BackchargeStatus.Requested,
-                        Username = currentUser.LoginName,
-                        EmployeeNumber = currentUser.EmployeeNumber,
+                        Amount = message.Amount,
+                        InvoiceNumber = message.InvoiceNumber,
+                        Comments = message.Comments,
                         ServiceCallLineItemId = message.ServiceCallLineItemId,
-                        CommunityNumber = communityNumber
+                        PaymentStatus = PaymentStatus.Requested,
+                        VendorNumber = message.VendorNumber,
+                        VendorName = message.VendorName,
+                        JobNumber = job.JobNumber,
+                        CommunityNumber =
+                            string.IsNullOrEmpty(communityNumber) ? string.Empty : communityNumber.Substring(0, 4),
+                        CostCode = costCode.CostCode,
+                        ObjectAccount = _resolveObjectAccount.ResolveLaborObjectAccount(job, serviceCall),
                     };
-                    _database.Insert(backcharge);
 
-                    return new AddPaymentCommandDto { CostCode = costCode, PaymentId = payment.PaymentId, BackchargeId = backcharge.BackchargeId};
+                    _database.Insert(payment);
+
+                    _bus.Send<NotifyPaymentRequested>(x =>
+                    {
+                        x.PaymentId = payment.PaymentId;
+                        x.Username = currentUser.LoginName;
+                        x.HasAssociatedBackcharge = message.IsBackcharge;
+                    });
+
+                    if (message.IsBackcharge)
+                    {
+                        var backcharge = new Backcharge
+                        {
+                            PaymentId = payment.PaymentId,
+
+                            BackchargeVendorNumber = message.BackchargeVendorNumber,
+                            BackchargeVendorName = message.BackchargeVendorName,
+                            BackchargeAmount = message.BackchargeAmount,
+                            BackchargeReason = message.BackchargeReason,
+                            PersonNotified = message.PersonNotified,
+                            PersonNotifiedPhoneNumber = message.PersonNotifiedPhoneNumber,
+                            PersonNotifiedDate = message.PersonNotifiedDate,
+                            BackchargeResponseFromVendor = message.BackchargeResponseFromVendor,
+                            CostCode = costCode.CostCode,
+                            BackchargeStatus = BackchargeStatus.Requested,
+                            Username = currentUser.LoginName,
+                            EmployeeNumber = currentUser.EmployeeNumber,
+                            ServiceCallLineItemId = message.ServiceCallLineItemId,
+                            CommunityNumber = communityNumber
+                        };
+                        _database.Insert(backcharge);
+
+                        return new AddPaymentCommandDto
+                        {
+                            CostCode = costCode,
+                            PaymentId = payment.PaymentId,
+                            BackchargeId = backcharge.BackchargeId
+                        };
+                    }
+
+                    return new AddPaymentCommandDto {CostCode = costCode, PaymentId = payment.PaymentId};
                 }
-
-                return new AddPaymentCommandDto {CostCode = costCode, PaymentId = payment.PaymentId};
             }
         }
     }
