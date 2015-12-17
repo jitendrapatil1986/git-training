@@ -245,12 +245,6 @@ require(['/Scripts/app/main.js'], function () {
                     this.problemDescription(this.currentProblemDescription());
                 };
 
-                //reopen line item.
-                self.reopenLine = function () {
-                    this.lineEditing(false);
-                    reopenServiceCallLineItem(this);
-                };
-
                 self.lineNumber = ko.observable(options.lineNumber);
 
                 self.lineNumberWithProblemCode = ko.computed(function () {
@@ -417,27 +411,6 @@ require(['/Scripts/app/main.js'], function () {
                         line.problemCodeEditing(false);
                         line.problemDescriptionEditing(false);
                         line.lineEditing(false);
-                    });
-            }
-
-            function reopenServiceCallLineItem(line) {
-                var lineData = ko.toJSON(line);
-
-                $.ajax({
-                    url: urls.ManageServiceCall.ReopenLineItem,
-                    type: "POST",
-                    data: lineData,
-                    dataType: "json",
-                    processData: false,
-                    contentType: "application/json; charset=utf-8"
-                })
-                    .fail(function (response) {
-                        toastr.error("There was an issue reopening the line item. Please try again!");
-                    })
-                    .done(function (response) {
-                        toastr.success("Success! Item reopened.");
-                        line.serviceCallLineItemStatusDisplayName(response.ServiceCallLineItemStatus.DisplayName);
-                        viewModel.callSummaryServiceCallStatus(response.ServiceCallStatus.DisplayName);
                     });
             }
 
