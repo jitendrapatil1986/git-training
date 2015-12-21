@@ -7,10 +7,11 @@ namespace Warranty.UI.Api
     public class UserSessionController : ApiController
     {
         [HttpGet]
-        public DateTime KeepAlive()
+        public double KeepAlive()
         {
             var sessionModule = FederatedAuthentication.SessionAuthenticationModule;
-            return sessionModule.ContextSessionSecurityToken.ValidTo;
+            var now = DateTime.UtcNow;
+            return (sessionModule.ContextSessionSecurityToken.ValidTo - now).TotalMilliseconds;
         }
     }
 }

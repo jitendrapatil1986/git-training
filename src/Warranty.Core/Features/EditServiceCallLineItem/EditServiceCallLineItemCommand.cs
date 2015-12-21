@@ -1,7 +1,6 @@
 ﻿namespace Warranty.Core.Features.EditServiceCallLineItem
 {
     using System;
-    using Enumerations;
 
     public class EditServiceCallLineCommand : ICommand<Guid>
     {

@@ -68,6 +68,14 @@
     <Reference Include="NPoco">
       <HintPath>..\packages\NPoco.2.5.76\lib\net40\NPoco.dll</HintPath>
     </Reference>
+    <Reference Include="NServiceBus, Version=4.2.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.Interfaces.4.2.0\lib\net40\NServiceBus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NServiceBus.Core, Version=4.2.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.4.2.0\lib\net40\NServiceBus.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -129,6 +137,7 @@
     </Compile>
     <Compile Include="Core\Calculator\WarrantyCalculatorTests.cs" />
     <Compile Include="Core\DatabaseDeleter.cs" />
+    <Compile Include="Core\Features\AssignWSRs\WhenExistingAssignmentAndThereAreNoTasksAssigned.cs" />
     <Compile Include="Core\IntExtensionsTester.cs" />
     <Compile Include="Core\TestWarrantyUserSession.cs" />
     <Compile Include="ServiceCallCalculatorTester.cs" />

@@ -7,7 +7,7 @@
                 <div class="col-md-6">
                     <div data-bind="foreach: { data: additionalPhoneContacts, afterRender: afterAdditionalContactRendered }">
                         <div class='inline-editable-text margin-bottom-5 additional-contact can-remove'>
-                            <a class="glyphicon glyphicon-earphone hidden-sm hidden-md hidden-lg" data-bind="visible: contactValue(), attr: { 'href': 'tel:*67' + contactValue() }"></a>
+                            <a class="glyphicon glyphicon-earphone hidden-sm hidden-md hidden-lg" data-bind="visible: contactValue(), attr: { 'href': 'tel:' + contactValue() }"></a>
                             <span class="glyphicon glyphicon-earphone additional-contact-icon hidden-xs"></span>
                             <a href="#" class="additional-contact-phone"></a>
                             <span class="glyphicon glyphicon-trash remove-additional-contact hidden-xs" data-bind="click: $parent.removeAdditionalContact"></span>
