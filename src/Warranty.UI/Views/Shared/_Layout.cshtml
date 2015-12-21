@@ -73,9 +73,9 @@
     @Html.RenderScripts()
     @{ Html.RenderAction("GetPageRequireJs", "Home", new {context = ViewContext});}
 
-    @if (!Html.IsDebug())
+    @if (Html.IsProduction())
     {
-        @Html.Analytics();
+        @Html.Analytics()
     }
 </head>
 <body>

@@ -1,4 +1,6 @@
-﻿namespace Warranty.UI.Core.Helpers
+﻿using System.Configuration;
+
+namespace Warranty.UI.Core.Helpers
 {
     using System;
     using System.Collections.Generic;
@@ -167,13 +169,9 @@
          }
          #endregion
 
-        public static bool IsDebug(this HtmlHelper htmlHelper)
+        public static bool IsProduction(this HtmlHelper htmlHelper)
         {
-            #if DEBUG
-                return true;
-            #else
-                return false;
-            #endif
+            return ConfigurationManager.AppSettings["Environment"] == "prod";
         }
 
         public static MvcHtmlString Analytics(this HtmlHelper htmlHelper)
