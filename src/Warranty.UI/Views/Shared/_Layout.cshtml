@@ -71,7 +71,12 @@
     </script>
     @RenderSection("modules", required: false)
     @Html.RenderScripts()
-    @{ Html.RenderAction("GetPageRequireJs", "Home", new { context = ViewContext });}
+    @{ Html.RenderAction("GetPageRequireJs", "Home", new {context = ViewContext});}
+
+    @if (Html.IsProduction())
+    {
+        @Html.Analytics()
+    }
 </head>
 <body>
     <div class="navbar navbar-default navbar-fixed-top no-print">
