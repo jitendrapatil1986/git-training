@@ -17,16 +17,31 @@ namespace Warranty.Tests.Core
         {
             using (database)
             {
-                database.Execute(@"ALTER TABLE HomeOwners DROP CONSTRAINT FK_HomeOwners_JobId");
-                database.Execute(@"UPDATE HomeOwners SET JobId = NULL");
+                try
+                {
+                    database.Execute(@"ALTER TABLE HomeOwners DROP CONSTRAINT FK_HomeOwners_JobId");
+                }
+                catch
+                {
+                    
+                }
+                
             }
             
             BuildDeleteTables(database);
 
             using (database)
             {
-                database.Execute(@"ALTER TABLE HomeOwners ADD CONSTRAINT FK_HomeOwners_JobId
+                try
+                {
+                    database.Execute(@"ALTER TABLE HomeOwners ADD CONSTRAINT FK_HomeOwners_JobId
                                     FOREIGN KEY (JobId) REFERENCES Jobs(JobId)");
+                }
+                catch
+                {
+
+                }
+                
             }
         }
 
@@ -40,7 +55,25 @@ namespace Warranty.Tests.Core
         {
             using (database)
             {
+                try
+                {
+                    database.Execute(@"ALTER TABLE HomeOwners DROP CONSTRAINT UQ_Homeowners_JobNumber");
+                }
+                catch
+                {
+
+                }
+                database.Execute(@"UPDATE HomeOwners SET JobID = NULL");
                 database.Execute(_deleteSql);
+                try
+                {
+                    database.Execute(@"ALTER TABLE HomeOwners ADD CONSTRAINT UQ_Homeowners_JobNumber
+                                    UNIQUE (JobId, HomeownerNumber)");
+                }
+                catch
+                {
+
+                }
             }
         }
 

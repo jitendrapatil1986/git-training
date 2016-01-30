@@ -13,11 +13,11 @@ namespace Warranty.Server.IntegrationTests
     using Extensions;
     using System.Linq;
 
-    public abstract class HandlerTester<TEvent> where TEvent : IEvent, new()
+    public abstract class IBusHandlerTesterBase<TEvent> where TEvent : IBusEvent, new()
     {
         protected readonly IDatabase TestDatabase;
 
-        protected HandlerTester()
+        protected IBusHandlerTesterBase()
         {
             TestDatabase = ObjectFactory.GetInstance<IDatabase>();
 
