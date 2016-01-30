@@ -28,7 +28,5 @@
         public static readonly ActivityType ChangeNote = new ActivityType(19, "Change Note");
         public static readonly ActivityType DeleteNote = new ActivityType(20, "Delete Note");
         public static readonly ActivityType BackchargeDelete = new ActivityType(21, "Backcharge Delete");
-        public static readonly ActivityType HomeownerDelete = new ActivityType(22, "Home Owner Delete");
-        public static readonly ActivityType JobDeleted = new ActivityType(23, "Job Delete");
     }
 }
