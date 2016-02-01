@@ -26,7 +26,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         public void Homeowner_Should_Be_Deleted()
         {
             var job = GetSaved<Job>();
-            var homeowner = GetSaved<HomeOwner>(h =>
+            var homeOwner = GetSaved<HomeOwner>(h =>
             {
                 h.JobId = job.JobId;
             });

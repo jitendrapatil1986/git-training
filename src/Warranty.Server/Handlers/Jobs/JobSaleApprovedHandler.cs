@@ -128,12 +128,12 @@ namespace Warranty.Server.Handlers.Jobs
             _log.Info(string.Format(@"Deleting previous homeowners for job {0}", job.JobNumber));
             using (_database)
             {
-                var homeownersForJob = _database.GetHomeOwnersByJobNumber(job.JobNumber);
-                if (homeownersForJob.Count > 0)
+                var homeOwnersForJob = _database.GetHomeOwnersByJobNumber(job.JobNumber);
+                if (homeOwnersForJob.Count > 0)
                 {
                     job.CurrentHomeOwnerId = null;
                     _database.Update(job);
-                    foreach (var previousHomeOwner in homeownersForJob)
+                    foreach (var previousHomeOwner in homeOwnersForJob)
                     {
                         _database.Delete(previousHomeOwner);
                     }

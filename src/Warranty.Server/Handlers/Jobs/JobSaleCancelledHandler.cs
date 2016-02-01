@@ -24,15 +24,15 @@ namespace Warranty.Server.Handlers.Jobs
             using (_database)
             {
                 var job = _database.FetchWhere<Job>(j => j.JobNumber == message.JobNumber).Single();
-                var homeowners = _database.GetHomeOwnersByJobNumber(message.JobNumber);
+                var homeOwners = _database.GetHomeOwnersByJobNumber(message.JobNumber);
 
-                if (homeowners != null)
+                if (homeOwners != null)
                 {
-                    foreach (var homeowner in homeowners)
+                    foreach (var homeOwner in homeOwners)
                     {
                         _log.Info(string.Format(@"Deleting HomeOwner: Name {0}, Number {1}, Phone {2}, Job Number {3}",
-                            homeowner.HomeOwnerName, homeowner.HomeOwnerNumber, homeowner.HomePhone, job.JobNumber));
-                        _database.Delete(homeowner);
+                            homeOwner.HomeOwnerName, homeOwner.HomeOwnerNumber, homeOwner.HomePhone, job.JobNumber));
+                        _database.Delete(homeOwner);
                     }
                 }
                 else
