@@ -170,7 +170,6 @@
     <Compile Include="Handlers\Jobs\JobClosedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobHomeBuyerNameUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobResetToDirtHandlerTester.cs" />
-    <Compile Include="Handlers\Jobs\JobAddedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobPlanUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandlerTester.cs" />
