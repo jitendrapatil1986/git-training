@@ -23,7 +23,7 @@ namespace Warranty.Server.Handlers.Jobs
         private readonly IDatabase _database;
         private static readonly ILog _log = LogManager.GetLogger(typeof (JobSaleApprovedHandler));
 
-        public JobSaleApprovedHandler(IDatabase database, IActivityLogger activityLogger)
+        public JobSaleApprovedHandler(IDatabase database)
         {
             _database = database;
         }
