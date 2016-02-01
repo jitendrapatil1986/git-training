@@ -168,6 +168,7 @@
     <Compile Include="Handlers\Communities\ProjectNameUpdatedHandler.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateAddedHandler.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateUpdatedHandler.cs" />
+    <Compile Include="Handlers\Jobs\BuyerTransferApprovedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobAddressChangedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobElevationUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobClosedHandler.cs" />
