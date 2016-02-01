@@ -12,11 +12,11 @@ namespace Warranty.Server.Handlers.Jobs
     public class JobSaleCancelledHandler : IHandleMessages<JobSaleCancelled>
     {
         private readonly SqlServerDatabase _database;
-        private static readonly ILog _log = LogManager.GetLogger(typeof(JobSaleCancelledHandler));
+        private static readonly ILog _log = LogManager.GetLogger(typeof (JobSaleCancelledHandler));
 
         public JobSaleCancelledHandler(IDatabase database)
         {
-            _database = (SqlServerDatabase)database;
+            _database = (SqlServerDatabase) database;
         }
 
         public void Handle(JobSaleCancelled message)
@@ -37,11 +37,10 @@ namespace Warranty.Server.Handlers.Jobs
                 }
                 else
                 {
-                    _log.Error(string.Format("Deleting HomeOwner Failed: Homeowner does not exist for job {0}", job.JobNumber));
+                    _log.Error(string.Format("Deleting HomeOwner Failed: Homeowner does not exist for job {0}",
+                        job.JobNumber));
                 }
             }
         }
-
-
     }
 }

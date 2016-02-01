@@ -21,14 +21,14 @@ namespace Warranty.Server.Handlers.Jobs
     public class JobSaleApprovedHandler : IHandleMessages<JobSaleApproved>
     {
         private readonly IDatabase _database;
-        private static readonly ILog _log = LogManager.GetLogger(typeof(JobSaleApprovedHandler));
+        private static readonly ILog _log = LogManager.GetLogger(typeof (JobSaleApprovedHandler));
 
         public JobSaleApprovedHandler(IDatabase database, IActivityLogger activityLogger)
         {
             _database = database;
         }
 
-        private void SetIfNotNull<T>(List<T> list, Func<T,bool> condition, Action<T> setter)
+        private void SetIfNotNull<T>(List<T> list, Func<T, bool> condition, Action<T> setter)
         {
             var check = list.FirstOrDefault(condition);
             if (check != null)
@@ -39,7 +39,6 @@ namespace Warranty.Server.Handlers.Jobs
 
         public HomeOwner GetHomeOwner(JobSaleApproved message, Job job)
         {
-            
             var homeOwner = new HomeOwner
             {
                 HomeOwnerId = Guid.NewGuid(),
@@ -52,21 +51,26 @@ namespace Warranty.Server.Handlers.Jobs
 
             var homeOwnerInfo = message.Opportunity.Contact;
             if (homeOwnerInfo != null && homeOwnerInfo.FirstName != null && homeOwnerInfo.LastName != null)
+            {
                 homeOwner.HomeOwnerName = string.Format("{0}, {1}", homeOwnerInfo.LastName,
                     homeOwnerInfo.FirstName);
+            }
 
             job.CurrentHomeOwnerId = homeOwner.HomeOwnerId;
 
             if (message.Opportunity.Contact != null)
             {
-                SetIfNotNull(message.Opportunity.Contact.PhoneNumbers, x => x.IsPrimary, x => homeOwner.HomePhone = x.Number);
-                SetIfNotNull(message.Opportunity.Contact.Emails, x => x.IsPrimary, x => homeOwner.EmailAddress = x.Address);
+                SetIfNotNull(message.Opportunity.Contact.PhoneNumbers, x => x.IsPrimary,
+                    x => homeOwner.HomePhone = x.Number);
+                SetIfNotNull(message.Opportunity.Contact.Emails, x => x.IsPrimary,
+                    x => homeOwner.EmailAddress = x.Address);
             }
 
             return homeOwner;
         }
 
-        public Job GetJob(JobSaleApproved message, Guid? communityId = null, Guid? builderEmployeeId = null, Guid? salesEmployeeId = null)
+        public Job GetJob(JobSaleApproved message, Guid? communityId = null, Guid? builderEmployeeId = null,
+            Guid? salesEmployeeId = null)
         {
             var job = new Job
             {
@@ -85,28 +89,40 @@ namespace Warranty.Server.Handlers.Jobs
                 JdeIdentifier = null, //TIPS needs to start generating these JDE Identifiers for me
                 PlanName = message.Sale.PlanName,
                 PlanTypeDescription = null, //TIPS should tell me what kind of home this is
-                Swing = message.Sale.Swing,
+                Swing = message.Sale.Swing
             };
 
             if (message.Sale.LegalDescription != null)
+            {
                 job.LegalDescription = message.Sale.LegalDescription.ToString();
-            if (communityId.HasValue) 
+            }
+            if (communityId.HasValue)
+            {
                 job.CommunityId = communityId.Value;
-            if (builderEmployeeId.HasValue) 
+            }
+            if (builderEmployeeId.HasValue)
+            {
                 job.BuilderEmployeeId = builderEmployeeId.Value;
-            if (salesEmployeeId.HasValue) 
+            }
+            if (salesEmployeeId.HasValue)
+            {
                 job.SalesConsultantEmployeeId = salesEmployeeId.Value;
+            }
             if (message.Sale.Stage.HasValue)
+            {
                 job.Stage = message.Sale.Stage.Value;
+            }
             if (message.Sale.CloseDate.HasValue)
+            {
                 job.WarrantyExpirationDate = message.Sale.CloseDate.Value.AddYears(10);
+            }
 
             return job;
         }
 
         public void Validate(JobSaleApproved message)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             if (String.IsNullOrWhiteSpace(message.Sale.JobNumber))
             {
@@ -116,7 +132,7 @@ namespace Warranty.Server.Handlers.Jobs
             {
                 sb.Append("Community number missing. ");
             }
-            
+
             if (sb.Length > 0)
             {
                 throw new ArgumentException(sb.ToString());
@@ -134,10 +150,8 @@ namespace Warranty.Server.Handlers.Jobs
                     job.CurrentHomeOwnerId = null;
                     _database.Update(job);
                     foreach (var previousHomeOwner in homeOwnersForJob)
-                    {
                         _database.Delete(previousHomeOwner);
-                    }
-                } 
+                }
             }
         }
 
@@ -148,7 +162,11 @@ namespace Warranty.Server.Handlers.Jobs
             using (_database)
             {
                 var community = _database.GetCommunityByNumber(message.Sale.CommunityNumber);
-                if (community == null) throw new ArgumentException(string.Format("Community number '{0}' does not exist in database", message.Sale.CommunityNumber));
+                if (community == null)
+                {
+                    throw new ArgumentException(string.Format("Community number '{0}' does not exist in database",
+                        message.Sale.CommunityNumber));
+                }
 
                 var job = _database.GetJobByNumber(message.Sale.JobNumber);
                 var builder = _database.GetEmployeeByNumber(message.Sale.BuilderEmployeeID);
@@ -165,11 +183,20 @@ namespace Warranty.Server.Handlers.Jobs
 
                 var homeOwner = GetHomeOwner(message, job);
                 _database.Insert(homeOwner);
-                
-                if (builder != null) job.BuilderEmployeeId = builder.EmployeeId;
-                if (salesConsultant != null) job.SalesConsultantEmployeeId = salesConsultant.EmployeeId;
-                if (community.CommunityId != job.CommunityId) job.CommunityId = community.CommunityId;
-                
+
+                if (builder != null)
+                {
+                    job.BuilderEmployeeId = builder.EmployeeId;
+                }
+                if (salesConsultant != null)
+                {
+                    job.SalesConsultantEmployeeId = salesConsultant.EmployeeId;
+                }
+                if (community.CommunityId != job.CommunityId)
+                {
+                    job.CommunityId = community.CommunityId;
+                }
+
                 job.CurrentHomeOwnerId = homeOwner.HomeOwnerId;
 
                 _database.Update(job);

@@ -63,8 +63,8 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         {
             var community = GetSaved<Community>();
 
-            SendMessage(community, x => {});
-      
+            SendMessage(community, x => { });
+
             using (TestDatabase)
             {
                 var job = TestDatabase.FetchBy<Job>(sql => sql.Where(j => j.JobNumber == Event.Sale.JobNumber)).Single();
@@ -78,17 +78,8 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         public void Invalid_Message_Information_Test()
         {
             var community = GetSaved<Community>();
-            Assert.Throws<ArgumentException>(() =>
-            {
-                SendMessage(null, x => { });
-            });
-            Assert.Throws<ArgumentException>(() =>
-            {
-                SendMessage(community, x =>
-                {
-                    x.Sale.JobNumber = null;
-                });
-            });
+            Assert.Throws<ArgumentException>(() => { SendMessage(null, x => { }); });
+            Assert.Throws<ArgumentException>(() => { SendMessage(community, x => { x.Sale.JobNumber = null; }); });
         }
 
         [Test]
@@ -98,7 +89,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             var salesman = GetSaved<Employee>();
             var community = GetSaved<Community>();
 
-            SendMessage(community, x=>
+            SendMessage(community, x =>
             {
                 x.Sale.BuilderEmployeeID = int.Parse(builder.Number);
                 x.Sale.SalesConsultantEmployeeID = int.Parse(salesman.Number);

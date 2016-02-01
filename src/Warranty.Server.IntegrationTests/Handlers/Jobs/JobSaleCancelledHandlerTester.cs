@@ -17,29 +17,27 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             {
                 JobNumber = jobNumber
             };
-            if (contactId.HasValue) message.ContactId = contactId.Value;
+            if (contactId.HasValue)
+            {
+                message.ContactId = contactId.Value;
+            }
             Send(message);
         }
 
-        
         [Test]
         public void Homeowner_Should_Be_Deleted()
         {
             var job = GetSaved<Job>();
-            var homeOwner = GetSaved<HomeOwner>(h =>
-            {
-                h.JobId = job.JobId;
-            });
+            var homeOwner = GetSaved<HomeOwner>(h => { h.JobId = job.JobId; });
 
             var homeOwnersFromDb = TestDatabase.GetHomeOwnersByJobNumber(job.JobNumber);
             homeOwnersFromDb.ShouldNotBeNull();
             homeOwnersFromDb.Count.ShouldEqual(1);
 
-            SendMessage(job.JobNumber); 
+            SendMessage(job.JobNumber);
 
             homeOwnersFromDb = TestDatabase.GetHomeOwnersByJobNumber(job.JobNumber);
             homeOwnersFromDb.Count.ShouldEqual(0);
         }
-
     }
 }

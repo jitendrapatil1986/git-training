@@ -57,17 +57,13 @@ namespace Warranty.Server.IntegrationTests
         protected T Get<T>(object id)
         {
             using (TestDatabase)
-            {
                 return TestDatabase.SingleById<T>(id);
-            }
         }
 
         protected T Get<T>(string jdeId) where T : IJdeEntity
         {
             using (TestDatabase)
-            {
                 return TestDatabase.SingleOrDefaultByJdeId<T>(jdeId);
-            }
         }
     }
 }
