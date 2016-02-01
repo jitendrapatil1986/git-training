@@ -86,9 +86,9 @@ namespace Warranty.Server.Handlers.Jobs
                 CloseDate = message.Sale.CloseDate,
                 CreatedBy = "Warranty.Server",
                 CreatedDate = DateTime.Now,
-                JdeIdentifier = null, //TIPS needs to start generating these JDE Identifiers for me
+                JdeIdentifier = message.Sale.JobNumber,
                 PlanName = message.Sale.PlanName,
-                PlanTypeDescription = null, //TIPS should tell me what kind of home this is
+                PlanTypeDescription = null,
                 Swing = message.Sale.Swing
             };
 
