@@ -1,5 +1,6 @@
 ﻿namespace Warranty.Core.Services
 {
+    using Entities;
     using Extensions;
     using NPoco;
     using Common.Security.Session;
@@ -13,6 +14,23 @@
         {
             _database = database;
             _userSession = userSession;
+        }
+
+        public Employee GetEmployeeByNumber(int? employeeNumber)
+        {
+            if (!employeeNumber.HasValue)
+                return null;
+            return _database.SingleOrDefault<Employee>("WHERE EmployeeNumber = @0", employeeNumber.Value);
+        }
+
+        public Employee GetEmployeeByNumber(string employeeNumber)
+        {
+            int parsedEmployeeNumber;
+            if (int.TryParse(employeeNumber, out parsedEmployeeNumber))
+            {
+                return GetEmployeeByNumber(parsedEmployeeNumber);
+            }
+            return null;
         }
 
         public string[] GetEmployeesInMarket()

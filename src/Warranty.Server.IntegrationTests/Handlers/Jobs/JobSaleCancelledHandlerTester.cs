@@ -1,9 +1,11 @@
 ﻿using System;
 using NUnit.Framework;
 using Should;
+using StructureMap;
 using TIPS.Events.JobEvents;
 using Warranty.Core.Entities;
 using Warranty.Server.Extensions;
+using Warranty.Server.Handlers.Jobs;
 using Job = Warranty.Core.Entities.Job;
 
 namespace Warranty.Server.IntegrationTests.Handlers.Jobs
@@ -11,6 +13,12 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
     [TestFixture]
     public class JobSaleCancelledHandlerTester : IBusHandlerTesterBase<JobSaleCancelled>
     {
+        private IHomeOwnerService _homeOwnerService;
+
+        public JobSaleCancelledHandlerTester()
+        {
+            _homeOwnerService = ObjectFactory.GetInstance<IHomeOwnerService>(); ;
+        }
         public void SendMessage(string jobNumber, Guid? contactId = null)
         {
             var message = new JobSaleCancelled
@@ -30,14 +38,13 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             var job = GetSaved<Job>();
             var homeOwner = GetSaved<HomeOwner>(h => { h.JobId = job.JobId; });
 
-            var homeOwnersFromDb = TestDatabase.GetHomeOwnersByJobNumber(job.JobNumber);
+            var homeOwnersFromDb = _homeOwnerService.GetHomeOwnerByJobNumber(job.JobNumber);
             homeOwnersFromDb.ShouldNotBeNull();
-            homeOwnersFromDb.Count.ShouldEqual(1);
 
             SendMessage(job.JobNumber);
 
-            homeOwnersFromDb = TestDatabase.GetHomeOwnersByJobNumber(job.JobNumber);
-            homeOwnersFromDb.Count.ShouldEqual(0);
+            homeOwnersFromDb = _homeOwnerService.GetHomeOwnerByJobNumber(job.JobNumber);
+            homeOwnersFromDb.ShouldBeNull();
         }
     }
 }

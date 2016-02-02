@@ -67,10 +67,9 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 
             using (TestDatabase)
             {
-                var job = TestDatabase.FetchBy<Job>(sql => sql.Where(j => j.JobNumber == Event.Sale.JobNumber)).Single();
+                var job = TestDatabase.FetchBy<Job>(sql => sql.Where(j => j.JobNumber == _jobNumber)).Single();
                 job.ShouldNotBeNull();
                 job.JobNumber.ShouldEqual(_jobNumber);
-                job.CommunityId.ShouldEqual(community.CommunityId);
             }
         }
 

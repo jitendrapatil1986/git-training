@@ -157,8 +157,10 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Handlers\Jobs\BuyerTransferApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\CommunityAddedHandlerTester.cs" />
-    <Compile Include="Extensions\IDatabase\GetJobWithHomeOwners.cs" />
+    <Compile Include="Services\EmployeeServiceTester.cs" />
+    <Compile Include="Services\HomeOwnerServiceTester.cs" />
     <Compile Include="Handlers\Jobs\JobSaleCancelledHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobSaleApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobHomeBuyerNameUpdatedHandlerEdgeCaseTester.cs" />
@@ -180,7 +182,8 @@
     <Compile Include="Handlers\Payments\PaymentDeletedHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentPaymentAmountUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentStatusUpdatedHandlerTester.cs" />
-    <Compile Include="Extensions\IDatabase\DBTestBase.cs" />
+    <Compile Include="Services\JobServiceTester.cs" />
+    <Compile Include="Services\ServicesTestBase.cs" />
     <Compile Include="IBusHandlerTesterBase.cs" />
     <Compile Include="IntegrationSetUpFixture.cs" />
     <Compile Include="CommandHandlerTester.cs" />
@@ -218,6 +221,7 @@
       <Name>Warranty.Core.Tests</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

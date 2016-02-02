@@ -13,10 +13,12 @@ namespace Warranty.Server.Handlers.Jobs
     {
         private readonly SqlServerDatabase _database;
         private static readonly ILog _log = LogManager.GetLogger(typeof (JobSaleCancelledHandler));
+        private readonly IHomeOwnerService _homeOwnerService;
 
-        public JobSaleCancelledHandler(IDatabase database)
+        public JobSaleCancelledHandler(IDatabase database, IHomeOwnerService homeOwnerService)
         {
             _database = (SqlServerDatabase) database;
+            _homeOwnerService = homeOwnerService;
         }
 
         public void Handle(JobSaleCancelled message)
@@ -24,16 +26,13 @@ namespace Warranty.Server.Handlers.Jobs
             using (_database)
             {
                 var job = _database.FetchWhere<Job>(j => j.JobNumber == message.JobNumber).Single();
-                var homeOwners = _database.GetHomeOwnersByJobNumber(message.JobNumber);
+                var homeOwner = _homeOwnerService.GetHomeOwnerByJobNumber(message.JobNumber);
 
-                if (homeOwners != null)
+                if (homeOwner != null)
                 {
-                    foreach (var homeOwner in homeOwners)
-                    {
-                        _log.Info(string.Format(@"Deleting HomeOwner: Name {0}, Number {1}, Phone {2}, Job Number {3}",
-                            homeOwner.HomeOwnerName, homeOwner.HomeOwnerNumber, homeOwner.HomePhone, job.JobNumber));
-                        _database.Delete(homeOwner);
-                    }
+                    _log.Info(string.Format(@"Deleting HomeOwner: Name {0}, Number {1}, Phone {2}, Job Number {3}",
+                        homeOwner.HomeOwnerName, homeOwner.HomeOwnerNumber, homeOwner.HomePhone, job.JobNumber));
+                    _database.Delete(homeOwner);
                 }
                 else
                 {
