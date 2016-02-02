@@ -157,7 +157,6 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Handlers\Jobs\BuyerTransferApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\CommunityAddedHandlerTester.cs" />
     <Compile Include="Services\EmployeeServiceTester.cs" />
     <Compile Include="Services\HomeOwnerServiceTester.cs" />
