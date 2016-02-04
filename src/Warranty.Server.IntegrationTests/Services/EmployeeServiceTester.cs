@@ -19,7 +19,7 @@ namespace Warranty.Server.IntegrationTests.Services
         [TestCase("0", "0", "00000")]
         [TestCase("1", "000001", "321")]
         [TestCase("100", "00100", "32100")]
-        public void QueryEmployeeNumberButItsCrazy(string employeeNumberToSearch, string employeeNumberFromSql, string fakeEmployeeNumber)
+        public void QueryEmployeeNumber(string employeeNumberToSearch, string employeeNumberFromSql, string fakeEmployeeNumber)
         {
             var employee = Get<Employee>(e =>
             {
