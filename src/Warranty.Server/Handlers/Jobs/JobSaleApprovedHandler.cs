@@ -12,7 +12,7 @@ namespace Warranty.Server.Handlers.Jobs
     public class JobSaleApprovedHandler : IHandleMessages<JobSaleApproved>
     {
         private readonly IDatabase _database;
-        private static readonly ILog _log = LogManager.GetLogger(typeof (JobSaleApprovedHandler));
+        private readonly ILog _log = LogManager.GetLogger(typeof (JobSaleApprovedHandler));
         private readonly IJobService _jobService;
         private readonly IHomeOwnerService _homeOwnerService;
         private ICommunityService _communityService;

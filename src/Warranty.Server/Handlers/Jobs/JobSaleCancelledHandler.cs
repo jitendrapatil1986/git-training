@@ -12,7 +12,7 @@ namespace Warranty.Server.Handlers.Jobs
     public class JobSaleCancelledHandler : IHandleMessages<JobSaleCancelled>
     {
         private readonly SqlServerDatabase _database;
-        private static readonly ILog _log = LogManager.GetLogger(typeof (JobSaleCancelledHandler));
+        private readonly ILog _log = LogManager.GetLogger(typeof (JobSaleCancelledHandler));
         private readonly IHomeOwnerService _homeOwnerService;
 
         public JobSaleCancelledHandler(IDatabase database, IHomeOwnerService homeOwnerService)
