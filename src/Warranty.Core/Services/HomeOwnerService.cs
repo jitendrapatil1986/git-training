@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NPoco;
-using TIPS.Events.JobEvents;
 using TIPS.Events.Models;
 using Warranty.Core.Entities;
+using Warranty.Server.Handlers.Jobs;
 using Job = Warranty.Core.Entities.Job;
 
-namespace Warranty.Server.Handlers.Jobs
+namespace Warranty.Core.Services
 {
     public class HomeOwnerService : IHomeOwnerService
     {
@@ -22,6 +22,7 @@ namespace Warranty.Server.Handlers.Jobs
         {
             if (list == null) return;
             if (condition == null) return;
+            if (setter == null) return;
 
             var check = list.FirstOrDefault(condition);
             if (check != null)
@@ -38,7 +39,7 @@ namespace Warranty.Server.Handlers.Jobs
 
         public HomeOwner GetHomeOwnerByJobNumber(string jobNumber)
         {
-            return _database.SingleOrDefault<HomeOwner>("SELECT h.* FROM Homeowners h inner join Jobs j on j.JobId = h.JobId WHERE j.JobNumber = @0", jobNumber);
+            return _database.SingleOrDefault<HomeOwner>("SELECT TOP 1 h.* FROM Homeowners h inner join Jobs j on j.JobId = h.JobId WHERE j.JobNumber = @0 ORDER BY h.HomeownerNumber DESC", jobNumber);
         }
 
         public HomeOwner GetHomeOwner(Opportunity opportunity)

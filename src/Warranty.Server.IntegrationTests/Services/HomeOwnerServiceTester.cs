@@ -3,13 +3,12 @@ using Should;
 using StructureMap;
 using Warranty.Core.Entities;
 using Warranty.Server.Handlers.Jobs;
-using Warranty.Server.IntegrationTests.Extensions.IDatabase;
 using Warranty.Server.IntegrationTests.SetUp;
 
 namespace Warranty.Server.IntegrationTests.Services
 {
     [TestFixture]
-    public class HomeOwnerServiceTester : ServicesTestBase
+    public class HomeOwnerServiceTester : ServiceTesterBase
     {
         private IHomeOwnerService _homeOwnerService;
 

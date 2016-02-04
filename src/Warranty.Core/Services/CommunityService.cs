@@ -2,7 +2,7 @@ using System;
 using NPoco;
 using Warranty.Core.Entities;
 
-namespace Warranty.Server.Handlers.Jobs
+namespace Warranty.Core.Services
 {
     public class CommunityService : ICommunityService
     {
@@ -15,7 +15,7 @@ namespace Warranty.Server.Handlers.Jobs
 
         public Community GetCommunityByNumber(string communityNumber)
         {
-            if (communityNumber == null)
+            if (string.IsNullOrWhiteSpace(communityNumber))
                 throw new ArgumentNullException("communityNumber");
 
             return _database.SingleOrDefault<Community>("WHERE CommunityNumber = @0", communityNumber);

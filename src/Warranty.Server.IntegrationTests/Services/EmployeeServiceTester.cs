@@ -1,26 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Should;
 using StructureMap;
 using Warranty.Core.Entities;
 using Warranty.Core.Services;
-using Warranty.Server.IntegrationTests.Extensions.IDatabase;
-using Warranty.Server.IntegrationTests.SetUp;
 
 namespace Warranty.Server.IntegrationTests.Services
 {
     [TestFixture]
-    public class EmployeeServiceTester : ServicesTestBase
+    public class EmployeeServiceTester : ServiceTesterBase
     {
         private IEmployeeService _employeeService;
 
         public EmployeeServiceTester()
         {
             _employeeService = ObjectFactory.GetInstance<IEmployeeService>();
+        }
+
+        [TestCase("0", "0", "00000")]
+        [TestCase("1", "000001", "321")]
+        [TestCase("100", "00100", "32100")]
+        public void QueryEmployeeNumberButItsCrazy(string employeeNumberToSearch, string employeeNumberFromSql, string fakeEmployeeNumber)
+        {
+            var employee = Get<Employee>(e =>
+            {
+                e.Number = employeeNumberFromSql;
+            });
+            var fakeEmployee = Get<Employee>(e =>
+            {
+                e.Number = fakeEmployeeNumber;
+            });
+            var employeeFromSql = _employeeService.GetEmployeeByNumber(employeeNumberToSearch);
+            employeeFromSql.EmployeeId.ShouldEqual(employee.EmployeeId);
+
         }
 
         [Test]

@@ -1,10 +1,9 @@
 using System;
 using NPoco;
 using TIPS.Events.Models;
-using Warranty.Core.Services;
 using Job = Warranty.Core.Entities.Job;
 
-namespace Warranty.Server.Handlers.Jobs
+namespace Warranty.Core.Services
 {
     public class JobService : IJobService
     {
@@ -27,9 +26,9 @@ namespace Warranty.Server.Handlers.Jobs
             return _database.SingleOrDefault<Job>("WHERE JobNumber = @0", jobNumber);
         }
 
-        public Job GetJobAndInsert(Sale sale)
+        public Job  CreateJobAndInsert(Sale sale)
         {
-            var job = GetJob(sale);
+            var job = CreateJobFromSale(sale);
             using (_database)
             {
                 _database.Insert(job);
@@ -37,7 +36,7 @@ namespace Warranty.Server.Handlers.Jobs
             return job;
         }
 
-        public Job GetJob(Sale sale)
+        public Job CreateJobFromSale(Sale sale)
         {
             if (sale == null)
                 throw new ArgumentNullException("sale");

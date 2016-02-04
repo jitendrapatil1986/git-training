@@ -5,19 +5,17 @@ using NServiceBus;
 using StructureMap;
 using Warranty.Server.Extensions;
 using Warranty.Server.IntegrationTests.SetUp;
+using Warranty.Core.Entities;
+using Warranty.Tests.Core;
 
 namespace Warranty.Server.IntegrationTests
 {
-    using Core.Entities;
-    using Tests.Core;
-    using Extensions;
-    using System.Linq;
 
-    public abstract class IBusHandlerTesterBase<TEvent> where TEvent : IBusEvent, new()
+    public abstract class BusHandlerTesterBase<TEvent> where TEvent : IBusEvent, new()
     {
         protected readonly IDatabase TestDatabase;
 
-        protected IBusHandlerTesterBase()
+        protected BusHandlerTesterBase()
         {
             TestDatabase = ObjectFactory.GetInstance<IDatabase>();
 

@@ -13,7 +13,7 @@ using Job = Warranty.Core.Entities.Job;
 namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 {
     [TestFixture]
-    public class JobSaleApprovedHandlerTester : IBusHandlerTesterBase<JobSaleApproved>
+    public class JobSaleApprovedHandlerTester : BusHandlerTesterBase<JobSaleApproved>
     {
         private readonly string _jobNumber = "12345";
         private readonly string _primaryEmail = "test2@dwhomes.com";

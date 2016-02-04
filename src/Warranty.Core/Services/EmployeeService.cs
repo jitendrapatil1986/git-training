@@ -1,4 +1,8 @@
-﻿namespace Warranty.Core.Services
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+namespace Warranty.Core.Services
 {
     using Entities;
     using Extensions;
@@ -25,10 +29,45 @@
 
         public Employee GetEmployeeByNumber(string employeeNumber)
         {
-            int parsedEmployeeNumber;
-            if (int.TryParse(employeeNumber, out parsedEmployeeNumber))
+            if (string.IsNullOrWhiteSpace(employeeNumber))
+                return null;
+
+            var searchSql = string.Format("WHERE EmployeeNumber LIKE '%{0}'", employeeNumber);
+
+            var allPossibleEmployees = _database.Fetch<Employee>(searchSql);
+
+            var trueMatch = allPossibleEmployees.Where(x => x.Number.Equals(employeeNumber));
+            var matches = trueMatch as IList<Employee> ?? trueMatch.ToList();
+            if (matches.Count == 1)
             {
-                return GetEmployeeByNumber(parsedEmployeeNumber);
+                return matches[0];
+            }
+
+            foreach (var possibleEmployee in allPossibleEmployees)
+            {
+                var possibleEmployeeNumber = possibleEmployee.Number;
+                if(possibleEmployeeNumber == employeeNumber)
+                    return possibleEmployee;
+                
+                if (string.IsNullOrWhiteSpace(possibleEmployeeNumber))
+                    continue;
+
+                possibleEmployeeNumber = RemoveLeadingZeros(possibleEmployeeNumber);
+
+                if (possibleEmployeeNumber != null && employeeNumber.Equals(possibleEmployeeNumber))
+                    return possibleEmployee;
+            }
+            return null;
+        }
+
+        private string RemoveLeadingZeros(string numberWithZeros)
+        {
+            var expression = new Regex(@"[0]*([a-zA-Z0-9]+)$");
+            var match = expression.Match(numberWithZeros);
+            var groupCount = match.Groups.Count;
+            if (groupCount > 0)
+            {
+                return match.Groups[groupCount - 1].Value;
             }
             return null;
         }

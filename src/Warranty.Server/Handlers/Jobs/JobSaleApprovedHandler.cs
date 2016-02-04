@@ -1,19 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using log4net;
-using log4net.DateFormatter;
-using NHibernate.Mapping.ByCode.Impl;
-using NHibernate.Util;
 using NPoco;
 using NServiceBus;
-using Warranty.Core.DataAccess;
-using Warranty.Core.Entities;
 using TIPS.Events.JobEvents;
-using TIPS.Events.Models;
-using Warranty.Core.ActivityLogger;
-using Warranty.Server.Extensions;
+using Warranty.Core.Services;
 using Job = Warranty.Core.Entities.Job;
 
 namespace Warranty.Server.Handlers.Jobs
@@ -86,8 +77,7 @@ namespace Warranty.Server.Handlers.Jobs
                 if (job == null)
                 {
                     _log.Info(string.Format(@"Creating Job: {0}", message.Sale.JobNumber));
-                    job = _jobService.GetJob(message.Sale);
-                    _database.Insert(job);
+                    job = _jobService.CreateJobAndInsert(message.Sale);
                 }
                 DeletePreviousHomeowners(job);
 

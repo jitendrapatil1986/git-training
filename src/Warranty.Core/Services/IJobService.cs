@@ -1,15 +1,14 @@
-using System;
 using TIPS.Events.Models;
 using Job = Warranty.Core.Entities.Job;
 
-namespace Warranty.Server.Handlers.Jobs
+namespace Warranty.Core.Services
 {
     public interface IJobService
     {
         Job GetJobByNumber(string jobNumber);
 
-        Job GetJob(Sale sale);
+        Job CreateJobFromSale(Sale sale);
 
-        Job GetJobAndInsert(Sale sale);
+        Job CreateJobAndInsert(Sale sale);
     }
 }

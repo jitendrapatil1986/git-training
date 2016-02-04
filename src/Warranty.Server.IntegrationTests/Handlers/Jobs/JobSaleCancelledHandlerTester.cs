@@ -11,13 +11,13 @@ using Job = Warranty.Core.Entities.Job;
 namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 {
     [TestFixture]
-    public class JobSaleCancelledHandlerTester : IBusHandlerTesterBase<JobSaleCancelled>
+    public class JobSaleCancelledHandlerTester : BusHandlerTesterBase<JobSaleCancelled>
     {
         private IHomeOwnerService _homeOwnerService;
 
         public JobSaleCancelledHandlerTester()
         {
-            _homeOwnerService = ObjectFactory.GetInstance<IHomeOwnerService>(); ;
+            _homeOwnerService = ObjectFactory.GetInstance<IHomeOwnerService>();
         }
         public void SendMessage(string jobNumber, Guid? contactId = null)
         {

@@ -1,6 +1,6 @@
 using Warranty.Core.Entities;
 
-namespace Warranty.Server.Handlers.Jobs
+namespace Warranty.Core.Services
 {
     public interface ICommunityService
     {
