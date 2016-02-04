@@ -60,11 +60,11 @@ namespace Warranty.Core.Services
                     homeOwnerInfo.FirstName);
             }
 
-            if (opportunity.Contact != null)
+            if (homeOwnerInfo != null)
             {
-                SetIfNotNull(opportunity.Contact.PhoneNumbers, x => x.IsPrimary,
+                SetIfNotNull(homeOwnerInfo.PhoneNumbers, x => x.IsPrimary,
                     x => homeOwner.HomePhone = x.Number);
-                SetIfNotNull(opportunity.Contact.Emails, x => x.IsPrimary,
+                SetIfNotNull(homeOwnerInfo.Emails, x => x.IsPrimary,
                     x => homeOwner.EmailAddress = x.Address);
             }
 
