@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using NHibernate.Mapping;
-
-namespace Warranty.Server.Extensions
+﻿namespace Warranty.Server.Extensions
 {
     using Core.Entities;
     using NPoco;
