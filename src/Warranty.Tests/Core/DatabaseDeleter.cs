@@ -15,33 +15,29 @@ namespace Warranty.Tests.Core
 
         public DatabaseDeleter(IDatabase database)
         {
+            bool droppedHomeownersConstraint = false;
             using (database)
             {
-                try
+                var homeOwnersJobIdConstraintExists =
+                    database.ExecuteScalar<int>(
+                        @"SELECT count(1) FROM sys.foreign_keys where name = 'FK_HomeOwners_JobId' and parent_object_id = OBJECT_ID(N'dbo.Homeowners')") ==
+                    1;
+                if (homeOwnersJobIdConstraintExists)
                 {
+                    droppedHomeownersConstraint = true;
                     database.Execute(@"ALTER TABLE HomeOwners DROP CONSTRAINT FK_HomeOwners_JobId");
                 }
-                catch
-                {
-                    
-                }
-                
             }
             
             BuildDeleteTables(database);
 
             using (database)
             {
-                try
+                if (droppedHomeownersConstraint)
                 {
                     database.Execute(@"ALTER TABLE HomeOwners ADD CONSTRAINT FK_HomeOwners_JobId
                                     FOREIGN KEY (JobId) REFERENCES Jobs(JobId)");
                 }
-                catch
-                {
-
-                }
-                
             }
         }
 
