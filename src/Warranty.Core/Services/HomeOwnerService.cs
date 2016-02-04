@@ -54,14 +54,15 @@ namespace Warranty.Core.Services
             };
 
             var homeOwnerInfo = opportunity.Contact;
-            if (homeOwnerInfo != null && homeOwnerInfo.FirstName != null && homeOwnerInfo.LastName != null)
-            {
-                homeOwner.HomeOwnerName = string.Format("{0}, {1}", homeOwnerInfo.LastName,
-                    homeOwnerInfo.FirstName);
-            }
 
             if (homeOwnerInfo != null)
             {
+                if (homeOwnerInfo.FirstName != null && homeOwnerInfo.LastName != null)
+                {
+                    homeOwner.HomeOwnerName = string.Format("{0}, {1}", homeOwnerInfo.LastName,
+                        homeOwnerInfo.FirstName);
+                }
+
                 SetIfNotNull(homeOwnerInfo.PhoneNumbers, x => x.IsPrimary,
                     x => homeOwner.HomePhone = x.Number);
                 SetIfNotNull(homeOwnerInfo.Emails, x => x.IsPrimary,
