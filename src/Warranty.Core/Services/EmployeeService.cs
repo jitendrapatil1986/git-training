@@ -24,7 +24,8 @@ namespace Warranty.Core.Services
         {
             if (!employeeNumber.HasValue)
                 return null;
-            return _database.SingleOrDefault<Employee>("WHERE EmployeeNumber = @0", employeeNumber.Value);
+
+            return GetEmployeeByNumber(employeeNumber.Value.ToString());
         }
 
         public Employee GetEmployeeByNumber(string employeeNumber)
