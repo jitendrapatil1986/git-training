@@ -19,6 +19,7 @@ namespace Warranty.Server.IntegrationTests.Services
         [TestCase("0", "0", "00000")]
         [TestCase("1", "000001", "321")]
         [TestCase("100", "00100", "32100")]
+        [TestCase("y","00y","00y0")]
         public void QueryEmployeeNumber(string employeeNumberToSearch, string employeeNumberFromSql, string fakeEmployeeNumber)
         {
             var employee = Get<Employee>(e =>
@@ -31,7 +32,6 @@ namespace Warranty.Server.IntegrationTests.Services
             });
             var employeeFromSql = _employeeService.GetEmployeeByNumber(employeeNumberToSearch);
             employeeFromSql.EmployeeId.ShouldEqual(employee.EmployeeId);
-
         }
 
         [Test]

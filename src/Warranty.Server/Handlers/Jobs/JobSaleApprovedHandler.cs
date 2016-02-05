@@ -80,8 +80,8 @@ namespace Warranty.Server.Handlers.Jobs
                     job = _jobService.CreateJobAndInsert(message.Sale);
                 }
                 DeletePreviousHomeowners(job);
-
-                var homeOwner = _homeOwnerService.GetHomeOwner(message.Opportunity);
+                
+                var homeOwner = _homeOwnerService.GetHomeOwner(message.Opportunity.Contact);
                 _homeOwnerService.AssignToJob(homeOwner, job);
 
                 _database.Insert(homeOwner);

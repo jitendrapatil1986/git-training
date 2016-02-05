@@ -11,6 +11,6 @@ namespace Warranty.Server.Handlers.Jobs
 
         HomeOwner GetHomeOwnerByJobNumber(string jobNumber);
 
-        HomeOwner GetHomeOwner(Opportunity opportunity);
+        HomeOwner GetHomeOwner(Contact homeOwnerInfo, int homeOwnerNumber = 1);
     }
 }

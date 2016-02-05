@@ -39,21 +39,38 @@ namespace Warranty.Core.Services
 
         public HomeOwner GetHomeOwnerByJobNumber(string jobNumber)
         {
-            return _database.SingleOrDefault<HomeOwner>("SELECT TOP 1 h.* FROM Homeowners h inner join Jobs j on j.JobId = h.JobId WHERE j.JobNumber = @0 ORDER BY h.HomeownerNumber DESC", jobNumber);
+            return _database.SingleOrDefault<HomeOwner>(
+                @"SELECT TOP 1 
+                       h.HomeownerId
+                      ,h.JobId
+                      ,h.HomeownerNumber
+                      ,h.HomeownerName
+                      ,h.HomePhone
+                      ,h.OtherPhone
+                      ,h.WorkPhone1
+                      ,h.WorkPhone2
+                      ,h.EmailAddress
+                      ,h.CreatedDate
+                      ,h.CreatedBy
+                      ,h.UpdatedDate
+                      ,h.UpdatedBy
+                      ,h.OldHomeOwnerID 
+                FROM Homeowners h 
+                inner join Jobs j on j.JobId = h.JobId 
+                WHERE j.JobNumber = @0 
+                ORDER BY h.HomeownerNumber DESC", jobNumber);
         }
 
-        public HomeOwner GetHomeOwner(Opportunity opportunity)
+        public HomeOwner GetHomeOwner(Contact homeOwnerInfo, int homeOwnerNumber = 1)
         {
             var homeOwner = new HomeOwner
             {
                 HomeOwnerId = Guid.NewGuid(),
                 CreatedBy = "Warranty.Server",
                 CreatedDate = DateTime.UtcNow,
-                HomeOwnerNumber = 0,
+                HomeOwnerNumber = homeOwnerNumber,
                 UpdatedBy = "Warranty.Server"
             };
-
-            var homeOwnerInfo = opportunity.Contact;
 
             if (homeOwnerInfo != null)
             {
