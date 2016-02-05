@@ -37,8 +37,8 @@ namespace Warranty.Core.Services
 
             var allPossibleEmployees = _database.Fetch<Employee>(searchSql);
 
-            var trueMatch = allPossibleEmployees.Where(x => x.Number.Equals(employeeNumber)) as IList<Employee>;
-            if (trueMatch != null && trueMatch.Count == 1)
+            var trueMatch = allPossibleEmployees.Where(x => x.Number.Equals(employeeNumber)).ToList();
+            if (trueMatch.Count == 1)
             {
                 return trueMatch[0];
             }
