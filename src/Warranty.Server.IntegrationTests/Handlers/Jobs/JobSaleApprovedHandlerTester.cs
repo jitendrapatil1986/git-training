@@ -103,7 +103,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             homeOwner.EmailAddress.ShouldEqual(_primaryEmail);
             homeOwner.HomePhone.ShouldEqual(_primaryPhone);
             homeOwner.JobId.ShouldEqual(job.JobId);
-            homeOwner.HomeOwnerNumber.ShouldEqual(0);
+            homeOwner.HomeOwnerNumber.ShouldEqual(1);
 
             job.CurrentHomeOwnerId.ShouldEqual(homeOwner.HomeOwnerId);
             job.SalesConsultantEmployeeId = salesman.EmployeeId;
@@ -125,7 +125,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 
             var homeOwner = homeOwnerList[0];
             homeOwner.ShouldNotBeNull();
-            homeOwner.HomeOwnerNumber.ShouldEqual(0);
+            homeOwner.HomeOwnerNumber.ShouldEqual(1);
             homeOwner.HomeOwnerName.ShouldEqual("HomeOwner2, HomeOwner2");
         }
     }
