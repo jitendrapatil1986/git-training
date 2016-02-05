@@ -47,15 +47,11 @@ namespace Warranty.Core.Services
             foreach (var possibleEmployee in allPossibleEmployees)
             {
                 var possibleEmployeeNumber = possibleEmployee.Number;
-                if(possibleEmployeeNumber == employeeNumber)
-                    return possibleEmployee;
                 
                 if (string.IsNullOrWhiteSpace(possibleEmployeeNumber))
                     continue;
 
-                possibleEmployeeNumber = RemoveLeadingZeros(possibleEmployeeNumber);
-
-                if (possibleEmployeeNumber != null && employeeNumber.Equals(possibleEmployeeNumber))
+                if (employeeNumber.Equals(RemoveLeadingZeros(possibleEmployeeNumber)))
                     return possibleEmployee;
             }
             return null;
