@@ -74,10 +74,16 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         }
 
         [Test]
-        public void Invalid_Message_Information_Test()
+        public void Invalid_Message_No_Community()
         {
             var community = GetSaved<Community>();
             Assert.Throws<ArgumentException>(() => { SendMessage(null, x => { }); });
+        }
+
+        [Test]
+        public void Invalid_Message_JobNumber_Is_Null()
+        {
+            var community = GetSaved<Community>();
             Assert.Throws<ArgumentException>(() => { SendMessage(community, x => { x.Sale.JobNumber = null; }); });
         }
 

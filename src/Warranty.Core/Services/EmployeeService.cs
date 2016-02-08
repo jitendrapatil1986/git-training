@@ -32,27 +32,41 @@ namespace Warranty.Core.Services
         {
             if (string.IsNullOrWhiteSpace(employeeNumber))
                 return null;
-
-            var searchSql = string.Format("WHERE EmployeeNumber LIKE '%{0}'", employeeNumber);
+            var searchSql = "";
+            int intEmployeeNumber;
+            if (int.TryParse(employeeNumber, out intEmployeeNumber))
+            {
+                searchSql = string.Format("WHERE ISNUMERIC(EmployeeNumber) = 1 AND CAST(EmployeeNumber AS INT) = {0}", intEmployeeNumber);
+            }
+            else
+            {
+                searchSql = string.Format(@"WHERE EmployeeNumber = '{0}'", employeeNumber);
+            }
 
             var allPossibleEmployees = _database.Fetch<Employee>(searchSql);
-
-            var trueMatch = allPossibleEmployees.Where(x => x.Number.Equals(employeeNumber)).ToList();
-            if (trueMatch.Count == 1)
+            if (allPossibleEmployees.Count == 1)
             {
-                return trueMatch[0];
+                return allPossibleEmployees[0];
+            }
+            else
+            {
+                var trueMatch = allPossibleEmployees.Where(x => x.Number == employeeNumber).ToList();
+                if (trueMatch.Count == 1)
+                {
+                    return trueMatch[0];
+                }
             }
 
-            foreach (var possibleEmployee in allPossibleEmployees)
-            {
-                var possibleEmployeeNumber = possibleEmployee.Number;
+            //foreach (var possibleEmployee in allPossibleEmployees)
+            //{
+            //    var possibleEmployeeNumber = possibleEmployee.Number;
                 
-                if (string.IsNullOrWhiteSpace(possibleEmployeeNumber))
-                    continue;
+            //    if (string.IsNullOrWhiteSpace(possibleEmployeeNumber))
+            //        continue;
 
-                if (employeeNumber.Equals(RemoveLeadingZeros(possibleEmployeeNumber)))
-                    return possibleEmployee;
-            }
+            //    if (employeeNumber.Equals(RemoveLeadingZeros(possibleEmployeeNumber)))
+            //        return possibleEmployee;
+            //}
             return null;
         }
 
