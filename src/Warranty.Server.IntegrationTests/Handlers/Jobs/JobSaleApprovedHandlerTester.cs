@@ -134,5 +134,98 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             homeOwner.HomeOwnerNumber.ShouldEqual(1);
             homeOwner.HomeOwnerName.ShouldEqual("HomeOwner2, HomeOwner2");
         }
+
+        [Test]
+        public void Job_Should_Be_Updated()
+        {
+            var community = GetSaved<Community>();
+            var oldBuilder = GetSaved<Employee>(x => x.Number = "1");
+            var oldSalesman = GetSaved<Employee>(x => x.Number = "2");
+
+            var newBuilder = GetSaved<Employee>(x => x.Number = "3");
+            var newSalesman = GetSaved<Employee>(x => x.Number = "4");
+
+            var job = GetSaved<Job>(x =>
+            {
+                x.JobId = Guid.Empty;
+                x.JobNumber = "110102";
+                x.CloseDate = DateTime.MaxValue;
+                x.AddressLine = "1234 testing lane";
+                x.City = "Test town";
+                x.StateCode = "TX";
+                x.PostalCode = "77477";
+                x.LegalDescription = "This is a legal description test";
+                x.CommunityId = community.CommunityId;
+                x.CurrentHomeOwnerId = null;
+                x.PlanType = "S";
+                x.PlanTypeDescription = "Nothing";
+                x.PlanName = "The Tester";
+                x.PlanNumber = "400";
+                x.Elevation = "A";
+                x.Swing = "West";
+                x.Stage = 7;
+                x.BuilderEmployeeId = oldBuilder.EmployeeId;
+                x.SalesConsultantEmployeeId = oldSalesman.EmployeeId;
+                x.WarrantyExpirationDate = DateTime.Now.AddYears(10);
+                x.DoNotContact = false;
+                x.CreatedDate = DateTime.Now.AddDays(-1);
+                x.CreatedBy = "testing";
+                x.UpdatedDate = DateTime.Now.AddDays(-1);
+                x.UpdatedBy = "Test updater";
+            });
+            var sale = new Sale
+            {
+                JobNumber = "110102",
+                JobType = "M",
+                CloseDate = DateTime.Today,
+                CommunityNumber = community.CommunityNumber,
+                BuilderEmployeeID = Int32.Parse(newBuilder.Number),
+                SalesConsultantEmployeeID = Int32.Parse(newSalesman.Number),
+                Stage = 8,
+                AddressCity = "New Test City",
+                LegalDescription = null,
+                Swing = "North",
+                PlanName = "The New Tester",
+                CommunityName = community.CommunityName,
+                AddressStateAbbreviation = "TX",
+                AddressZipCode = "77477",
+                PlanNumber = "1234",
+                Elevation = "C",
+                AddressLine1 = "911 Testing Terrace"
+            };
+            SendMessage(community, x =>
+            {
+                x.Sale = sale;
+            });
+
+            var jobFromDb = TestDatabase.FetchBy<Job>(sql => sql.Where(j => j.JobNumber == "110102")).Single();
+
+            jobFromDb.JobNumber.ShouldEqual(sale.JobNumber);
+            jobFromDb.PlanNumber.ShouldEqual(sale.PlanNumber);
+            jobFromDb.Elevation.ShouldEqual(sale.Elevation);
+            jobFromDb.AddressLine.ShouldEqual(sale.AddressLine1);
+            jobFromDb.City.ShouldEqual(sale.AddressCity);
+            jobFromDb.StateCode.ShouldEqual(sale.AddressStateAbbreviation);
+            jobFromDb.PostalCode.ShouldEqual(sale.AddressZipCode);
+            jobFromDb.PlanType.ShouldEqual(sale.JobType);
+            jobFromDb.CloseDate.ShouldEqual(sale.CloseDate);
+            jobFromDb.CreatedBy.ShouldEqual("Warranty.Server");
+            jobFromDb.JdeIdentifier.ShouldEqual(sale.JobNumber);
+            jobFromDb.PlanName.ShouldEqual(sale.PlanName);
+            jobFromDb.Swing.ShouldEqual(sale.Swing);
+            if (sale.LegalDescription == null)
+            {
+                jobFromDb.LegalDescription.ShouldBeNull();
+            }
+            else
+            {
+                jobFromDb.LegalDescription.ShouldEqual(sale.LegalDescription.ToString());
+            }
+            jobFromDb.CommunityId.ShouldEqual(community.CommunityId);
+            jobFromDb.BuilderEmployeeId.ShouldEqual(newBuilder.EmployeeId);
+            jobFromDb.SalesConsultantEmployeeId.ShouldEqual(newSalesman.EmployeeId);
+            jobFromDb.Stage.ShouldEqual(sale.Stage.Value);
+            jobFromDb.WarrantyExpirationDate.ShouldEqual(sale.CloseDate.Value.AddYears(10));
+        }
     }
 }

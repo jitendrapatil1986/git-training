@@ -76,9 +76,16 @@ namespace Warranty.Server.Handlers.Jobs
 
                 if (job == null)
                 {
-                    _log.Info(string.Format(@"Creating Job: {0}", message.Sale.JobNumber));
+                    _log.InfoFormat(@"Creating Job: {0}", message.Sale.JobNumber);
                     job = _jobService.CreateJobAndInsert(message.Sale);
                 }
+                else
+                {
+                    _log.InfoFormat(@"Updating Job: {0}", message.Sale.JobNumber);
+                    _jobService.UpdateExistingJob(job, message.Sale);
+                }
+
+                //todo: Once the information is correct in Warranty DB, existing homeowner will be an error
                 DeletePreviousHomeowners(job);
                 
                 var homeOwner = _homeOwnerService.GetHomeOwner(message.Opportunity.Contact);

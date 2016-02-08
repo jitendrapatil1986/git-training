@@ -18,19 +18,6 @@ namespace Warranty.Core.Services
             _database = database;
         }
 
-        private void SetIfNotNull<T>(List<T> list, Func<T, bool> condition, Action<T> setter)
-        {
-            if (list == null) return;
-            if (condition == null) return;
-            if (setter == null) return;
-
-            var check = list.FirstOrDefault(condition);
-            if (check != null)
-            {
-                setter(check);
-            }
-        }
-
         public void AssignToJob(HomeOwner homeOwner, Job job)
         {
             job.CurrentHomeOwnerId = homeOwner.HomeOwnerId;
@@ -80,10 +67,22 @@ namespace Warranty.Core.Services
                         homeOwnerInfo.FirstName);
                 }
 
-                SetIfNotNull(homeOwnerInfo.PhoneNumbers, x => x.IsPrimary,
-                    x => homeOwner.HomePhone = x.Number);
-                SetIfNotNull(homeOwnerInfo.Emails, x => x.IsPrimary,
-                    x => homeOwner.EmailAddress = x.Address);
+                if (homeOwnerInfo.PhoneNumbers != null)
+                {
+                    var primaryPhone = homeOwnerInfo.PhoneNumbers.Where(x => x.IsPrimary).ToList();
+                    if (primaryPhone.Count == 1)
+                    {
+                        homeOwner.HomePhone = primaryPhone[0].Number;
+                    }
+                }
+                if (homeOwnerInfo.Emails != null)
+                {
+                    var primaryEmail = homeOwnerInfo.Emails.Where(x => x.IsPrimary).ToList();
+                    if (primaryEmail.Count == 1)
+                    {
+                        homeOwner.EmailAddress = primaryEmail[0].Address;
+                    }
+                }
             }
 
             return homeOwner;
