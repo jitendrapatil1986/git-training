@@ -45,6 +45,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Accounting.Events.1.1.914.0\lib\net45\Accounting.Events.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Messages, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Messages.1.1.116.0\lib\net40\Common.Messages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Common.Security.1.1.112.0\lib\net45\Common.Security.dll</HintPath>
@@ -52,6 +56,10 @@
     <Reference Include="Construction.Events, Version=1.4.99.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Construction.Events.1.4.99.0\lib\net45\Construction.Events.dll</HintPath>
+    </Reference>
+    <Reference Include="FizzWare.NBuilder, Version=3.0.1.0, Culture=neutral, PublicKeyToken=5651b03e12e42c12, processorArchitecture=MSIL">
+      <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.3.1.229\lib\net45\FluentAssertions.dll</HintPath>
@@ -128,6 +136,10 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="TIPS.Events, Version=1.1863.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TIPS.Events.1.1863.0.0\lib\net40\TIPS.Events.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -146,6 +158,10 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Handlers\Jobs\CommunityAddedHandlerTester.cs" />
+    <Compile Include="Services\EmployeeServiceTester.cs" />
+    <Compile Include="Services\HomeOwnerServiceTester.cs" />
+    <Compile Include="Handlers\Jobs\JobSaleCancelledHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\JobSaleApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobHomeBuyerNameUpdatedHandlerEdgeCaseTester.cs" />
     <Compile Include="Handlers\Jobs\JobPrimaryBuilderUpdatedHandlerNewBuilderTester.cs" />
     <Compile Include="Handlers\Jobs\JobPrimaryBuilderUpdatedHandlerExistingBuilderTester.cs" />
@@ -155,7 +171,6 @@
     <Compile Include="Handlers\Jobs\JobClosedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobHomeBuyerNameUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobResetToDirtHandlerTester.cs" />
-    <Compile Include="Handlers\Jobs\JobAddedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobPlanUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandlerTester.cs" />
@@ -166,6 +181,9 @@
     <Compile Include="Handlers\Payments\PaymentDeletedHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentPaymentAmountUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentStatusUpdatedHandlerTester.cs" />
+    <Compile Include="Services\JobServiceTester.cs" />
+    <Compile Include="Services\ServiceTesterBase.cs" />
+    <Compile Include="BusHandlerTesterBase.cs" />
     <Compile Include="IntegrationSetUpFixture.cs" />
     <Compile Include="CommandHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentIdUpdatedHandlerTester.cs" />
@@ -202,6 +220,7 @@
       <Name>Warranty.Core.Tests</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

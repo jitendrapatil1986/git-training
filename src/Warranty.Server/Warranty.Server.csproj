@@ -51,13 +51,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Common.Core.1.1.109.0\lib\net45\Common.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Messages, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Messages.1.1.116.0\lib\net40\Common.Messages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Common.Security.1.1.112.0\lib\net45\Common.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Messages, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Messages.1.1.115.0\lib\net45\Common.Messages.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Construction.Events">
       <HintPath>..\packages\Construction.Events.1.4.286.0\lib\net45\Construction.Events.dll</HintPath>
@@ -149,6 +149,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TIPS.Events, Version=1.1863.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TIPS.Events.1.1863.0.0\lib\net40\TIPS.Events.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssemblyInfo.cs">
@@ -168,10 +172,11 @@
     <Compile Include="Handlers\Jobs\JobElevationUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobClosedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobHomeBuyerNameUpdatedHandler.cs" />
+    <Compile Include="Handlers\Jobs\JobSaleApprovedHandler.cs" />
+    <Compile Include="Handlers\Jobs\JobSaleCancelledHandler.cs" />
     <Compile Include="Handlers\Jobs\NotifyJobHomeownerChangedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobPrimaryBuilderUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobResetToDirtHandler.cs" />
-    <Compile Include="Handlers\Jobs\JobAddedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobPlanUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandler.cs" />

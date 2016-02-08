@@ -1,5 +1,10 @@
-﻿namespace Warranty.Core.Services
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+namespace Warranty.Core.Services
 {
+    using Entities;
     using Extensions;
     using NPoco;
     using Common.Security.Session;
@@ -13,6 +18,43 @@
         {
             _database = database;
             _userSession = userSession;
+        }
+
+        public Employee GetEmployeeByNumber(int? employeeNumber)
+        {
+            if (!employeeNumber.HasValue)
+                return null;
+
+            return GetEmployeeByNumber(employeeNumber.Value.ToString());
+        }
+
+        public Employee GetEmployeeByNumber(string employeeNumber)
+        {
+            if (string.IsNullOrWhiteSpace(employeeNumber))
+                return null;
+            var searchSql = "";
+            int intEmployeeNumber;
+            if (int.TryParse(employeeNumber, out intEmployeeNumber))
+            {
+                searchSql = string.Format("WHERE ISNUMERIC(EmployeeNumber) = 1 AND CAST(EmployeeNumber AS INT) = {0}", intEmployeeNumber);
+            }
+            else
+            {
+                searchSql = string.Format(@"WHERE EmployeeNumber = '{0}'", employeeNumber);
+            }
+
+            var allPossibleEmployees = _database.Fetch<Employee>(searchSql);
+            if (allPossibleEmployees.Count == 1)
+            {
+                return allPossibleEmployees[0];
+            }
+
+            var trueMatch = allPossibleEmployees.Where(x => x.Number == employeeNumber).ToList();
+            if (trueMatch.Count == 1)
+            {
+                return trueMatch[0];
+            }
+            return null;
         }
 
         public string[] GetEmployeesInMarket()
