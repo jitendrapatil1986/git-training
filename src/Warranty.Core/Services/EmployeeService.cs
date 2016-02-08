@@ -48,25 +48,12 @@ namespace Warranty.Core.Services
             {
                 return allPossibleEmployees[0];
             }
-            else
+
+            var trueMatch = allPossibleEmployees.Where(x => x.Number == employeeNumber).ToList();
+            if (trueMatch.Count == 1)
             {
-                var trueMatch = allPossibleEmployees.Where(x => x.Number == employeeNumber).ToList();
-                if (trueMatch.Count == 1)
-                {
-                    return trueMatch[0];
-                }
+                return trueMatch[0];
             }
-
-            //foreach (var possibleEmployee in allPossibleEmployees)
-            //{
-            //    var possibleEmployeeNumber = possibleEmployee.Number;
-                
-            //    if (string.IsNullOrWhiteSpace(possibleEmployeeNumber))
-            //        continue;
-
-            //    if (employeeNumber.Equals(RemoveLeadingZeros(possibleEmployeeNumber)))
-            //        return possibleEmployee;
-            //}
             return null;
         }
 
