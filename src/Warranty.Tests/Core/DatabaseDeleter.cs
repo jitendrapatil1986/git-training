@@ -53,7 +53,7 @@ namespace Warranty.Tests.Core
             {
                 var homeOwnersJobNumberConstraintExists =
                 database.ExecuteScalar<int>(
-                    @"SELECT count(1) FROM sys.foreign_keys where name = 'UQ_Homeowners_JobNumber' and parent_object_id = OBJECT_ID(N'dbo.Homeowners')") == 1;
+                    @"select COUNT(1) from INFORMATION_SCHEMA.TABLE_CONSTRAINTS where CONSTRAINT_TYPE='UNIQUE' and table_name= 'Homeowners' and CONSTRAINT_NAME = 'UQ_Homeowners_JobNumber'") == 1;
                 if (homeOwnersJobNumberConstraintExists)
                 {
                     droppedHomeownersConstraint = true;
