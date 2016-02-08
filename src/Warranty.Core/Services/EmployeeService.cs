@@ -57,18 +57,6 @@ namespace Warranty.Core.Services
             return null;
         }
 
-        private string RemoveLeadingZeros(string numberWithZeros)
-        {
-            var expression = new Regex(@"[0]*([a-zA-Z0-9]+)$");
-            var match = expression.Match(numberWithZeros);
-            var groupCount = match.Groups.Count;
-            if (groupCount > 0)
-            {
-                return match.Groups[groupCount - 1].Value;
-            }
-            return null;
-        }
-
         public string[] GetEmployeesInMarket()
         {
             var markets = GetEmployeeMarkets();
