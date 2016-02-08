@@ -49,26 +49,26 @@ namespace Warranty.Tests.Core
 
         public virtual void DeleteAllData(IDatabase database)
         {
+            bool droppedHomeownersConstraint = false;
             using (database)
             {
-                try
+                var homeOwnersJobNumberConstraintExists =
+                database.ExecuteScalar<int>(
+                    @"SELECT count(1) FROM sys.foreign_keys where name = 'UQ_Homeowners_JobNumber' and parent_object_id = OBJECT_ID(N'dbo.Homeowners')") ==
+                1;
+                if (homeOwnersJobNumberConstraintExists)
                 {
+                    droppedHomeownersConstraint = true;
                     database.Execute(@"ALTER TABLE HomeOwners DROP CONSTRAINT UQ_Homeowners_JobNumber");
                 }
-                catch
-                {
 
-                }
                 database.Execute(@"UPDATE HomeOwners SET JobID = NULL");
                 database.Execute(_deleteSql);
-                try
+
+                if (droppedHomeownersConstraint)
                 {
                     database.Execute(@"ALTER TABLE HomeOwners ADD CONSTRAINT UQ_Homeowners_JobNumber
                                     UNIQUE (JobId, HomeownerNumber)");
-                }
-                catch
-                {
-
                 }
             }
         }
