@@ -28,7 +28,7 @@ $accountingApiBaseUri = "http://accountingtest.davidweekleyhomes.com/api/"
 $jobServiceApiBaseUri = "http://jobservice.davidweekleyhomes.com"
 
 $accountingEndPointServer = "wkcorpappdev1"
-$TIPSEndpointServer = "wkcorpappdev2"
+$TIPSEndpointServer = "wkvtipstest"
 
 # Databaus configuration
 $fileShareDataBus = "\\wkcorpmgmt\DataBus\Test"
