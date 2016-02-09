@@ -158,6 +158,7 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Handlers\Jobs\CommunityAddedHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\ShowcaseResetToDirtHandlerTester.cs" />
     <Compile Include="Services\EmployeeServiceTester.cs" />
     <Compile Include="Services\HomeOwnerServiceTester.cs" />
     <Compile Include="Handlers\Jobs\JobSaleCancelledHandlerTester.cs" />
@@ -199,6 +200,7 @@
     <Compile Include="SetUp\EntityBuilder.cs" />
     <Compile Include="HandlerTester.cs" />
     <Compile Include="SetUp\ProjectEntityBuilder.cs" />
+    <Compile Include="SetUp\TaskEntityBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
