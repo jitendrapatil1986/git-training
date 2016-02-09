@@ -1,14 +1,8 @@
 ﻿namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 {
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Runtime.InteropServices;
     using Core.Entities;
-    using Core.Extensions;
     using NUnit.Framework;
-    using Should;
     using TIPS.Events.JobEvents;
 
     [TestFixture]
