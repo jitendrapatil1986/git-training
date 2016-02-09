@@ -17,7 +17,7 @@ namespace Warranty.Server.IntegrationTests.Services
         }
 
         [TestCase("0", "0", "00000")]
-        [TestCase("1", "000001", "321")]
+        [TestCase("000001", "000001", "321")]
         [TestCase("100", "00100", "32100")]
         [TestCase("00y","00y","00y0")]
         [TestCase("1", "1", "   101")]

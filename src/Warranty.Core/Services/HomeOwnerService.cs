@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NPoco;
+using NServiceBus.Logging;
 using TIPS.Events.Models;
 using Warranty.Core.Entities;
 using Warranty.Server.Handlers.Jobs;
@@ -12,23 +13,11 @@ namespace Warranty.Core.Services
     public class HomeOwnerService : IHomeOwnerService
     {
         private readonly IDatabase _database;
+        private readonly ILog _log = LogManager.GetLogger(typeof(HomeOwnerService));
 
         public HomeOwnerService(IDatabase database)
         {
             _database = database;
-        }
-
-        private void SetIfNotNull<T>(List<T> list, Func<T, bool> condition, Action<T> setter)
-        {
-            if (list == null) return;
-            if (condition == null) return;
-            if (setter == null) return;
-
-            var check = list.FirstOrDefault(condition);
-            if (check != null)
-            {
-                setter(check);
-            }
         }
 
         public void AssignToJob(HomeOwner homeOwner, Job job)
@@ -80,12 +69,31 @@ namespace Warranty.Core.Services
                         homeOwnerInfo.FirstName);
                 }
 
-                SetIfNotNull(homeOwnerInfo.PhoneNumbers, x => x.IsPrimary,
-                    x => homeOwner.HomePhone = x.Number);
-                SetIfNotNull(homeOwnerInfo.Emails, x => x.IsPrimary,
-                    x => homeOwner.EmailAddress = x.Address);
+                if (homeOwnerInfo.PhoneNumbers != null)
+                {
+                    var primaryPhone = homeOwnerInfo.PhoneNumbers.Where(x => x.IsPrimary).ToList();
+                    if (primaryPhone.Count >= 1)
+                    {
+                        if (primaryPhone.Count > 1)
+                        {
+                            _log.WarnFormat("Multiple primary phone numbers for homeowner '{0}', using first primary phone number '{1}'", homeOwner.HomeOwnerName, primaryPhone[0].Number);
+                        }
+                        homeOwner.HomePhone = primaryPhone[0].Number;
+                    }
+                }
+                if (homeOwnerInfo.Emails != null)
+                {
+                    var primaryEmail = homeOwnerInfo.Emails.Where(x => x.IsPrimary).ToList();
+                    if (primaryEmail.Count >= 1)
+                    {
+                        if (primaryEmail.Count > 1)
+                        {
+                            _log.WarnFormat("Multiple primary emails for homeowner '{0}', using first primary email '{1}'", homeOwner.HomeOwnerName, primaryEmail[0].Address);
+                        }
+                        homeOwner.EmailAddress = primaryEmail[0].Address;
+                    }
+                }
             }
-
             return homeOwner;
         }
     }

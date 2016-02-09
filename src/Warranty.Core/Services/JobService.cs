@@ -36,38 +36,49 @@ namespace Warranty.Core.Services
             return job;
         }
 
-        public Job CreateJobFromSale(Sale sale)
+        public void UpdateExistingJob(Job job, Sale sale)
         {
+            using (_database)
+            {
+                var updatedJob = UpdateJobFromSale(job, sale);
+                _database.Update(updatedJob);
+            }
+        }
+
+        private Job UpdateJobFromSale(Job job, Sale sale)
+        {
+            if(job == null)
+                throw new ArgumentNullException("job");
             if (sale == null)
                 throw new ArgumentNullException("sale");
 
             var builder = _employeeService.GetEmployeeByNumber(sale.BuilderEmployeeID);
             var salesConsultant = _employeeService.GetEmployeeByNumber(sale.SalesConsultantEmployeeID);
             var community = _communityService.GetCommunityByNumber(sale.CommunityNumber);
- 
-            var job = new Job
-            {
-                JobId = Guid.NewGuid(),
-                JobNumber = sale.JobNumber,
-                PlanNumber = sale.PlanNumber,
-                Elevation = sale.Elevation,
-                AddressLine = sale.AddressLine1,
-                City = sale.AddressCity,
-                StateCode = sale.AddressStateAbbreviation,
-                PostalCode = sale.AddressZipCode,
-                PlanType = sale.JobType,
-                CloseDate = sale.CloseDate,
-                CreatedBy = "Warranty.Server",
-                CreatedDate = DateTime.Now,
-                JdeIdentifier = sale.JobNumber,
-                PlanName = sale.PlanName,
-                PlanTypeDescription = null,
-                Swing = sale.Swing
-            };
+
+            job.JobNumber = sale.JobNumber;
+            job.PlanNumber = sale.PlanNumber;
+            job.Elevation = sale.Elevation;
+            job.AddressLine = sale.AddressLine1;
+            job.City = sale.AddressCity;
+            job.StateCode = sale.AddressStateAbbreviation;
+            job.PostalCode = sale.AddressZipCode;
+            job.PlanType = sale.JobType;
+            job.CloseDate = sale.CloseDate;
+            job.CreatedBy = "Warranty.Server";
+            job.CreatedDate = DateTime.Now;
+            job.JdeIdentifier = sale.JobNumber;
+            job.PlanName = sale.PlanName;
+            job.PlanTypeDescription = null;
+            job.Swing = sale.Swing;
 
             if (sale.LegalDescription != null)
             {
                 job.LegalDescription = sale.LegalDescription.ToString();
+            }
+            else
+            {
+                job.LegalDescription = null;
             }
             if (community != null)
             {
@@ -89,8 +100,16 @@ namespace Warranty.Core.Services
             {
                 job.WarrantyExpirationDate = sale.CloseDate.Value.AddYears(10);
             }
-
             return job;
+        }
+
+        public Job CreateJobFromSale(Sale sale)
+        {
+            if (sale == null)
+                throw new ArgumentNullException("sale");
+
+            var job = new Job();
+            return UpdateJobFromSale(job, sale);
         }
     }
 }
