@@ -43,6 +43,7 @@ Role "Nsb" -Incremental {
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='Accounting.API.BaseUri']/@value" $accountingApiBaseUri
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Accounting.Events']/@Endpoint" "Accounting.Server@$accountingEndPointServer"
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Accounting.Commands']/@Endpoint" "Accounting.Server@$accountingEndPointServer"
+    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='TIPS.Server']/@Endpoint" "TIPS.Server@$TIPSEndpointServer"
 	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='NServiceBus.FileShareDataBus']/@value" $fileShareDataBus
         
     #Install NSB Service
