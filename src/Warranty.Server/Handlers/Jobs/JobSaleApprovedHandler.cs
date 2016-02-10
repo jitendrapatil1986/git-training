@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Text;
+using System.Threading.Tasks;
 using log4net;
 using NPoco;
 using NServiceBus;
 using TIPS.Events.JobEvents;
+using Warranty.Core.Enumerations;
 using Warranty.Core.Services;
 using Job = Warranty.Core.Entities.Job;
 
@@ -16,13 +18,17 @@ namespace Warranty.Server.Handlers.Jobs
         private readonly IJobService _jobService;
         private readonly IHomeOwnerService _homeOwnerService;
         private ICommunityService _communityService;
+        private IEmployeeService _employeeService;
+        private ITaskService _taskService;
 
-        public JobSaleApprovedHandler(IDatabase database, IJobService jobService, IHomeOwnerService homeOwnerService, ICommunityService communityService)
+        public JobSaleApprovedHandler(IDatabase database, IJobService jobService, IHomeOwnerService homeOwnerService, ICommunityService communityService, IEmployeeService employeeService, ITaskService taskService)
         {
             _database = database;
             _jobService = jobService;
             _homeOwnerService = homeOwnerService;
             _communityService = communityService;
+            _employeeService = employeeService;
+            _taskService = taskService;
         }
 
         public void Validate(JobSaleApproved message)
@@ -57,6 +63,12 @@ namespace Warranty.Server.Handlers.Jobs
                     _database.Delete(previousHomeOwner);
                 }
             }
+        }
+
+        public void GenerateTodos(string communityNumber, string jobNumber)
+        {
+            var wsr = _employeeService.GetWsrByCommunity(communityNumber);
+            var currentTodos = _taskService.GetTasksByJobNumber(jobNumber);
         }
 
         public void Handle(JobSaleApproved message)

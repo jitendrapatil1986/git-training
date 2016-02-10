@@ -10,5 +10,7 @@ namespace Warranty.Core.Services
         Employee GetEmployeeByNumber(int? employeeNumber);
 
         Employee GetEmployeeByNumber(string employeeNumber);
+
+        Employee GetWsrByCommunity(string communityNumber);
     }
 }

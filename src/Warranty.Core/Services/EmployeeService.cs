@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -75,6 +76,26 @@ namespace Warranty.Core.Services
                 var employeesInMarket = _database.Fetch<string>(string.Format(sql, markets));
                 return employeesInMarket.ToArray();
             }
+        }
+
+        public Employee GetWsrByCommunity(string communityNumber)
+        {
+            if (string.IsNullOrWhiteSpace(communityNumber))
+                throw new ArgumentNullException("communityNumber");
+
+            var selectSql = @"SELECT Employees.EmployeeId
+                                  ,Employees.EmployeeNumber
+                                  ,Employees.EmployeeName
+                                  ,Employees.CreatedDate
+                                  ,Employees.CreatedBy
+                                  ,Employees.UpdatedDate
+                                  ,Employees.UpdatedBy
+                              FROM CommunityAssignments Assignments
+                              JOIN Communities Community on Community.CommunityId = Assignments.CommunityId
+                              JOIN Employees Employees on Employees.EmployeeId = Assignments.EmployeeId
+                              WHERE CommunityNumber = @0";
+
+            return _database.SingleOrDefault<Employee>(selectSql, communityNumber);
         }
 
         public string GetEmployeeMarkets()
