@@ -37,7 +37,12 @@ namespace Warranty.Core.Services
 
         public void DeleteTask(Guid jobId, TaskType taskType)
         {
-            _database.Delete(string.Format("DELETE FROM Tasks WHERE ReferenceId = '{0}' AND TaskType = {1}", jobId, taskType));
+            _database.Execute(string.Format("DELETE FROM Tasks WHERE ReferenceId = '{0}' AND TaskType = {1}", jobId, taskType.Value));
+        }
+
+        public List<Task> GetTasksByJobId(Guid jobId)
+        {
+            return _database.Fetch<Task>(string.Format("WHERE ReferenceId = '{0}'", jobId));
         }
 
         public void CreateTask(Guid jobId, Guid wsrEmployeeId, TaskType taskType)

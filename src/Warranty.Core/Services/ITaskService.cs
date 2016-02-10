@@ -14,5 +14,7 @@ namespace Warranty.Core.Services
         void CreateTask(Guid jobId, Guid wsrEmployeeId, TaskType taskType);
 
         void DeleteTask(Guid jobId, TaskType taskType);
+
+        List<Task> GetTasksByJobId(Guid jobId);
     }
 }
