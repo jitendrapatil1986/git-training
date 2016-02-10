@@ -27,14 +27,26 @@ namespace Warranty.Core.Services
             _database = database;
         }
 
+        public bool TaskExists(Guid jobId, TaskType taskType)
+        {
+            using (_database)
+            {
+                return _database.Single<int>(string.Format("SELECT COUNT(1) FROM Tasks WHERE ReferenceId = '{0}' AND TaskType = {1}", jobId, taskType)) >= 1;
+            }
+        }
+
+        public void CreateTaskIfDoesntExist(Guid jobId, Guid wsrEmployeeId, TaskType taskType)
+        {
+            if (!TaskExists(jobId, taskType))
+            {
+                CreateTask(jobId, wsrEmployeeId, taskType);
+            }
+        }
+
         public void CreateTask(Guid jobId, Guid wsrEmployeeId, TaskType taskType)
         {
             using (_database)
             {
-                var taskExists = _database.Single<int>(string.Format("SELECT COUNT(1) FROM Tasks WHERE ReferenceId = '{0}' AND TaskType = {1}", jobId, taskType)) >= 1;
-                if(taskExists)
-                    throw new Exception(string.Format("Task of type '{0}' already exists on job '{1}'", taskType, jobId));
-
                 var task = new Task
                 {
                     EmployeeId = wsrEmployeeId,
