@@ -38,6 +38,11 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             var job = GetSaved<Job>();
             var homeOwner = GetSaved<HomeOwner>(h => { h.JobId = job.JobId; });
 
+            job.CurrentHomeOwnerId = homeOwner.HomeOwnerId;
+            using (TestDatabase)
+            {
+                TestDatabase.Update(job);
+            }
             var homeOwnersFromDb = _homeOwnerService.GetHomeOwnerByJobNumber(job.JobNumber);
             homeOwnersFromDb.ShouldNotBeNull();
 
