@@ -1,5 +1,6 @@
 ﻿namespace Warranty.Server.Handlers.Jobs
 {
+    using System;
     using Core.Entities;
     using Extensions;
     using log4net;
@@ -24,6 +25,12 @@
             {
                 _log.Info(string.Format("Showcase {0} was reset to dirt but not found.", message.JobNumber));
                 return;
+            }
+
+            if (job.CurrentHomeOwnerId != null)
+            {
+                _log.Error(string.Format("Job {0} received a showcase reset to dirt message but has a homeowner.", job.JobNumber));
+                throw new ArgumentException(string.Format("Job {0} has a homeowner and can not be reset to dirt", job.JobNumber));
             }
 
             var tasks = _database.Fetch<Task>("where ReferenceId = @0", job.JobId);
