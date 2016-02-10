@@ -28,6 +28,11 @@ namespace Warranty.Server.IntegrationTests.Services
             return TestDatabase.SingleOrDefault<Task>(string.Format("WHERE ReferenceId = '{0}' AND TaskType = {1}", jobId, taskType.Value));
         }
 
+        private List<Task> GetTasksByJobId(Guid jobId)
+        {
+            return TestDatabase.Fetch<Task>(string.Format("WHERE ReferenceId = '{0}'", jobId));
+        }
+
         private void AssertTaskIsCorrect(Task task, Job job, Employee wsr, TaskType taskType)
         {
             task.ShouldNotBeNull();
@@ -62,6 +67,24 @@ namespace Warranty.Server.IntegrationTests.Services
             _taskService.CreateTaskIfDoesntExist(job.JobId, wsr.EmployeeId, taskType);
 
             AssertTaskIsCorrect(GetTask(job.JobId, taskType), job, wsr, taskType);
+        }
+
+        [Test]
+        public void Check_CreateTaskIfDoesntExist_DoesntCreateTaskIfExists()
+        {
+            var taskType = TaskType.JobStage3;
+            var job = Get<Job>();
+            var wsr = Get<Employee>();
+            GetTask(job.JobId, taskType).ShouldBeNull();
+
+            _taskService.CreateTaskIfDoesntExist(job.JobId, wsr.EmployeeId, taskType);
+            var task = GetTask(job.JobId, taskType);
+            AssertTaskIsCorrect(task, job, wsr, taskType);
+
+            _taskService.CreateTaskIfDoesntExist(job.JobId, wsr.EmployeeId, taskType);
+            var allTasks = GetTasksByJobId(job.JobId);
+            allTasks.Count.ShouldEqual(1);
+            AssertTaskIsCorrect(allTasks.First(), job, wsr, taskType);
         }
     }
 }
