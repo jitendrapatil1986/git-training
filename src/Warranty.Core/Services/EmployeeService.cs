@@ -14,11 +14,13 @@ namespace Warranty.Core.Services
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
+        private ICommunityService _communityService;
 
-        public EmployeeService(IDatabase database, IUserSession userSession)
+        public EmployeeService(IDatabase database, IUserSession userSession, ICommunityService communityService)
         {
             _database = database;
             _userSession = userSession;
+            _communityService = communityService;
         }
 
         public Employee GetEmployeeByNumber(int? employeeNumber)
@@ -95,7 +97,7 @@ namespace Warranty.Core.Services
                               JOIN Employees Employees on Employees.EmployeeId = Assignments.EmployeeId
                               WHERE CommunityNumber = @0";
 
-            return _database.SingleOrDefault<Employee>(selectSql, communityNumber);
+            return _database.SingleOrDefault<Employee>(selectSql, _communityService.GetWarrantyCommunityNumber(communityNumber));
         }
 
         public string GetEmployeeMarkets()

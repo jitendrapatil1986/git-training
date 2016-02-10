@@ -583,9 +583,11 @@
     <Compile Include="Services\IHomeOwnerService.cs" />
     <Compile Include="Services\IJobService.cs" />
     <Compile Include="Services\ISurveyService.cs" />
+    <Compile Include="Services\ITaskService.cs" />
     <Compile Include="Services\JobService.cs" />
     <Compile Include="Services\SurveyClientSystemMonitor.cs" />
     <Compile Include="Services\SurveyService.cs" />
+    <Compile Include="Services\TaskService.cs" />
     <Compile Include="Services\ToDoFilterCookieManager.cs" />
     <Compile Include="Services\IManageToDoFilterCookie.cs" />
     <Compile Include="Services\IServiceCallCreateService.cs" />

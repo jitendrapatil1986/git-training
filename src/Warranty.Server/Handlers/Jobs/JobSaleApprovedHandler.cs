@@ -65,10 +65,13 @@ namespace Warranty.Server.Handlers.Jobs
             }
         }
 
-        public void GenerateTodos(string communityNumber, string jobNumber)
+        public void GenerateTodos(string communityNumber, Guid jobId)
         {
             var wsr = _employeeService.GetWsrByCommunity(communityNumber);
-            var currentTodos = _taskService.GetTasksByJobNumber(jobNumber);
+
+            _taskService.CreateTaskIfDoesntExist(jobId, wsr.EmployeeId, TaskType.JobStage3);
+            _taskService.CreateTaskIfDoesntExist(jobId, wsr.EmployeeId, TaskType.JobStage7);
+            _taskService.CreateTaskIfDoesntExist(jobId, wsr.EmployeeId, TaskType.JobStage10);
         }
 
         public void Handle(JobSaleApproved message)
@@ -105,6 +108,8 @@ namespace Warranty.Server.Handlers.Jobs
 
                 _database.Insert(homeOwner);
                 _database.Update(job);
+
+                GenerateTodos(message.Sale.CommunityNumber, job.JobId);
             }
         }
     }

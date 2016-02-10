@@ -9,14 +9,6 @@ using Task = Warranty.Core.Entities.Task;
 
 namespace Warranty.Core.Services
 {
-    public interface ITaskService
-    {
-        void CreateTask(Guid jobId, Guid wsrEmployeeId, TaskType taskType);
-
-        List<Task> GetTasksByJobNumber(string jobNumber);
-
-        List<Task> GetTasksByCommunityNumber(string communityNumber);
-    }
 
     public class TaskService : ITaskService
     {
@@ -31,7 +23,7 @@ namespace Warranty.Core.Services
         {
             using (_database)
             {
-                return _database.Single<int>(string.Format("SELECT COUNT(1) FROM Tasks WHERE ReferenceId = '{0}' AND TaskType = {1}", jobId, taskType)) >= 1;
+                return _database.Single<int>(string.Format("SELECT COUNT(1) FROM Tasks WHERE ReferenceId = '{0}' AND TaskType = {1}", jobId, taskType.Value)) >= 1;
             }
         }
 
@@ -41,6 +33,11 @@ namespace Warranty.Core.Services
             {
                 CreateTask(jobId, wsrEmployeeId, taskType);
             }
+        }
+
+        public void DeleteTask(Guid jobId, TaskType taskType)
+        {
+            _database.Delete(string.Format("DELETE FROM Tasks WHERE ReferenceId = '{0}' AND TaskType = {1}", jobId, taskType));
         }
 
         public void CreateTask(Guid jobId, Guid wsrEmployeeId, TaskType taskType)
@@ -57,53 +54,5 @@ namespace Warranty.Core.Services
                 _database.Insert(task);
             }
         }
-
-        public List<Task> GetTasksByJobNumber(string jobNumber)
-        {
-            const string sql = @"SELECT 
-                                    T.TaskId,
-                                    T.EmployeeId,
-                                    T.ReferenceId,
-                                    T.Description,
-                                    T.IsComplete,
-                                    T.TaskType,
-                                    T.CreatedDate,
-                                    T.CreatedBy,
-                                    T.UpdatedDate,
-                                    T.UpdatedBy,
-                                    T.IsNoAction
-                                FROM 
-                                    Tasks T 
-                                    INNER JOIN Jobs J ON T.ReferenceId = J.JobId
-                                WHERE 
-                                    J.JobNumber = {0}";
-            return _database.Fetch<Task>(string.Format(sql, jobNumber));
-        }
-
-        public List<Task> GetTasksByCommunityNumber(string communityNumber)
-        {
-            const string sql = @"SELECT 
-                                    T.TaskId,
-                                    T.EmployeeId,
-                                    T.ReferenceId,
-                                    T.Description,
-                                    T.IsComplete,
-                                    T.TaskType,
-                                    T.CreatedDate,
-                                    T.CreatedBy,
-                                    T.UpdatedDate,
-                                    T.UpdatedBy,
-                                    T.IsNoAction
-                                FROM Tasks T 
-                                    INNER JOIN Jobs J
-                                        ON T.ReferenceId = J.JobId
-                                    INNER JOIN Communities C 
-                                        ON J.CommunityId = C.CommunityId
-                                    INNER JOIN Employees E
-                                        ON E.EmployeeId = T.EmployeeId
-                                WHERE 
-                                    C.CommunityNumber = {0}";
-            return _database.Fetch<Task>(string.Format(sql, communityNumber));
-        } 
     }
 }

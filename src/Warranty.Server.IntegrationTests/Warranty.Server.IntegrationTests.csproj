@@ -189,6 +189,7 @@
     <Compile Include="IntegrationSetUpFixture.cs" />
     <Compile Include="CommandHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentIdUpdatedHandlerTester.cs" />
+    <Compile Include="Services\TaskServiceTester.cs" />
     <Compile Include="SetUp\CityEntityBuilder.cs" />
     <Compile Include="SetUp\CommunityEntityBuilder.cs" />
     <Compile Include="SetUp\DivisionEntityBuilder.cs" />
