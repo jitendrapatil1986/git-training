@@ -32,7 +32,7 @@ namespace Warranty.Server.Handlers.Jobs
 
                 if (homeOwner == null)
                 {
-                    homeOwner = new HomeOwner { HomeOwnerName = message.BuyerName, JobId = job.JobId };
+                    homeOwner = new HomeOwner { HomeOwnerName = message.BuyerName, JobId = job.JobId, HomeOwnerNumber = 1};
                     _database.Insert(homeOwner);
                     job.CurrentHomeOwnerId = homeOwner.HomeOwnerId;
                     _database.Update(job);
