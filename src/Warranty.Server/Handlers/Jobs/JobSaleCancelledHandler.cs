@@ -32,6 +32,8 @@ namespace Warranty.Server.Handlers.Jobs
                 {
                     _log.Info(string.Format(@"Deleting HomeOwner: Name {0}, Number {1}, Phone {2}, Job Number {3}",
                         homeOwner.HomeOwnerName, homeOwner.HomeOwnerNumber, homeOwner.HomePhone, job.JobNumber));
+                    job.CurrentHomeOwnerId = null;
+                    _database.Update(job);
                     _database.Delete(homeOwner);
                 }
                 else
