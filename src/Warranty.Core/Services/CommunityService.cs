@@ -13,7 +13,7 @@ namespace Warranty.Core.Services
             _database = database;
         }
 
-        private string GetWarrantyCommunityNumber(string communityNumber)
+        public string GetWarrantyCommunityNumber(string communityNumber)
         {
             if (communityNumber.Length > 4)
                 return communityNumber.Substring(0, 4);
