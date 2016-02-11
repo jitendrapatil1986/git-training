@@ -158,19 +158,18 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Handlers\Jobs\CommunityAddedHandlerTester.cs" />
+    <Compile Include="Services\CommunityServiceTester.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseResetToDirtHandlerTester.cs" />
     <Compile Include="Services\EmployeeServiceTester.cs" />
     <Compile Include="Services\HomeOwnerServiceTester.cs" />
     <Compile Include="Handlers\Jobs\JobSaleCancelledHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobSaleApprovedHandlerTester.cs" />
-    <Compile Include="Handlers\Jobs\JobHomeBuyerNameUpdatedHandlerEdgeCaseTester.cs" />
     <Compile Include="Handlers\Jobs\JobPrimaryBuilderUpdatedHandlerNewBuilderTester.cs" />
     <Compile Include="Handlers\Jobs\JobPrimaryBuilderUpdatedHandlerExistingBuilderTester.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateAddedHandlerTester.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobElevationUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobClosedHandlerTester.cs" />
-    <Compile Include="Handlers\Jobs\JobHomeBuyerNameUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobResetToDirtHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobPlanUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandlerTester.cs" />
