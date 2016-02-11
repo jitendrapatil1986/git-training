@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using log4net;
@@ -65,22 +66,13 @@ namespace Warranty.Server.Handlers.Jobs
 
         public void GenerateTodo(Guid jobId, int stage)
         {
-            TaskType taskType = null;
-            switch (stage)
+            if (stage == 3 || stage == 7 || stage == 10)
             {
-                case 3:
-                    taskType = TaskType.JobStage3;
-                    break;
-                case 7:
-                    taskType = TaskType.JobStage7;
-                    break;
-                case 10:
-                    taskType = TaskType.JobStage10;
-                    break;
-            }
-            if (taskType != null)
-            {
-                _taskService.CreateTaskUnlessExists(jobId, taskType);
+                var taskType = TaskType.GetAll().SingleOrDefault(t => t.Stage.HasValue && t.Stage == stage);
+                if (taskType != null)
+                {
+                    _taskService.CreateTaskUnlessExists(jobId, taskType);
+                }
             }
         }
 
