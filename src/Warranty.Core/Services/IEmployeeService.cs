@@ -1,4 +1,5 @@
-﻿using Warranty.Core.Entities;
+﻿using System;
+using Warranty.Core.Entities;
 
 namespace Warranty.Core.Services
 {
@@ -12,5 +13,7 @@ namespace Warranty.Core.Services
         Employee GetEmployeeByNumber(string employeeNumber);
 
         Employee GetWsrByCommunity(string communityNumber);
+
+        Employee GetWsrByJobId(Guid jobId);
     }
 }

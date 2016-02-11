@@ -65,7 +65,7 @@ namespace Warranty.Server.Handlers.Jobs
             }
         }
 
-        public void GenerateTodo(string communityNumber, Guid jobId, int stage)
+        public void GenerateTodo(Guid jobId, int stage)
         {
             TaskType taskType = null;
             switch (stage)
@@ -82,8 +82,7 @@ namespace Warranty.Server.Handlers.Jobs
             }
             if (taskType != null)
             {
-                var wsr = _employeeService.GetWsrByCommunity(communityNumber);
-                _taskService.CreateTaskIfDoesntExist(jobId, wsr.EmployeeId, taskType);
+                _taskService.CreateTaskUnlessExists(jobId, taskType);
             }
         }
 
@@ -122,7 +121,7 @@ namespace Warranty.Server.Handlers.Jobs
                 _database.Insert(homeOwner);
                 _database.Update(job);
 
-                GenerateTodo(message.Sale.CommunityNumber, job.JobId, job.Stage);
+                GenerateTodo(job.JobId, job.Stage);
             }
         }
     }

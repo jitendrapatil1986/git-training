@@ -41,10 +41,19 @@ namespace Warranty.Server.IntegrationTests.Services
         public void Check_CreateTask()
         {
             var taskType = TaskType.JobStage3;
-            var job = Get<Job>();
+            var community = Get<Community>();
+            var job = Get<Job>(j => j.CommunityId = community.CommunityId);
             var wsr = Get<Employee>();
+            using (TestDatabase)
+            {
+                TestDatabase.Insert(new CommunityAssignment
+                {
+                    CommunityId = community.CommunityId,
+                    EmployeeId = wsr.EmployeeId
+                });
+            }
 
-            _taskService.CreateTask(job.JobId, wsr.EmployeeId, taskType);
+            _taskService.CreateTask(job.JobId, taskType);
 
             var task = GetTask(job.JobId, taskType);
 
@@ -55,11 +64,20 @@ namespace Warranty.Server.IntegrationTests.Services
         public void Check_CreateTaskIfDoesntExist_CreatesTaskIfDoesntExist()
         {
             var taskType = TaskType.JobStage3;
-            var job = Get<Job>();
+            var community = Get<Community>();
+            var job = Get<Job>(j => j.CommunityId = community.CommunityId);
             var wsr = Get<Employee>();
+            using (TestDatabase)
+            {
+                TestDatabase.Insert(new CommunityAssignment
+                {
+                    CommunityId = community.CommunityId,
+                    EmployeeId = wsr.EmployeeId
+                });
+            }
             GetTask(job.JobId, taskType).ShouldBeNull();
 
-            _taskService.CreateTaskIfDoesntExist(job.JobId, wsr.EmployeeId, taskType);
+            _taskService.CreateTaskUnlessExists(job.JobId, taskType);
 
             AssertTaskIsCorrect(GetTask(job.JobId, taskType), job, wsr, taskType);
         }
@@ -68,15 +86,25 @@ namespace Warranty.Server.IntegrationTests.Services
         public void Check_CreateTaskIfDoesntExist_DoesntCreateTaskIfExists()
         {
             var taskType = TaskType.JobStage3;
-            var job = Get<Job>();
+            var community = Get<Community>();
+            var job = Get<Job>(j => j.CommunityId = community.CommunityId);
             var wsr = Get<Employee>();
+            using (TestDatabase)
+            {
+                TestDatabase.Insert(new CommunityAssignment
+                {
+                    CommunityId = community.CommunityId,
+                    EmployeeId = wsr.EmployeeId
+                });
+            }
+
             GetTask(job.JobId, taskType).ShouldBeNull();
 
-            _taskService.CreateTaskIfDoesntExist(job.JobId, wsr.EmployeeId, taskType);
+            _taskService.CreateTaskUnlessExists(job.JobId, taskType);
             var task = GetTask(job.JobId, taskType);
             AssertTaskIsCorrect(task, job, wsr, taskType);
 
-            _taskService.CreateTaskIfDoesntExist(job.JobId, wsr.EmployeeId, taskType);
+            _taskService.CreateTaskUnlessExists(job.JobId, taskType);
             var allTasks = _taskService.GetTasksByJobId(job.JobId);
             allTasks.Count.ShouldEqual(1);
             AssertTaskIsCorrect(allTasks.First(), job, wsr, taskType);

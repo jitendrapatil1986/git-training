@@ -9,9 +9,9 @@ namespace Warranty.Core.Services
     {
         bool TaskExists(Guid jobId, TaskType taskType);
 
-        void CreateTaskIfDoesntExist(Guid jobId, Guid wsrEmployeeId, TaskType taskType);
+        void CreateTaskUnlessExists(Guid jobId, TaskType taskType);
 
-        void CreateTask(Guid jobId, Guid wsrEmployeeId, TaskType taskType);
+        void CreateTask(Guid jobId, TaskType taskType);
 
         void DeleteTask(Guid jobId, TaskType taskType);
 

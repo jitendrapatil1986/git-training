@@ -69,9 +69,9 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
                 });
             }
 
-            _taskService.CreateTaskIfDoesntExist(job.JobId, wsr.EmployeeId, TaskType.JobStage3);
-            _taskService.CreateTaskIfDoesntExist(job.JobId, wsr.EmployeeId, TaskType.JobStage7);
-            _taskService.CreateTaskIfDoesntExist(job.JobId, wsr.EmployeeId, TaskType.JobStage10);
+            _taskService.CreateTaskUnlessExists(job.JobId, TaskType.JobStage3);
+            _taskService.CreateTaskUnlessExists(job.JobId, TaskType.JobStage7);
+            _taskService.CreateTaskUnlessExists(job.JobId, TaskType.JobStage10);
 
             var allTasks = _taskService.GetTasksByJobId(job.JobId);
             allTasks.Count.ShouldEqual(3);

@@ -43,5 +43,24 @@ namespace Warranty.Server.IntegrationTests.Services
 
             queriedEmployee.EmployeeId.ShouldEqual(employee.EmployeeId);
         }
+
+        [Test]
+        public void GetWsrByJobId()
+        {
+            var community = Get<Community>();
+            var wsr = Get<Employee>();
+            var job = Get<Job>(j => j.CommunityId = community.CommunityId);
+            using (TestDatabase)
+            {
+                TestDatabase.Insert(new CommunityAssignment
+                {
+                    CommunityId = community.CommunityId,
+                    EmployeeId = wsr.EmployeeId
+                });
+            }
+
+            var wsrFromQuery = _employeeService.GetWsrByJobId(job.JobId);
+            wsrFromQuery.EmployeeId.ShouldEqual(wsr.EmployeeId);
+        }
     }
 }

@@ -80,6 +80,27 @@ namespace Warranty.Core.Services
             }
         }
 
+        public Employee GetWsrByJobId(Guid jobId)
+        {
+            var sql = string.Format(@"select 
+                                            e.EmployeeId
+                                            ,e.EmployeeNumber
+                                            ,e.EmployeeName
+                                            ,e.CreatedDate
+                                            ,e.CreatedBy
+                                            ,e.UpdatedDate
+                                            ,e.UpdatedBy
+                                        from jobs j
+                                            join Communities c on c.CommunityId = j.CommunityId
+                                            join CommunityAssignments ca on ca.CommunityId = c.CommunityId
+                                            join Employees e on e.EmployeeId = ca.EmployeeId
+                                        where j.JobId = '{0}'", jobId);
+            using (_database)
+            {
+                return _database.SingleOrDefault<Employee>(sql);
+            }
+        }
+
         public Employee GetWsrByCommunity(string communityNumber)
         {
             if (string.IsNullOrWhiteSpace(communityNumber))

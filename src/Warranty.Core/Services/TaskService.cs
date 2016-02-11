@@ -13,10 +13,12 @@ namespace Warranty.Core.Services
     public class TaskService : ITaskService
     {
         private IDatabase _database;
+        private IEmployeeService _employeeService;
 
-        public TaskService(IDatabase database)
+        public TaskService(IDatabase database, IEmployeeService employeeService)
         {
             _database = database;
+            _employeeService = employeeService;
         }
 
         public bool TaskExists(Guid jobId, TaskType taskType)
@@ -27,11 +29,11 @@ namespace Warranty.Core.Services
             }
         }
 
-        public void CreateTaskIfDoesntExist(Guid jobId, Guid wsrEmployeeId, TaskType taskType)
+        public void CreateTaskUnlessExists(Guid jobId, TaskType taskType)
         {
             if (!TaskExists(jobId, taskType))
             {
-                CreateTask(jobId, wsrEmployeeId, taskType);
+                CreateTask(jobId, taskType);
             }
         }
 
@@ -45,13 +47,16 @@ namespace Warranty.Core.Services
             return _database.Fetch<Task>(string.Format("WHERE ReferenceId = '{0}'", jobId));
         }
 
-        public void CreateTask(Guid jobId, Guid wsrEmployeeId, TaskType taskType)
+        public void CreateTask(Guid jobId, TaskType taskType)
         {
+
+            var wsr = _employeeService.GetWsrByJobId(jobId);
+
             using (_database)
             {
                 var task = new Task
                 {
-                    EmployeeId = wsrEmployeeId,
+                    EmployeeId = wsr.EmployeeId,
                     TaskType = taskType,
                     Description = taskType.DisplayName,
                     ReferenceId = jobId
