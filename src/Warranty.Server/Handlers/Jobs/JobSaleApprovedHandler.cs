@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using log4net;
 using NPoco;
 using NServiceBus;
 using TIPS.Events.JobEvents;
+using Warranty.Core.Enumerations;
 using Warranty.Core.Services;
 using Job = Warranty.Core.Entities.Job;
 
@@ -16,13 +19,15 @@ namespace Warranty.Server.Handlers.Jobs
         private readonly IJobService _jobService;
         private readonly IHomeOwnerService _homeOwnerService;
         private ICommunityService _communityService;
+        private ITaskService _taskService;
 
-        public JobSaleApprovedHandler(IDatabase database, IJobService jobService, IHomeOwnerService homeOwnerService, ICommunityService communityService)
+        public JobSaleApprovedHandler(IDatabase database, IJobService jobService, IHomeOwnerService homeOwnerService, ICommunityService communityService, ITaskService taskService)
         {
             _database = database;
             _jobService = jobService;
             _homeOwnerService = homeOwnerService;
             _communityService = communityService;
+            _taskService = taskService;
         }
 
         public void Validate(JobSaleApproved message)
@@ -55,6 +60,18 @@ namespace Warranty.Server.Handlers.Jobs
                     job.CurrentHomeOwnerId = null;
                     _database.Update(job);
                     _database.Delete(previousHomeOwner);
+                }
+            }
+        }
+
+        public void GenerateTodo(Guid jobId, int stage)
+        {
+            if (stage == 3 || stage == 7 || stage == 10)
+            {
+                var taskType = TaskType.GetAll().SingleOrDefault(t => t.Stage.HasValue && t.Stage == stage);
+                if (taskType != null)
+                {
+                    _taskService.CreateTaskUnlessExists(jobId, taskType);
                 }
             }
         }
@@ -93,6 +110,8 @@ namespace Warranty.Server.Handlers.Jobs
 
                 _database.Insert(homeOwner);
                 _database.Update(job);
+
+                GenerateTodo(job.JobId, job.Stage);
             }
         }
     }

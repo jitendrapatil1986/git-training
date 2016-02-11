@@ -1,10 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using log4net;
 using NPoco;
 using NServiceBus;
 using Warranty.Core.DataAccess;
 using Warranty.Core.Entities;
 using TIPS.Events.JobEvents;
+using Warranty.Core.Enumerations;
+using Warranty.Core.Services;
 using Warranty.Server.Extensions;
 
 namespace Warranty.Server.Handlers.Jobs
@@ -14,11 +17,13 @@ namespace Warranty.Server.Handlers.Jobs
         private readonly SqlServerDatabase _database;
         private readonly ILog _log = LogManager.GetLogger(typeof (JobSaleCancelledHandler));
         private readonly IHomeOwnerService _homeOwnerService;
+        private ITaskService _taskService;
 
-        public JobSaleCancelledHandler(IDatabase database, IHomeOwnerService homeOwnerService)
+        public JobSaleCancelledHandler(IDatabase database, IHomeOwnerService homeOwnerService, ITaskService taskService)
         {
             _database = (SqlServerDatabase) database;
             _homeOwnerService = homeOwnerService;
+            _taskService = taskService;
         }
 
         public void Handle(JobSaleCancelled message)
@@ -35,6 +40,7 @@ namespace Warranty.Server.Handlers.Jobs
                     job.CurrentHomeOwnerId = null;
                     _database.Update(job);
                     _database.Delete(homeOwner);
+                    RemoveToDos(job.JobId);
                 }
                 else
                 {
@@ -42,6 +48,12 @@ namespace Warranty.Server.Handlers.Jobs
                         job.JobNumber));
                 }
             }
+        }
+
+        private void RemoveToDos(Guid jobId)
+        {
+            _taskService.DeleteTask(jobId, TaskType.JobStage3);
+            _taskService.DeleteTask(jobId, TaskType.JobStage10);
         }
     }
 }
