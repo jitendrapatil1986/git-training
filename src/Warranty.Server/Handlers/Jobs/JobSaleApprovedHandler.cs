@@ -18,16 +18,14 @@ namespace Warranty.Server.Handlers.Jobs
         private readonly IJobService _jobService;
         private readonly IHomeOwnerService _homeOwnerService;
         private ICommunityService _communityService;
-        private IEmployeeService _employeeService;
         private ITaskService _taskService;
 
-        public JobSaleApprovedHandler(IDatabase database, IJobService jobService, IHomeOwnerService homeOwnerService, ICommunityService communityService, IEmployeeService employeeService, ITaskService taskService)
+        public JobSaleApprovedHandler(IDatabase database, IJobService jobService, IHomeOwnerService homeOwnerService, ICommunityService communityService, ITaskService taskService)
         {
             _database = database;
             _jobService = jobService;
             _homeOwnerService = homeOwnerService;
             _communityService = communityService;
-            _employeeService = employeeService;
             _taskService = taskService;
         }
 
