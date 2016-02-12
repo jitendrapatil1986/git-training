@@ -8,6 +8,7 @@ using Should;
 using TIPS.Events.JobEvents;
 using TIPS.Events.Models;
 using Warranty.Core.Entities;
+using Warranty.Core.Enumerations;
 using Job = Warranty.Core.Entities.Job;
 
 namespace Warranty.Server.IntegrationTests.Handlers.Jobs
@@ -274,6 +275,54 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 
             var jobFromDb = TestDatabase.FetchBy<Job>(sql => sql.Where(j => j.JobNumber == jobNumber)).Single();
             Assert_Job_And_Sale_Are_Equal(jobFromDb, sale);
+        }
+
+        private void Should_Create_Todos(int stage, TaskType taskType)
+        {
+            var community = GetSaved<Community>();
+            var wsr = GetSaved<Employee>();
+            using (TestDatabase)
+            {
+                var communityAssignment = new CommunityAssignment
+                {
+                    CommunityId = community.CommunityId,
+                    EmployeeId = wsr.EmployeeId
+                };
+                TestDatabase.Insert(communityAssignment);
+            }
+
+            SendMessage(community, x => { x.Sale.Stage = stage; });
+
+            using (TestDatabase)
+            {
+                var job = TestDatabase.FetchBy<Job>(sql => sql.Where(j => j.JobNumber == _jobNumber)).Single();
+                var allTasks = GetTasks(job.JobId, taskType);
+                allTasks.Count.ShouldEqual(1);
+                allTasks.First().TaskType.ShouldEqual(taskType);
+            }
+        }
+
+        [Test]
+        public void Job_Should_Create_ToDos_Stage3()
+        {
+            Should_Create_Todos(3, TaskType.JobStage3);
+        }
+
+        [Test]
+        public void Job_Should_Create_ToDos_Stage7()
+        {
+            Should_Create_Todos(7, TaskType.JobStage7);
+        }
+
+        [Test]
+        public void Job_Should_Create_ToDos_Stage10()
+        {
+            Should_Create_Todos(10, TaskType.JobStage10);
+        }
+
+        private List<Task> GetTasks(Guid jobId, TaskType taskType)
+        {
+            return TestDatabase.Fetch<Task>(string.Format("WHERE ReferenceId = '{0}' and TaskType = {1}", jobId, taskType.Value));
         }
     }
 }
