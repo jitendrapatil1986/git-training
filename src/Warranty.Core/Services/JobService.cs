@@ -36,6 +36,9 @@ namespace Warranty.Core.Services
 
         public Job CreateJobAndInsert(TipsJob tipsJob)
         {
+            if(tipsJob == null)
+                throw new ArgumentNullException("tipsJob");
+
             var job = CreateJobFromTipsJob(tipsJob);
             using (_database)
             {
@@ -46,6 +49,9 @@ namespace Warranty.Core.Services
 
         public Job  CreateJobAndInsert(Sale sale)
         {
+            if (sale == null)
+                throw new ArgumentNullException("sale");
+
             var job = CreateJobFromSale(sale);
             using (_database)
             {
