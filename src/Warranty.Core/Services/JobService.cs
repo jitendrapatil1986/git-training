@@ -131,6 +131,7 @@ namespace Warranty.Core.Services
             }
             if (sale.CloseDate.HasValue)
             {
+                job.CloseDate = sale.CloseDate;
                 job.WarrantyExpirationDate = sale.CloseDate.Value.AddYears(10);
             }
             return job;

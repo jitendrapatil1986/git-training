@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NPoco;
-using NServiceBus;
+﻿using NServiceBus;
 using TIPS.Events.JobEvents;
 using Warranty.Core.Enumerations;
 using Warranty.Core.Services;
