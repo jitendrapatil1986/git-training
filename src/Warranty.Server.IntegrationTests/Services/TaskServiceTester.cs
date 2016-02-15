@@ -38,29 +38,6 @@ namespace Warranty.Server.IntegrationTests.Services
         }
 
         [Test]
-        public void Check_CreateTask()
-        {
-            var taskType = TaskType.JobStage3;
-            var community = Get<Community>();
-            var job = Get<Job>(j => j.CommunityId = community.CommunityId);
-            var wsr = Get<Employee>();
-            using (TestDatabase)
-            {
-                TestDatabase.Insert(new CommunityAssignment
-                {
-                    CommunityId = community.CommunityId,
-                    EmployeeId = wsr.EmployeeId
-                });
-            }
-
-            _taskService.CreateTask(job.JobId, taskType);
-
-            var task = GetTask(job.JobId, taskType);
-
-            AssertTaskIsCorrect(task, job, wsr, taskType);
-        }
-
-        [Test]
         public void Check_CreateTaskIfDoesntExist_CreatesTaskIfDoesntExist()
         {
             var taskType = TaskType.JobStage3;

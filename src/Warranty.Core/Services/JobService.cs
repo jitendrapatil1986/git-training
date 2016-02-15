@@ -26,6 +26,16 @@ namespace Warranty.Core.Services
             _communityService = communityService;
         }
 
+        public Job GetJobById(Guid jobId)
+        {
+            return _database.SingleById<Job>(jobId);
+        }
+
+        public bool IsModelOrShowcase(Job job)
+        {
+            return job.CurrentHomeOwnerId == null;
+        }
+
         public Job GetJobByNumber(string jobNumber)
         {
             if (jobNumber == null)
@@ -47,7 +57,7 @@ namespace Warranty.Core.Services
             return job;
         }
 
-        public Job  CreateJob(Sale sale)
+        public Job CreateJob(Sale sale)
         {
             if (sale == null)
                 throw new ArgumentNullException("sale");

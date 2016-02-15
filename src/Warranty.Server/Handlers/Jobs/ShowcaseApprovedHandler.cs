@@ -28,11 +28,7 @@ namespace Warranty.Server.Handlers.Jobs
             {
                 _jobService.UpdateExistingJob(job, message.Showcase);
             }
-
-            if (message.Showcase.Stage == 7)
-            {
-               _taskService.CreateTaskUnlessExists(job.JobId, TaskType.JobStage7); 
-            }
+            _taskService.CreateTasks(job.JobId);
         }
     }
 }

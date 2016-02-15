@@ -1,3 +1,4 @@
+using System;
 using TIPS.Events.Models;
 using Job = Warranty.Core.Entities.Job;
 
@@ -14,5 +15,9 @@ namespace Warranty.Core.Services
         void UpdateExistingJob(Job job, Sale sale);
 
         void UpdateExistingJob(Job job, TIPS.Events.Models.Job tipsJob);
+
+        Job GetJobById(Guid jobId);
+
+        bool IsModelOrShowcase(Job job);
     }
 }

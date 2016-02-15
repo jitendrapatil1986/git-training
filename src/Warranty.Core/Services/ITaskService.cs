@@ -11,10 +11,10 @@ namespace Warranty.Core.Services
 
         void CreateTaskUnlessExists(Guid jobId, TaskType taskType);
 
-        void CreateTask(Guid jobId, TaskType taskType);
-
         void DeleteTask(Guid jobId, TaskType taskType);
 
         List<Task> GetTasksByJobId(Guid jobId);
+
+        void CreateTasks(Guid jobId);
     }
 }
