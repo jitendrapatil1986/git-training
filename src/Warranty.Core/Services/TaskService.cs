@@ -65,30 +65,46 @@ namespace Warranty.Core.Services
             return _database.Fetch<Task>(string.Format("WHERE ReferenceId = '{0}'", jobId));
         }
 
-        private TaskType GetTaskTypeByStage(int stage)
-        {
-            return TaskType.GetAll().SingleOrDefault(t => t.Stage.HasValue && t.Stage == stage);
-        }
-
         public void CreateTasks(Guid jobId)
         {
             var job = _jobService.GetJobById(jobId);
             if (_jobService.IsModelOrShowcase(job))
             {
-                if(job.Stage == 7)
-                    CreateTaskUnlessExists(jobId, TaskType.JobStage7);
+                CreateModelOrShowcaseTasks(jobId, job.Stage);
             }
-            else 
+            else
             {
-                if (job.Stage.In(new[] {3, 7, 10}))
+                CreateJobTasks(jobId, job.Stage);
+            }
+        }
+
+        private TaskType GetTaskTypeByStage(int stage)
+        {
+            return TaskType.GetAll().SingleOrDefault(t => t.Stage.HasValue && t.Stage == stage);
+        }
+
+        private void CreateTasks(Guid jobId, int stage, int[] validStages)
+        {
+            if (stage.In(validStages))
+            {
+                var taskType = GetTaskTypeByStage(stage);
+                if (taskType != null)
                 {
-                    var taskType = GetTaskTypeByStage(job.Stage);
-                    if (taskType != null)
-                    {
-                        CreateTaskUnlessExists(jobId, taskType);
-                    }
+                    CreateTaskUnlessExists(jobId, taskType);
                 }
             }
+        }
+
+        private void CreateModelOrShowcaseTasks(Guid jobId, int stage)
+        {
+            var validShowcaseOrModelStages = new[] {7};
+            CreateTasks(jobId, stage, validShowcaseOrModelStages);
+        }
+
+        private void CreateJobTasks(Guid jobId, int stage)
+        {
+            var validJobStages = new[] {3,7,10};
+            CreateTasks(jobId, stage, validJobStages);
         }
 
         private void CreateTask(Guid jobId, TaskType taskType)
