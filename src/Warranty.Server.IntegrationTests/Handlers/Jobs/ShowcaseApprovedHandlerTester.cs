@@ -9,13 +9,99 @@ using Should;
 using TIPS.Events.JobEvents;
 using TIPS.Events.Models;
 using Warranty.Core.Entities;
+using Warranty.Core.Enumerations;
 using Job = Warranty.Core.Entities.Job;
+using Task = Warranty.Core.Entities.Task;
 
 namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 {
     [TestFixture]
     public class ShowcaseApprovedHandlerTester : HandlerTester<ShowcaseApproved>
     {
+        private void AssignWsrToCommunity(string communityNumber)
+        {
+            using (TestDatabase)
+            {
+                var community = TestDatabase.First<Community>(string.Format("WHERE CommunityNumber = '{0}'", communityNumber.Substring(0,4)));
+                var wsr = GetSaved<Employee>();
+                TestDatabase.Insert(new CommunityAssignment
+                {
+                    CommunityId = community.CommunityId,
+                    EmployeeId = wsr.EmployeeId
+                });
+            }
+        }
+
+        [Test]
+        public void ShowcaseAdded_Stage10ShouldNotGenerateToDo()
+        {
+            CreateShowcaseAndSendThenAssertSameness(x =>
+            {
+                x.Stage = 10;
+                AssignWsrToCommunity(x.CommunityNumber);
+            },
+            (job, showcase) =>
+            {
+                using (TestDatabase)
+                {
+                    var todo = TestDatabase.Fetch<Task>(string.Format("WHERE ReferenceId = '{0}'", job.JobId));
+                    todo.Count.ShouldEqual(0);
+                }
+            });
+        }
+
+        [Test]
+        public void ShowcaseAdded_Stage7ShouldGenerateToDo()
+        {
+            CreateShowcaseAndSendThenAssertSameness(x =>
+            {
+                x.Stage = 7;
+                AssignWsrToCommunity(x.CommunityNumber);
+            },
+            (job, showcase) =>
+            {
+                using (TestDatabase)
+                {
+                    var todo = TestDatabase.First<Task>(string.Format("WHERE ReferenceId = '{0}'", job.JobId));
+                    todo.ShouldNotBeNull();
+
+                    todo.Description.ShouldEqual(TaskType.JobStage7.DisplayName);
+                    todo.TaskType.ShouldEqual(TaskType.JobStage7);
+                }
+            });
+
+        }
+
+        [Test]
+        public void ShowcaseAdded_NullStageShouldBe0()
+        {
+            CreateShowcaseAndSendThenAssertSameness(x =>
+            {
+                x.Stage = null;
+            });
+        }
+
+        [Test]
+        public void ShowcaseAdded_WithLegalDescription()
+        {
+            CreateShowcaseAndSendThenAssertSameness(x =>
+            {
+                x.LegalDescription = new LegalDescription
+                {
+                    Phase = "TestPhase",
+                    Lot = "TestLot",
+                    Block = "TestBlock",
+                    Section = "TestSection"
+                };
+            });
+        }
+
+        [Test]
+        public void ShowcaseShouldBeAdded()
+        {
+            CreateShowcaseAndSendThenAssertSameness(x => { });
+        }
+
         private Showcase CreateShowcase()
         {
             var community = GetSaved<Community>();
@@ -48,7 +134,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             return showcase;
         }
 
-        private void CreateShowcaseAndSendThenAssertSameness(Action<Showcase> modifyShowcaseAction)
+        private void CreateShowcaseAndSendThenAssertSameness(Action<Showcase> modifyShowcaseAction, Action<Job, Showcase> additionalAssertionAction = null)
         {
             var showcase = CreateShowcase();
             showcase.Stage = null;
@@ -64,36 +150,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
                 showcaseFromDb = TestDatabase.First<Job>(string.Format("WHERE JobNumber = '{0}'", showcase.JobNumber));
             }
             AssertShowcaseAndJobAreSame(showcaseFromDb, showcase);
-        }
-
-        [Test]
-        public void ShowcaseAdded_NullStageShouldBe0()
-        {
-            CreateShowcaseAndSendThenAssertSameness(x =>
-            {
-                x.Stage = null;
-            });
-        }
-
-        [Test]
-        public void ShowcaseAdded_WithLegalDescription()
-        {
-            CreateShowcaseAndSendThenAssertSameness(x =>
-            {
-                x.LegalDescription = new LegalDescription
-                {
-                    Phase = "TestPhase",
-                    Lot = "TestLot",
-                    Block = "TestBlock",
-                    Section = "TestSection"
-                };
-            });
-        }
-
-        [Test]
-        public void ShowcaseShouldBeAdded()
-        {
-            CreateShowcaseAndSendThenAssertSameness(x => { });
+            if (additionalAssertionAction != null) additionalAssertionAction(showcaseFromDb, showcase);
         }
 
         private void AssertShowcaseAndJobAreSame(Job job, Showcase showcase)
