@@ -39,7 +39,7 @@ namespace Warranty.Core.Services
             if(tipsJob == null)
                 throw new ArgumentNullException("tipsJob");
 
-            var job = CreateJobFromTipsJob(tipsJob);
+            var job = UpdateJobFromTipsJob(new Job(), tipsJob);
             using (_database)
             {
                 _database.Insert(job);
@@ -52,7 +52,7 @@ namespace Warranty.Core.Services
             if (sale == null)
                 throw new ArgumentNullException("sale");
 
-            var job = CreateJobFromSale(sale);
+            var job = UpdateJobFromSale(new Job(), sale);
             using (_database)
             {
                 _database.Insert(job);
@@ -90,6 +90,11 @@ namespace Warranty.Core.Services
 
         private Job UpdateJobFromTipsJob(Job job, TipsJob tipsJob)
         {
+            if (job == null)
+                throw new ArgumentNullException("job");
+            if (tipsJob == null)
+                throw new ArgumentNullException("tipsJob");
+
             var builder = _employeeService.GetEmployeeByNumber(tipsJob.BuilderEmployeeID);
             var community = _communityService.GetCommunityByNumber(tipsJob.CommunityNumber);
 
@@ -135,6 +140,11 @@ namespace Warranty.Core.Services
 
         private Job UpdateJobFromSale(Job job, Sale sale)
         {
+            if (job == null)
+                throw new ArgumentNullException("job");
+            if (sale == null)
+                throw new ArgumentNullException("sale");
+
             UpdateJobFromTipsJob(job, sale);
 
             var salesConsultant = _employeeService.GetEmployeeByNumber(sale.SalesConsultantEmployeeID);
@@ -148,24 +158,6 @@ namespace Warranty.Core.Services
                 job.WarrantyExpirationDate = sale.CloseDate.Value.AddYears(10);
             }
             return job;
-        }
-
-        public Job CreateJobFromSale(Sale sale)
-        {
-            if (sale == null)
-                throw new ArgumentNullException("sale");
-
-            var job = new Job();
-            return UpdateJobFromSale(job, sale);
-        }
-
-        public Job CreateJobFromTipsJob(TipsJob tipsJob)
-        {
-            if (tipsJob == null)
-                throw new ArgumentException("job");
-
-            var job = new Job();
-            return UpdateJobFromTipsJob(job, tipsJob);
         }
     }
 }

@@ -13,10 +13,6 @@ namespace Warranty.Core.Services
 
         void UpdateExistingJob(Job job, Sale sale);
 
-        Job CreateJobFromSale(Sale sale);
-
-        Job CreateJobFromTipsJob(TIPS.Events.Models.Job tipsJob);
-
         void UpdateExistingJob(Job job, TIPS.Events.Models.Job tipsJob);
     }
 }
