@@ -24,6 +24,11 @@ namespace Warranty.Server.Handlers.Jobs
 
         public void Handle(ShowcaseApproved message)
         {
+            if(message.Showcase == null)
+                throw new ArgumentException("Showcase is null");
+            if (string.IsNullOrWhiteSpace(message.Showcase.JobNumber))
+                throw new ArgumentException("JobNumber is null or whitespace");
+
             var job = _jobService.GetJobByNumber(message.Showcase.JobNumber);
 
             if (job == null)
