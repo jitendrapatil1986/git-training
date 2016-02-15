@@ -14,6 +14,13 @@ namespace Warranty.Core.Services
 
         public JobService(IDatabase database, IEmployeeService employeeService, ICommunityService communityService)
         {
+            if(database == null)
+                throw new ArgumentNullException("database");
+            if (employeeService == null)
+                throw new ArgumentNullException("employeeService");
+            if (communityService == null)
+                throw new ArgumentNullException("communityService");
+
             _database = database;
             _employeeService = employeeService;
             _communityService = communityService;
@@ -49,6 +56,11 @@ namespace Warranty.Core.Services
 
         public void UpdateExistingJob(Job job, Sale sale)
         {
+            if(job == null)
+                throw new ArgumentNullException("job");
+            if(sale == null)
+                throw new ArgumentNullException("sale");
+
             using (_database)
             {
                 var updatedJob = UpdateJobFromSale(job, sale);
@@ -58,6 +70,11 @@ namespace Warranty.Core.Services
 
         public void UpdateExistingJob(Job job, TipsJob tipsJob)
         {
+            if (job == null)
+                throw new ArgumentNullException("job");
+            if (tipsJob == null)
+                throw new ArgumentNullException("tipsJob");
+
             using (_database)
             {
                 var updatedJob = UpdateJobFromTipsJob(job, tipsJob);
@@ -67,11 +84,6 @@ namespace Warranty.Core.Services
 
         private Job UpdateJobFromTipsJob(Job job, TipsJob tipsJob)
         {
-            if (job == null)
-                throw new ArgumentNullException("job");
-            if (tipsJob == null)
-                throw new ArgumentNullException("tipsJob");
-
             var builder = _employeeService.GetEmployeeByNumber(tipsJob.BuilderEmployeeID);
             var community = _communityService.GetCommunityByNumber(tipsJob.CommunityNumber);
 
@@ -117,11 +129,6 @@ namespace Warranty.Core.Services
 
         private Job UpdateJobFromSale(Job job, Sale sale)
         {
-            if(job == null)
-                throw new ArgumentNullException("job");
-            if (sale == null)
-                throw new ArgumentNullException("sale");
-
             UpdateJobFromTipsJob(job, sale);
 
             var salesConsultant = _employeeService.GetEmployeeByNumber(sale.SalesConsultantEmployeeID);
