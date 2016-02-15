@@ -182,6 +182,7 @@
     <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\ModelAddedHandler.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseAddedHandler.cs" />
+    <Compile Include="Handlers\Jobs\ShowcaseApprovedHandler.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseResetToDirtHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyBackchargeDeletedHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyPaymentDeletedHandler.cs" />

@@ -2,6 +2,7 @@ using System;
 using NPoco;
 using TIPS.Events.Models;
 using Job = Warranty.Core.Entities.Job;
+using TipsJob = TIPS.Events.Models.Job;
 
 namespace Warranty.Core.Services
 {
@@ -13,9 +14,26 @@ namespace Warranty.Core.Services
 
         public JobService(IDatabase database, IEmployeeService employeeService, ICommunityService communityService)
         {
+            if(database == null)
+                throw new ArgumentNullException("database");
+            if (employeeService == null)
+                throw new ArgumentNullException("employeeService");
+            if (communityService == null)
+                throw new ArgumentNullException("communityService");
+
             _database = database;
             _employeeService = employeeService;
             _communityService = communityService;
+        }
+
+        public Job GetJobById(Guid jobId)
+        {
+            return _database.SingleById<Job>(jobId);
+        }
+
+        public bool IsModelOrShowcase(Job job)
+        {
+            return job.CurrentHomeOwnerId == null;
         }
 
         public Job GetJobByNumber(string jobNumber)
@@ -26,9 +44,25 @@ namespace Warranty.Core.Services
             return _database.SingleOrDefault<Job>("WHERE JobNumber = @0", jobNumber);
         }
 
-        public Job  CreateJobAndInsert(Sale sale)
+        public Job CreateJob(TipsJob tipsJob)
         {
-            var job = CreateJobFromSale(sale);
+            if(tipsJob == null)
+                throw new ArgumentNullException("tipsJob");
+
+            var job = UpdateJobFromTipsJob(new Job(), tipsJob);
+            using (_database)
+            {
+                _database.Insert(job);
+            }
+            return job;
+        }
+
+        public Job CreateJob(Sale sale)
+        {
+            if (sale == null)
+                throw new ArgumentNullException("sale");
+
+            var job = UpdateJobFromSale(new Job(), sale);
             using (_database)
             {
                 _database.Insert(job);
@@ -38,6 +72,11 @@ namespace Warranty.Core.Services
 
         public void UpdateExistingJob(Job job, Sale sale)
         {
+            if(job == null)
+                throw new ArgumentNullException("job");
+            if(sale == null)
+                throw new ArgumentNullException("sale");
+
             using (_database)
             {
                 var updatedJob = UpdateJobFromSale(job, sale);
@@ -45,36 +84,48 @@ namespace Warranty.Core.Services
             }
         }
 
-        private Job UpdateJobFromSale(Job job, Sale sale)
+        public void UpdateExistingJob(Job job, TipsJob tipsJob)
         {
-            if(job == null)
+            if (job == null)
                 throw new ArgumentNullException("job");
-            if (sale == null)
-                throw new ArgumentNullException("sale");
+            if (tipsJob == null)
+                throw new ArgumentNullException("tipsJob");
 
-            var builder = _employeeService.GetEmployeeByNumber(sale.BuilderEmployeeID);
-            var salesConsultant = _employeeService.GetEmployeeByNumber(sale.SalesConsultantEmployeeID);
-            var community = _communityService.GetCommunityByNumber(sale.CommunityNumber);
+            using (_database)
+            {
+                var updatedJob = UpdateJobFromTipsJob(job, tipsJob);
+                _database.Update(updatedJob);
+            }
+        }
 
-            job.JobNumber = sale.JobNumber;
-            job.PlanNumber = sale.PlanNumber;
-            job.Elevation = sale.Elevation;
-            job.AddressLine = sale.AddressLine1;
-            job.City = sale.AddressCity;
-            job.StateCode = sale.AddressStateAbbreviation;
-            job.PostalCode = sale.AddressZipCode;
-            job.PlanType = sale.JobType;
-            job.CloseDate = sale.CloseDate;
+        private Job UpdateJobFromTipsJob(Job job, TipsJob tipsJob)
+        {
+            if (job == null)
+                throw new ArgumentNullException("job");
+            if (tipsJob == null)
+                throw new ArgumentNullException("tipsJob");
+
+            var builder = _employeeService.GetEmployeeByNumber(tipsJob.BuilderEmployeeID);
+            var community = _communityService.GetCommunityByNumber(tipsJob.CommunityNumber);
+
+            job.JobNumber = tipsJob.JobNumber;
+            job.PlanNumber = tipsJob.PlanNumber;
+            job.Elevation = tipsJob.Elevation;
+            job.AddressLine = tipsJob.AddressLine1;
+            job.City = tipsJob.AddressCity;
+            job.StateCode = tipsJob.AddressStateAbbreviation;
+            job.PostalCode = tipsJob.AddressZipCode;
+            job.PlanType = tipsJob.JobType;
             job.CreatedBy = "Warranty.Server";
             job.CreatedDate = DateTime.Now;
-            job.JdeIdentifier = sale.JobNumber;
-            job.PlanName = sale.PlanName;
+            job.JdeIdentifier = tipsJob.JobNumber;
+            job.PlanName = tipsJob.PlanName;
             job.PlanTypeDescription = null;
-            job.Swing = sale.Swing;
+            job.Swing = tipsJob.Swing;
 
-            if (sale.LegalDescription != null)
+            if (tipsJob.LegalDescription != null)
             {
-                job.LegalDescription = sale.LegalDescription.ToString();
+                job.LegalDescription = tipsJob.LegalDescription.ToString();
             }
             else
             {
@@ -88,28 +139,35 @@ namespace Warranty.Core.Services
             {
                 job.BuilderEmployeeId = builder.EmployeeId;
             }
+            
+            if (tipsJob.Stage.HasValue)
+            {
+                job.Stage = tipsJob.Stage.Value;
+            }
+            
+            return job;
+        }
+
+        private Job UpdateJobFromSale(Job job, Sale sale)
+        {
+            if (job == null)
+                throw new ArgumentNullException("job");
+            if (sale == null)
+                throw new ArgumentNullException("sale");
+
+            UpdateJobFromTipsJob(job, sale);
+
+            var salesConsultant = _employeeService.GetEmployeeByNumber(sale.SalesConsultantEmployeeID);
             if (salesConsultant != null)
             {
                 job.SalesConsultantEmployeeId = salesConsultant.EmployeeId;
             }
-            if (sale.Stage.HasValue)
-            {
-                job.Stage = sale.Stage.Value;
-            }
             if (sale.CloseDate.HasValue)
             {
+                job.CloseDate = sale.CloseDate;
                 job.WarrantyExpirationDate = sale.CloseDate.Value.AddYears(10);
             }
             return job;
-        }
-
-        public Job CreateJobFromSale(Sale sale)
-        {
-            if (sale == null)
-                throw new ArgumentNullException("sale");
-
-            var job = new Job();
-            return UpdateJobFromSale(job, sale);
         }
     }
 }

@@ -64,18 +64,6 @@ namespace Warranty.Server.Handlers.Jobs
             }
         }
 
-        public void GenerateTodo(Guid jobId, int stage)
-        {
-            if (stage == 3 || stage == 7 || stage == 10)
-            {
-                var taskType = TaskType.GetAll().SingleOrDefault(t => t.Stage.HasValue && t.Stage == stage);
-                if (taskType != null)
-                {
-                    _taskService.CreateTaskUnlessExists(jobId, taskType);
-                }
-            }
-        }
-
         public void Handle(JobSaleApproved message)
         {
             Validate(message);
@@ -94,7 +82,7 @@ namespace Warranty.Server.Handlers.Jobs
                 if (job == null)
                 {
                     _log.InfoFormat(@"Creating Job: {0}", message.Sale.JobNumber);
-                    job = _jobService.CreateJobAndInsert(message.Sale);
+                    job = _jobService.CreateJob(message.Sale);
                 }
                 else
                 {
@@ -111,7 +99,7 @@ namespace Warranty.Server.Handlers.Jobs
                 _database.Insert(homeOwner);
                 _database.Update(job);
 
-                GenerateTodo(job.JobId, job.Stage);
+                _taskService.CreateTasks(job.JobId);
             }
         }
     }
