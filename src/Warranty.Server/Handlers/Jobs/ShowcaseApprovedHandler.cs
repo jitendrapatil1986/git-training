@@ -22,7 +22,7 @@ namespace Warranty.Server.Handlers.Jobs
 
             if (job == null)
             {
-                job = _jobService.CreateJobAndInsert(message.Showcase);
+                job = _jobService.CreateJob(message.Showcase);
             }
             else
             {

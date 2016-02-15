@@ -34,7 +34,7 @@ namespace Warranty.Core.Services
             return _database.SingleOrDefault<Job>("WHERE JobNumber = @0", jobNumber);
         }
 
-        public Job CreateJobAndInsert(TipsJob tipsJob)
+        public Job CreateJob(TipsJob tipsJob)
         {
             if(tipsJob == null)
                 throw new ArgumentNullException("tipsJob");
@@ -47,7 +47,7 @@ namespace Warranty.Core.Services
             return job;
         }
 
-        public Job  CreateJobAndInsert(Sale sale)
+        public Job  CreateJob(Sale sale)
         {
             if (sale == null)
                 throw new ArgumentNullException("sale");

@@ -7,9 +7,9 @@ namespace Warranty.Core.Services
     {
         Job GetJobByNumber(string jobNumber);
 
-        Job CreateJobAndInsert(TIPS.Events.Models.Job tipsJob);
+        Job CreateJob(TIPS.Events.Models.Job tipsJob);
 
-        Job  CreateJobAndInsert(Sale sale);
+        Job  CreateJob(Sale sale);
 
         void UpdateExistingJob(Job job, Sale sale);
 
