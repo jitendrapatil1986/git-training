@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NPoco;
+using NPoco.Expressions;
 using Warranty.Core.Enumerations;
 using Task = Warranty.Core.Entities.Task;
 
@@ -35,9 +36,7 @@ namespace Warranty.Core.Services
         public bool TaskExists(Guid jobId, TaskType taskType)
         {
             if (taskType == null)
-            {
                 throw new ArgumentNullException("taskType");
-            }
             using (_database)
             {
                 return _database.Single<int>(string.Format("SELECT COUNT(1) FROM Tasks WHERE ReferenceId = '{0}' AND TaskType = {1}", jobId, taskType.Value)) >= 1;
@@ -47,9 +46,7 @@ namespace Warranty.Core.Services
         public void CreateTaskUnlessExists(Guid jobId, TaskType taskType)
         {
             if (taskType == null)
-            {
                 throw new ArgumentNullException("taskType");
-            }
             if (!TaskExists(jobId, taskType))
             {
                 CreateTask(jobId, taskType);
@@ -59,9 +56,7 @@ namespace Warranty.Core.Services
         public void DeleteTask(Guid jobId, TaskType taskType)
         {
             if (taskType == null)
-            {
                 throw new ArgumentNullException("taskType");
-            }
             _database.Execute(string.Format("DELETE FROM Tasks WHERE ReferenceId = '{0}' AND TaskType = {1}", jobId, taskType.Value));
         }
 
@@ -85,7 +80,7 @@ namespace Warranty.Core.Services
             }
             else 
             {
-                if (job.Stage == 3 || job.Stage == 7 || job.Stage == 10)
+                if (job.Stage.In(new[] {3, 7, 10}))
                 {
                     var taskType = GetTaskTypeByStage(job.Stage);
                     if (taskType != null)
@@ -99,9 +94,7 @@ namespace Warranty.Core.Services
         private void CreateTask(Guid jobId, TaskType taskType)
         {
             if (taskType == null)
-            {
                 throw new ArgumentNullException("taskType");
-            }
             var wsr = _employeeService.GetWsrByJobId(jobId);
 
             using (_database)
