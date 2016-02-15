@@ -1,4 +1,5 @@
-﻿using NServiceBus;
+﻿using System;
+using NServiceBus;
 using TIPS.Events.JobEvents;
 using Warranty.Core.Enumerations;
 using Warranty.Core.Services;
@@ -12,6 +13,11 @@ namespace Warranty.Server.Handlers.Jobs
 
         public ShowcaseApprovedHandler(IJobService jobService, ITaskService taskService)
         {
+            if (jobService == null)
+                throw new ArgumentNullException("jobService");
+            if (taskService == null)
+                throw new ArgumentNullException("taskService");
+
             _jobService = jobService;
             _taskService = taskService;
         }
