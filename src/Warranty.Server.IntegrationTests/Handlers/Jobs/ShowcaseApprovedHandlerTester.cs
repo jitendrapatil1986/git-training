@@ -44,6 +44,17 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         }
 
         [Test, ExpectedException(typeof(InvalidOperationException))]
+        public void ShowcaseAdded_HomeownerExistsButIsNotProperlyAssignedToJob()
+        {
+            CreateShowcaseAndSendThenAssertSameness(x =>
+            {
+                var job = GetSaved<Job>();
+                var homeowner = GetSaved<HomeOwner>(h => h.JobId = job.JobId);
+                x.JobNumber = job.JobNumber;
+            });
+        }
+
+        [Test, ExpectedException(typeof(InvalidOperationException))]
         public void ShowcaseAdded_HomeownerExistsThrowsException()
         {
             CreateShowcaseAndSendThenAssertSameness(x =>
