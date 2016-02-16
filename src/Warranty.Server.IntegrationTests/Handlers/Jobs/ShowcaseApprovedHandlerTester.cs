@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using NUnit.Framework;
 using Should;
+using Should.Core.Exceptions;
 using TIPS.Events.JobEvents;
 using TIPS.Events.Models;
 using Warranty.Core.Entities;
@@ -30,6 +31,43 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
                     EmployeeId = wsr.EmployeeId
                 });
             }
+        }
+
+        [Test]
+        public void ShowcaseAdded_JobExists()
+        {
+            CreateShowcaseAndSendThenAssertSameness(x =>
+            {
+                var job = GetSaved<Job>();
+                x.JobNumber = job.JobNumber;
+            });
+        }
+
+        [Test, ExpectedException(typeof(InvalidOperationException))]
+        public void ShowcaseAdded_HomeownerExistsButIsNotProperlyAssignedToJob()
+        {
+            CreateShowcaseAndSendThenAssertSameness(x =>
+            {
+                var job = GetSaved<Job>();
+                var homeowner = GetSaved<HomeOwner>(h => h.JobId = job.JobId);
+                x.JobNumber = job.JobNumber;
+            });
+        }
+
+        [Test, ExpectedException(typeof(InvalidOperationException))]
+        public void ShowcaseAdded_HomeownerExistsThrowsException()
+        {
+            CreateShowcaseAndSendThenAssertSameness(x =>
+            {
+                var job = GetSaved<Job>();
+                var homeowner = GetSaved<HomeOwner>(h => h.JobId = job.JobId);
+                job.CurrentHomeOwnerId = homeowner.HomeOwnerId;
+                using (TestDatabase)
+                {
+                    TestDatabase.Update(job);
+                }
+                x.JobNumber = job.JobNumber;
+            });
         }
 
         [Test]
