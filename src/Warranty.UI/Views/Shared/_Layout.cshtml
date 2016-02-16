@@ -36,6 +36,11 @@
                         @NavHeaderItemHelper(item)
                     }
                 }
+                @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
+                {
+                    <li><a href="http://jde.dwhomes.net:8000/secure/sequel?Obj=WA_TODO2%24&Lib=SEQPROD&databind=N" target="_blank">Oustanding Warranty ToDo Report</a></li>
+                    <li><a href="http://jde.dwhomes.net:8000/secure/sequel?Obj=WA_TODO3%24&Lib=SEQPROD&databind=N" target="_blank">Complete Warranty ToDo Report</a></li>
+                }
             </ul>
         </li>
     }
