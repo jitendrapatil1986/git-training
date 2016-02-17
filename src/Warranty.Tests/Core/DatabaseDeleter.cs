@@ -15,18 +15,28 @@ namespace Warranty.Tests.Core
 
         public DatabaseDeleter(IDatabase database)
         {
+            bool droppedHomeownersConstraint = false;
             using (database)
             {
-                database.Execute(@"ALTER TABLE HomeOwners DROP CONSTRAINT FK_HomeOwners_JobId");
-                database.Execute(@"UPDATE HomeOwners SET JobId = NULL");
+                var homeOwnersJobIdConstraintExists =
+                    database.ExecuteScalar<int>(
+                        @"SELECT count(1) FROM sys.foreign_keys where name = 'FK_HomeOwners_JobId' and parent_object_id = OBJECT_ID(N'dbo.Homeowners')") == 1;
+                if (homeOwnersJobIdConstraintExists)
+                {
+                    droppedHomeownersConstraint = true;
+                    database.Execute(@"ALTER TABLE HomeOwners DROP CONSTRAINT FK_HomeOwners_JobId");
+                }
             }
             
             BuildDeleteTables(database);
 
             using (database)
             {
-                database.Execute(@"ALTER TABLE HomeOwners ADD CONSTRAINT FK_HomeOwners_JobId
+                if (droppedHomeownersConstraint)
+                {
+                    database.Execute(@"ALTER TABLE HomeOwners ADD CONSTRAINT FK_HomeOwners_JobId
                                     FOREIGN KEY (JobId) REFERENCES Jobs(JobId)");
+                }
             }
         }
 
@@ -38,9 +48,26 @@ namespace Warranty.Tests.Core
 
         public virtual void DeleteAllData(IDatabase database)
         {
+            bool droppedHomeownersConstraint = false;
             using (database)
             {
+                var homeOwnersJobNumberConstraintExists =
+                database.ExecuteScalar<int>(
+                    @"select COUNT(1) from INFORMATION_SCHEMA.TABLE_CONSTRAINTS where CONSTRAINT_TYPE='UNIQUE' and table_name= 'Homeowners' and CONSTRAINT_NAME = 'UQ_Homeowners_JobNumber'") == 1;
+                if (homeOwnersJobNumberConstraintExists)
+                {
+                    droppedHomeownersConstraint = true;
+                    database.Execute(@"ALTER TABLE HomeOwners DROP CONSTRAINT UQ_Homeowners_JobNumber");
+                }
+
+                database.Execute(@"UPDATE HomeOwners SET JobID = NULL");
                 database.Execute(_deleteSql);
+
+                if (droppedHomeownersConstraint)
+                {
+                    database.Execute(@"ALTER TABLE HomeOwners ADD CONSTRAINT UQ_Homeowners_JobNumber
+                                    UNIQUE (JobId, HomeownerNumber)");
+                }
             }
         }
 

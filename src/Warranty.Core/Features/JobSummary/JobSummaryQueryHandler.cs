@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 
 namespace Warranty.Core.Features.JobSummary
 {
+    using System;
+    using System.Collections.Generic;
     using System.Configuration;
     using System.Net.Http;
     using Enumerations;
@@ -12,6 +13,7 @@ namespace Warranty.Core.Features.JobSummary
     using Services;
     using System.Linq;
     using Extensions;
+    using JobService.Client.Api.Endpoints;
     using HttpApiClient = JobService.Client.Api.HttpApiClient;
 
     public class JobSummaryQueryHandler : IQueryHandler<JobSummaryQuery, JobSummaryModel>
@@ -55,7 +57,7 @@ namespace Warranty.Core.Features.JobSummary
 
             var jobNumber = _database.ExecuteScalar<string>(sql, jobId);
 
-            var client = new JobService.Client.Api.Endpoints.ArchivedBuildConfigurationEndpointProxy(apiServiceUrl, new HttpApiClient(), new ApiJsonConverter());
+            var client = new ArchivedBuildConfigurationEndpointProxy(apiServiceUrl, new HttpApiClient(), new ApiJsonConverter());
             try
             {
                 var jobInfo = client.Get(jobNumber);

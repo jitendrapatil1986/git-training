@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using NPoco;
 
 namespace Warranty.Core.Extensions
 {
-    using System.Collections.Generic;
-    using System.Linq.Expressions;
-    using NPoco;
 
     public static class DatabaseExtensions
     {

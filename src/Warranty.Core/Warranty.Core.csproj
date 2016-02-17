@@ -43,6 +43,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Common.Core.1.1.109.0\lib\net45\Common.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Messages, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Messages.1.1.116.0\lib\net40\Common.Messages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Common.Security.1.1.112.0\lib\net45\Common.Security.dll</HintPath>
@@ -136,6 +140,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TIPS.Events, Version=1.1863.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TIPS.Events.1.1863.0.0\lib\net40\TIPS.Events.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Yay.Enumerations, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Yay.Enumeration.0.5.1\lib\Yay.Enumerations.dll</HintPath>
@@ -567,11 +575,19 @@
     <Compile Include="FileManagement\ITemporaryFileUploadsService.cs" />
     <Compile Include="Services\AccountingClientSystemMonitor.cs" />
     <Compile Include="Services\AccountingService.cs" />
+    <Compile Include="Services\CommunityService.cs" />
     <Compile Include="Services\EmployeeService.cs" />
+    <Compile Include="Services\HomeOwnerService.cs" />
+    <Compile Include="Services\ICommunityService.cs" />
     <Compile Include="Services\IEmployeeService.cs" />
+    <Compile Include="Services\IHomeOwnerService.cs" />
+    <Compile Include="Services\IJobService.cs" />
     <Compile Include="Services\ISurveyService.cs" />
+    <Compile Include="Services\ITaskService.cs" />
+    <Compile Include="Services\JobService.cs" />
     <Compile Include="Services\SurveyClientSystemMonitor.cs" />
     <Compile Include="Services\SurveyService.cs" />
+    <Compile Include="Services\TaskService.cs" />
     <Compile Include="Services\ToDoFilterCookieManager.cs" />
     <Compile Include="Services\IManageToDoFilterCookie.cs" />
     <Compile Include="Services\IServiceCallCreateService.cs" />
