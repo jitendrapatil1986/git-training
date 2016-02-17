@@ -36,7 +36,6 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             });
         }
 
-
         [Test, ExpectedException(typeof(InvalidOperationException))]
         public void ShowcaseElevationUpdated_JobDoesntExistThrowsInvalidOperationException()
         {
