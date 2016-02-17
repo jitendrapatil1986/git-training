@@ -10,7 +10,7 @@ using Warranty.Core.Services;
 
 namespace Warranty.Server.Handlers.Jobs
 {
-    class ShowcasePlanUpdateApprovedHandler: IHandleMessages<ShowcasePlanUpdateApproved>
+    public class ShowcasePlanUpdateApprovedHandler: IHandleMessages<ShowcasePlanUpdateApproved>
     {
         private IJobService _jobService;
         private readonly ILog _log = LogManager.GetLogger(typeof(ShowcasePlanUpdateApprovedHandler));
@@ -32,8 +32,11 @@ namespace Warranty.Server.Handlers.Jobs
             if(showcase == null)
                 throw new InvalidOperationException("Showcase does not exist in Warranty. Can not update elevation.");
 
-            _log.Info(string.Format("Updating job '{0}' from elevation '{1}' to elevation '{2}'", showcase.JobId, showcase.Elevation, message.Elevation));
             showcase.Elevation = message.Elevation;
+            showcase.PlanName = message.PlanName;
+            showcase.PlanNumber = message.PlanNumber;
+
+            _log.Info(string.Format("Updating job '{0}'",showcase.JobId));
             _jobService.Save(showcase);
         }
     }
