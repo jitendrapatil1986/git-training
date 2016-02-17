@@ -24,7 +24,6 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         [Test]
         public void ShowcasePlanUpdateApproved_AssertUpdated()
         {
-
             var job = GetSaved<Job>();
             var message = GetMessage(job.JobNumber);
 
