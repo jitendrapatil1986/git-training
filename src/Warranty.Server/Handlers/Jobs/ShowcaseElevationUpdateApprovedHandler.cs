@@ -23,14 +23,12 @@ namespace Warranty.Server.Handlers.Jobs
         {
             if(string.IsNullOrWhiteSpace(message.JobNumber))
                 throw new InvalidOperationException("JobNumber is null or whitespace");
-            if(string.IsNullOrWhiteSpace(message.Elevation))
-                throw new InvalidOperationException("Elevation is null or whitespace");
 
             var showcase = _jobService.GetJobByNumber(message.JobNumber);
             if(showcase == null)
                 throw new InvalidOperationException("Showcase does not exist in Warranty. Can not update elevation.");
 
-            _log.Info(string.Format("Updating job '{0}' from elevation '{1}' to elevation '{2}'", showcase.JobId, showcase.Elevation, message.Elevation));
+            _log.Info(string.Format("Updating job '{0}' from elevation '{1}' to elevation '{2}'", showcase.JobId, showcase.Elevation ?? "", message.Elevation ?? ""));
             showcase.Elevation = message.Elevation;
             _jobService.Save(showcase);
         }
