@@ -28,16 +28,6 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         }
 
         [Test, ExpectedException(typeof(InvalidOperationException))]
-        public void ShowcaseElevationUpdated_NoElevationThrowsInvalidOperationException()
-        {
-            var job = GetSaved<Job>();
-            Send(new ShowcaseElevationUpdateApproved
-            {
-                JobNumber = job.JobNumber
-            });
-        }
-
-        [Test, ExpectedException(typeof(InvalidOperationException))]
         public void ShowcaseElevationUpdated_NoJobNumberThrowsInvalidOperationException()
         {
             Send(new ShowcaseElevationUpdateApproved
