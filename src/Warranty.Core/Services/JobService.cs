@@ -44,6 +44,14 @@ namespace Warranty.Core.Services
             return _database.SingleOrDefault<Job>("WHERE JobNumber = @0", jobNumber);
         }
 
+        public void Save(Job job)
+        {
+            using (_database)
+            {
+                _database.Update(job);
+            }
+        }
+
         public Job CreateJob(TipsJob tipsJob)
         {
             if(tipsJob == null)
