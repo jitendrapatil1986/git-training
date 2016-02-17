@@ -9,7 +9,7 @@ namespace Warranty.Server.Handlers.Jobs
     public class ShowcaseElevationUpdateApprovedHandler: IHandleMessages<ShowcaseElevationUpdateApproved>
     {
         private IJobService _jobService;
-        private readonly ILog _log = LogManager.GetLogger(typeof(JobSaleApprovedHandler));
+        private readonly ILog _log = LogManager.GetLogger(typeof(ShowcaseElevationUpdateApprovedHandler));
 
         public ShowcaseElevationUpdateApprovedHandler(IJobService jobService)
         {
