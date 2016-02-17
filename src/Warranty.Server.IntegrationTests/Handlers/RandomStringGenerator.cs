@@ -23,14 +23,6 @@ namespace Warranty.Server.IntegrationTests.Handlers
             return Convert.ToChar(charindex);
         }
 
-        private string GetRandom(int length)
-        {
-            _stringBuilder.Clear();
-            for (var i = 0; i < length; i++)
-                _stringBuilder.Append(GetRandomChar());
-            return _stringBuilder.ToString();
-        }
-
         public string Get(int length)
         {
             _stringBuilder.Clear();
