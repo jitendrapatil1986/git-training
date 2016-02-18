@@ -95,7 +95,7 @@
                     var community = _database.SingleOrDefaultById<Community>(job.CommunityId);
                     var communityNumber = community.CommunityNumber;
 
-                    if (job.IsOutOfWarranty && community.CommunityStatusCode != WarrantyConstants.DefaultActiveCommunityCode)
+                    if (job.IsOutOfWarranty)
                     {
                         communityNumber = WarrantyConfigSection.GetCity(user.Markets.FirstOrDefault()).ClosedOutCommunity;
                     }
