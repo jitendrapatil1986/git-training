@@ -17,7 +17,14 @@ namespace Warranty.Server.IntegrationTests.SetUp
             var community = GetSaved<Community>();
             var r = new Random();
             var jobNum = r.Next(12345678, 88889999).ToString(CultureInfo.InvariantCulture);
-
+            using (_database)
+            {
+                Job existing = null;
+                while ((existing = _database.SingleOrDefault<Job>(string.Format("WHERE JobNumber = {0}", jobNum))) != null)
+                {
+                    jobNum = r.Next(12345678, 88889999).ToString(CultureInfo.InvariantCulture);
+                }
+            }
             var entity = new Job{
                 JdeIdentifier = jobNum,
                 JobNumber = jobNum,
@@ -27,6 +34,12 @@ namespace Warranty.Server.IntegrationTests.SetUp
             };
 
             return Saved(entity, action);
+        }
+
+        public new Job GetRandom()
+        {
+            
+            return new Job();
         }
     }
 }

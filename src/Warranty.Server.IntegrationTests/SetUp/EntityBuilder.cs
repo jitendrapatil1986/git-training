@@ -1,4 +1,5 @@
 ﻿using System;
+using FizzWare.NBuilder;
 using NPoco;
 using StructureMap;
 
@@ -6,7 +7,7 @@ namespace Warranty.Server.IntegrationTests.SetUp
 {
     public abstract class EntityBuilder<T> : IEntityBuilder<T>
     {
-        private readonly IDatabase _database;
+        protected readonly IDatabase _database;
 
         protected EntityBuilder(IDatabase database)
         {
@@ -14,6 +15,11 @@ namespace Warranty.Server.IntegrationTests.SetUp
         }
 
         public abstract T GetSaved(Action<T> action);
+
+        public T GetRandom()
+        {
+            return Builder<T>.CreateNew().Build();
+        }
 
         public T Saved(T entity, Action<T> action)
         {

@@ -112,6 +112,8 @@ namespace Warranty.Core.Services
             if (taskType == null)
                 throw new ArgumentNullException("taskType");
             var wsr = _employeeService.GetWsrByJobId(jobId);
+            if (wsr == null) 
+                throw new InvalidOperationException("Cannot create a task without a WSR assigned to the community.");
 
             using (_database)
             {
