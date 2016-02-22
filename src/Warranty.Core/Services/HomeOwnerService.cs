@@ -26,8 +26,8 @@ namespace Warranty.Core.Services
             homeOwner.JobId = job.JobId;
             using (_database)
             {
-                _database.Update(job);
                 _database.Update(homeOwner);
+                _database.Update(job);
             }
         }
 

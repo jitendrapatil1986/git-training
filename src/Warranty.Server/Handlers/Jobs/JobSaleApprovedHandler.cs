@@ -94,9 +94,9 @@ namespace Warranty.Server.Handlers.Jobs
                 DeletePreviousHomeowners(job);
                 
                 var homeOwner = _homeOwnerService.GetHomeOwner(message.Opportunity.Contact);
-                _homeOwnerService.AssignToJob(homeOwner, job);
 
                 _database.Insert(homeOwner);
+                _homeOwnerService.AssignToJob(homeOwner, job);
                 _database.Update(job);
 
                 _taskService.CreateTasks(job.JobId);
