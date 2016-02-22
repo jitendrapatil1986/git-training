@@ -1,9 +1,10 @@
-﻿namespace Warranty.Server.Handlers.Jobs
+﻿using Warranty.Core.Services;
+
+namespace Warranty.Server.Handlers.Jobs
 {
     using System;
     using Construction.Events.Jobs;
     using Core.Entities;
-    using Core.TaskInfrastructure.Tasks;
     using Extensions;
     using NPoco;
     using NServiceBus;
@@ -11,12 +12,12 @@
     public class JobStageUpdatedHandler : IHandleMessages<JobStageUpdated>
     {
         private readonly IDatabase _database;
-        private readonly JobStageUpdatedContactBuilderTask _jobStageUpdatedContactBuilderTask;
+        private readonly ITaskService _taskService;
 
-        public JobStageUpdatedHandler(IDatabase database, JobStageUpdatedContactBuilderTask jobStageUpdatedContactBuilderTask)
+        public JobStageUpdatedHandler(IDatabase database, ITaskService taskService)
         {
             _database = database;
-            _jobStageUpdatedContactBuilderTask = jobStageUpdatedContactBuilderTask;
+            _taskService = taskService;
         }
 
         public void Handle(JobStageUpdated message)
@@ -27,7 +28,7 @@
 
                 job.Stage = Convert.ToInt32(Convert.ToDecimal(message.Stage));
                 _database.Update(job);
-                _jobStageUpdatedContactBuilderTask.Create(job);
+                _taskService.CreateTasks(job.JobId);
             }
         }
     }

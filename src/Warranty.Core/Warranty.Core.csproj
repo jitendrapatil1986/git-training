@@ -620,7 +620,6 @@
     <Compile Include="StructureMapValidatorFactory.cs" />
     <Compile Include="SystemTime.cs" />
     <Compile Include="TaskInfrastructure\Interfaces\ITask.cs" />
-    <Compile Include="TaskInfrastructure\Tasks\JobStageUpdatedContactBuilderTask.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoJob10MonthAnniversary.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoJobAnniversaryTask.cs" />
     <Compile Include="ToDoInfrastructure\ConcreteToDos\ToDoJobChangedTask.cs" />
@@ -662,7 +661,9 @@
       <Name>Warranty.InnerMessages</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="TaskInfrastructure\Tasks\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
