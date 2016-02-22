@@ -34,12 +34,6 @@ namespace Warranty.Server.IntegrationTests
             return savedItem;
         }
 
-        public T GetRandom<T>()
-        {
-            var builder = ObjectFactory.GetInstance<EntityBuilder<T>>();
-            return builder.GetRandom();
-        }
-
         public void Send(Action<TEvent> eventAction)
         {
             Event = new TEvent();

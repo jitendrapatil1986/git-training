@@ -35,11 +35,5 @@ namespace Warranty.Server.IntegrationTests.SetUp
 
             return Saved(entity, action);
         }
-
-        public new Job GetRandom()
-        {
-            
-            return new Job();
-        }
     }
 }
