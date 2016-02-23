@@ -24,6 +24,23 @@ namespace Warranty.Core.Services
         {
             job.CurrentHomeOwnerId = homeOwner.HomeOwnerId;
             homeOwner.JobId = job.JobId;
+            using (_database)
+            {
+                _database.Update(homeOwner);
+                _database.Update(job);
+            }
+        }
+
+        public void RemoveFromJob(HomeOwner homeOwner, Job job)
+        {
+            if (job.CurrentHomeOwnerId == homeOwner.HomeOwnerId)
+            {
+                using (_database)
+                {
+                    job.CurrentHomeOwnerId = null;
+                    _database.Update(job);
+                }
+            }
         }
 
         public HomeOwner GetHomeOwnerByJobNumber(string jobNumber)
