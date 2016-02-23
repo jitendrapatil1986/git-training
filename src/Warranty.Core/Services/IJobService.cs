@@ -19,5 +19,7 @@ namespace Warranty.Core.Services
         Job GetJobById(Guid jobId);
 
         bool IsModelOrShowcase(Job job);
+
+        void Save(Job job);
     }
 }
