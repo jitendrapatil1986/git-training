@@ -1,60 +1,21 @@
 Environment "dev" -servers @(
     Server "wkcorpappdev1" @("Web";)
-    Server "wkcorpappdev1" @("Nsb";)
     Server "wksql3" @("Database";)
     ) -installPath "C:\Installs\WarrantyTest"
     
 Environment "training" -servers @(
     Server "wkcorpapptrain1" @("Web";)
-    Server "wkcorpapptrain1" @("Nsb";)
     Server "wksql3" @("Database";)
     ) -installPath "C:\Installs\WarrantyTraining"
     
 Environment "prod" -servers @(
     Server "wkcorpappprod2" @("Web";)
-    Server "wkcorpappprod2" @("Nsb";)
     Server "wksql1" @("Database";)
     ) -installPath "C:\Installs\Warranty"
 
 
 if(Test-Path .\environments.ps1) {
     . .\environments.ps1
-}
-
-Role "Nsb" -Incremental {
-    . load-vars "nsb\Warranty"
-
-    # backup existing site
-    backup-directory $nsb_directory
-
-    #Stop NSB Service
-    Stop-Service "WolfpackAgent"
-    Stop-Service "$nsb_service_name"
-
-    #Uninstall NSB Service
-    &"$nsb_directory\NServiceBus.Host.exe" "/uninstall" "/serviceName:$nsb_service_name"
-
-    # copy new files
-    sync-files $source_dir $nsb_directory
-    Remove-Item "$nsb_directory\mscorlib.dll"
-
-    # config
-    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_nsb_application_name;"
-    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='Accounting.API.BaseUri']/@value" $accountingApiBaseUri
-    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Accounting.Events']/@Endpoint" "Accounting.Server@$accountingEndPointServer"
-    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Accounting.Commands']/@Endpoint" "Accounting.Server@$accountingEndPointServer"
-    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='TIPS.Events']/@Endpoint" "TIPS.Server@$TIPSEndpointServer"
-	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='NServiceBus.FileShareDataBus']/@value" $fileShareDataBus
-        
-    #Install NSB Service
-    &"$nsb_directory\NServiceBus.Host.exe" "/install" "/serviceName:$nsb_service_name" "/username:dwh\svc-Warranty-nsb" "/password:8k6+_6xft#y`$K_Xd" "/dependsOn:MSMQ"
-
-    #Start NSB Service
-    Start-Service "$nsb_service_name"
-    Start-Service "WolfpackAgent"
-
-} -FullInstall {
-    # You could do IIS setup here... but it is much easier to just do that with server provisioning
 }
 
 Role "Web" -Incremental {
@@ -118,7 +79,6 @@ function script:load-vars($relativeSourceDir) {
     $invalid_path_msg = "ERROR: Invalid path for variable {0}!!"
     
     check-pathvar $web_directory '$web_directory'
-    check-pathvar $nsb_directory '$nsb_directory'
     check-var $db_server = "$db_server"
 }
 

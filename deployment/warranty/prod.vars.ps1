@@ -2,17 +2,13 @@
 $environment = "prod"
 
 $web_directory = "C:\Applications\Warranty"
-$nsb_directory = "C:\Applications\Warranty.Server"
 
 $newRelicAppName = "Warranty (Prod)"
 
 # db settings
 $db_server = "WKSQL1"
 $db_name = "Warranty"
-$db_nsb_application_name = "Warranty.Server"
 $db_web_application_name = "Warranty.UI"
-
-$nsb_service_name = "DWH - Warranty.Server"
 
 $header_image_file_name = "DWH logo_color_233x34_prod.png"
 
@@ -30,6 +26,3 @@ $jobServiceApiBaseUri = "http://jobservice.davidweekleyhomes.com"
 
 $accountingEndPointServer = "wkcorpappprod1"
 $TIPSEndpointServer = "wkcorpcrm2012"
-
-# Databaus configuration
-$fileShareDataBus = "\\wkcorpmgmt\DataBus\Prod"
