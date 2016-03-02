@@ -10,7 +10,7 @@ properties {
 	$build_dir = "$base_dir\_build"
 	$temp_package_dir = "$build_dir\temp_for_packaging"
 	$package_dir = "$build_dir\latestVersion"
-	$warranty_package_file = "$package_dir\Warranty_Package.zip"
+	$warranty_package_file = "$package_dir\Warranty_UI_Package.zip"
 	$warranty_server_file = "$package_dir\Warranty_Server_Package.zip"
 	$source_dir = "$base_dir\src"
 	$test_dir = "$build_dir\test"
@@ -75,9 +75,9 @@ task InitialPrivateBuild -depends StopSystem, Clean, RunAllUnitTests
 
 task DeveloperBuild -depends StopSystem, Clean, CommonAssemblyInfo, Compile, UpdateAllDatabases, RunAllUnitTests
 
-task IntegrationBuild -depends SetReleaseBuild, StopSystem, Clean, CommonAssemblyInfo, Compile, RunAllUnitTests, Packagewarranty, PackageServer
+task IntegrationBuild -depends SetReleaseBuild, StopSystem, Clean, CommonAssemblyInfo, Compile, RunAllUnitTests, PackageWarrantyUI, PackageServer
 
-task ReleaseBuild -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Compile, Packagewarranty, PackageServer
+task ReleaseBuild -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Compile, PackageWarrantyUI, PackageServer
 
 task BuildAndStart -depends StopSystem, Clean, CommonAssemblyInfo, RebuildAllDatabases, UpdateAllDatabases, Compile, StartSystem
 
@@ -142,7 +142,7 @@ task Clean {
 	exec { msbuild /t:clean /v:q /p:Configuration=$project_config $source_dir\$project_name.sln }
 }
 
-task Packagewarranty -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Compile {
+task PackageWarrantyUI -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Compile {
 	delete_directory $temp_package_dir
 	delete_file $warranty_package_file
 	
