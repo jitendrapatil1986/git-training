@@ -1,17 +1,17 @@
 Environment "dev" -servers @(
     Server "wkcorpappdev1" @("Nsb";)
     Server "wksql3" @("Database";)
-    ) -installPath "C:\Installs\WarrantyTest"
+    ) -installPath "C:\Installs\WarrantyServerTest"
     
 Environment "training" -servers @(
     Server "wkcorpapptrain1" @("Nsb";)
     Server "wksql3" @("Database";)
-    ) -installPath "C:\Installs\WarrantyTraining"
+    ) -installPath "C:\Installs\WarrantyServerTraining"
     
 Environment "prod" -servers @(
     Server "wkcorpappprod2" @("Nsb";)
     Server "wksql1" @("Database";)
-    ) -installPath "C:\Installs\Warranty"
+    ) -installPath "C:\Installs\WarrantyServer"
 
 
 if(Test-Path .\environments.ps1) {
