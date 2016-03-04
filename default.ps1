@@ -10,7 +10,8 @@ properties {
 	$build_dir = "$base_dir\_build"
 	$temp_package_dir = "$build_dir\temp_for_packaging"
 	$package_dir = "$build_dir\latestVersion"
-	$warranty_package_file = "$package_dir\Warranty_Package.zip"
+	$warranty_package_file = "$package_dir\Warranty_UI_Package.zip"
+	$warranty_server_file = "$package_dir\Warranty_Server_Package.zip"
 	$source_dir = "$base_dir\src"
 	$test_dir = "$build_dir\test"
 	$result_dir = "$build_dir\results"
@@ -74,9 +75,9 @@ task InitialPrivateBuild -depends StopSystem, Clean, RunAllUnitTests
 
 task DeveloperBuild -depends StopSystem, Clean, CommonAssemblyInfo, Compile, UpdateAllDatabases, RunAllUnitTests
 
-task IntegrationBuild -depends SetReleaseBuild, StopSystem, Clean, CommonAssemblyInfo, Compile, RunAllUnitTests, Packagewarranty
+task IntegrationBuild -depends SetReleaseBuild, StopSystem, Clean, CommonAssemblyInfo, Compile, RunAllUnitTests, PackageWarrantyUI, PackageServer
 
-task ReleaseBuild -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Compile, Packagewarranty
+task ReleaseBuild -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Compile, PackageWarrantyUI, PackageServer
 
 task BuildAndStart -depends StopSystem, Clean, CommonAssemblyInfo, RebuildAllDatabases, UpdateAllDatabases, Compile, StartSystem
 
@@ -141,7 +142,7 @@ task Clean {
 	exec { msbuild /t:clean /v:q /p:Configuration=$project_config $source_dir\$project_name.sln }
 }
 
-task Packagewarranty -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Compile {
+task PackageWarrantyUI -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Compile {
 	delete_directory $temp_package_dir
 	delete_file $warranty_package_file
 	
@@ -150,9 +151,6 @@ task Packagewarranty -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Compil
 	
 	#websites
 	copy_website_files "$warranty_web_dir" "$temp_package_dir\web\warranty"
-
-	#nservicebus
-	copy_files "$warranty_nsb_dir\$project_config" "$temp_package_dir\nsb\warranty"
 
 	#tools
 	copy_files "$roundhouse_dir" "$temp_package_dir\tools\roundhouse"
@@ -163,6 +161,27 @@ task Packagewarranty -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Compil
 	copy_files "$base_dir\deployment\modules" "$temp_package_dir\modules"
 
 	zip_directory $temp_package_dir $warranty_package_file
+}
+
+task PackageServer -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Compile {
+	delete_directory $temp_package_dir
+	delete_file $warranty_server_file
+	
+	#databases
+	copy_files "$source_dir\database" "$temp_package_dir\database"
+
+	#nservicebus
+	copy_files "$warranty_nsb_dir\$project_config" "$temp_package_dir\nsb\warranty"
+
+	#tools
+	copy_files "$roundhouse_dir" "$temp_package_dir\tools\roundhouse"
+	delete_directory "$temp_package_dir\tools\roundhouse\output"
+	
+	#pstrami deployment
+	copy_files "$base_dir\deployment\server" "$temp_package_dir"
+	copy_files "$base_dir\deployment\modules" "$temp_package_dir\modules"
+
+	zip_directory $temp_package_dir $warranty_server_file
 }
 
 task StartSystem {
