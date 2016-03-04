@@ -181,8 +181,6 @@
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandler.cs" />
-    <Compile Include="Handlers\Jobs\ModelAddedHandler.cs" />
-    <Compile Include="Handlers\Jobs\ShowcaseAddedHandler.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseApprovedHandler.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseElevationUpdateApprovedHandler.cs" />
     <Compile Include="Handlers\Jobs\ShowcasePlanUpdateApprovedHandler.cs" />
