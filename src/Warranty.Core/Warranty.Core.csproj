@@ -162,6 +162,7 @@
     <Compile Include="Calculator\SurveyDataResult.cs" />
     <Compile Include="Calculator\WarrantyCalculator.cs" />
     <Compile Include="Enumerations\PaymentTypes.cs" />
+    <Compile Include="Exceptions\DeleteServiceCallException.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddPaymentCommandDto.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddStandAloneBackchargeCommand.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddStandAloneBackchargeCommandDto.cs" />

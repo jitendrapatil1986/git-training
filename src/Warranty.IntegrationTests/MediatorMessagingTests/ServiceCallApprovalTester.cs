@@ -3,14 +3,12 @@ using NUnit.Framework;
 using Should;
 using Warranty.Core.Entities;
 using Warranty.Core.Enumerations;
+using Warranty.Core.Exceptions;
 using Warranty.Core.Features.ServiceCallApproval;
 using Warranty.IntegrationTests.PersistenceTests;
-using Warranty.Tests.Core;
 
 namespace Warranty.IntegrationTests.MediatorMessagingTests
 {
-    using NServiceBus;
-
     public class ServiceCallApprovalTester : MediatorMessagingTesterBase
     {
         private ServiceCall _serviceCall;
@@ -42,7 +40,21 @@ namespace Warranty.IntegrationTests.MediatorMessagingTests
             };
             Send(command);
             var affectedServiceCall = Load<ServiceCall>(_serviceCall.ServiceCallId);
-            affectedServiceCall.ServiceCallStatus.ShouldEqual(ServiceCallStatus.Complete);
+            affectedServiceCall.ShouldBeNull();
+        }
+
+        [Test, ExpectedException(typeof(DeleteServiceCallException))]
+        public void ServiceCall_DenialWithPurchaseOrder_ShouldFail()
+        {
+            TestDatabase.Insert(new ServiceCall());
+            var serviceCallLineItem = GetSaved<ServiceCallLineItem>(x => x.ServiceCallId = _serviceCall.ServiceCallId);
+            var purchaseOrder = GetSaved<PurchaseOrder>(x => x.ServiceCallLineItemId = serviceCallLineItem.ServiceCallLineItemId);
+
+            var command = new ServiceCallDenyCommand
+            {
+                ServiceCallId = _serviceCall.ServiceCallId
+            };
+            Send(command);
         }
     }
 }
