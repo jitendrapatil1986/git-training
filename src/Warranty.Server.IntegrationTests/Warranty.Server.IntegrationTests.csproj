@@ -157,8 +157,13 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Handlers\Jobs\BuyerTransferApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\CommunityAddedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseApprovedHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\ShowcaseElevationUpdateApprovedHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\ShowcasePlanUpdateApprovedHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\ShowcaseSwingUpdateApprovedHandlerTester.cs" />
+    <Compile Include="Handlers\RandomStringGenerator.cs" />
     <Compile Include="Services\CommunityServiceTester.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseResetToDirtHandlerTester.cs" />
     <Compile Include="Services\EmployeeServiceTester.cs" />
@@ -176,7 +181,6 @@
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandlerTester.cs" />
-    <Compile Include="Handlers\Jobs\ShowcaseAddedHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentAddedHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentAddressNumberUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Payments\PaymentDeletedHandlerTester.cs" />

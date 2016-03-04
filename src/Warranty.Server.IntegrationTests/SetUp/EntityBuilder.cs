@@ -6,7 +6,7 @@ namespace Warranty.Server.IntegrationTests.SetUp
 {
     public abstract class EntityBuilder<T> : IEntityBuilder<T>
     {
-        private readonly IDatabase _database;
+        protected readonly IDatabase _database;
 
         protected EntityBuilder(IDatabase database)
         {

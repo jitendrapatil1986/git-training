@@ -10,7 +10,6 @@ namespace Warranty.Server.Handlers.Jobs
     using System.Collections.Generic;
     using System.Linq;
     using Core.Services;
-    using Core.TaskInfrastructure.Tasks;
 
     public class JobClosedHandler : IHandleMessages<JobClosed>
     {

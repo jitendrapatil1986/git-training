@@ -168,6 +168,7 @@
     <Compile Include="Handlers\Communities\ProjectNameUpdatedHandler.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateAddedHandler.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateUpdatedHandler.cs" />
+    <Compile Include="Handlers\Jobs\BuyerTransferApprovedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobAddressChangedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobElevationUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobClosedHandler.cs" />
@@ -180,10 +181,11 @@
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobWarrantyDateUpdatedHandler.cs" />
-    <Compile Include="Handlers\Jobs\ModelAddedHandler.cs" />
-    <Compile Include="Handlers\Jobs\ShowcaseAddedHandler.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseApprovedHandler.cs" />
+    <Compile Include="Handlers\Jobs\ShowcaseElevationUpdateApprovedHandler.cs" />
+    <Compile Include="Handlers\Jobs\ShowcasePlanUpdateApprovedHandler.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseResetToDirtHandler.cs" />
+    <Compile Include="Handlers\Jobs\ShowcaseSwingUpdateApprovedHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyBackchargeDeletedHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyPaymentDeletedHandler.cs" />
     <Compile Include="Handlers\Payments\NotifyBackchargeRequestedHandler.cs" />
