@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NPoco;
 using Warranty.Core.Entities;
+using Warranty.Core.Enumerations;
 
 namespace Warranty.IntegrationTests.MediatorMessagingTests.EntityBuilders
 {
@@ -18,7 +19,9 @@ namespace Warranty.IntegrationTests.MediatorMessagingTests.EntityBuilders
         {
             var entity = new PurchaseOrder
             {
-                CreatedBy = "test"
+                CreatedBy = "test",
+                DeliveryInstructions = DeliveryInstruction.ASAP,
+                CostCode = WarrantyCostCode.AllFlooring
             };
 
             return Saved(entity, action);

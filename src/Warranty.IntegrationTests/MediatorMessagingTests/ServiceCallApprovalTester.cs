@@ -46,9 +46,21 @@ namespace Warranty.IntegrationTests.MediatorMessagingTests
         [Test, ExpectedException(typeof(DeleteServiceCallException))]
         public void ServiceCall_DenialWithPurchaseOrder_ShouldFail()
         {
-            TestDatabase.Insert(new ServiceCall());
             var serviceCallLineItem = GetSaved<ServiceCallLineItem>(x => x.ServiceCallId = _serviceCall.ServiceCallId);
             var purchaseOrder = GetSaved<PurchaseOrder>(x => x.ServiceCallLineItemId = serviceCallLineItem.ServiceCallLineItemId);
+
+            var command = new ServiceCallDenyCommand
+            {
+                ServiceCallId = _serviceCall.ServiceCallId
+            };
+            Send(command);
+        }
+
+        [Test, ExpectedException(typeof(DeleteServiceCallException))]
+        public void ServiceCall_DenialWithPayment_ShouldFail()
+        {
+            var serviceCallLineItem = GetSaved<ServiceCallLineItem>(x => x.ServiceCallId = _serviceCall.ServiceCallId);
+            var payment = GetSaved<Payment>(x => x.ServiceCallLineItemId = serviceCallLineItem.ServiceCallLineItemId);
 
             var command = new ServiceCallDenyCommand
             {

@@ -17,10 +17,9 @@ namespace Warranty.IntegrationTests.MediatorMessagingTests.EntityBuilders
 
         public override ServiceCallLineItem GetSaved(Action<ServiceCallLineItem> action)
         {
-            var testString = "test";
-
             var entity = new ServiceCallLineItem
             {
+                ServiceCallLineItemStatus = ServiceCallLineItemStatus.Open
             };
 
             return Saved(entity, action);

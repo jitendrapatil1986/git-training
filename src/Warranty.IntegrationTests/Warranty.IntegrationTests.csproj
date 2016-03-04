@@ -166,6 +166,7 @@
     <Compile Include="MediatorMessagingTests\EntityBuilders\JobEntityBuilder.cs" />
     <Compile Include="MediatorMessagingTests\EntityBuilders\EntityBuilder.cs" />
     <Compile Include="MediatorMessagingTests\EntityBuilders\IEntityBuilder.cs" />
+    <Compile Include="MediatorMessagingTests\EntityBuilders\PaymentEntityBuilder.cs" />
     <Compile Include="MediatorMessagingTests\EntityBuilders\PurchaseOrderEntityBuilder.cs" />
     <Compile Include="MediatorMessagingTests\EntityBuilders\ServiceCallLineItemEntityBuilder.cs" />
     <Compile Include="MediatorMessagingTests\ServiceCallApprovalTester.cs" />

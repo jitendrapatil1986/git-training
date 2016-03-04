@@ -139,16 +139,11 @@ namespace Warranty.UI.Controllers
                     ServiceCallId = id
                 });
             }
-            catch (Exception ex)
+            catch (DeleteServiceCallException ex)
             {
-                if(ex.InnerException.GetType() == typeof(DeleteServiceCallException))
-                {
-                    ex = ex.InnerException;
-                }
                 Response.StatusCode = 403;
                 return Json(new { success = "false", message = ex.Message });
             }
-            
 
             return Json(new { success = "true" }, JsonRequestBehavior.AllowGet);
         }
