@@ -134,7 +134,7 @@ namespace Warranty.UI.Controllers
         {
             try
             {
-                _mediator.Send(new ServiceCallDenyCommand
+                _mediator.Send(new DeleteServiceCallCommand
                 {
                     ServiceCallId = id
                 });

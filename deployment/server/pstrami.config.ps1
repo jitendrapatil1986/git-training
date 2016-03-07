@@ -1,62 +1,58 @@
 Environment "dev" -servers @(
-    Server "wkcorpappdev1" @("Web";)
+    Server "wkcorpappdev1" @("Nsb";)
     Server "wksql3" @("Database";)
-    ) -installPath "C:\Installs\WarrantyUITest"
+    ) -installPath "C:\Installs\WarrantyServerTest"
     
 Environment "training" -servers @(
-    Server "wkcorpapptrain1" @("Web";)
+    Server "wkcorpapptrain1" @("Nsb";)
     Server "wksql3" @("Database";)
-    ) -installPath "C:\Installs\WarrantyUITraining"
+    ) -installPath "C:\Installs\WarrantyServerTraining"
     
 Environment "prod" -servers @(
-    Server "wkcorpappprod2" @("Web";)
+    Server "wkcorpappprod2" @("Nsb";)
     Server "wksql1" @("Database";)
-    ) -installPath "C:\Installs\WarrantyUI"
+    ) -installPath "C:\Installs\WarrantyServer"
 
 
 if(Test-Path .\environments.ps1) {
     . .\environments.ps1
 }
 
-Role "Web" -Incremental {
-    . load-vars "web\Warranty"
-
-    Set-AppOffline $web_directory
+Role "Nsb" -Incremental {
+    . load-vars "nsb\Warranty"
 
     # backup existing site
-    backup-directory $web_directory
+    backup-directory $nsb_directory
+
+    #Stop NSB Service
+    Stop-Service "WolfpackAgent"
+    Stop-Service "$nsb_service_name"
+
+    #Uninstall NSB Service
+    &"$nsb_directory\NServiceBus.Host.exe" "/uninstall" "/serviceName:$nsb_service_name"
 
     # copy new files
-    $skips = @(
-        @{"objectName"="filePath";"skipAction"="Delete";"absolutePath"='App_Offline\.htm$'}
-    )
-    sync-files $source_dir $web_directory $skips
+    sync-files $source_dir $nsb_directory
+    Remove-Item "$nsb_directory\mscorlib.dll"
 
     # config
-    poke-xml "$web_directory\web.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_web_application_name;"
-    poke-xml "$web_directory\web.config" "configuration/system.identityModel/identityConfiguration/audienceUris/add/@value" $warranty_identity_uri
-    poke-xml "$web_directory\web.config" "configuration/system.identityModel.services/federationConfiguration/wsFederation/@realm" $warranty_identity_uri
-    poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Environment']/@value" $environment
-    poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='sendFeedbackAddresses']/@value" $sendFeedbackAddresses
-    poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='sendEmailsForTest']/@value" $sendEmailsForTest
-    poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='DocumentSharePath']/@value" $documentSharePath
-    poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Warranty.BaseUri']/@value" $warranty_identity_uri
-    poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Survey.API.BaseUri']/@value" $surveyApiBaseUri
-	poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Accounting.API.BaseUri']/@value" $accountingApiBaseUri
-	poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='ApiServiceUrl']/@value" $jobServiceApiBaseUri
-    poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='NewRelic.AppName']/@value" $newRelicAppName
+    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_nsb_application_name;"
+    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='Accounting.API.BaseUri']/@value" $accountingApiBaseUri
+    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Accounting.Events']/@Endpoint" "Accounting.Server@$accountingEndPointServer"
+    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Accounting.Commands']/@Endpoint" "Accounting.Server@$accountingEndPointServer"
+    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='TIPS.Events']/@Endpoint" "TIPS.Server@$TIPSEndpointServer"
+	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='NServiceBus.FileShareDataBus']/@value" $fileShareDataBus
+        
+    #Install NSB Service
+    &"$nsb_directory\NServiceBus.Host.exe" "/install" "/serviceName:$nsb_service_name" "/username:dwh\svc-Warranty-nsb" "/password:8k6+_6xft#y`$K_Xd" "/dependsOn:MSMQ"
 
-    poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
-    poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@subject" $errorReportingSubject
-    poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@smtpServer" $smtpServer
-    
-    Rename-Header-File $web_directory $header_image_file_name
+    #Start NSB Service
+    Start-Service "$nsb_service_name"
+    Start-Service "WolfpackAgent"
 
-    Set-AppOnline $web_directory
 } -FullInstall {
     # You could do IIS setup here... but it is much easier to just do that with server provisioning
 }
-
 
 Role "Database" -Incremental {
     run-dbtask "Update" "database\Warranty" "db_server" "db_name"
@@ -78,7 +74,7 @@ function script:load-vars($relativeSourceDir) {
     $error_msg = "ERROR: Missing variable {0}!!"
     $invalid_path_msg = "ERROR: Invalid path for variable {0}!!"
     
-    check-pathvar $web_directory '$web_directory'
+    check-pathvar $nsb_directory '$nsb_directory'
     check-var $db_server = "$db_server"
 }
 

@@ -2,7 +2,7 @@
 
 namespace Warranty.Core.Features.ServiceCallApproval
 {
-    public class ServiceCallDenyCommand : ICommand
+    public class DeleteServiceCallCommand : ICommand
     {
         public Guid ServiceCallId { get; set; }
     }

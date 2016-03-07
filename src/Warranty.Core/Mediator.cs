@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Runtime.ExceptionServices;
 
 namespace Warranty.Core
@@ -73,7 +74,7 @@ namespace Warranty.Core
             {
                 handler.GetType().GetMethod("Handle").Invoke(handler, new object[] { message });
             }
-            catch (Exception ex)
+            catch (TargetInvocationException ex)
             {
                 if (ex.InnerException != null)
                     ExceptionDispatchInfo.Capture(ex.InnerException).Throw();

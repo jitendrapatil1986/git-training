@@ -485,7 +485,7 @@
     <Compile Include="Features\SendFeedback\SendFeedbackCommand.cs" />
     <Compile Include="Features\SendFeedback\SendFeedbackCommandHandler.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallDenyHandler.cs" />
-    <Compile Include="Features\ServiceCallApproval\ServiceCallDenyCommand.cs" />
+    <Compile Include="Features\ServiceCallApproval\DeleteServiceCallCommand.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommand.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommandHandler.cs" />
     <Compile Include="Features\Homeowner\AddOrUpdateEmailCommand.cs" />

@@ -39,7 +39,7 @@ namespace Warranty.IntegrationTests.MediatorMessagingTests
             var serviceCallNote = GetSaved<ServiceCallNote>(x => x.ServiceCallId = _serviceCall.ServiceCallId);
             var serviceCallLineItem = GetSaved<ServiceCallLineItem>(x => x.ServiceCallId = _serviceCall.ServiceCallId);
 
-            var command = new ServiceCallDenyCommand()
+            var command = new DeleteServiceCallCommand()
             {
                 ServiceCallId = _serviceCall.ServiceCallId
             };
@@ -59,7 +59,7 @@ namespace Warranty.IntegrationTests.MediatorMessagingTests
             var serviceCallLineItem = GetSaved<ServiceCallLineItem>(x => x.ServiceCallId = _serviceCall.ServiceCallId);
             var purchaseOrder = GetSaved<PurchaseOrder>(x => x.ServiceCallLineItemId = serviceCallLineItem.ServiceCallLineItemId);
 
-            var command = new ServiceCallDenyCommand
+            var command = new DeleteServiceCallCommand
             {
                 ServiceCallId = _serviceCall.ServiceCallId
             };
@@ -72,7 +72,7 @@ namespace Warranty.IntegrationTests.MediatorMessagingTests
             var serviceCallLineItem = GetSaved<ServiceCallLineItem>(x => x.ServiceCallId = _serviceCall.ServiceCallId);
             var payment = GetSaved<Payment>(x => x.ServiceCallLineItemId = serviceCallLineItem.ServiceCallLineItemId);
 
-            var command = new ServiceCallDenyCommand
+            var command = new DeleteServiceCallCommand
             {
                 ServiceCallId = _serviceCall.ServiceCallId
             };
