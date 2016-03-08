@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NPoco;
 using Warranty.Core.ApprovalInfrastructure.Interfaces;
 using Warranty.Core.Entities;
 using Warranty.Core.Enumerations;
+using Warranty.Core.Exceptions;
 
 namespace Warranty.Core.ApprovalInfrastructure.ApprovalServices
 {
@@ -23,11 +26,6 @@ namespace Warranty.Core.ApprovalInfrastructure.ApprovalServices
         public ServiceCall Approve(Guid id)
         {
             return UpdateServiceCall(id, ServiceCallStatus.Open);
-        }
-
-        public ServiceCall Deny(Guid id)
-        {
-            return UpdateServiceCall(id, ServiceCallStatus.Complete);
         }
 
         private ServiceCall UpdateServiceCall(Guid id, ServiceCallStatus newStatus)
