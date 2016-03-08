@@ -142,7 +142,7 @@ namespace Warranty.UI.Controllers
             catch (DeleteServiceCallException ex)
             {
                 Response.StatusCode = 403;
-                return Json(new { success = "false", message = ex.Message });
+                return Json(new { success = "false", message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
 
             return Json(new { success = "true" }, JsonRequestBehavior.AllowGet);
