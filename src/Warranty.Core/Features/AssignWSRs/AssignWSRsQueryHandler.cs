@@ -34,7 +34,7 @@ namespace Warranty.Core.Features.AssignWSRs
                                             INNER JOIN Cities CT ON
                                             @0 LIKE '%' + CT.CityCode + '%'
                                             AND CT.CityId = C.CityId
-                                            WHERE (SELECT COUNT(jobnumber) FROM Jobs j WHERE j.CommunityId = a.CommunityId) > 0
+                                            WHERE (SELECT COUNT(JobNumber) FROM Jobs j WHERE j.CommunityId = C.CommunityId) > 0
                                             GROUP BY C.CommunityId
                                          ) a
                                          LEFT JOIN CommunityAssignments ca
