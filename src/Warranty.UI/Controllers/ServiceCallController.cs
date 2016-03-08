@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Net;
 using System.Web.Services.Description;
 using Common.Security.Session;
 using Warranty.Core.Exceptions;
@@ -141,8 +142,7 @@ namespace Warranty.UI.Controllers
             }
             catch (DeleteServiceCallException ex)
             {
-                Response.StatusCode = 403;
-                return Json(new { success = "false", message = ex.Message }, JsonRequestBehavior.AllowGet);
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden, ex.Message);
             }
 
             return Json(new { success = "true" }, JsonRequestBehavior.AllowGet);
