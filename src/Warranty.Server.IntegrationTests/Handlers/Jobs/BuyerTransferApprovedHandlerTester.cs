@@ -136,6 +136,44 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         }
 
         [Test]
+        public void BuyerTransferApprovedHandler_ProperlyCreatesNewHomeownerIfDoesntExist()
+        {
+            var oldJob = GetSaved<Job>();
+            var newJob = GetSaved<Job>();
+
+            oldJob.CommunityId = _community.CommunityId;
+            TestDatabase.Update(oldJob);
+
+            newJob.CommunityId = _community.CommunityId;
+            TestDatabase.Update(newJob);
+
+            var message = new BuyerTransferApproved
+            {
+                Opportunity = new Opportunity
+                {
+                    Contact = new Contact
+                    {
+                        FirstName = "test",
+                        LastName = "testing"
+                    }
+                },
+                Sale = new Sale
+                {
+                    JobNumber = newJob.JobNumber
+                },
+                PreviousJobNumber = oldJob.JobNumber
+            };
+            
+            Send(message);
+
+            var newJobFromDb = TestDatabase.SingleById<Job>(newJob.JobId);
+            var homeownerFromDb = TestDatabase.SingleById<HomeOwner>(newJobFromDb.CurrentHomeOwnerId);
+
+            homeownerFromDb.ShouldNotBeNull();
+            homeownerFromDb.HomeOwnerName.ShouldEqual("testing, test");
+        }
+
+        [Test]
         public void BuyerTransferApprovedHandler_ProperlyCreatesStage7TodoOnOldJob()
         {
             SendMessage(beforeSend: (oldJob, newJob, homeowner) =>
