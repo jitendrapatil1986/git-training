@@ -10,6 +10,7 @@ $nsb_service_name = "DWH - Warranty.Server"
 
 $accountingApiBaseUri = "http://accountingtest.davidweekleyhomes.com/api/"
 
+$landEndPointServer = "wkcorpappdev1"
 $accountingEndPointServer = "wkcorpappdev1"
 $TIPSEndpointServer = "wkvtipstest"
 
