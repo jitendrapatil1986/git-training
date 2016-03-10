@@ -45,6 +45,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Accounting.Events.1.1.914.0\lib\net45\Accounting.Events.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Common.Core.1.1.82.0\lib\net45\Common.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Messages, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Common.Messages.1.1.116.0\lib\net40\Common.Messages.dll</HintPath>
       <Private>True</Private>
@@ -70,6 +74,10 @@
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
+    <Reference Include="Land.Events, Version=1.1.88.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Land.Events.1.1.88\lib\net45\Land.Events.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
       <Private>True</Private>
@@ -81,6 +89,10 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Moq, Version=4.2.1502.911, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Moq.4.2.1502.0911\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -159,6 +171,7 @@
     </Compile>
     <Compile Include="Handlers\Jobs\BuyerTransferApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\CommunityAddedHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\JobAddressChangedHandlerTests.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseElevationUpdateApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\ShowcasePlanUpdateApprovedHandlerTester.cs" />
