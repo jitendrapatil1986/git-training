@@ -82,5 +82,24 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 
             jobService.Verify(x => x.Save(job), Times.Once);
         }
+
+        [TestCase("   1234", "1234")]
+        [TestCase("4321   ", "4321")]
+        [TestCase("   8794    ", "8794")]
+        public void Handle_WhenJdeIdentifierContainsLeadingOrTrailingWhiteSpace_ProvidesJdeIdentifierWithoutWhiteSpaceToJobService(string jdeIdentifier, string expectedJobNumber)
+        {
+            var jobService = new Mock<IJobService>();
+            var handler = new JobAddressChangedHandler(jobService.Object);
+            var message = new LotAddressChanged
+            {
+                JdeIdentifier = jdeIdentifier,
+                NewStreetNumber = "1234",
+                NewStreetName = "some street"
+            };
+
+            handler.Handle(message);
+
+            jobService.Verify(x => x.GetJobByNumber(expectedJobNumber), Times.Once);
+        }
     }
 }

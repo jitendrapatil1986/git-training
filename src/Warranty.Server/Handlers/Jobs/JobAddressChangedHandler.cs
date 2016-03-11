@@ -19,7 +19,8 @@ namespace Warranty.Server.Handlers.Jobs
 
         public void Handle(LotAddressChanged message)
         {
-            var job = _jobService.GetJobByNumber(message.JdeIdentifier);
+            var trimmedJdeIdentifier = message.JdeIdentifier.Trim();
+            var job = _jobService.GetJobByNumber(trimmedJdeIdentifier);
 
             //We may not have the job in warranty yet so just return in that case
             if (job == null)
