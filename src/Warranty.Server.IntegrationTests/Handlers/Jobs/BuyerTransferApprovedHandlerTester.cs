@@ -43,7 +43,10 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             if(beforeSend != null) beforeSend(oldJob, newJob, homeowner);
             var message = new BuyerTransferApproved
             {
-                Opportunity = new Opportunity(),
+                Opportunity = new Opportunity
+                {
+                    Contact = new Contact()
+                },
                 Sale = new Sale
                 {
                     JobNumber = newJob.JobNumber
@@ -85,6 +88,11 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
                     TestDatabase.SingleOrDefault<Task>(string.Format("WHERE ReferenceId = '{0}' AND TaskType = {1}",
                         jobId, taskType.Value));
             }
+        }
+
+        private string GetFormattedHomeownerName(string firstName, string lastName)
+        {
+            return string.Format("{0}, {1}", lastName, firstName);
         }
 
         public BuyerTransferApprovedHandlerTester()
@@ -133,6 +141,47 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             {
                 newJob.ShouldNotBeNull();
             });
+        }
+
+        [Test]
+        public void BuyerTransferApprovedHandler_ProperlyCreatesNewHomeownerIfDoesntExist()
+        {
+            var oldJob = GetSaved<Job>();
+            var newJob = GetSaved<Job>();
+
+            var firstName = Guid.NewGuid().ToString();
+            var lastName = Guid.NewGuid().ToString();
+
+            oldJob.CommunityId = _community.CommunityId;
+            TestDatabase.Update(oldJob);
+
+            newJob.CommunityId = _community.CommunityId;
+            TestDatabase.Update(newJob);
+
+            var message = new BuyerTransferApproved
+            {
+                Opportunity = new Opportunity
+                {
+                    Contact = new Contact
+                    {
+                        FirstName = firstName,
+                        LastName = lastName
+                    }
+                },
+                Sale = new Sale
+                {
+                    JobNumber = newJob.JobNumber
+                },
+                PreviousJobNumber = oldJob.JobNumber
+            };
+            
+            Send(message);
+
+            var newJobFromDb = TestDatabase.SingleById<Job>(newJob.JobId);
+            var homeownerFromDb = TestDatabase.SingleById<HomeOwner>(newJobFromDb.CurrentHomeOwnerId);
+
+            homeownerFromDb.ShouldNotBeNull();
+            homeownerFromDb.HomeOwnerName.ShouldEqual(GetFormattedHomeownerName(firstName, lastName));
         }
 
         [Test]
@@ -210,6 +259,24 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
                 oldJob.CurrentHomeOwnerId.ShouldBeNull();
                 newJob.CurrentHomeOwnerId.ShouldEqual(homeowner.HomeOwnerId);
                 homeowner.JobId.ShouldEqual(newJob.JobId);
+            });
+        }
+
+        [Test]
+        public void BuyerTransferApprovedHandler_DoesntCreateNewHomeownerIfHomeownerExists()
+        {
+            var firstName = Guid.NewGuid().ToString();
+            var lastName = Guid.NewGuid().ToString();
+            var homeownerName = GetFormattedHomeownerName(firstName, lastName);
+
+            SendMessage(modifyMessage: (message) =>
+            {
+                message.Opportunity.Contact.FirstName = firstName;
+                message.Opportunity.Contact.LastName = lastName;
+            },afterSend: (oldJob, newJob, homeowner) =>
+            {
+                var orphanedHomeowner = TestDatabase.Fetch<HomeOwner>("WHERE HomeownerName = @0", homeownerName);
+                orphanedHomeowner.Count.ShouldEqual(0);
             });
         }
     }

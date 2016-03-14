@@ -74,6 +74,7 @@ namespace Warranty.Server.Handlers.Jobs
             if (homeowner == null)
             {
                 homeowner = CreateNewHomeowner(message.Opportunity);
+                _database.Insert(homeowner);
             }
             else
             {
