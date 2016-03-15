@@ -161,6 +161,8 @@ require(['/Scripts/app/main.js'], function () {
                     success: function (result) {
                         button.parent().html('<span>Status: <span class="label label-' + status.toLowerCase() + '-service-call">' + status + '</span></span>');
                     }
+                }).fail(function (response, error, responseMessage) {
+                    toastr.error(responseMessage);
                 });
             }
 

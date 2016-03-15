@@ -162,6 +162,7 @@
     <Compile Include="Calculator\SurveyDataResult.cs" />
     <Compile Include="Calculator\WarrantyCalculator.cs" />
     <Compile Include="Enumerations\PaymentTypes.cs" />
+    <Compile Include="Exceptions\DeleteServiceCallException.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddPaymentCommandDto.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddStandAloneBackchargeCommand.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddStandAloneBackchargeCommandDto.cs" />
@@ -484,7 +485,7 @@
     <Compile Include="Features\SendFeedback\SendFeedbackCommand.cs" />
     <Compile Include="Features\SendFeedback\SendFeedbackCommandHandler.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallDenyHandler.cs" />
-    <Compile Include="Features\ServiceCallApproval\ServiceCallDenyCommand.cs" />
+    <Compile Include="Features\ServiceCallApproval\DeleteServiceCallCommand.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommand.cs" />
     <Compile Include="Features\ServiceCallApproval\ServiceCallApproveCommandHandler.cs" />
     <Compile Include="Features\Homeowner\AddOrUpdateEmailCommand.cs" />

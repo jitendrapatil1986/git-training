@@ -1,23 +1,26 @@
-﻿namespace Warranty.Server.Handlers.Jobs
-{
-    using System.Linq;
-    using Common.DataAccess;
-    using Core.Entities;
-    using Land.Events;
-    using NServiceBus;
+﻿using System;
+using Land.Events;
+using NServiceBus;
+using Warranty.Core.Services;
 
+namespace Warranty.Server.Handlers.Jobs
+{
     public class JobAddressChangedHandler : IHandleMessages<LotAddressChanged>
     {
-        private readonly IRepository _repository;
+        private readonly IJobService _jobService;
 
-        public JobAddressChangedHandler(IRepository repository)
+        public JobAddressChangedHandler(IJobService jobService)
         {
-            _repository = repository;
+            if (jobService == null)
+                throw new ArgumentNullException("jobService");
+
+            _jobService = jobService;
         }
 
         public void Handle(LotAddressChanged message)
         {
-            var job = _repository.Query<Job>().SingleOrDefault(j => j.JobNumber == message.JdeIdentifier);
+            var trimmedJdeIdentifier = message.JdeIdentifier.Trim();
+            var job = _jobService.GetJobByNumber(trimmedJdeIdentifier);
 
             //We may not have the job in warranty yet so just return in that case
             if (job == null)
@@ -25,7 +28,7 @@
 
             job.AddressLine = string.Format("{0} {1}", message.NewStreetNumber, message.NewStreetName);
 
-            _repository.SaveOrUpdate(job);
+            _jobService.Save(job);
         }
     }
 }

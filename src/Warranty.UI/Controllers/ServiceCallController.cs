@@ -1,5 +1,8 @@
 ﻿using System.Configuration;
+using System.Net;
+using System.Web.Services.Description;
 using Common.Security.Session;
+using Warranty.Core.Exceptions;
 
 namespace Warranty.UI.Controllers
 {
@@ -130,10 +133,17 @@ namespace Warranty.UI.Controllers
 
         public ActionResult Deny(Guid id)
         {
-            _mediator.Send(new ServiceCallDenyCommand
+            try
             {
-                ServiceCallId = id
-            });
+                _mediator.Send(new DeleteServiceCallCommand
+                {
+                    ServiceCallId = id
+                });
+            }
+            catch (DeleteServiceCallException ex)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden, ex.Message);
+            }
 
             return Json(new { success = "true" }, JsonRequestBehavior.AllowGet);
         }

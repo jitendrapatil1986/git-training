@@ -1,4 +1,8 @@
-﻿namespace Warranty.Core
+﻿using System;
+using System.Reflection;
+using System.Runtime.ExceptionServices;
+
+namespace Warranty.Core
 {
     using StructureMap;
 
@@ -61,12 +65,21 @@
 
         TResult ProcessCommandWithHandler<TResult>(ICommand<TResult> message, object handler)
         {
-            return (TResult)handler.GetType().GetMethod("Handle").Invoke(handler, new object[] { message });
+            return (TResult) handler.GetType().GetMethod("Handle").Invoke(handler, new object[] {message});
         }
 
         void ProcessCommandWithHandler(ICommand message, object handler)
         {
-            handler.GetType().GetMethod("Handle").Invoke(handler, new object[] { message });
+            try
+            {
+                handler.GetType().GetMethod("Handle").Invoke(handler, new object[] { message });
+            }
+            catch (TargetInvocationException ex)
+            {
+                if (ex.InnerException != null)
+                    ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                throw;
+            }
         }
     }
 }
