@@ -172,6 +172,7 @@
     <Compile Include="Handlers\JobStages\JobStageDateAddedHandler.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\BuyerTransferredToNewLotHandler.cs" />
+    <Compile Include="Sagas\BuyerTransferredToNewLotSaga.cs" />
     <Compile Include="Handlers\Jobs\JobAddressChangedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobElevationUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobClosedHandler.cs" />
