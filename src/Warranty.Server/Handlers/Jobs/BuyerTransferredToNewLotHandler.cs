@@ -14,38 +14,24 @@ using Job = Warranty.Core.Entities.Job;
 
 namespace Warranty.Server.Handlers.Jobs
 {
-    public class BuyerTransferApprovedHandler : IHandleMessages<BuyerTransferApproved>
+    public class BuyerTransferredToNewLotHandler : IHandleMessages<BuyerTransferredToNewLot>
     {
-        private IJobService _jobService;
-        private IHomeOwnerService _homeOwnerService;
-        private ITaskService _taskService;
+        private readonly IJobService _jobService;
+        private readonly IHomeOwnerService _homeOwnerService;
+        private readonly ITaskService _taskService;
         private IDatabase _database;
 
-        public BuyerTransferApprovedHandler(IJobService jobService, IHomeOwnerService homeOwnerService, ITaskService taskService, IDatabase database)
+        public BuyerTransferredToNewLotHandler(IJobService jobService, IHomeOwnerService homeOwnerService, ITaskService taskService, IDatabase database)
         {
-            if (jobService == null)
-                throw new ArgumentNullException("jobService");
-            if (homeOwnerService == null)
-                throw new ArgumentNullException("homeOwnerService");
-            if (taskService == null)
-                throw new ArgumentNullException("taskService");
-            if (database == null)
-                throw new ArgumentNullException("database");
-
             _jobService = jobService;
             _homeOwnerService = homeOwnerService;
             _taskService = taskService;
             _database = database;
         }
 
-        private void Validate(BuyerTransferApproved message)
+        private void Validate(BuyerTransferredToNewLot message)
         {
-            if(message.Sale == null)
-                throw new InvalidOperationException("Sale is null");
-            if (message.Opportunity == null)
-                throw new InvalidOperationException("Opportunity is null");
-            if(string.IsNullOrWhiteSpace(message.Sale.JobNumber))
-                throw new InvalidOperationException("Job Number is null or blank");
+            
         }
 
         private HomeOwner CreateNewHomeowner(Opportunity opportunity )
@@ -63,18 +49,18 @@ namespace Warranty.Server.Handlers.Jobs
             _taskService.DeleteTask(job.JobId, TaskType.JobStage10);
         }
 
-        public void Handle(BuyerTransferApproved message)
+        public void Handle(BuyerTransferredToNewLot message)
         {
             Validate(message);
 
             var previousJob = _jobService.GetJobByNumber(message.PreviousJobNumber);
-            var newJob = _jobService.GetJobByNumber(message.Sale.JobNumber);
+            var newJob = _jobService.GetJobByNumber(message.NewJobNumber);
             var homeowner = _homeOwnerService.GetHomeOwnerByJobNumber(message.PreviousJobNumber);
 
             if (homeowner == null)
             {
-                homeowner = CreateNewHomeowner(message.Opportunity);
-                _database.Insert(homeowner);
+                // todo: create homeowner
+                //homeowner = CreateNewHomeowner(message.Opportunity);
             }
             else
             {
@@ -86,7 +72,8 @@ namespace Warranty.Server.Handlers.Jobs
 
             if (newJob == null)
             {
-                newJob = _jobService.CreateJob(message.Sale);
+                //todo: create job
+                //newJob = _jobService.CreateJob(message.Sale);
             }
 
             _homeOwnerService.AssignToJob(homeowner, newJob);

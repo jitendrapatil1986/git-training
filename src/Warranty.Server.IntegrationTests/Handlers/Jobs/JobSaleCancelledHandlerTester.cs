@@ -14,7 +14,7 @@ using Job = Warranty.Core.Entities.Job;
 namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 {
     [TestFixture]
-    public class JobSaleCancelledHandlerTester : BusHandlerTesterBase<JobSaleCancelled>
+    public class JobSaleCancelledHandlerTester : BusHandlerTesterBase<HomeSaleCancelled>
     {
         private IHomeOwnerService _homeOwnerService;
         private ITaskService _taskService;
@@ -26,7 +26,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         }
         public void SendMessage(string jobNumber, Guid? contactId = null)
         {
-            var message = new JobSaleCancelled
+            var message = new HomeSaleCancelled
             {
                 JobNumber = jobNumber
             };
