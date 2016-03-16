@@ -12,21 +12,21 @@ using Warranty.Server.Extensions;
 
 namespace Warranty.Server.Handlers.Jobs
 {
-    public class JobSaleCancelledHandler : IHandleMessages<JobSaleCancelled>
+    public class HomeSaleCancelledHandler : IHandleMessages<HomeSaleCancelled>
     {
         private readonly SqlServerDatabase _database;
-        private readonly ILog _log = LogManager.GetLogger(typeof (JobSaleCancelledHandler));
+        private readonly ILog _log = LogManager.GetLogger(typeof (HomeSaleCancelledHandler));
         private readonly IHomeOwnerService _homeOwnerService;
-        private ITaskService _taskService;
+        private readonly ITaskService _taskService;
 
-        public JobSaleCancelledHandler(IDatabase database, IHomeOwnerService homeOwnerService, ITaskService taskService)
+        public HomeSaleCancelledHandler(IDatabase database, IHomeOwnerService homeOwnerService, ITaskService taskService)
         {
             _database = (SqlServerDatabase) database;
             _homeOwnerService = homeOwnerService;
             _taskService = taskService;
         }
 
-        public void Handle(JobSaleCancelled message)
+        public void Handle(HomeSaleCancelled message)
         {
             using (_database)
             {

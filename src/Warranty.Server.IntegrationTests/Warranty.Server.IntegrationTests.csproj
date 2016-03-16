@@ -41,25 +41,25 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Warranty.UI\bin\Accounting.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Accounting.Events, Version=1.1.914.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Accounting.Events.1.1.914.0\lib\net45\Accounting.Events.dll</HintPath>
+    <Reference Include="Accounting.Events, Version=1.1.1135.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accounting.Events.1.1.1135.0\lib\net45\Accounting.Events.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Common.Core.1.1.82.0\lib\net45\Common.Core.dll</HintPath>
+    <Reference Include="Common.Core, Version=1.1.124.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Core.1.1.124.0\lib\net45\Common.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Messages, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Messages.1.1.116.0\lib\net40\Common.Messages.dll</HintPath>
+    <Reference Include="Common.Messages, Version=1.1.124.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Messages.1.1.124.0\lib\net40\Common.Messages.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Common.Security.1.1.112.0\lib\net45\Common.Security.dll</HintPath>
+      <HintPath>..\packages\Common.Security.1.1.124.0\lib\net45\Common.Security.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Construction.Events, Version=1.4.99.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Construction.Events.1.4.99.0\lib\net45\Construction.Events.dll</HintPath>
+    <Reference Include="Construction.Events, Version=1.4.580.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Construction.Events.1.4.580.0\lib\net45\Construction.Events.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="FizzWare.NBuilder, Version=3.0.1.0, Culture=neutral, PublicKeyToken=5651b03e12e42c12, processorArchitecture=MSIL">
       <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
@@ -74,16 +74,16 @@
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.1001\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="Land.Events, Version=1.1.88.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Land.Events.1.1.88\lib\net45\Land.Events.dll</HintPath>
+    <Reference Include="Land.Events, Version=1.1.191.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Land.Events.1.1.191\lib\net45\Land.Events.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -95,18 +95,20 @@
       <HintPath>..\packages\Moq.4.2.1502.0911\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NPoco, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NPoco.2.5.76\lib\net40\NPoco.dll</HintPath>
     </Reference>
-    <Reference Include="NServiceBus">
-      <HintPath>..\packages\NServiceBus.Interfaces.4.2.0\lib\net40\NServiceBus.dll</HintPath>
+    <Reference Include="NServiceBus, Version=4.7.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.Interfaces.4.7.5\lib\net40\NServiceBus.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="NServiceBus.Core">
-      <HintPath>..\packages\NServiceBus.4.2.0\lib\net40\NServiceBus.Core.dll</HintPath>
+    <Reference Include="NServiceBus.Core, Version=4.7.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.4.7.5\lib\net40\NServiceBus.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.ObjectBuilder.StructureMap">
       <HintPath>..\packages\NServiceBus.StructureMap.4.2.0\lib\net40\NServiceBus.ObjectBuilder.StructureMap.dll</HintPath>
@@ -148,8 +150,8 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="TIPS.Events, Version=1.1863.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TIPS.Events.1.1863.0.0\lib\net40\TIPS.Events.dll</HintPath>
+    <Reference Include="TIPS.Events, Version=1.1971.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TIPS.Events.1.1971.0.0\lib\net40\TIPS.Events.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
