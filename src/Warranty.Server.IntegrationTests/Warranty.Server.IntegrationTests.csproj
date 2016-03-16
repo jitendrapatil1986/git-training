@@ -191,7 +191,6 @@
     <Compile Include="Handlers\JobStages\JobStageDateUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobElevationUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobClosedHandlerTester.cs" />
-    <Compile Include="Handlers\Jobs\JobResetToDirtHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobPlanUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandlerTester.cs" />

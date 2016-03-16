@@ -179,7 +179,6 @@
     <Compile Include="Handlers\Jobs\HomeSaleCancelledHandler.cs" />
     <Compile Include="Handlers\Jobs\NotifyJobHomeownerChangedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobPrimaryBuilderUpdatedHandler.cs" />
-    <Compile Include="Handlers\Jobs\JobResetToDirtHandler.cs" />
     <Compile Include="Handlers\Jobs\JobPlanUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandler.cs" />
