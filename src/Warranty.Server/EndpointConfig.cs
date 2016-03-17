@@ -1,18 +1,20 @@
 using System.Configuration;
+using AutoMapper;
 using Common.Extensions;
 using Common.Messages;
+using log4net.Config;
+using NServiceBus;
+using Warranty.Core.DataAccess;
 
 namespace Warranty.Server
 {
-    using Core.DataAccess;
-    using log4net.Config;
-    using NServiceBus;
-
     public class EndpointConfig : IConfigureThisEndpoint, AsA_Publisher, IWantCustomInitialization
     {
         public void Init()
         {
             SetLoggingLibrary.Log4Net(() => XmlConfigurator.Configure());
+
+            Mapper.Initialize(a => a.AddProfile(new MappingProfile()));
 
             var container = StructureMapConfig.CreateContainer();
             DbFactory.Setup(container);
@@ -24,6 +26,8 @@ namespace Warranty.Server
                 .DefiningCommandsAs(t => t.IsAssignableTo<ICommand>() || t.IsBusCommand())
                 .DefiningEventsAs(t => t.IsAssignableTo<IEvent>() || t.IsBusEvent())
                 .FileShareDataBus(ConfigurationManager.AppSettings["NServiceBus.FileShareDataBus"]);
+
+            Configure.Features.Enable<NServiceBus.Features.Sagas>();
         }
     }
 }

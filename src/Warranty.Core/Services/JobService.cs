@@ -52,17 +52,26 @@ namespace Warranty.Core.Services
             }
         }
 
+        public Job CreateJob(Job job)
+        {
+            if (job == null)
+                throw new ArgumentNullException("job");
+
+            using (_database)
+            {
+                _database.Insert(job);
+            }
+
+            return job;
+        }
+
         public Job CreateJob(TipsJob tipsJob)
         {
             if(tipsJob == null)
                 throw new ArgumentNullException("tipsJob");
 
             var job = UpdateJobFromTipsJob(new Job(), tipsJob);
-            using (_database)
-            {
-                _database.Insert(job);
-            }
-            return job;
+            return CreateJob(job);
         }
 
         public Job CreateJob(Sale sale)
@@ -71,11 +80,7 @@ namespace Warranty.Core.Services
                 throw new ArgumentNullException("sale");
 
             var job = UpdateJobFromSale(new Job(), sale);
-            using (_database)
-            {
-                _database.Insert(job);
-            }
-            return job;
+            return CreateJob(job);
         }
 
         public void UpdateExistingJob(Job job, Sale sale)
