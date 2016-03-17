@@ -1,4 +1,5 @@
 using System.Configuration;
+using AutoMapper;
 using Common.Extensions;
 using Common.Messages;
 using log4net.Config;
@@ -12,6 +13,8 @@ namespace Warranty.Server
         public void Init()
         {
             SetLoggingLibrary.Log4Net(() => XmlConfigurator.Configure());
+
+            Mapper.Initialize(a => a.AddProfile(new MappingProfile()));
 
             var container = StructureMapConfig.CreateContainer();
             DbFactory.Setup(container);
