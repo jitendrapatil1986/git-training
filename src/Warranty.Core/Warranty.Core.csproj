@@ -142,8 +142,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TIPS.Events, Version=1.1981.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TIPS.Events.1.1981.0.0\lib\net40\TIPS.Events.dll</HintPath>
+    <Reference Include="TIPS.Events, Version=1.1984.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TIPS.Events.1.1984.0.0\lib\net40\TIPS.Events.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Yay.Enumerations, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
