@@ -48,6 +48,8 @@ namespace Warranty.Server.Sagas
             ConfigureMapping<HomeSoldSaga_AssignHomeOwnerToJob>(m => m.JobNumber).ToSaga(s => s.JobNumber);
         }
 
+        public HomeSoldSaga() { }
+
         public HomeSoldSaga(ICommunityService communityService, IJobService jobService, IEmployeeService employeeService, IHomeOwnerService homeOwnerService, ITaskService taskService)
         {
             _communityService = communityService;
