@@ -54,11 +54,9 @@ namespace Warranty.Server.Sagas
 
         public void Handle(JobSaleDetailsResponse message)
         {
-            Data.CommunityNumber = message.CommunityNumber;
-            Data.BuilderEmployeeID = message.BuilderEmployeeID;
-            Data.JobSaleDetails = message;
+            Data.JobSaleDetails = message; // Will need info from this later
 
-            var community = _communityService.GetCommunityByNumber(Data.CommunityNumber);
+            var community = _communityService.GetCommunityByNumber(Data.JobSaleDetails.CommunityNumber);
             if (community == null)
             {
                 Bus.SendLocal(new HomeSoldSaga_GetCommunityDetails(Data.JobNumber));
@@ -90,7 +88,7 @@ namespace Warranty.Server.Sagas
                 Data.NewJob.UpdatedDate = DateTime.UtcNow;
                 Data.NewJob.CommunityId = Data.Community.CommunityId;
 
-                var builder = _employeeService.GetEmployeeByNumber(Data.BuilderEmployeeID);
+                var builder = _employeeService.GetEmployeeByNumber(Data.JobSaleDetails.BuilderEmployeeID);
                 if (builder != null)
                     Data.NewJob.BuilderEmployeeId = builder.EmployeeId;
 
@@ -186,8 +184,6 @@ namespace Warranty.Server.Sagas
         public virtual Guid ContactId { get; set; }
         [Unique]
         public virtual string JobNumber { get; set; }
-        public virtual string CommunityNumber { get; set; }
-        public virtual int? BuilderEmployeeID { get; set; }
         public virtual Job NewJob { get; set; }
         public virtual Community Community { get; set; }
         public virtual JobSaleDetailsResponse JobSaleDetails { get; set; }
