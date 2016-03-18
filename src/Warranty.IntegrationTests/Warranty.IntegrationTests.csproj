@@ -175,6 +175,7 @@
     <Compile Include="MediatorMessagingTests\MediatorMessagingTesterBase.cs" />
     <Compile Include="MediatorMessagingTests\EntityBuilders\ServiceCallEntityBuilder.cs" />
     <Compile Include="PersistenceTests\ActivityLogMapTester.cs" />
+    <Compile Include="PersistenceTests\CommunityServiceTester.cs" />
     <Compile Include="PersistenceTests\PaymentMapTester.cs" />
     <Compile Include="PersistenceTests\PersistenceTesterBase.cs" />
     <Compile Include="PersistenceTests\ServiceCallMapTester.cs" />

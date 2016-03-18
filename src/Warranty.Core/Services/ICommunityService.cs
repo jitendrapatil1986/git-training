@@ -7,5 +7,6 @@ namespace Warranty.Core.Services
         Community GetCommunityByNumber(string communityNumber);
 
         string GetWarrantyCommunityNumber(string communityNumber);
+        Community Create(Community newCommunity);
     }
 }

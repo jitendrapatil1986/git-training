@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Configuration;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using AutoMapper;
 using Common.Messages;
+using Newtonsoft.Json;
 using NServiceBus;
 using NServiceBus.Saga;
 using TIPS.Commands.Requests;
@@ -8,6 +12,7 @@ using TIPS.Commands.Responses;
 using TIPS.Events.JobEvents;
 using Warranty.Core.Entities;
 using Warranty.Core.Services;
+using Warranty.Core.Services.Models;
 using Warranty.Server.Handlers.Jobs;
 
 namespace Warranty.Server.Sagas
@@ -25,6 +30,14 @@ namespace Warranty.Server.Sagas
         private readonly IEmployeeService _employeeService;
         private readonly IHomeOwnerService _homeOwnerService;
         private readonly ITaskService _taskService;
+
+        public Uri AccountingBaseAddress
+        {
+            get
+            {
+                return new Uri(ConfigurationManager.AppSettings["Accounting.API.BaseUri"]);
+            }
+        }
 
         public override void ConfigureHowToFindSaga()
         {
@@ -69,12 +82,24 @@ namespace Warranty.Server.Sagas
 
         public void Handle(HomeSoldSaga_GetCommunityDetails message)
         {
-            // 1. Make Call to Accounting API to get community
-            // 2. Create the community in Warranty
-            // 3. Set the community on SagaData
-            
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = AccountingBaseAddress;
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.dwh.accounting-v1+json"));
+                
+                var result = client.GetAsync(string.Format("api/community?communitynumber={0}", Data.JobSaleDetails.CommunityNumber)).Result;
+                result.EnsureSuccessStatusCode();
+
+                var details = JsonConvert.DeserializeObject<CommunityDetails>(result.Content.ReadAsStringAsync().Result);
+                var newCommunity = Mapper.Map<Community>(details);
+
+                Data.Community = _communityService.Create(newCommunity);
+            }
+
             Bus.SendLocal(new HomeSoldSaga_CreateOrUpdateJob(Data.JobNumber));
         }
+
+        
 
         public void Handle(HomeSoldSaga_CreateOrUpdateJob message)
         {

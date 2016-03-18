@@ -132,6 +132,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
@@ -244,6 +245,7 @@
     <Compile Include="HandlerTester.cs" />
     <Compile Include="SetUp\ProjectEntityBuilder.cs" />
     <Compile Include="SetUp\TaskEntityBuilder.cs" />
+    <Compile Include="WebServices\AccountingTester.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
