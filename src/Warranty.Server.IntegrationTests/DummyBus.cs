@@ -12,7 +12,7 @@ namespace Warranty.Server.IntegrationTests
             Bus = new DummyBus();
         }
 
-        public DummyBus Bus { get; }
+        public DummyBus Bus { get; private set; }
     }
 
 
@@ -24,8 +24,8 @@ namespace Warranty.Server.IntegrationTests
             SentMessages = new List<object>();
         }
 
-        public List<object> SentLocalMessages { get; }
-        public List<object> SentMessages { get; }
+        public List<object> SentLocalMessages { get; private set; }
+        public List<object> SentMessages { get; private set; }
 
         public T CreateInstance<T>()
         {
