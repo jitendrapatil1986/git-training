@@ -255,8 +255,8 @@ namespace Warranty.Server.IntegrationTests
             throw new NotImplementedException();
         }
 
-        public IDictionary<string, string> OutgoingHeaders { get; }
-        public IMessageContext CurrentMessageContext { get; }
-        public IInMemoryOperations InMemory { get; }
+        public IDictionary<string, string> OutgoingHeaders { get; private set; }
+        public IMessageContext CurrentMessageContext { get; private set; }
+        public IInMemoryOperations InMemory { get; private set; }
     }
 }
