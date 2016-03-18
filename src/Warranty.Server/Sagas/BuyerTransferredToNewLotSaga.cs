@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using Common.Messages;
 using NServiceBus;
 using NServiceBus.Saga;
 using TIPS.Commands.Requests;
@@ -72,7 +73,7 @@ namespace Warranty.Server.Sagas
             homeOwner.CreatedDate = DateTime.UtcNow;
             homeOwner.UpdatedDate = DateTime.UtcNow;
 
-            Data.HomeOwner = homeOwner;
+            Data.HomeOwner = _homeOwnerService.Create(homeOwner);
             Bus.SendLocal(new BuyerTransferredToNewLotSaga_EnsureNewJobExists(Data.NewJobNumber));
         }
 
@@ -130,7 +131,7 @@ namespace Warranty.Server.Sagas
         }
     }
 
-    public class BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks : ICommand
+    public class BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks : IBusCommand
     {
         public string NewJobNumber { get; set; }
 
@@ -142,7 +143,7 @@ namespace Warranty.Server.Sagas
         }
     }
 
-    public class BuyerTransferredToNewLotSaga_EnsureNewJobExists : ICommand
+    public class BuyerTransferredToNewLotSaga_EnsureNewJobExists : IBusCommand
     {
         public string NewJobNumber { get; set; }
 
@@ -154,7 +155,7 @@ namespace Warranty.Server.Sagas
         }
     }
 
-    public class BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner : ICommand
+    public class BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner : IBusCommand
     {
         public string NewJobNumber { get; set; }
 

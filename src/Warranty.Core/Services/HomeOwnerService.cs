@@ -68,6 +68,15 @@ namespace Warranty.Core.Services
             }
         }
 
+        public HomeOwner Create(HomeOwner homeOwner)
+        {
+            using (_database)
+            {
+                _database.Insert(homeOwner);
+                return homeOwner;
+            }
+        }
+
         public HomeOwner GetHomeOwnerByJobNumber(string jobNumber)
         {
             return _database.SingleOrDefault<HomeOwner>(

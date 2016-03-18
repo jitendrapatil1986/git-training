@@ -98,8 +98,8 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
             var message = new TIPS.Events.JobEvents.BuyerTransferredToNewLot
             {
                 ContactId = Guid.NewGuid(),
-                NewJobNumber = JobNumber_For_Known_HomeOwner,
-                PreviousJobNumber = "Does Not Matter"
+                NewJobNumber = "Does Not Matter",
+                PreviousJobNumber = JobNumber_For_Known_HomeOwner
             };
 
             Saga.Handle(message);
@@ -109,13 +109,13 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         }
 
         [Test]
-        public void ShouldSentToRemoveExistingHomeOwnerWhenFound()
+        public void ShouldSendToRemoveExistingHomeOwnerWhenFound()
         {
             var message = new TIPS.Events.JobEvents.BuyerTransferredToNewLot
             {
                 ContactId = Guid.NewGuid(),
-                NewJobNumber = JobNumber_For_Known_HomeOwner,
-                PreviousJobNumber = "Does Not Matter"
+                NewJobNumber = "Does Not Matter",
+                PreviousJobNumber = JobNumber_For_Known_HomeOwner
             };
 
             Saga.Handle(message);
