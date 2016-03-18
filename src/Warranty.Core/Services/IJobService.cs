@@ -10,7 +10,7 @@ namespace Warranty.Core.Services
 
         Job CreateJob(TIPS.Events.Models.Job tipsJob);
 
-        Job  CreateJob(Sale sale);
+        Job CreateJob(Sale sale);
 
         void UpdateExistingJob(Job job, Sale sale);
 
@@ -21,5 +21,7 @@ namespace Warranty.Core.Services
         bool IsModelOrShowcase(Job job);
 
         void Save(Job job);
+
+        Job CreateJob(Job job);
     }
 }
