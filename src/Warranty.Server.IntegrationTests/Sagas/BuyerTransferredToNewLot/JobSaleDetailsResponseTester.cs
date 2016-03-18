@@ -47,9 +47,11 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
                 })
                 .Verifiable();
 
+            var log = new Mock<log4net.ILog>();
+
             SagaData = new BuyerTransferredToNewLotSagaData();
 
-            Saga = new BuyerTransferredToNewLotSaga(jobService.Object, homeOwnerService.Object, taskService.Object, EmployeeService.Object, CommunityService.Object)
+            Saga = new BuyerTransferredToNewLotSaga(jobService.Object, homeOwnerService.Object, taskService.Object, EmployeeService.Object, CommunityService.Object, log.Object)
             {
                 Bus = Bus,
                 Data = SagaData

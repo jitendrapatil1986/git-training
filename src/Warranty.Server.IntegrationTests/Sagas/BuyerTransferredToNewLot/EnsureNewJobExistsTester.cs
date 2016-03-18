@@ -36,10 +36,11 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
             var taskService = new Mock<ITaskService>();
             var employeeService = new Mock<IEmployeeService>();
             var communityService = new Mock<ICommunityService>();
+            var log = new Mock<log4net.ILog>();
 
             SagaData = new BuyerTransferredToNewLotSagaData();
 
-            Saga = new BuyerTransferredToNewLotSaga(jobService.Object, homeOwnerService.Object, taskService.Object, employeeService.Object, communityService.Object)
+            Saga = new BuyerTransferredToNewLotSaga(jobService.Object, homeOwnerService.Object, taskService.Object, employeeService.Object, communityService.Object, log.Object)
             {
                 Bus = Bus,
                 Data = SagaData
