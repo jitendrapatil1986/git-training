@@ -23,5 +23,6 @@ namespace Warranty.Core.Services
         void Save(Job job);
 
         Job CreateJob(Job job);
+        void UpdateExistingJob(Job job);
     }
 }

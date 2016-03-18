@@ -25,7 +25,6 @@ namespace Warranty.Server.Sagas
         private readonly ITaskService _taskService;
         private readonly IEmployeeService _employeeService;
         private readonly ICommunityService _communityService;
-        private const string ENDPOINT_NAME = "Warranty.Server";
 
         public BuyerTransferredToNewLotSaga(IJobService jobService, IHomeOwnerService homeOwnerService, ITaskService taskService, IEmployeeService employeeService, ICommunityService communityService)
         {
@@ -68,8 +67,8 @@ namespace Warranty.Server.Sagas
             var homeOwner = Mapper.Map<HomeOwner>(message);
             homeOwner.HomeOwnerId = Guid.NewGuid();
             homeOwner.HomeOwnerNumber = 1;
-            homeOwner.CreatedBy = ENDPOINT_NAME;
-            homeOwner.UpdatedBy = ENDPOINT_NAME;
+            homeOwner.CreatedBy = Constants.ENDPOINT_NAME;
+            homeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
             homeOwner.CreatedDate = DateTime.UtcNow;
             homeOwner.UpdatedDate = DateTime.UtcNow;
 

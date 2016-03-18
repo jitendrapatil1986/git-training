@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using NPoco;
 using NServiceBus.Logging;
@@ -40,6 +39,32 @@ namespace Warranty.Core.Services
                     job.CurrentHomeOwnerId = null;
                     _database.Update(job);
                 }
+            }
+        }
+
+        public void RemoveHomeOwner(Job job)
+        {
+            if (!job.CurrentHomeOwnerId.HasValue)
+                return;
+
+            var existingOwner = GetHomeOwnerByJobNumber(job.JobNumber);
+            if(existingOwner == null)
+                return;
+
+            using (_database)
+            {
+                job.CurrentHomeOwnerId = null;
+                _database.Update(job);
+                _database.Delete(existingOwner);
+            }
+        }
+
+        public HomeOwner Create(HomeOwner homeOwner)
+        {
+            using (_database)
+            {
+                _database.Insert(homeOwner);
+                return homeOwner;
             }
         }
 
