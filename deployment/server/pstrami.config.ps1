@@ -41,6 +41,7 @@ Role "Nsb" -Incremental {
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Accounting.Events']/@Endpoint" "Accounting.Server@$accountingEndPointServer"
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Accounting.Commands']/@Endpoint" "Accounting.Server@$accountingEndPointServer"
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='TIPS.Events']/@Endpoint" "TIPS.Server@$TIPSEndpointServer"
+    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='TIPS.Commands']/@Endpoint" "TIPS.Server@$TIPSEndpointServer"
 	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Land.Events']/@Endpoint" "Land.Server@$landEndpointServer"
 	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='NServiceBus.FileShareDataBus']/@value" $fileShareDataBus
         
