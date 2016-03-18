@@ -37,6 +37,8 @@ namespace Warranty.Server.Sagas
             _communityService = communityService;
         }
 
+        public BuyerTransferredToNewLotSaga() { }
+
         public override void ConfigureHowToFindSaga()
         {
             ConfigureMapping<BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner>(x => x.NewJobNumber).ToSaga(x => x.NewJobNumber);
