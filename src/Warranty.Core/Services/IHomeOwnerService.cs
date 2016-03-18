@@ -14,5 +14,6 @@ namespace Warranty.Server.Handlers.Jobs
         HomeOwner GetHomeOwner(Contact homeOwnerInfo, int homeOwnerNumber = 1);
 
         void RemoveFromJob(HomeOwner homeOwner, Job job);
+        HomeOwner Create(HomeOwner homeOwner);
     }
 }
