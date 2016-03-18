@@ -17,6 +17,14 @@ namespace Warranty.Server
 
             var container = StructureMapConfig.CreateContainer();
             DbFactory.Setup(container);
+            container.Configure(cfg =>
+            {
+                cfg.For<ILog>().AlwaysUnique().Use(c =>
+                {
+                    var parentType = c.ParentType ?? c.BuildStack.Current.ConcreteType;
+                    return LogManager.GetLogger(parentType);
+                });
+            });
 
             Configure.With()
                 .StructureMapBuilder(container)
