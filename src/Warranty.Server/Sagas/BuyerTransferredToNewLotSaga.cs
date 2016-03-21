@@ -112,7 +112,7 @@ namespace Warranty.Server.Sagas
 
         public void Handle(JobSaleDetailsResponse message)
         {
-            _log.InfoFormat("Received JobDetailsResponse from TIPS for job number {0}, will not create job in Warranty.", message.JobNumber);
+            _log.InfoFormat("Received JobDetailsResponse from TIPS for job number {0}, will now create job in Warranty.", message.JobNumber);
 
             var existingJob = _jobService.GetJobByNumber(message.JobNumber);
 
