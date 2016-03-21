@@ -202,7 +202,6 @@
     <Compile Include="MappingTests\MappingTest.cs" />
     <Compile Include="Sagas\BuyerTransferredToNewLot\BuyerTransferredToNewLotTester.cs" />
     <Compile Include="Sagas\BuyerTransferredToNewLot\HomeBuyerDetailsResponseTester.cs" />
-    <Compile Include="Sagas\BuyerTransferredToNewLot\EnsureNewJobExistsTester.cs" />
     <Compile Include="Sagas\BuyerTransferredToNewLot\JobSaleDetailsResponseTester.cs" />
     <Compile Include="Services\CommunityServiceTester.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseResetToDirtHandlerTester.cs" />

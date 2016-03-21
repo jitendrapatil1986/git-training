@@ -4,6 +4,7 @@ using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using Should;
+using TIPS.Commands.Requests;
 using TIPS.Commands.Responses;
 using TIPS.Events.Models;
 using Warranty.Core.Entities;
@@ -93,14 +94,14 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         }
 
         [Test]
-        public void ShouldSendToEnsureJobExists()
+        public void ShouldRequestJobDetails()
         {
             SagaData.NewJobNumber = "12345";
 
             var response = new HomeBuyerDetailsResponse();
             Saga.Handle(response);
 
-            var sentMessage = Bus.SentLocalMessages.OfType<BuyerTransferredToNewLotSaga_EnsureNewJobExists>().FirstOrDefault(m => m.NewJobNumber == "12345");
+            var sentMessage = Bus.SentMessages.OfType<RequestJobSaleDetails>().FirstOrDefault(m => m.JobNumber == "12345");
             sentMessage.ShouldNotBeNull();
         }
 

@@ -18,7 +18,6 @@ namespace Warranty.Server.Sagas
     public class BuyerTransferredToNewLotSaga : Saga<BuyerTransferredToNewLotSagaData>,
         IAmStartedByMessages<BuyerTransferredToNewLot>,
         IHandleMessages<BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner>,
-        IHandleMessages<BuyerTransferredToNewLotSaga_EnsureNewJobExists>,
         IHandleMessages<BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks>,
         IHandleMessages<HomeBuyerDetailsResponse>,
         IHandleMessages<JobSaleDetailsResponse>
@@ -46,7 +45,6 @@ namespace Warranty.Server.Sagas
         public override void ConfigureHowToFindSaga()
         {
             ConfigureMapping<BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner>(x => x.NewJobNumber).ToSaga(x => x.NewJobNumber);
-            ConfigureMapping<BuyerTransferredToNewLotSaga_EnsureNewJobExists>(x => x.NewJobNumber).ToSaga(x => x.NewJobNumber);
             ConfigureMapping<BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks>(x => x.NewJobNumber).ToSaga(x => x.NewJobNumber);
             ConfigureMapping<HomeBuyerDetailsResponse>(x => x.ContactId).ToSaga(x => x.ContactId);
             ConfigureMapping<JobSaleDetailsResponse>(x => x.JobNumber).ToSaga(x => x.NewJobNumber);
@@ -87,7 +85,9 @@ namespace Warranty.Server.Sagas
 
             _log.InfoFormat("Creating new HomeOwner in Warranty from TIPS information = {0}", JsonConvert.SerializeObject(homeOwner));
             Data.HomeOwner = _homeOwnerService.Create(homeOwner);
-            Bus.SendLocal(new BuyerTransferredToNewLotSaga_EnsureNewJobExists(Data.NewJobNumber));
+
+            _log.InfoFormat("Requesting updated job details from TIPS {0}", Data.NewJobNumber);
+            Bus.Send(new RequestJobSaleDetails { JobNumber = Data.NewJobNumber });
         }
 
         public void Handle(BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner message)
@@ -106,50 +106,61 @@ namespace Warranty.Server.Sagas
             _log.InfoFormat("Creating tasks from previous job {0}", Data.PreviousJobNumber);
             _taskService.CreateTasks(previousJob.JobId);
 
-            Bus.SendLocal(new BuyerTransferredToNewLotSaga_EnsureNewJobExists(Data.NewJobNumber));
-        }
-
-        public void Handle(BuyerTransferredToNewLotSaga_EnsureNewJobExists message)
-        {
-            _log.InfoFormat("Ensuring job exists in Warranty for job number {0}", Data.NewJobNumber);
-            var newJob = _jobService.GetJobByNumber(Data.NewJobNumber);
-
-            if (newJob == null)
-            {
-                _log.InfoFormat("Did not find job in Warranty for job number {0}, sending request to TIPS for data.", Data.NewJobNumber);
-
-                // Get Sale from TIPS
-                Bus.Send(new RequestJobSaleDetails { JobNumber = Data.NewJobNumber });
-                return;
-            }
-
-            _log.InfoFormat("Found job in Warranty for job number {0}, proceeding to assign to HomeOwner.", Data.NewJobNumber);
-            Data.NewJob = newJob;
-            Bus.SendLocal(new BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks(Data.NewJobNumber));
+            _log.InfoFormat("Requesting updated job details from TIPS {0}", Data.NewJobNumber);
+            Bus.Send(new RequestJobSaleDetails { JobNumber = Data.NewJobNumber });
         }
 
         public void Handle(JobSaleDetailsResponse message)
         {
-            _log.InfoFormat("Received JobDetailsResponse from TIPS for job number {0}, will not create job in Warranty.", message.JobNumber);
-            var newJob = Mapper.Map<Job>(message);
+            _log.InfoFormat("Received JobDetailsResponse from TIPS for job number {0}, will now create job in Warranty.", message.JobNumber);
+
+            var existingJob = _jobService.GetJobByNumber(message.JobNumber);
+
+            if (existingJob == null)
+            {
+                _log.InfoFormat("Job {0} does not exist, will create a new job with details from TIPS.", message.JobNumber);
+                Data.NewJob = Mapper.Map<Job>(message);
+                Data.NewJob.CreatedBy = ENDPOINT_NAME;
+                Data.NewJob.UpdatedBy = ENDPOINT_NAME;
+                Data.NewJob.CreatedDate = DateTime.UtcNow;
+                Data.NewJob.UpdatedDate = DateTime.UtcNow;
+            }
+            else
+            {
+                _log.InfoFormat("Job {0} exists, will update the existing job with details from TIPS.", message.JobNumber);
+                Data.NewJob = Mapper.Map(message, existingJob);
+                Data.NewJob.UpdatedBy = ENDPOINT_NAME;
+                Data.NewJob.UpdatedDate = DateTime.UtcNow;
+            }
+            
 
             var builder = _employeeService.GetEmployeeByNumber(message.BuilderEmployeeID);
             if (builder != null)
             {
                 _log.InfoFormat("Found a builder from the JobDetailsResponse for employeeid {0}, assigning it to the job.", message.BuilderEmployeeID);
-                newJob.BuilderEmployeeId = builder.EmployeeId;
+                Data.NewJob.BuilderEmployeeId = builder.EmployeeId;
             }
 
             var community = _communityService.GetCommunityByNumber(message.CommunityNumber);
             if (community != null)
             {
                 _log.InfoFormat("Found a community from the JobDetailsResponse for CommunityNumber {0}, assigning it to the job.", message.CommunityNumber);
-                newJob.CommunityId = community.CommunityId;
+                Data.NewJob.CommunityId = community.CommunityId;
             }
 
-            Data.NewJob = _jobService.CreateJob(newJob);
-            _log.InfoFormat("Saved new job in Warranty with job number {0}, proceeding to assign the HomeOwner and create tasks.", newJob.JobNumber);
+            if (Data.NewJob.IsNew())
+            {
+                _log.InfoFormat("Saving new job record in Warranty for job number {0}.", message.JobNumber);
+                Data.NewJob = _jobService.CreateJob(Data.NewJob);
+            }
+            else
+            {
+                _log.InfoFormat("Updating job {0} in Warranty with new details from TIPS.", message.JobNumber);
+                _jobService.Save(Data.NewJob);
+            }
+                
 
+            _log.InfoFormat("Proceeding to assign the HomeOwner and create tasks for Job {0}.", Data.NewJob.JobNumber);
             Bus.SendLocal(new BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks(Data.NewJobNumber));
         }
 
@@ -173,18 +184,6 @@ namespace Warranty.Server.Sagas
         public BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks() { }
 
         public BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks(string newJobNumber)
-        {
-            NewJobNumber = newJobNumber;
-        }
-    }
-
-    public class BuyerTransferredToNewLotSaga_EnsureNewJobExists : IBusCommand
-    {
-        public string NewJobNumber { get; set; }
-
-        public BuyerTransferredToNewLotSaga_EnsureNewJobExists() { }
-
-        public BuyerTransferredToNewLotSaga_EnsureNewJobExists(string newJobNumber)
         {
             NewJobNumber = newJobNumber;
         }
