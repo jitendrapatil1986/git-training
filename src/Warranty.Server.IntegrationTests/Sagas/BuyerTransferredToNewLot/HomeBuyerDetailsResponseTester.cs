@@ -96,12 +96,12 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         [Test]
         public void ShouldRequestJobDetails()
         {
-            SagaData.NewJobNumber = "12345";
+            SagaData.SaleId = 12344567;
 
             var response = new HomeBuyerDetailsResponse();
             Saga.Handle(response);
 
-            var sentMessage = Bus.SentMessages.OfType<RequestJobSaleDetails>().FirstOrDefault(m => m.JobNumber == "12345");
+            var sentMessage = Bus.SentMessages.OfType<RequestJobSaleDetails>().FirstOrDefault(m => m.SaleId == 12344567);
             sentMessage.ShouldNotBeNull();
         }
 
