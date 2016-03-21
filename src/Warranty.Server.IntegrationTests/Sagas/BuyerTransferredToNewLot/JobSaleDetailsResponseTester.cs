@@ -166,10 +166,6 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
             SagaData.NewJob.ShouldNotBeNull();
 
             JobService.Verify(m => m.GetJobByNumber(message.JobNumber), Times.Once);
-
-            var newJob = SagaData.NewJob;
-            newJob.ShouldNotBeNull();
-            
             JobService.Verify(m => m.Save(It.IsAny<Job>()), Times.Never);
             JobService.Verify(m => m.CreateJob(It.IsAny<Job>()), Times.Once);
         }
