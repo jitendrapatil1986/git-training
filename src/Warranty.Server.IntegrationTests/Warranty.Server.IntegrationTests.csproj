@@ -94,8 +94,8 @@
       <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -162,12 +162,12 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="TIPS.Commands, Version=1.1984.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TIPS.Commands.1.1984.0.0\lib\net40\TIPS.Commands.dll</HintPath>
+    <Reference Include="TIPS.Commands, Version=1.1997.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TIPS.Commands.1.1997.0.0\lib\net40\TIPS.Commands.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="TIPS.Events, Version=1.1984.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TIPS.Events.1.1984.0.0\lib\net40\TIPS.Events.dll</HintPath>
+    <Reference Include="TIPS.Events, Version=1.1997.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TIPS.Events.1.1997.0.0\lib\net40\TIPS.Events.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
