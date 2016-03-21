@@ -116,13 +116,14 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
             {
                 ContactId = Guid.NewGuid(),
                 NewJobNumber = "Does Not Matter",
-                PreviousJobNumber = JobNumber_For_Known_HomeOwner
+                PreviousJobNumber = JobNumber_For_Known_HomeOwner,
+                SaleId = 75645638
             };
 
             Saga.Handle(message);
 
             var sentMessage = Bus.SentLocalMessages.OfType<BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner>()
-                .FirstOrDefault(m => m.NewJobNumber == message.NewJobNumber);
+                .FirstOrDefault(m => m.SaleId == message.SaleId);
             sentMessage.ShouldNotBeNull();
         }
         
