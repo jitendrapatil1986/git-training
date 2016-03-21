@@ -132,7 +132,6 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
             };
 
             Saga.Handle(message);
-            SagaData.NewJob.ShouldNotBeNull();
 
             JobService.Verify(m => m.GetJobByNumber(message.JobNumber), Times.Once);
 
