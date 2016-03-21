@@ -2,6 +2,7 @@ using AutoMapper;
 using System.Linq;
 using TIPS.Commands.Responses;
 using Warranty.Core.Entities;
+using Warranty.Core.Services.Models;
 
 namespace Warranty.Server
 {
@@ -43,6 +44,9 @@ namespace Warranty.Server
                 .ForMember(m => m.PostalCode, a => a.MapFrom(src => src.AddressZipCode))
                 .ForMember(m => m.PlanType, a => a.MapFrom(src => src.JobType))
                 .ForMember(m => m.JdeIdentifier, a => a.MapFrom(src => src.JobNumber));
+
+            CreateMap<CommunityDetails, Community>()
+                .ForAllMembers(m => m.Ignore());
         }
 
         private string GetLegalDescription(JobSaleDetailsResponse src)

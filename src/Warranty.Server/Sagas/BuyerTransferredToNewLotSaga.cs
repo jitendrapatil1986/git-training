@@ -120,8 +120,8 @@ namespace Warranty.Server.Sagas
             {
                 _log.InfoFormat("Job {0} does not exist, will create a new job with details from TIPS.", message.JobNumber);
                 Data.NewJob = Mapper.Map<Job>(message);
-                Data.NewJob.CreatedBy = ENDPOINT_NAME;
-                Data.NewJob.UpdatedBy = ENDPOINT_NAME;
+                Data.NewJob.CreatedBy = Constants.ENDPOINT_NAME;
+                Data.NewJob.UpdatedBy = Constants.ENDPOINT_NAME;
                 Data.NewJob.CreatedDate = DateTime.UtcNow;
                 Data.NewJob.UpdatedDate = DateTime.UtcNow;
             }
@@ -129,7 +129,7 @@ namespace Warranty.Server.Sagas
             {
                 _log.InfoFormat("Job {0} exists, will update the existing job with details from TIPS.", message.JobNumber);
                 Data.NewJob = Mapper.Map(message, existingJob);
-                Data.NewJob.UpdatedBy = ENDPOINT_NAME;
+                Data.NewJob.UpdatedBy = Constants.ENDPOINT_NAME;
                 Data.NewJob.UpdatedDate = DateTime.UtcNow;
             }
             

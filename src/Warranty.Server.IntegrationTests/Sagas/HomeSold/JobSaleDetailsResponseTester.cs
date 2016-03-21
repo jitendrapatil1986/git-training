@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using log4net;
 using Moq;
 using NUnit.Framework;
 using Should;
@@ -22,6 +23,9 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             var homeOwnerService = new Mock<IHomeOwnerService>();
             var taskService = new Mock<ITaskService>();
             var employeeService = new Mock<IEmployeeService>();
+            Log = new Mock<ILog>();
+
+            Log.Setup(m => m.ErrorFormat(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<object>())).Verifiable();
 
             CommunityService = new Mock<ICommunityService>();
             CommunityService.Setup(m => m.GetCommunityByNumber(Community_DoesNotExist))
@@ -36,12 +40,14 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
                 .Verifiable();
 
             SagaData = new HomeSoldSagaData();
-            Saga = new HomeSoldSaga(CommunityService.Object, jobService.Object, employeeService.Object, homeOwnerService.Object, taskService.Object)
+            Saga = new HomeSoldSaga(CommunityService.Object, jobService.Object, employeeService.Object, homeOwnerService.Object, taskService.Object, Log.Object)
             {
                 Data = SagaData,
                 Bus = Bus
             };
         }
+
+        public Mock<ILog> Log { get; set; }
 
         public Mock<ICommunityService> CommunityService { get; set; }
 
@@ -65,8 +71,11 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
         [Test]
         public void ShouldSendToGetCommunityDetailsIfNotFound()
         {
+            Log.ResetCalls();
             SagaData.JobSaleDetails = null;
             SagaData.JobNumber = "928192818";
+            SagaData.SaleId = 834738473748;
+            
 
             CommunityService.ResetCalls();
             var message = new JobSaleDetailsResponse
@@ -78,8 +87,11 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
 
             CommunityService.Verify(m => m.GetCommunityByNumber(Community_DoesNotExist), Times.Once);
             
-            var sentMessage = Bus.SentLocalMessages.OfType<HomeSoldSaga_GetCommunityDetails>().FirstOrDefault(m => m.JobNumber == "928192818");
-            sentMessage.ShouldNotBeNull();
+            var sentMessage = Bus.SentLocalMessages.OfType<HomeSoldSaga_GetCommunityDetails>().FirstOrDefault(m => m.SaleId == 834738473748);
+
+            // Disabled for now until it is implemented
+            sentMessage.ShouldBeNull();
+            Log.Verify(m => m.ErrorFormat(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<object>()), Times.Once);
         }
 
         [Test]
@@ -105,6 +117,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
         {
             SagaData.JobSaleDetails = null;
             SagaData.JobNumber = "88857423";
+            SagaData.SaleId = 3923928398;
             CommunityService.ResetCalls();
 
             var message = new JobSaleDetailsResponse
@@ -116,7 +129,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
 
             CommunityService.Verify(m => m.GetCommunityByNumber(Community_Exists), Times.Once);
 
-            var sentMessage = Bus.SentLocalMessages.OfType<HomeSoldSaga_CreateOrUpdateJob>().FirstOrDefault(m => m.JobNumber == "88857423");
+            var sentMessage = Bus.SentLocalMessages.OfType<HomeSoldSaga_CreateOrUpdateJob>().FirstOrDefault(m => m.SaleId == 3923928398);
             sentMessage.ShouldNotBeNull();
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
+using log4net;
 using Moq;
 using NUnit.Framework;
 using Should;
@@ -49,6 +50,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
 
             var taskService = new Mock<ITaskService>();
             var communityService = new Mock<ICommunityService>();
+            var log = new Mock<ILog>();
 
             SagaData = new HomeSoldSagaData
             {
@@ -56,7 +58,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
                 Community = new Community()
             };
 
-            Saga = new HomeSoldSaga(communityService.Object, JobService.Object, EmployeeService.Object, HomeOwnerService.Object, taskService.Object)
+            Saga = new HomeSoldSaga(communityService.Object, JobService.Object, EmployeeService.Object, HomeOwnerService.Object, taskService.Object, log.Object)
             {
                 Data = SagaData,
                 Bus = Bus
@@ -79,10 +81,12 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
         public void ShouldSetPropertiesWhenJobFound()
         {
             SagaData.NewJob = null;
+            SagaData.JobNumber = Job_Exists;
+
             JobService.ResetCalls();
             EmployeeService.ResetCalls();
 
-            var message = new HomeSoldSaga_CreateOrUpdateJob(Job_Exists);
+            var message = new HomeSoldSaga_CreateOrUpdateJob(8723837273287);
             Saga.Handle(message);
             SagaData.NewJob.ShouldNotBeNull();
         }
@@ -94,8 +98,9 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             SagaData.JobNumber = Job_Exists;
             JobService.ResetCalls();
             EmployeeService.ResetCalls();
+            HomeOwnerService.ResetCalls();
 
-            var message = new HomeSoldSaga_CreateOrUpdateJob(Job_Exists);
+            var message = new HomeSoldSaga_CreateOrUpdateJob(8723837273287);
             Saga.Handle(message);
             
             EmployeeService.Verify(m => m.GetEmployeeByNumber(It.IsAny<int?>()), Times.Once);
@@ -111,7 +116,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             JobService.ResetCalls();
             EmployeeService.ResetCalls();
 
-            var message = new HomeSoldSaga_CreateOrUpdateJob(Job_DoesNotExist);
+            var message = new HomeSoldSaga_CreateOrUpdateJob(12837812738273);
             Saga.Handle(message);
 
             EmployeeService.Verify(m => m.GetEmployeeByNumber(It.IsAny<int?>()), Times.Once);
@@ -128,7 +133,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             JobService.ResetCalls();
             EmployeeService.ResetCalls();
 
-            var message = new HomeSoldSaga_CreateOrUpdateJob(Job_DoesNotExist);
+            var message = new HomeSoldSaga_CreateOrUpdateJob(127831827387123);
             Saga.Handle(message);
 
             var sentMessage = Bus.SentMessages.OfType<RequestHomeBuyerDetails>().FirstOrDefault(m => m.ContactId == SagaData.ContactId);
@@ -144,7 +149,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             JobService.ResetCalls();
             EmployeeService.ResetCalls();
 
-            var message = new HomeSoldSaga_CreateOrUpdateJob(Job_DoesNotExist);
+            var message = new HomeSoldSaga_CreateOrUpdateJob(123872387237);
             Saga.Handle(message);
 
             var sentMessage = Bus.SentMessages.OfType<RequestHomeBuyerDetails>().FirstOrDefault(m => m.ContactId == SagaData.ContactId);

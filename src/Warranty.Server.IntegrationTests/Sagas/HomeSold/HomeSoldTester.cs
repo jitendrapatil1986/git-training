@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using log4net;
 using Moq;
 using NUnit.Framework;
 using Should;
@@ -21,9 +22,10 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             var taskService = new Mock<ITaskService>();
             var employeeService = new Mock<IEmployeeService>();
             var communityService = new Mock<ICommunityService>();
+            var log = new Mock<ILog>();
 
             SagaData = new HomeSoldSagaData();
-            Saga = new HomeSoldSaga(communityService.Object, jobService.Object, employeeService.Object,homeOwnerService.Object, taskService.Object)
+            Saga = new HomeSoldSaga(communityService.Object, jobService.Object, employeeService.Object,homeOwnerService.Object, taskService.Object, log.Object)
             {
                 Data = SagaData,
                 Bus = Bus
@@ -58,11 +60,12 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             var message = new TIPS.Events.JobEvents.HomeSold()
             {
                 ContactId = Guid.NewGuid(),
-                JobNumber = "56748392"
+                JobNumber = "56748392",
+                SaleId = 8373827327
             };
             Saga.Handle(message);
 
-            var sentMessage = Bus.SentMessages.OfType<RequestJobSaleDetails>().FirstOrDefault(m => m.JobNumber == message.JobNumber);
+            var sentMessage = Bus.SentMessages.OfType<RequestJobSaleDetails>().FirstOrDefault(m => m.SaleId == message.SaleId);
             sentMessage.ShouldNotBeNull();
         }
     }
