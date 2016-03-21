@@ -4,6 +4,7 @@ using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using Should;
+using TIPS.Commands.Requests;
 using TIPS.Commands.Responses;
 using TIPS.Events.Models;
 using Warranty.Core.Entities;
@@ -34,10 +35,11 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
             var taskService = new Mock<ITaskService>();
             var employeeService = new Mock<IEmployeeService>();
             var communityService = new Mock<ICommunityService>();
+            var log = new Mock<log4net.ILog>();
 
             SagaData = new BuyerTransferredToNewLotSagaData();
 
-            Saga = new BuyerTransferredToNewLotSaga(jobService.Object, HomeOwnerService.Object, taskService.Object, employeeService.Object, communityService.Object)
+            Saga = new BuyerTransferredToNewLotSaga(jobService.Object, HomeOwnerService.Object, taskService.Object, employeeService.Object, communityService.Object, log.Object)
             {
                 Bus = Bus,
                 Data = SagaData
@@ -92,14 +94,14 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         }
 
         [Test]
-        public void ShouldSendToEnsureJobExists()
+        public void ShouldRequestJobDetails()
         {
             SagaData.NewJobNumber = "12345";
 
             var response = new HomeBuyerDetailsResponse();
             Saga.Handle(response);
 
-            var sentMessage = Bus.SentLocalMessages.OfType<BuyerTransferredToNewLotSaga_EnsureNewJobExists>().FirstOrDefault(m => m.NewJobNumber == "12345");
+            var sentMessage = Bus.SentMessages.OfType<RequestJobSaleDetails>().FirstOrDefault(m => m.JobNumber == "12345");
             sentMessage.ShouldNotBeNull();
         }
 
