@@ -68,6 +68,11 @@ namespace Warranty.Core.Services
             }
         }
 
+        public HomeOwner GetByHomeOwnerId(Guid homeOwnerId)
+        {
+            return _database.SingleById<HomeOwner>(homeOwnerId);
+        }
+
         public HomeOwner GetHomeOwnerByJobNumber(string jobNumber)
         {
             return _database.SingleOrDefault<HomeOwner>(

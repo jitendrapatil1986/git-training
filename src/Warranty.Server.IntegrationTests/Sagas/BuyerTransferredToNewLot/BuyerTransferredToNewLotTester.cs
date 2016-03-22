@@ -55,6 +55,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
             {
                 return new HomeOwner
                 {
+                    HomeOwnerId = Guid.NewGuid(),
                     HomeOwnerName = "John Smith"
                 };
             }
@@ -96,6 +97,8 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         [Test]
         public void ShouldSetHomeOwnerDataWhenFound()
         {
+            SagaData.HomeOwnerReference = Guid.Empty;
+
             var message = new TIPS.Events.JobEvents.BuyerTransferredToNewLot
             {
                 ContactId = Guid.NewGuid(),
@@ -105,8 +108,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
 
             Saga.Handle(message);
 
-            SagaData.HomeOwner.ShouldNotBeNull();
-            SagaData.HomeOwner.HomeOwnerName.ShouldEqual("John Smith");
+            SagaData.HomeOwnerReference.ShouldNotEqual(Guid.Empty);
         }
 
         [Test]

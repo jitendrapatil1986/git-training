@@ -67,7 +67,7 @@ namespace Warranty.Server.Sagas
             }
 
             _log.InfoFormat("Existing HomeOwner found in Warranty for job {0}, proceeding to remove them from the job.", message.PreviousJobNumber);
-            Data.HomeOwner = homeOwner;
+            Data.HomeOwnerReference = homeOwner.HomeOwnerId;
             Bus.SendLocal(new BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner(Data.SaleId));
         }
 
@@ -84,7 +84,9 @@ namespace Warranty.Server.Sagas
             homeOwner.UpdatedDate = DateTime.UtcNow;
 
             _log.InfoFormat("Creating new HomeOwner in Warranty from TIPS information = {0}", JsonConvert.SerializeObject(homeOwner));
-            Data.HomeOwner = _homeOwnerService.Create(homeOwner);
+
+            homeOwner = _homeOwnerService.Create(homeOwner);
+            Data.HomeOwnerReference = homeOwner.HomeOwnerId;
 
             _log.InfoFormat("Requesting updated job details from TIPS {0}", Data.NewJobNumber);
             Bus.Send(new RequestJobSaleDetails { SaleId = Data.SaleId });
@@ -114,66 +116,69 @@ namespace Warranty.Server.Sagas
         {
             _log.InfoFormat("Received JobDetailsResponse from TIPS for job number {0}, will now create job in Warranty.", message.JobNumber);
 
-            var existingJob = _jobService.GetJobByNumber(message.JobNumber);
-
-            if (existingJob == null)
+            var job = _jobService.GetJobByNumber(message.JobNumber);
+            if (job == null)
             {
                 _log.InfoFormat("Job {0} does not exist, will create a new job with details from TIPS.", message.JobNumber);
-                Data.NewJob = Mapper.Map<Job>(message);
-                Data.NewJob.CreatedBy = Constants.ENDPOINT_NAME;
-                Data.NewJob.UpdatedBy = Constants.ENDPOINT_NAME;
-                Data.NewJob.CreatedDate = DateTime.UtcNow;
-                Data.NewJob.UpdatedDate = DateTime.UtcNow;
+
+                job = Mapper.Map<Job>(message);
+                job.CreatedBy = Constants.ENDPOINT_NAME;
+                job.UpdatedBy = Constants.ENDPOINT_NAME;
+                job.CreatedDate = DateTime.UtcNow;
+                job.UpdatedDate = DateTime.UtcNow;
             }
             else
             {
                 _log.InfoFormat("Job {0} exists, will update the existing job with details from TIPS.", message.JobNumber);
-                Data.NewJob = Mapper.Map(message, existingJob);
-                Data.NewJob.UpdatedBy = Constants.ENDPOINT_NAME;
-                Data.NewJob.UpdatedDate = DateTime.UtcNow;
+                job = Mapper.Map(message, job);
+                job.UpdatedBy = Constants.ENDPOINT_NAME;
+                job.UpdatedDate = DateTime.UtcNow;
             }
-            
 
             var builder = _employeeService.GetEmployeeByNumber(message.BuilderEmployeeID);
             if (builder != null)
             {
                 _log.InfoFormat("Found a builder from the JobDetailsResponse for employeeid {0}, assigning it to the job.", message.BuilderEmployeeID);
-                Data.NewJob.BuilderEmployeeId = builder.EmployeeId;
+                job.BuilderEmployeeId = builder.EmployeeId;
             }
 
             var community = _communityService.GetCommunityByNumber(message.CommunityNumber);
             if (community != null)
             {
                 _log.InfoFormat("Found a community from the JobDetailsResponse for CommunityNumber {0}, assigning it to the job.", message.CommunityNumber);
-                Data.NewJob.CommunityId = community.CommunityId;
+                job.CommunityId = community.CommunityId;
             }
 
-            if (Data.NewJob.IsNew())
+            if (job.IsNew())
             {
                 _log.InfoFormat("Saving new job record in Warranty for job number {0}.", message.JobNumber);
-                Data.NewJob = _jobService.CreateJob(Data.NewJob);
+                job = _jobService.CreateJob(job);
             }
             else
             {
                 _log.InfoFormat("Updating job {0} in Warranty with new details from TIPS.", message.JobNumber);
-                _jobService.Save(Data.NewJob);
+                _jobService.Save(job);
             }
-                
 
-            _log.InfoFormat("Proceeding to assign the HomeOwner and create tasks for Job {0}.", Data.NewJob.JobNumber);
+            Data.JobIdReference = job.JobId;
+
+            _log.InfoFormat("Proceeding to assign the HomeOwner and create tasks for Job {0}.", job.JobNumber);
             Bus.SendLocal(new BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks(Data.SaleId));
         }
 
         public void Handle(BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks message)
         {
-            _homeOwnerService.AssignToJob(Data.HomeOwner, Data.NewJob);
-            _log.InfoFormat("Assigned HomeOwner {0} to JobNumber {1}.", Data.HomeOwner.HomeOwnerNumber, Data.NewJob.JobNumber);
+            var homeOwner = _homeOwnerService.GetByHomeOwnerId(Data.HomeOwnerReference);
+            var job = _jobService.GetJobById(Data.JobIdReference);
 
-            _taskService.CreateTasks(Data.NewJob.JobId);
-            _log.InfoFormat("Created tasks for JobNumber {0}.", Data.NewJob.JobNumber);
+            _homeOwnerService.AssignToJob(homeOwner, job);
+            _log.InfoFormat("Assigned HomeOwner {0} to JobNumber {1}.", homeOwner.HomeOwnerNumber, job.JobNumber);
+
+            _taskService.CreateTasks(job.JobId);
+            _log.InfoFormat("Created tasks for JobNumber {0}.", job.JobNumber);
 
             MarkAsComplete();
-            _log.InfoFormat("BuyerTransferredToNewLogSaga complete for JobNumber {0}.", Data.NewJob.JobNumber);
+            _log.InfoFormat("BuyerTransferredToNewLogSaga complete for JobNumber {0}.", job.JobNumber);
         }
     }
 
@@ -212,8 +217,9 @@ namespace Warranty.Server.Sagas
 
         [Unique]
         public virtual Guid ContactId { get; set; }
-        public virtual HomeOwner HomeOwner { get; set; }
-        public virtual Job NewJob { get; set; }
         public virtual long SaleId { get; set; }
+        public virtual Guid JobIdReference { get; set; }
+        public virtual Guid HomeOwnerReference { get; set; }
     }
+    
 }

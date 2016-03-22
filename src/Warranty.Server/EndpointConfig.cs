@@ -28,6 +28,9 @@ namespace Warranty.Server
 
             Configure.With()
                 .StructureMapBuilder(container)
+                .UseNHibernateSagaPersister()
+                .UseNHibernateSubscriptionPersister()
+                .UseNHibernateTimeoutPersister()
                 .DefiningDataBusPropertiesAs(t => t.Name.EndsWith("DataBus"))
                 .DefiningMessagesAs(t => (t.IsAssignableTo<IMessage>() && !(t.IsAssignableTo<ICommand>() || t.IsAssignableTo<IEvent>())) || t.IsBusMessage())
                 .DefiningCommandsAs(t => t.IsAssignableTo<ICommand>() || t.IsBusCommand())

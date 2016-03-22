@@ -37,6 +37,7 @@ Role "Nsb" -Incremental {
 
     # config
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_nsb_application_name;"
+	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/connectionStrings/add[@name='NServiceBus/Persistence']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name_nsb;Integrated Security=SSPI;Application Name=$db_nsb_application_name;"
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='Accounting.API.BaseUri']/@value" $accountingApiBaseUri
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Accounting.Events']/@Endpoint" "Accounting.Server@$accountingEndPointServer"
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Accounting.Commands']/@Endpoint" "Accounting.Server@$accountingEndPointServer"
