@@ -19,7 +19,7 @@ using Warranty.Server.Handlers.Jobs;
 namespace Warranty.Server.Sagas
 {
     public class HomeSoldSaga : Saga<HomeSoldSagaData>,
-        IHandleMessages<HomeSold>,
+        IAmStartedByMessages<HomeSold>,
         IHandleMessages<JobSaleDetailsResponse>,
         IHandleMessages<HomeSoldSaga_GetCommunityDetails>,
         IHandleMessages<HomeSoldSaga_CreateOrUpdateJob>,
