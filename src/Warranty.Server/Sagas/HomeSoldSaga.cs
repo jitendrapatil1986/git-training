@@ -180,19 +180,7 @@ namespace Warranty.Server.Sagas
         {
             _log.InfoFormat("Received homeowner details for contact {0} on sale {1} from TIPS", Data.ContactId, Data.SaleId);
 
-            var homeOwner = Mapper.Map<HomeOwner>(message);
-            homeOwner.HomeOwnerId = Guid.NewGuid();
-            homeOwner.HomeOwnerNumber = 1;
-            homeOwner.CreatedBy = Constants.ENDPOINT_NAME;
-            homeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
-            homeOwner.CreatedDate = DateTime.UtcNow;
-            homeOwner.UpdatedDate = DateTime.UtcNow;
-            homeOwner.JobId = Data.NewJob.JobId;
-
-            homeOwner = _homeOwnerService.Create(homeOwner);
-            _log.InfoFormat("Created homeowner record for contact {0} on sale {1}", Data.ContactId, Data.SaleId);
-
-            Data.HomeOwnerReferenceId = homeOwner.HomeOwnerId;
+            Data.HomeBuyerDetails = message;
 
             _log.InfoFormat("Proceeding to assign new homeowner to sale {0}", Data.SaleId);
             Bus.SendLocal(new HomeSoldSaga_AssignHomeOwnerToJob(Data.SaleId));
@@ -200,7 +188,18 @@ namespace Warranty.Server.Sagas
 
         public void Handle(HomeSoldSaga_AssignHomeOwnerToJob message)
         {
-            var homeOwner = _homeOwnerService.GetByHomeOwnerId(Data.HomeOwnerReferenceId);
+            var homeOwner = Mapper.Map<HomeOwner>(message);
+            homeOwner.HomeOwnerId = Guid.NewGuid();
+            homeOwner.HomeOwnerNumber = 1;
+            homeOwner.CreatedBy = Constants.ENDPOINT_NAME;
+            homeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
+            homeOwner.CreatedDate = DateTime.UtcNow;
+            homeOwner.UpdatedDate = DateTime.UtcNow;
+            homeOwner.JobId = Data.JobReferenceId;
+
+            homeOwner = _homeOwnerService.Create(homeOwner);
+            _log.InfoFormat("Created homeowner record for contact {0} on sale {1}", Data.ContactId, Data.SaleId);
+
             var job = _jobService.GetJobById(Data.JobReferenceId);
 
             _log.InfoFormat("Assigning new homeowner to sale {0} with job number {1}", Data.SaleId, Data.JobNumber);
@@ -259,6 +258,6 @@ namespace Warranty.Server.Sagas
         public virtual JobSaleDetailsResponse JobSaleDetails { get; set; }
         public virtual Guid CommunityReferenceId { get; set; }
         public virtual Guid JobReferenceId { get; set; }
-        public virtual Guid HomeOwnerReferenceId { get; set; }
+        public virtual HomeBuyerDetailsResponse HomeBuyerDetails { get; set; }
     }
 }
