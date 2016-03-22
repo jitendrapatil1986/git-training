@@ -48,14 +48,14 @@ namespace Warranty.Core.Services
                 return;
 
             var existingOwner = GetHomeOwnerByJobNumber(job.JobNumber);
-            if(existingOwner == null)
-                return;
 
             using (_database)
             {
                 job.CurrentHomeOwnerId = null;
                 _database.Update(job);
-                _database.Delete(existingOwner);
+
+                if (existingOwner != null)
+                    _database.Delete(existingOwner);
             }
         }
 
