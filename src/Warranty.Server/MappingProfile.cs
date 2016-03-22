@@ -37,6 +37,7 @@ namespace Warranty.Server
                 .ForMember(m => m.WarrantyExpirationDate, a => a.Ignore())
                 .ForMember(m => m.DoNotContact, a => a.Ignore())
                 .ForMember(m => m.BuilderEmployeeId, a => a.Ignore())
+                .ForMember(m => m.SalesConsultantEmployeeId, a => a.Ignore())
                 .ForMember(m => m.LegalDescription, a => a.MapFrom(src => GetLegalDescription(src)))
                 .ForMember(m => m.AddressLine, a => a.MapFrom(src => src.AddressLine1))
                 .ForMember(m => m.City, a => a.MapFrom(src => src.AddressCity))
