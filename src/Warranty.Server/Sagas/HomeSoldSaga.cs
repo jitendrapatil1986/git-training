@@ -19,7 +19,7 @@ using Warranty.Server.Handlers.Jobs;
 namespace Warranty.Server.Sagas
 {
     public class HomeSoldSaga : Saga<HomeSoldSagaData>,
-        IHandleMessages<HomeSold>,
+        IAmStartedByMessages<HomeSold>,
         IHandleMessages<JobSaleDetailsResponse>,
         IHandleMessages<HomeSoldSaga_GetCommunityDetails>,
         IHandleMessages<HomeSoldSaga_CreateOrUpdateJob>,
@@ -187,6 +187,7 @@ namespace Warranty.Server.Sagas
             homeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
             homeOwner.CreatedDate = DateTime.UtcNow;
             homeOwner.UpdatedDate = DateTime.UtcNow;
+            homeOwner.JobId = Data.NewJob.JobId;
 
             homeOwner = _homeOwnerService.Create(homeOwner);
             _log.InfoFormat("Created homeowner record for contact {0} on sale {1}", Data.ContactId, Data.SaleId);
