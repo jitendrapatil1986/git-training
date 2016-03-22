@@ -24,6 +24,15 @@ namespace Warranty.Core.Services
             return communityNumber;
         }
 
+        public Community Create(Community newCommunity)
+        {
+            if(newCommunity == null)
+                throw new ArgumentNullException("newCommunity");
+
+            _database.Insert(newCommunity);
+            return newCommunity;
+        }
+
         public Community GetCommunityByNumber(string communityNumber)
         {
             if (string.IsNullOrWhiteSpace(communityNumber))

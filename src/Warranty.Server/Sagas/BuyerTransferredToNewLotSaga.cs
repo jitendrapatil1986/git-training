@@ -28,7 +28,6 @@ namespace Warranty.Server.Sagas
         private readonly IEmployeeService _employeeService;
         private readonly ICommunityService _communityService;
         private readonly ILog _log;
-        private const string ENDPOINT_NAME = "Warranty.Server";
 
         public BuyerTransferredToNewLotSaga(IJobService jobService, IHomeOwnerService homeOwnerService, ITaskService taskService, IEmployeeService employeeService, ICommunityService communityService, ILog log)
         {
@@ -79,8 +78,8 @@ namespace Warranty.Server.Sagas
             var homeOwner = Mapper.Map<HomeOwner>(message);
             homeOwner.HomeOwnerId = Guid.NewGuid();
             homeOwner.HomeOwnerNumber = 1;
-            homeOwner.CreatedBy = ENDPOINT_NAME;
-            homeOwner.UpdatedBy = ENDPOINT_NAME;
+            homeOwner.CreatedBy = Constants.ENDPOINT_NAME;
+            homeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
             homeOwner.CreatedDate = DateTime.UtcNow;
             homeOwner.UpdatedDate = DateTime.UtcNow;
 
@@ -121,8 +120,8 @@ namespace Warranty.Server.Sagas
             {
                 _log.InfoFormat("Job {0} does not exist, will create a new job with details from TIPS.", message.JobNumber);
                 Data.NewJob = Mapper.Map<Job>(message);
-                Data.NewJob.CreatedBy = ENDPOINT_NAME;
-                Data.NewJob.UpdatedBy = ENDPOINT_NAME;
+                Data.NewJob.CreatedBy = Constants.ENDPOINT_NAME;
+                Data.NewJob.UpdatedBy = Constants.ENDPOINT_NAME;
                 Data.NewJob.CreatedDate = DateTime.UtcNow;
                 Data.NewJob.UpdatedDate = DateTime.UtcNow;
             }
@@ -130,7 +129,7 @@ namespace Warranty.Server.Sagas
             {
                 _log.InfoFormat("Job {0} exists, will update the existing job with details from TIPS.", message.JobNumber);
                 Data.NewJob = Mapper.Map(message, existingJob);
-                Data.NewJob.UpdatedBy = ENDPOINT_NAME;
+                Data.NewJob.UpdatedBy = Constants.ENDPOINT_NAME;
                 Data.NewJob.UpdatedDate = DateTime.UtcNow;
             }
             
