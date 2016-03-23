@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using log4net;
 using Moq;
 using NUnit.Framework;
@@ -35,6 +36,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             CommunityService.Setup(m => m.GetCommunityByNumber(Community_Exists))
                 .Returns(new Community
                 {
+                    CommunityId = Guid.NewGuid(),
                     CommunityNumber = Community_Exists
                 })
                 .Verifiable();
@@ -99,6 +101,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
         {
             SagaData.JobSaleDetails = null;
             SagaData.JobNumber = "2342456";
+            SagaData.CommunityReferenceId = Guid.Empty;
             CommunityService.ResetCalls();
 
             var message = new JobSaleDetailsResponse
@@ -109,7 +112,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             Saga.Handle(message);
 
             CommunityService.Verify(m => m.GetCommunityByNumber(Community_Exists), Times.Once);
-            SagaData.Community.ShouldNotBeNull();
+            SagaData.CommunityReferenceId.ShouldNotEqual(Guid.Empty);
         }
 
         [Test]

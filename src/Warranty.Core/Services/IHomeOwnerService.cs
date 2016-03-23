@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TIPS.Events.Models;
 using Warranty.Core.Entities;
@@ -16,5 +17,6 @@ namespace Warranty.Server.Handlers.Jobs
         void RemoveFromJob(HomeOwner homeOwner, Job job);
         void RemoveHomeOwner(Job job);
         HomeOwner Create(HomeOwner homeOwner);
+        HomeOwner GetByHomeOwnerId(Guid homeOwnerId);
     }
 }

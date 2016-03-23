@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Moq;
@@ -29,7 +30,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
             var jobService = new Mock<IJobService>();
             HomeOwnerService = new Mock<IHomeOwnerService>();
             HomeOwnerService.Setup(p => p.Create(It.IsAny<HomeOwner>()))
-               .Returns(new HomeOwner())
+               .Returns(new HomeOwner { HomeOwnerId = Guid.NewGuid() })
                .Verifiable();
 
             var taskService = new Mock<ITaskService>();
@@ -49,6 +50,8 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         [Test]
         public void ShouldSetDataFields()
         {
+            SagaData.HomeOwnerReference = Guid.Empty;
+
             var response = new HomeBuyerDetailsResponse
             {
                 FirstName = "John",
@@ -66,7 +69,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
             };
 
             Saga.Handle(response);
-            SagaData.HomeOwner.ShouldNotBeNull();
+            SagaData.HomeOwnerReference.ShouldNotEqual(Guid.Empty);
         }
 
         [Test]

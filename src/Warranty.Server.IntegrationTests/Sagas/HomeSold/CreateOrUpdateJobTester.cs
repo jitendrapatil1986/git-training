@@ -25,7 +25,11 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
         {
             JobService = new Mock<IJobService>();
             JobService.Setup(m => m.GetJobByNumber(Job_Exists))
-                .Returns(new Job { JobNumber = Job_Exists})
+                .Returns(new Job
+                {
+                    JobId = Guid.NewGuid(),
+                    JobNumber = Job_Exists
+                })
                 .Verifiable();
 
             JobService.Setup(m => m.GetJobByNumber(Job_DoesNotExist))
@@ -33,7 +37,11 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
                 .Verifiable();
 
             JobService.Setup(m => m.CreateJob(It.IsAny<Job>()))
-                .Returns(new Job { JobNumber = Job_DoesNotExist })
+                .Returns(new Job
+                {
+                    JobId = Guid.NewGuid(),
+                    JobNumber = Job_DoesNotExist
+                })
                 .Verifiable();
 
             JobService.Setup(m => m.UpdateExistingJob(It.IsAny<Job>()))
@@ -55,7 +63,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             SagaData = new HomeSoldSagaData
             {
                 JobSaleDetails = new JobSaleDetailsResponse(),
-                Community = new Community()
+                CommunityReferenceId = Guid.NewGuid()
             };
 
             Saga = new HomeSoldSaga(communityService.Object, JobService.Object, EmployeeService.Object, HomeOwnerService.Object, taskService.Object, log.Object)
@@ -80,7 +88,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
         [Test]
         public void ShouldSetPropertiesWhenJobFound()
         {
-            SagaData.NewJob = null;
+            SagaData.JobReferenceId = Guid.Empty;
             SagaData.JobNumber = Job_Exists;
 
             JobService.ResetCalls();
@@ -88,13 +96,13 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
 
             var message = new HomeSoldSaga_CreateOrUpdateJob(8723837273287);
             Saga.Handle(message);
-            SagaData.NewJob.ShouldNotBeNull();
+            SagaData.JobReferenceId.ShouldNotEqual(Guid.Empty);
         }
 
         [Test]
         public void ShouldUpdateExistingJobWhenFound()
         {
-            SagaData.NewJob = null;
+            SagaData.JobReferenceId = Guid.Empty;
             SagaData.JobNumber = Job_Exists;
             JobService.ResetCalls();
             EmployeeService.ResetCalls();
@@ -111,7 +119,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
         [Test]
         public void ShouldCreateJobWhenNotFound()
         {
-            SagaData.NewJob = null;
+            SagaData.JobReferenceId = Guid.Empty;
             SagaData.JobNumber = Job_DoesNotExist;
             JobService.ResetCalls();
             EmployeeService.ResetCalls();
@@ -127,7 +135,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
         [Test]
         public void ShouldSendToGetHomeAfterUpdatingJob()
         {
-            SagaData.NewJob = null;
+            SagaData.JobReferenceId = Guid.Empty;
             SagaData.ContactId = Guid.NewGuid();
             SagaData.JobNumber = Job_Exists;
             JobService.ResetCalls();
@@ -143,7 +151,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
         [Test]
         public void ShouldSendToGetHomeAfterCreatingJob()
         {
-            SagaData.NewJob = null;
+            SagaData.JobReferenceId = Guid.Empty;
             SagaData.ContactId = Guid.NewGuid();
             SagaData.JobNumber = Job_DoesNotExist;
             JobService.ResetCalls();

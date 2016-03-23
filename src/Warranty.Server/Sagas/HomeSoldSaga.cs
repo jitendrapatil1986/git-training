@@ -91,7 +91,8 @@ namespace Warranty.Server.Sagas
             }
 
             _log.InfoFormat("Community found for CommunityNumber {0} on Sale {1}, proceeding to handle job details", Data.JobSaleDetails.CommunityNumber, message.SaleId);
-            Data.Community = community;
+
+            Data.CommunityReferenceId = community.CommunityId;
             Bus.SendLocal(new HomeSoldSaga_CreateOrUpdateJob(Data.SaleId));
         }
 
@@ -109,7 +110,8 @@ namespace Warranty.Server.Sagas
                 var details = JsonConvert.DeserializeObject<CommunityDetails>(result.Content.ReadAsStringAsync().Result);
                 var newCommunity = Mapper.Map<Community>(details);
 
-                Data.Community = _communityService.Create(newCommunity);
+                newCommunity = _communityService.Create(newCommunity);
+                Data.CommunityReferenceId = newCommunity.CommunityId;
             }
 
             _log.InfoFormat("Received Community data from Accounting for CommunityNumber {0} on Sale {1}, proceeding to handle job details", Data.JobSaleDetails.CommunityNumber, message.SaleId);
@@ -121,23 +123,23 @@ namespace Warranty.Server.Sagas
         public void Handle(HomeSoldSaga_CreateOrUpdateJob message)
         {
             _log.InfoFormat("Handling job details for sale {0}, checking for job with job number {1}", message.SaleId, Data.JobNumber);
-            var existingJob = _jobService.GetJobByNumber(Data.JobNumber);
-            if (existingJob == null)
+            var job = _jobService.GetJobByNumber(Data.JobNumber);
+            if (job == null)
             {
                 _log.InfoFormat("Job was not found for job number {0}, proceeding to create new job", Data.JobNumber);
 
-                Data.NewJob = Mapper.Map<Job>(Data.JobSaleDetails);
-                Data.NewJob.CreatedBy = Constants.ENDPOINT_NAME;
-                Data.NewJob.UpdatedBy = Constants.ENDPOINT_NAME;
-                Data.NewJob.CreatedDate = DateTime.UtcNow;
-                Data.NewJob.UpdatedDate = DateTime.UtcNow;
-                Data.NewJob.CommunityId = Data.Community.CommunityId;
+                job = Mapper.Map<Job>(Data.JobSaleDetails);
+                job.CreatedBy = Constants.ENDPOINT_NAME;
+                job.UpdatedBy = Constants.ENDPOINT_NAME;
+                job.CreatedDate = DateTime.UtcNow;
+                job.UpdatedDate = DateTime.UtcNow;
+                job.CommunityId = Data.CommunityReferenceId;
 
                 var builder = _employeeService.GetEmployeeByNumber(Data.JobSaleDetails.BuilderEmployeeID);
                 if (builder != null)
-                    Data.NewJob.BuilderEmployeeId = builder.EmployeeId;
+                    job.BuilderEmployeeId = builder.EmployeeId;
 
-                Data.NewJob = _jobService.CreateJob(Data.NewJob);
+                job = _jobService.CreateJob(job);
                 _log.InfoFormat("New job created with job number {0} for sale {1}", Data.JobNumber, message.SaleId);
             }
             else
@@ -145,28 +147,29 @@ namespace Warranty.Server.Sagas
                 _log.InfoFormat("Job found for job number {0}, proceeding to update the existing job", Data.JobNumber);
 
                 // Update properties for existing job from what we received from TIPS
-                Data.NewJob = Mapper.Map(Data.JobSaleDetails, existingJob);
-                Data.NewJob.UpdatedBy = Constants.ENDPOINT_NAME;
-                Data.NewJob.UpdatedDate = DateTime.UtcNow;
+                job = Mapper.Map(Data.JobSaleDetails, job);
+                job.UpdatedBy = Constants.ENDPOINT_NAME;
+                job.UpdatedDate = DateTime.UtcNow;
 
                 var salesConsultant = _employeeService.GetEmployeeByNumber(Data.JobSaleDetails.SalesConsultantEmployeeID);
                 if (salesConsultant != null)
-                    Data.NewJob.SalesConsultantEmployeeId = salesConsultant.EmployeeId;
+                    job.SalesConsultantEmployeeId = salesConsultant.EmployeeId;
 
                 if (Data.JobSaleDetails.CloseDate.HasValue)
                 {
-                    Data.NewJob.CloseDate = Data.JobSaleDetails.CloseDate;
-                    Data.NewJob.WarrantyExpirationDate = Data.JobSaleDetails.CloseDate.Value.AddYears(10);
+                    job.CloseDate = Data.JobSaleDetails.CloseDate;
+                    job.WarrantyExpirationDate = Data.JobSaleDetails.CloseDate.Value.AddYears(10);
                 }
 
-                _jobService.UpdateExistingJob(Data.NewJob);
+                _jobService.UpdateExistingJob(job);
                 _log.InfoFormat("Existing job with job number {0} for sale {1} was updated with new details", Data.JobNumber, message.SaleId);
             }
 
+            Data.JobReferenceId = job.JobId;
+
             // If there is an existing owner, we need to remove them
             _log.InfoFormat("Removing any existing homeowner from job {0} for sale {1}", Data.JobNumber, message.SaleId);
-            _homeOwnerService.RemoveHomeOwner(Data.NewJob);
-
+            _homeOwnerService.RemoveHomeOwner(job);
 
             // Request the new HomeOwner info from TIPS
             _log.InfoFormat("Requesting new homeowner details for contact {0} on sale {1} from TIPS", Data.ContactId, message.SaleId);
@@ -177,17 +180,7 @@ namespace Warranty.Server.Sagas
         {
             _log.InfoFormat("Received homeowner details for contact {0} on sale {1} from TIPS", Data.ContactId, Data.SaleId);
 
-            var homeOwner = Mapper.Map<HomeOwner>(message);
-            homeOwner.HomeOwnerId = Guid.NewGuid();
-            homeOwner.HomeOwnerNumber = 1;
-            homeOwner.CreatedBy = Constants.ENDPOINT_NAME;
-            homeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
-            homeOwner.CreatedDate = DateTime.UtcNow;
-            homeOwner.UpdatedDate = DateTime.UtcNow;
-            homeOwner.JobId = Data.NewJob.JobId;
-
-            Data.HomeOwner = _homeOwnerService.Create(homeOwner);
-            _log.InfoFormat("Created homeowner record for contact {0} on sale {1}", Data.ContactId, Data.SaleId);
+            Data.HomeBuyerDetails = message;
 
             _log.InfoFormat("Proceeding to assign new homeowner to sale {0}", Data.SaleId);
             Bus.SendLocal(new HomeSoldSaga_AssignHomeOwnerToJob(Data.SaleId));
@@ -195,11 +188,25 @@ namespace Warranty.Server.Sagas
 
         public void Handle(HomeSoldSaga_AssignHomeOwnerToJob message)
         {
+            var homeOwner = Mapper.Map<HomeOwner>(message);
+            homeOwner.HomeOwnerId = Guid.NewGuid();
+            homeOwner.HomeOwnerNumber = 1;
+            homeOwner.CreatedBy = Constants.ENDPOINT_NAME;
+            homeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
+            homeOwner.CreatedDate = DateTime.UtcNow;
+            homeOwner.UpdatedDate = DateTime.UtcNow;
+            homeOwner.JobId = Data.JobReferenceId;
+
+            homeOwner = _homeOwnerService.Create(homeOwner);
+            _log.InfoFormat("Created homeowner record for contact {0} on sale {1}", Data.ContactId, Data.SaleId);
+
+            var job = _jobService.GetJobById(Data.JobReferenceId);
+
             _log.InfoFormat("Assigning new homeowner to sale {0} with job number {1}", Data.SaleId, Data.JobNumber);
-            _homeOwnerService.AssignToJob(Data.HomeOwner, Data.NewJob);
+            _homeOwnerService.AssignToJob(homeOwner, job);
 
             _log.InfoFormat("Creating tasks for sale {0} with job number {1}", Data.SaleId, Data.JobNumber);
-            _taskService.CreateTasks(Data.NewJob.JobId);
+            _taskService.CreateTasks(Data.JobReferenceId);
 
             MarkAsComplete();
             _log.InfoFormat("Completed handling of HomeSold for sale {0} with job number {1}", Data.SaleId, Data.JobNumber);
@@ -247,10 +254,10 @@ namespace Warranty.Server.Sagas
         public virtual Guid ContactId { get; set; }
         [Unique]
         public virtual string JobNumber { get; set; }
-        public virtual Job NewJob { get; set; }
-        public virtual Community Community { get; set; }
-        public virtual JobSaleDetailsResponse JobSaleDetails { get; set; }
-        public virtual HomeOwner HomeOwner { get; set; }
         public virtual long SaleId { get; set; }
+        public virtual JobSaleDetailsResponse JobSaleDetails { get; set; }
+        public virtual Guid CommunityReferenceId { get; set; }
+        public virtual Guid JobReferenceId { get; set; }
+        public virtual HomeBuyerDetailsResponse HomeBuyerDetails { get; set; }
     }
 }
