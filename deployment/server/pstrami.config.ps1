@@ -47,7 +47,7 @@ Role "Nsb" -Incremental {
 	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='NServiceBus.FileShareDataBus']/@value" $fileShareDataBus
         
     #Install NSB Service
-    &"$nsb_directory\NServiceBus.Host.exe" "/install" "/serviceName:$nsb_service_name" "/username:dwh\svc-Warranty-nsb" "/password:8k6+_6xft#y`$K_Xd" "/dependsOn:MSMQ" "NServiceBus.Integration"
+    &"$nsb_directory\NServiceBus.Host.exe" "/install" "/serviceName:$nsb_service_name" "/username:dwh\svc-Warranty-nsb" "/password:8k6+_6xft#y`$K_Xd" "/dependsOn:MSMQ" "NServiceBus.Production"
 
     #Start NSB Service
     Start-Service "$nsb_service_name"
