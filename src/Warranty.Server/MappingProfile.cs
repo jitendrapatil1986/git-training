@@ -1,5 +1,7 @@
+using System;
 using AutoMapper;
 using System.Linq;
+using System.Linq.Expressions;
 using TIPS.Commands.Responses;
 using Warranty.Core.Entities;
 using Warranty.Core.Services.Models;
@@ -47,7 +49,65 @@ namespace Warranty.Server
                 .ForMember(m => m.JdeIdentifier, a => a.MapFrom(src => src.JobNumber));
 
             CreateMap<CommunityDetails, Community>()
-                .ForAllMembers(m => m.Ignore());
+                .ForMember(m => m.CommunityId, a => a.Ignore())
+                .ForMember(m => m.DivisionId, a => a.Ignore())
+                .ForMember(m => m.ProjectId, a => a.Ignore())
+                .ForMember(m => m.SateliteCityId, a => a.Ignore())
+                .ForMember(m => m.CityId, a => a.Ignore())
+                .ForMember(m => m.CreatedDate, a => a.Ignore())
+                .ForMember(m => m.CreatedBy, a => a.Ignore())
+                .ForMember(m => m.UpdatedBy, a => a.Ignore())
+                .ForMember(m => m.UpdatedDate, a => a.Ignore())
+                .ForMember(m => m.CommunityNumber, a => a.Condition(src => src.Community != null))
+                .ForMember(m => m.CommunityNumber, a => a.MapFrom(src => src.Community.JDEId.Substring(0, 4)))
+                .ForMember(m => m.CommunityName, a => a.Condition(src => src.Community != null))
+                .ForMember(m => m.CommunityName, a => a.MapFrom(src => src.Community.Name))
+                .ForMember(m => m.CommunityStatusCode, a => a.Condition(src => src.Status != null))
+                .ForMember(m => m.CommunityStatusCode, a => a.MapFrom(src => src.Status.JDEId))
+                .ForMember(m => m.CommunityStatusDescription, a => a.Condition(src => src.Status != null))
+                .ForMember(m => m.CommunityStatusDescription, a => a.MapFrom(src => src.Status.Name))
+                .ForMember(m => m.ProductType, a => a.Condition(src => src.ProductType != null))
+                .ForMember(m => m.ProductType, a => a.MapFrom(src => src.ProductType.JDEId))
+                .ForMember(m => m.ProductTypeDescription, a => a.Condition(src => src.ProductType != null))
+                .ForMember(m => m.ProductTypeDescription, a => a.MapFrom(src => src.ProductType.Name));
+
+            CreateMap<CommunityDetails, City>()
+                .ForMember(m => m.CityId, a => a.Ignore())
+                .ForMember(m => m.PurchaseOrderMaxAmount, a => a.Ignore())
+                .ForMember(m => m.CreatedDate, a => a.Ignore())
+                .ForMember(m => m.CreatedBy, a => a.Ignore())
+                .ForMember(m => m.UpdatedBy, a => a.Ignore())
+                .ForMember(m => m.UpdatedDate, a => a.Ignore())
+                .ForMember(m => m.CityName, a => a.MapFrom(src => src.Market.Name))
+                .ForMember(m => m.CityName, a => a.Condition(src => src.Market != null))
+                .ForMember(m => m.CityCode, a => a.MapFrom(src => src.Market.JDEId))
+                .ForMember(m => m.CityCode, a => a.Condition(src => src.Market != null));
+
+            CreateMap<CommunityDetails, Division>()
+                .ForMember(m => m.DivisionId, a => a.Ignore())
+                .ForMember(m => m.CreatedDate, a => a.Ignore())
+                .ForMember(m => m.CreatedBy, a => a.Ignore())
+                .ForMember(m => m.UpdatedBy, a => a.Ignore())
+                .ForMember(m => m.UpdatedDate, a => a.Ignore())
+                .ForMember(m => m.AreaCode, a => a.MapFrom(src => src.Area.JDEId))
+                .ForMember(m => m.AreaCode, a => a.Condition(src => src.Area != null))
+                .ForMember(m => m.AreaName, a => a.MapFrom(src => src.Area.Name))
+                .ForMember(m => m.AreaName, a => a.Condition(src => src.Area != null))
+                .ForMember(m => m.DivisionCode, a => a.MapFrom(src => src.Division.JDEId))
+                .ForMember(m => m.DivisionCode, a => a.Condition(src => src.Division != null))
+                .ForMember(m => m.DivisionName, a => a.MapFrom(src => src.Division.Name))
+                .ForMember(m => m.DivisionName, a => a.Condition(src => src.Division != null));
+
+            CreateMap<CommunityDetails, Project>()
+                .ForMember(m => m.ProjectId, a => a.Ignore())
+                .ForMember(m => m.CreatedDate, a => a.Ignore())
+                .ForMember(m => m.CreatedBy, a => a.Ignore())
+                .ForMember(m => m.UpdatedBy, a => a.Ignore())
+                .ForMember(m => m.UpdatedDate, a => a.Ignore())
+                .ForMember(m => m.ProjectNumber, a => a.MapFrom(src => src.Project.JDEId))
+                .ForMember(m => m.ProjectNumber, a => a.Condition(src => src.Project != null))
+                .ForMember(m => m.ProjectName, a => a.MapFrom(src => src.Project.Name))
+                .ForMember(m => m.ProjectName, a => a.Condition(src => src.Project != null));
         }
 
         private string GetLegalDescription(JobSaleDetailsResponse src)

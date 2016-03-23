@@ -589,6 +589,7 @@
     <Compile Include="Services\ITaskService.cs" />
     <Compile Include="Services\JobService.cs" />
     <Compile Include="Services\Models\CommunityDetails.cs" />
+    <Compile Include="Services\Models\JdeField.cs" />
     <Compile Include="Services\SurveyClientSystemMonitor.cs" />
     <Compile Include="Services\SurveyService.cs" />
     <Compile Include="Services\TaskService.cs" />

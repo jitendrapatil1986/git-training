@@ -92,8 +92,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             var sentMessage = Bus.SentLocalMessages.OfType<HomeSoldSaga_GetCommunityDetails>().FirstOrDefault(m => m.SaleId == 834738473748);
 
             // Disabled for now until it is implemented
-            sentMessage.ShouldBeNull();
-            Log.Verify(m => m.ErrorFormat(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<object>()), Times.Once);
+            sentMessage.ShouldNotBeNull();
         }
 
         [Test]

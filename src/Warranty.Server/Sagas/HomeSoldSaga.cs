@@ -81,12 +81,8 @@ namespace Warranty.Server.Sagas
             var community = _communityService.GetCommunityByNumber(Data.JobSaleDetails.CommunityNumber);
             if (community == null)
             {
-                _log.ErrorFormat("Community was not found for CommunityNumber {0} on Sale {1}; currently the Community API is not implemented so this request will be terminated since we cannot proceed.", Data.JobSaleDetails.CommunityNumber, message.SaleId);
-                MarkAsComplete();
-
-                //_log.InfoFormat("Community was not found for CommunityNumber {0}, requesting it from Accounting", Data.JobSaleDetails.CommunityNumber);
-                //Bus.SendLocal(new HomeSoldSaga_GetCommunityDetails(Data.SaleId));
-                // This is what we'll do later
+                _log.InfoFormat("Community was not found for CommunityNumber {0}, requesting it from Accounting", Data.JobSaleDetails.CommunityNumber);
+                Bus.SendLocal(new HomeSoldSaga_GetCommunityDetails(Data.SaleId));
                 return;
             }
 
@@ -98,6 +94,15 @@ namespace Warranty.Server.Sagas
 
         public void Handle(HomeSoldSaga_GetCommunityDetails message)
         {
+            var community = _communityService.GetCommunityByNumber(Data.JobSaleDetails.CommunityNumber);
+            if (community != null)
+            {
+                _log.InfoFormat("Community with CommunityNumber {0} appears to have been added already.  Skipping creation of community from response.", Data.JobSaleDetails.CommunityNumber);
+                Data.CommunityReferenceId = community.CommunityId;
+                Bus.SendLocal(new HomeSoldSaga_CreateOrUpdateJob(Data.SaleId));
+                return;
+            }
+
             _log.InfoFormat("Requesting Community data from Accounting for CommunityNumber {0} on Sale {1}", Data.JobSaleDetails.CommunityNumber, message.SaleId);
             using (var client = new HttpClient())
             {
@@ -108,17 +113,45 @@ namespace Warranty.Server.Sagas
                 result.EnsureSuccessStatusCode();
 
                 var details = JsonConvert.DeserializeObject<CommunityDetails>(result.Content.ReadAsStringAsync().Result);
-                var newCommunity = Mapper.Map<Community>(details);
+                _log.InfoFormat("Received Community data from Accounting for CommunityNumber {0} on Sale {1}", Data.JobSaleDetails.CommunityNumber, message.SaleId);
 
-                newCommunity = _communityService.Create(newCommunity);
-                Data.CommunityReferenceId = newCommunity.CommunityId;
+                var city = _communityService.GetCity(details.Market.JDEId);
+                if (city == null)
+                {
+                    _log.InfoFormat("Creating missing City record from Community data for CommunityNumber {0} on Sale {1}", Data.JobSaleDetails.CommunityNumber, message.SaleId);
+                    city = Mapper.Map<City>(details);
+                    city = _communityService.CreateCity(city);
+                }
+
+                var division = _communityService.GetDivision(details.Division.JDEId);
+                if (division == null)
+                {
+                    _log.InfoFormat("Creating missing Division record from Community data for CommunityNumber {0} on Sale {1}", Data.JobSaleDetails.CommunityNumber, message.SaleId);
+                    division = Mapper.Map<Division>(details);
+                    division = _communityService.CreateDivision(division);
+                }
+
+                var project = _communityService.GetProject(details.Project.JDEId);
+                if (project == null)
+                {
+                    _log.InfoFormat("Creating missing Project record from Community data for CommunityNumber {0} on Sale {1}", Data.JobSaleDetails.CommunityNumber, message.SaleId);
+                    project = Mapper.Map<Project>(details);
+                    project = _communityService.CreateProject(project);
+                }
+
+                community = Mapper.Map<Community>(details);
+                community.CityId = city.CityId;
+                community.DivisionId = division.DivisionId;
+                community.ProjectId = project.ProjectId;
+
+                _log.InfoFormat("Creating Community from data for CommunityNumber {0} on Sale {1}", Data.JobSaleDetails.CommunityNumber, message.SaleId);
+                community = _communityService.Create(community);
+                Data.CommunityReferenceId = community.CommunityId;
             }
 
-            _log.InfoFormat("Received Community data from Accounting for CommunityNumber {0} on Sale {1}, proceeding to handle job details", Data.JobSaleDetails.CommunityNumber, message.SaleId);
+            _log.InfoFormat("Proceeding to handle job details for CommunityNumber {0} on Sale {1}", Data.JobSaleDetails.CommunityNumber, message.SaleId);
             Bus.SendLocal(new HomeSoldSaga_CreateOrUpdateJob(Data.SaleId));
         }
-
-        
 
         public void Handle(HomeSoldSaga_CreateOrUpdateJob message)
         {

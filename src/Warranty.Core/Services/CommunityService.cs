@@ -33,6 +33,57 @@ namespace Warranty.Core.Services
             return newCommunity;
         }
 
+        public City GetCity(string marketCode)
+        {
+            if (string.IsNullOrWhiteSpace(marketCode))
+                return null;
+
+            return _database.SingleOrDefault<City>("WHERE CityCode=@0", marketCode);
+        }
+
+        public City CreateCity(City city)
+        {
+            if (city == null)
+                throw new ArgumentNullException("city");
+
+            _database.Insert(city);
+            return city;
+        }
+
+        public Division GetDivision(string divisionCode)
+        {
+            if (string.IsNullOrWhiteSpace(divisionCode))
+                return null;
+
+            return _database.SingleOrDefault<Division>("WHERE DivisionCode=@0", divisionCode);
+        }
+
+        public Division CreateDivision(Division division)
+        {
+            if (division == null)
+                throw new ArgumentNullException("division");
+
+            _database.Insert(division);
+            return division;
+        }
+
+        public Project GetProject(string projectCode)
+        {
+            if (string.IsNullOrWhiteSpace(projectCode))
+                return null;
+
+            return _database.SingleOrDefault<Project>("WHERE ProjectNumber=@0", projectCode);
+        }
+
+        public Project CreateProject(Project project)
+        {
+            if(project == null)
+                throw new ArgumentNullException("project");
+
+            _database.Insert(project);
+            return project;
+        }
+
         public Community GetCommunityByNumber(string communityNumber)
         {
             if (string.IsNullOrWhiteSpace(communityNumber))
