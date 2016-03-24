@@ -85,12 +85,13 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
             {
                 ContactId = Guid.NewGuid(),
                 NewJobNumber = JobNumber_For_Unknown_HomeOwner,
-                PreviousJobNumber = "Does Not Matter"
+                PreviousJobNumber = "Does Not Matter",
+                SaleId = 23132738273827
             };
 
             Saga.Handle(message);
 
-            var sentMessage = Bus.SentMessages.OfType<RequestHomeBuyerDetails>().FirstOrDefault(m => m.ContactId == message.ContactId);
+            var sentMessage = Bus.SentMessages.OfType<RequestJobSaleDetails>().FirstOrDefault(m => m.SaleId  == message.SaleId);
             sentMessage.ShouldNotBeNull();
         }
 

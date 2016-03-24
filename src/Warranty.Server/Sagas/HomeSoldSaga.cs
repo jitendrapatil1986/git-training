@@ -23,8 +23,7 @@ namespace Warranty.Server.Sagas
         IHandleMessages<JobSaleDetailsResponse>,
         IHandleMessages<HomeSoldSaga_GetCommunityDetails>,
         IHandleMessages<HomeSoldSaga_CreateOrUpdateJob>,
-        IHandleMessages<HomeBuyerDetailsResponse>,
-        IHandleMessages<HomeSoldSaga_AssignHomeOwnerToJob>
+        IHandleMessages<HomeBuyerDetailsResponse>
     {
         private readonly ICommunityService _communityService;
         private readonly IJobService _jobService;
@@ -47,7 +46,6 @@ namespace Warranty.Server.Sagas
             ConfigureMapping<JobSaleDetailsResponse>(m => m.SaleId).ToSaga(s => s.SaleId);
             ConfigureMapping<HomeSoldSaga_CreateOrUpdateJob>(m => m.SaleId).ToSaga(s => s.SaleId);
             ConfigureMapping<HomeBuyerDetailsResponse>(m => m.ContactId).ToSaga(s => s.ContactId);
-            ConfigureMapping<HomeSoldSaga_AssignHomeOwnerToJob>(m => m.SaleId).ToSaga(s => s.SaleId);
         }
 
         public HomeSoldSaga() { }
@@ -180,14 +178,6 @@ namespace Warranty.Server.Sagas
         {
             _log.InfoFormat("Received homeowner details for contact {0} on sale {1} from TIPS", Data.ContactId, Data.SaleId);
 
-            Data.HomeBuyerDetails = message;
-
-            _log.InfoFormat("Proceeding to assign new homeowner to sale {0}", Data.SaleId);
-            Bus.SendLocal(new HomeSoldSaga_AssignHomeOwnerToJob(Data.SaleId));
-        }
-
-        public void Handle(HomeSoldSaga_AssignHomeOwnerToJob message)
-        {
             var homeOwner = Mapper.Map<HomeOwner>(message);
             homeOwner.HomeOwnerId = Guid.NewGuid();
             homeOwner.HomeOwnerNumber = 1;
@@ -258,6 +248,5 @@ namespace Warranty.Server.Sagas
         public virtual JobSaleDetailsResponse JobSaleDetails { get; set; }
         public virtual Guid CommunityReferenceId { get; set; }
         public virtual Guid JobReferenceId { get; set; }
-        public virtual HomeBuyerDetailsResponse HomeBuyerDetails { get; set; }
     }
 }
