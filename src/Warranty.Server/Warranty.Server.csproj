@@ -162,12 +162,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TIPS.Commands, Version=1.1997.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TIPS.Commands.1.1997.0.0\lib\net40\TIPS.Commands.dll</HintPath>
+    <Reference Include="TIPS.Commands, Version=1.2003.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TIPS.Commands.1.2003.0.0\lib\net40\TIPS.Commands.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="TIPS.Events, Version=1.1997.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TIPS.Events.1.1997.0.0\lib\net40\TIPS.Events.dll</HintPath>
+    <Reference Include="TIPS.Events, Version=1.2003.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TIPS.Events.1.2003.0.0\lib\net40\TIPS.Events.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
