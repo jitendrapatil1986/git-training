@@ -210,7 +210,7 @@ namespace Warranty.Server.Sagas
         public virtual Guid ContactId { get; set; }
         public virtual long SaleId { get; set; }
         public virtual Guid JobIdReference { get; set; }
-        public Guid HomeOwnerReference { get; set; }
+        public virtual Guid HomeOwnerReference { get; set; }
     }
     
 }
