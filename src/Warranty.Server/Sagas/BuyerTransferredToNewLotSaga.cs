@@ -18,7 +18,6 @@ namespace Warranty.Server.Sagas
     public class BuyerTransferredToNewLotSaga : Saga<BuyerTransferredToNewLotSagaData>,
         IAmStartedByMessages<BuyerTransferredToNewLot>,
         IHandleMessages<BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner>,
-        IHandleMessages<BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks>,
         IHandleMessages<HomeBuyerDetailsResponse>,
         IHandleMessages<JobSaleDetailsResponse>
     {
@@ -44,7 +43,6 @@ namespace Warranty.Server.Sagas
         public override void ConfigureHowToFindSaga()
         {
             ConfigureMapping<BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner>(x => x.SaleId).ToSaga(x => x.SaleId);
-            ConfigureMapping<BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks>(x => x.SaleId).ToSaga(x => x.SaleId);
             ConfigureMapping<HomeBuyerDetailsResponse>(x => x.ContactId).ToSaga(x => x.ContactId);
             ConfigureMapping<JobSaleDetailsResponse>(x => x.SaleId).ToSaga(x => x.SaleId);
         }
@@ -60,9 +58,9 @@ namespace Warranty.Server.Sagas
             var homeOwner = _homeOwnerService.GetHomeOwnerByJobNumber(message.PreviousJobNumber);
             if (homeOwner == null)
             {
-                _log.InfoFormat("HomeOwner was not found in Warranty for job {0}, requesting HomeBuyer details from TIPS", message.PreviousJobNumber);
-                // Get Homebuyer information from TIPS
-                Bus.Send(new RequestHomeBuyerDetails(Data.ContactId));
+                _log.InfoFormat("HomeOwner was not found in Warranty for job {0}, requesting JobSaleDetails from TIPS since we do not need to remove an existing owner", message.PreviousJobNumber);
+                // Get the updated Job details from TIPS
+                Bus.Send(new RequestJobSaleDetails { SaleId = Data.SaleId });
                 return;
             }
 
@@ -71,26 +69,7 @@ namespace Warranty.Server.Sagas
             Bus.SendLocal(new BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner(Data.SaleId));
         }
 
-        public void Handle(HomeBuyerDetailsResponse message)
-        {
-            _log.InfoFormat("Response for HomeBuyerDetails received from TIPS for ContactId {0} - {1}", message.ContactId, JsonConvert.SerializeObject(message));
-
-            var homeOwner = Mapper.Map<HomeOwner>(message);
-            homeOwner.HomeOwnerId = Guid.NewGuid();
-            homeOwner.HomeOwnerNumber = 1;
-            homeOwner.CreatedBy = Constants.ENDPOINT_NAME;
-            homeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
-            homeOwner.CreatedDate = DateTime.UtcNow;
-            homeOwner.UpdatedDate = DateTime.UtcNow;
-
-            _log.InfoFormat("Creating new HomeOwner in Warranty from TIPS information = {0}", JsonConvert.SerializeObject(homeOwner));
-
-            homeOwner = _homeOwnerService.Create(homeOwner);
-            Data.HomeOwnerReference = homeOwner.HomeOwnerId;
-
-            _log.InfoFormat("Requesting updated job details from TIPS {0}", Data.NewJobNumber);
-            Bus.Send(new RequestJobSaleDetails { SaleId = Data.SaleId });
-        }
+        
 
         public void Handle(BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner message)
         {
@@ -162,14 +141,38 @@ namespace Warranty.Server.Sagas
 
             Data.JobIdReference = job.JobId;
 
-            _log.InfoFormat("Proceeding to assign the HomeOwner and create tasks for Job {0}.", job.JobNumber);
-            Bus.SendLocal(new BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks(Data.SaleId));
+            _log.InfoFormat("Requesting HomeBuyerDetails for Contact {0} on JobNumber {1}.", Data.ContactId, job.JobNumber);
+            Bus.Send(new RequestHomeBuyerDetails(Data.ContactId));
         }
 
-        public void Handle(BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks message)
+        public void Handle(HomeBuyerDetailsResponse message)
         {
-            var homeOwner = _homeOwnerService.GetByHomeOwnerId(Data.HomeOwnerReference);
+            _log.InfoFormat("Response for HomeBuyerDetails received from TIPS for ContactId {0} - {1}", message.ContactId, JsonConvert.SerializeObject(message));
+
             var job = _jobService.GetJobById(Data.JobIdReference);
+
+            var homeOwner = _homeOwnerService.GetByHomeOwnerId(Data.HomeOwnerReference);
+            if (homeOwner == null)
+            {
+                homeOwner = Mapper.Map<HomeOwner>(message);
+                homeOwner.HomeOwnerId = Guid.NewGuid();
+                homeOwner.HomeOwnerNumber = 1;
+                homeOwner.CreatedBy = Constants.ENDPOINT_NAME;
+                homeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
+                homeOwner.CreatedDate = DateTime.UtcNow;
+                homeOwner.UpdatedDate = DateTime.UtcNow;
+                homeOwner.JobId = Data.JobIdReference; // required or it will violate a known unique index
+
+                _log.InfoFormat("Creating new HomeOwner in Warranty from TIPS information = {0}", JsonConvert.SerializeObject(homeOwner));
+                homeOwner = _homeOwnerService.Create(homeOwner);
+            }
+            else
+            {
+                _log.InfoFormat("Updating existing HomeOwner in Warranty from TIPS information = {0}", JsonConvert.SerializeObject(homeOwner));
+                homeOwner = Mapper.Map(message, homeOwner); // update with latest data from TIPS
+                homeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
+                homeOwner.UpdatedDate = DateTime.UtcNow;
+            }
 
             _homeOwnerService.AssignToJob(homeOwner, job);
             _log.InfoFormat("Assigned HomeOwner {0} to JobNumber {1}.", homeOwner.HomeOwnerNumber, job.JobNumber);
@@ -179,18 +182,6 @@ namespace Warranty.Server.Sagas
 
             MarkAsComplete();
             _log.InfoFormat("BuyerTransferredToNewLogSaga complete for JobNumber {0}.", job.JobNumber);
-        }
-    }
-
-    public class BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks : IBusCommand
-    {
-        public long SaleId { get; set; }
-
-        public BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks() { }
-
-        public BuyerTransferredToNewLotSaga_AssignHomeownerAndTasks(long saleId)
-        {
-            SaleId = saleId;
         }
     }
 
@@ -219,7 +210,7 @@ namespace Warranty.Server.Sagas
         public virtual Guid ContactId { get; set; }
         public virtual long SaleId { get; set; }
         public virtual Guid JobIdReference { get; set; }
-        public virtual Guid HomeOwnerReference { get; set; }
+        public Guid HomeOwnerReference { get; set; }
     }
     
 }
