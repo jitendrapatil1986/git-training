@@ -191,7 +191,6 @@
     <Compile Include="Handlers\Jobs\JobAddressChangedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobElevationUpdatedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobClosedHandler.cs" />
-    <Compile Include="Handlers\Jobs\HomeSoldHandler.cs" />
     <Compile Include="Handlers\Jobs\HomeSaleCancelledHandler.cs" />
     <Compile Include="Handlers\Jobs\NotifyJobHomeownerChangedHandler.cs" />
     <Compile Include="Handlers\Jobs\JobPrimaryBuilderUpdatedHandler.cs" />
