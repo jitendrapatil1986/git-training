@@ -166,13 +166,6 @@ namespace Warranty.Server.Sagas
                 _log.InfoFormat("Creating new HomeOwner in Warranty from TIPS information = {0}", JsonConvert.SerializeObject(homeOwner));
                 homeOwner = _homeOwnerService.Create(homeOwner);
             }
-            else
-            {
-                _log.InfoFormat("Updating existing HomeOwner in Warranty from TIPS information = {0}", JsonConvert.SerializeObject(homeOwner));
-                homeOwner = Mapper.Map(message, homeOwner); // update with latest data from TIPS
-                homeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
-                homeOwner.UpdatedDate = DateTime.UtcNow;
-            }
 
             _homeOwnerService.AssignToJob(homeOwner, job);
             _log.InfoFormat("Assigned HomeOwner {0} to JobNumber {1}.", homeOwner.HomeOwnerNumber, job.JobNumber);
