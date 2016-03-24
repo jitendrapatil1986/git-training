@@ -1,4 +1,5 @@
 ﻿using System;
+using log4net;
 
 namespace Warranty.Server.Handlers.Jobs
 {
@@ -11,10 +12,12 @@ namespace Warranty.Server.Handlers.Jobs
     public class JobPrimaryBuilderUpdatedHandler : IHandleMessages<JobPrimaryBuilderUpdated>
     {
         private readonly IDatabase _database;
+        private readonly ILog _log;
 
-        public JobPrimaryBuilderUpdatedHandler(IDatabase database)
+        public JobPrimaryBuilderUpdatedHandler(IDatabase database, ILog log)
         {
             _database = database;
+            _log = log;
         }
 
         public void Handle(JobPrimaryBuilderUpdated message)
@@ -35,7 +38,13 @@ namespace Warranty.Server.Handlers.Jobs
                     _database.Insert(builder);
                 }
 
-                var job = _database.SingleByJdeId<Job>(message.JDEId);
+                var job = _database.SingleOrDefaultByJdeId<Job>(message.JDEId);
+                if (job == null)
+                {
+                    _log.WarnFormat("Could not update primary builder on job because job {0} does not exist locally", message.JDEId);
+                    return;
+                }
+
                 job.BuilderEmployeeId = builder.EmployeeId;
                 _database.Update(job);
             }
