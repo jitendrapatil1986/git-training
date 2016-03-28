@@ -107,7 +107,7 @@ namespace Warranty.Server.Sagas
                 client.BaseAddress = AccountingBaseAddress;
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.dwh.accounting-v1+json"));
                 
-                var result = client.GetAsync(string.Format("api/community?communitynumber={0}", Data.JobSaleDetails.CommunityNumber)).Result;
+                var result = client.GetAsync(string.Format("community?communitynumber={0}", Data.JobSaleDetails.CommunityNumber)).Result;
                 result.EnsureSuccessStatusCode();
 
                 var details = JsonConvert.DeserializeObject<CommunityDetails>(result.Content.ReadAsStringAsync().Result);
