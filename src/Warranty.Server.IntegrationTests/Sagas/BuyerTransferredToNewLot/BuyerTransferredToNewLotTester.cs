@@ -94,41 +94,5 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
             var sentMessage = Bus.SentMessages.OfType<RequestJobSaleDetails>().FirstOrDefault(m => m.SaleId  == message.SaleId);
             sentMessage.ShouldNotBeNull();
         }
-
-        [Test]
-        public void ShouldSetHomeOwnerDataWhenFound()
-        {
-            SagaData.HomeOwnerReference = Guid.Empty;
-
-            var message = new TIPS.Events.JobEvents.BuyerTransferredToNewLot
-            {
-                ContactId = Guid.NewGuid(),
-                NewJobNumber = "Does Not Matter",
-                PreviousJobNumber = JobNumber_For_Known_HomeOwner
-            };
-
-            Saga.Handle(message);
-
-            SagaData.HomeOwnerReference.ShouldNotEqual(Guid.Empty);
-        }
-
-        [Test]
-        public void ShouldSendToRemoveExistingHomeOwnerWhenFound()
-        {
-            var message = new TIPS.Events.JobEvents.BuyerTransferredToNewLot
-            {
-                ContactId = Guid.NewGuid(),
-                NewJobNumber = "Does Not Matter",
-                PreviousJobNumber = JobNumber_For_Known_HomeOwner,
-                SaleId = 75645638
-            };
-
-            Saga.Handle(message);
-
-            var sentMessage = Bus.SentLocalMessages.OfType<BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner>()
-                .FirstOrDefault(m => m.SaleId == message.SaleId);
-            sentMessage.ShouldNotBeNull();
-        }
-        
     }
 }

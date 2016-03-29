@@ -17,7 +17,6 @@ namespace Warranty.Server.Sagas
 {
     public class BuyerTransferredToNewLotSaga : Saga<BuyerTransferredToNewLotSagaData>,
         IAmStartedByMessages<BuyerTransferredToNewLot>,
-        IHandleMessages<BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner>,
         IHandleMessages<HomeBuyerDetailsResponse>,
         IHandleMessages<JobSaleDetailsResponse>
     {
@@ -42,67 +41,45 @@ namespace Warranty.Server.Sagas
 
         public override void ConfigureHowToFindSaga()
         {
-            ConfigureMapping<BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner>(x => x.SaleId).ToSaga(x => x.SaleId);
             ConfigureMapping<HomeBuyerDetailsResponse>(x => x.ContactId).ToSaga(x => x.ContactId);
             ConfigureMapping<JobSaleDetailsResponse>(x => x.SaleId).ToSaga(x => x.SaleId);
         }
 
         public void Handle(BuyerTransferredToNewLot message)
         {
-            _log.InfoFormat("Received BuyerTransferredToNewLot for PreviousJob {0} to NewJob {1} for ContactId {2}", message.PreviousJobNumber, message.NewJobNumber, message.ContactId);
+            _log.InfoFormat("Received BuyerTransferredToNewLot for PreviousJob {0} to NewJob {1} for ContactId {2} on SaleId {3}", message.PreviousJobNumber, message.NewJobNumber, message.ContactId, message.SaleId);
             Data.NewJobNumber = message.NewJobNumber;
             Data.PreviousJobNumber = message.PreviousJobNumber;
             Data.ContactId = message.ContactId;
             Data.SaleId = message.SaleId;
 
-            var homeOwner = _homeOwnerService.GetHomeOwnerByJobNumber(message.PreviousJobNumber);
-            if (homeOwner == null)
-            {
-                _log.InfoFormat("HomeOwner was not found in Warranty for job {0}, requesting JobSaleDetails from TIPS since we do not need to remove an existing owner", message.PreviousJobNumber);
-                // Get the updated Job details from TIPS
-                Bus.Send(new RequestJobSaleDetails { SaleId = Data.SaleId });
-                return;
-            }
-
-            _log.InfoFormat("Existing HomeOwner found in Warranty for job {0}, proceeding to remove them from the job.", message.PreviousJobNumber);
-            Data.HomeOwnerReference = homeOwner.HomeOwnerId;
-            Bus.SendLocal(new BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner(Data.SaleId));
-        }
-
-        
-
-        public void Handle(BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner message)
-        {
-            _log.InfoFormat("Removing HomeOwner from previous job {0}", Data.PreviousJobNumber);
-
-            var homeOwner = _homeOwnerService.GetHomeOwnerByJobNumber(Data.PreviousJobNumber);
-            var previousJob = _jobService.GetJobByNumber(Data.PreviousJobNumber);
-
-            _homeOwnerService.RemoveFromJob(homeOwner, previousJob);
-
-            _log.InfoFormat("Removing Homeowner from system for job {0}", Data.PreviousJobNumber);
-            _homeOwnerService.Delete(homeOwner);
-
-            _log.InfoFormat("Removing tasks from previous job {0}", Data.PreviousJobNumber);
-            _taskService.DeleteTask(previousJob.JobId, TaskType.JobStage3);
-            _taskService.DeleteTask(previousJob.JobId, TaskType.JobStage10);
-
-            _log.InfoFormat("Creating tasks from previous job {0}", Data.PreviousJobNumber);
-            _taskService.CreateTasks(previousJob.JobId);
-
-            _log.InfoFormat("Requesting updated job details from TIPS {0}", Data.NewJobNumber);
+            _log.InfoFormat("Requesting current job information from TIPS for SaleId {0}", message.SaleId);
             Bus.Send(new RequestJobSaleDetails { SaleId = Data.SaleId });
         }
 
         public void Handle(JobSaleDetailsResponse message)
         {
-            _log.InfoFormat("Received JobDetailsResponse from TIPS for job number {0}, will now create job in Warranty.", message.JobNumber);
+            _log.InfoFormat("Received JobDetailsResponse from TIPS for SaleId {0}", message.SaleId);
+
+            if (!message.ContactGUID.HasValue)
+            {
+                _log.ErrorFormat("According to TIPS, there is no Homeowner associated with the SaleId {0} - this suggests something may have happened before attempting to process the message.  This BuyerTransfer will not be processed any further.", message.SaleId);
+                MarkAsComplete();
+                return;
+            }
+
+            if (message.ContactGUID.Value != Data.ContactId)
+            {
+                _log.ErrorFormat("ContactGUID value from TIPS {0} does not match ContactID {1} from original event.", message.ContactGUID, Data.ContactId);
+                _log.ErrorFormat("According to TIPS, the contact associated with the SaleId {0} does not match the original ContactId received during the transfer - this suggests something may have happened before attempting to process the message.  This BuyerTransfer will not be processed any further.", message.SaleId);
+                MarkAsComplete();
+                return;
+            }
 
             var job = _jobService.GetJobByNumber(message.JobNumber);
             if (job == null)
             {
-                _log.InfoFormat("Job {0} does not exist, will create a new job with details from TIPS.", message.JobNumber);
-
+                _log.InfoFormat("Job {0} does not exist locally, will create a new job with details from TIPS.", message.JobNumber);
                 job = Mapper.Map<Job>(message);
                 job.CreatedBy = Constants.ENDPOINT_NAME;
                 job.UpdatedBy = Constants.ENDPOINT_NAME;
@@ -144,7 +121,7 @@ namespace Warranty.Server.Sagas
 
             Data.JobIdReference = job.JobId;
 
-            _log.InfoFormat("Requesting HomeBuyerDetails for Contact {0} on JobNumber {1}.", Data.ContactId, job.JobNumber);
+            _log.InfoFormat("Requesting updated HomeBuyer details for Contact {0} on SaleId {1}.", Data.ContactId, Data.SaleId);
             Bus.Send(new RequestHomeBuyerDetails(Data.ContactId));
         }
 
@@ -152,44 +129,56 @@ namespace Warranty.Server.Sagas
         {
             _log.InfoFormat("Response for HomeBuyerDetails received from TIPS for ContactId {0} - {1}", message.ContactId, JsonConvert.SerializeObject(message));
 
-            var job = _jobService.GetJobById(Data.JobIdReference);
+            var newJob = _jobService.GetJobById(Data.JobIdReference);
+            var previousJob = _jobService.GetJobByNumber(Data.PreviousJobNumber);
+            var previousHomeOwner = _homeOwnerService.GetHomeOwnerByJobNumber(Data.PreviousJobNumber);
 
-            var homeOwner = _homeOwnerService.GetByHomeOwnerId(Data.HomeOwnerReference);
-            if (homeOwner == null)
+            if (newJob.CurrentHomeOwnerId.HasValue)
             {
-                homeOwner = Mapper.Map<HomeOwner>(message);
-                homeOwner.HomeOwnerId = Guid.NewGuid();
-                homeOwner.HomeOwnerNumber = 1;
-                homeOwner.CreatedBy = Constants.ENDPOINT_NAME;
-                homeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
-                homeOwner.CreatedDate = DateTime.UtcNow;
-                homeOwner.UpdatedDate = DateTime.UtcNow;
-                homeOwner.JobId = Data.JobIdReference; // required or it will violate a known unique index
-
-                _log.InfoFormat("Creating new HomeOwner in Warranty from TIPS information = {0}", JsonConvert.SerializeObject(homeOwner));
-                homeOwner = _homeOwnerService.Create(homeOwner);
+                _log.ErrorFormat("The new job {0} on SaleId {1} currently has a home owner assigned in Warranty.  You cannot transfer to a job that is currently assigned a home owner.  This suggests something changed or failed to update prior to this message being handled.", Data.NewJobNumber, Data.SaleId);
+                MarkAsComplete();
+                return;
             }
 
-            _homeOwnerService.AssignToJob(homeOwner, job);
-            _log.InfoFormat("Assigned HomeOwner {0} to JobNumber {1}.", homeOwner.HomeOwnerNumber, job.JobNumber);
+            // If we have a homeowner locally, we just want to update them and point them to the new job
+            if (previousHomeOwner != null)
+            {
+                _log.ErrorFormat("Homeowner {3} was found on previous job {0} for SaleId {1}, updating their details and removing them from the previous job.", Data.PreviousJobNumber, Data.SaleId, previousHomeOwner.HomeOwnerName);
 
-            _taskService.CreateTasks(job.JobId);
-            _log.InfoFormat("Created tasks for JobNumber {0}.", job.JobNumber);
+                previousHomeOwner = Mapper.Map(message, previousHomeOwner);  // Update the contact info from TIPS that we just received
+                _homeOwnerService.RemoveFromJob(previousHomeOwner, previousJob);
 
+                _log.InfoFormat("Removing tasks from previous job {0} on SaleId {1}", Data.PreviousJobNumber, Data.SaleId);
+                _taskService.DeleteTask(previousJob.JobId, TaskType.JobStage3);
+                _taskService.DeleteTask(previousJob.JobId, TaskType.JobStage10);
+
+                _log.InfoFormat("Creating tasks for previous job {0} on SaleId {1}", Data.PreviousJobNumber, Data.SaleId);
+                _taskService.CreateTasks(previousJob.JobId);
+            }
+            // Since we don't have a homeowner locally, we need to create a new record and assign them to the new job
+            else
+            {
+                _log.ErrorFormat("Homeowner was not found on previous job {0} for SaleId {1}, creating a new HomeOwner record for them.", Data.PreviousJobNumber, Data.SaleId);
+
+                previousHomeOwner = Mapper.Map<HomeOwner>(message);
+                previousHomeOwner.HomeOwnerId = Guid.NewGuid();
+                previousHomeOwner.HomeOwnerNumber = 1;
+                previousHomeOwner.CreatedBy = Constants.ENDPOINT_NAME;
+                previousHomeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
+                previousHomeOwner.CreatedDate = DateTime.UtcNow;
+                previousHomeOwner.UpdatedDate = DateTime.UtcNow;
+                previousHomeOwner.JobId = Data.JobIdReference; // required or it will violate a known unique index    
+                previousHomeOwner = _homeOwnerService.Create(previousHomeOwner);
+            }
+
+            _log.InfoFormat("Assigning HomeOwner {0} to JobNumber {1} on SaleId {2}.", previousHomeOwner.HomeOwnerName, newJob.JobNumber, Data.SaleId);
+            _homeOwnerService.AssignToJob(previousHomeOwner, newJob);
+
+            _log.InfoFormat("Creating tasks for JobNumber {0} on SaleId {1}.", newJob.JobNumber, Data.SaleId);
+            _taskService.CreateTasks(newJob.JobId);
+            
             MarkAsComplete();
-            _log.InfoFormat("BuyerTransferredToNewLogSaga complete for JobNumber {0}.", job.JobNumber);
-        }
-    }
-
-    public class BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner : IBusCommand
-    {
-        public long SaleId { get; set; }
-
-        public BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner() { }
-
-        public BuyerTransferredToNewLotSaga_RemoveExistingHomeOwner(long saleId)
-        {
-            SaleId = saleId;
+            _log.InfoFormat("BuyerTransferredToNewLogSaga complete for JobNumber {0}.", newJob.JobNumber);
         }
     }
 
@@ -206,7 +195,6 @@ namespace Warranty.Server.Sagas
         public virtual Guid ContactId { get; set; }
         public virtual long SaleId { get; set; }
         public virtual Guid JobIdReference { get; set; }
-        public virtual Guid HomeOwnerReference { get; set; }
     }
     
 }
