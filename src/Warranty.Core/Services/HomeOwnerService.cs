@@ -73,6 +73,11 @@ namespace Warranty.Core.Services
             return _database.SingleById<HomeOwner>(homeOwnerId);
         }
 
+        public void Delete(HomeOwner homeOwner)
+        {
+            _database.Delete<HomeOwner>(homeOwner.HomeOwnerId);
+        }
+
         public HomeOwner GetHomeOwnerByJobNumber(string jobNumber)
         {
             return _database.SingleOrDefault<HomeOwner>(

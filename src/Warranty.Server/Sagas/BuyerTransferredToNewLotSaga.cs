@@ -80,6 +80,9 @@ namespace Warranty.Server.Sagas
 
             _homeOwnerService.RemoveFromJob(homeOwner, previousJob);
 
+            _log.InfoFormat("Removing Homeowner from system for job {0}", Data.PreviousJobNumber);
+            _homeOwnerService.Delete(homeOwner);
+
             _log.InfoFormat("Removing tasks from previous job {0}", Data.PreviousJobNumber);
             _taskService.DeleteTask(previousJob.JobId, TaskType.JobStage3);
             _taskService.DeleteTask(previousJob.JobId, TaskType.JobStage10);
