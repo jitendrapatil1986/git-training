@@ -78,7 +78,11 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         {
             SagaData.JobIdReference = Guid.Empty;
 
-            var message = new JobSaleDetailsResponse();
+            var message = new JobSaleDetailsResponse
+            {
+                ContactGUID = Guid.NewGuid()
+            };
+            SagaData.ContactId = message.ContactGUID.Value;
             Saga.Handle(message);
 
             SagaData.JobIdReference.ShouldNotEqual(Guid.Empty);
@@ -91,10 +95,12 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
 
             var message = new JobSaleDetailsResponse
             {
+                ContactGUID = Guid.NewGuid(),
                 BuilderEmployeeID = Builder_Exists
             };
-
+            SagaData.ContactId = message.ContactGUID.Value;
             Saga.Handle(message);
+
             SagaData.JobIdReference.ShouldNotEqual(Guid.Empty);
 
             EmployeeService.Verify(e => e.GetEmployeeByNumber(Builder_Exists), Times.Once);
@@ -107,10 +113,12 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
 
             var message = new JobSaleDetailsResponse
             {
+                ContactGUID = Guid.NewGuid(),
                 CommunityNumber = Community_Exists
             };
-
+            SagaData.ContactId = message.ContactGUID.Value;
             Saga.Handle(message);
+
             SagaData.JobIdReference.ShouldNotEqual(Guid.Empty);
 
             CommunityService.Verify(e => e.GetCommunityByNumber(Community_Exists), Times.Once);
@@ -124,13 +132,14 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
 
             var message = new JobSaleDetailsResponse
             {
+                ContactGUID = Guid.NewGuid(),
                 JobNumber = ExistingJob.JobNumber,
                 AddressCity = "Houston",
                 AddressLine1 = "123 Main St",
                 AddressStateAbbreviation = "TX",
                 AddressZipCode = "77571"
             };
-
+            SagaData.ContactId = message.ContactGUID.Value;
             Saga.Handle(message);
 
             JobService.Verify(m => m.GetJobByNumber(message.JobNumber), Times.Once);
@@ -149,10 +158,12 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
 
             var message = new JobSaleDetailsResponse
             {
+                ContactGUID = Guid.NewGuid(),
                 JobNumber = "88273758"
             };
-
+            SagaData.ContactId = message.ContactGUID.Value;
             Saga.Handle(message);
+
             SagaData.JobIdReference.ShouldNotEqual(Guid.Empty);
 
             JobService.Verify(m => m.GetJobByNumber(message.JobNumber), Times.Once);

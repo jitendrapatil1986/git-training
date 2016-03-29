@@ -99,27 +99,11 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         {
             ResetCalls();
             SagaData.JobIdReference = Job_Reference;
-            SagaData.HomeOwnerReference = HomeOwner_DoesNotExist;
 
             Saga.Handle(Response);
 
             JobService.Verify(a => a.GetJobById(Job_Reference), Times.Once);
-            HomeOwnerService.Verify(a => a.GetByHomeOwnerId(HomeOwner_DoesNotExist), Times.Once);
             HomeOwnerService.Verify(a => a.Create(It.IsAny<HomeOwner>()), Times.Once);
-        }
-
-        [Test]
-        public void ShouldUpdateExistingHomeOwner()
-        {
-            ResetCalls();
-            SagaData.JobIdReference = Job_Reference;
-            SagaData.HomeOwnerReference = HomeOwner_Exists;
-
-            Saga.Handle(Response);
-
-            JobService.Verify(a => a.GetJobById(Job_Reference), Times.Once);
-            HomeOwnerService.Verify(a => a.GetByHomeOwnerId(HomeOwner_Exists), Times.Once);
-            HomeOwnerService.Verify(a => a.Create(It.IsAny<HomeOwner>()), Times.Never);
         }
 
         [Test]
@@ -127,8 +111,6 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         {
             ResetCalls();
             SagaData.JobIdReference = Job_Reference;
-            SagaData.HomeOwnerReference = HomeOwner_DoesNotExist;
-
             Saga.Handle(Response);
 
             HomeOwnerService.Verify(a => a.AssignToJob(It.IsAny<HomeOwner>(), It.IsAny<Job>()), Times.Once);
@@ -139,7 +121,6 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         {
             ResetCalls();
             SagaData.JobIdReference = Job_Reference;
-            SagaData.HomeOwnerReference = HomeOwner_Exists;
 
             Saga.Handle(Response);
 
@@ -151,7 +132,6 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         {
             ResetCalls();
             SagaData.JobIdReference = Job_Reference;
-            SagaData.HomeOwnerReference = HomeOwner_DoesNotExist;
 
             Saga.Handle(Response);
 
@@ -163,7 +143,6 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         {
             ResetCalls();
             SagaData.JobIdReference = Job_Reference;
-            SagaData.HomeOwnerReference = HomeOwner_Exists;
 
             Saga.Handle(Response);
 
@@ -175,7 +154,6 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         {
             ResetCalls();
             SagaData.JobIdReference = Job_Reference;
-            SagaData.HomeOwnerReference = HomeOwner_DoesNotExist;
 
             Saga.Handle(Response);
 
@@ -187,7 +165,6 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         {
             ResetCalls();
             SagaData.JobIdReference = Job_Reference;
-            SagaData.HomeOwnerReference = HomeOwner_Exists;
 
             Saga.Handle(Response);
 

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using TIPS.Events.Models;
 using Warranty.Core.Entities;
 using Job = Warranty.Core.Entities.Job;
