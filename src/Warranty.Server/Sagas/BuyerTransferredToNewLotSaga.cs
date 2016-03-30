@@ -68,14 +68,6 @@ namespace Warranty.Server.Sagas
                 return;
             }
 
-            if (message.ContactGUID.Value != Data.ContactId)
-            {
-                _log.ErrorFormat("ContactGUID value from TIPS {0} does not match ContactID {1} from original event.", message.ContactGUID, Data.ContactId);
-                _log.ErrorFormat("According to TIPS, the contact associated with the SaleId {0} does not match the original ContactId received during the transfer - this suggests something may have happened before attempting to process the message.  This BuyerTransfer will not be processed any further.", message.SaleId);
-                MarkAsComplete();
-                return;
-            }
-
             var job = _jobService.GetJobByNumber(message.JobNumber);
             if (job == null)
             {
