@@ -8,6 +8,9 @@ $db_name = "Warranty"
 $db_name_nsb = "Warranty_NServicebus"
 $db_nsb_application_name = "Warranty.Server"
 
+$nsb_installer_user = "NSB"
+$nsb_installer_pwd = "Gy*9d>VM&6gu6<k"
+
 $nsb_service_name = "DWH - Warranty.Server"
 
 $accountingApiBaseUri = "http://accounting.davidweekleyhomes.com/api/"
