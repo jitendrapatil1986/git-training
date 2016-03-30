@@ -77,12 +77,12 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         public void ShouldSetSagaDataFromResponse()
         {
             SagaData.JobIdReference = Guid.Empty;
+            SagaData.NewJobNumber = "287128712";
 
             var message = new JobSaleDetailsResponse
             {
-                ContactGUID = Guid.NewGuid()
+                JobNumber = SagaData.NewJobNumber
             };
-            SagaData.ContactId = message.ContactGUID.Value;
             Saga.Handle(message);
 
             SagaData.JobIdReference.ShouldNotEqual(Guid.Empty);
@@ -92,13 +92,13 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         public void ShouldSetBuilderIdWhenFound()
         {
             SagaData.JobIdReference = Guid.Empty;
+            SagaData.NewJobNumber = "238273827";
 
             var message = new JobSaleDetailsResponse
             {
-                ContactGUID = Guid.NewGuid(),
-                BuilderEmployeeID = Builder_Exists
+                BuilderEmployeeID = Builder_Exists,
+                JobNumber = SagaData.NewJobNumber
             };
-            SagaData.ContactId = message.ContactGUID.Value;
             Saga.Handle(message);
 
             SagaData.JobIdReference.ShouldNotEqual(Guid.Empty);
@@ -110,13 +110,13 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         public void ShouldSetCommunityIdWhenFound()
         {
             SagaData.JobIdReference = Guid.Empty;
+            SagaData.NewJobNumber = "28372837";
 
             var message = new JobSaleDetailsResponse
             {
-                ContactGUID = Guid.NewGuid(),
-                CommunityNumber = Community_Exists
+                CommunityNumber = Community_Exists,
+                JobNumber = SagaData.NewJobNumber
             };
-            SagaData.ContactId = message.ContactGUID.Value;
             Saga.Handle(message);
 
             SagaData.JobIdReference.ShouldNotEqual(Guid.Empty);
@@ -128,18 +128,17 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         public void ShouldUpdateExistingJobWhenFound()
         {
             SagaData.JobIdReference = Guid.Empty;
+            SagaData.NewJobNumber = ExistingJob.JobNumber;
             JobService.ResetCalls();
 
             var message = new JobSaleDetailsResponse
             {
-                ContactGUID = Guid.NewGuid(),
                 JobNumber = ExistingJob.JobNumber,
                 AddressCity = "Houston",
                 AddressLine1 = "123 Main St",
                 AddressStateAbbreviation = "TX",
                 AddressZipCode = "77571"
             };
-            SagaData.ContactId = message.ContactGUID.Value;
             Saga.Handle(message);
 
             JobService.Verify(m => m.GetJobByNumber(message.JobNumber), Times.Once);
@@ -154,14 +153,13 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
         public void ShouldCreateNewJobWhenNotFound()
         {
             SagaData.JobIdReference = Guid.Empty;
+            SagaData.NewJobNumber = "88273758";
             JobService.ResetCalls();
 
             var message = new JobSaleDetailsResponse
             {
-                ContactGUID = Guid.NewGuid(),
-                JobNumber = "88273758"
+                JobNumber = SagaData.NewJobNumber
             };
-            SagaData.ContactId = message.ContactGUID.Value;
             Saga.Handle(message);
 
             SagaData.JobIdReference.ShouldNotEqual(Guid.Empty);
