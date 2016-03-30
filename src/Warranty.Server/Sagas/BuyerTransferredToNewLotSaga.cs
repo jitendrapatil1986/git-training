@@ -61,9 +61,10 @@ namespace Warranty.Server.Sagas
         {
             _log.InfoFormat("Received JobDetailsResponse from TIPS for SaleId {0}", message.SaleId);
 
-            if (!message.ContactGUID.HasValue)
+            if (string.IsNullOrWhiteSpace(message.JobNumber) || message.JobNumber != Data.NewJobNumber)
             {
-                _log.ErrorFormat("According to TIPS, there is no Homeowner associated with the SaleId {0} - this suggests something may have happened before attempting to process the message.  This BuyerTransfer will not be processed any further.", message.SaleId);
+                _log.ErrorFormat("The Job information received from TIPS has a job number {0} that doesn't match the orignal job number from the event {1}.  This suggests something happened to the job since the event was fired.", message.JobNumber, Data.NewJobNumber);
+                _log.ErrorFormat("Ending BuyerTransfer saga for Sale {0} due to invalid data condition.", Data.SaleId);
                 MarkAsComplete();
                 return;
             }
