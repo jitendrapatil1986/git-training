@@ -37,15 +37,24 @@ Role "Nsb" -Incremental {
 
     # config
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/connectionStrings/add[@name='WarrantyDB']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name;Integrated Security=SSPI;Application Name=$db_nsb_application_name;"
+	
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='Accounting.API.BaseUri']/@value" $accountingApiBaseUri
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Accounting.Events']/@Endpoint" "Accounting.Server@$accountingEndPointServer"
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Accounting.Commands']/@Endpoint" "Accounting.Server@$accountingEndPointServer"
     poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='TIPS.Events']/@Endpoint" "TIPS.Server@$TIPSEndpointServer"
+    poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='TIPS.Commands']/@Endpoint" "TIPS.Server@$TIPSEndpointServer"
 	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/UnicastBusConfig/MessageEndpointMappings/add[@Assembly='Land.Events']/@Endpoint" "Land.Server@$landEndpointServer"
 	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/appSettings/add[@key='NServiceBus.FileShareDataBus']/@value" $fileShareDataBus
-        
+    
+	#Update the NSB connection so it can upgrade the NSB database
+	#This is needed due to the "double-hop" authentication problem when running deployments this way
+	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/connectionStrings/add[@name='NServiceBus/Persistence']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name_nsb;User Id=$nsb_installer_user;Password=$nsb_installer_pwd;Application Name=$db_nsb_application_name;"
+    
     #Install NSB Service
-    &"$nsb_directory\NServiceBus.Host.exe" "/install" "/serviceName:$nsb_service_name" "/username:dwh\svc-Warranty-nsb" "/password:8k6+_6xft#y`$K_Xd" "/dependsOn:MSMQ"
+    &"$nsb_directory\NServiceBus.Host.exe" "/install" "/serviceName:$nsb_service_name" "/username:dwh\svc-Warranty-nsb" "/password:8k6+_6xft#y`$K_Xd" "/dependsOn:MSMQ" "NServiceBus.Production"
+	
+	#Set the NSB connection to the run-time setting
+	poke-xml "$nsb_directory\Warranty.Server.dll.config" "configuration/connectionStrings/add[@name='NServiceBus/Persistence']/@connectionString" "Data Source=$db_server;Initial Catalog=$db_name_nsb;Integrated Security=SSPI;Application Name=$db_nsb_application_name;"
 
     #Start NSB Service
     Start-Service "$nsb_service_name"

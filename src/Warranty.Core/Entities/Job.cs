@@ -38,5 +38,10 @@ namespace Warranty.Core.Entities
                 return CloseDate.GetValueOrDefault().CompareTo(DateTime.Today.AddYears(-2)) <= 0;
             }
         }
+
+        public bool IsNew()
+        {
+            return JobId == Guid.Empty;
+        }
     }
 }

@@ -1,29 +1,49 @@
 using System.Configuration;
+using AutoMapper;
 using Common.Extensions;
 using Common.Messages;
+using log4net;
+using log4net.Config;
+using NServiceBus;
+using Warranty.Core.DataAccess;
 
 namespace Warranty.Server
 {
-    using Core.DataAccess;
-    using log4net.Config;
-    using NServiceBus;
-
-    public class EndpointConfig : IConfigureThisEndpoint, AsA_Publisher, IWantCustomInitialization
+    public class EndpointConfig : IConfigureThisEndpoint, AsA_Publisher, IWantCustomInitialization, IWantCustomLogging
     {
         public void Init()
         {
-            SetLoggingLibrary.Log4Net(() => XmlConfigurator.Configure());
+            Mapper.Initialize(a => a.AddProfile(new MappingProfile()));
 
             var container = StructureMapConfig.CreateContainer();
             DbFactory.Setup(container);
+            container.Configure(cfg =>
+            {
+                cfg.For<ILog>().AlwaysUnique().Use(c =>
+                {
+                    var parentType = c.ParentType ?? c.BuildStack.Current.ConcreteType;
+                    return LogManager.GetLogger(parentType);
+                });
+            });
 
             Configure.With()
                 .StructureMapBuilder(container)
+                .UseNHibernateSagaPersister()
+                .UseNHibernateSubscriptionPersister()
+                .UseNHibernateTimeoutPersister()
                 .DefiningDataBusPropertiesAs(t => t.Name.EndsWith("DataBus"))
                 .DefiningMessagesAs(t => (t.IsAssignableTo<IMessage>() && !(t.IsAssignableTo<ICommand>() || t.IsAssignableTo<IEvent>())) || t.IsBusMessage())
                 .DefiningCommandsAs(t => t.IsAssignableTo<ICommand>() || t.IsBusCommand())
                 .DefiningEventsAs(t => t.IsAssignableTo<IEvent>() || t.IsBusEvent())
                 .FileShareDataBus(ConfigurationManager.AppSettings["NServiceBus.FileShareDataBus"]);
+
+            Configure.Features.Enable<NServiceBus.Features.Sagas>();
+        }
+
+        void IWantCustomLogging.Init()
+        {
+            SetLoggingLibrary.Log4Net(() => XmlConfigurator.Configure());
+            LogManager.GetLogger(GetType()).Info("Logging Initialized");
         }
     }
 }

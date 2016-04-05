@@ -52,17 +52,28 @@ namespace Warranty.Core.Services
             }
         }
 
+        public Job CreateJob(Job job)
+        {
+            if (job == null)
+                throw new ArgumentNullException("job");
+
+            using (_database)
+            {
+                _database.Insert(job);
+            }
+
+            return job;
+        }
+
+        
+
         public Job CreateJob(TipsJob tipsJob)
         {
             if(tipsJob == null)
                 throw new ArgumentNullException("tipsJob");
 
             var job = UpdateJobFromTipsJob(new Job(), tipsJob);
-            using (_database)
-            {
-                _database.Insert(job);
-            }
-            return job;
+            return CreateJob(job);
         }
 
         public Job CreateJob(Sale sale)
@@ -71,11 +82,14 @@ namespace Warranty.Core.Services
                 throw new ArgumentNullException("sale");
 
             var job = UpdateJobFromSale(new Job(), sale);
+            return CreateJob(job);
+        }
+        public void UpdateExistingJob(Job job)
+        {
             using (_database)
             {
-                _database.Insert(job);
+                _database.Update(job);
             }
-            return job;
         }
 
         public void UpdateExistingJob(Job job, Sale sale)
@@ -85,11 +99,8 @@ namespace Warranty.Core.Services
             if(sale == null)
                 throw new ArgumentNullException("sale");
 
-            using (_database)
-            {
-                var updatedJob = UpdateJobFromSale(job, sale);
-                _database.Update(updatedJob);
-            }
+            var updatedJob = UpdateJobFromSale(job, sale);
+            UpdateExistingJob(updatedJob);
         }
 
         public void UpdateExistingJob(Job job, TipsJob tipsJob)
@@ -99,11 +110,8 @@ namespace Warranty.Core.Services
             if (tipsJob == null)
                 throw new ArgumentNullException("tipsJob");
 
-            using (_database)
-            {
-                var updatedJob = UpdateJobFromTipsJob(job, tipsJob);
-                _database.Update(updatedJob);
-            }
+            var updatedJob = UpdateJobFromTipsJob(job, tipsJob);
+            UpdateExistingJob(updatedJob);
         }
 
         private Job UpdateJobFromTipsJob(Job job, TipsJob tipsJob)

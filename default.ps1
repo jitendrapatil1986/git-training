@@ -26,7 +26,7 @@ properties {
 
 	$cassini_process_name = "WebDev.WebServer40"
 
-	$db_server = ".\SqlExpress"
+	$db_server = if (test-path env:_LOCAL_SQL_INSTANCE) { $env:_LOCAL_SQL_INSTANCE } else { ".\SqlExpress" }
 
 	$db_name = "Warranty"
 	$db_scripts_dir = "$source_dir\Database\warranty"

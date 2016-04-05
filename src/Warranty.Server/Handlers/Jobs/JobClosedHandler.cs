@@ -1,4 +1,5 @@
 ﻿using Accounting.Events.Job;
+using log4net;
 using NPoco;
 using NServiceBus;
 using Warranty.Core.Entities;
@@ -15,18 +16,26 @@ namespace Warranty.Server.Handlers.Jobs
     {
         private readonly IDatabase _database;
         private readonly IAccountingService _accountingService;
+        private readonly ILog _log;
 
-        public JobClosedHandler(IDatabase database, IAccountingService accountingService)
+        public JobClosedHandler(IDatabase database, IAccountingService accountingService, ILog log)
         {
             _database = database;
             _accountingService = accountingService;
+            _log = log;
         }
 
         public void Handle(JobClosed message)
         {
             using (_database)
             {
-                var job = _database.SingleByJdeId<Job>(message.JDEId);
+                var job = _database.SingleOrDefaultByJdeId<Job>(message.JDEId);
+                if (job == null)
+                {
+                    _log.WarnFormat("Received JobClosed for job {0} that does not exist locally", message.JDEId);
+                    return;
+                }
+
                 job.CloseDate = message.CloseDate;
                 _database.Update(job);
 

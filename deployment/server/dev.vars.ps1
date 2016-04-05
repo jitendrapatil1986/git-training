@@ -4,7 +4,11 @@ $nsb_directory = "C:\Applications\Warranty.Server"
 
 $db_server = "WKSQL3"
 $db_name = "WarrantyTest"
+$db_name_nsb = "WarrantyTest_NServicebus"
 $db_nsb_application_name = "Warranty.Server.Dev"
+
+$nsb_installer_user = "NSB"
+$nsb_installer_pwd = "Gy*9d>VM&6gu6<k"
 
 $nsb_service_name = "DWH - Warranty.Server"
 

@@ -1,3 +1,4 @@
+using log4net;
 using NPoco;
 using NServiceBus;
 using NUnit.Framework;
@@ -39,6 +40,11 @@ namespace Warranty.Server.IntegrationTests
                                                             scan.ConnectImplementationsToTypesClosing(typeof (IEntityBuilder<>));
                                                         });
                                              x.For<IUserSession>().Use<TestWarrantyUserSession>();
+                                             x.For<ILog>().AlwaysUnique().Use(c =>
+                                             {
+                                                 var parentType = c.ParentType ?? c.BuildStack.Current.ConcreteType;
+                                                 return LogManager.GetLogger(parentType);
+                                             });
 
                                              var baseAccountingApiUri = ConfigurationManager.AppSettings["Accounting.API.BaseUri"];
                                              var timeoutInMilliseconds = ConfigurationManager.AppSettings["Accounting.API.TimeoutInMilliseconds"];
