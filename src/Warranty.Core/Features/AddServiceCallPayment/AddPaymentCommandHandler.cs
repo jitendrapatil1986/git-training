@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Warranty.Core.Features.AddServiceCallPayment
+﻿namespace Warranty.Core.Features.AddServiceCallPayment
 {
     using Configurations;
     using Entities;
