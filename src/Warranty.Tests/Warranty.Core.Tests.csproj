@@ -140,6 +140,7 @@
     <Compile Include="Core\Features\AssignWSRs\WhenExistingAssignmentAndThereAreNoTasksAssigned.cs" />
     <Compile Include="Core\IntExtensionsTester.cs" />
     <Compile Include="Core\TestWarrantyUserSession.cs" />
+    <Compile Include="Entities\JobTests.cs" />
     <Compile Include="ServiceCallCalculatorTester.cs" />
   </ItemGroup>
   <ItemGroup>
