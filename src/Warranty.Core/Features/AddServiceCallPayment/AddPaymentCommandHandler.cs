@@ -1,4 +1,6 @@
-﻿namespace Warranty.Core.Features.AddServiceCallPayment
+﻿using System;
+
+namespace Warranty.Core.Features.AddServiceCallPayment
 {
     using Configurations;
     using Entities;
@@ -55,7 +57,7 @@
 
                 var communityNumber = community.CommunityNumber;
 
-                if (job.IsOutOfWarranty)
+                if (job.CloseDate.Value < serviceCall.CreatedDate.Value.AddYears(-2))
                 {
                     communityNumber = WarrantyConfigSection.GetCity(city.CityCode.ToUpper()).ClosedOutCommunity;
                 }
