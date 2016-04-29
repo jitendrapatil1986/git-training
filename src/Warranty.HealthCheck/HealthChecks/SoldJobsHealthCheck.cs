@@ -26,8 +26,7 @@ namespace Warranty.HealthCheck.HealthChecks
         {
             var schedule = TriggerBuilder.Create()
                 .WithIdentity("SoldJobsTrigger")
-                .WithSchedule(SimpleScheduleBuilder.RepeatHourlyForever())
-                .StartNow()
+                .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(5, 0))
                 .Build();
 
             var detail = JobBuilder.Create<SoldJobsHealthCheck>()
