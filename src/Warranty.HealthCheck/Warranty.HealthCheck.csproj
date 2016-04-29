@@ -62,6 +62,10 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NPoco, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NPoco.3.2.0\lib\net45\NPoco.dll</HintPath>
       <Private>True</Private>
@@ -76,6 +80,10 @@
     </Reference>
     <Reference Include="NServiceBus.Host, Version=4.7.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <HintPath>..\packages\NServiceBus.Host.4.7.5\lib\net40\NServiceBus.Host.exe</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NServiceBus.NHibernate, Version=4.2.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.NHibernate.4.2.0\lib\net40\NServiceBus.NHibernate.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus.ObjectBuilder.StructureMap, Version=4.2.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
@@ -107,6 +115,7 @@
     <Compile Include="Config\HealthCheckRegistry.cs" />
     <Compile Include="Config\StructuremapConfig.cs" />
     <Compile Include="Config\StructuremapJobFactory.cs" />
+    <Compile Include="Data\IHealthCheckDatabase.cs" />
     <Compile Include="Data\TipsDatabase.cs" />
     <Compile Include="Data\WarrantyDatabase.cs" />
     <Compile Include="EndpointConfig.cs" />
@@ -114,8 +123,11 @@
     <Compile Include="Handlers\SoldJobsHealthCheckSaga.cs" />
     <Compile Include="HealthChecks\IHealthCheck.cs" />
     <Compile Include="HealthChecks\SoldJobsHealthCheck.cs" />
-    <Compile Include="Mediatr\GetJobsFromWarranty.cs" />
-    <Compile Include="Mediatr\GetSoldJobsFromTips.cs" />
+    <Compile Include="Mediatr\ClearTempJobNumberTables.cs" />
+    <Compile Include="Mediatr\GetSoldJobs.cs" />
+    <Compile Include="Mediatr\LoadJobsFromWarranty.cs" />
+    <Compile Include="Mediatr\LoadJobsFromTips.cs" />
+    <Compile Include="Models\HEALTH_SoldJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup\SchedulerStartup.cs" />
   </ItemGroup>

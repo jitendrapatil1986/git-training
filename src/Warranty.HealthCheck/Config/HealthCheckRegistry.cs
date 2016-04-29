@@ -44,6 +44,10 @@ namespace Warranty.HealthCheck.Config
                     .LifecycleIs(new ThreadLocalStorageLifecycle())
                     .Use(new WarrantyDatabase("warranty"));
 
+                For<IHealthCheckDatabase>()
+                    .LifecycleIs(new ThreadLocalStorageLifecycle())
+                    .Use(new HealthCheckDatabase("NServiceBus/Persistence"));
+
                 For<IJobFactory>().Use<StructuremapJobFactory>();
                 For<ISchedulerFactory>().Use(new StdSchedulerFactory());
                 For<IScheduler>()

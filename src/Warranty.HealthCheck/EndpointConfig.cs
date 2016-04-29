@@ -15,6 +15,8 @@ namespace Warranty.HealthCheck
 	    {
 	        Configure.With()
                 .StructureMapBuilder(StructuremapConfig.Init())
+                .UseNHibernateSagaPersister()
+                .UseNHibernateTimeoutPersister()
                 .DefiningMessagesAs(t => (t.IsAssignableTo<IMessage>() && !(t.IsAssignableTo<ICommand>() || t.IsAssignableTo<IEvent>())) || t.IsBusMessage())
                 .DefiningCommandsAs(t => t.IsAssignableTo<ICommand>() || t.IsBusCommand())
                 .DefiningEventsAs(t => t.IsAssignableTo<IEvent>() || t.IsBusEvent());

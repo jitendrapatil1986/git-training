@@ -8,13 +8,15 @@ using MediatR;
 using NServiceBus;
 using NServiceBus.Saga;
 using Warranty.HealthCheck.Mediatr;
+using Warranty.HealthCheck.Models;
 
 namespace Warranty.HealthCheck.Handlers
 {
     public class SoldJobsHealthCheckSaga : Saga<SoldJobsHealthCheckSagaData>,
         IAmStartedByMessages<InitiateSoldJobsHealthCheckSaga>,
-        IHandleMessages<SoldJobsHealthCheckSaga_GetSoldJobsFromTips>,
-        IHandleMessages<SoldJobsHealthCheckSaga_GetSoldJobsFromWarranty>,
+        IHandleMessages<SoldJobsHealthCheckSaga_CleanupTempTables>,
+        IHandleMessages<SoldJobsHealthCheckSaga_LoadSoldJobsFromTips>,
+        IHandleMessages<SoldJobsHealthCheckSaga_LoadSoldJobsFromWarranty>,
         IHandleMessages<SoldJobsHealthCheckSaga_CompareJobsFromTipsAndWarranty>
     {
         private readonly ILog _log;
@@ -30,8 +32,9 @@ namespace Warranty.HealthCheck.Handlers
         public override void ConfigureHowToFindSaga()
         {
             ConfigureMapping<InitiateSoldJobsHealthCheckSaga>(m => m.RunDate).ToSaga(s => s.RunDate);
-            ConfigureMapping<SoldJobsHealthCheckSaga_GetSoldJobsFromTips>(m => m.RunDate).ToSaga(s => s.RunDate);
-            ConfigureMapping<SoldJobsHealthCheckSaga_GetSoldJobsFromWarranty>(m => m.RunDate).ToSaga(s => s.RunDate);
+            ConfigureMapping<SoldJobsHealthCheckSaga_CleanupTempTables>(m => m.RunDate).ToSaga(s => s.RunDate);
+            ConfigureMapping<SoldJobsHealthCheckSaga_LoadSoldJobsFromTips>(m => m.RunDate).ToSaga(s => s.RunDate);
+            ConfigureMapping<SoldJobsHealthCheckSaga_LoadSoldJobsFromWarranty>(m => m.RunDate).ToSaga(s => s.RunDate);
             ConfigureMapping<SoldJobsHealthCheckSaga_CompareJobsFromTipsAndWarranty>(m => m.RunDate).ToSaga(s => s.RunDate);
         }
 
@@ -47,44 +50,39 @@ namespace Warranty.HealthCheck.Handlers
             _log.InfoFormat("Started new instance of the SoldJobsHealthCheckSaga for {0:d}", Data.RunDate);
             Data.RunDate = message.RunDate.Date;
             Data.OldestSaleDate = Data.RunDate.Value.AddDays(-365);
-            Bus.SendLocal(new SoldJobsHealthCheckSaga_GetSoldJobsFromTips(Data.RunDate.Value));
+            Bus.SendLocal(new SoldJobsHealthCheckSaga_CleanupTempTables(Data.RunDate.Value));
         }
 
-        public void Handle(SoldJobsHealthCheckSaga_GetSoldJobsFromTips message)
+        public void Handle(SoldJobsHealthCheckSaga_CleanupTempTables message)
         {
-            _log.InfoFormat("Getting all sold jobs from Tips {0:d}", Data.RunDate);
-            Data.TipsJobs = _mediator.Send(new GetSoldJobsFromTipsRequest(Data.OldestSaleDate)).ToList();
+            _log.Info("Clearing any existing data from previous checks");
+            _mediator.Send(new ClearTempJobNumberTablesRequest());
 
-            if (!Data.TipsJobs.Any())
-            {
-                _log.ErrorFormat("Could not find any sold jobs in TIPS from the last year - somethings not right!");
-                MarkAsComplete();
-                return;
-            }
-
-            _log.InfoFormat("Found {0} sold jobs in TIPS from the last year", Data.TipsJobs.Count);
-            Bus.SendLocal(new SoldJobsHealthCheckSaga_GetSoldJobsFromWarranty(Data.RunDate.Value));
+            Bus.SendLocal(new SoldJobsHealthCheckSaga_LoadSoldJobsFromTips(Data.RunDate.Value));
         }
 
-        public void Handle(SoldJobsHealthCheckSaga_GetSoldJobsFromWarranty message)
+        public void Handle(SoldJobsHealthCheckSaga_LoadSoldJobsFromTips message)
         {
-            _log.InfoFormat("Getting all jobs from Warranty");
-            Data.WarrantyJobs = _mediator.Send(new GetJobsFromWarrantyRequest()).ToList();
+            _log.InfoFormat("Loading all sold jobs from Tips newer than {0:d}", Data.RunDate);
+            _mediator.Send(new LoadSoldJobsFromTipsRequest(Data.OldestSaleDate));
 
-            if (!Data.WarrantyJobs.Any())
-            {
-                _log.ErrorFormat("Could not find any jobs in Warranty - somethings not right!");
-                MarkAsComplete();
-                return;
-            }
+            Bus.SendLocal(new SoldJobsHealthCheckSaga_LoadSoldJobsFromWarranty(Data.RunDate.Value));
+        }
 
-            _log.InfoFormat("Found {0} jobs in Warranty");
+        public void Handle(SoldJobsHealthCheckSaga_LoadSoldJobsFromWarranty message)
+        {
+            _log.Info("Loading all jobs from Warranty");
+            _mediator.Send(new LoadJobsFromWarrantyRequest());
+
             Bus.SendLocal(new SoldJobsHealthCheckSaga_CompareJobsFromTipsAndWarranty(Data.RunDate.Value));
         }
 
         public void Handle(SoldJobsHealthCheckSaga_CompareJobsFromTipsAndWarranty message)
         {
-            var missingJobs = Data.TipsJobs.Except(Data.WarrantyJobs).ToList();
+            var tipsJobs = _mediator.Send(new GetSoldJobsRequest(Systems.TIPS));
+            var warrantyJobs = _mediator.Send(new GetSoldJobsRequest(Systems.Warranty));
+
+            var missingJobs = tipsJobs.Except(warrantyJobs).ToList();
 
             if (!missingJobs.Any())
             {
@@ -104,10 +102,24 @@ namespace Warranty.HealthCheck.Handlers
 
             Bus.SendLocal(new Notification
             {
-                Subject = string.Format("{0} missing sold jobs in Warranty"),
+                Subject = string.Format("{0} missing sold jobs in Warranty", missingJobs.Count),
                 Body = notification.ToString()
             });
             MarkAsComplete();
+        }
+
+        
+    }
+
+    public class SoldJobsHealthCheckSaga_CleanupTempTables : IBusCommand
+    {
+        public DateTime RunDate { get; set; }
+
+        public SoldJobsHealthCheckSaga_CleanupTempTables() { }
+
+        public SoldJobsHealthCheckSaga_CleanupTempTables(DateTime runDate)
+        {
+            RunDate = runDate;
         }
     }
 
@@ -124,25 +136,25 @@ namespace Warranty.HealthCheck.Handlers
     }
 
 
-    public class SoldJobsHealthCheckSaga_GetSoldJobsFromWarranty : IBusCommand
+    public class SoldJobsHealthCheckSaga_LoadSoldJobsFromWarranty : IBusCommand
     {
         public DateTime RunDate { get; set; }
 
-        public SoldJobsHealthCheckSaga_GetSoldJobsFromWarranty() { }
+        public SoldJobsHealthCheckSaga_LoadSoldJobsFromWarranty() { }
 
-        public SoldJobsHealthCheckSaga_GetSoldJobsFromWarranty(DateTime runDate)
+        public SoldJobsHealthCheckSaga_LoadSoldJobsFromWarranty(DateTime runDate)
         {
             RunDate = runDate;
         }
     }
 
-    public class SoldJobsHealthCheckSaga_GetSoldJobsFromTips : IBusCommand
+    public class SoldJobsHealthCheckSaga_LoadSoldJobsFromTips : IBusCommand
     {
         public DateTime RunDate { get; set; }
 
-        public SoldJobsHealthCheckSaga_GetSoldJobsFromTips() { }
+        public SoldJobsHealthCheckSaga_LoadSoldJobsFromTips() { }
 
-        public SoldJobsHealthCheckSaga_GetSoldJobsFromTips(DateTime runDate)
+        public SoldJobsHealthCheckSaga_LoadSoldJobsFromTips(DateTime runDate)
         {
             RunDate = runDate;
         }
@@ -168,8 +180,5 @@ namespace Warranty.HealthCheck.Handlers
         [Unique]
         public virtual DateTime? RunDate { get; set; }
         public virtual DateTime OldestSaleDate { get; set; }
-
-        public virtual List<string> WarrantyJobs { get; set; }
-        public virtual List<string> TipsJobs { get; set; }
     }
 }
