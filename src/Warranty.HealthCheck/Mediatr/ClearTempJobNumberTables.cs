@@ -5,16 +5,16 @@ namespace Warranty.HealthCheck.Mediatr
 {
     public class ClearTempJobNumberTablesRequestHandler : RequestHandler<ClearTempJobNumberTablesRequest>
     {
-        private readonly IWarrantyDatabase _warrantyDatabase;
+        private readonly IHealthCheckDatabase _healthCheckDatabase;
 
-        public ClearTempJobNumberTablesRequestHandler(IWarrantyDatabase warrantyDatabase)
+        public ClearTempJobNumberTablesRequestHandler(IHealthCheckDatabase healthCheckDatabase)
         {
-            _warrantyDatabase = warrantyDatabase;
+            _healthCheckDatabase = healthCheckDatabase;
         }
 
         protected override void HandleCore(ClearTempJobNumberTablesRequest message)
         {
-            _warrantyDatabase.Execute("DELETE FROM HEALTH_SoldJob");
+            _healthCheckDatabase.Execute("DELETE FROM HEALTH_SoldJob");
         }
     }
 
