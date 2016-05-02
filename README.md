@@ -38,6 +38,21 @@ It currently does not use a database to persist the trigger state but this is so
 * Make use of MediatR for re-use where possible
 * If you need to connect to a new database, add a new abstraction following the pattern already in place
 
+``  
+public interface ITipsDatabase: IDatabase { }
+
+internal class TipsDatabase : Database, ITipsDatabase
+{
+    public TipsDatabase(string connectionStringName) : base(connectionStringName) { }
+}
+
+....
+
+For<ITipsDatabase>()
+    .LifecycleIs(new ThreadLocalStorageLifecycle())
+    .Use(new TipsDatabase("tips"));
+``
+
 ### Database Abstraction
 
 Each database connection is abstracted with Structure map / IDatabase interface.
