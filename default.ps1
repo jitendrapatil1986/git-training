@@ -204,7 +204,7 @@ task PackageHealthCheck -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Com
 	copy_files "$base_dir\deployment\health" "$temp_package_dir"
 	copy_files "$base_dir\deployment\modules" "$temp_package_dir\modules"
 
-	zip_directory $temp_package_dir $warranty_server_file
+	zip_directory $temp_package_dir $warranty_healthcheck_file
 }
 
 task StartSystem {
