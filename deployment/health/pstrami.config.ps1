@@ -80,7 +80,6 @@ function script:load-vars($relativeSourceDir) {
     $invalid_path_msg = "ERROR: Invalid path for variable {0}!!"
     
     check-pathvar $nsb_directory '$nsb_directory'
-    check-var $db_server = "$db_server"
 }
 
 function script:check-var($var,$var_name) {
