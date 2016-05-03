@@ -19,7 +19,7 @@ if(Test-Path .\environments.ps1) {
 }
 
 Role "Nsb" -Incremental {
-    . load-vars "nsb\Warranty"
+    . load-vars "nsb\healthcheck"
 
     # backup existing site
     backup-directory $nsb_directory
