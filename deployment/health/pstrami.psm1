@@ -21,6 +21,7 @@ function Deploy-Package{
 	get-environments | ?{$_.Name -eq $EnvironmentName} | %{deploy-environment $_ $package $Verbose $Install}
 
 	write-host "`nFinished!"
+	exit 0
 }
 
 function Get-MSWebDeployInstallPath(){
