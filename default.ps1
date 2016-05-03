@@ -77,9 +77,9 @@ task InitialPrivateBuild -depends StopSystem, Clean, RunAllUnitTests
 
 task DeveloperBuild -depends StopSystem, Clean, CommonAssemblyInfo, Compile, UpdateAllDatabases, RunAllUnitTests
 
-task IntegrationBuild -depends SetReleaseBuild, StopSystem, Clean, CommonAssemblyInfo, Compile, RunAllUnitTests, PackageWarrantyUI, PackageServer
+task IntegrationBuild -depends SetReleaseBuild, StopSystem, Clean, CommonAssemblyInfo, Compile, RunAllUnitTests, PackageWarrantyUI, PackageServer, PackageHealthCheck
 
-task ReleaseBuild -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Compile, PackageWarrantyUI, PackageServer
+task ReleaseBuild -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Compile, PackageWarrantyUI, PackageServer, PackageHealthCheck
 
 task BuildAndStart -depends StopSystem, Clean, CommonAssemblyInfo, RebuildAllDatabases, UpdateAllDatabases, Compile, StartSystem
 
