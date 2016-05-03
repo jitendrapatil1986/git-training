@@ -12,6 +12,7 @@ properties {
 	$package_dir = "$build_dir\latestVersion"
 	$warranty_package_file = "$package_dir\Warranty_UI_Package.zip"
 	$warranty_server_file = "$package_dir\Warranty_Server_Package.zip"
+	$warranty_healthcheck_file = "$package_dir\Warranty_HealthCheck_Package.zip"
 	$source_dir = "$base_dir\src"
 	$test_dir = "$build_dir\test"
 	$result_dir = "$build_dir\results"
@@ -23,6 +24,7 @@ properties {
 	$admin_port = 8081
 	$warranty_web_dir = "$source_dir\Warranty.UI" 
 	$warranty_nsb_dir = "$source_dir\Warranty.Server\bin" 
+	$warranty_health_dir = "$source_dir\Warranty.HealthCheck\bin" 
 
 	$cassini_process_name = "WebDev.WebServer40"
 
@@ -179,6 +181,27 @@ task PackageServer -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Compile 
 	
 	#pstrami deployment
 	copy_files "$base_dir\deployment\server" "$temp_package_dir"
+	copy_files "$base_dir\deployment\modules" "$temp_package_dir\modules"
+
+	zip_directory $temp_package_dir $warranty_server_file
+}
+
+task PackageHealthCheck -depends SetReleaseBuild, Clean, CommonAssemblyInfo, Compile {
+	delete_directory $temp_package_dir
+	delete_file $warranty_healthcheck_file
+	
+	#databases
+	copy_files "$source_dir\database" "$temp_package_dir\database"
+
+	#nservicebus
+	copy_files "$warranty_health_dir\$project_config" "$temp_package_dir\nsb\healthcheck"
+
+	#tools
+	copy_files "$roundhouse_dir" "$temp_package_dir\tools\roundhouse"
+	delete_directory "$temp_package_dir\tools\roundhouse\output"
+	
+	#pstrami deployment
+	copy_files "$base_dir\deployment\health" "$temp_package_dir"
 	copy_files "$base_dir\deployment\modules" "$temp_package_dir\modules"
 
 	zip_directory $temp_package_dir $warranty_server_file
