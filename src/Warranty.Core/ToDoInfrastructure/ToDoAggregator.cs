@@ -315,7 +315,8 @@ namespace Warranty.Core.ToDoInfrastructure
                                 ON c.CommunityId = ca.CommunityId
                             INNER JOIN Cities ci
                                 ON c.CityId = ci.CityId
-                            WHERE ci.CityCode IN ({0}) AND ca.EmployeeId IS NULL;";
+                            WHERE ci.CityCode IN ({0}) AND ca.EmployeeId IS NULL
+                            AND (SELECT COUNT(jobNumber) FROM Jobs j WHERE j.CommunityId = c.CommunityId) > 0;";
 
             var query = string.Format(sql, userMarkets.CommaSeparateWrapWithSingleQuote());
             var toDos = database.Fetch<ToDoCommunityEmployeeAssignment, ToDoCommunityEmployeeAssignmentModel>(query);
