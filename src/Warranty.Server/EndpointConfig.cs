@@ -6,6 +6,7 @@ using log4net;
 using log4net.Config;
 using NServiceBus;
 using Warranty.Core.DataAccess;
+using Warranty.Server.Configuration;
 
 namespace Warranty.Server
 {
@@ -16,15 +17,9 @@ namespace Warranty.Server
             Mapper.Initialize(a => a.AddProfile(new MappingProfile()));
 
             var container = StructureMapConfig.CreateContainer();
+                
             DbFactory.Setup(container);
-            container.Configure(cfg =>
-            {
-                cfg.For<ILog>().AlwaysUnique().Use(c =>
-                {
-                    var parentType = c.ParentType ?? c.BuildStack.Current.ConcreteType;
-                    return LogManager.GetLogger(parentType);
-                });
-            });
+            StructureMapBootstrapper.Bootstrap(container);
 
             Configure.With()
                 .StructureMapBuilder(container)

@@ -16,7 +16,7 @@ namespace Warranty.Server.Handlers.Jobs
         private readonly ITaskService _taskService;
         private readonly ILog _log;
 
-        public JobStageUpdatedHandler(IDatabase database, ITaskService taskService, ILog log)
+        public JobStageUpdatedHandler(IDatabase database, ITaskService taskService, ILog log, IEmployeeService employeeService)
         {
             _database = database;
             _taskService = taskService;

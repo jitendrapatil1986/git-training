@@ -1,0 +1,20 @@
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [{{DatabaseName}}_NServicebus].[dbo].[HEALTH_SoldJob](
+	[JobNumber] [varchar](8) NOT NULL,
+	[System] [int] NOT NULL
+)
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+

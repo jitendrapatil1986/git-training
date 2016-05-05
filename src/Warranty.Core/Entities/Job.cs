@@ -39,6 +39,11 @@ namespace Warranty.Core.Entities
             }
         }
 
+        public bool WasCreatedDuringWarrantablePeriod(ServiceCall call)
+        {
+            return CloseDate >= call.CreatedDate.GetValueOrDefault().AddYears(-2);
+        }
+
         public bool IsNew()
         {
             return JobId == Guid.Empty;

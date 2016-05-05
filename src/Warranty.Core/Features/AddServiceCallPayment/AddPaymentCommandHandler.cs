@@ -55,7 +55,7 @@
 
                 var communityNumber = community.CommunityNumber;
 
-                if (job.IsOutOfWarranty)
+                if (!job.WasCreatedDuringWarrantablePeriod(serviceCall))
                 {
                     communityNumber = WarrantyConfigSection.GetCity(city.CityCode.ToUpper()).ClosedOutCommunity;
                 }
