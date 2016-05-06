@@ -19,7 +19,7 @@ namespace Warranty.HealthCheck.HealthChecks
 
         public void Execute(IJobExecutionContext context)
         {
-            _bus.SendLocal(new InitiateSoldJobsHealthCheckSaga(DateTime.UtcNow.Date));
+            _bus.SendLocal(new InitiateSoldJobsHealthCheckSaga(new DateTime(2016, 1, 1)));
         }
 
         public void Schedule(IScheduler scheduler)
