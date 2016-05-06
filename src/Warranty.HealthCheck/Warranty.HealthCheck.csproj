@@ -112,6 +112,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Config\HealthCheckRegistry.cs" />
     <Compile Include="Config\StructuremapConfig.cs" />
     <Compile Include="Config\StructuremapJobFactory.cs" />
@@ -128,7 +131,6 @@
     <Compile Include="Mediatr\LoadJobsFromWarranty.cs" />
     <Compile Include="Mediatr\LoadJobsFromTips.cs" />
     <Compile Include="Models\HEALTH_SoldJob.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup\SchedulerStartup.cs" />
   </ItemGroup>
   <ItemGroup>
