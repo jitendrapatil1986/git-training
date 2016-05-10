@@ -92,7 +92,7 @@ namespace Warranty.HealthCheck.Handlers
 
             Bus.SendLocal(new Notification
             {
-                Subject = string.Format("{1} - HEALTH CHECK FAILURE - {0} missing showcases in Warranty", missingShowcases.Count, Settings.DatabaseName.Value),
+                Subject = string.Format("{0} - HEALTH CHECK FAILURE - {1} missing showcases in Warranty", Settings.DatabaseName.Value, missingShowcases.Count),
                 Body = notification.ToString()
             });
             MarkAsComplete();

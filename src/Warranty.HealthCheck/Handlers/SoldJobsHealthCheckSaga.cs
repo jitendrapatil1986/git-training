@@ -102,7 +102,7 @@ namespace Warranty.HealthCheck.Handlers
 
             Bus.SendLocal(new Notification
             {
-                Subject = string.Format("{1} - HEALTH CHECK FAILURE - {0} missing sold jobs in Warranty", missingJobs.Count, Settings.DatabaseName.Value),
+                Subject = string.Format("{0} - HEALTH CHECK FAILURE - {1} missing sold jobs in Warranty", Settings.DatabaseName.Value, missingJobs.Count),
                 Body = notification.ToString()
             });
             MarkAsComplete();
