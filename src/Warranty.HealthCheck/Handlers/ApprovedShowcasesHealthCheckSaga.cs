@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using Common.Messages;
@@ -91,7 +92,7 @@ namespace Warranty.HealthCheck.Handlers
 
             Bus.SendLocal(new Notification
             {
-                Subject = string.Format("HEALTH CHECK FAILURE - {0} missing showcases in Warranty", missingShowcases.Count),
+                Subject = string.Format("{1} - HEALTH CHECK FAILURE - {0} missing showcases in Warranty", missingShowcases.Count, Settings.DatabaseName.Value),
                 Body = notification.ToString()
             });
             MarkAsComplete();

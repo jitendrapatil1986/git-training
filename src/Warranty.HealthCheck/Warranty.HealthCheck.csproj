@@ -118,7 +118,8 @@
     <Compile Include="Config\HealthCheckRegistry.cs" />
     <Compile Include="Config\StructuremapConfig.cs" />
     <Compile Include="Config\StructuremapJobFactory.cs" />
-    <Compile Include="Data\IHealthCheckDatabase.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Data\HealthCheckDatabase.cs" />
     <Compile Include="Data\TipsDatabase.cs" />
     <Compile Include="Data\WarrantyDatabase.cs" />
     <Compile Include="EndpointConfig.cs" />
