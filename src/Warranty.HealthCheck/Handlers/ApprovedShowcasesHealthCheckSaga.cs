@@ -54,7 +54,7 @@ namespace Warranty.HealthCheck.Handlers
             _log.Info("Clearing any existing data from previous checks");
             _mediator.Send(new ClearTempShowcasesTable());
 
-            Bus.SendLocal(new ApprovedShowcasesHealthCheckSaga_GetApprovedShowcasesFromTips());
+            Bus.SendLocal(new ApprovedShowcasesHealthCheckSaga_GetApprovedShowcasesFromTips(true));
         }
 
         public void Handle(ApprovedShowcasesHealthCheckSaga_GetApprovedShowcasesFromTips message)
@@ -62,7 +62,7 @@ namespace Warranty.HealthCheck.Handlers
             _log.Info("Fetching approved showcases from TIPS");
             _mediator.Send(new LoadApprovedShowcasesFromTips());
 
-            Bus.SendLocal(new ApprovedShowcasesHealthCheckSaga_GetShowcasesFromWarranty());
+            Bus.SendLocal(new ApprovedShowcasesHealthCheckSaga_GetShowcasesFromWarranty(true));
         }
 
         public void Handle(ApprovedShowcasesHealthCheckSaga_GetShowcasesFromWarranty message)
@@ -70,7 +70,7 @@ namespace Warranty.HealthCheck.Handlers
             _log.Info("Fetching showcases from Warranty");
             _mediator.Send(new LoadShowcasesFromWarranty());
 
-            Bus.SendLocal(new ApprovedShowcasesHealthCheckSaga_CompareShowcasesFromTipsAndWarranty());
+            Bus.SendLocal(new ApprovedShowcasesHealthCheckSaga_CompareShowcasesFromTipsAndWarranty(true));
         }
 
         public void Handle(ApprovedShowcasesHealthCheckSaga_CompareShowcasesFromTipsAndWarranty message)
