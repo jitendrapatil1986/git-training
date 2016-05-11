@@ -89,7 +89,7 @@ namespace Warranty.HealthCheck.Handlers
                 return;
             }
 
-            _log.WarnFormat("Found {0} missing showcases from Warranty", missingShowcases.Count());
+            _log.WarnFormat("Found {0} missing showcases from Warranty", missingShowcases.Count);
 
             var notification = new StringBuilder();
             notification.AppendLine("Found the following showcases missing from Warranty:<br>");
