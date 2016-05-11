@@ -30,6 +30,14 @@ namespace Warranty.HealthCheck.Handlers
             _mediator = mediator;
         }
 
+        public override void ConfigureHowToFindSaga()
+        {
+            ConfigureMapping<ApprovedShowcasesHealthCheckSaga_ClearShowcasesFromTempTable>(message => message.Running).ToSaga(data => data.Running);
+            ConfigureMapping<ApprovedShowcasesHealthCheckSaga_GetApprovedShowcasesFromTips>(message => message.Running).ToSaga(data => data.Running);
+            ConfigureMapping<ApprovedShowcasesHealthCheckSaga_GetShowcasesFromWarranty>(message => message.Running).ToSaga(data => data.Running);
+            ConfigureMapping<ApprovedShowcasesHealthCheckSaga_CompareShowcasesFromTipsAndWarranty>(message => message.Running).ToSaga(data => data.Running);
+        }
+
         public void Handle(InitiateApprovedShowcasesHealthCheckSaga message)
         {
             if (Data.Running)
@@ -39,14 +47,14 @@ namespace Warranty.HealthCheck.Handlers
             }
 
             Data.Running = true;
-            Bus.SendLocal(new ApprovedShowcasesHealthCheckSaga_ClearShowcasesFromTempTable());
+            Bus.SendLocal(new ApprovedShowcasesHealthCheckSaga_ClearShowcasesFromTempTable(true));
         }
         public void Handle(ApprovedShowcasesHealthCheckSaga_ClearShowcasesFromTempTable message)
         {
             _log.Info("Clearing any existing data from previous checks");
             _mediator.Send(new ClearTempShowcasesTable());
 
-            Bus.SendLocal(new ApprovedShowcasesHealthCheckSaga_GetApprovedShowcasesFromTips());
+            Bus.SendLocal(new ApprovedShowcasesHealthCheckSaga_GetApprovedShowcasesFromTips(true));
         }
 
         public void Handle(ApprovedShowcasesHealthCheckSaga_GetApprovedShowcasesFromTips message)
@@ -54,7 +62,7 @@ namespace Warranty.HealthCheck.Handlers
             _log.Info("Fetching approved showcases from TIPS");
             _mediator.Send(new LoadApprovedShowcasesFromTips());
 
-            Bus.SendLocal(new ApprovedShowcasesHealthCheckSaga_GetShowcasesFromWarranty());
+            Bus.SendLocal(new ApprovedShowcasesHealthCheckSaga_GetShowcasesFromWarranty(true));
         }
 
         public void Handle(ApprovedShowcasesHealthCheckSaga_GetShowcasesFromWarranty message)
@@ -62,7 +70,7 @@ namespace Warranty.HealthCheck.Handlers
             _log.Info("Fetching showcases from Warranty");
             _mediator.Send(new LoadShowcasesFromWarranty());
 
-            Bus.SendLocal(new ApprovedShowcasesHealthCheckSaga_CompareShowcasesFromTipsAndWarranty());
+            Bus.SendLocal(new ApprovedShowcasesHealthCheckSaga_CompareShowcasesFromTipsAndWarranty(true));
         }
 
         public void Handle(ApprovedShowcasesHealthCheckSaga_CompareShowcasesFromTipsAndWarranty message)
@@ -99,15 +107,65 @@ namespace Warranty.HealthCheck.Handlers
         }
     }
 
-    public class ApprovedShowcasesHealthCheckSaga_ClearShowcasesFromTempTable : IBusCommand { }
+    public class ApprovedShowcasesHealthCheckSaga_ClearShowcasesFromTempTable : IBusCommand
+    {
+        public ApprovedShowcasesHealthCheckSaga_ClearShowcasesFromTempTable(bool running)
+        {
+            Running = running;
+        }
 
-    public class ApprovedShowcasesHealthCheckSaga_CompareShowcasesFromTipsAndWarranty : IBusCommand { }
+        public ApprovedShowcasesHealthCheckSaga_ClearShowcasesFromTempTable() { }
 
-    public class ApprovedShowcasesHealthCheckSaga_GetShowcasesFromWarranty : IBusCommand { }
+        public bool Running { get; set; }
+    }
 
-    public class ApprovedShowcasesHealthCheckSaga_GetApprovedShowcasesFromTips : IBusCommand { }
+    public class ApprovedShowcasesHealthCheckSaga_CompareShowcasesFromTipsAndWarranty : IBusCommand
+    {
+        public ApprovedShowcasesHealthCheckSaga_CompareShowcasesFromTipsAndWarranty(bool running)
+        {
+            Running = running;
+        }
 
-    public class InitiateApprovedShowcasesHealthCheckSaga : IBusCommand { }
+        public ApprovedShowcasesHealthCheckSaga_CompareShowcasesFromTipsAndWarranty() { }
+
+        public bool Running { get; set; }
+    }
+
+    public class ApprovedShowcasesHealthCheckSaga_GetShowcasesFromWarranty : IBusCommand
+    {
+        public ApprovedShowcasesHealthCheckSaga_GetShowcasesFromWarranty(bool running)
+        {
+            Running = running;
+        }
+
+        public ApprovedShowcasesHealthCheckSaga_GetShowcasesFromWarranty() { }
+
+        public bool Running { get; set; }
+    }
+
+    public class ApprovedShowcasesHealthCheckSaga_GetApprovedShowcasesFromTips : IBusCommand
+    {
+        public ApprovedShowcasesHealthCheckSaga_GetApprovedShowcasesFromTips(bool running)
+        {
+            Running = running;
+        }
+
+        public ApprovedShowcasesHealthCheckSaga_GetApprovedShowcasesFromTips() { }
+
+        public bool Running { get; set; }
+    }
+
+    public class InitiateApprovedShowcasesHealthCheckSaga : IBusCommand
+    {
+        public InitiateApprovedShowcasesHealthCheckSaga(bool running)
+        {
+            Running = running;
+        }
+
+        public InitiateApprovedShowcasesHealthCheckSaga() { }
+
+        public bool Running { get; set; }
+    }
 
     public class ApprovedShowcasesHealthCheckSagaData : IContainSagaData
     {
