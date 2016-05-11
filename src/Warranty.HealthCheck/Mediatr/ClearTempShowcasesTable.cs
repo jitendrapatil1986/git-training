@@ -3,7 +3,7 @@ using Warranty.HealthCheck.Data;
 
 namespace Warranty.HealthCheck.Mediatr
 {
-    public class ClearTempShowcasesTableHandler : RequestHandler<ClearTempJobNumberTablesRequest>
+    public class ClearTempShowcasesTableHandler : RequestHandler<ClearTempShowcasesTable>
     {
         private readonly IHealthCheckDatabase _healthCheckDatabase;
 
@@ -12,7 +12,7 @@ namespace Warranty.HealthCheck.Mediatr
             _healthCheckDatabase = healthCheckDatabase;
         }
 
-        protected override void HandleCore(ClearTempJobNumberTablesRequest message)
+        protected override void HandleCore(ClearTempShowcasesTable message)
         {
             _healthCheckDatabase.Execute("DELETE FROM HEALTH_Showcase");
         }
