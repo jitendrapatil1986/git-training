@@ -157,9 +157,9 @@
 //                {
 //                    EmployeeId = _wsr.EmployeeId,
 //                    ReferenceId = oldJob.JobId,
-//                    TaskType = TaskType.JobStage10Complete
+//                    TaskType = TaskType.JobStage10JobClosed
 //                });
-//                GetTask(oldJob.JobId, TaskType.JobStage10Complete).ShouldNotBeNull();
+//                GetTask(oldJob.JobId, TaskType.JobStage10JobClosed).ShouldNotBeNull();
 //            }, afterSend: (oldJob, newJob, homeowner) =>
 //            {
 //                GetTask(oldJob.JobId, TaskType.JobStage3).ShouldBeNull();
@@ -199,7 +199,7 @@
 //        [Test]
 //        public void BuyerTransferApprovedHandler_ProperlyCreatesTaskOnNewJobStage10()
 //        {
-//            AssertNewJobToDoExistsForStage(10, TaskType.JobStage10Complete);
+//            AssertNewJobToDoExistsForStage(10, TaskType.JobStage10JobClosed);
 //        }
 
 //        [Test]

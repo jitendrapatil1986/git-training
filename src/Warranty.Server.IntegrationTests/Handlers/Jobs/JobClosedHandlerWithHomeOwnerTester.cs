@@ -1,6 +1,5 @@
 ﻿using System;
 using Accounting.Events.Job;
-using FluentAssertions;
 using NUnit.Framework;
 using Should;
 using Warranty.Core.Entities;
@@ -9,7 +8,7 @@ using Warranty.Core.Enumerations;
 namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 {
     [TestFixture]
-    public class JobClosedHandlerTester : HandlerTester<JobClosed>
+    public class JobClosedHandlerWithHomeOwnerTester : HandlerTester<JobClosed>
     {
         private Job _job;
 
