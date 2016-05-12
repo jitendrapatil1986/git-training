@@ -317,7 +317,7 @@
 //        [Test]
 //        public void Job_Should_Create_ToDos_Stage10()
 //        {
-//            Should_Create_Todos(10, TaskType.JobStage10Complete);
+//            Should_Create_Todos(10, TaskType.JobStage10JobClosed);
 //        }
 
 //        private List<Task> GetTasks(Guid jobId, TaskType taskType)
