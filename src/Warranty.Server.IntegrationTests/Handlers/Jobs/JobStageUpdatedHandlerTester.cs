@@ -92,12 +92,11 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
         }
 
         [Test]
-        public void Job_Stage_10_Should_Create_ToDo()
+        public void Job_Stage_10_Should_Not_Create_ToDo()
         {
             UpdateToStageAssertTasksExist(10, tasks =>
             {
-                tasks.Count.ShouldEqual(1);
-                tasks[0].TaskType.ShouldEqual(TaskType.JobStage10);
+                tasks.Count.ShouldEqual(0);
             });
         }
 

@@ -192,6 +192,7 @@
     <Compile Include="Handlers\Jobs\BuyerTransferApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\CommunityAddedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobAddressChangedHandlerTests.cs" />
+    <Compile Include="Handlers\Jobs\JobClosedHandlerWithNoHomeOwnerTester.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseElevationUpdateApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\ShowcasePlanUpdateApprovedHandlerTester.cs" />
@@ -219,7 +220,7 @@
     <Compile Include="Handlers\JobStages\JobStageDateAddedHandlerTester.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobElevationUpdatedHandlerTester.cs" />
-    <Compile Include="Handlers\Jobs\JobClosedHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\JobClosedHandlerWithHomeOwnerTester.cs" />
     <Compile Include="Handlers\Jobs\JobPlanUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandlerTester.cs" />
@@ -237,6 +238,7 @@
     <Compile Include="Handlers\Payments\PaymentIdUpdatedHandlerTester.cs" />
     <Compile Include="Services\TaskServiceTester.cs" />
     <Compile Include="SetUp\CityEntityBuilder.cs" />
+    <Compile Include="SetUp\CommunityAssignmentEntityBuilder.cs" />
     <Compile Include="SetUp\CommunityEntityBuilder.cs" />
     <Compile Include="SetUp\DivisionEntityBuilder.cs" />
     <Compile Include="SetUp\HomeOwnerEntityBuilder.cs" />
