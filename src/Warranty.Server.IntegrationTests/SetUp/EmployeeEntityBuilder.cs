@@ -19,7 +19,7 @@ namespace Warranty.Server.IntegrationTests.SetUp
             using (_database)
             {
                 Employee existing = null;
-                while ((existing = _database.SingleOrDefault<Employee>(string.Format("WHERE EmployeeNumber = {0}", empNum))) != null)
+                while ((existing = _database.SingleOrDefault<Employee>("WHERE EmployeeNumber = @0", empNum)) != null)
                 {
                     empNum = r.Next(100000, 999999).ToString(CultureInfo.InvariantCulture);
                 }

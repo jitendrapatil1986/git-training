@@ -262,7 +262,7 @@
             var result = _database.Fetch<JobSummaryModel.Task>(sql, jobId);
 
             return result.Where(x => (x.TaskType.Value == TaskType.JobStage3.Value) || (x.TaskType.Value == TaskType.JobStage7.Value) ||
-                                     (x.TaskType.Value == TaskType.JobStage10.Value) || (x.TaskType.Value == TaskType.Job10MonthAnniversary.Value)).ToList(); ;
+                                     (x.TaskType.Value == TaskType.JobStage10Complete.Value) || (x.TaskType.Value == TaskType.Job10MonthAnniversary.Value)).ToList(); ;
         }
 
         private IEnumerable<JobSummaryModel.JobPayment> GetJobPayments(Guid jobId)
