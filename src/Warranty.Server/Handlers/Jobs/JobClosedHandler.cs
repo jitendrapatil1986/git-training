@@ -3,6 +3,7 @@ using log4net;
 using NPoco;
 using NServiceBus;
 using Warranty.Core.Entities;
+using Warranty.Core.Enumerations;
 using Warranty.Server.Extensions;
 
 namespace Warranty.Server.Handlers.Jobs
@@ -17,12 +18,14 @@ namespace Warranty.Server.Handlers.Jobs
         private readonly IDatabase _database;
         private readonly IAccountingService _accountingService;
         private readonly ILog _log;
+        private readonly ITaskService _taskService;
 
-        public JobClosedHandler(IDatabase database, IAccountingService accountingService, ILog log)
+        public JobClosedHandler(IDatabase database, IAccountingService accountingService, ILog log, ITaskService taskService)
         {
             _database = database;
             _accountingService = accountingService;
             _log = log;
+            _taskService = taskService;
         }
 
         public void Handle(JobClosed message)
@@ -40,6 +43,10 @@ namespace Warranty.Server.Handlers.Jobs
                 _database.Update(job);
 
                 StoreVendorsForJob(job);
+
+                if (job.CurrentHomeOwnerId == null) { return; }
+
+                _taskService.CreateTaskUnlessExists(job.JobId, TaskType.JobStage10JobClosed);
             }
         }
 

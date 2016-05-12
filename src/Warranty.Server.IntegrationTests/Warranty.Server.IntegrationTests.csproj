@@ -236,6 +236,7 @@
     <Compile Include="Handlers\Payments\PaymentIdUpdatedHandlerTester.cs" />
     <Compile Include="Services\TaskServiceTester.cs" />
     <Compile Include="SetUp\CityEntityBuilder.cs" />
+    <Compile Include="SetUp\CommunityAssignmentEntityBuilder.cs" />
     <Compile Include="SetUp\CommunityEntityBuilder.cs" />
     <Compile Include="SetUp\DivisionEntityBuilder.cs" />
     <Compile Include="SetUp\HomeOwnerEntityBuilder.cs" />

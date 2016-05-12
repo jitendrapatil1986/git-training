@@ -103,7 +103,7 @@ namespace Warranty.Core.Services
 
         private void CreateJobTasks(Guid jobId, int stage)
         {
-            var validJobStages = new[] {3,7,10};
+            var validJobStages = new[] {3,7};
             CreateTasks(jobId, stage, validJobStages);
         }
 
