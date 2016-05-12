@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using MediatR;
 using Warranty.HealthCheck.Data;
-using Warranty.HealthCheck.Models;
 
 namespace Warranty.HealthCheck.Mediatr
 {
-    public class GetShowcasesHandler : IRequestHandler<GetShowcases, IEnumerable<HEALTH_Showcase>>
+    public class GetShowcasesHandler : IRequestHandler<GetShowcases, IEnumerable<string>>
     {
         private readonly IHealthCheckDatabase _healthCheckDatabase;
 
@@ -14,13 +13,13 @@ namespace Warranty.HealthCheck.Mediatr
             _healthCheckDatabase = healthCheckDatabase;
         }
 
-        public IEnumerable<HEALTH_Showcase> Handle(GetShowcases message)
+        public IEnumerable<string> Handle(GetShowcases message)
         {
-            return _healthCheckDatabase.Fetch<HEALTH_Showcase>("WHERE System = @0", message.System);
+            return _healthCheckDatabase.Fetch<string>("SELECT JobNumber FROM HEALTH_Showcase WHERE System = @0", message.System);
         }
     }
 
-    public class GetShowcases : IRequest<IEnumerable<HEALTH_Showcase>>
+    public class GetShowcases : IRequest<IEnumerable<string>>
     {
         public GetShowcases() { }
 
