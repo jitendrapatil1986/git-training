@@ -44,9 +44,12 @@ namespace Warranty.Server.Handlers.Jobs
 
                 StoreVendorsForJob(job);
 
-                if (job.CurrentHomeOwnerId == null) { return; }
+                if (job.CurrentHomeOwnerId == null)
+                {
+                    return;
+                }
 
-                _taskService.CreateTaskUnlessExists(job.JobId, TaskType.JobStage10Complete);
+                _taskService.CreateTaskUnlessExists(job.JobId, TaskType.JobStage10JobClosed);
             }
         }
 

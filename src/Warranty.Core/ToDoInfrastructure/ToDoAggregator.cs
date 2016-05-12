@@ -57,7 +57,7 @@ namespace Warranty.Core.ToDoInfrastructure
                 {
                     var taskJobChangedToDos = GetJobChangedTaskToDos(user, _database, TaskType.JobStage3).ToList();
                     taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage7));
-                    taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage10Complete));
+                    taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage10JobClosed));
 
                     //Pull deprecated job task type ToDos for users to complete for those created before the new job task types.
                     taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStageChanged));
@@ -288,7 +288,7 @@ namespace Warranty.Core.ToDoInfrastructure
                             where 
                                 e.EmployeeNumber = @0 and t.TaskType=@1 and t.IsComplete = 0";
 
-            if (taskType == TaskType.JobStage10Complete)
+            if (taskType == TaskType.JobStage10JobClosed)
             {
                 query = @"SELECT t.CreatedDate [Date], TaskType, Description, TaskId,  j.JobId, j.JobNumber, j.AddressLine Address, j.City, j.StateCode, j.PostalCode, ho.HomeownerName, ho.HomePhone
                             FROM [Tasks] t

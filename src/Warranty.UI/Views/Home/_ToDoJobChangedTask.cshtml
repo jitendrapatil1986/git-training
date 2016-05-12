@@ -32,7 +32,7 @@
             </small>
         </div>
         <div class="todo-widget-action-buttons margin-top-10">
-            @if (Model.TaskType.Value == TaskType.JobStage10Complete.Value)
+            @if (Model.TaskType.Value == TaskType.JobStage10JobClosed.Value)
             {
                 <a href="#" data-task-id="@Model.TaskId" class="submit-for-approval-task"><span class="glyphicon glyphicon-thumbs-up submit-for-approval-todo"></span>&nbsp;Complete</a>
             }
