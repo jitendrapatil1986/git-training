@@ -25,7 +25,7 @@ namespace Warranty.HealthCheck.HealthChecks
                 .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(5, 0))
                 .Build();
 
-            var detail = JobBuilder.Create<SoldJobsHealthCheck>()
+            var detail = JobBuilder.Create<ApprovedShowcasesHealthCheck>()
                 .WithIdentity("ApprovedShowcasesCheck")
                 .Build();
 
