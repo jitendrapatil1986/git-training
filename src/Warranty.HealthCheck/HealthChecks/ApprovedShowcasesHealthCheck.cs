@@ -1,33 +1,32 @@
-﻿using System;
-using NServiceBus;
+﻿using NServiceBus;
 using Quartz;
 using Warranty.HealthCheck.Handlers;
 
 namespace Warranty.HealthCheck.HealthChecks
 {
-    public class SoldJobsHealthCheck : IHealthCheck
+    public class ApprovedShowcasesHealthCheck : IHealthCheck
     {
         private readonly IBus _bus;
 
-        public SoldJobsHealthCheck(IBus bus)
+        public ApprovedShowcasesHealthCheck(IBus bus)
         {
             _bus = bus;
         }
 
         public void Execute(IJobExecutionContext context)
         {
-            _bus.SendLocal(new InitiateSoldJobsHealthCheckSaga(new DateTime(2016, 1, 1)));
+            _bus.SendLocal(new InitiateApprovedShowcasesHealthCheckSaga());
         }
 
         public void Schedule(IScheduler scheduler)
         {
             var schedule = TriggerBuilder.Create()
-                .WithIdentity("SoldJobsTrigger")
+                .WithIdentity("ApprovedShowcasesTrigger")
                 .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(5, 0))
                 .Build();
 
-            var detail = JobBuilder.Create<SoldJobsHealthCheck>()
-                .WithIdentity("SoldJobsCheck")
+            var detail = JobBuilder.Create<ApprovedShowcasesHealthCheck>()
+                .WithIdentity("ApprovedShowcasesCheck")
                 .Build();
 
             scheduler.ScheduleJob(detail, schedule);
