@@ -23,8 +23,5 @@ namespace Warranty.HealthCheck.Mediatr
         }
     }
 
-    public class LoadJobsFromWarrantyRequest : IRequest
-    {
-
-    }
+    public class LoadJobsFromWarrantyRequest : IRequest { }
 }

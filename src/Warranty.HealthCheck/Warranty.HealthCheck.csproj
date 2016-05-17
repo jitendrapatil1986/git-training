@@ -118,19 +118,28 @@
     <Compile Include="Config\HealthCheckRegistry.cs" />
     <Compile Include="Config\StructuremapConfig.cs" />
     <Compile Include="Config\StructuremapJobFactory.cs" />
-    <Compile Include="Data\IHealthCheckDatabase.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Data\HealthCheckDatabase.cs" />
     <Compile Include="Data\TipsDatabase.cs" />
     <Compile Include="Data\WarrantyDatabase.cs" />
     <Compile Include="EndpointConfig.cs" />
+    <Compile Include="Handlers\ApprovedShowcasesHealthCheckSaga.cs" />
     <Compile Include="Handlers\NotificationHandler.cs" />
     <Compile Include="Handlers\SoldJobsHealthCheckSaga.cs" />
+    <Compile Include="HealthChecks\ApprovedShowcasesHealthCheck.cs" />
     <Compile Include="HealthChecks\IHealthCheck.cs" />
     <Compile Include="HealthChecks\SoldJobsHealthCheck.cs" />
     <Compile Include="Mediatr\ClearTempJobNumberTables.cs" />
+    <Compile Include="Mediatr\ClearTempShowcasesTable.cs" />
+    <Compile Include="Mediatr\GetShowcases.cs" />
     <Compile Include="Mediatr\GetSoldJobs.cs" />
     <Compile Include="Mediatr\LoadJobsFromWarranty.cs" />
     <Compile Include="Mediatr\LoadJobsFromTips.cs" />
+    <Compile Include="Mediatr\LoadApprovedShowcasesFromTips.cs" />
+    <Compile Include="Mediatr\LoadShowcasesFromWarranty.cs" />
+    <Compile Include="Models\HEALTH_Showcase.cs" />
     <Compile Include="Models\HEALTH_SoldJob.cs" />
+    <Compile Include="Models\Systems.cs" />
     <Compile Include="Startup\SchedulerStartup.cs" />
   </ItemGroup>
   <ItemGroup>
