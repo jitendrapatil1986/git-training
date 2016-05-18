@@ -196,6 +196,7 @@
     <Compile Include="Handlers\Jobs\ShowcaseApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseElevationUpdateApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\ShowcasePlanUpdateApprovedHandlerTester.cs" />
+    <Compile Include="Handlers\Jobs\ShowcaseResetToDirtHomeOwnerHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseSwingUpdateApprovedHandlerTester.cs" />
     <Compile Include="Handlers\RandomStringGenerator.cs" />
     <Compile Include="MappingTests\CommunityDetailsMappingTester.cs" />
