@@ -4,9 +4,11 @@
     using System.Collections.Generic;
     using System.Linq;
     using Configurations;
+    using Enumerations;
     using Extensions;
     using NPoco;
     using Common.Security.Session;
+    using Common.Security.User;
     using Services;
 
     public class WarrantyBonusSummaryWSRQueryHandler : IQueryHandler<WarrantyBonusSummaryWSRQuery, WarrantyBonusSummaryModel>
@@ -25,11 +27,8 @@
         public WarrantyBonusSummaryModel Handle(WarrantyBonusSummaryWSRQuery query)
         {
             var user = _userSession.GetCurrentUser();
-            var isWsrUser = user.IsInRole(Enumerations.UserRoles.WarrantyServiceRepresentative);
-            var employeeNumber = isWsrUser ? user.EmployeeNumber : query.Model.SelectedEmployeeNumber;
-            var market = isWsrUser
-                ? user.Markets.FirstOrDefault()
-                : GetMarketForEmployee(employeeNumber);
+            var employeeNumber = user.IsInRole(Enumerations.UserRoles.WarrantyServiceRepresentative) ? user.EmployeeNumber : query.Model.SelectedEmployeeNumber;
+            var market = user.Markets.FirstOrDefault();
 
             if (!query.Model.FilteredDate.HasValue || String.IsNullOrEmpty(market))
             {
@@ -39,6 +38,7 @@
                 };
             }
 
+            
             var surveyData = GetSurveyData(query, employeeNumber);
 
             var model = new WarrantyBonusSummaryModel
@@ -54,26 +54,6 @@
             model.FilteredDate = query.Model != null ? query.Model.FilteredDate : null;
 
             return model;
-        }
-
-        private string GetMarketForEmployee(string employeeNumber)
-        {
-            using (_database)
-            {
-                const string sql = @"SELECT DISTINCT
-	                                    C2.CityCode
-                                    FROM dbo.CommunityAssignments CA
-                                    INNER JOIN dbo.Employees E
-	                                    ON E.EmployeeId = CA.EmployeeId
-                                    INNER JOIN dbo.Communities C
-	                                    ON C.CommunityId = CA.CommunityId
-                                    INNER JOIN dbo.Cities C2
-	                                    ON C2.CityId = C.CityId
-                                    WHERE E.EmployeeNumber = @0
-	                                    AND C.CommunityStatusCode = 'A';";
-
-                return _database.ExecuteScalar<string>(sql, employeeNumber);
-            }
         }
 
         private IEnumerable<WarrantyBonusSummaryModel.BonusSummary> GetBonusByEmployeeAndCommunity(WarrantyBonusSummaryWSRQuery query, string employeeNumber, string market)
