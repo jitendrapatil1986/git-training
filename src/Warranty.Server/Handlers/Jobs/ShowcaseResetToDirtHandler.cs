@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Util;
 
 namespace Warranty.Server.Handlers.Jobs
@@ -43,12 +44,12 @@ namespace Warranty.Server.Handlers.Jobs
             _log.ErrorFormat("Deleting HomeOwner {0} for JobNumber {1} ({2})", job.CurrentHomeOwnerId, message.JobNumber, job.JobId);
             _homeOwnerService.RemoveHomeOwner(job);
 
-            var otherHomeOwnersAssignedToJob = _database.Fetch<HomeOwner>("WHERE JobId = @0;", job.JobId);
+            var otherHomeOwnersAssignedToJob = _database.Fetch<string>("SELECT HomeownerName FROM dbo.Homeowners WHERE JobId = @0;", job.JobId);
 
             if (otherHomeOwnersAssignedToJob.Any())
             {
-                var homeOwnerGuids = string.Join(",", otherHomeOwnersAssignedToJob.Select(x => x.HomeOwnerId.ToString()));
-                _log.ErrorFormat("Deleting additional home owners found ({0}) for JobNumber {1} ({2})", homeOwnerGuids, message.JobNumber, job.JobId);
+                var homeOwners = string.Join(",", otherHomeOwnersAssignedToJob);
+                _log.ErrorFormat("Deleting {0} additional home owner(s) found ({1}) for JobNumber {2} ({3})", otherHomeOwnersAssignedToJob.Count, homeOwners, message.JobNumber, job.JobId);
                 _database.Delete<HomeOwner>("WHERE JobID = @0;", job.JobId);
             }
 
