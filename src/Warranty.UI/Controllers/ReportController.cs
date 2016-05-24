@@ -149,5 +149,10 @@ namespace Warranty.UI.Controllers
 
             return View(resultModel);
         }
+
+        public ActionResult WSROutstandingActivityReport()
+        {
+            return View();
+        }
     }
 }

@@ -493,6 +493,7 @@
     <Content Include="Views\Report\WSROpenedClosedCallReport.cshtml" />
     <Content Include="Views\Shared\_ImpersonateMenu.cshtml" />
     <Content Include="Views\Shared\_ImpersonateUserModal.cshtml" />
+    <Content Include="Views\Report\WSROutstandingActivityReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
