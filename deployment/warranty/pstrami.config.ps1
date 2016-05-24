@@ -2,6 +2,10 @@ Environment "dev" -servers @(
     Server "wkcorpappdev1" @("Web";)
     Server "wksql3" @("Database";)
     ) -installPath "C:\Installs\WarrantyUITest"
+
+Environment "backport" -servers @(
+    Server "corwebdev3" @("Web";)
+    ) -installPath "C:\Installs\WarrantyUIBackport"
     
 Environment "training" -servers @(
     Server "wkcorpapptrain1" @("Web";)
