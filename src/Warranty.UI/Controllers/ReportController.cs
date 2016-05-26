@@ -1,5 +1,11 @@
 using System;
 using System.Web.Mvc;
+using AutoMapper;
+using Common.Security.Session;
+using Warranty.Core.Features.MyDivisions;
+using Warranty.Core.Features.MyProjects;
+using Warranty.Core.Features.MyTeam;
+using Warranty.Core.Features.Report.WSROpenActivity;
 
 namespace Warranty.UI.Controllers
 {
@@ -16,10 +22,12 @@ namespace Warranty.UI.Controllers
     public class ReportController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IUserSession _userSession;
 
-        public ReportController(IMediator mediator)
+        public ReportController(IMediator mediator, IUserSession userSession)
         {
             _mediator = mediator;
+            _userSession = userSession;
         }
 
         public ActionResult MailMerge()
@@ -152,7 +160,26 @@ namespace Warranty.UI.Controllers
 
         public ActionResult WSROutstandingActivityReport()
         {
-            return View();
+            var model = new WSROpenActivityModel
+            {
+                Divisions = _mediator.Request(new MyDivisionsQuery()),
+                Projects = _mediator.Request(new MyProjectsQuery()),
+                TeamMembers = _mediator.Request(new MyTeamQuery())
+            };
+
+            return View(model);
         }
+
+        [HttpPost]
+        public ActionResult WSROutstandingActivityReport(WSROpenActivityModel model)
+        {
+            var report = _mediator.Request(new WSROpenActivityQuery(model));
+            report.Divisions = _mediator.Request(new MyDivisionsQuery());
+            report.Projects = _mediator.Request(new MyProjectsQuery());
+            report.TeamMembers = _mediator.Request(new MyTeamQuery());
+
+            return View(report);
+        }
+
     }
 }

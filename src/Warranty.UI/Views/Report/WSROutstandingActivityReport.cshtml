@@ -1,1 +1,95 @@
-﻿
+﻿@using Warranty.Core.Enumerations
+@model Warranty.Core.Features.Report.WSROpenActivity.WSROpenActivityModel
+
+<h2>Outstanding Activity Report</h2>
+
+@if (!User.IsInRole(UserRoles.WarrantyServiceRepresentative))
+{
+    <div class="panel panel-default no-print">
+        <div class="panel-heading">
+            <div id="wsrLoadingReportFilter">
+                <div class="no-bottom-padding">
+                    <div class="row">
+                        <div class="col-md-12">
+                            @using (Html.BeginForm("WSROutstandingActivityReport", "Report", FormMethod.Post, new { @class = "form-inline" }))
+                            {
+                                @Html.ValidationSummary()
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.DivisionId, Model.Divisions.Select(division => new SelectListItem
+                                    {
+                                        Text = division.Value,
+                                        Value = division.Key.ToString()
+                                    }),
+                                        "Division",
+                                        new {@class = "form-control text-capitalize"})
+                                </div>
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.ProjectId, Model.Projects.Select(project => new SelectListItem
+                                    {
+                                        Text = project.Value,
+                                        Value = project.Key.ToString()
+                                    }),
+                                        "Project",
+                                        new {@class = "form-control text-capitalize"})
+                                </div>
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.TeamMemberId, Model.TeamMembers.Select(teamMember => new SelectListItem
+                                    {
+                                        Text = teamMember.EmployeeName,
+                                        Value = teamMember.EmployeeId.ToString()
+                                    }),
+                                        "Team Member",
+                                        new { @class = "form-control text-capitalize" })
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-primary" value="Run Report" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.HasResults)
+{
+    foreach (var activity in Model.OpenActivities)
+    {
+        <div class="row">
+            <div id="wsrCallSummary" class="col-md-12">
+                <h4>Team Member: @activity.EmployeeName</h4>
+                <h5>Total Number Of Open TODOs: @activity.OpenTasks.Count()</h5>
+                <div class="row service-call-line no-bottom-padding">
+                    <h4 class="col-xs-3">Task</h4>
+                    <h4 class="col-xs-3">Description</h4>
+                    <h4 class="col-xs-1">Days Outstanding</h4>
+                </div>
+            
+                @foreach (var task in activity.OpenTasks)
+                {
+                    <div class="row small service-call-line">
+                        <div class="col-xs-3 margin-bottom-5">@task.Task</div>
+                        <div class="col-xs-3">@task.Description</div>
+                        <div class="col-xs-3">@task.DaysOutstanding.Days</div>
+                    </div>
+                }
+
+                <h5>Total Number Of Open Calls: @activity.ServiceCalls.Count()</h5>
+                <div class="row service-call-line no-bottom-padding">
+                    <h4 class="col-xs-3">Community</h4>
+                    <h4 class="col-xs-3">Homeowner</h4>
+                    <h4 class="col-xs-3">Address</h4>
+                    <h4 class="col-xs-2">Phone</h4>
+                    <h4 class="col-md-1 text-right">Days Open</h4>
+                </div>
+                @Html.Partial("_ServiceCalls", activity.ServiceCalls)
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p><em>No entries match report criteria</em></p>
+}
