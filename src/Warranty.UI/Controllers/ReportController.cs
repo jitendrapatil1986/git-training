@@ -22,10 +22,12 @@ namespace Warranty.UI.Controllers
     public class ReportController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IUserSession _userSession;
 
-        public ReportController(IMediator mediator)
+        public ReportController(IMediator mediator, IUserSession userSession)
         {
             _mediator = mediator;
+            _userSession = userSession;
         }
 
         public ActionResult MailMerge()

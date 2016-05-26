@@ -314,6 +314,7 @@
     <Content Include="apple-touch-icon.png" />
     <Content Include="App_Readme\Handlebarsjs_README.md" />
     <Content Include="App_Readme\Handlebarsjs_LICENSE" />
+    <Content Include="App_LocalResources\ReportOutstandingActivityReport.mrt" />
     <None Include="css\less\bootstrap-custom.less" />
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="css\bootstrap-editable.css" />

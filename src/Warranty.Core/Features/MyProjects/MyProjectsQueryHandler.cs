@@ -44,7 +44,9 @@ namespace Warranty.Core.Features.MyProjects
                 return projects;
 
             foreach (var project in result)
+            {
                 projects.Add(project.ProjectId, project.ProjectName);
+            }
 
             return projects;
         }
