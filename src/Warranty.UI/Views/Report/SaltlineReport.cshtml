@@ -50,7 +50,10 @@
                      <thead>
                          <tr>
                              <th>WSR</th>
-                             <th>HUW</th>
+                             <th>
+                                 <label class="has-bottom-tooltip" data-original-title="This is a test." title=""></label>
+                                 HUW
+                             </th>
                              <th class="text-right"># Calls</th>
                              <th class="text-right">Avg. Days</th>
                          </tr>
@@ -62,7 +65,7 @@
                                  <td class="text-capitalize">@employee.EmployeeName</td>
                                  <td>@employee.NumberOfHomes</td>
                                  <td class="text-right">@employee.NumerOfCalls</td>
-                                 <td class="text-right">@Format.WithOneDecimal(@employee.AverageDaysClosing)</td>
+                                 <td class="text-right">@Format.WithOneDecimal(@employee.AverageDaysServiceCallsOpen)</td>
                              </tr>
                          }
                      </tbody>
@@ -83,7 +86,7 @@
                                  <td class="text-capitalize">@project.ProjectName</td>
                                  <td>@project.NumberOfHomes</td>
                                  <td class="text-right">@project.NumerOfCalls</td>
-                                 <td class="text-right">@Format.WithOneDecimal(project.AverageDaysClosing)</td>
+                                 <td class="text-right">@Format.WithOneDecimal(project.AverageDaysServiceCallsOpen)</td>
                              </tr>
                          }
                      </tbody>
@@ -104,7 +107,7 @@
                                  <td class="text-capitalize">@division.DivisionName</td>
                                  <td>@division.NumberOfHomes</td>
                                  <td class="text-right">@division.NumerOfCalls</td>
-                                 <td class="text-right">@Format.WithOneDecimal(division.AverageDaysClosing)</td>
+                                 <td class="text-right">@Format.WithOneDecimal(division.AverageDaysServiceCallsOpen)</td>
                              </tr>
                          }
                      </tbody>
