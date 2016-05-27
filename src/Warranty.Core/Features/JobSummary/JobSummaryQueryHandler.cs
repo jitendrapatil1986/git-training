@@ -67,7 +67,7 @@ namespace Warranty.Core.Features.JobSummary
                     OptionDescription = x.Description
                 }).OrderBy(x => x.OptionNumber);
             }
-            catch (HttpRequestException)
+            catch
             {
                 return new List<JobSummaryModel.JobSelection>();
             }
