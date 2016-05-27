@@ -157,6 +157,104 @@ namespace Warranty.Core.Calculator
         }
         #endregion AverageDaysClosed
 
+        #region NumberOfServiceCallsOpen
+
+        public IEnumerable<CalculatorResult> GetEmployeeNumberOfServiceCallsOpen(DateTime endDate, string employeeNumber)
+        {
+            using (_database)
+            {
+                const string sql = @"SELECT COUNT(*) AS TotalElements
+	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, GETDATE())) AS Amount
+	                                    ,MONTH(SC.CreatedDate) AS MonthNumber
+	                                    ,YEAR(SC.CreatedDate) AS YearNumber
+                                    FROM dbo.ServiceCalls SC
+                                    INNER JOIN dbo.Employees E
+	                                    ON E.EmployeeId = SC.WarrantyRepresentativeEmployeeId
+                                    INNER JOIN dbo.Jobs J
+	                                    ON J.JobId = SC.JobId
+                                    INNER JOIN dbo.Communities C
+	                                    ON C.CommunityId = J.CommunityId
+                                    INNER JOIN dbo.Cities C2
+	                                    ON C2.CityId = C.CityId
+                                    WHERE C2.CityCode IN ({0})
+                                        AND SC.CreatedDate <= @0
+	                                    AND E.EmployeeNumber = @1
+	                                    AND SC.ServiceCallType = 'Warranty Service Request'
+	                                    AND (SC.ServiceCallStatusId = 2 AND SC.CompletionDate IS NULL) -- Open
+                                    GROUP BY MONTH(SC.CreatedDate) 
+	                                    ,YEAR(SC.CreatedDate);";
+
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), endDate, employeeNumber);
+                return result;
+            }
+        }
+
+        public IEnumerable<CalculatorResult> GetProjectNumberOfServiceCallsOpen(DateTime endDate, string projectName)
+        {
+            using (_database)
+            {
+                const string sql = @"SELECT 
+	                                    COUNT(*) AS TotalElements
+	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, GETDATE())) AS Amount
+	                                    ,MONTH(SC.CreatedDate) AS MonthNumber
+	                                    ,YEAR(SC.CreatedDate) AS YearNumber
+                                    FROM dbo.ServiceCalls SC
+                                    INNER JOIN dbo.Jobs J
+	                                    ON J.JobId = SC.JobId
+                                    INNER JOIN dbo.Communities C
+	                                    ON C.CommunityId = J.CommunityId
+                                    INNER JOIN dbo.Cities C2
+	                                    ON C2.CityId = C.CityId
+                                    INNER JOIN dbo.Projects P
+	                                    ON P.ProjectId = C.ProjectId
+                                    WHERE 1 = 1
+	                                    AND C2.CityCode IN ({0})
+	                                    AND SC.CreatedDate <= @0 
+	                                    AND P.ProjectName = @1 
+	                                    AND SC.ServiceCallType = 'Warranty Service Request'
+	                                    AND (SC.ServiceCallStatusId = 2 AND SC.CompletionDate IS NULL) -- Open
+                                    GROUP BY MONTH(SC.CreatedDate) 
+	                                    ,YEAR(SC.CreatedDate);";
+
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), endDate, projectName);
+                return result;
+            }
+        }
+
+        public IEnumerable<CalculatorResult> GetDivisionNumberOfServiceCallsOpen(DateTime endDate, string divisionName)
+        {
+            using (_database)
+            {
+                const string sql = @"SELECT 
+	                                    COUNT(*) AS TotalElements
+	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, GETDATE())) AS Amount
+	                                    ,MONTH(SC.CreatedDate) AS MonthNumber
+	                                    ,YEAR(SC.CreatedDate) AS YearNumber
+                                    FROM dbo.ServiceCalls SC
+                                    INNER JOIN dbo.Jobs J
+	                                    ON J.JobId = SC.JobId
+                                    INNER JOIN dbo.Communities C
+	                                    ON C.CommunityId = J.CommunityId
+                                    INNER JOIN dbo.Cities C2
+	                                    ON C2.CityId = C.CityId
+                                    INNER JOIN dbo.Divisions D
+	                                    ON D.DivisionId = C.DivisionId
+                                    WHERE 1 = 1
+	                                    AND C2.CityCode IN ({0})
+	                                    AND SC.CreatedDate <= @0 
+	                                    AND D.DivisionName = @1 
+	                                    AND SC.ServiceCallType = 'Warranty Service Request'
+	                                    AND (SC.ServiceCallStatusId = 2 AND SC.CompletionDate IS NULL) -- Open
+                                    GROUP BY MONTH(SC.CreatedDate) 
+	                                    ,YEAR(SC.CreatedDate);";
+
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), endDate, divisionName);
+                return result;
+            }
+        }
+
+        #endregion
+
         #region ClosedWithin7Days
         public IEnumerable<CalculatorResult> GetEmployeePercentClosedWithin7Days(DateTime startDate, DateTime endDate, string employeeNumber)
         {
