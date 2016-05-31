@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Warranty.Core.Entities;
 using Warranty.Core.Services;
 
 namespace Warranty.Core.Features.Report
@@ -12,6 +13,7 @@ namespace Warranty.Core.Features.Report
         public string ServiceCallNumber { get; set; }
         public DateTime CreatedDate { get; set; }
         public string HomeownerName { get; set; }
+        public Guid CommunityId { get; set; }
         public string CommunityName { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
@@ -20,6 +22,8 @@ namespace Warranty.Core.Features.Report
         public string HomePhone { get; set; }
         public string OtherPhone { get; set; }
         public bool IsSpecialProject { get; set; }
+        public string JobNumber { get; set; }
+        public Guid JobId { get; set; }
         public int NumberOfDaysRemaining { get { return ServiceCallCalculator.CalculateNumberOfDaysRemaining(CreatedDate); } }
         public List<ServiceCallLine> ServiceCallLines { get; set; }
         public IEnumerable<ServiceCallNote> ServiceCallNotes { get; set; }

@@ -1,5 +1,6 @@
-﻿@using Warranty.Core.Enumerations
-@model Warranty.Core.Features.Report.WSROpenActivity.WSROpenActivityModel
+﻿@model Warranty.Core.Features.Report.WSROpenActivity.WSROpenActivityModel
+@using Warranty.Core.Enumerations
+@using Warranty.Core.Extensions
 
 <h2>Outstanding Activity Report</h2>
 
@@ -20,7 +21,7 @@
                                         Text = division.Value,
                                         Value = division.Key.ToString()
                                     }),
-                                        "Division",
+                                        "Division - ALL",
                                         new {@class = "form-control text-capitalize"})
                                 </div>
                                 <div class="form-group">
@@ -29,7 +30,7 @@
                                         Text = project.Value,
                                         Value = project.Key.ToString()
                                     }),
-                                        "Project",
+                                        "Project - ALL",
                                         new {@class = "form-control text-capitalize"})
                                 </div>
                                 <div class="form-group">
@@ -38,7 +39,7 @@
                                         Text = teamMember.EmployeeName,
                                         Value = teamMember.EmployeeId.ToString()
                                     }),
-                                        "Team Member",
+                                        "Team Member - ALL",
                                         new { @class = "form-control text-capitalize" })
                                 </div>
                                 <div class="form-group">
@@ -55,38 +56,145 @@
 
 @if (Model.HasResults)
 {
+    <h3>Report Summary</h3>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <table class="table table-striped">
+                <tr>
+                    <td><b>Team Members</b></td>
+                    <td>@Model.OpenActivities.Count()</td>
+                </tr>
+                <tr>
+                    <td><b>Outstanding TODOs</b></td>
+                    <td>@Model.OpenActivities.Sum(a => a.OpenTasks.Count())</td>
+                </tr>
+                <tr>
+                    <td><b>Oldest Outstanding TODO</b></td>
+                    <td>@Model.OpenActivities.Max(a => a.OldestOpenTask).Days days</td>
+                </tr>
+                <tr>
+                    <td><b>Open Service Calls</b></td>
+                    <td>@Model.OpenActivities.Sum(a => a.ServiceCalls.Count())</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="float-right-non-xs-screen">
+        <a class="btn btn-default" href="#" role="button" id="expandAll">
+            <span class="glyphicon glyphicon-plus"></span>
+            <span class="text">Expand All</span>
+        </a>
+    </div>
+
+    <div class="clearfix"></div>
+    <div class="margin-top-10"></div>
+
     foreach (var activity in Model.OpenActivities)
     {
-        <div class="row">
-            <div id="wsrCallSummary" class="col-md-12">
-                <h4>Team Member: @activity.EmployeeName</h4>
-                <h5>Total Number Of Open TODOs: @activity.OpenTasks.Count()</h5>
-                <div class="row service-call-line no-bottom-padding">
-                    <h4 class="col-xs-3">Task</h4>
-                    <h4 class="col-xs-3">Description</h4>
-                    <h4 class="col-xs-1">Days Outstanding</h4>
-                </div>
-            
-                @foreach (var task in activity.OpenTasks)
-                {
-                    <div class="row small service-call-line">
-                        <div class="col-xs-3 margin-bottom-5">@task.Task</div>
-                        <div class="col-xs-3">@task.Description</div>
-                        <div class="col-xs-3">@task.DaysOutstanding.Days</div>
-                    </div>
-                }
-
-                <h5>Total Number Of Open Calls: @activity.ServiceCalls.Count()</h5>
-                <div class="row service-call-line no-bottom-padding">
-                    <h4 class="col-xs-3">Community</h4>
-                    <h4 class="col-xs-3">Homeowner</h4>
-                    <h4 class="col-xs-3">Address</h4>
-                    <h4 class="col-xs-2">Phone</h4>
-                    <h4 class="col-md-1 text-right">Days Open</h4>
-                </div>
-                @Html.Partial("_ServiceCalls", activity.ServiceCalls)
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <a name="@activity.EmployeeName"></a><span class="text-larger"><strong>@activity.EmployeeName</strong></span><span class="badge margin-left-15">@activity.OpenTasks.Count() outstanding tasks</span><span class="badge margin-left-15">@activity.ServiceCalls.Count() outstanding calls</span>
+            <div class="float-right-non-xs-screen">
+                <a class="btn btn-default btn-xs" href="#@activity.EmployeeName" role="button" onclick="$('#content-@activity.Anchor').toggleClass('hidden')"><span class="glyphicon glyphicon-plus"></span> Show Details</a>    
             </div>
         </div>
+        <div class="panel-body">
+            <div id="content-@activity.Anchor" class="activityContent hidden">
+                <h4>Outstanding Tasks <span class="badge">@activity.OpenTasks.Count()</span></h4>
+                <div class="row">
+                @foreach (var taskType in activity.OpenTasks.Where(t => t.JobNumber != null).GroupBy(t => t.TaskType.Stage).OrderBy(t => t.Key))
+                {
+                    if (taskType.Any())
+                    {
+                        <div class="col-lg-4">
+                            <strong>Jobs awaiting @taskType.FirstOrDefault().TaskType.ReportDisplay</strong>
+                            <ul>
+                            @foreach (var task in taskType.OrderByDescending(t => t.DaysOutstanding))
+                            {
+                                <li>@Html.ActionLink(task.JobNumber, "JobSummary", "Job", new { id = task.ReferenceId }, new { target = "_blank" }) - @task.DaysOutstanding.Days days outstanding</li>
+                            }
+                            </ul>
+                        </div>    
+                    }
+                }
+                </div>
+
+                @foreach (var communityGroup in @activity.ServiceCalls.GroupBy(sc => sc.CommunityName))
+                {
+                    <h4>@communityGroup.Key - Outstanding Calls</h4>
+                    var communityId = communityGroup.Select(c => c.CommunityId).FirstOrDefault();
+                    var communityTasks = activity.OpenTasks.Where(t => t.ReferenceId == communityId);
+                    if (communityTasks.Any())
+                    {
+                        <ul class="list-group no-margin">
+                            @foreach (var task in communityTasks)
+                            {
+                                <li class="list-group-item">@task.Description</li>
+                            }
+                        </ul>
+                    }
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <td><b>Job Number</b></td>
+                            <td><b>Homeowner</b></td>
+                            <td><b>Address</b></td>
+                            <td><b>Phone</b></td>
+                            <td><b>Days Outstanding</b></td>
+                        </tr>
+                        </thead>
+                        @foreach (var serviceCall in communityGroup.OrderByDescending(sc => Math.Abs((DateTime.Today - sc.CreatedDate.Date).TotalDays)))
+                        {
+                            <tr>
+                                <td>@Html.ActionLink(serviceCall.JobNumber, "JobSummary", "Job", new { id = serviceCall.JobId }, new { target = "_blank" })</td>
+                                <td>@serviceCall.HomeownerName</td>
+                                <td>@serviceCall.Address</td>
+                                <td>@serviceCall.HomePhone.ToPhoneNumberWithExtension()</td>
+                                @if (serviceCall.IsSpecialProject)
+                                {
+                                    <td>Special Project</td>
+                                }
+                                else
+                                {
+                                    <td>@(Math.Abs((DateTime.Today - serviceCall.CreatedDate.Date).TotalDays)) days</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <h6><strong>Line Item Problem Code and Description</strong></h6>
+                                    <ul>
+                                        @foreach (var line in serviceCall.ServiceCallLines)
+                                        {
+                                            <li>@line.ProblemCode - @line.ProblemDescription</li>
+                                        }
+                                    </ul>
+                                    @if (serviceCall.ServiceCallNotes.Any())
+                                    {
+                                        <h6><strong>Notes</strong></h6>
+                                        <ul>
+                                            @foreach (var note in serviceCall.ServiceCallNotes)
+                                            {
+                                                <li>@note.Note</li>
+                                            }
+                                        </ul>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
+            </div>
+        </div>
+        @*<div class="panel-footer">
+            <ul class="list-group no-margin">
+                <li class="list-group-item">Outstanding TODOs: @activity.OpenTasks.Count()</li>
+                <li class="list-group-item">Oldest Outstanding TODO: @activity.OldestOpenTask.Days days</li>
+                <li class="list-group-item">Open Service Calls: @activity.ServiceCalls.Count()</li>
+            </ul>
+        </div>*@
+    </div>
     }
 }
 else

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+using Warranty.Core.Enumerations;
 using Warranty.Core.Features.MyTeam;
 
 namespace Warranty.Core.Features.Report.WSROpenActivity
@@ -41,6 +43,24 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
         public string EmployeeName { get; set; }
         public IEnumerable<ServiceCall> ServiceCalls { get; set; }
         public IEnumerable<OpenTask> OpenTasks { get; set; }
+
+        public TimeSpan OldestOpenTask
+        {
+            get
+            {
+                if(OpenTasks == null || !OpenTasks.Any())
+                    return TimeSpan.Zero;
+                return OpenTasks.Max(t => t.DaysOutstanding);
+            }
+        }
+
+        public string Anchor
+        {
+            get
+            {
+                return new Regex("[^a-zA-Z0-9 -]").Replace(EmployeeName, "").Trim().Replace(" ", null);
+            }
+        }
     }
 
     public class OpenTask
@@ -49,17 +69,23 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
 
         public string Description { get; set; }
 
-        public DateTime? CreateDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
+
+        public Guid? ReferenceId { get; set; }
 
         public TimeSpan DaysOutstanding
         {
             get
             {
-                if(!CreateDate.HasValue)
+                if(!CreatedDate.HasValue)
                     return TimeSpan.Zero;
 
-                return DateTime.UtcNow.Subtract(CreateDate.Value);
+                return DateTime.UtcNow.Subtract(CreatedDate.Value);
             }
         }
+
+        public TaskType TaskType { get; set; }
+
+        public string JobNumber { get; set; }
     }
 }

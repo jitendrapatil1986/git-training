@@ -54,17 +54,18 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
 
         private IEnumerable<OpenTask> GetOpenTasks(Guid employeeId)
         {
-            var tasks = _database.Fetch<Task>("WHERE EmployeeId = @0 AND IsComplete = 0 ORDER BY CreatedDate", employeeId);
-            if(tasks == null || !tasks.Any())
+            var tasks = _database.Fetch<OpenTask>(@"SELECT t.*, j.JobNumber
+                                                    FROM Tasks t
+                                                    LEFT JOIN Jobs j ON j.JobId = t.ReferenceId
+                                                    WHERE t.EmployeeId = @0 
+                                                        AND t.IsComplete = 0 
+                                                    ORDER BY CreatedDate",
+                                                    employeeId);
+
+            if(tasks == null)
                 return new List<OpenTask>();
 
-            return tasks.Select(t =>
-                new OpenTask
-                {
-                    Task = t.TaskType.DisplayName,
-                    Description = t.Description,
-                    CreateDate = t.CreatedDate
-                });
+            return tasks.Where(t => t.TaskType.Stage.HasValue);
         }
 
         private IEnumerable<ServiceCall> GetServiceCalls(WSROpenActivityModel model)
@@ -77,10 +78,12 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
                             , Servicecallnumber as CallNumber
                             , sc.CreatedDate
                             , sc.SpecialProject as IsSpecialProject
+                            , sc.JobId
                             , j.AddressLine as [Address]
                             , j.City 
                             , j.StateCode
                             , j.PostalCode
+                            , j.JobNumber
                             , ho.HomeOwnerName
                             , ho.HomePhone
                             , ho.OtherPhone
@@ -88,6 +91,7 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
                             , li.LineNumber
                             , li.ProblemCode
                             , li.ProblemDescription
+                            , j.CommunityId
                         FROM ServiceCalls sc
 	                        INNER JOIN Jobs j ON sc.JobId = j.JobId
 	                        INNER JOIN HomeOwners ho ON j.CurrentHomeOwnerId = ho.HomeOwnerId
