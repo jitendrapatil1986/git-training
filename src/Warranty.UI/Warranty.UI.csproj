@@ -230,6 +230,7 @@
     <Compile Include="Api\QuickSearchController.cs" />
     <Compile Include="Api\ManageServiceCallController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Constants\SaltlineReportConstants.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
     <Compile Include="Api\UserSessionController.cs" />
     <Compile Include="Controllers\UserSecurityController.cs" />

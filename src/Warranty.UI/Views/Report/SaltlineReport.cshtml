@@ -1,4 +1,5 @@
-﻿@using Warranty.UI.Core.Helpers
+﻿@using Warranty.UI.Constants
+@using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.Report.Saltline.SaltlineReportModel
 
 <div class="container">
@@ -50,12 +51,9 @@
                      <thead>
                          <tr>
                              <th>WSR</th>
-                             <th>
-                                 <label class="has-bottom-tooltip" data-original-title="This is a test." title=""></label>
-                                 HUW
-                             </th>
-                             <th class="text-right"># Calls</th>
-                             <th class="text-right">Avg. Days</th>
+                             <th>@Html.RenderTableHeaderTextWithBottomTooltip("HUW", SaltlineReportConstants.HomesUnderWarrantyTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("# Calls", SaltlineReportConstants.NumberOfCallsTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("Avg. Days", SaltlineReportConstants.AverageDaysTooltip)</th>
                          </tr>
                      </thead>
                      <tbody>
@@ -74,9 +72,9 @@
                      <thead>
                          <tr>
                              <th>Project</th>
-                             <th>HUW</th>
-                             <th class="text-right"># Calls</th>
-                             <th class="text-right">Avg. Days</th>
+                             <th>@Html.RenderTableHeaderTextWithBottomTooltip("HUW", SaltlineReportConstants.HomesUnderWarrantyTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("# Calls", SaltlineReportConstants.NumberOfCallsTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("Avg. Days", SaltlineReportConstants.AverageDaysTooltip)</th>
                          </tr>
                      </thead>
                      <tbody>
@@ -95,9 +93,9 @@
                      <thead>
                          <tr>
                              <th>Division</th>
-                             <th>HUW</th>
-                             <th class="text-right"># Calls</th>
-                             <th class="text-right">Avg. Days</th>
+                             <th>@Html.RenderTableHeaderTextWithBottomTooltip("HUW", SaltlineReportConstants.HomesUnderWarrantyTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("# Calls", SaltlineReportConstants.NumberOfCallsTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("Avg. Days", SaltlineReportConstants.AverageDaysTooltip)</th>
                          </tr>
                      </thead>
                      <tbody>
@@ -119,9 +117,9 @@
                      <thead>
                          <tr>
                              <th>WSR</th>
-                             <th class="text-right">Number of Surveys</th>
-                             <th class="text-right">Truly Outstanding Warranty Service</th>
-                             <th class="text-right">Definitely Would Recommend</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("Number of Surveys", SaltlineReportConstants.NumberOfSurveysTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("Truly Outstanding Warranty Service", SaltlineReportConstants.TrulyOustandingWarrantyServiceTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("Definitely Would Recommend", SaltlineReportConstants.DefinitelyWouldRecommendTooltip)</th>
                          </tr>
                      </thead>
                      <tbody>
@@ -141,9 +139,9 @@
                      <thead>
                          <tr>
                              <th>Project</th>
-                             <th class="text-right"># of Surveys</th>
-                             <th class="text-right">EWS</th>
-                             <th class="text-right">DWR</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("# of Surveys", SaltlineReportConstants.NumberOfSurveysTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("EWS", SaltlineReportConstants.TrulyOustandingWarrantyServiceTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("DWR", SaltlineReportConstants.DefinitelyWouldRecommendTooltip)</th>
                          </tr>
                      </thead>
                      <tbody>
@@ -163,9 +161,9 @@
                      <thead>
                          <tr>
                              <th>Division</th>
-                             <th class="text-right"># of Surveys</th>
-                             <th class="text-right">EWS</th>
-                             <th class="text-right">DWR</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("# of Surveys", SaltlineReportConstants.NumberOfSurveysTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("EWS", SaltlineReportConstants.TrulyOustandingWarrantyServiceTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("DWR", SaltlineReportConstants.DefinitelyWouldRecommendTooltip)</th>
                          </tr>
                      </thead>
                      <tbody>
@@ -187,7 +185,7 @@
                      <thead>
                          <tr>
                              <th>WSR</th>
-                             <th class="text-right">$$</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("$$", SaltlineReportConstants.DollarsSpentTooltip)</th>
                          </tr>
                      </thead>
                      <tbody>
@@ -204,7 +202,7 @@
                      <thead>
                          <tr>
                              <th>Project</th>
-                             <th class="text-right">$$</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("$$", SaltlineReportConstants.DollarsSpentTooltip)</th>
                          </tr>
                      </thead>
                      <tbody>
@@ -221,7 +219,7 @@
                      <thead>
                          <tr>
                              <th>Division</th>
-                             <th class="text-right">$$</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("$$", SaltlineReportConstants.DollarsSpentTooltip)</th>
                          </tr>
                      </thead>
                      <tbody>
