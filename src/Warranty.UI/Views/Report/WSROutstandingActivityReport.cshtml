@@ -97,7 +97,9 @@
         <div class="panel-heading">
             <a name="@activity.EmployeeName"></a><span class="text-larger"><strong>@activity.EmployeeName</strong></span><span class="badge margin-left-15">@activity.OpenTasks.Count() outstanding tasks</span><span class="badge margin-left-15">@activity.ServiceCalls.Count() outstanding calls</span>
             <div class="float-right-non-xs-screen">
-                <a class="btn btn-default btn-xs" href="#@activity.EmployeeName" role="button" onclick="$('#content-@activity.Anchor').toggleClass('hidden')"><span class="glyphicon glyphicon-plus"></span> Show Details</a>    
+                <a class="btn btn-default btn-xs activityToggle" href="#@activity.EmployeeName" role="button">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </a>    
             </div>
         </div>
         <div class="panel-body">
