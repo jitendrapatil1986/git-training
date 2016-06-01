@@ -25,3 +25,5 @@ $jobServiceApiBaseUri = "http://jobservice.davidweekleyhomes.com"
 
 $accountingEndPointServer = "wkcorpapptrain1"
 $TIPSEndpointServer = "wkvtipstrain"
+
+$config_transform = "Test"

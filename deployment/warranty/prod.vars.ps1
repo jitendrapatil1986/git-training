@@ -26,3 +26,5 @@ $jobServiceApiBaseUri = "http://jobservice.davidweekleyhomes.com"
 
 $accountingEndPointServer = "wkcorpappprod1"
 $TIPSEndpointServer = "wkcorpcrm2012"
+
+$config_transform = "Release"

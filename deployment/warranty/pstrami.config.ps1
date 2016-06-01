@@ -53,6 +53,9 @@ Role "Web" -Incremental {
     poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
     poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@subject" $errorReportingSubject
     poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@smtpServer" $smtpServer
+
+    # log4net config transforms
+    & .\TransformWebConfigs.ps1 -SourceFile $web_directory\Web.config -TransformFile $web_directory\Web.$config_transform.config $web_directory\Web.config "modules\msbuild\"
     
     Rename-Header-File $web_directory $header_image_file_name
 
