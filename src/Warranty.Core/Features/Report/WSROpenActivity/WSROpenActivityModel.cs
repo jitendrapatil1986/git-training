@@ -15,6 +15,7 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
         public Guid? ProjectId { get; set; }
         public IEnumerable<MyTeamModel> TeamMembers { get; set; }
         public Guid? TeamMemberId { get; set; }
+        public string Action { get; set; }
 
         public IEnumerable<OpenActivity> OpenActivities { get; set; }
 

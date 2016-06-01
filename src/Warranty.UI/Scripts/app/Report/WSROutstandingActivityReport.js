@@ -1,5 +1,5 @@
 ﻿require(['/Scripts/app/main.js'], function() {
-    require(['jquery', 'ko', 'moment'], function ($, ko, moment) {
+    require(['jquery'], function ($) {
         $(function() {
             $("#expandAll").click(function() {
                 $(this).children(".glyphicon").toggleClass("glyphicon-plus");

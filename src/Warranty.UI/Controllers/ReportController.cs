@@ -1,7 +1,6 @@
 using System;
 using System.Web.Mvc;
 using AutoMapper;
-using Common.Security.Session;
 using Warranty.Core.Features.MyDivisions;
 using Warranty.Core.Features.MyProjects;
 using Warranty.Core.Features.MyTeam;
@@ -22,12 +21,10 @@ namespace Warranty.UI.Controllers
     public class ReportController : Controller
     {
         private readonly IMediator _mediator;
-        private readonly IUserSession _userSession;
 
-        public ReportController(IMediator mediator, IUserSession userSession)
+        public ReportController(IMediator mediator)
         {
             _mediator = mediator;
-            _userSession = userSession;
         }
 
         public ActionResult MailMerge()
@@ -177,6 +174,13 @@ namespace Warranty.UI.Controllers
             report.Divisions = _mediator.Request(new MyDivisionsQuery());
             report.Projects = _mediator.Request(new MyProjectsQuery());
             report.TeamMembers = _mediator.Request(new MyTeamQuery());
+
+            // Setup for exporting
+            //if(model.Action == "web")
+            //    return View(report);
+
+            //if(model.Action == "xls")
+            //    return View(report);
 
             return View(report);
         }

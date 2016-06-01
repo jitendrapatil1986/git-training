@@ -43,7 +43,15 @@
                                         new { @class = "form-control text-capitalize" })
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" class="btn btn-primary" value="Run Report" />
+                                    <button type="submit" class="btn btn-primary" name="Action" value="web">Run Report</button>
+                                    @*<button type="submit" class="btn btn-default" name="Action" value="pdf">
+                                        <span class="glyphicon glyphicon-share"></span>
+                                        PDF
+                                    </button>
+                                    <button type="submit" class="btn btn-default" name="Action" value="xls">
+                                        <span class="glyphicon glyphicon-share"></span>
+                                        XLS
+                                    </button>*@
                                 </div>
                             }
                         </div>
@@ -82,10 +90,10 @@
     </div>
 
     <div class="float-right-non-xs-screen">
-        <a class="btn btn-default" href="#" role="button" id="expandAll">
-            <span class="glyphicon glyphicon-plus"></span>
-            <span class="text">Expand All</span>
-        </a>
+        <button class="btn btn-sm btn-secondary" role="button" id="expandAll">
+            <span class="glyphicon glyphicon-minus"></span>
+            <span class="text">Hide All</span>
+        </button>
     </div>
 
     <div class="clearfix"></div>
@@ -95,30 +103,32 @@
     {
     <div class="panel panel-primary" style="page-break-after: always">
         <div class="panel-heading">
-            <a name="@activity.EmployeeName"></a><span class="text-larger"><strong>@activity.EmployeeName</strong></span><span class="badge margin-left-15">@activity.OpenTasks.Count() outstanding tasks</span><span class="badge margin-left-15">@activity.ServiceCalls.Count() outstanding calls</span>
+            <span class="text-larger"><strong>@activity.EmployeeName</strong></span>
+            <span class="badge margin-left-15">@activity.OpenTasks.Count() outstanding tasks</span>
+            <span class="badge margin-left-15">@activity.ServiceCalls.Count() outstanding calls</span>
             <div class="float-right-non-xs-screen">
-                <a class="btn btn-default btn-xs activityToggle" href="#@activity.EmployeeName" role="button">
+                <button class="btn btn-xs btn-default activityToggle" role="button">
                     <span class="glyphicon glyphicon-plus"></span>
-                </a>    
+                </button>
             </div>
         </div>
         <div class="panel-body">
-            <div id="content-@activity.Anchor" class="activityContent hidden">
+            <div class="activityContent">
                 <h4>Outstanding Tasks <span class="badge">@activity.OpenTasks.Count()</span></h4>
                 <div class="row" style="page-break-after: always">
                 @foreach (var taskType in activity.OpenTasks.Where(t => t.JobNumber != null).GroupBy(t => t.TaskType.Stage).OrderBy(t => t.Key))
                 {
                     if (taskType.Any())
                     {
-                        <div class="col-xs-4">
-                            <strong>Jobs awaiting @taskType.FirstOrDefault().TaskType.ReportDisplay</strong>
-                            <ul>
-                            @foreach (var task in taskType.OrderByDescending(t => t.DaysOutstanding))
-                            {
-                                <li>@Html.ActionLink(task.JobNumber, "JobSummary", "Job", new { id = task.ReferenceId }, new { target = "_blank" }) - @task.DaysOutstanding.Days days outstanding</li>
-                            }
-                            </ul>
-                        </div>    
+                    <div class="col-xs-4">
+                        <strong>Jobs awaiting @taskType.FirstOrDefault().TaskType.ReportDisplay</strong>
+                        <ul>
+                        @foreach (var task in taskType.OrderByDescending(t => t.DaysOutstanding))
+                        {
+                            <li>@Html.ActionLink(task.JobNumber, "JobSummary", "Job", new { id = task.ReferenceId }, new { target = "_blank" }) - @task.DaysOutstanding.Days days outstanding</li>
+                        }
+                        </ul>
+                    </div>    
                     }
                 }
                 </div>
