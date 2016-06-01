@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Warranty.Core.Features.Report.Saltline
 {
@@ -174,9 +175,14 @@ namespace Warranty.Core.Features.Report.Saltline
             var totalDaysServiceCallsOpen = surveyReportData.OutstandingServiceCallsOpen.Sum(x => x.Amount) ?? 0;
             var totalServiceCallsOpen = surveyReportData.OutstandingServiceCallsOpen.Sum(x => x.TotalElements);
 
+            var totalAmountSpentForAllHomes = list.Sum(x => x.AmountSpentPerHome);
+            var totalHomesUnderWarranty = list.Sum(x => x.NumberOfHomes);
+
             return new SaltlineReportModel.SaltlineSummary
             {
-                AmountSpentPerHome = list.Average(x => x.AmountSpentPerHome),
+                AmountSpentPerHome = totalHomesUnderWarranty == 0
+                    ? 0
+                    : totalAmountSpentForAllHomes / totalHomesUnderWarranty,
                 AverageDaysClosing = list.Average(x => x.AverageDaysClosing),
                 DefinitelyWouldRecommend = def,
                 OutstandingWarrantyService = outs,
