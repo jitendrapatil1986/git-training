@@ -7,6 +7,7 @@ using NPoco;
 using StructureMap.Query;
 using Warranty.Core.Entities;
 using Warranty.Core.Enumerations;
+using Warranty.Core.Extensions;
 
 namespace Warranty.Core.Features.Report.WSROpenActivity
 {
@@ -98,42 +99,26 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
 	                        LEFT JOIN ServiceCallLineItems li ON sc.ServiceCallId = li.ServiceCallId
 	                        LEFT JOIN Employees e ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
 	                        INNER JOIN Communities cm ON j.CommunityId = cm.CommunityId
+                            INNER JOIN Cities c on cm.CityId = c.CityId AND c.CityCode IN(@1)
                         WHERE sc.ServiceCallStatusId = @0");
 
-            var divisions = new List<Division>();
-
             if (model.TeamMemberId.HasValue)
-                sql.Append(" AND sc.WarrantyRepresentativeEmployeeId = @1");
+                sql.Append(" AND sc.WarrantyRepresentativeEmployeeId = @2");
             else if(model.ProjectId.HasValue)
-                sql.Append(" AND cm.ProjectId = @1");
+                sql.Append(" AND cm.ProjectId = @2");
             else if (model.DivisionId.HasValue)
-                sql.Append(" AND cm.DivisionId = @1");
-            else
-            {
-                var markets = _userSession.GetCurrentUser().Markets;
-
-                const string divisonSql = @"SELECT DISTINCT
-	                        d.DivisionId,
-	                        d.DivisionName,
-	                        d.DivisionCode
-                        FROM 
-	                        Communities com
-	                        LEFT JOIN Cities c ON c.CityId = com.CityId
-	                        LEFT JOIN Divisions d on d.DivisionId = com.DivisionId
-                        WHERE d.DivisionId IS NOT NULL AND c.CityCode IN (@0)";
-
-                divisions = _database.Fetch<Division>(divisonSql, markets);
-                sql.Append(" AND cm.DivisionId IN(@2)");
-            }
+                sql.Append(" AND cm.DivisionId = @2");
 
             sql.Append(" ORDER BY cm.CommunityName, ho.HomeOwnerName, j.AddressLine");
+
+            var markets = _userSession.GetCurrentUser().Markets;
 
             var serviceCalls = _database.FetchOneToMany<ServiceCall, ServiceCallLine>(x => 
                                                         x.ServiceCallId, 
                                                         sql.ToString(),
-                                                        ServiceCallStatus.Open.Value,
-                                                        model.FilterValue, 
-                                                        divisions.Select(d => d.DivisionId));
+                                                        ServiceCallStatus.Open.Value, // @0
+                                                        markets,                      // @1
+                                                        model.FilterValue);           // @2
 
             foreach (var serviceCall in serviceCalls)
             {

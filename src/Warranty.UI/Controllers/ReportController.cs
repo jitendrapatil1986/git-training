@@ -1,10 +1,11 @@
 using System;
 using System.Web.Mvc;
-using AutoMapper;
+using Warranty.Core.Enumerations;
 using Warranty.Core.Features.MyDivisions;
 using Warranty.Core.Features.MyProjects;
 using Warranty.Core.Features.MyTeam;
 using Warranty.Core.Features.Report.WSROpenActivity;
+using Warranty.UI.Core.Initialization;
 
 namespace Warranty.UI.Controllers
 {
@@ -155,6 +156,7 @@ namespace Warranty.UI.Controllers
             return View(resultModel);
         }
 
+        [RoleAuthorize(UserRoles.WarrantyServiceCoordinator, UserRoles.CustomerCareManager)]
         public ActionResult WSROutstandingActivityReport()
         {
             var model = new WSROpenActivityModel
@@ -168,6 +170,7 @@ namespace Warranty.UI.Controllers
         }
 
         [HttpPost]
+        [RoleAuthorize(UserRoles.WarrantyServiceCoordinator, UserRoles.CustomerCareManager)]
         public ActionResult WSROutstandingActivityReport(WSROpenActivityModel model)
         {
             var report = _mediator.Request(new WSROpenActivityQuery(model));

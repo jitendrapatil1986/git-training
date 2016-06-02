@@ -26,30 +26,25 @@ namespace Warranty.Core.Features.MyProjects
 
             var sql = new StringBuilder();
             sql.Append(@"SELECT DISTINCT
-	                        p.ProjectId,
-	                        p.ProjectName
-                        FROM 
-	                        Communities com
-	                        LEFT JOIN Cities c ON c.CityId = com.CityId
-	                        LEFT JOIN Divisions d on d.DivisionId = com.DivisionId
-	                        LEFT JOIN Projects p on p.ProjectId = com.ProjectId
-                        WHERE d.DivisionId IS NOT NULL AND p.ProjectId IS NOT NULL");
+                                p.ProjectId,
+                                p.ProjectName
+                        FROM Projects p
+	                    INNER JOIN Communities com on p.ProjectId = com.ProjectId
+                        INNER JOIN Divisions d on com.DivisionId = d.DivisionId
+	                    INNER JOIN Cities c ON c.CityId = com.CityId
+                        WHERE c.CityCode IN (@0)");
 
             if (query.DivisionId.HasValue)
-                sql.Append(" AND d.DivisionId = @0");
-            else
-                sql.Append(" AND d.AreaCode IN(@1)");
+                sql.Append(" AND d.DivisionId = @1");
 
-            var result = _database.Fetch<Project>(sql.ToString(), query.DivisionId, user.Markets.CommaSeparateWrapWithSingleQuote());
+            var result = _database.Fetch<Project>(sql.ToString(), user.Markets, query.DivisionId);
+            
             var projects = new Dictionary<Guid, string>();
-
             if (result == null || !result.Any())
                 return projects;
 
             foreach (var project in result)
-            {
                 projects.Add(project.ProjectId, project.ProjectName);
-            }
 
             return projects;
         }

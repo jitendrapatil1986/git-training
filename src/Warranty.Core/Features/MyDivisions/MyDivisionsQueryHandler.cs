@@ -4,6 +4,7 @@ using System.Linq;
 using Common.Security.Session;
 using NPoco;
 using Warranty.Core.Entities;
+using Warranty.Core.Extensions;
 
 namespace Warranty.Core.Features.MyDivisions
 {
@@ -33,7 +34,7 @@ namespace Warranty.Core.Features.MyDivisions
 	                        LEFT JOIN Divisions d on d.DivisionId = com.DivisionId
                         WHERE d.DivisionId IS NOT NULL AND c.CityCode IN (@0)";
 
-            var result = _database.Fetch<Division>(sql, markets);
+            var result = _database.Fetch<Division>(sql, user.Markets);
             var divisions = new Dictionary<Guid, string>();
 
             if (result == null || !result.Any())
