@@ -67,7 +67,7 @@
     <h3>Report Summary</h3>
 
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <table class="table table-striped">
                 <tr>
                     <td><b>Team Members</b></td>
@@ -89,9 +89,9 @@
         </div>
     </div>
 
-    <div class="float-right-non-xs-screen">
+    <div>
         <button class="btn btn-sm btn-secondary" role="button" id="expandAll">
-            <span class="glyphicon glyphicon-minus"></span>
+            <span class="glyphicon glyphicon-chevron-down margin-right-10"></span>
             <span class="text">Hide All</span>
         </button>
     </div>
@@ -102,102 +102,96 @@
     foreach (var activity in Model.OpenActivities)
     {
     <div class="panel panel-primary" style="page-break-after: always">
-        <div class="panel-heading">
+        <div class="panel-heading cursor-pointer">
+            <span class="glyphicon glyphicon-chevron-down activityToggle margin-right-10"></span>
             <span class="text-larger"><strong>@activity.EmployeeName</strong></span>
             <span class="badge margin-left-15">@activity.OpenTasks.Count() outstanding tasks</span>
             <span class="badge margin-left-15">@activity.ServiceCalls.Count() outstanding calls</span>
-            <div class="float-right-non-xs-screen">
-                <button class="btn btn-xs btn-default activityToggle" role="button">
-                    <span class="glyphicon glyphicon-plus"></span>
-                </button>
-            </div>
         </div>
         <div class="panel-body">
-            <div class="activityContent">
-                <h4>Outstanding Tasks <span class="badge">@activity.OpenTasks.Count()</span></h4>
-                <div class="row" style="page-break-after: always">
-                @foreach (var taskType in activity.OpenTasks.Where(t => t.JobNumber != null).GroupBy(t => t.TaskType.Stage).OrderBy(t => t.Key))
+            <h4>Outstanding Tasks <span class="badge">@activity.OpenTasks.Count()</span></h4>
+            <div class="row" style="page-break-after: always">
+            @foreach (var taskType in activity.OpenTasks.Where(t => t.JobNumber != null).GroupBy(t => t.TaskType.Stage).OrderBy(t => t.Key))
+            {
+                if (taskType.Any())
                 {
-                    if (taskType.Any())
+                <div class="col-xs-4">
+                    <strong>Jobs awaiting @taskType.FirstOrDefault().TaskType.ReportDisplay</strong>
+                    <ul>
+                    @foreach (var task in taskType.OrderByDescending(t => t.DaysOutstanding))
                     {
-                    <div class="col-xs-4">
-                        <strong>Jobs awaiting @taskType.FirstOrDefault().TaskType.ReportDisplay</strong>
-                        <ul>
-                        @foreach (var task in taskType.OrderByDescending(t => t.DaysOutstanding))
-                        {
-                            <li>@Html.ActionLink(task.JobNumber, "JobSummary", "Job", new { id = task.ReferenceId }, new { target = "_blank" }) - @task.DaysOutstanding.Days days outstanding</li>
-                        }
-                        </ul>
-                    </div>    
+                        <li>@Html.ActionLink(task.JobNumber, "JobSummary", "Job", new { id = task.ReferenceId }, new { target = "_blank" }) - @task.DaysOutstanding.Days days outstanding</li>
                     }
+                    </ul>
+                </div>    
                 }
-                </div>
+            }
+            </div>
 
-                @foreach (var communityGroup in @activity.ServiceCalls.GroupBy(sc => sc.CommunityName))
+            @foreach (var communityGroup in @activity.ServiceCalls.GroupBy(sc => sc.CommunityName))
+            {
+                <h4>@communityGroup.Key - Outstanding Calls</h4>
+                var communityId = communityGroup.Select(c => c.CommunityId).FirstOrDefault();
+                var communityTasks = activity.OpenTasks.Where(t => t.ReferenceId == communityId);
+                if (communityTasks.Any())
                 {
-                    <h4>@communityGroup.Key - Outstanding Calls</h4>
-                    var communityId = communityGroup.Select(c => c.CommunityId).FirstOrDefault();
-                    var communityTasks = activity.OpenTasks.Where(t => t.ReferenceId == communityId);
-                    if (communityTasks.Any())
-                    {
-                        <ul class="list-group no-margin">
-                            @foreach (var task in communityTasks)
-                            {
-                                <li class="list-group-item">@task.Description</li>
-                            }
-                        </ul>
-                    }
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <td><b>Job Number</b></td>
-                            <td><b>Homeowner</b></td>
-                            <td><b>Address</b></td>
-                            <td><b>Phone</b></td>
-                            <td><b>Days Outstanding</b></td>
-                        </tr>
-                        </thead>
-                        @foreach (var serviceCall in communityGroup.OrderByDescending(sc => Math.Abs((DateTime.Today - sc.CreatedDate.Date).TotalDays)))
+                    <ul class="list-group no-margin">
+                        @foreach (var task in communityTasks)
                         {
-                            <tr>
-                                <td>@Html.ActionLink(serviceCall.JobNumber, "JobSummary", "Job", new { id = serviceCall.JobId }, new { target = "_blank" })</td>
-                                <td>@serviceCall.HomeownerName</td>
-                                <td>@serviceCall.Address</td>
-                                <td>@serviceCall.HomePhone.ToPhoneNumberWithExtension()</td>
-                                @if (serviceCall.IsSpecialProject)
+                            <li class="list-group-item">@task.Description</li>
+                        }
+                    </ul>
+                }
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <td><b>Job Number</b></td>
+                        <td><b>Homeowner</b></td>
+                        <td><b>Address</b></td>
+                        <td><b>Phone</b></td>
+                        <td><b>Days Outstanding</b></td>
+                    </tr>
+                    </thead>
+                    @foreach (var serviceCall in communityGroup.OrderByDescending(sc => Math.Abs((DateTime.Today - sc.CreatedDate.Date).TotalDays)))
+                    {
+                        <tr>
+                            <td>@Html.ActionLink(serviceCall.JobNumber, "JobSummary", "Job", new { id = serviceCall.JobId }, new { target = "_blank" })</td>
+                            <td>@serviceCall.HomeownerName</td>
+                            <td>@serviceCall.Address</td>
+                            <td>@serviceCall.HomePhone.ToPhoneNumberWithExtension()</td>
+                            @if (serviceCall.IsSpecialProject)
+                            {
+                                <td>Special Project</td>
+                            }
+                            else
+                            {
+                                <td>@(Math.Abs((DateTime.Today - serviceCall.CreatedDate.Date).TotalDays)) days</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <h6><strong>Line Item Problem Code and Description</strong></h6>
+                                <ul>
+                                    @foreach (var line in serviceCall.ServiceCallLines)
+                                    {
+                                        <li>@line.ProblemCode - @line.ProblemDescription</li>
+                                    }
+                                </ul>
+                                @if (serviceCall.ServiceCallNotes.Any())
                                 {
-                                    <td>Special Project</td>
-                                }
-                                else
-                                {
-                                    <td>@(Math.Abs((DateTime.Today - serviceCall.CreatedDate.Date).TotalDays)) days</td>
-                                }
-                            </tr>
-                            <tr>
-                                <td colspan="5">
-                                    <h6><strong>Line Item Problem Code and Description</strong></h6>
+                                    <h6><strong>Notes</strong></h6>
                                     <ul>
-                                        @foreach (var line in serviceCall.ServiceCallLines)
+                                        @foreach (var note in serviceCall.ServiceCallNotes)
                                         {
-                                            <li>@line.ProblemCode - @line.ProblemDescription</li>
+                                            <li>@note.Note</li>
                                         }
                                     </ul>
-                                    @if (serviceCall.ServiceCallNotes.Any())
-                                    {
-                                        <h6><strong>Notes</strong></h6>
-                                        <ul>
-                                            @foreach (var note in serviceCall.ServiceCallNotes)
-                                            {
-                                                <li>@note.Note</li>
-                                            }
-                                        </ul>
-                                    }
-                                </td>
-                            </tr>
-                        }
-                    </table>
-                }
-            </div>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </table>
+            }
         </div>
     </div>
     }

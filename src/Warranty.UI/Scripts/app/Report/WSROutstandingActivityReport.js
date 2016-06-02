@@ -2,26 +2,26 @@
     require(['jquery'], function ($) {
         $(function() {
             $("#expandAll").click(function() {
-                $(this).children(".glyphicon").toggleClass("glyphicon-plus");
-                $(this).children(".glyphicon").toggleClass("glyphicon-minus");
+                $(this).children(".glyphicon").toggleClass("glyphicon-chevron-right");
+                $(this).children(".glyphicon").toggleClass("glyphicon-chevron-down");
 
-                if ($(this).children(".glyphicon").hasClass("glyphicon-minus")) {
+                if ($(this).children(".glyphicon").hasClass("glyphicon-chevron-down")) {
                     $(this).children(".text").text("Hide All");
-                    $(".activityContent").removeClass("hidden");
-                    $(".activityToggle").children(".glyphicon").removeClass("glyphicon-plus");
-                    $(".activityToggle").children(".glyphicon").addClass("glyphicon-minus");
+                    $(".panel-body").removeClass("hidden");
+                    $(".activityToggle").removeClass("glyphicon-chevron-right");
+                    $(".activityToggle").addClass("glyphicon-chevron-down");
                 } else {
                     $(this).children(".text").text("Expand All");
-                    $(".activityContent").addClass("hidden");
-                    $(".activityToggle").children(".glyphicon").removeClass("glyphicon-minus");
-                    $(".activityToggle").children(".glyphicon").addClass("glyphicon-plus");
+                    $(".panel-body").addClass("hidden");
+                    $(".activityToggle").removeClass("glyphicon-chevron-down");
+                    $(".activityToggle").addClass("glyphicon-chevron-right");
                 }
             });
 
-            $(".activityToggle").click(function () {
-                $(this).children(".glyphicon").toggleClass("glyphicon-plus");
-                $(this).children(".glyphicon").toggleClass("glyphicon-minus");
-                $(this).closest(".panel").find("div.activityContent").toggleClass("hidden");
+            $(".panel-heading").click(function () {
+                $(this).children(".activityToggle").toggleClass("glyphicon-chevron-right");
+                $(this).children(".activityToggle").toggleClass("glyphicon-chevron-down");
+                $(this).closest(".panel").find(".panel-body").toggleClass("hidden");
             });
         });
     });
