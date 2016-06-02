@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Common.Security.Session;
 using NPoco;
 using Warranty.Core.Entities;
+using Warranty.Core.Extensions;
 
 namespace Warranty.Core.Features.MyProjects
 {
@@ -21,9 +23,9 @@ namespace Warranty.Core.Features.MyProjects
         public Dictionary<Guid, string> Handle(MyProjectsQuery query)
         {
             var user = _userSession.GetCurrentUser();
-            var markets = user.Markets;
 
-            var sql = @"SELECT DISTINCT
+            var sql = new StringBuilder();
+            sql.Append(@"SELECT DISTINCT
 	                        p.ProjectId,
 	                        p.ProjectName
                         FROM 
@@ -31,12 +33,14 @@ namespace Warranty.Core.Features.MyProjects
 	                        LEFT JOIN Cities c ON c.CityId = com.CityId
 	                        LEFT JOIN Divisions d on d.DivisionId = com.DivisionId
 	                        LEFT JOIN Projects p on p.ProjectId = com.ProjectId
-                        WHERE d.DivisionId IS NOT NULL AND p.ProjectId IS NOT NULL ";
+                        WHERE d.DivisionId IS NOT NULL AND p.ProjectId IS NOT NULL");
 
             if (query.DivisionId.HasValue)
-                sql += "AND d.DivisionId = @0";
+                sql.Append(" AND d.DivisionId = @0");
+            else
+                sql.Append(" AND d.AreaCode IN(@1)");
 
-            var result = _database.Fetch<Project>(sql, query.DivisionId);
+            var result = _database.Fetch<Project>(sql.ToString(), query.DivisionId, user.Markets.CommaSeparateWrapWithSingleQuote());
             var projects = new Dictionary<Guid, string>();
 
             if (result == null || !result.Any())
