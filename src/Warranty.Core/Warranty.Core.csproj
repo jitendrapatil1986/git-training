@@ -166,6 +166,7 @@
     <Compile Include="Calculator\MonthYearModel.cs" />
     <Compile Include="Calculator\SurveyDataResult.cs" />
     <Compile Include="Calculator\WarrantyCalculator.cs" />
+    <Compile Include="Entities\Tmp_Jde_Gl_War_Buckets.cs" />
     <Compile Include="Enumerations\PaymentTypes.cs" />
     <Compile Include="Exceptions\DeleteServiceCallException.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddPaymentCommandDto.cs" />

@@ -32,6 +32,18 @@ namespace Warranty.Server.IntegrationTests
             return savedItem;
         }
 
+        public IEnumerable<T> GetManySaved<T>(int numberOfEntities, Action<T> action = null)
+        {
+            var savedItems = new List<T>();
+
+            for (var i = 0; i < numberOfEntities; i++)
+            {
+                savedItems.Add(GetSaved(action));
+            }
+
+            return savedItems;
+        }
+
         public void Send(Action<TEvent> eventAction)
         {
             Event = new TEvent();

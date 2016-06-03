@@ -1,6 +1,7 @@
 ﻿using System;
 using NPoco;
 using Warranty.Core.Entities;
+using Warranty.Server.IntegrationTests.Handlers;
 
 namespace Warranty.Server.IntegrationTests.SetUp
 {
@@ -13,9 +14,11 @@ namespace Warranty.Server.IntegrationTests.SetUp
 
         public override Division GetSaved(Action<Division> action)
         {
+            var randomStringGenerator = new RandomStringGenerator();
+
             var entity = new Division
             {
-                DivisionCode = "DIV",
+                DivisionCode = randomStringGenerator.Get(3),
                 CreatedBy = "test",
                 CreatedDate = DateTime.UtcNow,
             };

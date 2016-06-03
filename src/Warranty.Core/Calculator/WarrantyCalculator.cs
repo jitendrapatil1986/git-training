@@ -164,7 +164,7 @@ namespace Warranty.Core.Calculator
             using (_database)
             {
                 const string sql = @"SELECT COUNT(*) AS TotalElements
-	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, GETDATE())) AS Amount
+	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, @0)) AS Amount
 	                                    ,MONTH(SC.CreatedDate) AS MonthNumber
 	                                    ,YEAR(SC.CreatedDate) AS YearNumber
                                     FROM dbo.ServiceCalls SC
@@ -195,7 +195,7 @@ namespace Warranty.Core.Calculator
             {
                 const string sql = @"SELECT 
 	                                    COUNT(*) AS TotalElements
-	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, GETDATE())) AS Amount
+	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, @0)) AS Amount
 	                                    ,MONTH(SC.CreatedDate) AS MonthNumber
 	                                    ,YEAR(SC.CreatedDate) AS YearNumber
                                     FROM dbo.ServiceCalls SC
@@ -227,7 +227,7 @@ namespace Warranty.Core.Calculator
             {
                 const string sql = @"SELECT 
 	                                    COUNT(*) AS TotalElements
-	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, GETDATE())) AS Amount
+	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, @0)) AS Amount
 	                                    ,MONTH(SC.CreatedDate) AS MonthNumber
 	                                    ,YEAR(SC.CreatedDate) AS YearNumber
                                     FROM dbo.ServiceCalls SC
@@ -355,7 +355,7 @@ namespace Warranty.Core.Calculator
 
                 list.Add(new CalculatorResult
                 {
-                    Amount = dollarSpentInMonth.Amount.Value,
+                    Amount = dollarSpentInMonth != null ? dollarSpentInMonth.Amount : 0,
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
                     TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.TotalElements : 0
@@ -378,7 +378,7 @@ namespace Warranty.Core.Calculator
 
                 list.Add(new CalculatorResult
                 {
-                    Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
+                    Amount = dollarSpentInMonth != null ? dollarSpentInMonth.Amount : 0,
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
                     TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.TotalElements : 0
@@ -401,27 +401,13 @@ namespace Warranty.Core.Calculator
 
                 list.Add(new CalculatorResult
                 {
-                    Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
+                    Amount = dollarSpentInMonth != null ? dollarSpentInMonth.Amount : 0,
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
                     TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.TotalElements : 0
                 });
             }
             return list;
-        }
-
-        private decimal CalculateAmountSpentPerMonth(CalculatorResult dollarSpentInMonth, CalculatorResult warrantableHomesInMonth)
-        {
-            if (dollarSpentInMonth != null && warrantableHomesInMonth != null)
-            {
-                if (dollarSpentInMonth.Amount == 0 || warrantableHomesInMonth.TotalElements == 0)
-                {
-                    return 0;
-                }
-
-                return dollarSpentInMonth.Amount.Value / warrantableHomesInMonth.TotalElements;
-            }
-            return 0;
         }
         #endregion AmountSpent
 
