@@ -335,6 +335,7 @@
     <Content Include="Scripts\app\Job\ChangeHomeowner.js" />
     <Content Include="Scripts\app\Job\JobSummary.js" />
     <Content Include="Scripts\app\Report\WarrantyBonusSummaryWSRReport.js" />
+    <Content Include="Scripts\app\Report\WSROutstandingActivityReport.js" />
     <Content Include="Scripts\app\responsiveTabs.js" />
     <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\search.js" />
@@ -493,6 +494,8 @@
     <Content Include="Views\Report\WSROpenedClosedCallReport.cshtml" />
     <Content Include="Views\Shared\_ImpersonateMenu.cshtml" />
     <Content Include="Views\Shared\_ImpersonateUserModal.cshtml" />
+    <Content Include="Views\Report\WSROutstandingActivityReport.cshtml" />
+    <Content Include="Views\Report\_ServiceCalls.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
