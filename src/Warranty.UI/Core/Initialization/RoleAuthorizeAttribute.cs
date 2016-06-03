@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using Common.Security.Session;
 using Microsoft.Practices.ServiceLocation;
@@ -7,11 +8,11 @@ namespace Warranty.UI.Core.Initialization
 {
     public class RoleAuthorizeAttribute : AuthorizeAttribute
     {
-        private readonly string _allowedRole;
+        private readonly string[] _allowedRoles;
 
-        public RoleAuthorizeAttribute(string allowedRole)
+        public RoleAuthorizeAttribute(params string[] allowedRoleses)
         {
-            _allowedRole = allowedRole;
+            _allowedRoles = allowedRoleses;
         }
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
@@ -19,7 +20,7 @@ namespace Warranty.UI.Core.Initialization
             var userSession = ServiceLocator.Current.GetInstance<IUserSession>();
             var user = userSession.GetCurrentUser();
 
-            return user.IsInRole(_allowedRole);
+            return _allowedRoles.Any(r => user.IsInRole(r));
         }
     }
 }

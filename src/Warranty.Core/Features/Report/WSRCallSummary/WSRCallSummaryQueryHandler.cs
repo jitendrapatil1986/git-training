@@ -4,7 +4,6 @@
     using Enumerations;
     using NPoco;
     using Common.Security.Session;
-    using Common.Security.User;
     using System.Linq;
     using Common.Extensions;
 
@@ -23,7 +22,7 @@
         {
             var user = _userSession.GetCurrentUser();
 
-            if (!user.IsInRole(Enumerations.UserRoles.WarrantyServiceRepresentative) && query.queryModel.SelectedEmployeeNumber == null)
+            if (!user.IsInRole(UserRoles.WarrantyServiceRepresentative) && query.queryModel.SelectedEmployeeNumber == null)
             {
                 return new WSRCallSummaryModel
                     {
@@ -31,7 +30,7 @@
                     };
             }
 
-            var employeeNumber = user.IsInRole(Enumerations.UserRoles.WarrantyServiceRepresentative) ? user.EmployeeNumber : query.queryModel.SelectedEmployeeNumber;
+            var employeeNumber = user.IsInRole(UserRoles.WarrantyServiceRepresentative) ? user.EmployeeNumber : query.queryModel.SelectedEmployeeNumber;
             
             var model = new WSRCallSummaryModel()
             {
@@ -40,14 +39,14 @@
                 ServiceCalls = GetWSRServiceCalls(employeeNumber).OrderBy(x => x.CommunityName).ThenBy(x => x.NumberOfDaysRemaining).ThenBy(x => x.HomeownerName),
             };
 
-            model.EmployeeName = user.IsInRole(Enumerations.UserRoles.WarrantyServiceRepresentative) 
+            model.EmployeeName = user.IsInRole(UserRoles.WarrantyServiceRepresentative) 
                 ? user.UserName 
                 : model.EmployeeTiedToRepresentatives.First(x => x.EmployeeNumber == model.EmployeeNumber).EmployeeName.ToTitleCase();
 
             return model;
         }
 
-        private IEnumerable<WSRCallSummaryModel.ServiceCall> GetWSRServiceCalls(string employeeNumber)
+        private IEnumerable<ServiceCall> GetWSRServiceCalls(string employeeNumber)
         {
             using (_database)
             {
@@ -82,13 +81,13 @@
                                     AND sc.ServiceCallStatusId = @1
                                     ORDER BY cm.CommunityName, ho.HomeOwnerName, j.AddressLine";
 
-                var serviceCalls = _database.FetchOneToMany<WSRCallSummaryModel.ServiceCall, WSRCallSummaryModel.ServiceCallLine>(x => x.ServiceCallId, sql, employeeNumber, ServiceCallStatus.Open.Value);
+                var serviceCalls = _database.FetchOneToMany<ServiceCall, ServiceCallLine>(x => x.ServiceCallId, sql, employeeNumber, ServiceCallStatus.Open.Value);
                 
                 foreach (var serviceCall in serviceCalls)
                 {
                     const string notesSql = @"SELECT ServiceCallNote AS Note FROM ServiceCallNotes WHERE ServiceCallId = @0 AND (ServiceCallNote <> '' OR ServiceCallNote != null)";
 
-                    serviceCall.ServiceCallNotes = _database.Fetch<WSRCallSummaryModel.ServiceCallNote>(notesSql, serviceCall.ServiceCallId);
+                    serviceCall.ServiceCallNotes = _database.Fetch<ServiceCallNote>(notesSql, serviceCall.ServiceCallId);
                 }
 
                 return serviceCalls;
