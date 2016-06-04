@@ -34,7 +34,9 @@
         {
             var model = GetJobSummary(query.JobId);
             model.JobServiceCalls = GetJobServiceCalls(query.JobId);
-            model.JobSelections = GetJobSelections(query.JobId);
+            model.JobSelections = model.CloseDate.HasValue // js-1370, js-1366: bypass bad JS API performance for in-flight jobs
+                ? GetJobSelections(query.JobId)
+                : new JobSummaryModel.JobSelection[0];
             model.JobNotes = GetJobNotes(query.JobId);
             model.Attachments = GetJobAttachments(query.JobId);
             model.Homeowners = GetJobHomeowners(query.JobId);
