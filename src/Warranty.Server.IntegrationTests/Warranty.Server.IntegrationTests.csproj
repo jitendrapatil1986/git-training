@@ -206,6 +206,7 @@
     <Compile Include="Sagas\BuyerTransferredToNewLot\HomeBuyerDetailsResponseTester.cs" />
     <Compile Include="Sagas\BuyerTransferredToNewLot\JobSaleDetailsResponseTester.cs" />
     <Compile Include="Sagas\HomeSold\CreateOrUpdateJobTester.cs" />
+    <Compile Include="Sagas\HomeSold\HomeBuyerDetailsResponseTester.cs" />
     <Compile Include="Sagas\HomeSold\HomeSoldTester.cs" />
     <Compile Include="Sagas\HomeSold\JobSaleDetailsResponseTester.cs" />
     <Compile Include="Services\CommunityServiceTester.cs" />

@@ -211,19 +211,36 @@ namespace Warranty.Server.Sagas
         {
             _log.InfoFormat("Received homeowner details for contact {0} on sale {1} from TIPS", Data.ContactId, Data.SaleId);
 
-            var homeOwner = Mapper.Map<HomeOwner>(message);
-            homeOwner.HomeOwnerId = Guid.NewGuid();
-            homeOwner.HomeOwnerNumber = 1;
-            homeOwner.CreatedBy = Constants.ENDPOINT_NAME;
-            homeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
-            homeOwner.CreatedDate = DateTime.UtcNow;
-            homeOwner.UpdatedDate = DateTime.UtcNow;
-            homeOwner.JobId = Data.JobReferenceId;
-
-            homeOwner = _homeOwnerService.Create(homeOwner);
-            _log.InfoFormat("Created homeowner record for contact {0} on sale {1}", Data.ContactId, Data.SaleId);
-
             var job = _jobService.GetJobById(Data.JobReferenceId);
+            var existingHomeOwner = _homeOwnerService.GetHomeOwnerByJobNumber(job.JobNumber);
+            HomeOwner homeOwner; 
+
+            if (existingHomeOwner == null)
+            {
+                homeOwner = Mapper.Map<HomeOwner>(message);
+                homeOwner.HomeOwnerId = Guid.NewGuid();
+                homeOwner.HomeOwnerNumber = 1;
+                homeOwner.CreatedBy = Constants.ENDPOINT_NAME;
+                homeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
+                homeOwner.CreatedDate = DateTime.UtcNow;
+                homeOwner.UpdatedDate = DateTime.UtcNow;
+                homeOwner.JobId = Data.JobReferenceId;
+
+                homeOwner = _homeOwnerService.Create(homeOwner);
+                _log.InfoFormat("Created homeowner record for contact {0} on sale {1}", Data.ContactId, Data.SaleId);
+            }
+            else
+            {
+                homeOwner = Mapper.Map<HomeOwner>(existingHomeOwner);
+                homeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
+                homeOwner.UpdatedDate = DateTime.UtcNow;
+                homeOwner.JobId = Data.JobReferenceId;
+
+                _homeOwnerService.UpdateHomeOwner(homeOwner);
+                _log.InfoFormat("Homeowner already exists, updating homeowner record for contact {0} on sale {1} for job {2}", Data.ContactId, 
+                    Data.SaleId, 
+                    Data.JobReferenceId);
+            }
 
             _log.InfoFormat("Assigning new homeowner to sale {0} with job number {1}", Data.SaleId, Data.JobNumber);
             _homeOwnerService.AssignToJob(homeOwner, job);
