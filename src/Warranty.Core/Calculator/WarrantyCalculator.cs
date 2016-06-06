@@ -207,8 +207,7 @@ namespace Warranty.Core.Calculator
 	                                    ON C2.CityId = C.CityId
                                     INNER JOIN dbo.Projects P
 	                                    ON P.ProjectId = C.ProjectId
-                                    WHERE 1 = 1
-	                                    AND C2.CityCode IN ({0})
+                                    WHERE C2.CityCode IN ({0})
 	                                    AND SC.CreatedDate <= @0 
 	                                    AND P.ProjectName = @1 
 	                                    AND SC.ServiceCallType = 'Warranty Service Request'
@@ -239,8 +238,7 @@ namespace Warranty.Core.Calculator
 	                                    ON C2.CityId = C.CityId
                                     INNER JOIN dbo.Divisions D
 	                                    ON D.DivisionId = C.DivisionId
-                                    WHERE 1 = 1
-	                                    AND C2.CityCode IN ({0})
+                                    WHERE C2.CityCode IN ({0})
 	                                    AND SC.CreatedDate <= @0 
 	                                    AND D.DivisionName = @1 
 	                                    AND SC.ServiceCallType = 'Warranty Service Request'
