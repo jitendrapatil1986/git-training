@@ -1,1 +1,0 @@
-.\pstrami.bat deploy-package backport . %1
