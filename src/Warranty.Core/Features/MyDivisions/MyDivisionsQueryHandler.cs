@@ -22,19 +22,15 @@ namespace Warranty.Core.Features.MyDivisions
         public Dictionary<Guid, string> Handle(MyDivisionsQuery query)
         {
             var user = _userSession.GetCurrentUser();
-            var markets = user.Markets;
 
-            const string sql = @"SELECT DISTINCT
-	                        d.DivisionId,
-	                        d.DivisionName,
-	                        d.DivisionCode
-                        FROM 
-	                        Communities com
-	                        LEFT JOIN Cities c ON c.CityId = com.CityId
-	                        LEFT JOIN Divisions d on d.DivisionId = com.DivisionId
-                        WHERE d.DivisionId IS NOT NULL AND c.CityCode IN (@0)";
+            const string sql = @"SELECT 
+	                                DivisionId,
+	                                DivisionName,
+	                                DivisionCode
+                                FROM Divisions 
+                                WHERE DivisionCode IN (@0)";
 
-            var result = _database.Fetch<Division>(sql, user.Markets);
+            var result = _database.Fetch<Division>(sql, user.Divisions);
             var divisions = new Dictionary<Guid, string>();
 
             if (result == null || !result.Any())
