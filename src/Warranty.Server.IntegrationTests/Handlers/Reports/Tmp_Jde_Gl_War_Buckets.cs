@@ -1,4 +1,4 @@
-﻿namespace Warranty.Core.Entities
+﻿namespace Warranty.Server.IntegrationTests.Handlers.Reports
 {
     public class Tmp_Jde_Gl_War_Buckets
     {

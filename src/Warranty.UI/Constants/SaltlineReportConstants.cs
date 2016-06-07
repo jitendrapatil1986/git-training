@@ -12,7 +12,7 @@
         public static readonly string DefinitelyWouldRecommendTooltip = "The average survey score for each WSR for the surveys received during the specified date range based on the Number of Surveys column.";
 
         public static readonly string DollarsSpentTooltip = "The total $ amount charged to the Warranty Cost Codes for all jobs under warranty in the communities assigned to each WSR " +
-                                                            "during the specified date range divided by the toal number of homes under warranty in the communtiies assigned to each WSR " +
+                                                            "during the specified date range divided by the toal number of homes under warranty in the communities assigned to each WSR " +
                                                             "during the specified date range.";
     }
 }
