@@ -78,7 +78,7 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
             if(tasks == null)
                 return new List<OpenTask>();
 
-            return tasks.Where(t => t.TaskType.Stage.HasValue);
+            return tasks.Where(t => t.TaskType.ShowInReports);
         }
 
         private IEnumerable<ServiceCall> GetServiceCalls(WSROpenActivityModel model)

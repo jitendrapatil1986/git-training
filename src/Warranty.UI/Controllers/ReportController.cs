@@ -9,6 +9,7 @@ using Warranty.Core.Features.MyDivisions;
 using Warranty.Core.Features.MyProjects;
 using Warranty.Core.Features.MyTeam;
 using Warranty.Core.Features.Report.WSROpenActivity;
+using Warranty.UI.Core.Initialization;
 
 
 namespace Warranty.UI.Controllers
