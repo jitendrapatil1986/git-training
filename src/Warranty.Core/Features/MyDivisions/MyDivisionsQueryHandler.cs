@@ -4,6 +4,7 @@ using System.Linq;
 using Common.Security.Session;
 using NPoco;
 using Warranty.Core.Entities;
+using Warranty.Core.Extensions;
 
 namespace Warranty.Core.Features.MyDivisions
 {
@@ -36,7 +37,9 @@ namespace Warranty.Core.Features.MyDivisions
                 return divisions;
 
             foreach (var division in result)
+            {
                 divisions.Add(division.DivisionId, string.Format("({0}) {1}", division.DivisionCode, division.DivisionName));
+            }
 
             return divisions;
         }

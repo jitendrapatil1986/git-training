@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using Common.Security.Session;
 using NPoco;
+using StructureMap.Query;
+using Warranty.Core.Entities;
 using Warranty.Core.Enumerations;
+using Warranty.Core.Extensions;
 
 namespace Warranty.Core.Features.Report.WSROpenActivity
 {
