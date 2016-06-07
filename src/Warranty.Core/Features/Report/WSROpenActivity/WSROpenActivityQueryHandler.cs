@@ -4,29 +4,36 @@ using System.Linq;
 using System.Text;
 using Common.Security.Session;
 using NPoco;
-using StructureMap.Query;
-using Warranty.Core.Entities;
 using Warranty.Core.Enumerations;
-using Warranty.Core.Extensions;
 
 namespace Warranty.Core.Features.Report.WSROpenActivity
 {
     public class WSROpenActivityQueryHandler : IQueryHandler<WSROpenActivityQuery, WSROpenActivityModel>
     {
         private readonly IDatabase _database;
-        private readonly IUserSession _userSession;
+        private readonly IUser _user;
 
         public WSROpenActivityQueryHandler(IDatabase database, IUserSession userSession)
         {
             _database = database;
-            _userSession = userSession;
+            _user = userSession.GetCurrentUser();
         }
 
         public WSROpenActivityModel Handle(WSROpenActivityQuery query)
         {
             var model = query.Model;
-            var activities = new List<OpenActivity>();
 
+            if (!(_user.IsInRole(UserRoles.WarrantyServiceRepresentative) || _user.IsInRole(UserRoles.CustomerCareManager)))
+            {
+                var employeeId = GetCurrentUserId(_user.EmployeeNumber);
+
+                if (!employeeId.HasValue) // contractors won't have a value - so there's no point in continuing
+                    return model;
+
+                model.TeamMemberId = employeeId;
+            }
+
+            var activities = new List<OpenActivity>();
             var serviceCalls = GetServiceCalls(model);
 
             foreach (var employeeCalls in serviceCalls.GroupBy(e => e.EmployeeId))
@@ -51,6 +58,11 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
 
             model.OpenActivities = activities;
             return model;
+        }
+
+        private Guid? GetCurrentUserId(string employeeNumber)
+        {
+            return _database.SingleOrDefault<Guid?>("SELECT EmployeeId FROM Employees WHERE EmployeeNumber = @0", employeeNumber);
         }
 
         private IEnumerable<OpenTask> GetOpenTasks(Guid employeeId)
@@ -111,7 +123,7 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
 
             sql.Append(" ORDER BY cm.CommunityName, ho.HomeOwnerName, j.AddressLine");
 
-            var markets = _userSession.GetCurrentUser().Markets;
+            var markets = _user.Markets;
 
             var serviceCalls = _database.FetchOneToMany<ServiceCall, ServiceCallLine>(x => 
                                                         x.ServiceCallId, 

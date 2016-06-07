@@ -1,11 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
+using AutoMapper;
+using Common.Security.Session;
+using Microsoft.Practices.ServiceLocation;
 using Warranty.Core.Enumerations;
 using Warranty.Core.Features.MyDivisions;
 using Warranty.Core.Features.MyProjects;
 using Warranty.Core.Features.MyTeam;
 using Warranty.Core.Features.Report.WSROpenActivity;
-using Warranty.UI.Core.Initialization;
+
 
 namespace Warranty.UI.Controllers
 {
@@ -22,10 +26,12 @@ namespace Warranty.UI.Controllers
     public class ReportController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public ReportController(IMediator mediator)
+        public ReportController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         public ActionResult MailMerge()
@@ -156,27 +162,29 @@ namespace Warranty.UI.Controllers
             return View(resultModel);
         }
 
-        [RoleAuthorize(UserRoles.WarrantyServiceCoordinator, UserRoles.CustomerCareManager)]
         public ActionResult WSROutstandingActivityReport()
         {
+            if (!(User.IsInRole(UserRoles.WarrantyServiceRepresentative) || User.IsInRole(UserRoles.CustomerCareManager)))
+                return WSROutstandingActivityReport(new WSROpenActivityModel());
+
             var model = new WSROpenActivityModel
             {
-                Divisions = _mediator.Request(new MyDivisionsQuery()),
-                Projects = _mediator.Request(new MyProjectsQuery()),
-                TeamMembers = _mediator.Request(new MyTeamQuery())
+                MyDivisions = _mapper.Map<List<SelectListItem>>(_mediator.Request(new MyDivisionsQuery()) ?? new Dictionary<Guid, string>()),
+                MyProjects = _mapper.Map<List<SelectListItem>>(_mediator.Request(new MyProjectsQuery()) ?? new Dictionary<Guid, string>()),
+                MyTeamMembers = _mapper.Map<List<SelectListItem>>(_mediator.Request(new MyTeamQuery()) ?? new List<MyTeamModel>())
             };
 
             return View(model);
         }
 
         [HttpPost]
-        [RoleAuthorize(UserRoles.WarrantyServiceCoordinator, UserRoles.CustomerCareManager)]
         public ActionResult WSROutstandingActivityReport(WSROpenActivityModel model)
         {
             var report = _mediator.Request(new WSROpenActivityQuery(model));
-            report.Divisions = _mediator.Request(new MyDivisionsQuery());
-            report.Projects = _mediator.Request(new MyProjectsQuery());
-            report.TeamMembers = _mediator.Request(new MyTeamQuery());
+
+            report.MyDivisions = _mapper.Map<List<SelectListItem>>(_mediator.Request(new MyDivisionsQuery()) ?? new Dictionary<Guid, string>());
+            report.MyProjects = _mapper.Map<List<SelectListItem>>(_mediator.Request(new MyProjectsQuery()) ?? new Dictionary<Guid, string>());
+            report.MyTeamMembers = _mapper.Map<List<SelectListItem>>(_mediator.Request(new MyTeamQuery()) ?? new List<MyTeamModel>());
 
             // Setup for exporting
             //if(model.Action == "web")
