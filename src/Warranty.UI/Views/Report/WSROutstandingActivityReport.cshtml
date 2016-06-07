@@ -1,47 +1,32 @@
 ﻿@model Warranty.Core.Features.Report.WSROpenActivity.WSROpenActivityModel
+@using Warranty.Core.Enumerations
 @using Warranty.Core.Extensions
 
 <h2>Outstanding Activity Report</h2>
 
-<div class="panel panel-default no-print">
-    <div class="panel-heading">
-        <div id="wsrLoadingReportFilter">
-            <div class="no-bottom-padding">
-                <div class="row">
-                    <div class="col-md-12">
-                        @using (Html.BeginForm("WSROutstandingActivityReport", "Report", FormMethod.Post, new { @class = "form-inline" }))
-                        {
-                            @Html.ValidationSummary()
-                            <div class="form-group">
-                                @Html.DropDownListFor(m => m.DivisionId, Model.Divisions.Select(division => new SelectListItem
-                                {
-                                    Text = division.Value,
-                                    Value = division.Key.ToString()
-                                }),
-                                    "Division - ALL",
-                                    new {@class = "form-control text-capitalize"})
-                            </div>
-                            <div class="form-group">
-                                @Html.DropDownListFor(m => m.ProjectId, Model.Projects.Select(project => new SelectListItem
-                                {
-                                    Text = project.Value,
-                                    Value = project.Key.ToString()
-                                }),
-                                    "Project - ALL",
-                                    new {@class = "form-control text-capitalize"})
-                            </div>
-                            <div class="form-group">
-                                @Html.DropDownListFor(m => m.TeamMemberId, Model.TeamMembers.Select(teamMember => new SelectListItem
-                                {
-                                    Text = teamMember.EmployeeName,
-                                    Value = teamMember.EmployeeId.ToString()
-                                }),
-                                    "Team Member - ALL",
-                                    new { @class = "form-control text-capitalize" })
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary" name="Action" value="web">Run Report</button>
-                                @*<button type="submit" class="btn btn-default" name="Action" value="pdf">
+@if (User.IsInRole(UserRoles.WarrantyServiceRepresentative) || User.IsInRole(UserRoles.CustomerCareManager))
+{
+    <div class="panel panel-default no-print">
+        <div class="panel-heading">
+            <div id="wsrLoadingReportFilter">
+                <div class="no-bottom-padding">
+                    <div class="row">
+                        <div class="col-md-12">
+                            @using (Html.BeginForm("WSROutstandingActivityReport", "Report", FormMethod.Post, new {@class = "form-inline"}))
+                            {
+                                @Html.ValidationSummary()
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.DivisionId, Model.MyDivisions, "Division - All", new {@class = "form-control text-capitalize"})
+                                </div>
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.ProjectId, Model.MyProjects, "Project - All", new {@class = "form-control text-capitalize"})
+                                </div>
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.TeamMemberId, Model.MyTeamMembers, "Team Member - All", new {@class = "form-control text-capitalize"})
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary" name="Action" value="web">Run Report</button>
+                                    @*<button type="submit" class="btn btn-default" name="Action" value="pdf">
                                     <span class="glyphicon glyphicon-share"></span>
                                     PDF
                                 </button>
@@ -49,15 +34,15 @@
                                     <span class="glyphicon glyphicon-share"></span>
                                     XLS
                                 </button>*@
-                            </div>
-                        }
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
+}
 @if (Model.HasResults)
 {
     <h3>Report Summary</h3>
