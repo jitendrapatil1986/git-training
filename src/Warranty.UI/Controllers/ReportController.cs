@@ -9,6 +9,7 @@ using Warranty.Core.Features.MyDivisions;
 using Warranty.Core.Features.MyProjects;
 using Warranty.Core.Features.MyTeam;
 using Warranty.Core.Features.Report.WSROpenActivity;
+using Warranty.UI.Core.Initialization;
 
 
 namespace Warranty.UI.Controllers
@@ -162,7 +163,6 @@ namespace Warranty.UI.Controllers
             return View(resultModel);
         }
 
-        [RoleAuthorize(UserRoles.WarrantyServiceCoordinator, UserRoles.CustomerCareManager)]
         public ActionResult WSROutstandingActivityReport()
         {
             if (!(User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager)))
@@ -179,7 +179,6 @@ namespace Warranty.UI.Controllers
         }
 
         [HttpPost]
-        [RoleAuthorize(UserRoles.WarrantyServiceCoordinator, UserRoles.CustomerCareManager)]
         public ActionResult WSROutstandingActivityReport(WSROpenActivityModel model)
         {
             var report = _mediator.Request(new WSROpenActivityQuery(model));
