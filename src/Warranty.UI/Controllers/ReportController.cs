@@ -164,7 +164,7 @@ namespace Warranty.UI.Controllers
 
         public ActionResult WSROutstandingActivityReport()
         {
-            if (!(User.IsInRole(UserRoles.WarrantyServiceRepresentative) || User.IsInRole(UserRoles.CustomerCareManager)))
+            if (!(User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager)))
                 return WSROutstandingActivityReport(new WSROpenActivityModel());
 
             var model = new WSROpenActivityModel

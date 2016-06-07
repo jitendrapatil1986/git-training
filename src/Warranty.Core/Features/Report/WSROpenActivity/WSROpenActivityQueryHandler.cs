@@ -23,7 +23,7 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
         {
             var model = query.Model;
 
-            if (!(_user.IsInRole(UserRoles.WarrantyServiceRepresentative) || _user.IsInRole(UserRoles.CustomerCareManager)))
+            if (!(_user.IsInRole(UserRoles.WarrantyServiceCoordinator) || _user.IsInRole(UserRoles.CustomerCareManager)))
             {
                 var employeeId = GetCurrentUserId(_user.EmployeeNumber);
 
