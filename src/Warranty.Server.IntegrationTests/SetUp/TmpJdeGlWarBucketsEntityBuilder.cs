@@ -1,6 +1,6 @@
 ﻿using System;
 using NPoco;
-using Warranty.Core.Entities;
+using Warranty.Server.IntegrationTests.Handlers.Reports;
 
 namespace Warranty.Server.IntegrationTests.SetUp
 {

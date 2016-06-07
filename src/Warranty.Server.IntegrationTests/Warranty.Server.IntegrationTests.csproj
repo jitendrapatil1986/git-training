@@ -198,6 +198,7 @@
     <Compile Include="Handlers\Jobs\ShowcaseSwingUpdateApprovedHandlerTester.cs" />
     <Compile Include="Handlers\RandomStringGenerator.cs" />
     <Compile Include="Handlers\Reports\SaltlineReportQueryHandlerTester.cs" />
+    <Compile Include="Handlers\Reports\Tmp_Jde_Gl_War_Buckets.cs" />
     <Compile Include="MappingTests\CommunityDetailsMappingTester.cs" />
     <Compile Include="MappingTests\DefaultMappingTester.cs" />
     <Compile Include="MappingTests\HomeBuyerDetailsResponseMappingTester.cs" />

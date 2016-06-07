@@ -167,9 +167,9 @@ namespace Warranty.Core.Calculator
 	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, @0)) AS Amount
 	                                    ,MONTH(SC.CreatedDate) AS MonthNumber
 	                                    ,YEAR(SC.CreatedDate) AS YearNumber
-                                    FROM dbo.ServiceCalls SC
-                                    INNER JOIN dbo.Employees E
-	                                    ON E.EmployeeId = SC.WarrantyRepresentativeEmployeeId
+                                    FROM dbo.Employees E
+                                    INNER JOIN dbo.ServiceCalls SC
+	                                    ON SC.WarrantyRepresentativeEmployeeId = E.EmployeeID
                                     INNER JOIN dbo.Jobs J
 	                                    ON J.JobId = SC.JobId
                                     INNER JOIN dbo.Communities C
@@ -198,15 +198,15 @@ namespace Warranty.Core.Calculator
 	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, @0)) AS Amount
 	                                    ,MONTH(SC.CreatedDate) AS MonthNumber
 	                                    ,YEAR(SC.CreatedDate) AS YearNumber
-                                    FROM dbo.ServiceCalls SC
-                                    INNER JOIN dbo.Jobs J
-	                                    ON J.JobId = SC.JobId
+                                    FROM dbo.Projects P
                                     INNER JOIN dbo.Communities C
-	                                    ON C.CommunityId = J.CommunityId
+	                                    ON C.ProjectId = P.ProjectId
                                     INNER JOIN dbo.Cities C2
-	                                    ON C2.CityId = C.CityId
-                                    INNER JOIN dbo.Projects P
-	                                    ON P.ProjectId = C.ProjectId
+                                        ON C2.CityId = C.CityId
+                                    INNER JOIN dbo.Jobs J
+	                                    ON J.CommunityId = C.CommunityId
+                                    INNER JOIN dbo.ServiceCalls SC
+                                        ON SC.JobId = J.JobId
                                     WHERE C2.CityCode IN ({0})
 	                                    AND SC.CreatedDate <= @0 
 	                                    AND P.ProjectName = @1 
@@ -229,15 +229,15 @@ namespace Warranty.Core.Calculator
 	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, @0)) AS Amount
 	                                    ,MONTH(SC.CreatedDate) AS MonthNumber
 	                                    ,YEAR(SC.CreatedDate) AS YearNumber
-                                    FROM dbo.ServiceCalls SC
-                                    INNER JOIN dbo.Jobs J
-	                                    ON J.JobId = SC.JobId
+                                    FROM dbo.Divisions D
                                     INNER JOIN dbo.Communities C
-	                                    ON C.CommunityId = J.CommunityId
-                                    INNER JOIN dbo.Cities C2
+	                                    ON C.DivisionId = D.DivisionId
+                                    INNER JOIN dbo.Cities C2	
 	                                    ON C2.CityId = C.CityId
-                                    INNER JOIN dbo.Divisions D
-	                                    ON D.DivisionId = C.DivisionId
+                                    INNER JOIN dbo.Jobs J
+	                                    ON J.CommunityId = C.CommunityId
+                                    INNER JOIN dbo.ServiceCalls SC
+	                                    ON SC.JobId = J.JobId
                                     WHERE C2.CityCode IN ({0})
 	                                    AND SC.CreatedDate <= @0 
 	                                    AND D.DivisionName = @1 
@@ -348,15 +348,22 @@ namespace Warranty.Core.Calculator
             var list = new List<CalculatorResult>();
             foreach (var month in monthRange)
             {
-                var dollarSpentInMonth = dollarsSpent.SingleOrDefault(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber);
-                var warrantableHomesInMonth = warrantablehomes.SingleOrDefault(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber);
+                var dollarSpentInMonth = dollarsSpent
+                    .Where(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber)
+                    .DefaultIfEmpty(CalculatorResult.Default)
+                    .Single();
+
+                var warrantableHomesInMonth = warrantablehomes
+                    .Where(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber)
+                    .DefaultIfEmpty(CalculatorResult.Default)
+                    .Single();
 
                 list.Add(new CalculatorResult
                 {
-                    Amount = dollarSpentInMonth != null ? dollarSpentInMonth.Amount : 0,
+                    Amount = dollarSpentInMonth.Amount,
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
-                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.TotalElements : 0
+                    TotalElements = warrantableHomesInMonth.TotalElements,
                 });
             }
             return list;
@@ -371,15 +378,22 @@ namespace Warranty.Core.Calculator
             var list = new List<CalculatorResult>();
             foreach (var month in monthRange)
             {
-                var dollarSpentInMonth = dollarsSpent.SingleOrDefault(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber);
-                var warrantableHomesInMonth = warrantablehomes.SingleOrDefault(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber);
+                var dollarSpentInMonth = dollarsSpent
+                    .Where(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber)
+                    .DefaultIfEmpty(CalculatorResult.Default)
+                    .Single();
+
+                var warrantableHomesInMonth = warrantablehomes
+                    .Where(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber)
+                    .DefaultIfEmpty(CalculatorResult.Default)
+                    .Single();
 
                 list.Add(new CalculatorResult
                 {
-                    Amount = dollarSpentInMonth != null ? dollarSpentInMonth.Amount : 0,
+                    Amount = dollarSpentInMonth.Amount,
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
-                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.TotalElements : 0
+                    TotalElements = warrantableHomesInMonth.TotalElements,
                 });
             }
             return list;
@@ -394,15 +408,22 @@ namespace Warranty.Core.Calculator
             var list = new List<CalculatorResult>();
             foreach (var month in monthRange)
             {
-                var dollarSpentInMonth = dollarsSpent.SingleOrDefault(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber);
-                var warrantableHomesInMonth = warrantablehomes.SingleOrDefault(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber);
+                var dollarSpentInMonth = dollarsSpent
+                    .Where(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber)
+                    .DefaultIfEmpty(CalculatorResult.Default)
+                    .Single();
+
+                var warrantableHomesInMonth = warrantablehomes
+                    .Where(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber)
+                    .DefaultIfEmpty(CalculatorResult.Default)
+                    .Single();
 
                 list.Add(new CalculatorResult
                 {
-                    Amount = dollarSpentInMonth != null ? dollarSpentInMonth.Amount : 0,
+                    Amount = dollarSpentInMonth.Amount,
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
-                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.TotalElements : 0
+                    TotalElements = warrantableHomesInMonth.TotalElements,
                 });
             }
             return list;
