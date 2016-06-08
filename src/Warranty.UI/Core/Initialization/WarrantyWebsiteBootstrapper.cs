@@ -1,15 +1,12 @@
 ﻿namespace Warranty.UI.Core.Initialization
 {
-    using System.Configuration;
     using System.Web.Http;
     using System.Web.Mvc;
     using FluentValidation.Mvc;
     using System.Web.Optimization;
     using System.Web.Routing;
-    using AutoMapper;
     using ModelBinders;
     using NServiceBus;
-    using Warranty.Core.AutoMapper;
     using Warranty.Core.DataAccess;
 
     public class WarrantyWebsiteBootstrapper
@@ -34,7 +31,6 @@
             ViewEngines.Engines.Add(new RazorViewEngine());
 
             DbFactory.Setup(IoC.Container);
-            InitializeAutoMapper();
             InitializeNServiceBus();
         }
 
@@ -47,11 +43,6 @@
                      .RunHandlersUnderIncomingPrincipal(false)
                      .MsmqSubscriptionStorage()
                      .SendOnly();
-        }
-
-        private static void InitializeAutoMapper()
-        {
-            Mapper.Initialize(cfg => cfg.AddProfile<QueryAutoMapperProfile>());
         }
     }
 }

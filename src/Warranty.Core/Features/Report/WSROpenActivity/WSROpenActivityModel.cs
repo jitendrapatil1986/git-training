@@ -2,22 +2,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web.Mvc;
+using Common.Security.Session;
 using Warranty.Core.Enumerations;
-using Warranty.Core.Features.MyTeam;
 
 namespace Warranty.Core.Features.Report.WSROpenActivity
 {
     public class WSROpenActivityModel
     {
-        public Dictionary<Guid, string> Divisions { get; set; }
+        public WSROpenActivityModel()
+        {
+            MyDivisions = new List<SelectListItem>();
+            MyTeamMembers = new List<SelectListItem>();
+            MyProjects = new List<SelectListItem>();
+        }
+
+        public WSROpenActivityModel(IUser currentUser) : this()
+        {
+            ShowReportFilters = (currentUser.IsInRole(UserRoles.WarrantyServiceCoordinator) || currentUser.IsInRole(UserRoles.CustomerCareManager));
+        }
+
+        public List<SelectListItem> MyDivisions { get; set; }
+        public List<SelectListItem> MyTeamMembers { get; set; }
+        public List<SelectListItem> MyProjects { get; set; }
+
         public Guid? DivisionId { get; set; }
-        public Dictionary<Guid, string> Projects { get; set; }
         public Guid? ProjectId { get; set; }
-        public IEnumerable<MyTeamModel> TeamMembers { get; set; }
         public Guid? TeamMemberId { get; set; }
+
         public string Action { get; set; }
 
         public IEnumerable<OpenActivity> OpenActivities { get; set; }
+
+        public bool ShowReportFilters { get; set; }
 
         public bool HasResults
         {

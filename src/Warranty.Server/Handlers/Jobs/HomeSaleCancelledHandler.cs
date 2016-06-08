@@ -57,7 +57,7 @@ namespace Warranty.Server.Handlers.Jobs
         private void RemoveToDos(Guid jobId)
         {
             _taskService.DeleteTask(jobId, TaskType.JobStage3);
-            _taskService.DeleteTask(jobId, TaskType.JobStage10);
+            _taskService.DeleteTask(jobId, TaskType.JobStage10JobClosed);
         }
     }
 }
