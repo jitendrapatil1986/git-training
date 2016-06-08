@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
+using Common.Security.Session;
 using Warranty.Core.Enumerations;
 
 namespace Warranty.Core.Features.Report.WSROpenActivity
@@ -16,6 +17,11 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
             MyProjects = new List<SelectListItem>();
         }
 
+        public WSROpenActivityModel(IUser currentUser) : this()
+        {
+            ShowReportFilters = (currentUser.IsInRole(UserRoles.WarrantyServiceCoordinator) || currentUser.IsInRole(UserRoles.CustomerCareManager));
+        }
+
         public List<SelectListItem> MyDivisions { get; set; }
         public List<SelectListItem> MyTeamMembers { get; set; }
         public List<SelectListItem> MyProjects { get; set; }
@@ -27,6 +33,8 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
         public string Action { get; set; }
 
         public IEnumerable<OpenActivity> OpenActivities { get; set; }
+
+        public bool ShowReportFilters { get; set; }
 
         public bool HasResults
         {

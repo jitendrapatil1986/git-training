@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using AutoMapper;
 using Common.Security.Session;
-using Microsoft.Practices.ServiceLocation;
 using Warranty.Core.Enumerations;
 using Warranty.Core.Features.MyDivisions;
 using Warranty.Core.Features.MyProjects;
 using Warranty.Core.Features.MyTeam;
 using Warranty.Core.Features.Report.WSROpenActivity;
-using Warranty.UI.Core.Initialization;
-
 
 namespace Warranty.UI.Controllers
 {
@@ -28,11 +25,13 @@ namespace Warranty.UI.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
+        private IUser _currentUser;
 
-        public ReportController(IMediator mediator, IMapper mapper)
+        public ReportController(IMediator mediator, IMapper mapper, IUserSession currentSession)
         {
             _mediator = mediator;
             _mapper = mapper;
+            _currentUser = currentSession.GetCurrentUser();
         }
 
         public ActionResult MailMerge()
@@ -165,15 +164,14 @@ namespace Warranty.UI.Controllers
 
         public ActionResult WSROutstandingActivityReport()
         {
-            if (!(User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager)))
-                return WSROutstandingActivityReport(new WSROpenActivityModel());
+            var model = new WSROpenActivityModel(_currentUser);
 
-            var model = new WSROpenActivityModel
-            {
-                MyDivisions = _mapper.Map<List<SelectListItem>>(_mediator.Request(new MyDivisionsQuery()) ?? new Dictionary<Guid, string>()),
-                MyProjects = _mapper.Map<List<SelectListItem>>(_mediator.Request(new MyProjectsQuery()) ?? new Dictionary<Guid, string>()),
-                MyTeamMembers = _mapper.Map<List<SelectListItem>>(_mediator.Request(new MyTeamQuery()) ?? new List<MyTeamModel>())
-            };
+            if (!model.ShowReportFilters)
+                return WSROutstandingActivityReport(model);
+
+            model.MyDivisions = _mapper.Map<List<SelectListItem>>(_mediator.Request(new MyDivisionsQuery()) ?? new Dictionary<Guid, string>());
+            model.MyProjects = _mapper.Map<List<SelectListItem>>(_mediator.Request(new MyProjectsQuery()) ?? new Dictionary<Guid, string>());
+            model.MyTeamMembers =_mapper.Map<List<SelectListItem>>(_mediator.Request(new MyTeamQuery()) ?? new List<MyTeamModel>());
 
             return View(model);
         }
