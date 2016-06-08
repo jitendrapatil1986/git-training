@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using NHibernate.Util;
-
-namespace Warranty.Server.Handlers.Jobs
+﻿namespace Warranty.Server.Handlers.Jobs
 {
+    using System;
     using Core.Entities;
     using Extensions;
     using log4net;
@@ -13,13 +11,11 @@ namespace Warranty.Server.Handlers.Jobs
     {
         private readonly IDatabase _database;
         private readonly ILog _log;
-        private readonly IHomeOwnerService _homeOwnerService;
 
-        public ShowcaseResetToDirtHandler(IDatabase database, ILog log, IHomeOwnerService homeOwnerService)
+        public ShowcaseResetToDirtHandler(IDatabase database, ILog log)
         {
             _database = database;
             _log = log;
-            _homeOwnerService = homeOwnerService;
         }
 
         public void Handle(ShowcaseResetToDirt message)
@@ -35,21 +31,8 @@ namespace Warranty.Server.Handlers.Jobs
 
             if (job.CurrentHomeOwnerId != null)
             {
-                _log.ErrorFormat("Job {0} received a showcase reset to dirt message but has homeowner {1} currently assigned. Proceeding with deletion.", 
-                    message.JobNumber, 
-                    job.CurrentHomeOwnerId);
-            }
-
-            _log.ErrorFormat("Deleting HomeOwner {0} for JobNumber {1} ({2})", job.CurrentHomeOwnerId, message.JobNumber, job.JobId);
-            _homeOwnerService.RemoveHomeOwner(job);
-
-            var otherHomeOwnersAssignedToJob = _database.Fetch<HomeOwner>("WHERE JobId = @0;", job.JobId);
-
-            if (otherHomeOwnersAssignedToJob.Any())
-            {
-                var homeOwnerGuids = string.Join(",", otherHomeOwnersAssignedToJob.Select(x => x.HomeOwnerId.ToString()));
-                _log.ErrorFormat("Deleting additional home owners found ({0}) for JobNumber {1} ({2})", homeOwnerGuids, message.JobNumber, job.JobId);
-                _database.Delete<HomeOwner>("WHERE JobID = @0;", job.JobId);
+                _log.ErrorFormat("Job {0} received a showcase reset to dirt message but has a homeowner.", job.JobNumber);
+                throw new ArgumentException(string.Format("Job {0} has a homeowner and can not be reset to dirt", job.JobNumber));
             }
 
             _log.InfoFormat("Deleting Tasks for JobNumber {0} ({1})", message.JobNumber, job.JobId);

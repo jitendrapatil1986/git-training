@@ -1,9 +1,11 @@
-﻿namespace Warranty.Server.IntegrationTests.Handlers.Jobs
+﻿using Should;
+
+namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 {
+    using System;
     using Core.Entities;
     using NUnit.Framework;
     using TIPS.Events.JobEvents;
-    using Should;
 
     [TestFixture]
     public class ShowcaseResetToDirtHandlerTester : HandlerTester<ShowcaseResetToDirt>
