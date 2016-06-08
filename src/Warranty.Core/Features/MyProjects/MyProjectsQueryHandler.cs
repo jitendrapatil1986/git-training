@@ -25,19 +25,13 @@ namespace Warranty.Core.Features.MyProjects
             var user = _userSession.GetCurrentUser();
 
             var sql = new StringBuilder();
-            sql.Append(@"SELECT DISTINCT
-                                p.ProjectId,
-                                p.ProjectName
-                        FROM Projects p
-	                    INNER JOIN Communities com on p.ProjectId = com.ProjectId
-                        INNER JOIN Divisions d on com.DivisionId = d.DivisionId
-	                    INNER JOIN Cities c ON c.CityId = com.CityId
-                        WHERE c.CityCode IN (@0)");
+            sql.Append(@"SELECT 
+                                ProjectId,
+                                ProjectName
+                        FROM Projects
+                        WHERE ProjectNumber IN (@0)");
 
-            if (query.DivisionId.HasValue)
-                sql.Append(" AND d.DivisionId = @1");
-
-            var result = _database.Fetch<Project>(sql.ToString(), user.Markets, query.DivisionId);
+            var result = _database.Fetch<Project>(sql.ToString(), user.Projects);
             
             var projects = new Dictionary<Guid, string>();
             if (result == null || !result.Any())

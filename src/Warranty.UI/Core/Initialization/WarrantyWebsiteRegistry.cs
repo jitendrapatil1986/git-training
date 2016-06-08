@@ -1,7 +1,9 @@
-﻿using Common.Security.Session;
+﻿using AutoMapper;
+using Common.Security.Session;
 using Common.UI.Security.Session;
 using FluentValidation;
 using FluentValidation.Mvc;
+using Warranty.UI.Core.Automapper;
 
 namespace Warranty.UI.Core.Initialization
 {
@@ -31,6 +33,7 @@ namespace Warranty.UI.Core.Initialization
             For<IWarrantyMailer>().Use<WarrantyMailer>();
             For<IManageToDoFilterCookie>().Use<ToDoFilterCookieManager>();
             For(typeof(IFileSystemManager<>)).Use(typeof(FileSystemManager<>));
+            For<IMapper>().Singleton().Use(cfg => CreateMapper());
 
             var baseAccountingApiUri = ConfigurationManager.AppSettings["Accounting.API.BaseUri"];
             var accountingTimeoutInMilliseconds = ConfigurationManager.AppSettings["Accounting.API.TimeoutInMilliseconds"];
@@ -67,6 +70,12 @@ namespace Warranty.UI.Core.Initialization
             For<SurveyClientConfiguration>()
                 .Singleton()
                 .Use(() => new SurveyClientConfiguration(baseSurveyApiUri, surveyTimeout));
+        }
+
+        private static IMapper CreateMapper()
+        {
+            var config = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>()); // add others if needed
+            return config.CreateMapper();
         }
     }
 }
