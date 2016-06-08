@@ -143,7 +143,7 @@ namespace Warranty.Server.Sagas
 
                 _log.InfoFormat("Removing tasks from previous job {0} on SaleId {1}", Data.PreviousJobNumber, Data.SaleId);
                 _taskService.DeleteTask(previousJob.JobId, TaskType.JobStage3);
-                _taskService.DeleteTask(previousJob.JobId, TaskType.JobStage10Complete);
+                _taskService.DeleteTask(previousJob.JobId, TaskType.JobStage10JobClosed);
 
                 _log.InfoFormat("Creating tasks for previous job {0} on SaleId {1}", Data.PreviousJobNumber, Data.SaleId);
                 _taskService.CreateTasks(previousJob.JobId);
