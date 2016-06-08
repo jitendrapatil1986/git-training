@@ -97,7 +97,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             UpdateToStageAssertTasksExist(10, tasks =>
             {
                 tasks.Count.ShouldEqual(1);
-                tasks[0].TaskType.ShouldEqual(TaskType.JobStage10);
+                tasks[0].TaskType.ShouldEqual(TaskType.JobStage10JobClosed);
             });
         }
 
