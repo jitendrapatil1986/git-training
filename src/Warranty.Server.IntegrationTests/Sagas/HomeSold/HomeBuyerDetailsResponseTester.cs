@@ -43,7 +43,6 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
         [Test]
         public void ShouldUpdateHomeOwnerRecordIfItAlreadyExists()
         {
-
             var homeOwner = GetSaved<HomeOwner>(owner =>
             {
                 owner.HomeOwnerNumber = 112233;
