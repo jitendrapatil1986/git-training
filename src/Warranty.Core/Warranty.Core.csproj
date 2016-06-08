@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Warranty.Core</RootNamespace>
     <AssemblyName>Warranty.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -58,13 +58,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
-    <Reference Include="JobService.Client, Version=1.0.546.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\JobService.Client.1.0.546.0\lib\net45\JobService.Client.dll</HintPath>
+    <Reference Include="JobService.Client, Version=1.0.1216.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JobService.Client.1.0.1216\lib\net451\JobService.Client.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="JobService.Enumerations, Version=1.0.444.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\JobService.Enumerations.1.0.444.0\lib\net45\JobService.Enumerations.dll</HintPath>
+    <Reference Include="JobService.Enumerations, Version=1.0.1216.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JobService.Enumerations.1.0.1216\lib\net451\JobService.Enumerations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
@@ -88,8 +92,9 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NPoco">
-      <HintPath>..\packages\NPoco.2.5.76\lib\net40\NPoco.dll</HintPath>
+    <Reference Include="NPoco, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPoco.2.10.11\lib\net45\NPoco.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NServiceBus, Version=4.7.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <HintPath>..\packages\NServiceBus.Interfaces.4.7.5\lib\net40\NServiceBus.dll</HintPath>
@@ -187,9 +192,17 @@
     <Compile Include="Features\EditServiceCallNote\EditServiceCallNoteCommand.cs" />
     <Compile Include="Features\EditServiceCallNote\EditServiceCallNoteCommandHandler.cs" />
     <Compile Include="Features\EditServiceCallNote\EditServiceCallNoteModel.cs" />
+    <Compile Include="Features\MyDivisions\MyDivisionsQuery.cs" />
+    <Compile Include="Features\MyDivisions\MyDivisionsQueryHandler.cs" />
+    <Compile Include="Features\MyProjects\MyProjectsQuery.cs" />
+    <Compile Include="Features\MyProjects\MyProjectsQueryHandler.cs" />
     <Compile Include="Features\NoActionServiceCallLineItem\NoActionServiceCallLineItemCommand.cs" />
     <Compile Include="Features\NoActionServiceCallLineItem\NoActionServiceCallLineItemCommandHandler.cs" />
     <Compile Include="Features\NoActionServiceCallLineItem\NoActionServiceCallLineItemModel.cs" />
+    <Compile Include="Features\Report\ServiceCall.cs" />
+    <Compile Include="Features\Report\WSROpenActivity\WSROpenActivityModel.cs" />
+    <Compile Include="Features\Report\WSROpenActivity\WSROpenActivityQuery.cs" />
+    <Compile Include="Features\Report\WSROpenActivity\WSROpenActivityQueryHandler.cs" />
     <Compile Include="Features\Report\WSROpenedClosedCalls\WSROpenedClosedCallsModel.cs" />
     <Compile Include="Features\Report\WSROpenedClosedCalls\WSROpenedClosedCallsQuery.cs" />
     <Compile Include="Features\Report\WSROpenedClosedCalls\WSROpenedClosedCallsQueryHandler.cs" />
