@@ -1,10 +1,9 @@
 ﻿@model Warranty.Core.Features.Report.WSROpenActivity.WSROpenActivityModel
-@using Warranty.Core.Enumerations
 @using Warranty.Core.Extensions
 
 <h2>Outstanding Activity Report</h2>
 
-@if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
+@if (Model.ShowReportFilters)
 {
     <div class="panel panel-default no-print">
         <div class="panel-heading">
@@ -15,6 +14,7 @@
                             @using (Html.BeginForm("WSROutstandingActivityReport", "Report", FormMethod.Post, new {@class = "form-inline"}))
                             {
                                 @Html.ValidationSummary()
+                                @Html.HiddenFor(m => m.ShowReportFilters)
                                 <div class="form-group">
                                     @Html.DropDownListFor(m => m.DivisionId, Model.MyDivisions, "Division - All", new {@class = "form-control text-capitalize"})
                                 </div>
