@@ -1,6 +1,9 @@
-﻿namespace Warranty.Server.Handlers.Jobs
+﻿using System.Collections.Generic;
+using System.Linq;
+using NHibernate.Util;
+
+namespace Warranty.Server.Handlers.Jobs
 {
-    using System;
     using Core.Entities;
     using Extensions;
     using log4net;
@@ -11,11 +14,13 @@
     {
         private readonly IDatabase _database;
         private readonly ILog _log;
+        private readonly IHomeOwnerService _homeOwnerService;
 
-        public ShowcaseResetToDirtHandler(IDatabase database, ILog log)
+        public ShowcaseResetToDirtHandler(IDatabase database, ILog log, IHomeOwnerService homeOwnerService)
         {
             _database = database;
             _log = log;
+            _homeOwnerService = homeOwnerService;
         }
 
         public void Handle(ShowcaseResetToDirt message)
@@ -31,8 +36,21 @@
 
             if (job.CurrentHomeOwnerId != null)
             {
-                _log.ErrorFormat("Job {0} received a showcase reset to dirt message but has a homeowner.", job.JobNumber);
-                throw new ArgumentException(string.Format("Job {0} has a homeowner and can not be reset to dirt", job.JobNumber));
+                _log.ErrorFormat("Job {0} received a showcase reset to dirt message but has homeowner {1} currently assigned. Proceeding with deletion.", 
+                    message.JobNumber, 
+                    job.CurrentHomeOwnerId);
+            }
+
+            _log.ErrorFormat("Deleting HomeOwner {0} for JobNumber {1} ({2})", job.CurrentHomeOwnerId, message.JobNumber, job.JobId);
+            _homeOwnerService.RemoveHomeOwner(job);
+
+            var otherHomeOwnersAssignedToJob = _database.Fetch<string>("SELECT HomeownerName FROM dbo.Homeowners WHERE JobId = @0;", job.JobId);
+
+            if (otherHomeOwnersAssignedToJob.Any())
+            {
+                var homeOwners = string.Join(",", otherHomeOwnersAssignedToJob);
+                _log.ErrorFormat("Deleting {0} additional home owner(s) found ({1}) for JobNumber {2} ({3})", otherHomeOwnersAssignedToJob.Count, homeOwners, message.JobNumber, job.JobId);
+                _database.Delete<HomeOwner>("WHERE JobID = @0;", job.JobId);
             }
 
             _log.InfoFormat("Deleting Tasks for JobNumber {0} ({1})", message.JobNumber, job.JobId);
