@@ -57,65 +57,7 @@
                     <h4 class="col-xs-2">Phone</h4>
                     <h4 class="col-md-1 text-right">Days Open</h4>
                 </div>
-
-                @foreach (var serviceCall in Model.ServiceCalls)
-                {
-                    <div class="row small service-call-line">
-                        <div class="col-xs-3 margin-bottom-5">@serviceCall.CommunityName</div>
-                        <div class="col-xs-3">@serviceCall.HomeownerName</div>
-                        <div class="col-xs-3">@serviceCall.Address</div>
-                        <div class="col-xs-2">
-                            @if (!string.IsNullOrEmpty(serviceCall.HomePhone))
-                            {
-                                @serviceCall.HomePhone.ToPhoneNumberWithExtension()
-                                if (!string.IsNullOrEmpty(serviceCall.OtherPhone))
-                                {
-                                    <span> / </span>@serviceCall.OtherPhone.ToPhoneNumberWithExtension()
-                                }
-                            }
-                            else
-                            {
-                                @serviceCall.OtherPhone.ToPhoneNumberWithExtension()
-                            }
-                        </div>
-                        @if (serviceCall.IsSpecialProject)
-                        {
-                            <div class="col-md-1 text-right">Special Project</div>
-                        }
-                        else
-                        {
-                            <div class="col-md-1 text-right">@(Math.Abs((DateTime.Today - serviceCall.CreatedDate.Date).TotalDays))</div>
-                        }
-
-                        @if(serviceCall.ServiceCallLines.Any())
-                        {
-                            <br/>
-                            <ul class="col-xs-12 margin-left-15">
-                                <b>Line Item Problem Code and Description</b>
-                                <ul>
-                                    @foreach (var line in serviceCall.ServiceCallLines)
-                                    {
-                                        <li>@line.ProblemCode - @line.ProblemDescription</li>
-                                    }
-                                </ul>
-                            </ul>
-                        }
-
-                        @if(serviceCall.ServiceCallNotes.Any())
-                        {
-                            <br/>
-                            <ul class="col-xs-12 margin-left-15">
-                                <b>Notes</b>
-                                <ul>
-                                    @foreach (var note in serviceCall.ServiceCallNotes)
-                                    {
-                                        <li>@note.Note</li>
-                                    }
-                                </ul>
-                            </ul>
-                        }
-                    </div>
-                }
+                @Html.Partial("_ServiceCalls", Model.ServiceCalls)
             </div>
         </div>
         

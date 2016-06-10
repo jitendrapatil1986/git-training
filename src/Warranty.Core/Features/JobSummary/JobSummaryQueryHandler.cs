@@ -1,6 +1,4 @@
-﻿
-
-namespace Warranty.Core.Features.JobSummary
+﻿namespace Warranty.Core.Features.JobSummary
 {
     using System;
     using System.Collections.Generic;
@@ -8,6 +6,7 @@ namespace Warranty.Core.Features.JobSummary
     using System.Net.Http;
     using Enumerations;
     using JobServiceApiHelpers;
+    using log4net;
     using NPoco;
     using Common.Security.Session;
     using Services;
@@ -18,6 +17,8 @@ namespace Warranty.Core.Features.JobSummary
 
     public class JobSummaryQueryHandler : IQueryHandler<JobSummaryQuery, JobSummaryModel>
     {
+        private static ILog Log = LogManager.GetLogger(typeof(JobSummaryQueryHandler));
+
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
         private readonly IHomeownerAdditionalContactsService _homeownerAdditionalContactsService;
@@ -33,7 +34,9 @@ namespace Warranty.Core.Features.JobSummary
         {
             var model = GetJobSummary(query.JobId);
             model.JobServiceCalls = GetJobServiceCalls(query.JobId);
-            model.JobSelections = GetJobSelections(query.JobId);
+            model.JobSelections = model.CloseDate.HasValue // js-1370, js-1366: bypass bad JS API performance for in-flight jobs
+                ? GetJobSelections(query.JobId)
+                : new JobSummaryModel.JobSelection[0];
             model.JobNotes = GetJobNotes(query.JobId);
             model.Attachments = GetJobAttachments(query.JobId);
             model.Homeowners = GetJobHomeowners(query.JobId);
@@ -57,18 +60,19 @@ namespace Warranty.Core.Features.JobSummary
 
             var jobNumber = _database.ExecuteScalar<string>(sql, jobId);
 
-            var client = new ArchivedBuildConfigurationEndpointProxy(apiServiceUrl, new HttpApiClient(), new ApiJsonConverter());
+            var client = new JobEndpointProxy(apiServiceUrl, new HttpApiClient(), new ApiJsonConverter());
             try
             {
-                var jobInfo = client.Get(jobNumber);
+                var jobInfo = client.Selections(jobNumber);
                 return jobInfo.Selections.Select(x => new JobSummaryModel.JobSelection
                 {
                     OptionNumber = x.OptionNumber,
                     OptionDescription = x.Description
                 }).OrderBy(x => x.OptionNumber);
             }
-            catch (HttpRequestException)
+            catch (Exception ex)
             {
+                Log.Error("Exception when loading Options for Job: " + jobId, ex);
                 return new List<JobSummaryModel.JobSelection>();
             }
         }

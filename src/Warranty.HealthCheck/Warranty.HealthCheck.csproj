@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Core, Version=1.1.124.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Core.1.1.124.0\lib\net45\Common.Core.dll</HintPath>
+    <Reference Include="Common.Core, Version=1.1.126.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Core.1.1.126\lib\net45\Common.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
@@ -42,8 +42,8 @@
       <HintPath>..\packages\Common.Logging.Core.3.3.0\lib\net40\Common.Logging.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Messages, Version=1.1.124.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Messages.1.1.124.0\lib\net40\Common.Messages.dll</HintPath>
+    <Reference Include="Common.Messages, Version=1.1.126.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Messages.1.1.126\lib\net40\Common.Messages.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
@@ -118,19 +118,28 @@
     <Compile Include="Config\HealthCheckRegistry.cs" />
     <Compile Include="Config\StructuremapConfig.cs" />
     <Compile Include="Config\StructuremapJobFactory.cs" />
-    <Compile Include="Data\IHealthCheckDatabase.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Data\HealthCheckDatabase.cs" />
     <Compile Include="Data\TipsDatabase.cs" />
     <Compile Include="Data\WarrantyDatabase.cs" />
     <Compile Include="EndpointConfig.cs" />
+    <Compile Include="Handlers\ApprovedShowcasesHealthCheckSaga.cs" />
     <Compile Include="Handlers\NotificationHandler.cs" />
     <Compile Include="Handlers\SoldJobsHealthCheckSaga.cs" />
+    <Compile Include="HealthChecks\ApprovedShowcasesHealthCheck.cs" />
     <Compile Include="HealthChecks\IHealthCheck.cs" />
     <Compile Include="HealthChecks\SoldJobsHealthCheck.cs" />
     <Compile Include="Mediatr\ClearTempJobNumberTables.cs" />
+    <Compile Include="Mediatr\ClearTempShowcasesTable.cs" />
+    <Compile Include="Mediatr\GetShowcases.cs" />
     <Compile Include="Mediatr\GetSoldJobs.cs" />
     <Compile Include="Mediatr\LoadJobsFromWarranty.cs" />
     <Compile Include="Mediatr\LoadJobsFromTips.cs" />
+    <Compile Include="Mediatr\LoadApprovedShowcasesFromTips.cs" />
+    <Compile Include="Mediatr\LoadShowcasesFromWarranty.cs" />
+    <Compile Include="Models\HEALTH_Showcase.cs" />
     <Compile Include="Models\HEALTH_SoldJob.cs" />
+    <Compile Include="Models\Systems.cs" />
     <Compile Include="Startup\SchedulerStartup.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,5 @@
-using System;
 using AutoMapper;
 using System.Linq;
-using System.Linq.Expressions;
 using TIPS.Commands.Responses;
 using Warranty.Core.Entities;
 using Warranty.Core.Services.Models;

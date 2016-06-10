@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Warranty.UI</RootNamespace>
     <AssemblyName>Warranty.UI</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>443</IISExpressSSLPort>
@@ -52,22 +52,20 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\WebGrease.1.3.0\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper">
-      <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=4.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="AutoMapper.Net4">
-      <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Messages, Version=1.1.124.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Messages.1.1.124.0\lib\net40\Common.Messages.dll</HintPath>
+    <Reference Include="Common.Messages, Version=1.1.126.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Messages.1.1.126\lib\net40\Common.Messages.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.UI.Security.1.1.124.0\lib\net45\Common.Security.dll</HintPath>
+      <HintPath>..\packages\Common.UI.Security.1.1.126\lib\net45\Common.Security.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.UI.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.UI.Security.1.1.124.0\lib\net45\Common.UI.Security.dll</HintPath>
+      <HintPath>..\packages\Common.UI.Security.1.1.126\lib\net45\Common.UI.Security.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CuteWebUI.AjaxUploader">
@@ -90,6 +88,10 @@
     </Reference>
     <Reference Include="HtmlTags">
       <HintPath>..\packages\HtmlTags.2.1.0.183\lib\4.0\HtmlTags.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.IdentityModel">
@@ -141,11 +143,11 @@
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Http, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.0\lib\net45\System.Web.Http.dll</HintPath>
@@ -231,6 +233,18 @@
     <Compile Include="Api\ManageServiceCallController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Constants\SaltlineReportConstants.cs" />
+    <None Include="Log4Net.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Content Include="Log4Net.Debug.config">
+      <DependentUpon>Log4Net.config</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Log4Net.Release.config">
+      <DependentUpon>Log4Net.config</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Compile Include="Controllers\CommunityController.cs" />
     <Compile Include="Api\UserSessionController.cs" />
     <Compile Include="Controllers\UserSecurityController.cs" />
@@ -244,6 +258,7 @@
     <Compile Include="Controllers\ServiceCallController.cs" />
     <Compile Include="Controllers\ServiceRepController.cs" />
     <Compile Include="Controllers\StatsController.cs" />
+    <Compile Include="Core\Automapper\MappingProfile.cs" />
     <Compile Include="Core\Enumerations\NavHeaderItem.cs" />
     <Compile Include="Core\Enumerations\ToastType.cs" />
     <Compile Include="Core\Filters\ModelStateToTempData.cs" />
@@ -336,6 +351,7 @@
     <Content Include="Scripts\app\Job\ChangeHomeowner.js" />
     <Content Include="Scripts\app\Job\JobSummary.js" />
     <Content Include="Scripts\app\Report\WarrantyBonusSummaryWSRReport.js" />
+    <Content Include="Scripts\app\Report\WSROutstandingActivityReport.js" />
     <Content Include="Scripts\app\responsiveTabs.js" />
     <Content Include="Scripts\app\feedbackForm.js" />
     <Content Include="Scripts\app\search.js" />
@@ -494,6 +510,8 @@
     <Content Include="Views\Report\WSROpenedClosedCallReport.cshtml" />
     <Content Include="Views\Shared\_ImpersonateMenu.cshtml" />
     <Content Include="Views\Shared\_ImpersonateUserModal.cshtml" />
+    <Content Include="Views\Report\WSROutstandingActivityReport.cshtml" />
+    <Content Include="Views\Report\_ServiceCalls.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

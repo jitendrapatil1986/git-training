@@ -2,7 +2,7 @@ Environment "dev" -servers @(
     Server "wkcorpappdev1" @("Web";)
     Server "wksql3" @("Database";)
     ) -installPath "C:\Installs\WarrantyUITest"
-    
+
 Environment "training" -servers @(
     Server "wkcorpapptrain1" @("Web";)
     Server "wksql3" @("Database";)
@@ -49,6 +49,9 @@ Role "Web" -Incremental {
     poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
     poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@subject" $errorReportingSubject
     poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@smtpServer" $smtpServer
+
+    # log4net config transforms
+    & .\TransformWebConfigs.ps1 -SourceFile $web_directory\Log4Net.config -TransformFile $web_directory\Log4Net.$config_transform.config $web_directory\Log4Net.config "modules\msbuild\"
     
     Rename-Header-File $web_directory $header_image_file_name
 
