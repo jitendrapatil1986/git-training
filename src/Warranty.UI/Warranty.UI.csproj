@@ -232,6 +232,7 @@
     <Compile Include="Api\QuickSearchController.cs" />
     <Compile Include="Api\ManageServiceCallController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Constants\SaltlineReportConstants.cs" />
     <None Include="Log4Net.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

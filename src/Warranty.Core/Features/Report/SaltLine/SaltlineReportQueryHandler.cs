@@ -1,4 +1,7 @@
-﻿namespace Warranty.Core.Features.Report.Saltline
+﻿using System;
+using System.Security.Cryptography.X509Certificates;
+
+namespace Warranty.Core.Features.Report.Saltline
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -77,7 +80,8 @@
                 RightTheFirstTime = _warrantyCalculator.GetRightTheFirstTimeWarrantyResults(surveyResults),
                 AmountSpent = _warrantyCalculator.GetEmployeeAmountSpent(startDate, endDate, employeeNumber),
                 AverageDays = _warrantyCalculator.GetEmployeeAverageDaysClosed(startDate, endDate, employeeNumber),
-                PercentClosedWithin7Days = _warrantyCalculator.GetEmployeePercentClosedWithin7Days(startDate, endDate, employeeNumber)
+                PercentClosedWithin7Days = _warrantyCalculator.GetEmployeePercentClosedWithin7Days(startDate, endDate, employeeNumber),
+                OutstandingServiceCallsOpen = _warrantyCalculator.GetEmployeeNumberOfServiceCallsOpen(endDate, employeeNumber),
             };
             var numberOfHomes = _warrantyCalculator.GetEmployeeWarrantableHomes(startDate, endDate, employeeNumber);
 
@@ -100,6 +104,7 @@
                 AmountSpent = _warrantyCalculator.GetDivisionAmountSpent(startDate, endDate, divisionName),
                 AverageDays = _warrantyCalculator.GetDivisionAverageDaysClosed(startDate, endDate, divisionName),
                 PercentClosedWithin7Days = _warrantyCalculator.GetDivisionPercentClosedWithin7Days(startDate, endDate, divisionName),
+                OutstandingServiceCallsOpen = _warrantyCalculator.GetDivisionNumberOfServiceCallsOpen(endDate, divisionName),
             };
             var numberOfHomes = _warrantyCalculator.GetDivisionWarrantableHomes(startDate, endDate, divisionName);
 
@@ -122,6 +127,7 @@
                 AmountSpent = _warrantyCalculator.GetProjectAmountSpent(startDate, endDate, projectName),
                 AverageDays = _warrantyCalculator.GetProjectAverageDaysClosed(startDate, endDate, projectName),
                 PercentClosedWithin7Days = _warrantyCalculator.GetProjectPercentClosedWithin7Days(startDate, endDate, projectName),
+                OutstandingServiceCallsOpen = _warrantyCalculator.GetProjectNumberOfServiceCallsOpen(endDate, projectName),
             };
             var numberOfHomes = _warrantyCalculator.GetProjectWarrantableHomes(startDate, endDate, projectName);
 
@@ -144,9 +150,10 @@
                         RightTheFirstTime = GetValueForMonth(surveyReportData.RightTheFirstTime, range),
                         Month = range.MonthNumber,
                         Year = range.YearNumber,
-                        NumerOfCalls = surveyReportData.AverageDays.Sum(x => x.TotalElements),
+                        NumerOfCalls = surveyReportData.OutstandingServiceCallsOpen.Sum(x => x.TotalElements),
                         NumberOfSurveys = surveyReportData.OutstandingService.Sum(x => x.TotalElements),
                         NumberOfHomes = GetTotalElementsForMonth(numberOfHomes, range).GetValueOrDefault(),
+                        AverageDaysServiceCallsOpen = GetValueForMonth(surveyReportData.OutstandingServiceCallsOpen, range) ?? 0,
                     });
             }
 
@@ -165,17 +172,31 @@
                 surveyReportData.RightTheFirstTime.Sum(w => w.TotalElements)) * 100
                 : 0;
 
+            var totalDaysServiceCallsOpen = surveyReportData.OutstandingServiceCallsOpen.Sum(x => x.Amount) ?? 0;
+            var totalServiceCallsOpen = surveyReportData.OutstandingServiceCallsOpen.Sum(x => x.TotalElements);
+
+            var totalAmountSpentForAllHomes = list.Sum(x => x.AmountSpentPerHome);
+            var totalHomesUnderWarranty = list.Sum(x => x.NumberOfHomes);
+
             return new SaltlineReportModel.SaltlineSummary
             {
-                AmountSpentPerHome = list.Average(x => x.AmountSpentPerHome),
+                AmountSpentPerHome = totalHomesUnderWarranty == 0
+                    ? 0
+                    : totalAmountSpentForAllHomes / totalHomesUnderWarranty,
                 AverageDaysClosing = list.Average(x => x.AverageDaysClosing),
                 DefinitelyWouldRecommend = def,
                 OutstandingWarrantyService = outs,
                 RightTheFirstTime = right,
                 PercentComplete7Days = list.Average(x => x.PercentComplete7Days),
-                NumerOfCalls = surveyReportData.AverageDays.Sum(x => x.TotalElements),
+                NumerOfCalls = surveyReportData.OutstandingServiceCallsOpen.Sum(x => x.TotalElements),
                 NumberOfSurveys = surveyReportData.OutstandingService.Sum(x => x.TotalElements),
-                NumberOfHomes = numberOfHomes.Sum(x => x.TotalElements),
+                NumberOfHomes = numberOfHomes.OrderByDescending(x => x.YearNumber)
+                    .ThenByDescending(x => x.MonthNumber)
+                    .First()
+                    .TotalElements,
+                AverageDaysServiceCallsOpen =  totalServiceCallsOpen == 0 
+                    ? 0
+                    : totalDaysServiceCallsOpen / totalServiceCallsOpen,
             };
         }
 
