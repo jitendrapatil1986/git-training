@@ -19,6 +19,7 @@ namespace Warranty.HealthCheck.Handlers
         public virtual string OriginalMessageId { get; set; }
         [Unique]
         public virtual DateTime? RunDate { get; set; }
+        public virtual DateTime MaxCloseDate { get; set; }
     }
 
     public class JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner : IBusCommand
@@ -126,6 +127,7 @@ namespace Warranty.HealthCheck.Handlers
 
             _log.InfoFormat("Started new instance of the JobsMissingHomeOwnerInfoHealthCheckSaga for {0:d}", Data.RunDate);
             Data.RunDate = message.RunDate;
+            Data.MaxCloseDate = Data.RunDate.Value.AddDays(-365);
             Bus.SendLocal(new JobsMissingHomeOwnerInfoHealthCheckSagaCleanupTempTables(Data.RunDate.Value));
         }
 
