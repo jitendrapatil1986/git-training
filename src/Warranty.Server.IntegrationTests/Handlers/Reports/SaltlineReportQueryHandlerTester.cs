@@ -16,6 +16,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Reports
     public class SaltlineReportQueryHandlerTester : HandlerTester<SaltlineReportQuery>
     {
         private SaltlineReportQueryHandler _saltlineReportQueryHandler;
+        private Employee _employee;
 
         [TestFixtureSetUp]
         public void Setup()
@@ -23,13 +24,13 @@ namespace Warranty.Server.IntegrationTests.Handlers.Reports
             var city = GetSaved<City>(c => { c.CityCode = "HOU"; });
             var project = GetSaved<Project>(p => { p.ProjectName = "Project1"; });
             var division = GetSaved<Division>(d => { d.DivisionName = "Division1"; }); 
-            var employee = GetSaved<Employee>();
+            _employee = GetSaved<Employee>();
 
-            var communities = AddEmployeeToCommunities(city, project, division, employee);
+            var communities = AddEmployeeToCommunities(city, project, division, _employee);
             var jobs = AddJobs(communities);
 
             AddHomeOwners(jobs);
-            AddServiceCalls(employee, jobs);
+            AddServiceCalls(_employee, jobs);
             AddPaymentsToTmpJdeGlWarBuckets(communities);
 
             var surveyService = new Mock<ISurveyService>();
@@ -61,7 +62,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Reports
 
             var employeeSaltlineSummary = result.EmployeeSaltlineSummary.Single();
 
-            decimal.Round(employeeSaltlineSummary.AverageDaysServiceCallsOpen, 1).ShouldEqual(79.3m);
+            decimal.Round(employeeSaltlineSummary.AverageDaysServiceCallsOpen, 1).ShouldEqual(124.3m);
             employeeSaltlineSummary.NumberOfHomes.ShouldEqual(4);
             employeeSaltlineSummary.NumerOfCalls.ShouldEqual(24);
         }
@@ -80,7 +81,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Reports
 
             var projectSaltlineSummary = result.ProjectSaltlineSummary.Single();
             
-            decimal.Round(projectSaltlineSummary.AverageDaysServiceCallsOpen, 1).ShouldEqual(79.3m);
+            decimal.Round(projectSaltlineSummary.AverageDaysServiceCallsOpen, 1).ShouldEqual(124.3m);
             projectSaltlineSummary.NumberOfHomes.ShouldEqual(4);
             projectSaltlineSummary.NumerOfCalls.ShouldEqual(24);
         }
@@ -99,9 +100,39 @@ namespace Warranty.Server.IntegrationTests.Handlers.Reports
 
             var divisionSaltline = result.DivisionSaltlineSummary.Single();
 
-            decimal.Round(divisionSaltline.AverageDaysServiceCallsOpen, 1).ShouldEqual(79.3m);
+            decimal.Round(divisionSaltline.AverageDaysServiceCallsOpen, 1).ShouldEqual(124.3m);
             divisionSaltline.NumberOfHomes.ShouldEqual(4);
             divisionSaltline.NumerOfCalls.ShouldEqual(24);
+        }
+
+        [Test]
+        public void ShouldReturnCorrectValuesForEmployeeAverageDaysSectionWhenServiceCallsOpenIncludesSpecialProjects()
+        {
+            UpdateSpecialProjectOnServiceCall();
+
+            var result = _saltlineReportQueryHandler.Handle(new SaltlineReportQuery
+            {
+                queryModel = new SaltlineReportModel
+                {
+                    StartDate = DateTime.Parse("04/01/2016"),
+                    EndDate = DateTime.Parse("04/30/2016")
+                }
+            });
+
+            var employeeSaltlineSummary = result.EmployeeSaltlineSummary.Single();
+
+            decimal.Round(employeeSaltlineSummary.AverageDaysServiceCallsOpen, 1).ShouldEqual(126.5m);
+            employeeSaltlineSummary.NumberOfHomes.ShouldEqual(4);
+            employeeSaltlineSummary.NumerOfCalls.ShouldEqual(24);
+        }
+
+        private void UpdateSpecialProjectOnServiceCall()
+        {
+            TestDatabase.Execute(@"
+                    UPDATE TOP (1) dbo.ServiceCalls 
+                    SET SpecialProject = 1
+                    WHERE WarrantyRepresentativeEmployeeId = @0
+                        AND CreatedDate BETWEEN '04/01/2016' AND '04/30/2016';", _employee.EmployeeId);
         }
 
         [Test]
