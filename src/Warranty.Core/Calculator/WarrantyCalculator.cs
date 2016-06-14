@@ -180,7 +180,7 @@ namespace Warranty.Core.Calculator
                                         AND SC.CreatedDate <= @0
 	                                    AND E.EmployeeNumber = @1
 	                                    AND SC.ServiceCallType = 'Warranty Service Request'
-	                                    AND SC.CompletionDate IS NULL -- Open
+	                                    AND (SC.ServiceCallStatusId = 2 AND SC.CompletionDate IS NULL) -- Open
                                     GROUP BY MONTH(SC.CreatedDate) 
 	                                    ,YEAR(SC.CreatedDate);";
 
@@ -211,7 +211,7 @@ namespace Warranty.Core.Calculator
 	                                    AND SC.CreatedDate <= @0 
 	                                    AND P.ProjectName = @1 
 	                                    AND SC.ServiceCallType = 'Warranty Service Request'
-	                                    AND SC.CompletionDate IS NULL -- Open
+	                                    AND (SC.ServiceCallStatusId = 2 AND SC.CompletionDate IS NULL) -- Open
                                     GROUP BY MONTH(SC.CreatedDate) 
 	                                    ,YEAR(SC.CreatedDate);";
 
@@ -242,7 +242,7 @@ namespace Warranty.Core.Calculator
 	                                    AND SC.CreatedDate <= @0 
 	                                    AND D.DivisionName = @1 
 	                                    AND SC.ServiceCallType = 'Warranty Service Request'
-	                                    AND SC.CompletionDate IS NULL -- Open
+	                                    AND (SC.ServiceCallStatusId = 2 AND SC.CompletionDate IS NULL) -- Open
                                     GROUP BY MONTH(SC.CreatedDate) 
 	                                    ,YEAR(SC.CreatedDate);";
 
