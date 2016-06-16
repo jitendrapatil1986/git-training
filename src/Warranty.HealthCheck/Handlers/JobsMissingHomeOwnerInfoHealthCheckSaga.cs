@@ -131,7 +131,7 @@ namespace Warranty.HealthCheck.Handlers
 
         public void Handle(JobsMissingHomeOwnerInfoHealthCheckSagaCleanupTempTables message)
         {
-            _log.Info("Clearing any existing data in dbo.HEALTH_MissingJobs from previous checks");
+            _log.Info("Clearing any existing data in dbo.HEALTH_JobsMissingHomeOwnerInfo from previous checks");
             _mediator.Send(new ClearHomeOwnerMissingInfoTablesRequest());
 
             Bus.SendLocal(new JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner(Data.RunDate.Value));

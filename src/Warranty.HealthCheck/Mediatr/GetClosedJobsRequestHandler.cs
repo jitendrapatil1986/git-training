@@ -31,7 +31,7 @@ namespace Warranty.HealthCheck.Mediatr
         public IEnumerable<string> Handle(GetClosedJobsRequest message)
         {
             return _healthCheckDatabase
-                .Fetch<string>("SELECT JobNumber FROM dbo.HEALTH_MissingJobs WHERE System = @0;", message.System);
+                .Fetch<string>("SELECT JobNumber FROM dbo.HEALTH_JobsMissingHomeOwnerInfo WHERE System = @0;", message.System);
         }
     }
 }
