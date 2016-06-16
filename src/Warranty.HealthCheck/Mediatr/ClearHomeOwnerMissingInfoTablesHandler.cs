@@ -18,7 +18,7 @@ namespace Warranty.HealthCheck.Mediatr
 
         protected override void HandleCore(ClearHomeOwnerMissingInfoTablesRequest message)
         {
-            _healthCheckDatabase.Execute("DELETE FROM dbo.HEALTH_MissingJobs;");
+            _healthCheckDatabase.Execute("DELETE FROM dbo.HEALTH_JobsMissingHomeOwnerInfo;");
         }
     }
 }
