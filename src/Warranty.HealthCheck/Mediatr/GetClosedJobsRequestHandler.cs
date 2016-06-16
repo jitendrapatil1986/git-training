@@ -19,7 +19,7 @@ namespace Warranty.HealthCheck.Mediatr
         }
     }
 
-    public class GetClosedJobsRequestHandler : IRequestHandler<GetSoldJobsRequest, IEnumerable<string>>
+    public class GetClosedJobsRequestHandler : IRequestHandler<GetClosedJobsRequest, IEnumerable<string>>
     {
         private readonly IHealthCheckDatabase _healthCheckDatabase;
 
@@ -28,7 +28,7 @@ namespace Warranty.HealthCheck.Mediatr
             _healthCheckDatabase = healthCheckDatabase;
         }
 
-        public IEnumerable<string> Handle(GetSoldJobsRequest message)
+        public IEnumerable<string> Handle(GetClosedJobsRequest message)
         {
             return _healthCheckDatabase
                 .Fetch<string>("SELECT JobNumber FROM dbo.HEALTH_MissingJobs WHERE System = @0;", message.System);

@@ -32,11 +32,11 @@ namespace Warranty.HealthCheck.Mediatr
 
         protected override void HandleCore(LoadClosedJobsFromWarrantyWithoutHomeOwnerRequest message)
         {
-            var closedJobsWithoutHomeOwnerInWarranty = _warrantyDatabase.Fetch<HEALTH_ClosedJobs>(@"SELECT 
+            var closedJobsWithoutHomeOwnerInWarranty = _warrantyDatabase.Fetch<HEALTH_MissingJobs>(@"SELECT 
 		                                                                                            J.JobNumber
                                                                                                     ,@1 AS System
-	                                                                                            FROM Warranty.dbo.Jobs J
-	                                                                                            LEFT JOIN Warranty.dbo.Homeowners H
+	                                                                                            FROM dbo.Jobs J
+	                                                                                            LEFT JOIN dbo.Homeowners H
 		                                                                                            ON H.JobId = J.JobId
 	                                                                                            WHERE J.CurrentHomeOwnerId IS NULL
 		                                                                                            AND J.CloseDate IS NOT NULL

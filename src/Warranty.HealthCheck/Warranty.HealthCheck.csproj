@@ -136,6 +136,7 @@
     <Compile Include="Mediatr\ClearTempShowcasesTable.cs" />
     <Compile Include="Mediatr\GetShowcases.cs" />
     <Compile Include="Mediatr\GetClosedJobsRequestHandler.cs" />
+    <Compile Include="Mediatr\GetJobsWithHomeOwnerButNullCurrentHomeOwnerIdHandler.cs" />
     <Compile Include="Mediatr\GetSoldJobs.cs" />
     <Compile Include="Mediatr\LoadClosedJobsFromTipsWithHomeOwnerRequestHandler.cs" />
     <Compile Include="Mediatr\LoadClosedJobsFromWarrantyWithoutHomeOwnerRequestHandler.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Mediatr\LoadShowcasesFromWarranty.cs" />
     <Compile Include="Models\HEALTH_Showcase.cs" />
     <Compile Include="Models\HEALTH_ClosedJobs.cs" />
+    <Compile Include="Models\HEALTH_MissingJobs.cs" />
     <Compile Include="Models\HEALTH_SoldJob.cs" />
     <Compile Include="Models\Systems.cs" />
     <Compile Include="Startup\SchedulerStartup.cs" />
@@ -154,7 +156,9 @@
       <Link>Log4Net.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

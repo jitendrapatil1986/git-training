@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Common.Messages;
@@ -18,34 +19,33 @@ namespace Warranty.HealthCheck.Handlers
         public virtual string OriginalMessageId { get; set; }
         [Unique]
         public virtual DateTime? RunDate { get; set; }
-        public virtual DateTime MaxCloseDate { get; set; }
     }
 
     public class JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner : IBusCommand
     {
-        public DateTime MaxCloseDate { get; set; }
+        public DateTime RunDate { get; set; }
 
         public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner()
         {
         }
 
-        public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner(DateTime maxCloseDate)
+        public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner(DateTime runDate)
         {
-            MaxCloseDate = maxCloseDate;
+            RunDate = runDate;
         }
     }
 
     public class JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner : IBusCommand
     {
-        public DateTime MaxCloseDate { get; set; }
+        public DateTime RunDate { get; set; }
 
         public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner()
         {
         }
 
-        public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner(DateTime maxCloseDate)
+        public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner(DateTime runDate)
         {
-            MaxCloseDate = maxCloseDate;
+            RunDate = runDate;
         }
     }
 
@@ -61,8 +61,18 @@ namespace Warranty.HealthCheck.Handlers
         }
     }
 
-    public class CompareJobsFromTipsAndWarranty : IBusCommand
+    public class ExecuteHealthCheck : IBusCommand
     {
+        public DateTime RunDate { get; set; }
+
+        public ExecuteHealthCheck()
+        { 
+        }
+
+        public ExecuteHealthCheck(DateTime runDate)
+        {
+            RunDate = runDate;
+        }
     }
 
     public class InitiateJobsMissingHomeOwnerInfoHealthCheckSaga : IBusCommand
@@ -82,7 +92,7 @@ namespace Warranty.HealthCheck.Handlers
         IHandleMessages<JobsMissingHomeOwnerInfoHealthCheckSagaCleanupTempTables>,
         IHandleMessages<JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner>,
         IHandleMessages<JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner>,
-        IHandleMessages<CompareJobsFromTipsAndWarranty>
+        IHandleMessages<ExecuteHealthCheck>
     {
         private readonly ILog _log;
         private readonly IMediator _mediator;
@@ -97,6 +107,15 @@ namespace Warranty.HealthCheck.Handlers
             _mediator = mediator;
         }
 
+        public override void ConfigureHowToFindSaga()
+        {
+            ConfigureMapping<InitiateJobsMissingHomeOwnerInfoHealthCheckSaga>(m => m.RunDate).ToSaga(s => s.RunDate);
+            ConfigureMapping<JobsMissingHomeOwnerInfoHealthCheckSagaCleanupTempTables>(m => m.RunDate).ToSaga(s => s.RunDate);
+            ConfigureMapping<JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner>(m => m.RunDate).ToSaga(s => s.RunDate);
+            ConfigureMapping<JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner>(m => m.RunDate).ToSaga(s => s.RunDate);
+            ConfigureMapping<ExecuteHealthCheck>(m => m.RunDate).ToSaga(s => s.RunDate);
+        }
+
         public void Handle(InitiateJobsMissingHomeOwnerInfoHealthCheckSaga message)
         {
             if (Data.RunDate.HasValue)
@@ -107,7 +126,6 @@ namespace Warranty.HealthCheck.Handlers
 
             _log.InfoFormat("Started new instance of the JobsMissingHomeOwnerInfoHealthCheckSaga for {0:d}", Data.RunDate);
             Data.RunDate = message.RunDate;
-            Data.MaxCloseDate = Data.RunDate.Value.AddDays(-365);
             Bus.SendLocal(new JobsMissingHomeOwnerInfoHealthCheckSagaCleanupTempTables(Data.RunDate.Value));
         }
 
@@ -116,13 +134,13 @@ namespace Warranty.HealthCheck.Handlers
             _log.Info("Clearing any existing data in dbo.HEALTH_MissingJobs from previous checks");
             _mediator.Send(new ClearHomeOwnerMissingInfoTablesRequest());
 
-            Bus.SendLocal(new JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner());
+            Bus.SendLocal(new JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner(Data.RunDate.Value));
         }
 
         public void Handle(JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner message)
         {
             _log.InfoFormat("Loading all closed jobs from TIPS, with a homeowner, newer than {0:d}", Data.RunDate);
-            _mediator.Send(new LoadClosedJobsFromTipsWithHomeOwnerRequest(Data.MaxCloseDate));
+            _mediator.Send(new LoadClosedJobsFromTipsWithHomeOwnerRequest(Data.RunDate.Value));
 
             Bus.SendLocal(new JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner(Data.RunDate.Value));
         }
@@ -130,12 +148,20 @@ namespace Warranty.HealthCheck.Handlers
         public void Handle(JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner message)
         {
             _log.InfoFormat("Loading all closed jobs from Warranty, without a homeowner, newer than {0:d}", Data.RunDate);
-            _mediator.Send(new LoadClosedJobsFromWarrantyWithoutHomeOwnerRequest(Data.MaxCloseDate));
+            _mediator.Send(new LoadClosedJobsFromWarrantyWithoutHomeOwnerRequest(Data.RunDate.Value));
 
-            Bus.SendLocal(new CompareJobsFromTipsAndWarranty());
+            Bus.SendLocal(new ExecuteHealthCheck(Data.RunDate.Value));
         }
 
-        public void Handle(CompareJobsFromTipsAndWarranty message)
+        public void Handle(ExecuteHealthCheck message)
+        {
+            ExecuteJobsWithHomeOwnerInTipsButNoneInWarrantyHealthCheck();
+            ExecuteJobsWithHomeOwnerButNullCurrentHomeOwnerIdHealthCheck(Data.RunDate.Value);
+
+            MarkAsComplete();
+        }
+
+        private void ExecuteJobsWithHomeOwnerInTipsButNoneInWarrantyHealthCheck()
         {
             var tipsJobsWithHomeOwner = _mediator.Send(new GetClosedJobsRequest(Systems.TIPS));
             var warrantyJobsWithNoHomeOwner = _mediator.Send(new GetClosedJobsRequest(Systems.Warranty));
@@ -147,26 +173,57 @@ namespace Warranty.HealthCheck.Handlers
             if (!jobsWithHomeOwnerInTipsButNotWarranty.Any())
             {
                 _log.Info("Could not find any jobs where a home owner existed in TIPS but not Warranty.");
-                MarkAsComplete();
                 return;
             }
 
-            var notification = new StringBuilder();
-            notification.AppendLine("Found the following closed jobs where there's a home owner in TIPS but is missing in Warranty:<br>");
-            notification.AppendLine("<hr>");
+            const string notificationMessage = @"Found the following closed jobs where there's a home owner in TIPS but not in Warranty";
+            var subject = string.Format(@"{0} jobs with a home owner in TIPS but not Warranty", jobsWithHomeOwnerInTipsButNotWarranty.Count);
 
-            foreach (var job in jobsWithHomeOwnerInTipsButNotWarranty)
+            var notification = BuildNotification(notificationMessage, subject, jobsWithHomeOwnerInTipsButNotWarranty);
+
+            SendNotification(notification);
+        }
+
+        private void ExecuteJobsWithHomeOwnerButNullCurrentHomeOwnerIdHealthCheck(DateTime runDate)
+        {
+            var jobsWithHomeOwnerButNullCurrentHomeOwnerId = _mediator.Send(new GetJobsWithHomeOwnerButNullCurrentHomeOwnerIdRequest(runDate));
+
+            if (!jobsWithHomeOwnerButNullCurrentHomeOwnerId.Any())
             {
-                notification.AppendFormat("{0}<br>\n", job);
+                _log.Info("Could not find any jobs where a home owner exits but the CurrentHomeOwnerID is null in Warranty.");
+                return;
             }
 
-            Bus.SendLocal(new Notification
-            {
-                Subject = string.Format("HEALTH CHECK FAILURE - {0} jobs with a home owner in TIPS but not Warranty", jobsWithHomeOwnerInTipsButNotWarranty.Count),
-                Body = notification.ToString()
-            });
+            const string notificationMessage = @"Found the following jobs with a home owner but a null CurrentHomeOwnerID in Warranty";
+            var subject = string.Format(@"{0} jobs with a home owner in TIPS but not Warranty", jobsWithHomeOwnerButNullCurrentHomeOwnerId.Count());
 
-            MarkAsComplete();
+            var notification = BuildNotification(notificationMessage, subject, jobsWithHomeOwnerButNullCurrentHomeOwnerId);
+
+            SendNotification(notification);
         }
-    }    
+
+        private Notification BuildNotification(string notificationMessage, string subject, IEnumerable<string> jobNumbers)
+        {
+            var notification = new StringBuilder();
+            notification.AppendLine(string.Format("{0}:<br>", notificationMessage));
+            notification.AppendLine("<hr>");
+
+            foreach (var jobNumber in jobNumbers)
+            {
+                notification.AppendFormat("{0}<br>\n", jobNumber);
+            }
+
+            return new Notification
+            {
+                Subject = "HEALTH CHECK FAILURE - " + subject,
+                Body = notification.ToString(),
+            };
+        }
+
+        private void SendNotification(Notification notification)
+        {
+            Bus.SendLocal(notification);
+        }
+    }
+       
 }

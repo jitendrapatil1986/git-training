@@ -32,7 +32,7 @@ namespace Warranty.HealthCheck.Mediatr
 
         protected override void HandleCore(LoadClosedJobsFromTipsWithHomeOwnerRequest message)
         {
-            var jobsWithoutAHomeOwnerInTips = _tipsDatabase.Fetch<HEALTH_ClosedJobs>(@"SELECT 
+            var jobsWithoutAHomeOwnerInTips = _tipsDatabase.Fetch<HEALTH_MissingJobs>(@"SELECT 
 		                                                                                J.JobNumber
 		                                                                                ,@1 AS System
 	                                                                                FROM dbo.JOB_Jobs J

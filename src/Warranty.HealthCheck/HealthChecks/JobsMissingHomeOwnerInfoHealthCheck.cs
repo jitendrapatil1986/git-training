@@ -1,6 +1,8 @@
-﻿using log4net;
+﻿using System;
+using log4net;
 using NServiceBus;
 using Quartz;
+using Warranty.HealthCheck.Handlers;
 
 namespace Warranty.HealthCheck.HealthChecks
 {
@@ -17,17 +19,17 @@ namespace Warranty.HealthCheck.HealthChecks
 
         public void Execute(IJobExecutionContext context)
         {
-            throw new System.NotImplementedException("Must implement the HealthCheck Execute() function.");
+            _bus.SendLocal(new InitiateJobsMissingHomeOwnerInfoHealthCheckSaga(DateTime.Parse("01/01/2016")));
         }
 
         public void Schedule(IScheduler scheduler)
         {
             var schedule = TriggerBuilder.Create()
                 .WithIdentity("JobsMissingHomeOwnerInfoTrigger")
-                .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(5, 0))
+                .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(5, 10))
                 .Build();
 
-            var detail = JobBuilder.Create<SoldJobsHealthCheck>()
+            var detail = JobBuilder.Create<JobsMissingHomeOwnerInfoHealthCheck>()
                 .WithIdentity("JobsMissingHomeOwnerInfoJobsCheck")
                 .Build();
 
