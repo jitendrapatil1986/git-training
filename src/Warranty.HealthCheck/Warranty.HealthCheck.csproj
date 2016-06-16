@@ -145,8 +145,6 @@
     <Compile Include="Mediatr\LoadApprovedShowcasesFromTips.cs" />
     <Compile Include="Mediatr\LoadShowcasesFromWarranty.cs" />
     <Compile Include="Models\HEALTH_Showcase.cs" />
-    <Compile Include="Models\HEALTH_ClosedJobs.cs" />
-    <Compile Include="Models\HEALTH_MissingJobs.cs" />
     <Compile Include="Models\HEALTH_JobsMissingHomeOwnerInfo.cs" />
     <Compile Include="Models\HEALTH_SoldJob.cs" />
     <Compile Include="Models\Systems.cs" />
