@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using AutoMapper;
 using Common.Security.Session;
-using Warranty.Core.Enumerations;
 using Warranty.Core.Features.MyDivisions;
 using Warranty.Core.Features.MyProjects;
 using Warranty.Core.Features.MyTeam;

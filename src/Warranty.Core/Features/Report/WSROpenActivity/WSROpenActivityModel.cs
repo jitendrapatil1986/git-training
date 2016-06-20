@@ -36,6 +36,8 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
 
         public bool ShowReportFilters { get; set; }
 
+        public bool IncludeNotes { get; set; }
+
         public bool HasResults
         {
             get { return OpenActivities != null && OpenActivities.Any(); }
