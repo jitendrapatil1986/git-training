@@ -12,81 +12,6 @@ using Warranty.HealthCheck.Models;
 
 namespace Warranty.HealthCheck.Handlers
 {
-    public class JobsMissingHomeOwnerInfoHealthCheckSagaData : IContainSagaData
-    {
-        public virtual Guid Id { get; set; }
-        public virtual string Originator { get; set; }
-        public virtual string OriginalMessageId { get; set; }
-        [Unique]
-        public virtual DateTime? RunDate { get; set; }
-    }
-
-    public class JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner : IBusCommand
-    {
-        public DateTime RunDate { get; set; }
-
-        public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner()
-        {
-        }
-
-        public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner(DateTime runDate)
-        {
-            RunDate = runDate;
-        }
-    }
-
-    public class JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner : IBusCommand
-    {
-        public DateTime RunDate { get; set; }
-
-        public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner()
-        {
-        }
-
-        public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner(DateTime runDate)
-        {
-            RunDate = runDate;
-        }
-    }
-
-    public class JobsMissingHomeOwnerInfoHealthCheckSagaCleanupTempTables : IBusCommand
-    {
-        public DateTime RunDate { get; set; }
-
-        public JobsMissingHomeOwnerInfoHealthCheckSagaCleanupTempTables() { }
-
-        public JobsMissingHomeOwnerInfoHealthCheckSagaCleanupTempTables(DateTime runDate)
-        {
-            RunDate = runDate;
-        }
-    }
-
-    public class ExecuteHealthCheck : IBusCommand
-    {
-        public DateTime RunDate { get; set; }
-
-        public ExecuteHealthCheck()
-        { 
-        }
-
-        public ExecuteHealthCheck(DateTime runDate)
-        {
-            RunDate = runDate;
-        }
-    }
-
-    public class InitiateJobsMissingHomeOwnerInfoHealthCheckSaga : IBusCommand
-    {
-        public DateTime RunDate { get; set; }
-
-        public InitiateJobsMissingHomeOwnerInfoHealthCheckSaga() { }
-
-        public InitiateJobsMissingHomeOwnerInfoHealthCheckSaga(DateTime runDate)
-        {
-            RunDate = runDate;
-        }
-    }
-
     public class JobsMissingHomeOwnerInfoHealthCheckSaga : Saga<JobsMissingHomeOwnerInfoHealthCheckSagaData>,
         IAmStartedByMessages<InitiateJobsMissingHomeOwnerInfoHealthCheckSaga>,
         IHandleMessages<JobsMissingHomeOwnerInfoHealthCheckSagaCleanupTempTables>,
@@ -225,5 +150,79 @@ namespace Warranty.HealthCheck.Handlers
             Bus.SendLocal(notification);
         }
     }
-       
+
+    public class JobsMissingHomeOwnerInfoHealthCheckSagaData : IContainSagaData
+    {
+        public virtual Guid Id { get; set; }
+        public virtual string Originator { get; set; }
+        public virtual string OriginalMessageId { get; set; }
+        [Unique]
+        public virtual DateTime? RunDate { get; set; }
+    }
+
+    public class JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner : IBusCommand
+    {
+        public DateTime RunDate { get; set; }
+
+        public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner()
+        {
+        }
+
+        public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner(DateTime runDate)
+        {
+            RunDate = runDate;
+        }
+    }
+
+    public class JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner : IBusCommand
+    {
+        public DateTime RunDate { get; set; }
+
+        public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner()
+        {
+        }
+
+        public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner(DateTime runDate)
+        {
+            RunDate = runDate;
+        }
+    }
+
+    public class JobsMissingHomeOwnerInfoHealthCheckSagaCleanupTempTables : IBusCommand
+    {
+        public DateTime RunDate { get; set; }
+
+        public JobsMissingHomeOwnerInfoHealthCheckSagaCleanupTempTables() { }
+
+        public JobsMissingHomeOwnerInfoHealthCheckSagaCleanupTempTables(DateTime runDate)
+        {
+            RunDate = runDate;
+        }
+    }
+
+    public class ExecuteHealthCheck : IBusCommand
+    {
+        public DateTime RunDate { get; set; }
+
+        public ExecuteHealthCheck()
+        {
+        }
+
+        public ExecuteHealthCheck(DateTime runDate)
+        {
+            RunDate = runDate;
+        }
+    }
+
+    public class InitiateJobsMissingHomeOwnerInfoHealthCheckSaga : IBusCommand
+    {
+        public DateTime RunDate { get; set; }
+
+        public InitiateJobsMissingHomeOwnerInfoHealthCheckSaga() { }
+
+        public InitiateJobsMissingHomeOwnerInfoHealthCheckSaga(DateTime runDate)
+        {
+            RunDate = runDate;
+        }
+    }
 }
