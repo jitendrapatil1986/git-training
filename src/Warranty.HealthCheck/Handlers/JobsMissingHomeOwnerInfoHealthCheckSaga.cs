@@ -104,7 +104,7 @@ namespace Warranty.HealthCheck.Handlers
 
             var notification = BuildNotification(notificationMessage, subject, jobsWithHomeOwnerInTipsButNotWarranty);
 
-            SendNotification(notification);
+            Bus.SendLocal(notification);
         }
 
         private void FindJobsWithNullCurrentHomeOwnerId(DateTime runDate)
@@ -122,7 +122,7 @@ namespace Warranty.HealthCheck.Handlers
 
             var notification = BuildNotification(notificationMessage, subject, jobsWithHomeOwnerButNullCurrentHomeOwnerId);
 
-            SendNotification(notification);
+            Bus.SendLocal(notification);
         }
 
         private Notification BuildNotification(string notificationMessage, string subject, IEnumerable<string> jobNumbers)
@@ -141,11 +141,6 @@ namespace Warranty.HealthCheck.Handlers
                 Subject = "HEALTH CHECK FAILURE - " + subject,
                 Body = notification.ToString(),
             };
-        }
-
-        private void SendNotification(Notification notification)
-        {
-            Bus.SendLocal(notification);
         }
     }
 
