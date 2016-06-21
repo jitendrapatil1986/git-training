@@ -22,9 +22,7 @@ namespace Warranty.HealthCheck.Handlers
         private readonly ILog _log;
         private readonly IMediator _mediator;
 
-        public JobsMissingHomeOwnerInfoHealthCheckSaga()
-        {
-        }
+        public JobsMissingHomeOwnerInfoHealthCheckSaga() { }
 
         public JobsMissingHomeOwnerInfoHealthCheckSaga(ILog log, IMediator mediator)
         {
@@ -164,9 +162,7 @@ namespace Warranty.HealthCheck.Handlers
     {
         public DateTime RunDate { get; set; }
 
-        public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner()
-        {
-        }
+        public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner() { }
 
         public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner(DateTime runDate)
         {
@@ -178,9 +174,7 @@ namespace Warranty.HealthCheck.Handlers
     {
         public DateTime RunDate { get; set; }
 
-        public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner()
-        {
-        }
+        public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner() { }
 
         public JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner(DateTime runDate)
         {
@@ -204,9 +198,7 @@ namespace Warranty.HealthCheck.Handlers
     {
         public DateTime RunDate { get; set; }
 
-        public ExecuteHealthCheck()
-        {
-        }
+        public ExecuteHealthCheck() { }
 
         public ExecuteHealthCheck(DateTime runDate)
         {
