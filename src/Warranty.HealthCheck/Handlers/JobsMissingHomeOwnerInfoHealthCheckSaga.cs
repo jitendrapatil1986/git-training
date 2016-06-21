@@ -78,13 +78,13 @@ namespace Warranty.HealthCheck.Handlers
 
         public void Handle(ExecuteHealthCheck message)
         {
-            ExecuteJobsWithHomeOwnerInTipsButNoneInWarrantyHealthCheck();
-            ExecuteJobsWithHomeOwnerButNullCurrentHomeOwnerIdHealthCheck(Data.RunDate.Value);
+            FindJobsMissingHomeOwnersInWarranty();
+            FindJobsWithNullCurrentHomeOwnerId(Data.RunDate.Value);
 
             MarkAsComplete();
         }
 
-        private void ExecuteJobsWithHomeOwnerInTipsButNoneInWarrantyHealthCheck()
+        private void FindJobsMissingHomeOwnersInWarranty()
         {
             var tipsJobsWithHomeOwner = _mediator.Send(new GetClosedJobsRequest(Systems.TIPS));
             var warrantyJobsWithNoHomeOwner = _mediator.Send(new GetClosedJobsRequest(Systems.Warranty));
@@ -107,7 +107,7 @@ namespace Warranty.HealthCheck.Handlers
             SendNotification(notification);
         }
 
-        private void ExecuteJobsWithHomeOwnerButNullCurrentHomeOwnerIdHealthCheck(DateTime runDate)
+        private void FindJobsWithNullCurrentHomeOwnerId(DateTime runDate)
         {
             var jobsWithHomeOwnerButNullCurrentHomeOwnerId = _mediator.Send(new GetJobsWithHomeOwnerButNullCurrentHomeOwnerIdRequest(runDate));
 
