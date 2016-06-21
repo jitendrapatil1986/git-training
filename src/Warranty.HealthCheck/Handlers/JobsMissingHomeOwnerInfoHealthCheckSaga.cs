@@ -87,9 +87,7 @@ namespace Warranty.HealthCheck.Handlers
             var tipsJobsWithHomeOwner = _mediator.Send(new GetClosedJobsRequest(Systems.TIPS));
             var warrantyJobsWithNoHomeOwner = _mediator.Send(new GetClosedJobsRequest(Systems.Warranty));
 
-            var jobsWithHomeOwnerInTipsButNotWarranty = tipsJobsWithHomeOwner
-                .Where(tipsJob => warrantyJobsWithNoHomeOwner.Any(warrantyJob => warrantyJob == tipsJob))
-                .ToList();
+            var jobsWithHomeOwnerInTipsButNotWarranty = tipsJobsWithHomeOwner.Intersect(warrantyJobsWithNoHomeOwner).ToList();
 
             if (!jobsWithHomeOwnerInTipsButNotWarranty.Any())
             {
