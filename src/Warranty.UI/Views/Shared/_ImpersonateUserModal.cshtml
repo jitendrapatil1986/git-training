@@ -25,5 +25,5 @@
 }
 @if (User.IsBeingImpersonated())
 {
-    <div id="impersonationBanner">You are impersonating <b>@User.Identity.Name</b></div>
+    <div id="impersonationBanner" class="no-print">You are impersonating <b>@User.Identity.Name</b></div>
 }

@@ -132,9 +132,6 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
                                                         markets,                      // @1
                                                         model.FilterValue);           // @2
 
-            if (!model.IncludeNotes)
-                return serviceCalls;
-
             foreach (var serviceCall in serviceCalls)
             {
                 const string notesSql = @"SELECT ServiceCallNote AS Note FROM ServiceCallNotes WHERE ServiceCallId = @0 AND (ServiceCallNote <> '' OR ServiceCallNote != null)";
