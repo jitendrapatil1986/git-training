@@ -99,10 +99,10 @@ namespace Warranty.HealthCheck.Handlers
                 return;
             }
 
-            const string notificationMessage = @"Found the following closed jobs where there's a home owner in TIPS but not in Warranty";
+            const string message = @"Found the following closed jobs where there's a home owner in TIPS but not in Warranty";
             var subject = string.Format(@"{0} jobs with a home owner in TIPS but not Warranty", jobsWithHomeOwnerInTipsButNotWarranty.Count);
 
-            var notification = BuildNotification(notificationMessage, subject, jobsWithHomeOwnerInTipsButNotWarranty);
+            var notification = Notification.Create(message, subject, jobsWithHomeOwnerInTipsButNotWarranty);
 
             Bus.SendLocal(notification);
         }
@@ -117,30 +117,12 @@ namespace Warranty.HealthCheck.Handlers
                 return;
             }
 
-            const string notificationMessage = @"Found the following jobs with a home owner but a null CurrentHomeOwnerID in Warranty";
+            const string message = @"Found the following jobs with a home owner but a null CurrentHomeOwnerID in Warranty";
             var subject = string.Format(@"{0} jobs with a home owner in TIPS but not Warranty", jobsWithHomeOwnerButNullCurrentHomeOwnerId.Count());
 
-            var notification = BuildNotification(notificationMessage, subject, jobsWithHomeOwnerButNullCurrentHomeOwnerId);
+            var notification = Notification.Create(message, subject, jobsWithHomeOwnerButNullCurrentHomeOwnerId);
 
             Bus.SendLocal(notification);
-        }
-
-        private Notification BuildNotification(string notificationMessage, string subject, IEnumerable<string> jobNumbers)
-        {
-            var notification = new StringBuilder();
-            notification.AppendLine(string.Format("{0}:<br>", notificationMessage));
-            notification.AppendLine("<hr>");
-
-            foreach (var jobNumber in jobNumbers)
-            {
-                notification.AppendFormat("{0}<br>\n", jobNumber);
-            }
-
-            return new Notification
-            {
-                Subject = "HEALTH CHECK FAILURE - " + subject,
-                Body = notification.ToString(),
-            };
         }
     }
 

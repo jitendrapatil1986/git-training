@@ -1,5 +1,7 @@
-﻿using System.Configuration;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Net.Mail;
+using System.Text;
 using Common.Messages;
 using log4net;
 using NServiceBus;
@@ -62,5 +64,23 @@ namespace Warranty.HealthCheck.Handlers
     {
         public string Subject { get; set; }
         public string Body { get; set; }
+
+        public static Notification Create(string message, string subject, IEnumerable<string> jobNumbers)
+        {
+            var notification = new StringBuilder();
+            notification.AppendLine(string.Format("{0}:<br>", message));
+            notification.AppendLine("<hr>");
+
+            foreach (var jobNumber in jobNumbers)
+            {
+                notification.AppendFormat("{0}<br>\n", jobNumber);
+            }
+
+            return new Notification
+            {
+                Subject = "HEALTH CHECK FAILURE - " + subject,
+                Body = notification.ToString(),
+            };
+        }
     }
 }
