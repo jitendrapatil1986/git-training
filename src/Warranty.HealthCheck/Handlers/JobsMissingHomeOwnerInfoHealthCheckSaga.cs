@@ -15,7 +15,8 @@ namespace Warranty.HealthCheck.Handlers
         IHandleMessages<JobsMissingHomeOwnerInfoHealthCheckSagaCleanupTempTables>,
         IHandleMessages<JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner>,
         IHandleMessages<JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner>,
-        IHandleMessages<ExecuteHealthCheck>
+        IHandleMessages<FindJobsMissingHomeOwnersInWarranty>,
+        IHandleMessages<FindJobsWithNullCurrentHomeOwnerId>
     {
         private readonly ILog _log;
         private readonly IMediator _mediator;
@@ -34,7 +35,8 @@ namespace Warranty.HealthCheck.Handlers
             ConfigureMapping<JobsMissingHomeOwnerInfoHealthCheckSagaCleanupTempTables>(m => m.RunDate).ToSaga(s => s.RunDate);
             ConfigureMapping<JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedTipsJobsWithHomeOwner>(m => m.RunDate).ToSaga(s => s.RunDate);
             ConfigureMapping<JobsMissingHomeOwnerInfoHealthCheckSagaLoadClosedWarrantyJobsWithNoHomeOwner>(m => m.RunDate).ToSaga(s => s.RunDate);
-            ConfigureMapping<ExecuteHealthCheck>(m => m.RunDate).ToSaga(s => s.RunDate);
+            ConfigureMapping<FindJobsMissingHomeOwnersInWarranty>(m => m.RunDate).ToSaga(s => s.RunDate);
+            ConfigureMapping<FindJobsWithNullCurrentHomeOwnerId>(m => m.RunDate).ToSaga(s => s.RunDate);
         }
 
         public void Handle(InitiateJobsMissingHomeOwnerInfoHealthCheckSaga message)
@@ -71,18 +73,10 @@ namespace Warranty.HealthCheck.Handlers
             _log.InfoFormat("Loading all closed jobs from Warranty, without a homeowner, newer than {0:d}", Data.RunDate);
             _mediator.Send(new LoadClosedJobsFromWarrantyWithoutHomeOwnerRequest(Data.RunDate.Value));
 
-            Bus.SendLocal(new ExecuteHealthCheck(Data.RunDate.Value));
+            Bus.SendLocal(new FindJobsMissingHomeOwnersInWarranty(Data.RunDate.Value));
         }
 
-        public void Handle(ExecuteHealthCheck message)
-        {
-            FindJobsMissingHomeOwnersInWarranty();
-            FindJobsWithNullCurrentHomeOwnerId(Data.RunDate.Value);
-
-            MarkAsComplete();
-        }
-
-        private void FindJobsMissingHomeOwnersInWarranty()
+        public void Handle(FindJobsMissingHomeOwnersInWarranty message)
         {
             var tipsJobsWithHomeOwner = _mediator.Send(new GetClosedJobsRequest(Systems.TIPS));
             var warrantyJobsWithNoHomeOwner = _mediator.Send(new GetClosedJobsRequest(Systems.Warranty));
@@ -95,30 +89,33 @@ namespace Warranty.HealthCheck.Handlers
                 return;
             }
 
-            const string message = @"Found the following closed jobs where there's a home owner in TIPS but not in Warranty";
+            const string notificationMessage = @"Found the following closed jobs where there's a home owner in TIPS but not in Warranty";
             var subject = string.Format(@"{0} jobs with a home owner in TIPS but not Warranty", jobsWithHomeOwnerInTipsButNotWarranty.Count);
 
-            var notification = Notification.Create(message, subject, jobsWithHomeOwnerInTipsButNotWarranty);
+            var notification = Notification.Create(notificationMessage, subject, jobsWithHomeOwnerInTipsButNotWarranty);
 
             Bus.SendLocal(notification);
+            Bus.SendLocal(new FindJobsWithNullCurrentHomeOwnerId(message.RunDate));
         }
 
-        private void FindJobsWithNullCurrentHomeOwnerId(DateTime runDate)
+        public void Handle(FindJobsWithNullCurrentHomeOwnerId message)
         {
-            var jobsWithHomeOwnerButNullCurrentHomeOwnerId = _mediator.Send(new GetJobsWithHomeOwnerButNullCurrentHomeOwnerIdRequest(runDate));
+            var jobsWithHomeOwnerButNullCurrentHomeOwnerId = _mediator.Send(new GetJobsWithHomeOwnerButNullCurrentHomeOwnerIdRequest(message.RunDate));
 
             if (!jobsWithHomeOwnerButNullCurrentHomeOwnerId.Any())
             {
                 _log.Info("Could not find any jobs where a home owner exits but the CurrentHomeOwnerID is null in Warranty.");
+                MarkAsComplete();
                 return;
             }
 
-            const string message = @"Found the following jobs with a home owner but a null CurrentHomeOwnerID in Warranty";
+            const string notificationMessage = @"Found the following jobs with a home owner but a null CurrentHomeOwnerID in Warranty";
             var subject = string.Format(@"{0} jobs with a home owner in TIPS but not Warranty", jobsWithHomeOwnerButNullCurrentHomeOwnerId.Count());
 
-            var notification = Notification.Create(message, subject, jobsWithHomeOwnerButNullCurrentHomeOwnerId);
+            var notification = Notification.Create(notificationMessage, subject, jobsWithHomeOwnerButNullCurrentHomeOwnerId);
 
             Bus.SendLocal(notification);
+            MarkAsComplete();
         }
     }
 
@@ -167,18 +164,6 @@ namespace Warranty.HealthCheck.Handlers
         }
     }
 
-    public class ExecuteHealthCheck : IBusCommand
-    {
-        public DateTime RunDate { get; set; }
-
-        public ExecuteHealthCheck() { }
-
-        public ExecuteHealthCheck(DateTime runDate)
-        {
-            RunDate = runDate;
-        }
-    }
-
     public class InitiateJobsMissingHomeOwnerInfoHealthCheckSaga : IBusCommand
     {
         public DateTime RunDate { get; set; }
@@ -186,6 +171,30 @@ namespace Warranty.HealthCheck.Handlers
         public InitiateJobsMissingHomeOwnerInfoHealthCheckSaga() { }
 
         public InitiateJobsMissingHomeOwnerInfoHealthCheckSaga(DateTime runDate)
+        {
+            RunDate = runDate;
+        }
+    }
+
+    public class FindJobsMissingHomeOwnersInWarranty : IBusCommand
+    {
+        public DateTime RunDate { get; set; }
+
+        public FindJobsMissingHomeOwnersInWarranty() { }
+
+        public FindJobsMissingHomeOwnersInWarranty(DateTime runDate)
+        {
+            RunDate = runDate;
+        }
+    }
+
+    public class FindJobsWithNullCurrentHomeOwnerId : IBusCommand
+    {
+        public DateTime RunDate { get; set; }
+
+        public FindJobsWithNullCurrentHomeOwnerId() { }
+
+        public FindJobsWithNullCurrentHomeOwnerId(DateTime runDate)
         {
             RunDate = runDate;
         }

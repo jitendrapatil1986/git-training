@@ -1,5 +1,4 @@
 ﻿using System;
-using log4net;
 using NServiceBus;
 using Quartz;
 using Warranty.HealthCheck.Handlers;
@@ -9,12 +8,10 @@ namespace Warranty.HealthCheck.HealthChecks
     public class JobsMissingHomeOwnerInfoHealthCheck : IHealthCheck
     {
         private readonly IBus _bus;
-        private readonly ILog _log;
 
-        public JobsMissingHomeOwnerInfoHealthCheck(IBus bus, ILog log)
+        public JobsMissingHomeOwnerInfoHealthCheck(IBus bus)
         {
             _bus = bus;
-            _log = log;
         }
 
         public void Execute(IJobExecutionContext context)
