@@ -1,12 +1,8 @@
 ﻿@model Warranty.Core.Features.Report.WSROpenActivity.WSROpenActivityModel
 @using Warranty.Core.Extensions
-
 @section header
 {
     <style type="text/css" media="print">
-       .hidden-print {
-           display: none;
-       }
        .panel {
            border: none;
        }
@@ -16,7 +12,7 @@
 @if (Model.ShowReportFilters)
 {
     <div class="panel panel-default no-print">
-        <div class="panel-heading">
+        <div class="panel-heading no-bottom-padding">
             <div id="wsrLoadingReportFilter">
                 <div class="no-bottom-padding">
                     @using (Html.BeginForm("WSROutstandingActivityReport", "Report", FormMethod.Post, new { @class = "form-inline" }))
@@ -48,20 +44,10 @@
                             </div>
                         </div>
                     </div>
-                        <div class="row">
-                            <div class="form-group col-md-2 margin-top-10">
-                                <div class="checkbox-inline">
-                                    <label class="cursor-pointer">
-                                        @Html.CheckBoxFor(m => m.IncludeNotes) Include Notes
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12 no-bottom-padding">
                             <div class="alert alert-info margin-top-10" role="alert">
-                                <strong>Filters:</strong>
-                                <p>The most accurate selection above will be used. For example, if you select a project, the division selection is ignored.</p>
+                                <strong>Filters:</strong> The most accurate selection above will be used. For example, if you select a project, the division selection is ignored.
                             </div>
                         </div>
                     </div>
@@ -98,12 +84,19 @@
         </div>
     </div>
 
-    <div class="hidden-print">
+    <div class="no-print">
         <button class="btn btn-sm btn-secondary" role="button" id="expandAll">
             <span class="glyphicon glyphicon-chevron-down margin-right-10"></span>
             <span class="text">Hide All</span>
         </button>
-        <a href="javascript:window.print()" class="btn btn-default pull-right margin-botom-10 no-print"><span class="glyphicon glyphicon-print"></span> Print</a>
+        <button class="btn btn-default pull-right margin-botom-10 no-print" role="button" id="printButton">
+            <span class="glyphicon glyphicon-print margin-right-10"></span>
+            <span class="text">Print</span>
+        </button>
+        <button class="btn btn-default pull-right margin-botom-10 margin-right-10" role="button" id="notesToggle">
+            <span class="glyphicon glyphicon-align-left margin-right-10"></span>
+            <span class="text">Include Notes</span>
+        </button>
     </div>
 
     <div class="clearfix"></div>
@@ -113,7 +106,7 @@
     {
     <div class="panel panel-primary" style="page-break-before: always">
         <div class="panel-heading cursor-pointer">
-            <span class="hidden-print glyphicon glyphicon-chevron-down activityToggle margin-right-10"></span>
+            <span class="no-print glyphicon glyphicon-chevron-down activityToggle margin-right-10"></span>
             <span class="text-larger"><strong>@activity.EmployeeName</strong></span>
             <span class="badge margin-left-15">@activity.OpenTasks.Count() outstanding tasks</span>
             <span class="badge margin-left-15">@activity.ServiceCalls.Count() outstanding calls</span>
@@ -189,13 +182,15 @@
                                 </ul>
                                 @if (serviceCall.ServiceCallNotes != null && serviceCall.ServiceCallNotes.Any())
                                 {
-                                    <h6><strong>Notes</strong></h6>
-                                    <ul>
-                                        @foreach (var note in serviceCall.ServiceCallNotes)
-                                        {
-                                            <li>@note.Note</li>
-                                        }
-                                    </ul>
+                                    <div class="notes-container hidden no-print">
+                                        <h6><strong>Notes</strong></h6>
+                                        <ul>
+                                            @foreach (var note in serviceCall.ServiceCallNotes)
+                                            {
+                                                <li>@note.Note</li>
+                                            }
+                                        </ul>    
+                                    </div>
                                 }
                             </td>
                         </tr>

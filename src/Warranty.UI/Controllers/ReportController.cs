@@ -7,24 +7,23 @@ using Warranty.Core.Features.MyDivisions;
 using Warranty.Core.Features.MyProjects;
 using Warranty.Core.Features.MyTeam;
 using Warranty.Core.Features.Report.WSROpenActivity;
+using Warranty.Core;
+using Warranty.Core.Features.Report.Achievement;
+using Warranty.Core.Features.Report.MailMerge;
+using Warranty.Core.Features.Report.Saltline;
+using Warranty.Core.Features.Report.WSRCallSummary;
+using Warranty.Core.Features.Report.WSRLoadingReport;
+using Warranty.Core.Features.Report.WSROpenedClosedCalls;
+using Warranty.Core.Features.Report.WSRSummary;
+using Warranty.Core.Features.Report.WarrantyBonusSummary;
 
 namespace Warranty.UI.Controllers
 {
-    using Warranty.Core;
-    using Warranty.Core.Features.Report.Achievement;
-    using Warranty.Core.Features.Report.MailMerge;
-    using Warranty.Core.Features.Report.Saltline;
-    using Warranty.Core.Features.Report.WSRCallSummary;
-    using Warranty.Core.Features.Report.WSRLoadingReport;
-    using Warranty.Core.Features.Report.WSROpenedClosedCalls;
-    using Warranty.Core.Features.Report.WSRSummary;
-    using Warranty.Core.Features.Report.WarrantyBonusSummary;
-
     public class ReportController : Controller
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        private IUser _currentUser;
+        private readonly IUser _currentUser;
 
         public ReportController(IMediator mediator, IMapper mapper, IUserSession currentSession)
         {
@@ -68,6 +67,7 @@ namespace Warranty.UI.Controllers
         {
             var resultModel = _mediator.Request(new WSRLoadingReportQuery());
 
+            ViewBag.Title = "WSR Loading Report";
             return View(resultModel);
         }
 
@@ -76,6 +76,7 @@ namespace Warranty.UI.Controllers
         {
             var resultModel = _mediator.Request(new WSRLoadingReportQuery { queryModel = model });
 
+            ViewBag.Title = "WSR Loading Report";
             return View(resultModel);
         }
 
@@ -83,6 +84,7 @@ namespace Warranty.UI.Controllers
         {
             var resultModel = _mediator.Request(new WarrantyBonusSummaryWSRQuery());
 
+            ViewBag.Title = "Bonus Summary Report";
             return View(resultModel);
         }
 
@@ -91,6 +93,7 @@ namespace Warranty.UI.Controllers
         {
             var resultModel = _mediator.Request(new WarrantyBonusSummaryWSRQuery { Model = model });
 
+            ViewBag.Title = "Bonus Summary Report";
             return View(resultModel);
         }
 
@@ -98,6 +101,7 @@ namespace Warranty.UI.Controllers
         {
             var resultModel = _mediator.Request(new AchievementReportQuery());
 
+            ViewBag.Title = "Achievement Report";
             return View(resultModel);
         }
 
@@ -106,6 +110,7 @@ namespace Warranty.UI.Controllers
         {
             var resultModel = _mediator.Request(new AchievementReportQuery { queryModel = model });
 
+            ViewBag.Title = "Achievement Report";
             return View(resultModel);
         }
 
@@ -113,6 +118,7 @@ namespace Warranty.UI.Controllers
         {
             var resultModel = _mediator.Request(new SaltlineReportQuery());
 
+            ViewBag.Title = "Saltline Report";
             return View(resultModel);
         }
 
@@ -121,6 +127,7 @@ namespace Warranty.UI.Controllers
         {
             var resultModel = _mediator.Request(new SaltlineReportQuery { queryModel = model });
 
+            ViewBag.Title = "Saltline Report";
             return View(resultModel);
         }
 
@@ -128,6 +135,7 @@ namespace Warranty.UI.Controllers
         {
             var resultModel = _mediator.Request(new WSRSummaryQuery());
 
+            ViewBag.Title = "WSR Summary Report";
             return View(resultModel);
         }
 
@@ -135,6 +143,7 @@ namespace Warranty.UI.Controllers
         {
             var resultModel = _mediator.Request(new WSRCallSummaryQuery());
 
+            ViewBag.Title = "Call Summary Report";
             return View(resultModel);
         }
 
@@ -143,6 +152,7 @@ namespace Warranty.UI.Controllers
         {
             var resultModel = _mediator.Request(new WSRCallSummaryQuery() { queryModel = model });
 
+            ViewBag.Title = "Call Summary Report";
             return View(resultModel);
         }
 
@@ -150,6 +160,7 @@ namespace Warranty.UI.Controllers
         {
             var resultModel = _mediator.Request(new WSROpenedClosedCallsQuery());
 
+            ViewBag.Title = "Open Closed Call Report";
             return View(resultModel);
         }
 
@@ -158,6 +169,7 @@ namespace Warranty.UI.Controllers
         {
             var resultModel = _mediator.Request(new WSROpenedClosedCallsQuery() { queryModel = model });
 
+            ViewBag.Title = "Open Closed Call Report";
             return View(resultModel);
         }
 
@@ -172,6 +184,7 @@ namespace Warranty.UI.Controllers
             model.MyProjects = _mapper.Map<List<SelectListItem>>(_mediator.Request(new MyProjectsQuery()) ?? new Dictionary<Guid, string>());
             model.MyTeamMembers =_mapper.Map<List<SelectListItem>>(_mediator.Request(new MyTeamQuery()) ?? new List<MyTeamModel>());
 
+            ViewBag.Title = "Outstanding Activity Report";
             return View(model);
         }
 
@@ -191,6 +204,7 @@ namespace Warranty.UI.Controllers
             //if(model.Action == "xls")
             //    return View(report);
 
+            ViewBag.Title = "Outstanding Activity Report";
             return View(report);
         }
 
