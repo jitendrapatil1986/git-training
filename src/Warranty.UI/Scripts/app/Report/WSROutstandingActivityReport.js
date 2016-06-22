@@ -8,13 +8,13 @@
                 if ($(this).children(".glyphicon").hasClass("glyphicon-chevron-down")) {
                     $(this).children(".text").text("Hide All");
                     $(".panel-body").removeClass("hidden");
-                    $(".panel").removeClass("no-print");
+                    $(".employeeContainer").removeClass("no-print");
                     $(".activityToggle").removeClass("glyphicon-chevron-right");
                     $(".activityToggle").addClass("glyphicon-chevron-down");
                 } else {
                     $(this).children(".text").text("Expand All");
                     $(".panel-body").addClass("hidden");
-                    $(".panel").addClass("no-print");
+                    $(".employeeContainer").addClass("no-print");
                     $(".activityToggle").removeClass("glyphicon-chevron-down");
                     $(".activityToggle").addClass("glyphicon-chevron-right");
                 }
@@ -23,8 +23,8 @@
             $(".panel-heading").click(function () {
                 $(this).children(".activityToggle").toggleClass("glyphicon-chevron-right");
                 $(this).children(".activityToggle").toggleClass("glyphicon-chevron-down");
-                $(this).closest(".panel").find(".panel-body").toggleClass("hidden");
-                $(this).closest(".panel").toggleClass("hidden-print");
+                $(this).closest(".employeeContainer").find(".panel-body").toggleClass("hidden");
+                $(this).closest(".employeeContainer").toggleClass("no-print");
             });
 
             $("#notesToggle").click(function () {
