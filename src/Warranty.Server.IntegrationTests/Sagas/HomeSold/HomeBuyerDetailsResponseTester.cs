@@ -69,7 +69,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             var homeOwnerAfterResponseProcessed = TestDatabase.Single<HomeOwner>("WHERE HomeOwnerID = @0;", homeOwner.HomeOwnerId);
 
             homeOwnerAfterResponseProcessed.HomeOwnerNumber.ShouldEqual(homeOwner.HomeOwnerNumber);
-            homeOwnerAfterResponseProcessed.HomeOwnerName.ShouldEqual(homeOwner.HomeOwnerName);
+            homeOwnerAfterResponseProcessed.HomeOwnerName.ShouldEqual("Owner, NewHome");
             homeOwnerAfterResponseProcessed.UpdatedDate.ShouldBeGreaterThan(homeOwner.UpdatedDate);
             homeOwnerAfterResponseProcessed.UpdatedBy.ShouldEqual(Constants.ENDPOINT_NAME);
         }

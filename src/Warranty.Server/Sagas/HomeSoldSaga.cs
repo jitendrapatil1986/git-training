@@ -237,6 +237,8 @@ namespace Warranty.Server.Sagas
                 existingHomeOwner.UpdatedDate = DateTime.UtcNow;
                 existingHomeOwner.JobId = Data.JobReferenceId;
 
+                homeOwner = existingHomeOwner;
+
                 _log.InfoFormat("Homeowner already exists, updating homeowner record for contact {0} on sale {1} for job {2}", Data.ContactId,
                     Data.SaleId,
                     Data.JobReferenceId);
