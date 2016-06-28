@@ -73,6 +73,11 @@ namespace Warranty.Core.Services
             return _database.SingleById<HomeOwner>(homeOwnerId);
         }
 
+        public void UpdateHomeOwner(HomeOwner homeOwner)
+        {
+            _database.Update(homeOwner);
+        }
+
         public HomeOwner GetHomeOwnerByJobNumber(string jobNumber)
         {
             return _database.SingleOrDefault<HomeOwner>(

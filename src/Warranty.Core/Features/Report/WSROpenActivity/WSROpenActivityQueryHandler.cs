@@ -140,7 +140,6 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
             }
 
             return serviceCalls;
-
         }
     }
 }

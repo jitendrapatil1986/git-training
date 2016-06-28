@@ -202,5 +202,12 @@ namespace Warranty.UI.Core.Helpers
 
             return new MvcHtmlString(analytics);
         }
+
+        public static MvcHtmlString RenderTableHeaderTextWithBottomTooltip(this HtmlHelper htmlHelper, string headerText, string tooltip)
+        {
+            var headerTooltip = string.Format(@"<div class=""has-bottom-tooltip"" data-original-title=""{1}"" title="""">{0}</div>", headerText, tooltip);
+
+            return new MvcHtmlString(headerTooltip);
+        }
     }
 }

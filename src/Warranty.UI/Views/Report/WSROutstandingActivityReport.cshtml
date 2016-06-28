@@ -1,32 +1,41 @@
 ﻿@model Warranty.Core.Features.Report.WSROpenActivity.WSROpenActivityModel
 @using Warranty.Core.Extensions
-
+@section header
+{
+    <style type="text/css" media="print">
+       .panel {
+           border: none;
+       }
+       body {
+           padding: 5% !important;
+       }
+    </style>
+}
 <h2>Outstanding Activity Report</h2>
-
 @if (Model.ShowReportFilters)
 {
     <div class="panel panel-default no-print">
-        <div class="panel-heading">
+        <div class="panel-heading no-bottom-padding">
             <div id="wsrLoadingReportFilter">
                 <div class="no-bottom-padding">
+                    @using (Html.BeginForm("WSROutstandingActivityReport", "Report", FormMethod.Post, new { @class = "form-inline" }))
+                    {
                     <div class="row">
                         <div class="col-md-12">
-                            @using (Html.BeginForm("WSROutstandingActivityReport", "Report", FormMethod.Post, new {@class = "form-inline"}))
-                            {
-                                @Html.ValidationSummary()
-                                @Html.HiddenFor(m => m.ShowReportFilters)
-                                <div class="form-group">
-                                    @Html.DropDownListFor(m => m.DivisionId, Model.MyDivisions, "Division - All", new {@class = "form-control text-capitalize"})
-                                </div>
-                                <div class="form-group">
-                                    @Html.DropDownListFor(m => m.ProjectId, Model.MyProjects, "Project - All", new {@class = "form-control text-capitalize"})
-                                </div>
-                                <div class="form-group">
-                                    @Html.DropDownListFor(m => m.TeamMemberId, Model.MyTeamMembers, "Team Member - All", new {@class = "form-control text-capitalize"})
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary" name="Action" value="web">Run Report</button>
-                                    @*<button type="submit" class="btn btn-default" name="Action" value="pdf">
+                            @Html.ValidationSummary()
+                            @Html.HiddenFor(m => m.ShowReportFilters)
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.DivisionId, Model.MyDivisions, "Division - All", new {@class = "form-control text-capitalize"})
+                            </div>
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.ProjectId, Model.MyProjects, "Project - All", new {@class = "form-control text-capitalize"})
+                            </div>
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.TeamMemberId, Model.MyTeamMembers, "Team Member - All", new {@class = "form-control text-capitalize"})
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary" name="Action" value="web">Run Report</button>
+                                @*<button type="submit" class="btn btn-default" name="Action" value="pdf">
                                     <span class="glyphicon glyphicon-share"></span>
                                     PDF
                                 </button>
@@ -34,15 +43,18 @@
                                     <span class="glyphicon glyphicon-share"></span>
                                     XLS
                                 </button>*@
-                                    @Html.ActionLink("Reset", "WSROutstandingActivityReport", null, new { @class="btn btn-default"})
-                                </div>
-                            }
-                            <div class="alert alert-info margin-top-10" role="alert">
-                                <strong>Filters:</strong>
-                                <p>The most accurate selection above will be used.  For example, if you select a project, the division selection is ignored.</p>
+                                @Html.ActionLink("Reset", "WSROutstandingActivityReport", null, new {@class = "btn btn-default"})
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12 no-bottom-padding">
+                            <div class="alert alert-info margin-top-10" role="alert">
+                                <strong>Filters:</strong> The most accurate selection above will be used. For example, if you select a project, the division selection is ignored.
+                            </div>
+                        </div>
+                    </div>
+                    }
                 </div>
             </div>
         </div>
@@ -60,11 +72,11 @@
                     <td>@Model.OpenActivities.Count()</td>
                 </tr>
                 <tr>
-                    <td><b>Outstanding TODOs</b></td>
+                    <td><b>Outstanding Tasks</b></td>
                     <td>@Model.OpenActivities.Sum(a => a.OpenTasks.Count())</td>
                 </tr>
                 <tr>
-                    <td><b>Oldest Outstanding TODO</b></td>
+                    <td><b>Oldest Outstanding Task</b></td>
                     <td>@Model.OpenActivities.Max(a => a.OldestOpenTask).Days days</td>
                 </tr>
                 <tr>
@@ -75,29 +87,36 @@
         </div>
     </div>
 
-    <div>
+    <div class="no-print">
         <button class="btn btn-sm btn-secondary" role="button" id="expandAll">
             <span class="glyphicon glyphicon-chevron-down margin-right-10"></span>
             <span class="text">Hide All</span>
         </button>
-        <a href="javascript:window.print()" class="btn btn-default pull-right margin-botom-10 no-print"><span class="glyphicon glyphicon-print"></span> Print</a>
+        <button class="btn btn-default pull-right margin-botom-10 no-print" role="button" id="printButton">
+            <span class="glyphicon glyphicon-print margin-right-10"></span>
+            <span class="text">Print</span>
+        </button>
+        <button class="btn btn-default pull-right margin-botom-10 margin-right-10" role="button" id="notesToggle">
+            <span class="glyphicon glyphicon-align-left margin-right-10"></span>
+            <span class="text">Include Notes</span>
+        </button>
     </div>
 
     <div class="clearfix"></div>
     <div class="margin-top-10"></div>
 
-    foreach (var activity in Model.OpenActivities)
+    foreach (var activity in Model.OpenActivities.OrderBy(a => a.EmployeeName))
     {
-    <div class="panel panel-primary" style="page-break-after: always">
+    <div class="panel panel-primary employeeContainer" style="page-break-before: always">
         <div class="panel-heading cursor-pointer">
-            <span class="glyphicon glyphicon-chevron-down activityToggle margin-right-10"></span>
+            <span class="no-print glyphicon glyphicon-chevron-down activityToggle margin-right-10"></span>
             <span class="text-larger"><strong>@activity.EmployeeName</strong></span>
             <span class="badge margin-left-15">@activity.OpenTasks.Count() outstanding tasks</span>
             <span class="badge margin-left-15">@activity.ServiceCalls.Count() outstanding calls</span>
         </div>
         <div class="panel-body">
             <h4>Outstanding Tasks <span class="badge">@activity.OpenTasks.Count()</span></h4>
-            <div class="row" style="page-break-after: always">
+            <div class="row">
             @foreach (var taskType in activity.OpenTasks.Where(t => t.JobNumber != null).GroupBy(t => t.TaskType.Stage).OrderBy(t => t.Key))
             {
                 if (taskType.Any())
@@ -164,15 +183,17 @@
                                         <li>@line.ProblemCode - @line.ProblemDescription</li>
                                     }
                                 </ul>
-                                @if (serviceCall.ServiceCallNotes.Any())
+                                @if (serviceCall.ServiceCallNotes != null && serviceCall.ServiceCallNotes.Any())
                                 {
-                                    <h6><strong>Notes</strong></h6>
-                                    <ul>
-                                        @foreach (var note in serviceCall.ServiceCallNotes)
-                                        {
-                                            <li>@note.Note</li>
-                                        }
-                                    </ul>
+                                    <div class="notes-container hidden no-print">
+                                        <h6><strong>Notes</strong></h6>
+                                        <ul>
+                                            @foreach (var note in serviceCall.ServiceCallNotes)
+                                            {
+                                                <li>@note.Note</li>
+                                            }
+                                        </ul>    
+                                    </div>
                                 }
                             </td>
                         </tr>
