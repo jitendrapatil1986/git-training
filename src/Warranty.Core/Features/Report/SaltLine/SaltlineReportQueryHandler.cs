@@ -81,7 +81,7 @@ namespace Warranty.Core.Features.Report.Saltline
                 AmountSpent = _warrantyCalculator.GetEmployeeAmountSpent(startDate, endDate, employeeNumber),
                 AverageDays = _warrantyCalculator.GetEmployeeAverageDaysClosed(startDate, endDate, employeeNumber),
                 PercentClosedWithin7Days = _warrantyCalculator.GetEmployeePercentClosedWithin7Days(startDate, endDate, employeeNumber),
-                OutstandingServiceCallsOpen = _warrantyCalculator.GetEmployeeNumberOfServiceCallsOpen(DateTime.UtcNow, employeeNumber),
+                OutstandingServiceCallsOpen = _warrantyCalculator.GetEmployeeNumberOfServiceCallsOpen(endDate, employeeNumber),
             };
             var numberOfHomes = _warrantyCalculator.GetEmployeeWarrantableHomes(startDate, endDate, employeeNumber);
 
@@ -104,7 +104,7 @@ namespace Warranty.Core.Features.Report.Saltline
                 AmountSpent = _warrantyCalculator.GetDivisionAmountSpent(startDate, endDate, divisionName),
                 AverageDays = _warrantyCalculator.GetDivisionAverageDaysClosed(startDate, endDate, divisionName),
                 PercentClosedWithin7Days = _warrantyCalculator.GetDivisionPercentClosedWithin7Days(startDate, endDate, divisionName),
-                OutstandingServiceCallsOpen = _warrantyCalculator.GetDivisionNumberOfServiceCallsOpen(DateTime.UtcNow, divisionName),
+                OutstandingServiceCallsOpen = _warrantyCalculator.GetDivisionNumberOfServiceCallsOpen(endDate, divisionName),
             };
             var numberOfHomes = _warrantyCalculator.GetDivisionWarrantableHomes(startDate, endDate, divisionName);
 
@@ -127,7 +127,7 @@ namespace Warranty.Core.Features.Report.Saltline
                 AmountSpent = _warrantyCalculator.GetProjectAmountSpent(startDate, endDate, projectName),
                 AverageDays = _warrantyCalculator.GetProjectAverageDaysClosed(startDate, endDate, projectName),
                 PercentClosedWithin7Days = _warrantyCalculator.GetProjectPercentClosedWithin7Days(startDate, endDate, projectName),
-                OutstandingServiceCallsOpen = _warrantyCalculator.GetProjectNumberOfServiceCallsOpen(DateTime.UtcNow, projectName),
+                OutstandingServiceCallsOpen = _warrantyCalculator.GetProjectNumberOfServiceCallsOpen(endDate, projectName),
             };
             var numberOfHomes = _warrantyCalculator.GetProjectWarrantableHomes(startDate, endDate, projectName);
 
