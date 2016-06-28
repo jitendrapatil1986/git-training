@@ -173,7 +173,7 @@ namespace Warranty.Core.Features.Report.Saltline
                 : 0;
 
             var totalDaysServiceCallsOpen = surveyReportData.OutstandingServiceCallsOpen.Sum(x => x.Amount) ?? 0;
-            var totalServiceCallsOpen = surveyReportData.OutstandingServiceCallsOpen.Sum(x => x.TotalCalculableElements);
+            var totalServiceCallsOpen = surveyReportData.OutstandingServiceCallsOpen.Sum(x => x.TotalElements);
 
             var totalAmountSpentForAllHomes = list.Sum(x => x.AmountSpentPerHome);
             var totalHomesUnderWarranty = list.Sum(x => x.NumberOfHomes);
