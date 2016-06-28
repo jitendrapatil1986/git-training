@@ -12,5 +12,6 @@ namespace Warranty.Core.Calculator
         public IEnumerable<CalculatorResult> PercentClosedWithin7Days { get; set; }
         public IEnumerable<CalculatorResult> AmountSpent { get; set; }
         public IEnumerable<AchievementReportModel.AchievementSummary> AchievementSummaries { get; set; }
+        public IEnumerable<CalculatorResult> OutstandingServiceCallsOpen { get; set; }
     }
 }

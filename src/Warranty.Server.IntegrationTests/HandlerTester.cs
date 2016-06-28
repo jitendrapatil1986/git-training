@@ -1,9 +1,8 @@
 ﻿using System;
-using Common.Messages;
+using System.Collections.Generic;
 using NPoco;
 using NServiceBus;
 using StructureMap;
-using Warranty.Server.Extensions;
 using Warranty.Server.IntegrationTests.SetUp;
 
 namespace Warranty.Server.IntegrationTests
@@ -11,7 +10,6 @@ namespace Warranty.Server.IntegrationTests
     using Core.Entities;
     using Tests.Core;
     using Extensions;
-    using System.Linq;
 
     public abstract class HandlerTester<TEvent> where TEvent : new()
     {
@@ -32,6 +30,18 @@ namespace Warranty.Server.IntegrationTests
             var builder = ObjectFactory.GetInstance<EntityBuilder<T>>();
             var savedItem = builder.GetSaved(action ?? (x => { }));
             return savedItem;
+        }
+
+        public IEnumerable<T> GetManySaved<T>(int numberOfEntities, Action<T> action = null)
+        {
+            var savedItems = new List<T>();
+
+            for (var i = 0; i < numberOfEntities; i++)
+            {
+                savedItems.Add(GetSaved(action));
+            }
+
+            return savedItems;
         }
 
         public void Send(Action<TEvent> eventAction)
@@ -71,3 +81,4 @@ namespace Warranty.Server.IntegrationTests
         }
     }
 }
+

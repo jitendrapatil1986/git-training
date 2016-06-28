@@ -197,6 +197,8 @@
     <Compile Include="Handlers\Jobs\ShowcaseResetToDirtHomeOwnerHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseSwingUpdateApprovedHandlerTester.cs" />
     <Compile Include="Handlers\RandomStringGenerator.cs" />
+    <Compile Include="Handlers\Reports\SaltlineReportQueryHandlerTester.cs" />
+    <Compile Include="Handlers\Reports\Tmp_Jde_Gl_War_Buckets.cs" />
     <Compile Include="MappingTests\CommunityDetailsMappingTester.cs" />
     <Compile Include="MappingTests\DefaultMappingTester.cs" />
     <Compile Include="MappingTests\HomeBuyerDetailsResponseMappingTester.cs" />
@@ -250,7 +252,9 @@
     <Compile Include="SetUp\EntityBuilder.cs" />
     <Compile Include="HandlerTester.cs" />
     <Compile Include="SetUp\ProjectEntityBuilder.cs" />
+    <Compile Include="SetUp\ServiceCallEntityBuilder.cs" />
     <Compile Include="SetUp\TaskEntityBuilder.cs" />
+    <Compile Include="SetUp\TmpJdeGlWarBucketsEntityBuilder.cs" />
     <Compile Include="WebServices\AccountingTester.cs" />
   </ItemGroup>
   <ItemGroup>

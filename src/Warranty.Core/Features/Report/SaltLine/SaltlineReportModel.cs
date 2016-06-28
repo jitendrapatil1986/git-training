@@ -43,6 +43,7 @@
             public decimal NumerOfCalls { get; set; }
             public decimal NumberOfSurveys { get; set; }
             public decimal NumberOfHomes { get; set; }
+            public decimal AverageDaysServiceCallsOpen { get; set; }
         }
 
         public class EmployeeModel

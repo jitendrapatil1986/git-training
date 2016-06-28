@@ -157,6 +157,102 @@ namespace Warranty.Core.Calculator
         }
         #endregion AverageDaysClosed
 
+        #region NumberOfServiceCallsOpen
+
+        public IEnumerable<CalculatorResult> GetEmployeeNumberOfServiceCallsOpen(DateTime endDate, string employeeNumber)
+        {
+            using (_database)
+            {
+                const string sql = @"SELECT COUNT(*) AS TotalElements
+	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, @0)) AS Amount
+	                                    ,MONTH(SC.CreatedDate) AS MonthNumber
+	                                    ,YEAR(SC.CreatedDate) AS YearNumber
+                                    FROM dbo.Employees E
+                                    INNER JOIN dbo.ServiceCalls SC
+	                                    ON SC.WarrantyRepresentativeEmployeeId = E.EmployeeID
+                                    INNER JOIN dbo.Jobs J
+	                                    ON J.JobId = SC.JobId
+                                    INNER JOIN dbo.Communities C
+	                                    ON C.CommunityId = J.CommunityId
+                                    INNER JOIN dbo.Cities C2
+	                                    ON C2.CityId = C.CityId
+                                    WHERE C2.CityCode IN ({0})
+                                        AND SC.CreatedDate <= @0
+	                                    AND E.EmployeeNumber = @1
+	                                    AND SC.ServiceCallType = 'Warranty Service Request'
+	                                    AND SC.CompletionDate IS NULL -- Open
+                                    GROUP BY MONTH(SC.CreatedDate) 
+	                                    ,YEAR(SC.CreatedDate);";
+
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), endDate, employeeNumber);
+                return result;
+            }
+        }
+
+        public IEnumerable<CalculatorResult> GetProjectNumberOfServiceCallsOpen(DateTime endDate, string projectName)
+        {
+            using (_database)
+            {
+                const string sql = @"SELECT 
+	                                    COUNT(*) AS TotalElements
+	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, @0)) AS Amount
+	                                    ,MONTH(SC.CreatedDate) AS MonthNumber
+	                                    ,YEAR(SC.CreatedDate) AS YearNumber
+                                    FROM dbo.Projects P
+                                    INNER JOIN dbo.Communities C
+	                                    ON C.ProjectId = P.ProjectId
+                                    INNER JOIN dbo.Cities C2
+                                        ON C2.CityId = C.CityId
+                                    INNER JOIN dbo.Jobs J
+	                                    ON J.CommunityId = C.CommunityId
+                                    INNER JOIN dbo.ServiceCalls SC
+                                        ON SC.JobId = J.JobId
+                                    WHERE C2.CityCode IN ({0})
+	                                    AND SC.CreatedDate <= @0 
+	                                    AND P.ProjectName = @1 
+	                                    AND SC.ServiceCallType = 'Warranty Service Request'
+	                                    AND SC.CompletionDate IS NULL -- Open
+                                    GROUP BY MONTH(SC.CreatedDate) 
+	                                    ,YEAR(SC.CreatedDate);";
+
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), endDate, projectName);
+                return result;
+            }
+        }
+
+        public IEnumerable<CalculatorResult> GetDivisionNumberOfServiceCallsOpen(DateTime endDate, string divisionName)
+        {
+            using (_database)
+            {
+                const string sql = @"SELECT 
+	                                    COUNT(*) AS TotalElements
+	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, @0)) AS Amount
+	                                    ,MONTH(SC.CreatedDate) AS MonthNumber
+	                                    ,YEAR(SC.CreatedDate) AS YearNumber
+                                    FROM dbo.Divisions D
+                                    INNER JOIN dbo.Communities C
+	                                    ON C.DivisionId = D.DivisionId
+                                    INNER JOIN dbo.Cities C2	
+	                                    ON C2.CityId = C.CityId
+                                    INNER JOIN dbo.Jobs J
+	                                    ON J.CommunityId = C.CommunityId
+                                    INNER JOIN dbo.ServiceCalls SC
+	                                    ON SC.JobId = J.JobId
+                                    WHERE C2.CityCode IN ({0})
+	                                    AND SC.CreatedDate <= @0 
+	                                    AND D.DivisionName = @1 
+	                                    AND SC.ServiceCallType = 'Warranty Service Request'
+	                                    AND SC.CompletionDate IS NULL -- Open
+                                    GROUP BY MONTH(SC.CreatedDate) 
+	                                    ,YEAR(SC.CreatedDate);";
+
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), endDate, divisionName);
+                return result;
+            }
+        }
+
+        #endregion
+
         #region ClosedWithin7Days
         public IEnumerable<CalculatorResult> GetEmployeePercentClosedWithin7Days(DateTime startDate, DateTime endDate, string employeeNumber)
         {
@@ -252,15 +348,22 @@ namespace Warranty.Core.Calculator
             var list = new List<CalculatorResult>();
             foreach (var month in monthRange)
             {
-                var dollarSpentInMonth = dollarsSpent.SingleOrDefault(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber);
-                var warrantableHomesInMonth = warrantablehomes.SingleOrDefault(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber);
+                var dollarSpentInMonth = dollarsSpent
+                    .Where(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber)
+                    .DefaultIfEmpty(CalculatorResult.Default)
+                    .Single();
+
+                var warrantableHomesInMonth = warrantablehomes
+                    .Where(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber)
+                    .DefaultIfEmpty(CalculatorResult.Default)
+                    .Single();
 
                 list.Add(new CalculatorResult
                 {
-                    Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
+                    Amount = dollarSpentInMonth.Amount,
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
-                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.TotalElements : 0
+                    TotalElements = warrantableHomesInMonth.TotalElements,
                 });
             }
             return list;
@@ -275,15 +378,22 @@ namespace Warranty.Core.Calculator
             var list = new List<CalculatorResult>();
             foreach (var month in monthRange)
             {
-                var dollarSpentInMonth = dollarsSpent.SingleOrDefault(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber);
-                var warrantableHomesInMonth = warrantablehomes.SingleOrDefault(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber);
+                var dollarSpentInMonth = dollarsSpent
+                    .Where(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber)
+                    .DefaultIfEmpty(CalculatorResult.Default)
+                    .Single();
+
+                var warrantableHomesInMonth = warrantablehomes
+                    .Where(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber)
+                    .DefaultIfEmpty(CalculatorResult.Default)
+                    .Single();
 
                 list.Add(new CalculatorResult
                 {
-                    Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
+                    Amount = dollarSpentInMonth.Amount,
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
-                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.TotalElements : 0
+                    TotalElements = warrantableHomesInMonth.TotalElements,
                 });
             }
             return list;
@@ -298,32 +408,25 @@ namespace Warranty.Core.Calculator
             var list = new List<CalculatorResult>();
             foreach (var month in monthRange)
             {
-                var dollarSpentInMonth = dollarsSpent.SingleOrDefault(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber);
-                var warrantableHomesInMonth = warrantablehomes.SingleOrDefault(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber);
+                var dollarSpentInMonth = dollarsSpent
+                    .Where(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber)
+                    .DefaultIfEmpty(CalculatorResult.Default)
+                    .Single();
+
+                var warrantableHomesInMonth = warrantablehomes
+                    .Where(x => x.MonthNumber == month.MonthNumber && x.YearNumber == month.YearNumber)
+                    .DefaultIfEmpty(CalculatorResult.Default)
+                    .Single();
 
                 list.Add(new CalculatorResult
                 {
-                    Amount = CalculateAmountSpentPerMonth(dollarSpentInMonth, warrantableHomesInMonth),
+                    Amount = dollarSpentInMonth.Amount,
                     MonthNumber = month.MonthNumber,
                     YearNumber = month.YearNumber,
-                    TotalElements = warrantableHomesInMonth != null ? warrantableHomesInMonth.TotalElements : 0
+                    TotalElements = warrantableHomesInMonth.TotalElements,
                 });
             }
             return list;
-        }
-
-        private decimal CalculateAmountSpentPerMonth(CalculatorResult dollarSpentInMonth, CalculatorResult warrantableHomesInMonth)
-        {
-            if (dollarSpentInMonth != null && warrantableHomesInMonth != null)
-            {
-                if (dollarSpentInMonth.Amount == 0 || warrantableHomesInMonth.TotalElements == 0)
-                {
-                    return 0;
-                }
-
-                return dollarSpentInMonth.Amount.Value / warrantableHomesInMonth.TotalElements;
-            }
-            return 0;
         }
         #endregion AmountSpent
 

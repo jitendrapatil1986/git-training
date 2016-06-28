@@ -1,3 +1,6 @@
+using System.Security.Cryptography;
+using Warranty.Server.IntegrationTests.Handlers;
+
 namespace Warranty.Server.IntegrationTests.SetUp
 {
     using System;
@@ -13,9 +16,11 @@ namespace Warranty.Server.IntegrationTests.SetUp
 
         public override Project GetSaved(Action<Project> action)
         {
+            var randomStringGenerator = new RandomStringGenerator();
+
             var entity = new Project
                              {
-                                 ProjectNumber = "123",
+                                 ProjectNumber = randomStringGenerator.Get(3),
                                  CreatedBy = "test",
                                  CreatedDate = DateTime.UtcNow,
                              };
