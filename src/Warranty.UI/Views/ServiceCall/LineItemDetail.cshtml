@@ -20,7 +20,10 @@
                     <div class="pull-right no-right-padding no-print">
                         <button id="btn-no-action-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: noActionForLine, visible: !hasEverBeenCompleted() && !isLineItemCompleted() && !isLineItemNoAction()">No Action</button>
                         <button id="btn-complete-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: completeLine, visible: !isLineItemCompleted() && !isLineItemNoAction()">Complete</button>
-                        <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: reopenLine, visible: isLineItemCompleted()">Reopen</button>
+                        @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
+                        {
+                            <button id="btn-reopen-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: reopenLine, visible: isLineItemCompleted()">Reopen</button>
+                        }
                     </div>
                 </h2>
                 <div class="clearfix"></div>
