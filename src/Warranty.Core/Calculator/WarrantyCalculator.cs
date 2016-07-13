@@ -163,10 +163,24 @@ namespace Warranty.Core.Calculator
         {
             using (_database)
             {
-                const string sql = @"SELECT COUNT(*) AS TotalElements
-	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, @0)) AS Amount
-	                                    ,MONTH(SC.CreatedDate) AS MonthNumber
-	                                    ,YEAR(SC.CreatedDate) AS YearNumber
+                const string sql = @"SELECT 
+                                        COUNT(*) AS TotalElements
+								        ,COUNT
+								        (
+									        CASE
+										        WHEN SC.SpecialProject = 0 THEN 1
+										        ELSE NULL
+									        END
+								        ) AS TotalCalculableElements
+								        ,SUM
+								        (
+									        CASE
+										        WHEN SC.SpecialProject = 0 THEN DATEDIFF(DD, SC.CreatedDate, @0)
+										        ELSE 0
+									        END
+								        ) AS Amount
+								        ,MONTH(SC.CreatedDate) AS MonthNumber
+								        ,YEAR(SC.CreatedDate) AS YearNumber
                                     FROM dbo.Employees E
                                     INNER JOIN dbo.ServiceCalls SC
 	                                    ON SC.WarrantyRepresentativeEmployeeId = E.EmployeeID
@@ -195,9 +209,22 @@ namespace Warranty.Core.Calculator
             {
                 const string sql = @"SELECT 
 	                                    COUNT(*) AS TotalElements
-	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, @0)) AS Amount
-	                                    ,MONTH(SC.CreatedDate) AS MonthNumber
-	                                    ,YEAR(SC.CreatedDate) AS YearNumber
+	                                    ,COUNT
+								        (
+									        CASE
+										        WHEN SC.SpecialProject = 0 THEN 1
+										        ELSE NULL
+									        END
+								        ) AS TotalCalculableElements
+								        ,SUM
+								        (
+									        CASE
+										        WHEN SC.SpecialProject = 0 THEN DATEDIFF(DD, SC.CreatedDate, @0)
+										        ELSE 0
+									        END
+								        ) AS Amount
+								        ,MONTH(SC.CreatedDate) AS MonthNumber
+								        ,YEAR(SC.CreatedDate) AS YearNumber
                                     FROM dbo.Projects P
                                     INNER JOIN dbo.Communities C
 	                                    ON C.ProjectId = P.ProjectId
@@ -226,9 +253,22 @@ namespace Warranty.Core.Calculator
             {
                 const string sql = @"SELECT 
 	                                    COUNT(*) AS TotalElements
-	                                    ,SUM(DATEDIFF(DD, SC.CreatedDate, @0)) AS Amount
-	                                    ,MONTH(SC.CreatedDate) AS MonthNumber
-	                                    ,YEAR(SC.CreatedDate) AS YearNumber
+	                                    ,COUNT
+								        (
+									        CASE
+										        WHEN SC.SpecialProject = 0 THEN 1
+										        ELSE NULL
+									        END
+								        ) AS TotalCalculableElements
+								        ,SUM
+								        (
+									        CASE
+										        WHEN SC.SpecialProject = 0 THEN DATEDIFF(DD, SC.CreatedDate, @0)
+										        ELSE 0
+									        END
+								        ) AS Amount
+								        ,MONTH(SC.CreatedDate) AS MonthNumber
+								        ,YEAR(SC.CreatedDate) AS YearNumber
                                     FROM dbo.Divisions D
                                     INNER JOIN dbo.Communities C
 	                                    ON C.DivisionId = D.DivisionId

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using Common.Security.Session;
 using Moq;
 using NUnit.Framework;
 using Should;
+using Warranty.Core;
 using Warranty.Core.Calculator;
 using Warranty.Core.Entities;
 using Warranty.Core.Features.Report.Saltline;
@@ -16,6 +18,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Reports
     public class SaltlineReportQueryHandlerTester : HandlerTester<SaltlineReportQuery>
     {
         private SaltlineReportQueryHandler _saltlineReportQueryHandler;
+        private Employee _employee;
 
         [TestFixtureSetUp]
         public void Setup()
@@ -23,13 +26,13 @@ namespace Warranty.Server.IntegrationTests.Handlers.Reports
             var city = GetSaved<City>(c => { c.CityCode = "HOU"; });
             var project = GetSaved<Project>(p => { p.ProjectName = "Project1"; });
             var division = GetSaved<Division>(d => { d.DivisionName = "Division1"; }); 
-            var employee = GetSaved<Employee>();
+            _employee = GetSaved<Employee>();
 
-            var communities = AddEmployeeToCommunities(city, project, division, employee);
+            var communities = AddEmployeeToCommunities(city, project, division, _employee);
             var jobs = AddJobs(communities);
 
             AddHomeOwners(jobs);
-            AddServiceCalls(employee, jobs);
+            AddServiceCalls(_employee, jobs);
             AddPaymentsToTmpJdeGlWarBuckets(communities);
 
             var surveyService = new Mock<ISurveyService>();
@@ -50,13 +53,18 @@ namespace Warranty.Server.IntegrationTests.Handlers.Reports
         [Test]
         public void ShouldReturnCorrectValuesForEmployeeAverageDaysSection()
         {
-            var result = _saltlineReportQueryHandler.Handle(new SaltlineReportQuery
+            var result = new SaltlineReportModel();
+
+            SystemTime.Stub(new DateTime(2016, 4, 30), () =>
             {
-                queryModel = new SaltlineReportModel
+                result = _saltlineReportQueryHandler.Handle(new SaltlineReportQuery
                 {
-                    StartDate = DateTime.Parse("04/01/2016"),
-                    EndDate = DateTime.Parse("04/30/2016")
-                }
+                    queryModel = new SaltlineReportModel
+                    {
+                        StartDate = DateTime.Parse("04/01/2016"),
+                        EndDate = DateTime.Parse("04/30/2016")
+                    }
+                });
             });
 
             var employeeSaltlineSummary = result.EmployeeSaltlineSummary.Single();
@@ -69,13 +77,18 @@ namespace Warranty.Server.IntegrationTests.Handlers.Reports
         [Test]
         public void ShouldReturnCorrectValuesForProjectAverageDaysSection()
         {
-            var result = _saltlineReportQueryHandler.Handle(new SaltlineReportQuery
+            var result = new SaltlineReportModel();
+
+            SystemTime.Stub(new DateTime(2016, 4, 30), () =>
             {
-                queryModel = new SaltlineReportModel
+                result = _saltlineReportQueryHandler.Handle(new SaltlineReportQuery
                 {
-                    StartDate = DateTime.Parse("04/01/2016"),
-                    EndDate = DateTime.Parse("04/30/2016")
-                }
+                    queryModel = new SaltlineReportModel
+                    {
+                        StartDate = DateTime.Parse("04/01/2016"),
+                        EndDate = DateTime.Parse("04/30/2016")
+                    }
+                });
             });
 
             var projectSaltlineSummary = result.ProjectSaltlineSummary.Single();
@@ -88,13 +101,18 @@ namespace Warranty.Server.IntegrationTests.Handlers.Reports
         [Test]
         public void ShouldReturnCorrectValuesForDivisionAverageDaysSection()
         {
-            var result = _saltlineReportQueryHandler.Handle(new SaltlineReportQuery
+            var result = new SaltlineReportModel();
+
+            SystemTime.Stub(new DateTime(2016, 4, 30), () =>
             {
-                queryModel = new SaltlineReportModel
+                result = _saltlineReportQueryHandler.Handle(new SaltlineReportQuery
                 {
-                    StartDate = DateTime.Parse("04/01/2016"),
-                    EndDate = DateTime.Parse("04/30/2016")
-                }
+                    queryModel = new SaltlineReportModel
+                    {
+                        StartDate = DateTime.Parse("04/01/2016"),
+                        EndDate = DateTime.Parse("04/30/2016")
+                    }
+                });
             });
 
             var divisionSaltline = result.DivisionSaltlineSummary.Single();
@@ -153,6 +171,102 @@ namespace Warranty.Server.IntegrationTests.Handlers.Reports
             var divisionSaltlineSummary = result.DivisionSaltlineSummary.Single();
 
             decimal.Round(divisionSaltlineSummary.AmountSpentPerHome, 1).ShouldEqual(400);
+        }
+
+        [Test]
+        public void ShouldReturnCorrectValuesForEmployeeAverageDaysSectionWhenServiceCallsOpenIncludesSpecialProjects()
+        {
+            var result = new SaltlineReportModel();
+
+            using (new TransactionScope())
+            {
+                UpdateSpecialProjectOnServiceCall();
+
+                SystemTime.Stub(new DateTime(2016, 4, 30), () =>
+                {
+                    result = _saltlineReportQueryHandler.Handle(new SaltlineReportQuery
+                    {
+                        queryModel = new SaltlineReportModel
+                        {
+                            StartDate = DateTime.Parse("04/01/2016"),
+                            EndDate = DateTime.Parse("04/30/2016")
+                        }
+                    });
+                });
+            }
+
+            var employeeSaltlineSummary = result.EmployeeSaltlineSummary.Single();
+
+            decimal.Round(employeeSaltlineSummary.AverageDaysServiceCallsOpen, 1).ShouldEqual(81.5m);
+            employeeSaltlineSummary.NumberOfHomes.ShouldEqual(4);
+            employeeSaltlineSummary.NumerOfCalls.ShouldEqual(23);
+        }
+
+        [Test]
+        public void ShouldReturnCorrectValuesForProjectAverageDaysSectionWhenServiceCallsOpenIncludesSpecialProjects()
+        {
+            var result = new SaltlineReportModel();
+
+            using (new TransactionScope())
+            {
+                UpdateSpecialProjectOnServiceCall();
+
+                SystemTime.Stub(new DateTime(2016, 4, 30), () =>
+                {
+                    result = _saltlineReportQueryHandler.Handle(new SaltlineReportQuery
+                    {
+                        queryModel = new SaltlineReportModel
+                        {
+                            StartDate = DateTime.Parse("04/01/2016"),
+                            EndDate = DateTime.Parse("04/30/2016")
+                        }
+                    });
+                });
+            }
+
+            var projectSaltlineSummary = result.ProjectSaltlineSummary.Single();
+
+            decimal.Round(projectSaltlineSummary.AverageDaysServiceCallsOpen, 1).ShouldEqual(81.5m);
+            projectSaltlineSummary.NumberOfHomes.ShouldEqual(4);
+            projectSaltlineSummary.NumerOfCalls.ShouldEqual(23);
+        }
+
+        [Test]
+        public void ShouldReturnCorrectValuesForDivisionAverageDaysSectionWhenServiceCallsOpenIncludesSpecialProjects()
+        {
+            var result = new SaltlineReportModel();
+
+            using (new TransactionScope())
+            {
+                UpdateSpecialProjectOnServiceCall();
+
+                SystemTime.Stub(new DateTime(2016, 4, 30), () =>
+                {
+                    result = _saltlineReportQueryHandler.Handle(new SaltlineReportQuery
+                    {
+                        queryModel = new SaltlineReportModel
+                        {
+                            StartDate = DateTime.Parse("04/01/2016"),
+                            EndDate = DateTime.Parse("04/30/2016")
+                        }
+                    });
+                });
+            }
+
+            var divisionSaltlineSummary = result.DivisionSaltlineSummary.Single();
+
+            decimal.Round(divisionSaltlineSummary.AverageDaysServiceCallsOpen, 1).ShouldEqual(81.5m);
+            divisionSaltlineSummary.NumberOfHomes.ShouldEqual(4);
+            divisionSaltlineSummary.NumerOfCalls.ShouldEqual(23);
+        }
+
+        private void UpdateSpecialProjectOnServiceCall()
+        {
+            TestDatabase.Execute(@"
+                    UPDATE TOP (1) dbo.ServiceCalls 
+                    SET SpecialProject = 1
+                    WHERE WarrantyRepresentativeEmployeeId = @0
+                        AND CreatedDate BETWEEN '04/01/2016' AND '04/30/2016';", _employee.EmployeeId);
         }
 
         private void AddPaymentsToTmpJdeGlWarBuckets(IEnumerable<Community> communities)
