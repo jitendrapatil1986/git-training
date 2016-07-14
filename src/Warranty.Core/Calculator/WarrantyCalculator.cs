@@ -165,16 +165,12 @@ namespace Warranty.Core.Calculator
             {
                 const string sql = @"SELECT 
                                         COUNT(*) AS TotalElements
-                                        ,COUNT
-                                        (
-	                                        CASE
+                                        ,COUNT(CASE
 		                                        WHEN SC.SpecialProject = 0 THEN 1
 		                                        ELSE NULL
 	                                        END
                                         ) AS TotalCalculableElements
-                                        ,SUM
-                                        (
-	                                        CASE
+                                        ,SUM(CASE
 		                                        WHEN SC.SpecialProject = 0 THEN DATEDIFF(DD, SC.CreatedDate, @0)
 		                                        ELSE 0
 	                                        END
@@ -209,19 +205,15 @@ namespace Warranty.Core.Calculator
             {
                 const string sql = @"SELECT 
                                         COUNT(*) AS TotalElements
-                                        ,COUNT
-                                        (
-                                        CASE
-	                                        WHEN SC.SpecialProject = 0 THEN 1
-	                                        ELSE NULL
-                                        END
+                                        ,COUNT(CASE
+		                                        WHEN SC.SpecialProject = 0 THEN 1
+		                                        ELSE NULL
+	                                        END
                                         ) AS TotalCalculableElements
-                                        ,SUM
-                                        (
-                                        CASE
-	                                        WHEN SC.SpecialProject = 0 THEN DATEDIFF(DD, SC.CreatedDate, @0)
-	                                        ELSE 0
-                                        END
+                                        ,SUM(CASE
+		                                        WHEN SC.SpecialProject = 0 THEN DATEDIFF(DD, SC.CreatedDate, @0)
+		                                        ELSE 0
+	                                        END
                                         ) AS Amount
                                         ,MONTH(SC.CreatedDate) AS MonthNumber
                                         ,YEAR(SC.CreatedDate) AS YearNumber
@@ -253,16 +245,12 @@ namespace Warranty.Core.Calculator
             {
                 const string sql = @"SELECT 
                                         COUNT(*) AS TotalElements
-                                        ,COUNT
-                                        (
-	                                        CASE
+                                        ,COUNT(CASE
 		                                        WHEN SC.SpecialProject = 0 THEN 1
 		                                        ELSE NULL
 	                                        END
                                         ) AS TotalCalculableElements
-                                        ,SUM
-                                        (
-	                                        CASE
+                                        ,SUM(CASE
 		                                        WHEN SC.SpecialProject = 0 THEN DATEDIFF(DD, SC.CreatedDate, @0)
 		                                        ELSE 0
 	                                        END
