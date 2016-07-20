@@ -71,7 +71,7 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
                                                     FROM Tasks t
                                                     LEFT JOIN Jobs j ON j.JobId = t.ReferenceId
                                                     WHERE t.EmployeeId = @0 
-                                                        AND t.IsComplete = 0 
+                                                        AND t.IsComplete = 0 AND t.IsNoAction = 0
                                                     ORDER BY CreatedDate",
                                                     employeeId);
 
