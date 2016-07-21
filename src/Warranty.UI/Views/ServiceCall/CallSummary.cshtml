@@ -199,7 +199,7 @@
                             <button type="button" class="btn btn-default pull-right has-bottom-tooltip no-print" title="Add Line Item" data-toggle="collapse" data-target="#addCallLineItem" data-bind="visible: !callSummaryStatusComplete() && !callSummaryStatusSigned()"><span class="glyphicon glyphicon-plus"></span></button>
                         </span>
                     </h3>
-                    <div class="clearfix"></div>
+                    <div class="clearfix no-print"></div>
                     @Html.HiddenFor(model => model.ServiceCallSummary.ServiceCallId, new { id = "callSummaryServiceCallId", @class = "form-control" })
                     <div id="addCallLineItem" class="collapse">
                         <div class="panel-body no-print">
