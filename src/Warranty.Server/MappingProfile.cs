@@ -2,6 +2,7 @@ using AutoMapper;
 using System.Linq;
 using TIPS.Commands.Responses;
 using Warranty.Core.Entities;
+using Warranty.Core.Features.Homeowner;
 using Warranty.Core.Services.Models;
 
 namespace Warranty.Server
@@ -24,6 +25,17 @@ namespace Warranty.Server
                 .ForMember(m => m.HomeOwnerName, a => a.MapFrom(src => GetHomeOwnerName(src)))
                 .ForMember(m => m.HomePhone, a => a.MapFrom(src => GetPrimaryPhone(src)))
                 .ForMember(m => m.EmailAddress, a => a.MapFrom(src => GetPrimaryEmailAddress(src)));
+
+            CreateMap<HomeBuyerDetailsResponse, CreateNewHomeOwnerCommand>()
+                .ForMember(m => m.WorkPhone1, a => a.Ignore())
+                .ForMember(m => m.WorkPhone2, a => a.Ignore())
+                .ForMember(m => m.OtherPhone, a => a.Ignore())
+                .ForMember(m => m.HomeOwnerName, a => a.MapFrom(src => GetHomeOwnerName(src)))
+                .ForMember(m => m.HomePhone, a => a.MapFrom(src => GetPrimaryPhone(src)))
+                .ForMember(m => m.EmailAddress, a => a.MapFrom(src => GetPrimaryEmailAddress(src)));
+
+            CreateMap<CreateNewHomeOwnerCommand, HomeOwner>();
+
 
             CreateMap<JobSaleDetailsResponse, Job>()
                 .ForMember(m => m.JobId, a => a.Ignore())
