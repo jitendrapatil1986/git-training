@@ -11,7 +11,9 @@ using NServiceBus.Saga;
 using TIPS.Commands.Requests;
 using TIPS.Commands.Responses;
 using TIPS.Events.JobEvents;
+using Warranty.Core;
 using Warranty.Core.Entities;
+using Warranty.Core.Features.Homeowner;
 using Warranty.Core.Services;
 using Warranty.Core.Services.Models;
 using Warranty.Server.Handlers.Jobs;
@@ -31,6 +33,7 @@ namespace Warranty.Server.Sagas
         private readonly IHomeOwnerService _homeOwnerService;
         private readonly ITaskService _taskService;
         private readonly ILog _log;
+        private readonly IMediator _mediator;
 
         public Uri AccountingBaseAddress
         {
@@ -50,7 +53,7 @@ namespace Warranty.Server.Sagas
 
         public HomeSoldSaga() { }
 
-        public HomeSoldSaga(ICommunityService communityService, IJobService jobService, IEmployeeService employeeService, IHomeOwnerService homeOwnerService, ITaskService taskService, ILog log)
+        public HomeSoldSaga(ICommunityService communityService, IJobService jobService, IEmployeeService employeeService, IHomeOwnerService homeOwnerService, ITaskService taskService, ILog log, IMediator mediator)
         {
             _communityService = communityService;
             _jobService = jobService;
@@ -58,6 +61,7 @@ namespace Warranty.Server.Sagas
             _homeOwnerService = homeOwnerService;
             _taskService = taskService;
             _log = log;
+            _mediator = mediator;
         }
 
         public void Handle(HomeSold message)
@@ -213,23 +217,19 @@ namespace Warranty.Server.Sagas
 
             var job = _jobService.GetJobById(Data.JobReferenceId);
             var existingHomeOwner = _homeOwnerService.GetHomeOwnerByJobNumber(job.JobNumber);
-            var homeOwner = Mapper.Map<HomeOwner>(message);
 
+            HomeOwner homeOwner;
             if (existingHomeOwner == null)
             {
-                homeOwner.HomeOwnerId = Guid.NewGuid();
-                homeOwner.HomeOwnerNumber = 1;
-                homeOwner.CreatedBy = Constants.ENDPOINT_NAME;
-                homeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
-                homeOwner.CreatedDate = DateTime.UtcNow;
-                homeOwner.UpdatedDate = DateTime.UtcNow;
-                homeOwner.JobId = Data.JobReferenceId;
+                var createCommand = Mapper.Map<CreateNewHomeOwnerCommand>(message);
+                createCommand.JobId = Data.JobReferenceId;
 
-                _log.InfoFormat("Created homeowner record for contact {0} on sale {1}", Data.ContactId, Data.SaleId);
-                homeOwner = _homeOwnerService.Create(homeOwner);
+                _log.InfoFormat("Creating homeowner record for contact {0} on sale {1}", Data.ContactId, Data.SaleId);
+                homeOwner = _mediator.Send(createCommand);
             }
             else
             {
+                homeOwner = Mapper.Map<HomeOwner>(message);
                 existingHomeOwner.HomeOwnerName = homeOwner.HomeOwnerName;
                 existingHomeOwner.HomePhone = homeOwner.HomePhone;
                 existingHomeOwner.EmailAddress = homeOwner.EmailAddress;

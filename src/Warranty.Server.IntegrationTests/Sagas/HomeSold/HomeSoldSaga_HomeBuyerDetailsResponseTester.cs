@@ -1,10 +1,13 @@
 ﻿using System;
 using AutoMapper;
+using Fake.Bus;
 using log4net;
 using Moq;
 using NUnit.Framework;
 using Should;
+using StructureMap;
 using TIPS.Commands.Responses;
+using Warranty.Core;
 using Warranty.Core.Entities;
 using Warranty.Core.Services;
 using Warranty.Server.Sagas;
@@ -26,17 +29,17 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             var taskService = new Mock<ITaskService>();
             var employeeService = new Mock<IEmployeeService>();
             var communityService = new Mock<ICommunityService>();
-
             var homeOwnerService = new HomeOwnerService(TestDatabase);
             var jobService = new JobService(TestDatabase, employeeService.Object, communityService.Object);
 
+            var mediator = ObjectFactory.GetInstance<IMediator>();
             var log = new Mock<ILog>();
             log.Setup(m => m.ErrorFormat(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<object>())).Verifiable();
 
-            Saga = new HomeSoldSaga(communityService.Object, jobService, employeeService.Object, homeOwnerService, taskService.Object, log.Object)
+            Saga = new HomeSoldSaga(communityService.Object, jobService, employeeService.Object, homeOwnerService, taskService.Object, log.Object, mediator)
             {
                 Data = new HomeSoldSagaData(),
-                Bus = new DummyBus(),
+                Bus = new FakeBus(),
             };
         }
 

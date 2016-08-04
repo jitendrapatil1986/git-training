@@ -191,11 +191,9 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="DummyBus.cs" />
     <Compile Include="Handlers\Jobs\BuyerTransferApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\CommunityAddedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobAddressChangedHandlerTests.cs" />
-    <Compile Include="Handlers\Jobs\JobClosedHandlerWithNoHomeOwnerTester.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\ShowcaseElevationUpdateApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\ShowcasePlanUpdateApprovedHandlerTester.cs" />
@@ -209,13 +207,13 @@
     <Compile Include="MappingTests\HomeBuyerDetailsResponseMappingTester.cs" />
     <Compile Include="MappingTests\JobSaleDetailsResponseMappingTester.cs" />
     <Compile Include="MappingTests\MappingTest.cs" />
-    <Compile Include="Sagas\BuyerTransferredToNewLot\BuyerTransferredToNewLotTester.cs" />
-    <Compile Include="Sagas\BuyerTransferredToNewLot\HomeBuyerDetailsResponseTester.cs" />
-    <Compile Include="Sagas\BuyerTransferredToNewLot\JobSaleDetailsResponseTester.cs" />
-    <Compile Include="Sagas\HomeSold\CreateOrUpdateJobTester.cs" />
-    <Compile Include="Sagas\HomeSold\HomeBuyerDetailsResponseTester.cs" />
-    <Compile Include="Sagas\HomeSold\HomeSoldTester.cs" />
-    <Compile Include="Sagas\HomeSold\JobSaleDetailsResponseTester.cs" />
+    <Compile Include="Sagas\BuyerTransferredToNewLot\BuyerTransferredToNewLotSaga_BuyerTransferredTonewLotTester.cs" />
+    <Compile Include="Sagas\BuyerTransferredToNewLot\BuyerTransferredToNewLotSaga_HomeBuyerDetailsResponseTester.cs" />
+    <Compile Include="Sagas\BuyerTransferredToNewLot\BuyerTransferredToNewLotSaga_JobSaleDetailsResponseTester.cs" />
+    <Compile Include="Sagas\HomeSold\HomeSoldSaga_CreateOrUpdateJobTester.cs" />
+    <Compile Include="Sagas\HomeSold\HomeSoldSaga_HomeBuyerDetailsResponseTester.cs" />
+    <Compile Include="Sagas\HomeSold\HomeSoldSaga_HomeSoldTester.cs" />
+    <Compile Include="Sagas\HomeSold\HomeSoldSaga_JobSaleDetailsResponseTester.cs" />
     <Compile Include="Sagas\JobClosed\JobClosedSagaTester.cs" />
     <Compile Include="Sagas\JobClosed\JobClosedSaga_HomeBuyerDetailsTester.cs" />
     <Compile Include="Services\CommunityServiceTester.cs" />
@@ -229,7 +227,6 @@
     <Compile Include="Handlers\JobStages\JobStageDateAddedHandlerTester.cs" />
     <Compile Include="Handlers\JobStages\JobStageDateUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobElevationUpdatedHandlerTester.cs" />
-    <Compile Include="Handlers\Jobs\JobClosedHandlerWithHomeOwnerTester.cs" />
     <Compile Include="Handlers\Jobs\JobPlanUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobSwingUpdatedHandlerTester.cs" />

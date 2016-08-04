@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
+using Fake.Bus;
 using log4net;
 using Moq;
 using NUnit.Framework;
 using Should;
 using TIPS.Commands.Responses;
+using Warranty.Core;
 using Warranty.Core.Entities;
 using Warranty.Core.Services;
 using Warranty.Server.Handlers.Jobs;
@@ -12,7 +14,7 @@ using Warranty.Server.Sagas;
 
 namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
 {
-    public class JobSaleDetailsResponseTester : UseDummyBus
+    public class HomeSoldSaga_JobSaleDetailsResponseTester
     {
         private const string Community_Exists = "2387228378";
         private const string Community_DoesNotExist = "47378382";
@@ -24,6 +26,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             var homeOwnerService = new Mock<IHomeOwnerService>();
             var taskService = new Mock<ITaskService>();
             var employeeService = new Mock<IEmployeeService>();
+            var mediator = new Mock<IMediator>();
             Log = new Mock<ILog>();
 
             Log.Setup(m => m.ErrorFormat(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<object>())).Verifiable();
@@ -41,13 +44,17 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
                 })
                 .Verifiable();
 
+            Bus = new FakeBus();
+
             SagaData = new HomeSoldSagaData();
-            Saga = new HomeSoldSaga(CommunityService.Object, jobService.Object, employeeService.Object, homeOwnerService.Object, taskService.Object, Log.Object)
+            Saga = new HomeSoldSaga(CommunityService.Object, jobService.Object, employeeService.Object, homeOwnerService.Object, taskService.Object, Log.Object, mediator.Object)
             {
                 Data = SagaData,
                 Bus = Bus
             };
         }
+
+        public FakeBus Bus { get; set; }
 
         public Mock<ILog> Log { get; set; }
 
