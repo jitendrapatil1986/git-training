@@ -1,9 +1,11 @@
 ﻿using System;
 using AutoMapper;
+using Fake.Bus;
 using Moq;
 using NUnit.Framework;
 using Should;
 using TIPS.Commands.Responses;
+using Warranty.Core;
 using Warranty.Core.Entities;
 using Warranty.Core.Services;
 using Warranty.Server.Handlers.Jobs;
@@ -12,7 +14,7 @@ using Warranty.Server.Sagas;
 namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
 {
     [TestFixture]
-    public class JobSaleDetailsResponseTester : UseDummyBus
+    public class BuyerTransferredToNewLotSaga_JobSaleDetailsResponseTester
     {
         private readonly int? Builder_Exists = 827838273;
         private const string Community_Exists = "278362763263";
@@ -57,15 +59,20 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
                 .Verifiable();
 
             var log = new Mock<log4net.ILog>();
+            var medaitor = new Mock<IMediator>();
+
+            Bus = new FakeBus();
 
             SagaData = new BuyerTransferredToNewLotSagaData();
 
-            Saga = new BuyerTransferredToNewLotSaga(JobService.Object, homeOwnerService.Object, taskService.Object, EmployeeService.Object, CommunityService.Object, log.Object)
+            Saga = new BuyerTransferredToNewLotSaga(JobService.Object, homeOwnerService.Object, taskService.Object, EmployeeService.Object, CommunityService.Object, log.Object, medaitor.Object)
             {
                 Bus = Bus,
                 Data = SagaData
             };
         }
+
+        public FakeBus Bus { get; set; }
 
         public Mock<IJobService> JobService { get; set; }
 

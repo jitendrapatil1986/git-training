@@ -49,8 +49,6 @@ namespace Warranty.Server.IntegrationTests.Sagas.JobClosed
             };
 
             Saga.Handle(message);
-            Saga.Data.JobNumber.ShouldNotBeNull();
-            Saga.Data.CloseDate.ShouldEqual(closeDate);
             Bus.SentMessages<RequestHomeBuyerDetails>().Any().ShouldBeFalse();
             Bus.SentLocalMessages.Any().ShouldBeFalse();
             Log.Verify(m => m.ErrorFormat(It.IsAny<string>(), message.Job), Times.AtLeastOnce, "Expected error message to be logged with job number");
