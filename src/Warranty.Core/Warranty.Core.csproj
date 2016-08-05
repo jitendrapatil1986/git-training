@@ -145,8 +145,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TIPS.Events, Version=1.2020.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TIPS.Events.1.2020.0.0\lib\net40\TIPS.Events.dll</HintPath>
+    <Reference Include="TIPS.Events, Version=1.2211.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TIPS.Events.1.2211.0\lib\net40\TIPS.Events.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Yay.Enumerations, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -190,6 +190,16 @@
     <Compile Include="Features\EditServiceCallNote\EditServiceCallNoteCommand.cs" />
     <Compile Include="Features\EditServiceCallNote\EditServiceCallNoteCommandHandler.cs" />
     <Compile Include="Features\EditServiceCallNote\EditServiceCallNoteModel.cs" />
+    <Compile Include="Features\Homeowner\AssignHomeOwnerToJobCommand.cs" />
+    <Compile Include="Features\Homeowner\AssignHomeOwnerToJobCommandHandler.cs" />
+    <Compile Include="Features\Homeowner\CreateNewHomeOwnerCommand.cs" />
+    <Compile Include="Features\Homeowner\CreateNewHomeOwnerCommandHandler.cs" />
+    <Compile Include="Features\Homeowner\GetHomeownerQuery.cs" />
+    <Compile Include="Features\Homeowner\GetHomeownerQueryHandler.cs" />
+    <Compile Include="Features\Job\CloseJobCommand.cs" />
+    <Compile Include="Features\Job\CloseJobCommandHandler.cs" />
+    <Compile Include="Features\Job\GetJobQuery.cs" />
+    <Compile Include="Features\Job\GetJobQueryHandler.cs" />
     <Compile Include="Features\MyDivisions\MyDivisionsQuery.cs" />
     <Compile Include="Features\MyDivisions\MyDivisionsQueryHandler.cs" />
     <Compile Include="Features\MyProjects\MyProjectsQuery.cs" />
@@ -221,6 +231,8 @@
     <Compile Include="Features\TaskSubmitForApproval\TaskSubmitForApprovalCommandHandler.cs" />
     <Compile Include="Features\ToDoWidget\ToDoLastSelectedFilterSaveCommand.cs" />
     <Compile Include="Features\ToDoWidget\ToDoLastSelectedFilterSaveCommandHandler.cs" />
+    <Compile Include="Features\Vendor\UpdateVendorDataCommand.cs" />
+    <Compile Include="Features\Vendor\UpdateVendorDataCommandHandler.cs" />
     <Compile Include="ISystemMonitor.cs" />
     <Compile Include="JobServiceApiHelpers\ApiJsonConverter.cs" />
     <Compile Include="JobServiceApiHelpers\EnumerationJsonConverter.cs" />

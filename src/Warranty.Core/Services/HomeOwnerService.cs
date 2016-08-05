@@ -95,7 +95,6 @@ namespace Warranty.Core.Services
                       ,h.CreatedBy
                       ,h.UpdatedDate
                       ,h.UpdatedBy
-                      ,h.OldHomeOwnerID 
                 FROM Homeowners h 
                 inner join Jobs j on j.JobId = h.JobId 
                 WHERE j.JobNumber = @0 

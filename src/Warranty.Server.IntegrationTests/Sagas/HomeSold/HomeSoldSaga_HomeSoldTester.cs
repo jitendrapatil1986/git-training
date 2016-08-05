@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
+using Fake.Bus;
 using log4net;
 using Moq;
 using NUnit.Framework;
 using Should;
 using TIPS.Commands.Requests;
+using Warranty.Core;
 using Warranty.Core.Services;
 using Warranty.Server.Handlers.Jobs;
 using Warranty.Server.Sagas;
@@ -12,7 +14,7 @@ using Warranty.Server.Sagas;
 namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
 {
     [TestFixture]
-    public class HomeSoldTester : UseDummyBus
+    public class HomeSoldSaga_HomeSoldTester
     {
         [TestFixtureSetUp]
         public void Setup()
@@ -23,14 +25,20 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             var employeeService = new Mock<IEmployeeService>();
             var communityService = new Mock<ICommunityService>();
             var log = new Mock<ILog>();
+            var mediator = new Mock<IMediator>();
 
             SagaData = new HomeSoldSagaData();
-            Saga = new HomeSoldSaga(communityService.Object, jobService.Object, employeeService.Object,homeOwnerService.Object, taskService.Object, log.Object)
+
+            Bus = new FakeBus();
+
+            Saga = new HomeSoldSaga(communityService.Object, jobService.Object, employeeService.Object,homeOwnerService.Object, taskService.Object, log.Object, mediator.Object)
             {
                 Data = SagaData,
                 Bus = Bus
             };
         }
+
+        public FakeBus Bus { get; set; }
 
         public HomeSoldSagaData SagaData { get; set; }
 
@@ -65,7 +73,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             };
             Saga.Handle(message);
 
-            var sentMessage = Bus.SentMessages.OfType<RequestJobSaleDetails>().FirstOrDefault(m => m.SaleId == message.SaleId);
+            var sentMessage = Bus.SentMessages<RequestJobSaleDetails>().FirstOrDefault(m => m.SaleId == message.SaleId);
             sentMessage.ShouldNotBeNull();
         }
     }

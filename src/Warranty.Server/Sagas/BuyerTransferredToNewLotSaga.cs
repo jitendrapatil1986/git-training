@@ -8,8 +8,10 @@ using NServiceBus.Saga;
 using TIPS.Commands.Requests;
 using TIPS.Commands.Responses;
 using TIPS.Events.JobEvents;
+using Warranty.Core;
 using Warranty.Core.Entities;
 using Warranty.Core.Enumerations;
+using Warranty.Core.Features.Homeowner;
 using Warranty.Core.Services;
 using Warranty.Server.Handlers.Jobs;
 
@@ -26,8 +28,9 @@ namespace Warranty.Server.Sagas
         private readonly IEmployeeService _employeeService;
         private readonly ICommunityService _communityService;
         private readonly ILog _log;
+        private readonly IMediator _mediator;
 
-        public BuyerTransferredToNewLotSaga(IJobService jobService, IHomeOwnerService homeOwnerService, ITaskService taskService, IEmployeeService employeeService, ICommunityService communityService, ILog log)
+        public BuyerTransferredToNewLotSaga(IJobService jobService, IHomeOwnerService homeOwnerService, ITaskService taskService, IEmployeeService employeeService, ICommunityService communityService, ILog log, IMediator mediator)
         {
             _jobService = jobService;
             _homeOwnerService = homeOwnerService;
@@ -35,6 +38,7 @@ namespace Warranty.Server.Sagas
             _employeeService = employeeService;
             _communityService = communityService;
             _log = log;
+            _mediator = mediator;
         }
 
         public BuyerTransferredToNewLotSaga() { }
@@ -153,15 +157,10 @@ namespace Warranty.Server.Sagas
             {
                 _log.ErrorFormat("Homeowner was not found on previous job {0} for SaleId {1}, creating a new HomeOwner record for them.", Data.PreviousJobNumber, Data.SaleId);
 
-                previousHomeOwner = Mapper.Map<HomeOwner>(message);
-                previousHomeOwner.HomeOwnerId = Guid.NewGuid();
-                previousHomeOwner.HomeOwnerNumber = 1;
-                previousHomeOwner.CreatedBy = Constants.ENDPOINT_NAME;
-                previousHomeOwner.UpdatedBy = Constants.ENDPOINT_NAME;
-                previousHomeOwner.CreatedDate = DateTime.UtcNow;
-                previousHomeOwner.UpdatedDate = DateTime.UtcNow;
-                previousHomeOwner.JobId = Data.JobIdReference; // required or it will violate a known unique index    
-                previousHomeOwner = _homeOwnerService.Create(previousHomeOwner);
+                var createCommand = Mapper.Map<CreateNewHomeOwnerCommand>(message);
+                createCommand.JobId = Data.JobIdReference; // required or it will violate a known unique index
+
+                previousHomeOwner = _mediator.Send(createCommand);
             }
 
             _log.InfoFormat("Assigning HomeOwner {0} to JobNumber {1} on SaleId {2}.", previousHomeOwner.HomeOwnerName, newJob.JobNumber, Data.SaleId);

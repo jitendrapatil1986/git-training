@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using Fake.Bus;
 using Moq;
 using NUnit.Framework;
 using Should;
 using TIPS.Commands.Requests;
+using Warranty.Core;
 using Warranty.Core.Entities;
 using Warranty.Core.Services;
 using Warranty.Server.Handlers.Jobs;
@@ -12,7 +14,7 @@ using Warranty.Server.Sagas;
 namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
 {
     [TestFixture]
-    public class BuyerTransferredToNewLotTester : UseDummyBus
+    public class BuyerTransferredToNewLotSaga_BuyerTransferredTonewLotTester
     {
         public BuyerTransferredToNewLotSagaData SagaData { get; set; }
         public BuyerTransferredToNewLotSaga Saga { get; set; }
@@ -39,15 +41,23 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
             var employeeService = new Mock<IEmployeeService>();
             var communityService = new Mock<ICommunityService>();
             var log = new Mock<log4net.ILog>();
+            
+            Mediator = new Mock<IMediator>();
+
+            Bus = new FakeBus();
 
             SagaData = new BuyerTransferredToNewLotSagaData();
 
-            Saga = new BuyerTransferredToNewLotSaga(jobService.Object, HomeOwnerService.Object,taskService.Object, employeeService.Object, communityService.Object, log.Object)
+            Saga = new BuyerTransferredToNewLotSaga(jobService.Object, HomeOwnerService.Object,taskService.Object, employeeService.Object, communityService.Object, log.Object, Mediator.Object)
             {
                 Bus = Bus,
                 Data = SagaData
             };
         }
+
+        public Mock<IMediator> Mediator { get; set; }
+
+        public FakeBus Bus { get; set; }
 
         public HomeOwner KnownHomeOwner
         {
@@ -91,7 +101,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.BuyerTransferredToNewLot
 
             Saga.Handle(message);
 
-            var sentMessage = Bus.SentMessages.OfType<RequestJobSaleDetails>().FirstOrDefault(m => m.SaleId  == message.SaleId);
+            var sentMessage = Bus.SentMessages<RequestJobSaleDetails>().FirstOrDefault(m => m.SaleId  == message.SaleId);
             sentMessage.ShouldNotBeNull();
         }
     }
