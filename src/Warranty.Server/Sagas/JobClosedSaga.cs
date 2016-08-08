@@ -110,7 +110,7 @@ namespace Warranty.Server.Sagas
 
     public class JobClosedSaga_CloseJob : IBusCommand
     {
-        public string JobNumber { get; set; }
+        public virtual string JobNumber { get; set; }
 
         public JobClosedSaga_CloseJob() { }
         public JobClosedSaga_CloseJob(string jobNumber)
@@ -121,12 +121,12 @@ namespace Warranty.Server.Sagas
 
     public class JobClosedSagaData : IContainSagaData
     {
-        public Guid Id { get; set; }
-        public string Originator { get; set; }
-        public string OriginalMessageId { get; set; }
-        public Guid JobId { get; set; }
-        public Guid CurrentHomeownerId { get; set; }
-        public string JobNumber { get; set; }
-        public DateTime CloseDate { get; set; }
+        public virtual Guid Id { get; set; }
+        public virtual string Originator { get; set; }
+        public virtual string OriginalMessageId { get; set; }
+        public virtual Guid JobId { get; set; }
+        public virtual Guid CurrentHomeownerId { get; set; }
+        public virtual string JobNumber { get; set; }
+        public virtual DateTime CloseDate { get; set; }
     }
 }
