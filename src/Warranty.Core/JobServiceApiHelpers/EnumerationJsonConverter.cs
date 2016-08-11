@@ -1,12 +1,12 @@
-﻿namespace Warranty.Core.JobServiceApiHelpers
-{
-    using System;
-    using System.Reflection;
-    using JobService.Enumerations.Extensions;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-    using Warranty.Core.Enumerations;
+﻿using System;
+using System.Reflection;
+using JobService.Enumerations;
+using JobService.Enumerations.Extensions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
+namespace Warranty.Core.JobServiceApiHelpers
+{
     public class EnumerationJsonConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
