@@ -2,6 +2,7 @@ using AutoMapper;
 using System.Linq;
 using TIPS.Commands.Responses;
 using Warranty.Core.Entities;
+using Warranty.Core.Features.Homeowner;
 using Warranty.Core.Services.Models;
 
 namespace Warranty.Server
@@ -21,9 +22,26 @@ namespace Warranty.Server
                 .ForMember(m => m.WorkPhone1, a => a.Ignore())
                 .ForMember(m => m.WorkPhone2, a => a.Ignore())
                 .ForMember(m => m.OtherPhone, a => a.Ignore())
-                .ForMember(m => m.HomeOwnerName, a => a.MapFrom(src => GetHomeOwnerName(src)))
+                .ForMember(m => m.HomeOwnerName, a => a.MapFrom(src => GetHomeOwnerName(src.FirstName, src.LastName)))
                 .ForMember(m => m.HomePhone, a => a.MapFrom(src => GetPrimaryPhone(src)))
                 .ForMember(m => m.EmailAddress, a => a.MapFrom(src => GetPrimaryEmailAddress(src)));
+
+            CreateMap<HomeBuyerDetailsResponse, CreateNewHomeOwnerCommand>()
+                .ForMember(m => m.JobId, a => a.Ignore())
+                .ForMember(m => m.WorkPhone1, a => a.Ignore())
+                .ForMember(m => m.WorkPhone2, a => a.Ignore())
+                .ForMember(m => m.OtherPhone, a => a.Ignore())
+                .ForMember(m => m.HomeOwnerName, a => a.MapFrom(src => GetHomeOwnerName(src.FirstName, src.LastName)))
+                .ForMember(m => m.HomePhone, a => a.MapFrom(src => GetPrimaryPhone(src)))
+                .ForMember(m => m.EmailAddress, a => a.MapFrom(src => GetPrimaryEmailAddress(src)));
+
+            CreateMap<CreateNewHomeOwnerCommand, HomeOwner>()
+                .ForMember(m => m.HomeOwnerId, a => a.Ignore())
+                .ForMember(m => m.HomeOwnerNumber, a => a.Ignore())
+                .ForMember(m => m.CreatedBy, a => a.Ignore())
+                .ForMember(m => m.CreatedDate, a => a.Ignore())
+                .ForMember(m => m.UpdatedDate, a => a.Ignore())
+                .ForMember(m => m.UpdatedBy, a => a.Ignore());
 
             CreateMap<JobSaleDetailsResponse, Job>()
                 .ForMember(m => m.JobId, a => a.Ignore())
@@ -141,12 +159,12 @@ namespace Warranty.Server
             return null;
         }
 
-        private string GetHomeOwnerName(HomeBuyerDetailsResponse src)
+        private string GetHomeOwnerName(string firstName, string lastName)
         {
-            if (string.IsNullOrWhiteSpace(src.FirstName) && string.IsNullOrWhiteSpace(src.LastName))
+            if (string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName))
                 return null;
 
-            return string.Format("{0}, {1}", src.LastName, src.FirstName);
+            return string.Format("{0}, {1}", lastName, firstName);
         }
     }
 }

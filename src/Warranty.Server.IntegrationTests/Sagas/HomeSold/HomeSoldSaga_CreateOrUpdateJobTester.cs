@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
+using Fake.Bus;
 using log4net;
 using Moq;
 using NUnit.Framework;
 using Should;
 using TIPS.Commands.Requests;
 using TIPS.Commands.Responses;
+using Warranty.Core;
 using Warranty.Core.Entities;
 using Warranty.Core.Services;
 using Warranty.Server.Handlers.Jobs;
@@ -15,12 +17,18 @@ using Warranty.Server.Sagas;
 namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
 {
     [TestFixture]
-    public class CreateOrUpdateJobTester : UseDummyBus
+    public class HomeSoldSaga_CreateOrUpdateJobTester
     {
         private const string Job_Exists = "2837287382";
         private const string Job_DoesNotExist = "8847263432";
 
         [TestFixtureSetUp]
+        public void FixtureSetup()
+        {
+            Mapper.Initialize(m => m.AddProfile(new MappingProfile()));
+        }
+
+        [SetUp]
         public void Setup()
         {
             JobService = new Mock<IJobService>();
@@ -59,6 +67,9 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             var taskService = new Mock<ITaskService>();
             var communityService = new Mock<ICommunityService>();
             var log = new Mock<ILog>();
+            var mediator = new Mock<IMediator>();
+
+            Bus = new FakeBus();
 
             SagaData = new HomeSoldSagaData
             {
@@ -66,14 +77,14 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
                 CommunityReferenceId = Guid.NewGuid()
             };
 
-            Saga = new HomeSoldSaga(communityService.Object, JobService.Object, EmployeeService.Object, HomeOwnerService.Object, taskService.Object, log.Object)
+            Saga = new HomeSoldSaga(communityService.Object, JobService.Object, EmployeeService.Object, HomeOwnerService.Object, taskService.Object, log.Object, mediator.Object)
             {
                 Data = SagaData,
                 Bus = Bus
             };
-
-            Mapper.Initialize(m => m.AddProfile(new MappingProfile()));
         }
+
+        public FakeBus Bus { get; set; }
 
         public Mock<IHomeOwnerService> HomeOwnerService { get; set; }
 
@@ -144,7 +155,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             var message = new HomeSoldSaga_CreateOrUpdateJob(127831827387123);
             Saga.Handle(message);
 
-            var sentMessage = Bus.SentMessages.OfType<RequestHomeBuyerDetails>().FirstOrDefault(m => m.ContactId == SagaData.ContactId);
+            var sentMessage = Bus.SentMessages<RequestHomeBuyerDetails>().FirstOrDefault(m => m.ContactId == SagaData.ContactId);
             sentMessage.ShouldNotBeNull();
         }
 
@@ -160,7 +171,7 @@ namespace Warranty.Server.IntegrationTests.Sagas.HomeSold
             var message = new HomeSoldSaga_CreateOrUpdateJob(123872387237);
             Saga.Handle(message);
 
-            var sentMessage = Bus.SentMessages.OfType<RequestHomeBuyerDetails>().FirstOrDefault(m => m.ContactId == SagaData.ContactId);
+            var sentMessage = Bus.SentMessages<RequestHomeBuyerDetails>().FirstOrDefault(m => m.ContactId == SagaData.ContactId);
             sentMessage.ShouldNotBeNull();
         }
     }
