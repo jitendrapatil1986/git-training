@@ -1,65 +1,34 @@
-﻿using Accounting.Events.Job;
-using log4net;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NPoco;
-using NServiceBus;
 using Warranty.Core.Entities;
-using Warranty.Core.Enumerations;
-using Warranty.Server.Extensions;
+using Warranty.Core.Services;
 
-namespace Warranty.Server.Handlers.Jobs
+namespace Warranty.Core.Features.Vendor
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Core.Services;
-
-    public class JobClosedHandler : IHandleMessages<JobClosed>
+    public class UpdateVendorDataCommandHandler : ICommandHandler<UpdateVendorDataCommand>
     {
-        private readonly IDatabase _database;
+        private readonly IJobService _jobService;
         private readonly IAccountingService _accountingService;
-        private readonly ILog _log;
-        private readonly ITaskService _taskService;
+        private readonly IDatabase _database;
 
-        public JobClosedHandler(IDatabase database, IAccountingService accountingService, ILog log, ITaskService taskService)
+        public UpdateVendorDataCommandHandler(IJobService jobService, IAccountingService accountingService, IDatabase database)
         {
-            _database = database;
+            _jobService = jobService;
             _accountingService = accountingService;
-            _log = log;
-            _taskService = taskService;
+            _database = database;
         }
 
-        public void Handle(JobClosed message)
+        public void Handle(UpdateVendorDataCommand message)
         {
-            using (_database)
-            {
-                var job = _database.SingleOrDefaultByJdeId<Job>(message.JDEId);
-                if (job == null)
-                {
-                    _log.WarnFormat("Received JobClosed for job {0} that does not exist locally", message.JDEId);
-                    return;
-                }
+            var job = _jobService.GetJobById(message.JobId);
 
-                job.CloseDate = message.CloseDate;
-                _database.Update(job);
-
-                StoreVendorsForJob(job);
-
-                if (job.CurrentHomeOwnerId == null)
-                {
-                    return;
-                }
-
-                _taskService.CreateTaskUnlessExists(job.JobId, TaskType.JobStage10JobClosed);
-            }
-        }
-
-        private void StoreVendorsForJob(Job job)
-        {
             var vendors = _accountingService.Execute(x => x.Get.VendorForJob(
                 new
-                    {
-                        jobNumber = job.JobNumber
-                    }));
+                {
+                    jobNumber = job.JobNumber
+                }));
 
             IEnumerable<VendorForJob> vendorsResult = vendors.Details.ToObject<List<VendorForJob>>();
             var vendorNumbers = vendorsResult.Select(x => x.VendorNumber).Distinct().ToList();
@@ -67,15 +36,15 @@ namespace Warranty.Server.Handlers.Jobs
             {
                 var vendorInfo = vendorsResult.Where(x => x.VendorNumber == vendorNumber);
                 var vendorForJob = vendorInfo.First();
-                var vendor = _database.SingleOrDefault<Vendor>("Select * FROM Vendors where Number = @0",
+                var vendor = _database.SingleOrDefault<Entities.Vendor>("Select * FROM Vendors where Number = @0",
                                                                vendorForJob.VendorNumber);
                 if (vendor == null)
                 {
-                    vendor = new Vendor
-                        {
-                            Name = vendorForJob.VendorName,
-                            Number = vendorForJob.VendorNumber
-                        };
+                    vendor = new Entities.Vendor
+                    {
+                        Name = vendorForJob.VendorName,
+                        Number = vendorForJob.VendorNumber
+                    };
 
                     _database.Insert(vendor);
                 }
@@ -89,7 +58,7 @@ namespace Warranty.Server.Handlers.Jobs
             }
         }
 
-        private void UpdateVendorInfo(IEnumerable<VendorForJob> vendorInfo, Vendor vendor)
+        private void UpdateVendorInfo(IEnumerable<VendorForJob> vendorInfo, Entities.Vendor vendor)
         {
             _database.Execute("DELETE FROM VendorPhones WHERE VendorId=@0", vendor.VendorId);
             _database.Execute("DELETE FROM VendorEmails WHERE VendorId=@0", vendor.VendorId);
@@ -116,7 +85,7 @@ namespace Warranty.Server.Handlers.Jobs
             });
         }
 
-        private void PersistVendorCostCodesForJob(IEnumerable<VendorForJob> vendorInfo, Vendor vendor, Guid jobId)
+        private void PersistVendorCostCodesForJob(IEnumerable<VendorForJob> vendorInfo, Entities.Vendor vendor, Guid jobId)
         {
             vendorInfo.Select(x => new { x.CostCode, x.Description }).ToList().ForEach(jvcc =>
             {
