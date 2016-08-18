@@ -86,6 +86,7 @@ namespace Warranty.HealthCheck.Handlers
             if (!jobsWithHomeOwnerInTipsButNotWarranty.Any())
             {
                 _log.Info("Could not find any jobs where a home owner existed in TIPS but not Warranty.");
+                Bus.SendLocal(new FindJobsWithNullCurrentHomeOwnerId(message.RunDate));
                 return;
             }
 

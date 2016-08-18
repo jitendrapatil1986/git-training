@@ -1,4 +1,6 @@
-﻿namespace Warranty.Core.Features.JobSummary
+﻿using JobService.Client.Caching;
+
+namespace Warranty.Core.Features.JobSummary
 {
     using System;
     using System.Collections.Generic;
@@ -60,7 +62,7 @@
 
             var jobNumber = _database.ExecuteScalar<string>(sql, jobId);
 
-            var client = new JobEndpointProxy(apiServiceUrl, new HttpApiClient(), new ApiJsonConverter());
+            var client = new JobEndpointProxy(apiServiceUrl, new HttpApiClient(), new ApiJsonConverter(), BasicMemoryCache.Singleton);
             try
             {
                 var jobInfo = client.Selections(jobNumber);

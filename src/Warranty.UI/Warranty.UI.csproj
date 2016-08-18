@@ -56,6 +56,10 @@
       <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Common.Core, Version=1.1.126.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Core.1.1.126\lib\net45\Common.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Common.Messages, Version=1.1.126.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Common.Messages.1.1.126\lib\net40\Common.Messages.dll</HintPath>
       <Private>True</Private>
@@ -232,6 +236,7 @@
     <Compile Include="Api\QuickSearchController.cs" />
     <Compile Include="Api\ManageServiceCallController.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Constants\SaltlineReportConstants.cs" />
     <None Include="Log4Net.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -244,7 +249,6 @@
       <DependentUpon>Log4Net.config</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Compile Include="Constants\SaltlineReportConstants.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
     <Compile Include="Api\UserSessionController.cs" />
     <Compile Include="Controllers\UserSecurityController.cs" />

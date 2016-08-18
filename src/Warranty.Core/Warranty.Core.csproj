@@ -62,12 +62,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
-    <Reference Include="JobService.Client, Version=1.0.1216.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\JobService.Client.1.0.1216\lib\net451\JobService.Client.dll</HintPath>
+    <Reference Include="JobService.Client, Version=1.0.1454.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JobService.Client.1.0.1454\lib\net451\JobService.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JobService.Enumerations, Version=1.0.1216.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\JobService.Enumerations.1.0.1216\lib\net451\JobService.Enumerations.dll</HintPath>
+    <Reference Include="JobService.Enumerations, Version=1.0.1454.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JobService.Enumerations.1.0.1454\lib\net451\JobService.Enumerations.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -235,6 +235,7 @@
     <Compile Include="Features\Vendor\UpdateVendorDataCommandHandler.cs" />
     <Compile Include="ISystemMonitor.cs" />
     <Compile Include="JobServiceApiHelpers\ApiJsonConverter.cs" />
+    <Compile Include="JobServiceApiHelpers\CostAdjustmentsDictionaryJsonConverter.cs" />
     <Compile Include="JobServiceApiHelpers\EnumerationJsonConverter.cs" />
     <Compile Include="JobServiceApiHelpers\OptionAttributeDictionaryJsonConverter.cs" />
     <Compile Include="Configurations\CitiesCollection.cs" />
