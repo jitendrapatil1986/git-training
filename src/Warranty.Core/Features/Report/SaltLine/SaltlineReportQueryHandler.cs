@@ -25,6 +25,7 @@ namespace Warranty.Core.Features.Report.Saltline
 
         public SaltlineReportModel Handle(SaltlineReportQuery query)
         {
+
             var model = new SaltlineReportModel();
 
             if (!query.queryModel.HasSearchCriteria)
