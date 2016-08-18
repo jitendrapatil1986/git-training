@@ -844,7 +844,7 @@ namespace Warranty.Core.Calculator
             {
                 StartDate = startDate,
                 EndDate = endDate,
-                EmployeeIds = _employeeService.GetEmployeesInMarket(),
+                Division = divisionName,
             }));
 
             if (surveyData != null)
@@ -862,7 +862,7 @@ namespace Warranty.Core.Calculator
             {
                 StartDate = startDate,
                 EndDate = endDate,
-                EmployeeIds = _employeeService.GetEmployeesInMarket(),
+                Project = projectName
             }));
 
             if (surveyData != null)
