@@ -1,7 +1,4 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
-
-namespace Warranty.Core.Features.Report.Saltline
+﻿namespace Warranty.Core.Features.Report.Saltline
 {
     using System.Collections.Generic;
     using System.Linq;
