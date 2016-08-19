@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Warranty.Core.Enumerations;
 
 namespace Warranty.Core.Calculator
 {
@@ -190,11 +191,11 @@ namespace Warranty.Core.Calculator
                                         AND SC.CreatedDate <= @0
 	                                    AND E.EmployeeNumber = @1
 	                                    AND SC.ServiceCallType = 'Warranty Service Request'
-	                                    AND SC.CompletionDate IS NULL -- Open
+	                                    AND SC.ServiceCallStatusId = @2
                                     GROUP BY MONTH(SC.CreatedDate) 
 	                                    ,YEAR(SC.CreatedDate);";
 
-                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), endDate, employeeNumber);
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), endDate, employeeNumber, ServiceCallStatus.Open.Value);
                 return result;
             }
         }
@@ -230,11 +231,11 @@ namespace Warranty.Core.Calculator
 	                                    AND SC.CreatedDate <= @0 
 	                                    AND P.ProjectName = @1 
 	                                    AND SC.ServiceCallType = 'Warranty Service Request'
-	                                    AND SC.CompletionDate IS NULL -- Open
+	                                    AND SC.ServiceCallStatusId = @2
                                     GROUP BY MONTH(SC.CreatedDate) 
 	                                    ,YEAR(SC.CreatedDate);";
 
-                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), endDate, projectName);
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), endDate, projectName, ServiceCallStatus.Open.Value);
                 return result;
             }
         }
@@ -270,11 +271,11 @@ namespace Warranty.Core.Calculator
 	                                    AND SC.CreatedDate <= @0 
 	                                    AND D.DivisionName = @1 
 	                                    AND SC.ServiceCallType = 'Warranty Service Request'
-	                                    AND SC.CompletionDate IS NULL -- Open
+	                                    AND SC.ServiceCallStatusId = @2
                                     GROUP BY MONTH(SC.CreatedDate) 
 	                                    ,YEAR(SC.CreatedDate);";
 
-                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), endDate, divisionName);
+                var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), endDate, divisionName, ServiceCallStatus.Open.Value);
                 return result;
             }
         }
