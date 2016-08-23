@@ -22,7 +22,7 @@
         {
             var employees = _employeeService.GetEmployeesInMarket();
 
-            var thisMonthRawSurveys = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey( new {
+            var thisMonthRawSurveys = _surveyService.Execute(x => x.Post.ElevenMonthWarrantySurvey( new {
                                                                                                     StartDate = SystemTime.Today.ToFirstDay(),
                                                                                                     EndDate = SystemTime.Today.ToLastDay(),
                                                                                                     EmployeeIds = employees}));
@@ -35,7 +35,7 @@
             var totalThisMonthSurveys = thisMonthSurveysInMarket.Count();
             var totalThisMonthSurveysWithRecommend = thisMonthSurveysInMarket.Count(x => string.Equals(x.DefinitelyWillRecommend, SurveyConstants.DefinitelyWillThreshold, StringComparison.CurrentCultureIgnoreCase));
 
-            var lastMonthRawSurveys = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new {
+            var lastMonthRawSurveys = _surveyService.Execute(x => x.Post.ElevenMonthWarrantySurvey(new {
                                                                                                     StartDate = SystemTime.Today.AddMonths(-1).ToFirstDay(),
                                                                                                     EndDate = SystemTime.Today.AddMonths(-1).ToLastDay(),
                                                                                                     EmployeeIds = employees}));

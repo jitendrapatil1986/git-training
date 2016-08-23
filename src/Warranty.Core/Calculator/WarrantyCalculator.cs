@@ -841,7 +841,7 @@ namespace Warranty.Core.Calculator
 
         public IEnumerable<SurveyDataResult> GetDivisionSurveyData(DateTime startDate, DateTime endDate, string divisionName)
         {
-            var surveyData = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new
+            var surveyData = _surveyService.Execute(x => x.Post.ElevenMonthWarrantySurvey(new
             {
                 StartDate = startDate,
                 EndDate = endDate,
@@ -859,7 +859,7 @@ namespace Warranty.Core.Calculator
 
         public IEnumerable<SurveyDataResult> GetProjectSurveyData(DateTime startDate, DateTime endDate, string projectName)
         {
-            var surveyData = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new
+            var surveyData = _surveyService.Execute(x => x.Post.ElevenMonthWarrantySurvey(new
             {
                 StartDate = startDate,
                 EndDate = endDate,
