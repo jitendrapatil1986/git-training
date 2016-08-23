@@ -8,6 +8,7 @@
     using ModelBinders;
     using NServiceBus;
     using Warranty.Core.DataAccess;
+    using log4net.Config;
 
     public class WarrantyWebsiteBootstrapper
     {
@@ -26,12 +27,13 @@
             ModelBinders.Binders.DefaultBinder = new CompositeModelBinder();
             ModelMetadataProviders.Current = new ModelMetadataProvider();
 
-
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
 
             DbFactory.Setup(IoC.Container);
             InitializeNServiceBus();
+
+            SetLoggingLibrary.Log4Net(() => XmlConfigurator.Configure());
         }
 
         private static void InitializeNServiceBus()
