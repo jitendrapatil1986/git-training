@@ -21,7 +21,7 @@
         public PercentSurveyOutstandingWidgetModel Handle(PercentSurveyOutstandingWidgetQuery query)
         {
             var employees = _employeeService.GetEmployeesInMarket();
-            var thisMonthRawSurveys = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new {
+            var thisMonthRawSurveys = _surveyService.Execute(x => x.Post.ElevenMonthWarrantySurvey(new {
                                                                                                         StartDate = SystemTime.Today.ToFirstDay(),
                                                                                                         EndDate = SystemTime.Today.ToLastDay(),
                                                                                                         EmployeeIds = employees}));
@@ -38,7 +38,7 @@
             var totalThisMonthOutstandingServiceSurveys = thisMonthSurveysInMarket
                 .Count(x => Convert.ToInt16(x.WarrantyServiceScore) >= SurveyConstants.OutstandingWarrantyThreshold);
 
-            var lastMonthRawSurveys = _surveyService.Execute(x => x.Get.ElevenMonthWarrantySurvey(new {
+            var lastMonthRawSurveys = _surveyService.Execute(x => x.Post.ElevenMonthWarrantySurvey(new {
                                                                                                         StartDate = SystemTime.Today.AddMonths(-1).ToFirstDay(),
                                                                                                         EndDate = SystemTime.Today.AddMonths(-1).ToLastDay(),
                                                                                                         EmployeeIds = employees}));
