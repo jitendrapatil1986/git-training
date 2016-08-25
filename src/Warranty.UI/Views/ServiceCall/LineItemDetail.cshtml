@@ -149,7 +149,7 @@
                                             @Html.Label("Vendor", new { @class = "control-label", @for = "vendor-search" })
                                             <input type="text" id="vendor-search" class="form-control" data-bind="disable: payHomeownerSelected" autocomplete="off" data-city-code="@Model.CityCode" data-ip-code="" placeholder="Type vendor name or vendor number" />
                                             <span data-bind="validationMessage: vendorNumber" class="help-block"></span>
-                                            <label>Pay Homeowner <input type="checkbox" id="homeowner-as-vendor" data-bind="checked: payHomeownerSelected" /></label>
+                                            <label><input type="checkbox" id="homeowner-as-vendor" data-bind="checked: payHomeownerSelected" /> Pay Homeowner</label>
                                         </div>
                                         <div class="form-group col-md-3" data-bind="validationElement: invoiceNumber">
                                             @Html.Label("Invoice #", new { @class = "control-label", @for = "invoiceNumber" })
@@ -163,6 +163,14 @@
                                             </div>
                                             <span data-bind="validationMessage: amount" class="help-block"></span>
                                         </div>
+                                    </div>
+                                    <div class="row" data-bind="visible: payHomeownerSelected">
+                                        <div class="form-group col-md-3">
+                                            @Html.Label("Project Coordinator Name", new { @class = "control-label", @for = "projectCoordinatorName" })
+                                            <input type="text" id="pc-search" class="form-control" autocomplete="off" placeholder="Type Project Coordinator name"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-12">
                                             @Html.Label("Comments", new { @class = "control-label" })
                                             <textarea class="form-control" maxlength="255" data-bind="value: comments"></textarea>

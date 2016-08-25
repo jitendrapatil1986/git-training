@@ -207,6 +207,9 @@
     <Compile Include="Features\NoActionServiceCallLineItem\NoActionServiceCallLineItemCommand.cs" />
     <Compile Include="Features\NoActionServiceCallLineItem\NoActionServiceCallLineItemCommandHandler.cs" />
     <Compile Include="Features\NoActionServiceCallLineItem\NoActionServiceCallLineItemModel.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchProjectCoordinatorModel.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchProjectCoordinatorsQuery.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchProjectCoordinatorsQueryHandler.cs" />
     <Compile Include="Features\Report\ServiceCall.cs" />
     <Compile Include="Features\Report\WSROpenActivity\WSROpenActivityModel.cs" />
     <Compile Include="Features\Report\WSROpenActivity\WSROpenActivityQuery.cs" />
