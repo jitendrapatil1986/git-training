@@ -675,6 +675,20 @@
                         self.vendorNumber(vendorNumber);
                         self.vendorName(vendorName);
                     });
+
+                    self.payHomeownerSelected = ko.observable(false);
+                    self.payHomeownerSelected.subscribe(function (newValue) {
+                        if (newValue) {
+                            //TODO: set self.vendorNumber and self.vendorName here (and save the vendor name in the #vendor-search input
+                            self.vendorOnHold(false);
+                            $('#vendor-search').val('Lastname, Firstname');
+                        } else {
+                            self.vendorOnHold(false);
+                            self.vendorNumber('');
+                            self.vendorName('');
+                            $('#vendor-search').val('');
+                        }
+                    });
                     
                     $(document).on('backcharge-vendor-number-selected', function () {
                         var vendorNumber = $('#backcharge-vendor-search').attr('data-vendor-number');
