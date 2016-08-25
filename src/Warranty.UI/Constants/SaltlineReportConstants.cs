@@ -7,7 +7,8 @@
         public static readonly string NumberOfCallsTooltip = "The total open outstanding calls assigned to the WSR as of the last day of the specified month.";
         public static readonly string AverageDaysTooltip = "The average days outstanding of the open calls as of the last day of the specified month.";
 
-        public static readonly string NumberOfSurveysTooltip = "The total number of surveys each WSR received during the specified date range.";
+        public static readonly string NumberOfOwsSurveysTooltip = "The total number of OWS surveys each WSR received during the specified date range.";
+        public static readonly string NumberOfDwrSurveysTooltip = "The total number of DWR surveys each WSR received during the specified date range.";
         public static readonly string TrulyOustandingWarrantyServiceTooltip = "The average survey score for each WSR for the surveys received during the specified date range based on the Number of Surveys column.";
         public static readonly string DefinitelyWouldRecommendTooltip = "The average survey score for each WSR for the surveys received during the specified date range based on the Number of Surveys column.";
 
