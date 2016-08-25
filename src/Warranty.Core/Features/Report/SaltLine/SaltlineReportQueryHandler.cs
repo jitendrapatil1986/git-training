@@ -53,7 +53,7 @@
                 var divisionSaltlineSummary = GetDivisionSaltlineSummary(query, division.DivisionName);
                 divisionSaltlineSummary.DivisionName = division.DivisionName;
                 divisionSaltlineSummary.DivisionId = division.DivisionCode;
-                if (!model.DivisionSaltlineSummary.Any(x => x.DivisionName == divisionSaltlineSummary.DivisionName && x.NumberOfSurveys == divisionSaltlineSummary.NumberOfSurveys && x.DefinitelyWouldRecommend == divisionSaltlineSummary.DefinitelyWouldRecommend && x.OutstandingWarrantyService == divisionSaltlineSummary.OutstandingWarrantyService))
+                if (!model.DivisionSaltlineSummary.Any(x => x.DivisionName == divisionSaltlineSummary.DivisionName && x.NumberOfOWSSurveys == divisionSaltlineSummary.NumberOfOWSSurveys && x.DefinitelyWouldRecommend == divisionSaltlineSummary.DefinitelyWouldRecommend && x.OutstandingWarrantyService == divisionSaltlineSummary.OutstandingWarrantyService))
                 {
                     model.DivisionSaltlineSummary.Add(divisionSaltlineSummary);
                 }
@@ -149,7 +149,8 @@
                         Month = range.MonthNumber,
                         Year = range.YearNumber,
                         NumerOfCalls = surveyReportData.OutstandingServiceCallsOpen.Sum(x => x.TotalElements),
-                        NumberOfSurveys = surveyReportData.OutstandingService.Sum(x => x.TotalElements),
+                        NumberOfOWSSurveys = surveyReportData.OutstandingService.Sum(x => x.TotalElements),
+                        NumberOfDWRSurveys = surveyReportData.DefinitelyWouldRecommend.Sum(x => x.TotalElements),
                         NumberOfHomes = GetTotalElementsForMonth(numberOfHomes, range).GetValueOrDefault(),
                         AverageDaysServiceCallsOpen = GetValueForMonth(surveyReportData.OutstandingServiceCallsOpen, range) ?? 0,
                     });
@@ -187,7 +188,8 @@
                 RightTheFirstTime = right,
                 PercentComplete7Days = list.Average(x => x.PercentComplete7Days),
                 NumerOfCalls = surveyReportData.OutstandingServiceCallsOpen.Sum(x => x.TotalCalculableElements),
-                NumberOfSurveys = surveyReportData.OutstandingService.Sum(x => x.TotalElements),
+                NumberOfOWSSurveys = surveyReportData.OutstandingService.Sum(x => x.TotalElements),
+                NumberOfDWRSurveys = surveyReportData.DefinitelyWouldRecommend.Sum(x => x.TotalElements),
                 NumberOfHomes = numberOfHomes.OrderByDescending(x => x.YearNumber)
                     .ThenByDescending(x => x.MonthNumber)
                     .First()
