@@ -309,6 +309,7 @@
       <DependentUpon>UploadHandler.ashx</DependentUpon>
     </Compile>
     <Content Include="Views\WarrantyMailer\NewHomeownerPaymentRequested.cshtml" />
+    <Content Include="Views\WarrantyMailer\_simpleLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />

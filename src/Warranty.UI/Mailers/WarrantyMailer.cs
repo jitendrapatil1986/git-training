@@ -111,12 +111,14 @@ namespace Warranty.UI.Mailers
             ViewBag.Amount = model.Amount.ToString("C");
             ViewBag.Comments = model.Comments;
             ViewBag.CheckDestination = model.SendCheckToProjectCoordinator ? "PC" : "Homeowner";
-
+            
             var emailRecipient = model.ProjectCoordinatorEmailToNotify;
             var requester = _userSession.GetActualUser().LastName + ", " + _userSession.GetActualUser().FirstName;
 
             if (!ConfigurationManager.AppSettings["sendEmailsForTest"].IsNullOrEmpty())
                 emailRecipient = _userSession.GetActualUser().Email;
+
+            MasterName = "_simpleLayout";
 
             return Populate(x =>
             {
