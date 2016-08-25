@@ -130,7 +130,14 @@ namespace Warranty.UI.Api
         [HttpPost]
         public AddPaymentCommandDto AddPayment(AddPaymentCommand model)
         {
-            return _mediator.Send(model); ;
+            var result = _mediator.Send(model);
+
+            if (!string.IsNullOrEmpty(model.ProjectCoordinatorEmailToNotify))
+            {
+                _mailer.NewHomeownerPaymentRequested(model).Send();
+            }
+
+            return result;
         }
 
         [System.Web.Http.HttpDelete]

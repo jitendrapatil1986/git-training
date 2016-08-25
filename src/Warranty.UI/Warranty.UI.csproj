@@ -304,9 +304,11 @@
     </Compile>
     <Compile Include="Mailers\WarrantyMailer.cs" />
     <Compile Include="Mailers\IWarrantyMailer.cs" />
+    <Content Include="Scripts\app\servicecall\SearchProjectCoordinator.js" />
     <Compile Include="UploadHandler.ashx.cs">
       <DependentUpon>UploadHandler.ashx</DependentUpon>
     </Compile>
+    <Content Include="Views\WarrantyMailer\NewHomeownerPaymentRequested.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -367,6 +369,7 @@
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
     <Content Include="Scripts\app\shared\keepAlive.js" />
     <Content Include="Scripts\config\backcharge-vendor-search.js" />
+    <Content Include="Scripts\config\project-coordinator-search.js" />
     <Content Include="Scripts\config\vendor-search.js" />
     <Content Include="Scripts\config\customer-search.js" />
     <Content Include="Scripts\lib\bootstrap-editable.min.js" />
@@ -405,6 +408,7 @@
     <Content Include="Scripts\lib\text.js" />
     <Content Include="Scripts\templates\call-search-item.html" />
     <Content Include="Scripts\templates\backcharge-vendor-search-item.html" />
+    <Content Include="Scripts\templates\project-coordinator-search-item.html" />
     <Content Include="Scripts\templates\vendor-search-item.html" />
     <Content Include="Scripts\templates\customer-search-item.html" />
     <Content Include="Scripts\templates\job-search-item.html" />

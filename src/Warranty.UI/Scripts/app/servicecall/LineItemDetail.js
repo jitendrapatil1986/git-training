@@ -79,6 +79,8 @@
                     self.backchargeStatusDisplayName = ko.observable(options.backchargeStatusDisplayName);
                     self.costCode = options.costCode ? options.costCode : options.backchargeCostCode;
                     self.standAloneBackcharge = ko.observable(!options.paymentId);
+                    self.projectCoordinatorEmailToNotify = options.projectCoordinatorEmailToNotify;
+                    self.sendCheckToProjectCoordinator = options.sendCheckToProjectCoordinator;
                     
                     self.isBackchargeHeld = ko.computed(function () {
                         return self.backchargeStatusDisplayName() == backchargeStatusEnum.RequestedHold.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName;
@@ -690,6 +692,7 @@
                         }
                     });
 
+                    self.sendCheckToPC = ko.observable();
                     self.projectCoordinatorEmail = ko.observable();
                     $(document).on('pc-selected', function () {
                         var projectCoordinatorEmail = $('#pc-search').attr('data-pc-email');
@@ -743,6 +746,8 @@
                             backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
                             paymentStatusDisplayName: paymentStatusEnum.Requested.DisplayName,
                             backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
+                            projectCoordinatorEmailToNotify: self.projectCoordinatorEmail(),
+                            sendCheckToProjectCoordinator: self.sendCheckToPC(),
                         });
 
                         var paymentData = ko.toJSON(newPayment);
