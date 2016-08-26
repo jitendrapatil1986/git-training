@@ -1,0 +1,1 @@
+ALTER TABLE Payments ADD SendCheckToPC bit DEFAULT 0;

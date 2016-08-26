@@ -39,8 +39,8 @@
       <HintPath>..\packages\Accounting.Client.1.1.1135.0\lib\net45\Accounting.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Accounting.Commands, Version=1.1.1135.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accounting.Commands.1.1.1135.0\lib\net45\Accounting.Commands.dll</HintPath>
+    <Reference Include="Accounting.Commands, Version=1.1.1387.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accounting.Commands.1.1.1387\lib\net45\Accounting.Commands.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Accounting.Events, Version=1.1.1135.0, Culture=neutral, processorArchitecture=MSIL">
@@ -263,7 +263,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Warranty.Commands\Warranty.Commands.csproj">
