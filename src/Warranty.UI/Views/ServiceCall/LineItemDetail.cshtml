@@ -165,9 +165,10 @@
                                         </div>
                                     </div>
                                     <div class="row" data-bind="visible: payHomeownerSelected">
-                                        <div class="form-group col-md-3">
+                                        <div class="form-group col-md-3" data-bind="validationElement: projectCoordinatorEmail">
                                             @Html.Label("Project Coordinator Name", new { @class = "control-label", @for = "projectCoordinatorName" })
                                             <input type="text" id="pc-search" class="form-control" autocomplete="off" placeholder="Type Project Coordinator name"/>
+                                            <span data-bind="validationMessage: projectCoordinatorEmail" class="help-block"></span>
                                             <label><input type="checkbox" id="send-check-to-pc" data-bind="checked: sendCheckToPC"/> Send check to PC</label>
                                         </div>
                                     </div>
