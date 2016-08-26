@@ -24,6 +24,7 @@
                     x.Column(y => y.HoldDate);
                     x.Column(y => y.CostCode);
                     x.Column(y => y.ObjectAccount);
+                    x.Column(y => y.SendCheckToPC);
                 });
         }
     }

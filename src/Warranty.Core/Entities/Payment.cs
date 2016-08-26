@@ -25,5 +25,6 @@ namespace Warranty.Core.Entities
         public string CostCode { get; set; }
         public string JdeIdentifier { get; set; }
         public string ObjectAccount { get; set; }
+        public bool SendCheckToPC { get; set; }
     }
 }
