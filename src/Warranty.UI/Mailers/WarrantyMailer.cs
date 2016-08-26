@@ -94,6 +94,7 @@ namespace Warranty.UI.Mailers
                 x.To.Add(model.Emails.CommaSeparate());
             });
         }
+
         public MvcMailMessage NewHomeownerPaymentRequested(AddPaymentCommand model)
         {
             var lineItem = _mediator.Request(new ServiceCallLineItemQuery {ServiceCallLineItemId = model.ServiceCallLineItemId});

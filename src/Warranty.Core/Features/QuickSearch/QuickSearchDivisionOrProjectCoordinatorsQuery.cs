@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class QuickSearchProjectCoordinatorsQuery : IQuery<IEnumerable<QuickSearchProjectCoordinatorModel>>
+    public class QuickSearchDivisionOrProjectCoordinatorsQuery : IQuery<IEnumerable<QuickSearchDivisionOrProjectCoordinatorModel>>
     {
         public string Query { get; set; }
     }
