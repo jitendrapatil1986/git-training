@@ -687,6 +687,8 @@
                         if (newValue) {
                             //TODO: set self.vendorNumber and self.vendorName here (and save the vendor name in the #vendor-search input
                             self.vendorOnHold(false);
+                            self.vendorNumber('00000000');
+                            self.vendorName('FAKENAME');
                             $('#vendor-search').val('Lastname, Firstname');
                         } else {
                             self.vendorOnHold(false);
@@ -769,7 +771,10 @@
                             contentType: "application/json; charset=utf-8"
                         })
                             .fail(function (response) {
-                                toastr.error("There was a problem adding the payment. Please try again.");
+                                if (response.responseJSON.ExceptionMessage === "EMAIL_SEND_FAILURE")
+                                    toastr.error("Failed to send email to Project Coordinator");
+                                else
+                                    toastr.error("There was a problem adding the payment. Please try again.");
                             })
                             .done(function (response) {
                                 newPayment.paymentId = response.PaymentId;

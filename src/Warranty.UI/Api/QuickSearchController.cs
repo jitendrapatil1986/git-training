@@ -56,9 +56,9 @@
         }
 
         [HttpGet]
-        public IEnumerable<QuickSearchProjectCoordinatorModel> ProjectCoordinators(string query)
+        public IEnumerable<QuickSearchDivisionOrProjectCoordinatorModel> ProjectCoordinators(string query)
         {
-            var results = _mediator.Request(new QuickSearchProjectCoordinatorsQuery { Query = query});
+            var results = _mediator.Request(new QuickSearchDivisionOrProjectCoordinatorsQuery { Query = query});
             return results;
         }
     }

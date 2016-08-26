@@ -4,9 +4,9 @@ using NPoco;
 
 namespace Warranty.Core.Features.QuickSearch
 {
-    public class QuickSearchProjectCoordinatorsQueryHandler : IQueryHandler<QuickSearchProjectCoordinatorsQuery, IEnumerable<QuickSearchProjectCoordinatorModel>>
+    public class QuickSearchDivisionOrProjectCoordinatorsQueryHandler : IQueryHandler<QuickSearchDivisionOrProjectCoordinatorsQuery, IEnumerable<QuickSearchDivisionOrProjectCoordinatorModel>>
     {
-        public IEnumerable<QuickSearchProjectCoordinatorModel> Handle(QuickSearchProjectCoordinatorsQuery query)
+        public IEnumerable<QuickSearchDivisionOrProjectCoordinatorModel> Handle(QuickSearchDivisionOrProjectCoordinatorsQuery query)
         {
             using (var database = new Database("SecurityDB"))
             {
@@ -17,7 +17,7 @@ namespace Warranty.Core.Features.QuickSearch
                                     AND users.name like @0
                                 ORDER BY users.name";
 
-                var result = database.Fetch<QuickSearchProjectCoordinatorModel>(sqlTemplate, "%" + query.Query + "%");
+                var result = database.Fetch<QuickSearchDivisionOrProjectCoordinatorModel>(sqlTemplate, "%" + query.Query + "%");
                 result.ForEach(x => x.Name = x.Name.ToTitleCase());
                 return result;
             }
