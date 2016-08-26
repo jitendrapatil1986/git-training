@@ -1,5 +1,5 @@
 ﻿require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'moment', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/BackchargeStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'enumeration/PurchaseOrderLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchBackchargeVendor'], function ($, ko, koxeditable, moment, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, backchargeStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, purchaseOrderLineItemStatusEnum, bootbox) {
+    require(['jquery', 'ko', 'ko.x-editable', 'moment', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/BackchargeStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'enumeration/PurchaseOrderLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchProjectCoordinator', 'app/serviceCall/SearchBackchargeVendor'], function ($, ko, koxeditable, moment, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, backchargeStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, purchaseOrderLineItemStatusEnum, bootbox) {
         window.ko = ko; //manually set the global ko property.
 
         require(['ko.validation', 'jquery.color'], function () {
@@ -79,6 +79,8 @@
                     self.backchargeStatusDisplayName = ko.observable(options.backchargeStatusDisplayName);
                     self.costCode = options.costCode ? options.costCode : options.backchargeCostCode;
                     self.standAloneBackcharge = ko.observable(!options.paymentId);
+                    self.projectCoordinatorEmailToNotify = options.projectCoordinatorEmailToNotify;
+                    self.sendCheckToProjectCoordinator = options.sendCheckToProjectCoordinator;
                     
                     self.isBackchargeHeld = ko.computed(function () {
                         return self.backchargeStatusDisplayName() == backchargeStatusEnum.RequestedHold.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName;
@@ -681,6 +683,8 @@
                         if (newValue) {
                             //TODO: set self.vendorNumber and self.vendorName here (and save the vendor name in the #vendor-search input
                             self.vendorOnHold(false);
+                            self.vendorNumber('00000000');
+                            self.vendorName('FAKENAME');
                             $('#vendor-search').val('Lastname, Firstname');
                         } else {
                             self.vendorOnHold(false);
@@ -688,6 +692,13 @@
                             self.vendorName('');
                             $('#vendor-search').val('');
                         }
+                    });
+
+                    self.sendCheckToPC = ko.observable();
+                    self.projectCoordinatorEmail = ko.observable();
+                    $(document).on('pc-selected', function () {
+                        var projectCoordinatorEmail = $('#pc-search').attr('data-pc-email');
+                        self.projectCoordinatorEmail(projectCoordinatorEmail);
                     });
                     
                     $(document).on('backcharge-vendor-number-selected', function () {
@@ -737,6 +748,8 @@
                             backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
                             paymentStatusDisplayName: paymentStatusEnum.Requested.DisplayName,
                             backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
+                            projectCoordinatorEmailToNotify: self.projectCoordinatorEmail(),
+                            sendCheckToProjectCoordinator: self.sendCheckToPC(),
                         });
 
                         var paymentData = ko.toJSON(newPayment);
@@ -750,7 +763,10 @@
                             contentType: "application/json; charset=utf-8"
                         })
                             .fail(function (response) {
-                                toastr.error("There was a problem adding the payment. Please try again.");
+                                if (response.responseJSON.ExceptionMessage === "EMAIL_SEND_FAILURE")
+                                    toastr.error("Failed to send email to Project Coordinator");
+                                else
+                                    toastr.error("There was a problem adding the payment. Please try again.");
                             })
                             .done(function (response) {
                                 newPayment.paymentId = response.PaymentId;
