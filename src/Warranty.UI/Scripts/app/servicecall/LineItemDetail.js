@@ -623,12 +623,12 @@
                     self.vendorOnHold = ko.observable(false);
                     self.vendorName = ko.observable('').extend({
                         required: {
-                            onlyIf: function () { return self.isPayment() === true; }
+                            onlyIf: function () { return self.isPayment() === true && !self.payHomeownerSelected(); }
                         }
                     });
                     self.vendorNumber = ko.observable('').extend({
                         required: {
-                            onlyIf: function () { return self.isPayment() === true; }
+                            onlyIf: function () { return self.isPayment() === true && !self.payHomeownerSelected(); }
                         },
                         vendorIsOnHold: self.vendorOnHold
                     });
@@ -654,11 +654,15 @@
                     self.clearPaymentFields = function () {
                         $('#vendor-search').val('');
                         $('#backcharge-vendor-search').val('');
+                        $('#pc-search').val('');
                         self.vendorNumber('');
                         self.backchargeVendorNumber('');
                         self.invoiceNumber('');
                         self.comments('');
                         self.amount('');
+                        self.payHomeownerSelected(false);
+                        self.projectCoordinatorEmail('');
+                        self.sendCheckToPC(false);
                         self.backchargeAmount('');
                         self.isBackcharge(false);
                         self.backchargeReason('');
@@ -695,7 +699,11 @@
                     });
 
                     self.sendCheckToPC = ko.observable();
-                    self.projectCoordinatorEmail = ko.observable();
+                    self.projectCoordinatorEmail = ko.observable().extend({
+                        required: {
+                            onlyIf: function () { return (self.payHomeownerSelected() === true); }
+                        }
+                    });;
                     $(document).on('pc-selected', function () {
                         var projectCoordinatorEmail = $('#pc-search').attr('data-pc-email');
                         self.projectCoordinatorEmail(projectCoordinatorEmail);
@@ -724,7 +732,7 @@
 
                     self.addPayment = function () {
                         
-                        if (formHasErrors([self.invoiceNumber, self.amount, self.backchargeAmount, self.backchargeReason, self.personNotified, self.personNotifiedPhoneNumber, self.personNotifiedDate, self.backchargeResponseFromVendor, self.vendorNumber, self.backchargeVendorName, self.backchargeVendorNumber]))
+                        if (formHasErrors([self.invoiceNumber, self.amount, self.backchargeAmount, self.backchargeReason, self.personNotified, self.personNotifiedPhoneNumber, self.personNotifiedDate, self.backchargeResponseFromVendor, self.vendorNumber, self.backchargeVendorName, self.backchargeVendorNumber, self.projectCoordinatorEmail]))
                             return;
 
                         self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
