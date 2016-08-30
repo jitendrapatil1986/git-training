@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using Common.Api.Http;
+using FluentValidation;
+using Warranty.Core.AccountingApiHelpers;
 using Warranty.Core.ActivityLogger;
 using Warranty.Core.ApprovalInfrastructure.Interfaces;
 
@@ -40,6 +42,9 @@ namespace Warranty.Core
             var timeout = timeoutInMilliseconds.TryParseNullable();
 
             For<SurveyClientConfiguration>().Singleton().Use(() => new SurveyClientConfiguration(baseSurveyApiUri, timeout));
+
+            For<HttpApiClient>().Use<HttpApiClient>();
+            For<ApiJsonConverter>().Use<ApiJsonConverter>();
         }
     }
 }

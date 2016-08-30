@@ -682,14 +682,38 @@
                         self.vendorName(vendorName);
                     });
 
+                    self.canPayHomeowner = ko.observable(false);
+                    self.canPayHomeownerUnknown = ko.observable(true);
+                    $.ajax({
+                        url: urls.ManageServiceCall.GetHomeownerId,
+                        type: "GET",
+                        data: { jobNumber: self.jobNumber() },
+                        contentType: "application/json; charset=utf-8"
+                    })
+                        .fail(function (response) {
+                            console.log(response);
+                            toastr.error("Failed to validate whether homeowner is payable");
+                        })
+                        .done(function (response) {
+                            if (response.IsValid) {
+                                self.canPayHomeowner(true);
+                                self.homeownerName(response.HomeownerName);
+                                self.homeownerId(response.HomeownerNumber);
+                                debugger;
+                            }
+                        })
+                        .always(function () {
+                            self.canPayHomeownerUnknown(false);
+                        });
+                    self.homeownerId = ko.observable();
+                    self.homeownerName = ko.observable();
                     self.payHomeownerSelected = ko.observable(false);
                     self.payHomeownerSelected.subscribe(function (newValue) {
                         if (newValue) {
-                            //TODO: set self.vendorNumber and self.vendorName here (and save the vendor name in the #vendor-search input
                             self.vendorOnHold(false);
-                            self.vendorNumber('00000000');
-                            self.vendorName('FAKENAME');
-                            $('#vendor-search').val('Lastname, Firstname');
+                            self.vendorNumber(self.homeownerId());
+                            self.vendorName(self.homeownerName());
+                            $('#vendor-search').val(self.homeownerName());
                         } else {
                             self.vendorOnHold(false);
                             self.vendorNumber('');

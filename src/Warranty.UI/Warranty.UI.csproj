@@ -45,8 +45,12 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Client, Version=1.1.1135.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accounting.Client.1.1.1135.0\lib\net45\Accounting.Client.dll</HintPath>
+    <Reference Include="Accounting.API.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accounting.API.Models.1.1.1403\lib\net45\Accounting.API.Models.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accounting.Client, Version=1.1.1403.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accounting.Client.1.1.1403\lib\net45\Accounting.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Antlr3.Runtime">
@@ -56,8 +60,12 @@
       <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Core, Version=1.1.126.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Core.1.1.126\lib\net45\Common.Core.dll</HintPath>
+    <Reference Include="Common.Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Api.1.1.128\lib\net45\Common.Api.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Core, Version=1.1.132.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Core.1.1.132\lib\net45\Common.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.Messages, Version=1.1.126.0, Culture=neutral, processorArchitecture=MSIL">

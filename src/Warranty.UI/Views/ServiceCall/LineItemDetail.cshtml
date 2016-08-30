@@ -149,7 +149,9 @@
                                             @Html.Label("Vendor", new { @class = "control-label", @for = "vendor-search" })
                                             <input type="text" id="vendor-search" class="form-control" data-bind="disable: payHomeownerSelected" autocomplete="off" data-city-code="@Model.CityCode" data-ip-code="" placeholder="Type vendor name or vendor number" />
                                             <span data-bind="validationMessage: vendorNumber" class="help-block"></span>
-                                            <label><input type="checkbox" id="homeowner-as-vendor" data-bind="checked: payHomeownerSelected" /> Pay Homeowner</label>
+                                            <span data-bind="visible: canPayHomeownerUnknown">Checking if homeowner can be paid <img src="@Url.Content("/img/loader.gif")" /></span>
+                                            <label data-bind="visible: canPayHomeowner() && !canPayHomeownerUnknown()"><input type="checkbox" id="homeowner-as-vendor" data-bind="checked: payHomeownerSelected"/> Pay Homeowner</label>
+                                            <span style="font-size: 12px" data-bind="visible: !canPayHomeowner() && !canPayHomeownerUnknown()">Cannot find homeowner in supply master; please contact your purchasing rep.</span>
                                         </div>
                                         <div class="form-group col-md-3" data-bind="validationElement: invoiceNumber">
                                             @Html.Label("Invoice #", new { @class = "control-label", @for = "invoiceNumber" })
