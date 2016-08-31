@@ -699,7 +699,6 @@
                                 self.canPayHomeowner(true);
                                 self.homeownerName(response.HomeownerName);
                                 self.homeownerId(response.HomeownerNumber);
-                                debugger;
                             }
                         })
                         .always(function () {
