@@ -1,5 +1,8 @@
-﻿using Common.Security.Session;
+﻿using Accounting.API.Models;
+using Common.Security.Session;
 using NServiceBus.Logging;
+using Warranty.Core.Features.Homeowner;
+using Warranty.Core.Features.Job;
 
 namespace Warranty.UI.Api
 {
@@ -255,6 +258,14 @@ namespace Warranty.UI.Api
         {
             _mediator.Send(model);
             return new PostResponseModel { Success = true };
+        }
+
+        public HomeownerIsPayableValidationResponseDto GetHomeownerId(string jobNumber)
+        {
+            var homeowner = _mediator.Request(new GetHomeOwnerQuery(jobNumber));
+            var job = _mediator.Request(new GetJobQuery(jobNumber));
+
+            return _mediator.Request(new GetHomeownerIdQuery { Name = homeowner.HomeOwnerName, Address = job.AddressLine });
         }
     }
 }
