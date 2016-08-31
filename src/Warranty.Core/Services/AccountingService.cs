@@ -7,16 +7,15 @@
     using Common.Api.Http;
     using Accounting.API.Models;
     using Accounting.Client.API.Endpoints;
-    using AccountingApiHelpers;
 
     public class AccountingService : IAccountingService
     {
         private readonly IAccountingClient _accountingClient;
         private readonly AccountingClientSystemMonitor _monitor;
-        private readonly HttpApiClient _client;
-        private readonly ApiJsonConverter _converter;
+        private readonly IApiClient _client;
+        private readonly IApiConverter _converter;
 
-        public AccountingService(IAccountingClient accountingClient, AccountingClientSystemMonitor monitor, HttpApiClient client, ApiJsonConverter converter)
+        public AccountingService(IAccountingClient accountingClient, AccountingClientSystemMonitor monitor, IApiClient client, IApiConverter converter)
         {
             _accountingClient = accountingClient;
             _monitor = monitor;

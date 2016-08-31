@@ -684,11 +684,11 @@
 
                     self.canPayHomeowner = ko.observable(false);
                     self.canPayHomeownerUnknown = ko.observable(true);
-                    self.payHomeownerVisible = ko.pureComputed(function() {
-                        return canPayHomeowner() && !canPayHomeownerUnknown();
+                    self.payHomeownerVisible = ko.computed(function() {
+                        return self.canPayHomeowner() && !self.canPayHomeownerUnknown();
                     });
-                    self.payHomeownerNotVisible = ko.pureComputed(function() {
-                        return !canPayHomeowner() && !canPayHomeownerUnknown();
+                    self.payHomeownerNotVisible = ko.computed(function () {
+                        return !self.canPayHomeowner() && !self.canPayHomeownerUnknown();
                     });
                     $.ajax({
                         url: urls.ManageServiceCall.GetHomeownerId,

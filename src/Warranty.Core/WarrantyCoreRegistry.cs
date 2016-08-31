@@ -43,8 +43,8 @@ namespace Warranty.Core
 
             For<SurveyClientConfiguration>().Singleton().Use(() => new SurveyClientConfiguration(baseSurveyApiUri, timeout));
 
-            For<HttpApiClient>().Use<HttpApiClient>();
-            For<ApiJsonConverter>().Use<ApiJsonConverter>();
+            For<IApiClient>().Use<HttpApiClient>();
+            For<IApiConverter>().Use<ApiJsonConverter>();
         }
     }
 }
