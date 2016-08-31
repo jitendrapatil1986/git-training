@@ -117,9 +117,10 @@
                      <thead>
                          <tr>
                              <th>WSR</th>
-                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("Number of Surveys", SaltlineReportConstants.NumberOfSurveysTooltip)</th>
-                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("Truly Outstanding Warranty Service", SaltlineReportConstants.TrulyOustandingWarrantyServiceTooltip)</th>
-                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("Definitely Would Recommend", SaltlineReportConstants.DefinitelyWouldRecommendTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("#", SaltlineReportConstants.NumberOfOwsSurveysTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("OWS", SaltlineReportConstants.TrulyOustandingWarrantyServiceTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("#", SaltlineReportConstants.NumberOfDwrSurveysTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("DWR", SaltlineReportConstants.DefinitelyWouldRecommendTooltip)</th>
                          </tr>
                      </thead>
                      <tbody>
@@ -128,8 +129,9 @@
                              <tr>
 
                                  <td class="text-capitalize">@wsr.EmployeeName</td>
-                                 <td class="text-right">@wsr.NumberOfSurveys</td>
+                                 <td class="text-right">@wsr.NumberOfOWSSurveys</td>
                                  <td class="text-right">@Format.Percentage(wsr.OutstandingWarrantyService)</td>
+                                 <td class="text-right">@wsr.NumberOfDWRSurveys</td>
                                  <td class="text-right">@Format.Percentage(wsr.DefinitelyWouldRecommend)</td>
                              </tr>
                          }
@@ -139,8 +141,9 @@
                      <thead>
                          <tr>
                              <th>Project</th>
-                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("# of Surveys", SaltlineReportConstants.NumberOfSurveysTooltip)</th>
-                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("EWS", SaltlineReportConstants.TrulyOustandingWarrantyServiceTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("#", SaltlineReportConstants.NumberOfOwsSurveysTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("OWS", SaltlineReportConstants.TrulyOustandingWarrantyServiceTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("#", SaltlineReportConstants.NumberOfDwrSurveysTooltip)</th>
                              <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("DWR", SaltlineReportConstants.DefinitelyWouldRecommendTooltip)</th>
                          </tr>
                      </thead>
@@ -150,8 +153,9 @@
                              <tr>
 
                                  <td class="text-capitalize">@wsr.ProjectName</td>
-                                 <td class="text-right">@wsr.NumberOfSurveys</td>
+                                 <td class="text-right">@wsr.NumberOfOWSSurveys</td>
                                  <td class="text-right">@Format.Percentage(wsr.OutstandingWarrantyService)</td>
+                                 <td class="text-right">@wsr.NumberOfDWRSurveys</td>
                                  <td class="text-right">@Format.Percentage(wsr.DefinitelyWouldRecommend)</td>
                              </tr>
                          }
@@ -161,8 +165,9 @@
                      <thead>
                          <tr>
                              <th>Division</th>
-                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("# of Surveys", SaltlineReportConstants.NumberOfSurveysTooltip)</th>
-                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("EWS", SaltlineReportConstants.TrulyOustandingWarrantyServiceTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("#", SaltlineReportConstants.NumberOfOwsSurveysTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("OWS", SaltlineReportConstants.TrulyOustandingWarrantyServiceTooltip)</th>
+                             <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("#", SaltlineReportConstants.NumberOfDwrSurveysTooltip)</th>
                              <th class="text-right">@Html.RenderTableHeaderTextWithBottomTooltip("DWR", SaltlineReportConstants.DefinitelyWouldRecommendTooltip)</th>
                          </tr>
                      </thead>
@@ -171,8 +176,9 @@
                          {
                              <tr>
                                 <td class="text-capitalize">@wsr.DivisionName</td>
-                                <td class="text-right">@wsr.NumberOfSurveys</td>
-                                <td class="text-right">@Format.Percentage(wsr.OutstandingWarrantyService)</td>
+                                <td class="text-right">@wsr.NumberOfOWSSurveys</td>
+                                 <td class="text-right">@Format.Percentage(wsr.OutstandingWarrantyService)</td>
+                                 <td class="text-right">@wsr.NumberOfDWRSurveys</td>
                                 <td class="text-right">@Format.Percentage(wsr.DefinitelyWouldRecommend)</td>
                              </tr>
                          }

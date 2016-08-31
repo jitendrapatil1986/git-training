@@ -1,5 +1,6 @@
 ﻿namespace Warranty.Core.Services
 {
+    using log4net;
     using System;
     using System.Collections.Generic;
 
@@ -8,12 +9,14 @@
         private readonly int _failuresToAssumeDown;
         private DateTime _exceptionStartTime;
         private readonly TimeSpan _timeToTryAgain;
+        private readonly ILog _log;
         private readonly List<KeyValuePair<string, Exception>> _exceptions = new List<KeyValuePair<string, Exception>>();
 
-        public SurveyClientSystemMonitor(int failuresToAssumeDown, TimeSpan timeToTryAgain)
+        public SurveyClientSystemMonitor(int failuresToAssumeDown, TimeSpan timeToTryAgain, ILog log)
         {
             _failuresToAssumeDown = failuresToAssumeDown;
             _timeToTryAgain = timeToTryAgain;
+            _log = log;
         }
 
         public bool SurveyClientAppearsDown
@@ -32,6 +35,7 @@
 
         public void LogException(string requestUri, Exception webException)
         {
+            _log.Error(string.Format("Error with request \"{0}\"", requestUri), webException);
             _exceptions.Add(new KeyValuePair<string, Exception>(requestUri, webException));
 
             if (_exceptions.Count == 1) // only keep track of the time from the first exception

@@ -41,7 +41,8 @@
             public string ProjectNumber { get; set; }
             public string ProjectName { get; set; }
             public decimal NumerOfCalls { get; set; }
-            public decimal NumberOfSurveys { get; set; }
+            public decimal NumberOfOWSSurveys { get; set; }
+            public decimal NumberOfDWRSurveys { get; set; }
             public decimal NumberOfHomes { get; set; }
             public decimal AverageDaysServiceCallsOpen { get; set; }
         }

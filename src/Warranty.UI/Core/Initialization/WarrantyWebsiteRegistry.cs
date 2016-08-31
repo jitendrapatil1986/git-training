@@ -3,6 +3,7 @@ using Common.Security.Session;
 using Common.UI.Security.Session;
 using FluentValidation;
 using FluentValidation.Mvc;
+using log4net;
 using Warranty.UI.Core.Automapper;
 
 namespace Warranty.UI.Core.Initialization
@@ -65,11 +66,15 @@ namespace Warranty.UI.Core.Initialization
 
             For<SurveyClientSystemMonitor>()
                 .LifecycleIs(new HybridLifecycle())
-                .Use(() => new SurveyClientSystemMonitor(surveyFailuresToAssumeDown, new TimeSpan(0, 0, 0, surveyTimeToTryAgain)));
+                .Use(ctx => new SurveyClientSystemMonitor(surveyFailuresToAssumeDown, new TimeSpan(0, 0, 0, surveyTimeToTryAgain), LogManager.GetLogger("SurveyLog")));
 
             For<SurveyClientConfiguration>()
                 .Singleton()
                 .Use(() => new SurveyClientConfiguration(baseSurveyApiUri, surveyTimeout));
+
+            For<ISurveyService>()
+                .Use<SurveyService>()
+                .Ctor<ILog>().Is(LogManager.GetLogger("SurveyLog"));
         }
 
         private static IMapper CreateMapper()
