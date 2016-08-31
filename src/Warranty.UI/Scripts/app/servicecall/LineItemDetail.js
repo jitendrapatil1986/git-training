@@ -684,6 +684,12 @@
 
                     self.canPayHomeowner = ko.observable(false);
                     self.canPayHomeownerUnknown = ko.observable(true);
+                    self.payHomeownerVisible = ko.pureComputed(function() {
+                        return canPayHomeowner() && !canPayHomeownerUnknown();
+                    });
+                    self.payHomeownerNotVisible = ko.pureComputed(function() {
+                        return !canPayHomeowner() && !canPayHomeownerUnknown();
+                    });
                     $.ajax({
                         url: urls.ManageServiceCall.GetHomeownerId,
                         type: "GET",
@@ -691,7 +697,7 @@
                         contentType: "application/json; charset=utf-8"
                     })
                         .fail(function (response) {
-                            console.log(response);
+                            console.error(response);
                             toastr.error("Failed to validate whether homeowner is payable");
                         })
                         .done(function (response) {
