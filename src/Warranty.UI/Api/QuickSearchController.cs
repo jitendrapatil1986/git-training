@@ -54,5 +54,12 @@
                 });
             return results;
         }
+
+        [HttpGet]
+        public IEnumerable<QuickSearchDivisionOrProjectCoordinatorModel> ProjectCoordinators(string query)
+        {
+            var results = _mediator.Request(new QuickSearchDivisionOrProjectCoordinatorsQuery { Query = query});
+            return results;
+        }
     }
 }

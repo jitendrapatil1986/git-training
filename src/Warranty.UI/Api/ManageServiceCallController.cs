@@ -1,4 +1,8 @@
-﻿using Common.Security.Session;
+﻿using Accounting.API.Models;
+using Common.Security.Session;
+using NServiceBus.Logging;
+using Warranty.Core.Features.Homeowner;
+using Warranty.Core.Features.Job;
 
 namespace Warranty.UI.Api
 {
@@ -29,6 +33,7 @@ namespace Warranty.UI.Api
     {
         private readonly IMediator _mediator;
         private readonly IWarrantyMailer _mailer;
+        private readonly ILog _log = LogManager.GetLogger(typeof(ManageServiceCallController));
 
         public ManageServiceCallController(IMediator mediator, IWarrantyMailer mailer, IUserSession userSession)
         {
@@ -130,7 +135,25 @@ namespace Warranty.UI.Api
         [HttpPost]
         public AddPaymentCommandDto AddPayment(AddPaymentCommand model)
         {
-            return _mediator.Send(model); ;
+            var result = _mediator.Send(model);
+
+            try
+            {
+                if (!string.IsNullOrEmpty(model.ProjectCoordinatorEmailToNotify))
+                {
+                    _mailer.NewHomeownerPaymentRequested(model).Send();
+                }
+            }
+            catch (Exception e)
+            {
+                _log.ErrorFormat("Failed to send email to PC for warranty payment to homeowner created for service call line item: {0} at email: {1}", 
+                    model.ServiceCallLineItemId, model.ProjectCoordinatorEmailToNotify);
+                _log.ErrorFormat("Exception message: {0}.  Stacktrace: {1}",
+                    e.Message, e.StackTrace);
+                throw new ApplicationException("EMAIL_SEND_FAILURE");
+            }
+
+            return result;
         }
 
         [System.Web.Http.HttpDelete]
@@ -235,6 +258,14 @@ namespace Warranty.UI.Api
         {
             _mediator.Send(model);
             return new PostResponseModel { Success = true };
+        }
+
+        public HomeownerIsPayableValidationResponseDto GetHomeownerId(string jobNumber)
+        {
+            var homeowner = _mediator.Request(new GetHomeOwnerQuery(jobNumber));
+            var job = _mediator.Request(new GetJobQuery(jobNumber));
+
+            return _mediator.Request(new GetHomeownerIdQuery { Name = homeowner.HomeOwnerName, Address = job.AddressLine });
         }
     }
 }

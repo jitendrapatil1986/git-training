@@ -1,5 +1,5 @@
 ﻿require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'moment', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/BackchargeStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'enumeration/PurchaseOrderLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchBackchargeVendor'], function ($, ko, koxeditable, moment, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, backchargeStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, purchaseOrderLineItemStatusEnum, bootbox) {
+    require(['jquery', 'ko', 'ko.x-editable', 'moment', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/BackchargeStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'enumeration/PurchaseOrderLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchProjectCoordinator', 'app/serviceCall/SearchBackchargeVendor'], function ($, ko, koxeditable, moment, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, backchargeStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, purchaseOrderLineItemStatusEnum, bootbox) {
         window.ko = ko; //manually set the global ko property.
 
         require(['ko.validation', 'jquery.color'], function () {
@@ -79,6 +79,8 @@
                     self.backchargeStatusDisplayName = ko.observable(options.backchargeStatusDisplayName);
                     self.costCode = options.costCode ? options.costCode : options.backchargeCostCode;
                     self.standAloneBackcharge = ko.observable(!options.paymentId);
+                    self.projectCoordinatorEmailToNotify = options.projectCoordinatorEmailToNotify;
+                    self.sendCheckToProjectCoordinator = options.sendCheckToProjectCoordinator;
                     
                     self.isBackchargeHeld = ko.computed(function () {
                         return self.backchargeStatusDisplayName() == backchargeStatusEnum.RequestedHold.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName;
@@ -621,12 +623,12 @@
                     self.vendorOnHold = ko.observable(false);
                     self.vendorName = ko.observable('').extend({
                         required: {
-                            onlyIf: function () { return self.isPayment() === true; }
+                            onlyIf: function () { return self.isPayment() === true && !self.payHomeownerSelected(); }
                         }
                     });
                     self.vendorNumber = ko.observable('').extend({
                         required: {
-                            onlyIf: function () { return self.isPayment() === true; }
+                            onlyIf: function () { return self.isPayment() === true && !self.payHomeownerSelected(); }
                         },
                         vendorIsOnHold: self.vendorOnHold
                     });
@@ -652,11 +654,15 @@
                     self.clearPaymentFields = function () {
                         $('#vendor-search').val('');
                         $('#backcharge-vendor-search').val('');
+                        $('#pc-search').val('');
                         self.vendorNumber('');
                         self.backchargeVendorNumber('');
                         self.invoiceNumber('');
                         self.comments('');
                         self.amount('');
+                        self.payHomeownerSelected(false);
+                        self.projectCoordinatorEmail('');
+                        self.sendCheckToPC(false);
                         self.backchargeAmount('');
                         self.isBackcharge(false);
                         self.backchargeReason('');
@@ -674,6 +680,62 @@
                         self.vendorOnHold(vendorOnHold);
                         self.vendorNumber(vendorNumber);
                         self.vendorName(vendorName);
+                    });
+
+                    self.canPayHomeowner = ko.observable(false);
+                    self.canPayHomeownerUnknown = ko.observable(true);
+                    self.payHomeownerVisible = ko.computed(function() {
+                        return self.canPayHomeowner() && !self.canPayHomeownerUnknown();
+                    });
+                    self.payHomeownerNotVisible = ko.computed(function () {
+                        return !self.canPayHomeowner() && !self.canPayHomeownerUnknown();
+                    });
+                    $.ajax({
+                        url: urls.ManageServiceCall.GetHomeownerId,
+                        type: "GET",
+                        data: { jobNumber: self.jobNumber() },
+                        contentType: "application/json; charset=utf-8"
+                    })
+                        .fail(function (response) {
+                            console.error(response);
+                            toastr.error("Failed to validate whether homeowner is payable");
+                        })
+                        .done(function (response) {
+                            if (response.IsValid) {
+                                self.canPayHomeowner(true);
+                                self.homeownerName(response.HomeownerName);
+                                self.homeownerId(response.HomeownerNumber);
+                            }
+                        })
+                        .always(function () {
+                            self.canPayHomeownerUnknown(false);
+                        });
+                    self.homeownerId = ko.observable();
+                    self.homeownerName = ko.observable();
+                    self.payHomeownerSelected = ko.observable(false);
+                    self.payHomeownerSelected.subscribe(function (newValue) {
+                        if (newValue) {
+                            self.vendorOnHold(false);
+                            self.vendorNumber(self.homeownerId());
+                            self.vendorName(self.homeownerName());
+                            $('#vendor-search').val(self.homeownerName());
+                        } else {
+                            self.vendorOnHold(false);
+                            self.vendorNumber('');
+                            self.vendorName('');
+                            $('#vendor-search').val('');
+                        }
+                    });
+
+                    self.sendCheckToPC = ko.observable();
+                    self.projectCoordinatorEmail = ko.observable().extend({
+                        required: {
+                            onlyIf: function () { return (self.payHomeownerSelected() === true); }
+                        }
+                    });;
+                    $(document).on('pc-selected', function () {
+                        var projectCoordinatorEmail = $('#pc-search').attr('data-pc-email');
+                        self.projectCoordinatorEmail(projectCoordinatorEmail);
                     });
                     
                     $(document).on('backcharge-vendor-number-selected', function () {
@@ -699,7 +761,7 @@
 
                     self.addPayment = function () {
                         
-                        if (formHasErrors([self.invoiceNumber, self.amount, self.backchargeAmount, self.backchargeReason, self.personNotified, self.personNotifiedPhoneNumber, self.personNotifiedDate, self.backchargeResponseFromVendor, self.vendorNumber, self.backchargeVendorName, self.backchargeVendorNumber]))
+                        if (formHasErrors([self.invoiceNumber, self.amount, self.backchargeAmount, self.backchargeReason, self.personNotified, self.personNotifiedPhoneNumber, self.personNotifiedDate, self.backchargeResponseFromVendor, self.vendorNumber, self.backchargeVendorName, self.backchargeVendorNumber, self.projectCoordinatorEmail]))
                             return;
 
                         self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
@@ -723,6 +785,8 @@
                             backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
                             paymentStatusDisplayName: paymentStatusEnum.Requested.DisplayName,
                             backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
+                            projectCoordinatorEmailToNotify: self.projectCoordinatorEmail(),
+                            sendCheckToProjectCoordinator: self.sendCheckToPC(),
                         });
 
                         var paymentData = ko.toJSON(newPayment);
@@ -736,7 +800,10 @@
                             contentType: "application/json; charset=utf-8"
                         })
                             .fail(function (response) {
-                                toastr.error("There was a problem adding the payment. Please try again.");
+                                if (response.responseJSON.ExceptionMessage === "EMAIL_SEND_FAILURE")
+                                    toastr.error("Failed to send email to Project Coordinator");
+                                else
+                                    toastr.error("There was a problem adding the payment. Please try again.");
                             })
                             .done(function (response) {
                                 newPayment.paymentId = response.PaymentId;
