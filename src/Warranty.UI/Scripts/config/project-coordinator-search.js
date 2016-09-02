@@ -5,6 +5,7 @@
         itemTemplate: template,
         target: function (item) {
             $('#pc-search').attr('data-pc-email', item.Email);
+            $('#pc-search').attr('data-pc-name', item.Name);
             $(document).trigger('pc-selected');
         },
         emptyText: 'No PCs found.',

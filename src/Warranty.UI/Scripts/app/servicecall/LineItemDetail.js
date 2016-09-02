@@ -79,8 +79,15 @@
                     self.backchargeStatusDisplayName = ko.observable(options.backchargeStatusDisplayName);
                     self.costCode = options.costCode ? options.costCode : options.backchargeCostCode;
                     self.standAloneBackcharge = ko.observable(!options.paymentId);
+                    self.NotifiedProjectCoordinator = options.notifiedProjectCoordinator;
                     self.projectCoordinatorEmailToNotify = options.projectCoordinatorEmailToNotify;
                     self.sendCheckToProjectCoordinator = options.sendCheckToProjectCoordinator;
+
+                    self.isHomeownerPayment = ko.computed(function() {
+                        if (self.projectCoordinatorEmailToNotify)
+                            return true;
+                        return false;
+                    });
                     
                     self.isBackchargeHeld = ko.computed(function () {
                         return self.backchargeStatusDisplayName() == backchargeStatusEnum.RequestedHold.DisplayName || self.backchargeStatusDisplayName() == backchargeStatusEnum.Hold.DisplayName;
@@ -719,15 +726,18 @@
                             self.vendorNumber(self.homeownerId());
                             self.vendorName(self.homeownerName());
                             $('#vendor-search').val(self.homeownerName());
+                            $("#invoiceNumber").focus();
                         } else {
                             self.vendorOnHold(false);
                             self.vendorNumber('');
                             self.vendorName('');
                             $('#vendor-search').val('');
+                            $("#vendor-search").focus();
                         }
                     });
 
                     self.sendCheckToPC = ko.observable();
+                    self.notifiedProjectCoordinator = ko.observable();
                     self.projectCoordinatorEmail = ko.observable().extend({
                         required: {
                             onlyIf: function () { return (self.payHomeownerSelected() === true); }
@@ -735,7 +745,9 @@
                     });;
                     $(document).on('pc-selected', function () {
                         var projectCoordinatorEmail = $('#pc-search').attr('data-pc-email');
+                        var notifiedProjectCoordinator = $('#pc-search').attr('data-pc-name');
                         self.projectCoordinatorEmail(projectCoordinatorEmail);
+                        self.notifiedProjectCoordinator(notifiedProjectCoordinator);
                     });
                     
                     $(document).on('backcharge-vendor-number-selected', function () {
@@ -785,6 +797,7 @@
                             backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
                             paymentStatusDisplayName: paymentStatusEnum.Requested.DisplayName,
                             backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
+                            notifiedProjectCoordinator: self.notifiedProjectCoordinator(),
                             projectCoordinatorEmailToNotify: self.projectCoordinatorEmail(),
                             sendCheckToProjectCoordinator: self.sendCheckToPC(),
                         });

@@ -336,7 +336,7 @@
                                                                 <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10 btn-action-with-popup hidden-xs" data-bind="visible: shouldDisplayHoldPayment, attr: {id:'btn_hold-' + paymentId}, click: displayHold">Hold</a>
                                                             }
                                                             <button class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="visible: shouldDisplayDeletePayment, click:deletePayment">Delete</button>
-                                                    
+
                                                             @if (Model.CanTakeActionOnPayments)
                                                             {
                                                                 <a href="#" class="btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayApprovePayment, click: approvePayment">Approve</a>
@@ -355,6 +355,18 @@
                                                         </div>
                                                     </div>
                                                     <!-- /ko -->
+                                                    <div class="row col-md-12" data-bind="visible: isHomeownerPayment">
+                                                        <div class="col-md-4">
+                                                            Homeowner Payment
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <span data-bind="text: notifiedProjectCoordinator"></span>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <span data-bind="visible: sendCheckToProjectCoordinator">Send check to PC </span>
+                                                            <span data-bind="visible: !sendCheckToProjectCoordinator">Send check to homeowner</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
