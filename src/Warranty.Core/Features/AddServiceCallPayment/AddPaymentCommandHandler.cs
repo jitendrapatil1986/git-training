@@ -76,6 +76,7 @@
                             string.IsNullOrEmpty(communityNumber) ? string.Empty : communityNumber.Substring(0, 4),
                         CostCode = costCode.CostCode,
                         ObjectAccount = _resolveObjectAccount.ResolveLaborObjectAccount(job, serviceCall),
+                        SendCheckToPC = message.SendCheckToProjectCoordinator
                     };
 
                     _database.Insert(payment);
