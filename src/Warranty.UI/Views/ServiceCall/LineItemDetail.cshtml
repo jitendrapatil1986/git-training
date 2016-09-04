@@ -149,9 +149,12 @@
                                             @Html.Label("Vendor", new { @class = "control-label", @for = "vendor-search" })
                                             <input type="text" id="vendor-search" class="form-control" data-bind="disable: payHomeownerSelected" autocomplete="off" data-city-code="@Model.CityCode" data-ip-code="" placeholder="Type vendor name or vendor number" />
                                             <span data-bind="validationMessage: vendorNumber" class="help-block"></span>
-                                            <span data-bind="visible: canPayHomeownerUnknown">Checking if homeowner can be paid <img src="@Url.Content("/img/loader.gif")" /></span>
-                                            <label data-bind="visible: payHomeownerVisible"><input type="checkbox" id="homeowner-as-vendor" data-bind="checked: payHomeownerSelected"/> Pay Homeowner</label>
-                                            <span style="font-size: 12px" data-bind="visible: payHomeownerNotVisible">Cannot find homeowner in supply master; please contact your purchasing rep.</span>
+                                            @if (User.IsInRole(UserRoles.CreateHomeownerPayment))
+                                            {
+                                                <span data-bind="visible: canPayHomeownerUnknown">Checking if homeowner can be paid <img src="@Url.Content("/img/loader.gif")" /></span>
+                                                <label data-bind="visible: payHomeownerVisible"><input type="checkbox" id="homeowner-as-vendor" data-bind="checked: payHomeownerSelected"/> Pay Homeowner</label>
+                                                <span style="font-size: 12px" data-bind="visible: payHomeownerNotVisible">Cannot find homeowner in supply master; please contact your PC.</span>
+                                            }
                                         </div>
                                         <div class="form-group col-md-3" data-bind="validationElement: invoiceNumber">
                                             @Html.Label("Invoice #", new { @class = "control-label", @for = "invoiceNumber" })
@@ -336,7 +339,7 @@
                                                                 <a href="#" class="btn btn-default btn-sm btn-hover-show margin-right-10 btn-action-with-popup hidden-xs" data-bind="visible: shouldDisplayHoldPayment, attr: {id:'btn_hold-' + paymentId}, click: displayHold">Hold</a>
                                                             }
                                                             <button class="btn btn-default btn-sm btn-hover-show margin-right-10 hidden-xs" data-bind="visible: shouldDisplayDeletePayment, click:deletePayment">Delete</button>
-                                                    
+
                                                             @if (Model.CanTakeActionOnPayments)
                                                             {
                                                                 <a href="#" class="btn btn-default btn-sm margin-right-10 hidden-sm hidden-md hidden-lg" data-bind="visible: shouldDisplayApprovePayment, click: approvePayment">Approve</a>
@@ -355,6 +358,18 @@
                                                         </div>
                                                     </div>
                                                     <!-- /ko -->
+                                                    <div class="row col-md-12" data-bind="visible: isHomeownerPayment">
+                                                        <div class="col-md-4">
+                                                            Homeowner Payment
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <span data-bind="text: notifiedProjectCoordinator"></span>
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <span data-bind="visible: sendCheckToProjectCoordinator">Send check to PC </span>
+                                                            <span data-bind="visible: !sendCheckToProjectCoordinator">Send check to homeowner</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

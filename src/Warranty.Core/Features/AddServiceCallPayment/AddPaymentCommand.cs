@@ -21,6 +21,7 @@
         public string BackchargeResponseFromVendor { get; set; }
         public int SelectedCostCode { get; set; }
         public bool IsStandAloneBackcharge { get; set; }
+        public string NotifiedProjectCoordinator { get; set; }
         public string ProjectCoordinatorEmailToNotify { get; set; }
         public bool SendCheckToProjectCoordinator { get; set; }
     }

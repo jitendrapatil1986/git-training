@@ -98,6 +98,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Up", "Up", "{20518451-E144-
 		Database\Warranty\Up\0088_CreatePurchaseOrderLineItemsTable.sql = Database\Warranty\Up\0088_CreatePurchaseOrderLineItemsTable.sql
 		Database\Warranty\Up\0100_AlterPurchaseOrdersAddPurchaseOrderNumber.sql = Database\Warranty\Up\0100_AlterPurchaseOrdersAddPurchaseOrderNumber.sql
 		Database\Warranty\Up\0141_AlterPaymentsToAdd_SendCheckToPC.sql = Database\Warranty\Up\0141_AlterPaymentsToAdd_SendCheckToPC.sql
+		Database\Warranty\Up\0142_AlterPaymentsToAdd_NotifiedPC.sql = Database\Warranty\Up\0142_AlterPaymentsToAdd_NotifiedPC.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{D0DD7813-D199-44F7-A1F3-EC38DCA342F2}"

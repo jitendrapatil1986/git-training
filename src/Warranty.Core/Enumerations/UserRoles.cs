@@ -10,5 +10,6 @@
         public const string CustomerCareManagerRole = @"ROLE_WarrantyCustomerCareManagers";
         public const string WarrantyServiceRepresentativeRole = @"ROLE_WarrantyServiceRepresentative";
         public const string Access = @"APP_Warranty_Access";
+        public const string CreateHomeownerPayment = @"APP_Warranty_HomeownerPayment_Create";
     }
 }
