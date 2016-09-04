@@ -79,7 +79,7 @@
                     self.backchargeStatusDisplayName = ko.observable(options.backchargeStatusDisplayName);
                     self.costCode = options.costCode ? options.costCode : options.backchargeCostCode;
                     self.standAloneBackcharge = ko.observable(!options.paymentId);
-                    self.NotifiedProjectCoordinator = options.notifiedProjectCoordinator;
+                    self.notifiedProjectCoordinator = options.notifiedProjectCoordinator;
                     self.projectCoordinatorEmailToNotify = options.projectCoordinatorEmailToNotify;
                     self.sendCheckToProjectCoordinator = options.sendCheckToProjectCoordinator;
 

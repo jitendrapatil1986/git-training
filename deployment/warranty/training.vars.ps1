@@ -14,7 +14,7 @@ $header_image_file_name = "DWH logo_color_233x34_Train.png"
 $Warranty_identity_uri = "https://WarrantyTraining.davidweekleyhomes.com"
 
 $sendFeedbackAddresses = "HSTWarrantyPortalHelp@dwhomes.com"
-$sendEmailsForTest = "customercare@dwhomes.com"
+$sendEmailsForTest = "true"
 $errorReportingEmailAddresses = "app-notify@dwhomes.com"
 $errorReportingSubject = "Warranty Exception (Training)"
 

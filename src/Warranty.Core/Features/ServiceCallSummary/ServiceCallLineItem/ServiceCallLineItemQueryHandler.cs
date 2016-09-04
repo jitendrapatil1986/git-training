@@ -180,7 +180,7 @@
                                     , CASE WHEN b.BackchargeVendorNumber IS NOT NULL THEN 1 ELSE 0 END AS IsBackcharge
                                     , p.CostCode as JdeCostCode
                                     , p.SendCheckToPC as SendCheckToProjectCoordinator
-                                    , p.PCNotified as NotifiedProjectCoordinator
+                                    , p.NotifiedPC as NotifiedProjectCoordinator
                                 FROM payments p
                                     LEFT JOIN backcharges b
                                        ON p.PaymentId = b.PaymentId

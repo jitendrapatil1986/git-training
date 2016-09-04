@@ -25,6 +25,7 @@
                     x.Column(y => y.CostCode);
                     x.Column(y => y.ObjectAccount);
                     x.Column(y => y.SendCheckToPC);
+                    x.Column(y => y.NotifiedPC);
                 });
         }
     }
