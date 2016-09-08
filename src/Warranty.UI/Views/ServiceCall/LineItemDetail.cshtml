@@ -360,14 +360,14 @@
                                                     <!-- /ko -->
                                                     <div class="row col-md-12" data-bind="visible: isHomeownerPayment">
                                                         <div class="col-md-4">
-                                                            Homeowner Payment
+                                                            <span class="label label-info">Homeowner Payment</span>
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <span data-bind="text: notifiedProjectCoordinator"></span>
+                                                            <span data-bind="text: notifiedProjectCoordinator"></span> was notified
                                                         </div>
-                                                        <div class="col-md-1">
-                                                            <span data-bind="visible: sendCheckToProjectCoordinator">Send check to PC </span>
-                                                            <span data-bind="visible: !sendCheckToProjectCoordinator">Send check to homeowner</span>
+                                                        <div class="col-md-5">
+                                                            <span data-bind="visible: sendCheckToProjectCoordinator">Check will be sent to PC </span>
+                                                            <span data-bind="visible: !sendCheckToProjectCoordinator">Check will be sent to homeowner</span>
                                                         </div>
                                                     </div>
                                                 </div>

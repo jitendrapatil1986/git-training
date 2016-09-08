@@ -84,7 +84,7 @@
                     self.sendCheckToProjectCoordinator = options.sendCheckToProjectCoordinator;
 
                     self.isHomeownerPayment = ko.computed(function() {
-                        if (self.projectCoordinatorEmailToNotify)
+                        if (self.sendCheckToProjectCoordinator)
                             return true;
                         return false;
                     });
