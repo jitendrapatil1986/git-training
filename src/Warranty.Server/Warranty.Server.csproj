@@ -39,8 +39,8 @@
       <HintPath>..\packages\Accounting.Client.1.1.1135.0\lib\net45\Accounting.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Accounting.Commands, Version=1.1.1387.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accounting.Commands.1.1.1387\lib\net45\Accounting.Commands.dll</HintPath>
+    <Reference Include="Accounting.Commands, Version=1.1.1422.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accounting.Commands.1.1.1422\lib\net45\Accounting.Commands.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Accounting.Events, Version=1.1.1135.0, Culture=neutral, processorArchitecture=MSIL">
@@ -51,12 +51,12 @@
       <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Core, Version=1.1.126.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Core.1.1.126\lib\net45\Common.Core.dll</HintPath>
+    <Reference Include="Common.Core, Version=1.1.132.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Core.1.1.132\lib\net45\Common.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Messages, Version=1.1.126.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Messages.1.1.126\lib\net40\Common.Messages.dll</HintPath>
+    <Reference Include="Common.Messages, Version=1.1.127.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Messages.1.1.127\lib\net40\Common.Messages.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
