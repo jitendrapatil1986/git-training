@@ -40,7 +40,7 @@
                         ProgramId = Configuration.WarrantyConstants.ProgramId,
                         ObjectAccount = payment.ObjectAccount,
                         VarianceExplanation = ToPaymentComment(payment.Comments),
-                        SendCheckToPC = payment.SendCheckToPC
+                        PCToRecieveCheck = payment.SendCheckToPC ? payment.NotifiedPC : string.Empty
                     };
 
                 _bus.Send(paymentRequest);
