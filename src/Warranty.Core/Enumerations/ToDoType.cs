@@ -63,7 +63,7 @@
                                                                                    UserRoles.WarrantyServiceCoordinator
                                                                                });
 
-        public static readonly ToDoType JobChangedTaskApproval = new ToDoType(9, "Job Changed Task Approval",
+        public static readonly ToDoType JobChangedTaskApproval = new ToDoType(9, "Warranty Orientation Approval",
                                                             new List<string>
                                                                 {
                                                                     UserRoles.WarrantyAdmin,

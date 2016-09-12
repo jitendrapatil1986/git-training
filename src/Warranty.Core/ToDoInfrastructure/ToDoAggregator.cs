@@ -68,7 +68,7 @@ namespace Warranty.Core.ToDoInfrastructure
                 
                 if (ToDoType.JobChangedTaskApproval.HasAccess(user.Roles))
                 {
-                    var taskJobChangedApprovalToDos = GetStage9JobApprovalToDos(user, _database);
+                    var taskJobChangedApprovalToDos = GetStage10JobApprovalToDos(user, _database);
 
                     toDos.AddRange(taskJobChangedApprovalToDos);
                 }
@@ -187,7 +187,7 @@ namespace Warranty.Core.ToDoInfrastructure
             return GetToDoTasks<ToDoJobStageChangedTask, ToDoJobChangedTaskModel>(user, database, taskType);
         }
 
-        private IEnumerable<IToDo> GetStage9JobApprovalToDos(IUser user, IDatabase database)
+        private IEnumerable<IToDo> GetStage10JobApprovalToDos(IUser user, IDatabase database)
         {
             var userMarkets = user.Markets;
             const string sql = @"SELECT t.CreatedDate [Date], Description, TaskId, j.JobId, j.JobNumber
