@@ -66,7 +66,7 @@ namespace Warranty.Core.ToDoInfrastructure
                     toDos.AddRange(taskJobChangedToDos);
                 }
                 
-                if (ToDoType.JobChangedTaskApproval.HasAccess(user.Roles))
+                if (ToDoType.WarrantyOrientationApproval.HasAccess(user.Roles))
                 {
                     var taskJobChangedApprovalToDos = GetStage10JobApprovalToDos(user, _database);
 
