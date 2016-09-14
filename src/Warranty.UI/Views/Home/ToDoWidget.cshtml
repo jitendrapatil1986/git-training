@@ -4,7 +4,7 @@
 @model Warranty.Core.Features.ToDoWidget.ToDoWidgetModel
 
 @{
-    var toDoList = Model.ToDoTypes.Where(x => Model.ToDos.Any(y => y.Type == x)).Select(x => new SelectListItem { Text = x.DisplayName, Value = @Css.ToDoClass(x) }).ToList();
+    var toDoList = Model.ToDoTypes.Where(x => Model.ToDos.Any(y => y.Type == x && y.Type != ToDoType.JobChangedTask)).Select(x => new SelectListItem { Text = x.DisplayName, Value = @Css.ToDoClass(x) }).ToList();
     var toDoListStage = Model.ToDos.Where(t => (t as ToDoJobStageChangedTask) != null).Select(t => t as ToDoJobStageChangedTask)
         .Select(t => Css.ToDoJobStageChangedTaskCleanDescription(t.Model.Description))
         .Distinct()
