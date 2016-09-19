@@ -45,8 +45,12 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Client, Version=1.1.1135.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accounting.Client.1.1.1135.0\lib\net45\Accounting.Client.dll</HintPath>
+    <Reference Include="Accounting.API.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accounting.API.Models.1.1.1403\lib\net45\Accounting.API.Models.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accounting.Client, Version=1.1.1403.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accounting.Client.1.1.1403\lib\net45\Accounting.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Antlr3.Runtime">
@@ -56,8 +60,12 @@
       <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Core, Version=1.1.126.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Core.1.1.126\lib\net45\Common.Core.dll</HintPath>
+    <Reference Include="Common.Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Api.1.1.128\lib\net45\Common.Api.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Core, Version=1.1.132.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Core.1.1.132\lib\net45\Common.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.Messages, Version=1.1.126.0, Culture=neutral, processorArchitecture=MSIL">
@@ -304,9 +312,12 @@
     </Compile>
     <Compile Include="Mailers\WarrantyMailer.cs" />
     <Compile Include="Mailers\IWarrantyMailer.cs" />
+    <Content Include="Scripts\app\servicecall\SearchProjectCoordinator.js" />
     <Compile Include="UploadHandler.ashx.cs">
       <DependentUpon>UploadHandler.ashx</DependentUpon>
     </Compile>
+    <Content Include="Views\WarrantyMailer\NewHomeownerPaymentRequested.cshtml" />
+    <Content Include="Views\WarrantyMailer\_simpleLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -367,6 +378,7 @@
     <Content Include="Scripts\app\servicecall\SearchCustomer.js" />
     <Content Include="Scripts\app\shared\keepAlive.js" />
     <Content Include="Scripts\config\backcharge-vendor-search.js" />
+    <Content Include="Scripts\config\project-coordinator-search.js" />
     <Content Include="Scripts\config\vendor-search.js" />
     <Content Include="Scripts\config\customer-search.js" />
     <Content Include="Scripts\lib\bootstrap-editable.min.js" />
@@ -405,6 +417,7 @@
     <Content Include="Scripts\lib\text.js" />
     <Content Include="Scripts\templates\call-search-item.html" />
     <Content Include="Scripts\templates\backcharge-vendor-search-item.html" />
+    <Content Include="Scripts\templates\project-coordinator-search-item.html" />
     <Content Include="Scripts\templates\vendor-search-item.html" />
     <Content Include="Scripts\templates\customer-search-item.html" />
     <Content Include="Scripts\templates\job-search-item.html" />

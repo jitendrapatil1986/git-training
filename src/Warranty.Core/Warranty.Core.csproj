@@ -35,16 +35,24 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accounting.Client, Version=1.1.1135.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accounting.Client.1.1.1135.0\lib\net45\Accounting.Client.dll</HintPath>
+    <Reference Include="Accounting.API.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accounting.API.Models.1.1.1403\lib\net45\Accounting.API.Models.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Accounting.Client, Version=1.1.1403.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accounting.Client.1.1.1403\lib\net45\Accounting.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="AutoMapper, Version=4.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Core, Version=1.1.126.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Core.1.1.126\lib\net45\Common.Core.dll</HintPath>
+    <Reference Include="Common.Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Api.1.1.128\lib\net45\Common.Api.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Core, Version=1.1.132.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Core.1.1.132\lib\net45\Common.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.Messages, Version=1.1.126.0, Culture=neutral, processorArchitecture=MSIL">
@@ -155,6 +163,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountingApiHelpers\ApiJsonConverter.cs" />
+    <Compile Include="AccountingApiHelpers\EnumerationJsonConverter.cs" />
     <Compile Include="ActivityLogger\ActivityLogger.cs" />
     <Compile Include="ActivityLogger\IActivityLogger.cs" />
     <Compile Include="ApprovalInfrastructure\ApprovalServices\ServiceCallApprovalService.cs" />
@@ -194,6 +204,8 @@
     <Compile Include="Features\Homeowner\AssignHomeOwnerToJobCommandHandler.cs" />
     <Compile Include="Features\Homeowner\CreateNewHomeOwnerCommand.cs" />
     <Compile Include="Features\Homeowner\CreateNewHomeOwnerCommandHandler.cs" />
+    <Compile Include="Features\Homeowner\GetHomeownerIdQuery.cs" />
+    <Compile Include="Features\Homeowner\GetHomeownerIdQueryHandler.cs" />
     <Compile Include="Features\Homeowner\GetHomeownerQuery.cs" />
     <Compile Include="Features\Homeowner\GetHomeownerQueryHandler.cs" />
     <Compile Include="Features\Job\CloseJobCommand.cs" />
@@ -207,6 +219,9 @@
     <Compile Include="Features\NoActionServiceCallLineItem\NoActionServiceCallLineItemCommand.cs" />
     <Compile Include="Features\NoActionServiceCallLineItem\NoActionServiceCallLineItemCommandHandler.cs" />
     <Compile Include="Features\NoActionServiceCallLineItem\NoActionServiceCallLineItemModel.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchDivisionOrProjectCoordinatorModel.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchDivisionOrProjectCoordinatorsQuery.cs" />
+    <Compile Include="Features\QuickSearch\QuickSearchDivisionOrProjectCoordinatorsQueryHandler.cs" />
     <Compile Include="Features\Report\ServiceCall.cs" />
     <Compile Include="Features\Report\WSROpenActivity\WSROpenActivityModel.cs" />
     <Compile Include="Features\Report\WSROpenActivity\WSROpenActivityQuery.cs" />
@@ -677,7 +692,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>

@@ -98,6 +98,8 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
             public bool IsBackcharge { get; set; }
             public WarrantyCostCode CostCode { get { return WarrantyCostCode.GetAll().SingleOrDefault(x => x.CostCode == JdeCostCode); }}
             public string JdeCostCode { get; set; }
+            public string NotifiedProjectCoordinator { get; set; }
+            public bool SendCheckToProjectCoordinator { get; set; }
         }
 
         public class ServiceCallLineItemStandAloneBackcharge

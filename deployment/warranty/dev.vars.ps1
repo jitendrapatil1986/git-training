@@ -14,7 +14,7 @@ $header_image_file_name = "DWH logo_color_233x34_dev.png"
 $Warranty_identity_uri = "https://Warrantytest.davidweekleyhomes.com"
 
 $sendFeedbackAddresses = "HSTWarrantyPortalHelp@dwhomes.com"
-$sendEmailsForTest = "customercare@dwhomes.com"
+$sendEmailsForTest = "true"
 $errorReportingEmailAddresses = "app-notify@dwhomes.com"
 $errorReportingSubject = "Warranty Exception (test)"
 
