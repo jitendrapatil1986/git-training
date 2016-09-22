@@ -10,9 +10,7 @@
         public ApiJsonConverter()
         {
             _settings = new JsonSerializerSettings();
-            _settings.Converters.Add(new OptionAttributeDictionaryJsonConverter());
             _settings.Converters.Add(new EnumerationJsonConverter());
-            _settings.Converters.Add(new CostAdjustmentsDictionaryJsonConverter());
         }
 
         public T Decode<T>(string json)
