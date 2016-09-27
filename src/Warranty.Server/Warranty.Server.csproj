@@ -44,7 +44,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Accounting.Enumerations, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accounting.Enumerations.1.1.1343\lib\net45\Accounting.Enumerations.dll</HintPath>
+      <HintPath>..\packages\Accounting.Enumerations.1.1.1447\lib\net45\Accounting.Enumerations.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Accounting.Events, Version=1.1.1135.0, Culture=neutral, processorArchitecture=MSIL">
