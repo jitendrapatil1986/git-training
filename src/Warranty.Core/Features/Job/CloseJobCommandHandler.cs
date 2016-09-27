@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using System;
+using log4net;
 using Warranty.Core.Enumerations;
 using Warranty.Core.Services;
 
@@ -8,14 +9,12 @@ namespace Warranty.Core.Features.Job
     {
         private readonly IJobService _jobService;
         private readonly ITaskService _taskService;
-        private readonly IEmployeeService _employeeService;
         private readonly ILog _log;
 
-        public CloseJobCommandHandler(IJobService jobService, ITaskService taskService, IEmployeeService employeeService, ILog log)
+        public CloseJobCommandHandler(IJobService jobService, ITaskService taskService, ILog log)
         {
             _jobService = jobService;
             _taskService = taskService;
-            _employeeService = employeeService;
             _log = log;
         }
 
@@ -26,15 +25,14 @@ namespace Warranty.Core.Features.Job
             _jobService.UpdateExistingJob(job);
             _log.InfoFormat("{0} Job is marked close.", job.JobNumber);
 
-            var hasWsr = _employeeService.GetWsrByJobId(job.JobId) != null;
-
-            if (!hasWsr)
+            try
             {
-                _log.ErrorFormat("{0} Job doesn't have a WSR assigned yet, so failed to create a task.", job.JobNumber);
-                return;
+                _taskService.CreateTaskUnlessExists(job.JobId, TaskType.JobStage10JobClosed);
             }
-
-            _taskService.CreateTaskUnlessExists(job.JobId, TaskType.JobStage10JobClosed);
+            catch (Exception ex)
+            {
+                _log.ErrorFormat("{0} for job {1}", ex.Message, job.JobNumber);
+            }
         }
     }
 }
