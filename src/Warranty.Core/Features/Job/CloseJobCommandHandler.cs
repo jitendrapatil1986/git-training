@@ -29,7 +29,7 @@ namespace Warranty.Core.Features.Job
             {
                 _taskService.CreateTaskUnlessExists(job.JobId, TaskType.JobStage10JobClosed);
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 _log.ErrorFormat("{0} for job {1}", ex.Message, job.JobNumber);
             }
