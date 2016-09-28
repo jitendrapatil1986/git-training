@@ -28,7 +28,7 @@ namespace Warranty.Core.Services
             if (!employeeNumber.HasValue)
                 return null;
 
-            return GetEmployeeByNumber(employeeNumber.Value.ToString());
+            return GetEmployeeByNumber(employeeNumber.Value.ToString().Substring(2));
         }
 
         public Employee GetEmployeeByNumber(string employeeNumber)
