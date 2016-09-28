@@ -25,10 +25,12 @@ namespace Warranty.Core.Services
 
         public Employee GetEmployeeByNumber(int? employeeNumber)
         {
-            if (!employeeNumber.HasValue)
+            if (!employeeNumber.HasValue || employeeNumber.Value.ToString().Length < 5 || employeeNumber.Value.ToString().Length > 7)
                 return null;
 
-            return GetEmployeeByNumber(employeeNumber.Value.ToString().Substring(2));
+            var validEmployeeNumber = GetValidEmployeeNumber(employeeNumber.Value.ToString());
+            
+            return GetEmployeeByNumber(validEmployeeNumber);
         }
 
         public Employee GetEmployeeByNumber(string employeeNumber)
@@ -124,6 +126,14 @@ namespace Warranty.Core.Services
         public string GetEmployeeMarkets()
         {
             return _userSession.GetCurrentUser().Markets.CommaSeparateWrapWithSingleQuote();
+        }
+
+        private string GetValidEmployeeNumber(string employeeNumber)
+        {
+            if (employeeNumber.Length.Equals(5))
+                return employeeNumber;
+
+            return employeeNumber.Substring(2);
         }
     }
 }
