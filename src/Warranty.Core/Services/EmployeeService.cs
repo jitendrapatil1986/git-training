@@ -25,9 +25,9 @@ namespace Warranty.Core.Services
 
         public Employee GetEmployeeByNumber(int? employeeNumber)
         {
-            if (!employeeNumber.HasValue || employeeNumber.Value.ToString().Length < 5 || employeeNumber.Value.ToString().Length > 7)
+            if (!employeeNumber.HasValue)
                 return null;
-
+            
             var validEmployeeNumber = GetValidEmployeeNumber(employeeNumber.Value.ToString());
             
             return GetEmployeeByNumber(validEmployeeNumber);
@@ -130,6 +130,9 @@ namespace Warranty.Core.Services
 
         private string GetValidEmployeeNumber(string employeeNumber)
         {
+            if (employeeNumber.Length < 5 || employeeNumber.Length > 7)
+                return string.Empty;
+
             if (employeeNumber.Length.Equals(5))
                 return employeeNumber;
 
