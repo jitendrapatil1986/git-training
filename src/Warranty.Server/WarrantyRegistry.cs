@@ -23,6 +23,7 @@ namespace Warranty.Server
             Scan(scanner =>
             {
                 scanner.WithDefaultConventions();
+                scanner.LookForRegistries();
                 
                 scanner.TheCallingAssembly();
                 scanner.AssemblyContainingType<IAuditableEntity>();

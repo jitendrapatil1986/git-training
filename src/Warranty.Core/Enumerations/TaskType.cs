@@ -4,7 +4,6 @@
 
     public class TaskType : Enumeration<TaskType>
     {
-        
 
         [Deprecated]
         public static readonly TaskType JobStageChanged = new TaskType(1, "Job Stage Changed", false);
@@ -22,7 +21,7 @@
         public static readonly TaskType JobStage3 = new TaskType(8, "Job is at Stage 3 - time to schedule a warranty introduction.", true, 3, "Warranty Introduction");
         public static readonly TaskType JobStage7 = new TaskType(9, "Job is at Stage 7 - time to schedule a 244 walk.", true, 7, "244 Walkthrough");
         public static readonly TaskType JobStage10JobClosed = new TaskType(10, "Job Closed - Warranty Orientation Due", true, 10, "Warranty Orientation");
-        public static readonly TaskType JobStage10Approval = new TaskType(11, "Job Stage 10 - Warranty Orientation Approval", true);
+        public static readonly TaskType JobStage10Approval = new TaskType(11, "Warranty Orientation Approval", true);
 
         private TaskType(int value, string displayName, bool isTransferable, int? stage = null, string reportDisplay = "")
             : base(value, displayName)

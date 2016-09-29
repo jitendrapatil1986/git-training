@@ -12,7 +12,7 @@
 
         public override ToDoType Type
         {
-            get { return ToDoType.JobChangedTaskApproval; }
+            get { return ToDoType.WarrantyOrientationApproval; }
         }
 
         public override ToDoPriority Priority
