@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Common.Security.Entities;
+using Common.Security.Queries;
 
 namespace Warranty.Core.Services
 {
@@ -59,7 +61,10 @@ namespace Warranty.Core.Services
             {
                 return trueMatch[0];
             }
-            return null;
+            
+            var employee = GetEmployeeFromSecurityDb(employeeNumber);
+
+            return employee;
         }
 
         public string[] GetEmployeesInMarket()
@@ -126,6 +131,33 @@ namespace Warranty.Core.Services
         public string GetEmployeeMarkets()
         {
             return _userSession.GetCurrentUser().Markets.CommaSeparateWrapWithSingleQuote();
+        }
+
+        private Employee GetEmployeeFromSecurityDb(string employeeNumber)
+        {
+            var getUserQuery = new GetUserByEmployeeNumberQuery();
+            var employee = getUserQuery.Execute(employeeNumber);
+
+            if (employee == null)
+                return null;
+
+            return InsertEmployee(employee);
+        }
+
+        private Employee InsertEmployee(SecurityUser employee)
+        {
+            var newEmployee = new Employee
+            {
+                Name = string.Format("{0} {1}", employee.FirstName, employee.LastName),
+                Number = employee.EmployeeNumber,
+                CreatedDate = DateTime.UtcNow,
+                CreatedBy = "Warranty.Server"
+            };
+
+            using (_database)
+                _database.Insert(newEmployee);
+
+            return newEmployee;
         }
 
         private string GetValidEmployeeNumber(string employeeNumber)

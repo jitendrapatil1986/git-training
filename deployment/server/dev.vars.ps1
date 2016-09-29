@@ -4,6 +4,7 @@ $nsb_directory = "C:\Applications\Warranty.Server"
 
 $db_server = "WKSQL3"
 $db_name = "WarrantyTest"
+$security_db_name = "SecurityTest"
 $db_name_nsb = "WarrantyTest_NServicebus"
 $db_nsb_application_name = "Warranty.Server.Dev"
 
