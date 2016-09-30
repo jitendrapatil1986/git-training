@@ -162,7 +162,7 @@ namespace Warranty.Core.Services
 
         private string GetValidEmployeeNumber(string employeeNumber)
         {
-            if (employeeNumber.Length < 5 || employeeNumber.Length > 7)
+            if (employeeNumber.Length != 5 && employeeNumber.Length != 7)
                 return string.Empty;
 
             if (employeeNumber.Length.Equals(5))
