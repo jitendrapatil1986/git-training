@@ -174,6 +174,10 @@ namespace Warranty.Server.Sagas
                 if (builder != null)
                     job.BuilderEmployeeId = builder.EmployeeId;
 
+                var salesConsultant = _employeeService.GetEmployeeByNumber(Data.JobSaleDetails.SalesConsultantEmployeeID);
+                if (salesConsultant != null)
+                    job.SalesConsultantEmployeeId = salesConsultant.EmployeeId;
+
                 job = _jobService.CreateJob(job);
                 _log.InfoFormat("New job created with job number {0} for sale {1}", Data.JobNumber, message.SaleId);
             }
