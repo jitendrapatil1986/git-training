@@ -315,49 +315,49 @@
                         </section>
                     </div>
                     <div class="tab-pane" id="job_selections">
-                            @if (Model.JobSelections.Any())
-                            {
-                                <div class="service-call-line">
-                                    <div class="col-md-10 text-capitalize small"><strong>Description</strong></div>
-                                    <div class="col-md-1 text-capitalize small"><strong>Date</strong></div>
-                                    <div class="col-md-1 text-capitalize small text-right"><strong>Quantity</strong></div>
-                                    <div class="clearfix"></div>
-                                </div>
-                                foreach (var selection in Model.JobSelections)
+                        @if (Model.JobSelections.Any())
+                        {
+                            <div id="jobOptionsList" class="panel-group margin-top-10">
+                                @foreach (var category in Model.JobSelections.Select(i => i.Category).Distinct().OrderBy(Category=>Category).ToList())
                                 {
-                                    <div class="service-call-line">
-                                        <div class="col-md-5 text-capitalize small">
-                                            <div>
-                                                @Html.DisplayFor(x => selection.OptionDescription)
-                                            </div>
-                                            <div>
-                                                @Html.DisplayFor(x => selection.OptionNumber)
-                                            </div>                                            
-                                        </div>
-                                        <div class="col-md-5 text-capitalize small">
-                                            @Html.DisplayFor(x => selection.Notes)
-                                            @foreach (var attribute in selection.Attributes)
+                                <div class="panel list-group-item">
+                                    <div class="accordion-toggle cursor-pointer panel-heading" data-toggle="collapse" data-target="#collapseOptions@(Model.JobSelections.Where(i => i.Category == category).ElementAt(0).Category)">
+                                        <a href="#">@category</a>
+                                    </div>
+                                    <div id="collapseOptions@(category)" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+                                            @foreach (var selection in Model.JobSelections.Where(i => i.Category == category))
                                             {
-                                                <div>
-                                                    @Html.DisplayFor(x => attribute.Type):
-                                                    @Html.DisplayFor(x => attribute.Value)
+                                                <div class="service-call-line" >
+                                                    <div class="col-md-6 text-capitalize small">
+                                                        <div>@Html.DisplayFor(x => selection.OptionDescription)</div>
+                                                        <div class="text-muted">
+                                                            @Html.DisplayFor(x => selection.OptionNumber)
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 small">
+                                                        @Html.DisplayFor(x => selection.Notes)
+                                                        @foreach (var attribute in selection.Attributes)
+                                                        {
+                                                            <div>
+                                                                @Html.DisplayFor(x => attribute.Type):
+                                                                @Html.DisplayFor(x => attribute.Value)
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                    <div class="clearfix"></div>
                                                 </div>
                                             }
                                         </div>
-                                        <div class="col-md-1 text-capitalize small">
-                                            @Format.DateMonthDayYear(selection.DateSelected)
-                                        </div>
-                                        <div class="col-md-1 text-capitalize small text-right">
-                                            @Html.DisplayFor(x => selection.Quantity)
-                                        </div>
-                                        <div class="clearfix"></div>
                                     </div>
+                                </div>
                                 }
-                            }
-                            else
-                            {
+                            </div>
+                        }
+                        else
+                        {
                                 <div class="margin-top-10"><span>No option selections found.</span></div>
-                            }
+                        }
                     </div>
                     <div class="tab-pane" id="job_vendors">
                         <div class="col-md-12 margin-top-10">
