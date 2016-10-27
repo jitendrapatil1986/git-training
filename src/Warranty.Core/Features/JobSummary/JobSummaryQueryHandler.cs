@@ -71,10 +71,9 @@ namespace Warranty.Core.Features.JobSummary
                     OptionNumber = x.OptionNumber,
                     OptionDescription = x.Description,
                     Notes = x.Notes,
-                    Attributes = x.Attributes.OrderBy(y => y.Type.DisplayOrder).Select(y => new JobSummary.JobSummaryModel.Attribute { Type = y.Type.DisplayName, Value = y.Value, DisplayOrder = y.Type.DisplayOrder }),
-                    DateSelected = x.DateSelected,
-                    Category = x.Category,
-                    Quantity = x.Quantity
+                    Attributes = x.Attributes.OrderBy(y => y.Type.DisplayOrder).Select(y => new JobSummary.JobSummaryModel.Attribute { Type = y.Type.DisplayName, Value = y.Value}),
+                    RoomValue = x.Room.Value,
+                    RoomDisplayName = x.Room.DisplayName
                 }).OrderBy(x => x.OptionDescription).ThenBy(x => x.OptionNumber);
             }
             catch (Exception ex)
