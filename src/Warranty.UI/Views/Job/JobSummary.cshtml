@@ -329,26 +329,31 @@
                                             @foreach (var selection in Model.JobSelections.Where(i => i.RoomValue == category.RoomValue))
                                             {
                                                 <div class="service-call-line" >
-                                                    <div class="col-md-6 text-capitalize small ">
-                                                        <div class="margin-bottom-5">@Html.DisplayFor(x => selection.OptionDescription)</div>
-                                                        <div class="text-muted">
-                                                            @Html.DisplayFor(x => selection.OptionNumber)
-                                                        </div>
+                                                    <div class="col-md-5 text-capitalize small ">
+                                                        <div class=""><p>@Html.DisplayFor(x => selection.OptionDescription)</p></div>
+                                                        <div class="text-muted">@Html.DisplayFor(x => selection.OptionNumber)</div>
                                                     </div>
-                                                    <div class="col-md-6 small">
-                                                        @if (!selection.Notes.IsNullOrEmpty())
+                                                    <div class="small">
+                                                        @if (!selection.Notes.IsNullOrEmpty() || selection.Attributes.Any())
                                                         {
-                                                            <div class="margin-bottom-5 ">@Html.DisplayFor(x => selection.Notes)</div>
+                                                            <div class="col-md-7 inner">
+                                                                @if (!selection.Notes.IsNullOrEmpty())
+                                                                {
+                                                                    <div class="col-md-2 header"><p>Notes:</p></div>
+                                                                    <div class="col-md-10"><p>@Html.DisplayFor(x => selection.Notes)</p></div>
+                                                                }
+                                                                @if (selection.Attributes.Any())
+                                                                {
+                                                                    <div class="col-md-2 header"><p>Attributes:</p></div>
+                                                                    <div id="job_selections_attributes" class="col-md-10">
+                                                                        @foreach (var attribute in selection.Attributes)
+                                                                        {
+                                                                            <p>@Html.DisplayFor(x => attribute.Type): @Html.DisplayFor(x => attribute.Value)</p>
+                                                                        }
+                                                                    </div>
+                                                                }
+                                                            </div>
                                                         }
-
-                                                        <div id="job_selections_attributes">
-                                                            @foreach (var attribute in selection.Attributes)
-                                                            {
-                                                                <div class="margin-bottom-5">
-                                                                    @Html.DisplayFor(x => attribute.Type): @Html.DisplayFor(x => attribute.Value)
-                                                                </div>
-                                                            }
-                                                        </div>
                                                     </div>
                                                     <div class="clearfix"></div>
                                                 </div>
