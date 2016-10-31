@@ -51,8 +51,8 @@
       <HintPath>..\packages\Common.Api.1.1.128\lib\net45\Common.Api.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Core, Version=1.1.132.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Common.Core.1.1.132\lib\net45\Common.Core.dll</HintPath>
+    <Reference Include="Common.Core, Version=1.1.144.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Core.1.1.144\lib\net45\Common.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.Messages, Version=1.1.126.0, Culture=neutral, processorArchitecture=MSIL">
@@ -70,12 +70,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.5.1.0.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
-    <Reference Include="JobService.Client, Version=1.0.1630.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\JobService.Client.1.0.1630\lib\net451\JobService.Client.dll</HintPath>
+    <Reference Include="JobService.Client, Version=1.0.1798.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JobService.Client.1.0.1798\lib\net451\JobService.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JobService.Enumerations, Version=1.0.1630.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\JobService.Enumerations.1.0.1630\lib\net451\JobService.Enumerations.dll</HintPath>
+    <Reference Include="JobService.Enumerations, Version=1.0.1798.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JobService.Enumerations.1.0.1798\lib\net451\JobService.Enumerations.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
