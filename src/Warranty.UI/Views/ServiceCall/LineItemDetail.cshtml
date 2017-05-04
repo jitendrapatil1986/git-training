@@ -151,9 +151,9 @@
                                             <span data-bind="validationMessage: vendorNumber" class="help-block"></span>
                                             @if (User.IsInRole(UserRoles.CreateHomeownerPayment))
                                             {
-                                                <span data-bind="visible: canPayHomeownerUnknown">Checking if homeowner can be paid <img src="@Url.Content("/img/loader.gif")" /></span>
-                                                <label data-bind="visible: payHomeownerVisible"><input type="checkbox" id="homeowner-as-vendor" data-bind="checked: payHomeownerSelected"/> Pay Homeowner</label>
-                                                <span style="font-size: 12px" data-bind="visible: payHomeownerNotVisible">Cannot find homeowner in supply master; please contact your PC.</span>
+                                                <span class="has-bottom-tooltip" data-bind="attr: { 'data-original-title': cannotPayHomeownerHelpText }, css: { 'text-muted': cannotPayHomeowner }" >
+                                                    <label data-bind="css: { 'cursor-pointer': canPayHomeowner }"><input type="checkbox" id="homeowner-as-vendor" data-bind="enable: canPayHomeowner, checked: payHomeownerSelected" /> Pay Homeowner</label>
+                                                </span>
                                             }
                                         </div>
                                         <div class="form-group col-md-3" data-bind="validationElement: invoiceNumber">
