@@ -1,4 +1,5 @@
 ﻿using System;
+using Common.Test;
 using Moq;
 using NUnit.Framework;
 using Should;
@@ -10,13 +11,13 @@ using Warranty.UI.Api;
 namespace Warranty.UI.Tests.Api
 {
     [TestFixture]
-    public class ManageServiceCallControllerTests : Common.Test.TestBase
+    public class ManageServiceCallControllerTests : BaseTest
     {
         [Test]
         public void CompleteLineItem_WhenRootProblemAndRootCauseAreValid_SendsCompleteServiceCallLineItemCommand()
         {
             var mediator = new Mock<IMediator>();
-            var controller = Create<ManageServiceCallController>(mediator);
+            var controller = new ManageServiceCallController(mediator.Object, null, null);
             var model = new CompleteServiceCallLineItemModel
             {
                 RootProblem = RootProblem.Appliances,
@@ -33,7 +34,7 @@ namespace Warranty.UI.Tests.Api
          TestCase("invalid root problem")]
         public void CompleteLineItem_WhenRootProblemIsInvalid_ThrowsArgumentException(string rootProblem)
         {
-            var controller = Create<ManageServiceCallController>();
+            var controller = new ManageServiceCallController(null, null, null);
             var model = new CompleteServiceCallLineItemModel
             {
                 RootProblem = rootProblem,
@@ -50,7 +51,7 @@ namespace Warranty.UI.Tests.Api
          TestCase("invalid root problem")]
         public void CompleteLineItem_WhenRootCauseIsInvalid_ThrowsArgumentException(string rootCause)
         {
-            var controller = Create<ManageServiceCallController>();
+            var controller = new ManageServiceCallController(null, null, null);
             var model = new CompleteServiceCallLineItemModel
             {
                 RootCause = rootCause,
