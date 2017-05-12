@@ -199,7 +199,7 @@
 
             if (System.IO.File.Exists(Server.MapPath(loc)))
             {
-                script = string.Format("<script src='{0}'></script>", VirtualPathUtility.ToAbsolute(loc));
+                script = string.Format("<script src='{0}?_={1}'></script>", VirtualPathUtility.ToAbsolute(loc), VersionHelper.ApplicationVersionNumber());
             }
             return script;
         }
