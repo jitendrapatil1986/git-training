@@ -11,7 +11,6 @@ using Warranty.Core;
 using Warranty.Core.Features.Report.Achievement;
 using Warranty.Core.Features.Report.MailMerge;
 using Warranty.Core.Features.Report.Saltline;
-using Warranty.Core.Features.Report.WSRCallSummary;
 using Warranty.Core.Features.Report.WSRLoadingReport;
 using Warranty.Core.Features.Report.WSROpenedClosedCalls;
 using Warranty.Core.Features.Report.WSRSummary;
@@ -139,23 +138,7 @@ namespace Warranty.UI.Controllers
             return View(resultModel);
         }
 
-        public ActionResult WSRCallSummaryReport()
-        {
-            var resultModel = _mediator.Request(new WSRCallSummaryQuery());
-
-            ViewBag.Title = "Call Summary Report";
-            return View(resultModel);
-        }
-
-        [HttpPost]
-        public ActionResult WSRCallSummaryReport(WSRCallSummaryModel model)
-        {
-            var resultModel = _mediator.Request(new WSRCallSummaryQuery() { queryModel = model });
-
-            ViewBag.Title = "Call Summary Report";
-            return View(resultModel);
-        }
-
+        
         public ActionResult WSROpenedClosedCallReport()
         {
             var resultModel = _mediator.Request(new WSROpenedClosedCallsQuery());
