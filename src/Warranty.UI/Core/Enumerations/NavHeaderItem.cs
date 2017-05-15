@@ -15,7 +15,6 @@
         public static NavHeaderItem Achievement = new NavHeaderItem(5, Reports.Key, Reports.Display.AchievementReportName, "Report", "AchievementReport");
         public static NavHeaderItem Saltline = new NavHeaderItem(6, Reports.Key, Reports.Display.SaltlineReportName, "Report", "SaltlineReport");
         public static NavHeaderItem WsrSummary = new NavHeaderItem(9, Reports.Key, Reports.Display.WsrSummaryReportName, "Report", "WSRSummaryReport");
-        //public static NavHeaderItem WsrCallSummary = new NavHeaderItem(10, Reports.Key, Reports.Display.WsrCallSummaryReportName, "Report", "WSRCallSummaryReport");
         public static NavHeaderItem WsrOpenedClosedCalls = new NavHeaderItem(11, Reports.Key, Reports.Display.WsrOpenedClosedCallReportName, "Report", "WSROpenedClosedCallReport");
         public static NavHeaderItem WsrOutstantindActivity = new NavHeaderItem(12, Reports.Key, Reports.Display.WsrOutstandingActivityReportName, "Report", "WSROutstandingActivityReport");
         
