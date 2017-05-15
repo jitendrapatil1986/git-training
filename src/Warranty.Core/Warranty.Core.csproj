@@ -233,9 +233,6 @@
     <Compile Include="Features\Report\WSROpenedClosedCalls\WSROpenedClosedCallsModel.cs" />
     <Compile Include="Features\Report\WSROpenedClosedCalls\WSROpenedClosedCallsQuery.cs" />
     <Compile Include="Features\Report\WSROpenedClosedCalls\WSROpenedClosedCallsQueryHandler.cs" />
-    <Compile Include="Features\Report\WSRCallSummary\WSRCallSummaryModel.cs" />
-    <Compile Include="Features\Report\WSRCallSummary\WSRCallSummaryQuery.cs" />
-    <Compile Include="Features\Report\WSRCallSummary\WSRCallSummaryQueryHandler.cs" />
     <Compile Include="Features\Report\WSRSummary\WSRSummaryModel.cs" />
     <Compile Include="Features\Report\WSRSummary\WSRSummaryQuery.cs" />
     <Compile Include="Features\Report\WSRSummary\WSRSummaryQueryHandler.cs" />
