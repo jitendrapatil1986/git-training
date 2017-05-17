@@ -14,14 +14,12 @@ namespace Warranty.Core.CsvBuilder
             using (var writer = new StreamWriter(tempFileName))
             {
                 var csv = ConfigureCsvWriter<T>(quoteChar, quoteAllFields, writer);
-                WriteLinesBeforeHeader<T>(linesBeforeHeader, writer);
-                WriteHeader<T>(includeHeaderRow, csv);
+                WriteLinesBeforeHeader<T>(linesBeforeHeader, writer);                              
+                WriteHeader<T>(csvRecords, includeHeaderRow, csv);
                 WriteCsvRecords(csvRecords, csv);
             }
-
             var bytes = File.ReadAllBytes(tempFileName);
-
-            if(File.Exists(tempFileName))
+            if (File.Exists(tempFileName))
                 File.Delete(tempFileName);
 
             return bytes;
@@ -42,12 +40,62 @@ namespace Warranty.Core.CsvBuilder
                 csv.WriteRecord(customer);
             }
         }
-
-        private static void WriteHeader<T>(bool includeHeaderRow, CsvWriter csv)
+        
+        private static void WriteHeader<T>(IEnumerable<T> csvRecords, bool includeHeaderRow, CsvWriter csv)
         {
             if (includeHeaderRow)
             {
-                csv.WriteHeader<T>();
+                var customer = csvRecords.FirstOrDefault();
+                if (customer != null)
+                {
+                    var columns = customer.GetType().GetProperties();
+                    string[] columnNames = columns.Select(column => column.Name)
+                                                  .ToArray();
+                    foreach (var column in columnNames)
+                    {                  
+                        if (column == "EmptyField1")
+                        {
+                            csv.WriteField("");
+                        }
+                        else if (column == "EmptyField2")
+                        {
+                            csv.WriteField("");
+                        }
+                        else if (column == "HomeownerName")
+                        {
+                            csv.WriteField("Homeowner Name");
+                        }
+                        else if (column == "AddressLine")
+                        {
+                            csv.WriteField("Address");
+                        }
+                        else if (column == "City")
+                        {
+                            csv.WriteField("City");
+                        }
+                        else if (column == "StateCode")
+                        {
+                            csv.WriteField("State");
+                        }
+                        else if (column == "PostalCode")
+                        {
+                            csv.WriteField("Zip Code");
+                        }
+                        else if (column == "HomePhone")
+                        {
+                            csv.WriteField("Home Phone");
+                        }
+                        else if (column == "CommunityName")
+                        {
+                            csv.WriteField("Community");
+                        }
+                        else if (column == "CloseDate")
+                        {
+                            csv.WriteField("Close Date");
+                        }
+                    }
+                }
+                csv.NextRecord();
             }
         }
 

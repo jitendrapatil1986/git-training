@@ -1,6 +1,6 @@
 ﻿namespace Warranty.Core.Features.Report.MailMerge
 {
-    using System.Collections.Generic;
+    using System.Collections.Generic;    
 
     public class MailMergeReport
     {
@@ -8,8 +8,8 @@
         public class Customer
         {
             public string EmptyField1 { get; set; }
-            public string EmptyField2 { get; set; }
-            public string HomeownerName { get; set; }
+            public string EmptyField2 { get; set; }            
+            public string HomeownerName { get; set; }           
             public string AddressLine { get; set; }
             public string City { get; set; }
             public string StateCode { get; set; }

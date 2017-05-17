@@ -21,10 +21,8 @@
         public MailMergeDownloadAsCsvModel Handle(MailMergeDownloadAsCsvQuery query)
         {
             var titleLine = string.Format(",,{0}", Month.FromValue(query.Date.Month).Abbreviation);
-            var linesBeforeHeader = new List<string> {titleLine};
-
-            var csvBytes = _csvBuilder.GetCsvBytes(linesBeforeHeader, query.ReportData.Customers, false);
-           
+            var linesBeforeHeader = new List<string> {titleLine};            
+            var csvBytes = _csvBuilder.GetCsvBytes(linesBeforeHeader, query.ReportData.Customers, true);
             var fileName = string.Format("MailMerge_{0}.csv", query.Date.ToString("MM_yyyy"));
 
             var model = new MailMergeDownloadAsCsvModel
