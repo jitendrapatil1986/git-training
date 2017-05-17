@@ -8,14 +8,14 @@ namespace Warranty.Core.CsvBuilder
 
     public class CsvBuilder : ICsvBuilder
     {
-        public byte[] GetCsvBytes<T>(IEnumerable<string> linesBeforeHeader, IEnumerable<T> csvRecords, bool includeHeaderRow = true, char quoteChar = '"', bool quoteAllFields = false)
+        public byte[] GetCsvBytes<T>(IEnumerable<string> linesBeforeHeader, IEnumerable<T> csvRecords, char quoteChar = '"', bool quoteAllFields = false)
         {
             var tempFileName = Path.GetTempFileName();
             using (var writer = new StreamWriter(tempFileName))
             {
                 var csv = ConfigureCsvWriter<T>(quoteChar, quoteAllFields, writer);
-                WriteLinesBeforeHeader<T>(linesBeforeHeader, writer);                              
-                WriteHeader<T>(csvRecords, includeHeaderRow, csv);
+                WriteLinesBeforeHeader<T>(linesBeforeHeader, writer);
+                WriteHeader<T>(csvRecords, csv);
                 WriteCsvRecords(csvRecords, csv);
             }
             var bytes = File.ReadAllBytes(tempFileName);
@@ -40,63 +40,59 @@ namespace Warranty.Core.CsvBuilder
                 csv.WriteRecord(customer);
             }
         }
-        
-        private static void WriteHeader<T>(IEnumerable<T> csvRecords, bool includeHeaderRow, CsvWriter csv)
+
+        private static void WriteHeader<T>(IEnumerable<T> csvRecords, CsvWriter csv)
         {
-            if (includeHeaderRow)
+            var customer = csvRecords.FirstOrDefault();
+            if (customer != null)
             {
-                var customer = csvRecords.FirstOrDefault();
-                if (customer != null)
+                var columnNames = customer.GetType().GetProperties().Select(column => column.Name);                                          
+                foreach (var column in columnNames)
                 {
-                    var columns = customer.GetType().GetProperties();
-                    string[] columnNames = columns.Select(column => column.Name)
-                                                  .ToArray();
-                    foreach (var column in columnNames)
-                    {                  
-                        if (column == "EmptyField1")
-                        {
-                            csv.WriteField("");
-                        }
-                        else if (column == "EmptyField2")
-                        {
-                            csv.WriteField("");
-                        }
-                        else if (column == "HomeownerName")
-                        {
-                            csv.WriteField("Homeowner Name");
-                        }
-                        else if (column == "AddressLine")
-                        {
-                            csv.WriteField("Address");
-                        }
-                        else if (column == "City")
-                        {
-                            csv.WriteField("City");
-                        }
-                        else if (column == "StateCode")
-                        {
-                            csv.WriteField("State");
-                        }
-                        else if (column == "PostalCode")
-                        {
-                            csv.WriteField("Zip Code");
-                        }
-                        else if (column == "HomePhone")
-                        {
-                            csv.WriteField("Home Phone");
-                        }
-                        else if (column == "CommunityName")
-                        {
-                            csv.WriteField("Community");
-                        }
-                        else if (column == "CloseDate")
-                        {
-                            csv.WriteField("Close Date");
-                        }
+                    if (column == "EmptyField1")
+                    {
+                        csv.WriteField("");
+                    }
+                    else if (column == "EmptyField2")
+                    {
+                        csv.WriteField("");
+                    }
+                    else if (column == "HomeownerName")
+                    {
+                        csv.WriteField("Homeowner Name");
+                    }
+                    else if (column == "AddressLine")
+                    {
+                        csv.WriteField("Address");
+                    }
+                    else if (column == "City")
+                    {
+                        csv.WriteField("City");
+                    }
+                    else if (column == "StateCode")
+                    {
+                        csv.WriteField("State");
+                    }
+                    else if (column == "PostalCode")
+                    {
+                        csv.WriteField("Zip Code");
+                    }
+                    else if (column == "HomePhone")
+                    {
+                        csv.WriteField("Home Phone");
+                    }
+                    else if (column == "CommunityName")
+                    {
+                        csv.WriteField("Community");
+                    }
+                    else if (column == "CloseDate")
+                    {
+                        csv.WriteField("Close Date");
                     }
                 }
-                csv.NextRecord();
             }
+            csv.NextRecord();
+
         }
 
         private static void WriteLinesBeforeHeader<T>(IEnumerable<string> linesBeforeHeader, StreamWriter writer)

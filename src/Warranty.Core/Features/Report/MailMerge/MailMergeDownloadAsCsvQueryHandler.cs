@@ -22,7 +22,7 @@
         {
             var titleLine = string.Format(",,{0}", Month.FromValue(query.Date.Month).Abbreviation);
             var linesBeforeHeader = new List<string> {titleLine};            
-            var csvBytes = _csvBuilder.GetCsvBytes(linesBeforeHeader, query.ReportData.Customers, true);
+            var csvBytes = _csvBuilder.GetCsvBytes(linesBeforeHeader, query.ReportData.Customers);
             var fileName = string.Format("MailMerge_{0}.csv", query.Date.ToString("MM_yyyy"));
 
             var model = new MailMergeDownloadAsCsvModel
