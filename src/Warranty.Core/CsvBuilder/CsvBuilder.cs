@@ -8,6 +8,19 @@ namespace Warranty.Core.CsvBuilder
 
     public class CsvBuilder : ICsvBuilder
     {
+        public static readonly Dictionary<string, string> _ColumnDescription = new Dictionary<string, string>()
+        {
+            {"EmptyField1", ""},
+            {"EmptyField2", ""},
+            {"HomeownerName", "Homeowner Name"},
+            {"AddressLine", "Address"},
+            {"City", "City"},
+            {"StateCode", "State"},
+            {"PostalCode", "Zip Code"},
+            {"HomePhone", "Home Phone"},
+            {"CommunityName", "Community"},
+            {"CloseDate", "Close Date"},
+        };
         public byte[] GetCsvBytes<T>(IEnumerable<string> linesBeforeHeader, IEnumerable<T> csvRecords, char quoteChar = '"', bool quoteAllFields = false)
         {
             var tempFileName = Path.GetTempFileName();
@@ -46,49 +59,12 @@ namespace Warranty.Core.CsvBuilder
             var customer = csvRecords.FirstOrDefault();
             if (customer != null)
             {
-                var columnNames = customer.GetType().GetProperties().Select(column => column.Name);                                          
+                var columnNames = customer.GetType().GetProperties().Select(column => column.Name);
                 foreach (var column in columnNames)
                 {
-                    if (column == "EmptyField1")
-                    {
-                        csv.WriteField("");
-                    }
-                    else if (column == "EmptyField2")
-                    {
-                        csv.WriteField("");
-                    }
-                    else if (column == "HomeownerName")
-                    {
-                        csv.WriteField("Homeowner Name");
-                    }
-                    else if (column == "AddressLine")
-                    {
-                        csv.WriteField("Address");
-                    }
-                    else if (column == "City")
-                    {
-                        csv.WriteField("City");
-                    }
-                    else if (column == "StateCode")
-                    {
-                        csv.WriteField("State");
-                    }
-                    else if (column == "PostalCode")
-                    {
-                        csv.WriteField("Zip Code");
-                    }
-                    else if (column == "HomePhone")
-                    {
-                        csv.WriteField("Home Phone");
-                    }
-                    else if (column == "CommunityName")
-                    {
-                        csv.WriteField("Community");
-                    }
-                    else if (column == "CloseDate")
-                    {
-                        csv.WriteField("Close Date");
-                    }
+                    string header = string.Empty;
+                    _ColumnDescription.TryGetValue(column, out header);
+                    csv.WriteField(header);
                 }
             }
             csv.NextRecord();
