@@ -9,7 +9,7 @@
         engine: new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            limit: 20,
+            limit: 10000,
             remote: urls.QuickSearch.Jobs + '?query=%QUERY'
         })
     };
