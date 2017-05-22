@@ -17,13 +17,12 @@ namespace Warranty.Core.Features.CreateServiceCall
         public List<string> Comments { get; set; }    
         public List<ServiceCallLine> LineItems { get; set; }        
         public string Url { get; set; }
-    }
 
-    public class ServiceCallLine
-    {
-        public int LineNumber { get; set; }
-        public string ProblemCode { get; set; }    
-        public string ProblemDescription { get; set; }                  
+        public class ServiceCallLine
+        {
+            public int LineNumber { get; set; }
+            public string ProblemCode { get; set; }
+            public string ProblemDescription { get; set; }
+        }
     }
-   
 }
