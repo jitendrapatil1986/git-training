@@ -42,7 +42,12 @@ namespace Warranty.Core.Features.CreateServiceCall
                                                 FROM ServiceCallNotes 
                                                 WHERE ServiceCallId = @0";
 
+                const string sqlLineItems = @"  SELECT LineNumber, ProblemCode, ProblemDescription 
+                                                FROM ServiceCallLineItems 
+                                                WHERE ServiceCallId = @0";
+
                 model.Comments = _database.Fetch<string>(sqlcomments, query.ServiceCallId);
+                model.LineItems = _database.Fetch<ServiceCallLine>(sqlLineItems, query.ServiceCallId);
                 return model;
             }
         }
