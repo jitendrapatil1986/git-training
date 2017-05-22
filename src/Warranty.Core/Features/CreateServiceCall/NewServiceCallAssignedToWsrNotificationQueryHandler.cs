@@ -47,7 +47,7 @@ namespace Warranty.Core.Features.CreateServiceCall
                                                 WHERE ServiceCallId = @0";
 
                 model.Comments = _database.Fetch<string>(sqlcomments, query.ServiceCallId);
-                model.LineItems = _database.Fetch<ServiceCallLine>(sqlLineItems, query.ServiceCallId);
+                model.LineItems = _database.Fetch<NewServiceCallAssignedToWsrNotificationModel.ServiceCallLine>(sqlLineItems, query.ServiceCallId);
                 return model;
             }
         }
