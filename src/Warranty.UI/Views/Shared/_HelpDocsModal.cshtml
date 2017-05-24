@@ -1,0 +1,52 @@
+﻿@using Warranty.Core.Features.HelpDoc
+@model HelpDocModel
+<div id="helpDocsModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Help Documents</h4>
+            </div>
+            <form id="helpDocsForm">
+                <div class="modal-body">
+                    <ul>
+                        @foreach (var docfeature in Model.DocumentFeatures)
+            {
+                            <li>
+                                <b>@docfeature.DocFeatureName</b>
+                                <ul>
+                                    @foreach (var docfeatureitem in docfeature.DocumentFeatureItems)
+                                    {
+                                        if (docfeatureitem.DocFeatureId == docfeature.DocFeatureId)
+                                        {
+                                            string strClass = null, strLink = null;
+                                            if (docfeatureitem.DocumentItemsUrl.Count > 0)
+                                            {
+                                                strClass = "dropdown";
+                                                strLink = "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">" + docfeatureitem.DocFeatureItemName + "</a>";
+                                            }
+                                            else
+                                            {
+                                                strLink = docfeatureitem.DocFeatureItemName;
+                                            }
+                                            <li class="@strClass">
+                                                @Html.Raw(@strLink)
+                                                <ul class="dropdown-menu">
+                                                    @foreach (var item in docfeatureitem.DocumentItemsUrl)
+                                                    {
+                                                        var url = Uri.EscapeUriString(item.Url);
+                                                        <li><a href=@url data-toggle="modal" target="_blank">@item.ItemDocName</a></li>
+                                                    }
+                                                </ul>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
