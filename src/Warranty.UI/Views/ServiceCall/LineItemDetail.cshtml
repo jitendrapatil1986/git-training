@@ -237,7 +237,7 @@
 
                                         <div class="form-group col-md-4" data-bind="validationElement: personNotifiedDate">
                                             @Html.Label("Date notified", new { @class = "control-label", @for = "Person_Notified_Date" })
-                                            <input id="Person_Notified_Date" type="text" data-bind="value: personNotifiedDate" class="form-control" />
+                                            <input id="Person_Notified_Date" type="text" data-bind="value: personNotifiedDate" class="form-control" onkeydown="validitydate(event)" />
                                         </div>
 
                                         <div class="form-group col-md-12" data-bind="validationElement: backchargeResponseFromVendor">
@@ -597,6 +597,19 @@
                 }
         });
 
-       
+        function validitydate(event) {
+            var key = window.event ? event.keyCode : event.which;
+            if (event.keyCode != 8 )
+            {
+                event.preventDefault();
+                return false;
+            }
+            else
+            {                
+                $("#Person_Notified_Date").val("");
+            }
+        }
+
     </script>
 }
+
