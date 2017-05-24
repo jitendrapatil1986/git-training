@@ -158,7 +158,8 @@
                                         </div>
                                         <div class="form-group col-md-3" data-bind="validationElement: invoiceNumber">
                                             @Html.Label("Invoice #", new { @class = "control-label", @for = "invoiceNumber" })
-                                            <input type="text" class="form-control" id="invoiceNumber" data-bind="value: invoiceNumber" />
+                                            <input disabled maxlength="3" size="3" value="25" id="counter" style="background: none; border: none">
+                                            <input type="text" class="form-control" onkeyup="textCounter(this,'counter',25)" id="invoiceNumber" data-bind="value: invoiceNumber" />
                                         </div>
                                         <div class="form-group col-md-3" data-bind="validationElement: amount, validationOptions: { insertMessages: false}">
                                             @Html.Label("Amount", new { @class = "control-label", @for = "amount" })
@@ -221,7 +222,9 @@
 
                                         <div class="form-group col-md-4" data-bind="validationElement: personNotified">
                                             @Html.Label("Person notified", new { @class = "control-label", @for = "personNotified" })
-                                            <input type="text" class="form-control" data-bind="value: personNotified" id="personNotified" />
+                                            <input disabled maxlength="3" size="3" value="40" id="counter" style="background: none; border: none">
+                                            <input type="text" class="form-control" onkeyup="textCounter(this,'counter',40)" data-bind="value: personNotified" id="personNotified" />
+
                                         </div>
 
                                         <div class="form-group col-md-4" data-bind="validationElement: personNotifiedPhoneNumber">
@@ -588,5 +591,19 @@
                 availableLookups: @Html.Raw(Model.ProblemCodes.Select(x => new { problemId = x.Value, problemCode = x.Text }).ToJson())
                 }
         });
+
+        function textCounter(field, field2, maxlimit)
+        {
+            var counterfield = document.getElementById(field2);
+            //setting counter to personotified
+            if(field.value.length > maxlimit)
+            {
+                field.value = field.value.substring(0, maxlimit);
+                return false;
+            }
+            else{
+                counterfield.value = maxlimit - field.value.length;
+            }
+        }
     </script>
 }
