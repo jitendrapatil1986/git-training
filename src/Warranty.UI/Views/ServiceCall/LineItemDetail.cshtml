@@ -237,7 +237,12 @@
 
                                         <div class="form-group col-md-4" data-bind="validationElement: personNotifiedDate">
                                             @Html.Label("Date notified", new { @class = "control-label", @for = "Person_Notified_Date" })
-                                            <input id="Person_Notified_Date" type="text" data-bind="value: personNotifiedDate" class="form-control" onkeydown="validitydate(event)" />
+                                            <div class="input-group" style="width:100%;">
+                                                <input id="Person_Notified_Date" type="text" data-bind="value: personNotifiedDate" class="form-control" readonly />
+                                                <span class="input-group-addon btn btn-default"  id="btnPicker">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
                                         </div>
 
                                         <div class="form-group col-md-12" data-bind="validationElement: backchargeResponseFromVendor">
@@ -596,20 +601,6 @@
                 availableLookups: @Html.Raw(Model.ProblemCodes.Select(x => new { problemId = x.Value, problemCode = x.Text }).ToJson())
                 }
         });
-
-        function validitydate(event) {
-            var key = window.event ? event.keyCode : event.which;
-            if (event.keyCode != 8 )
-            {
-                event.preventDefault();
-                return false;
-            }
-            else
-            {                
-                $("#Person_Notified_Date").val("");
-            }
-        }
-
     </script>
 }
 

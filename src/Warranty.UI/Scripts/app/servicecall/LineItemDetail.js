@@ -891,13 +891,13 @@
                                 self.hasAnyPayments(true);
                                 self.clearPaymentFields();
                             });
-                    };
-                    
-                    $("#Person_Notified_Date").datepicker({
+                    };                   
+
+                    $("#btnPicker").datepicker({
                         format: 'm/d/yyyy'
                     });
 
-                    $("#Person_Notified_Date").on('changeDate', function (e) {
+                    $("#btnPicker").on('changeDate', function (e) {
                         self.personNotifiedDate(moment(e.date).format("L"));
                     });
 
