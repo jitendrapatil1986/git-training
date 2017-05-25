@@ -893,11 +893,11 @@
                             });
                     };                   
 
-                    $("#btnPicker").datepicker({
+                    $("#personNotifiedBtnPicker").datepicker({
                         format: 'm/d/yyyy'
                     });
 
-                    $("#btnPicker").on('changeDate', function (e) {
+                    $("#personNotifiedBtnPicker").on('changeDate', function (e) {
                         self.personNotifiedDate(moment(e.date).format("L"));
                     });
 
