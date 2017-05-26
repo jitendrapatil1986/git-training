@@ -97,7 +97,7 @@
                     <ul class="dropdown-menu">
                         <li><span class="logged-in-user">Logged in as: @User.Identity.Name</span></li>
                         <li class="divider"></li>
-                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#helpDocsModal" data-toggle="modal">Documentation</a></li>
                         <li class="divider"></li>
                         <li><a href="#feedbackModal" data-toggle="modal">Contact Help Desk</a></li>
                         <li class="divider"></li>
@@ -151,9 +151,9 @@
         </footer>
     </div>
     @Html.Partial("_FeedbackModal")
-    @Html.Partial("_ImpersonateUserModal")
-    @RenderSection("scripts", required: false)
-
+    @Html.Partial("_ImpersonateUserModal")   
+    @{Html.RenderAction("HelpDocsModal", "Home");} 
+    @RenderSection("scripts", required: false)    
     @Html.RenderToastMessage()
 </body>
 </html>
