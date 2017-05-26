@@ -152,11 +152,8 @@
         </footer>
     </div>
     @Html.Partial("_FeedbackModal")
-    @Html.Partial("_ImpersonateUserModal")
-    @{
-        Html.RenderAction("HelpDocsModal", "Home",
-            new { context = ViewContext });
-    }
+    @Html.Partial("_ImpersonateUserModal")   
+    @{Html.RenderAction("HelpDocsModal", "Home");} 
     @RenderSection("scripts", required: false)    
     @Html.RenderToastMessage()
 </body>
