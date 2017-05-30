@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using Common.Api.Http;
 using Newtonsoft.Json;
@@ -20,9 +21,15 @@ namespace Warranty.Core.AccountingApiHelpers
             return JsonConvert.DeserializeObject<T>(json, _settings);
         }
 
-        public string Encode(object obj, IEnumerable<KeyValuePair<string, IEnumerable<string>>> headers = null)
+        public T Decode<T>(HttpContent content)
         {
-            return JsonConvert.SerializeObject(obj);
+            var contentValue = content.ReadAsStringAsync().Result;
+            return JsonConvert.DeserializeObject<T>(contentValue, _settings);
+        }
+
+        HttpContent IApiConverter.Encode(object obj, IEnumerable<KeyValuePair<string, IEnumerable<string>>> headers)
+        {
+            return new StringContent(JsonConvert.SerializeObject(obj), GetEncoding(), GetMediaType());
         }
 
         public string GetMediaType()

@@ -690,33 +690,30 @@
                     });
 
                     self.canPayHomeowner = ko.observable(false);
-                    self.canPayHomeownerUnknown = ko.observable(true);
-                    self.payHomeownerVisible = ko.computed(function() {
-                        return self.canPayHomeowner() && !self.canPayHomeownerUnknown();
+                    self.cannotPayHomeowner = ko.computed(function() {
+                        return !self.canPayHomeowner();
                     });
-                    self.payHomeownerNotVisible = ko.computed(function () {
-                        return !self.canPayHomeowner() && !self.canPayHomeownerUnknown();
+                    self.cannotPayHomeownerHelpText = ko.computed(function() {
+                        return self.canPayHomeowner() ? "" : "Cannot find homeowner in supply master; please contact your PC.";
                     });
+                    
                     $.ajax({
                         url: urls.ManageServiceCall.GetHomeownerId,
                         type: "GET",
                         data: { jobNumber: self.jobNumber() },
                         contentType: "application/json; charset=utf-8"
                     })
-                        .fail(function (response) {
-                            console.error(response);
-                            toastr.error("Failed to validate whether homeowner is payable");
-                        })
-                        .done(function (response) {
-                            if (response.IsValid) {
-                                self.canPayHomeowner(true);
-                                self.homeownerName(response.HomeownerName);
-                                self.homeownerId(response.HomeownerNumber);
-                            }
-                        })
-                        .always(function () {
-                            self.canPayHomeownerUnknown(false);
-                        });
+                    .fail(function (response) {
+                        console.error(response);
+                        toastr.error("Failed to validate whether homeowner is payable");
+                    })
+                    .done(function (response) {
+                        if (response.IsValid) {
+                            self.canPayHomeowner(true);
+                            self.homeownerName(response.HomeownerName);
+                            self.homeownerId(response.HomeownerNumber);
+                        }
+                    });
                     self.homeownerId = ko.observable();
                     self.homeownerName = ko.observable();
                     self.payHomeownerSelected = ko.observable(false);
