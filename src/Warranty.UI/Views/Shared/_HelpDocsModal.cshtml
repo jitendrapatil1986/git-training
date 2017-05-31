@@ -34,9 +34,8 @@
                                                 @FeatureItemLink(docFeatureItem.DocFeatureItemName, docFeatureItem.DocumentItemsUrl.Count)
                                                 <ul class="dropdown-menu">
                                                     @foreach (var item in docFeatureItem.DocumentItemsUrl)
-                                                    {
-                                                        var url = Uri.EscapeUriString(item.Url);
-                                                        <li><a href="@url" data-toggle="modal" target="_blank">@item.ItemDocName</a></li>
+                                                    {                                                        
+                                                        <li><a href="@item.Url" data-toggle="modal" target="_blank">@item.ItemDocName</a></li>
                                                     }
                                                 </ul>
                                             </li>
