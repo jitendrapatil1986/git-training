@@ -6,6 +6,7 @@
             });
 
             function CommunityAssignmentsItemsViewModel(options) {
+                debugger;
                 var self = this;
                 
                 self.communityId = options.id;

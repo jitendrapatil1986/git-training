@@ -47,13 +47,15 @@ namespace Warranty.Core.Features.AssignWSRs
                                     C.CommunityNumber = {0}
                                     AND T.IsComplete = 0";
             return _database.Fetch<Task>(String.Format(sql, communityNumber));
-        } 
+        }
 
         public void Handle(AssignWSRCommand cmd)
         {
             using (_database)
             {
-                const string sql = @"SELECT * FROM CommunityAssignments WHERE CommunityId = @0";
+                //const string sql = @"SELECT * FROM CommunityAssignments WHERE CommunityId = @0";
+
+                const string sql = @"SELECT * FROM CommunityAssignments WHERE CommunityId = @0 ORDER BY EmployeeAssignmentId  desc";
 
                 var communityAssignment =
                     _database.FirstOrDefault<CommunityAssignment>(sql, cmd.CommunityId);
@@ -72,10 +74,11 @@ namespace Warranty.Core.Features.AssignWSRs
                 if (string.IsNullOrWhiteSpace(employeeNumber))
                     throw new Exception(string.Format("No team member was found with the Id of {0}.", cmd.EmployeeId));
 
-                if (communityAssignment == null)
+                if ((communityAssignment == null) || (communityAssignment.EmployeeId != cmd.EmployeeId))
                 {
                     var newCommunityAssignment = new CommunityAssignment
                     {
+                        AssignmentDate = DateTime.UtcNow,
                         CommunityId = cmd.CommunityId,
                         EmployeeId = cmd.EmployeeId,
                     };
@@ -97,6 +100,7 @@ namespace Warranty.Core.Features.AssignWSRs
                     using (_database.Transaction)
                     {
                         _database.BeginTransaction();
+                        communityAssignment.AssignmentDate = DateTime.UtcNow;
                         _database.Update(communityAssignment);
 
                         var taskTypesToTransfer = TaskType.GetAll().Where(t => t.IsTransferable).ToDictionary(x => x.Value);
