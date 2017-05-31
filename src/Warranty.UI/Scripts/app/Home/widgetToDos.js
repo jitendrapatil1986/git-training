@@ -1,14 +1,28 @@
 define(['urls', 'jquery'], function (urls, $) {
+    var value;
+    var expires = "; expires=" + 'Wed, 1 Jan 2070 13:47:11 UTC';
+    var IsClick = false;
+    $(document).ready(function () {
+        if (document.cookie != "") {
+            value = document.cookie.substring(7);
+        }
+    });
     $(function () {
         
+       
         $('.todo:lt(5)').removeClass('hide');
 
         $('.show-more-todos').click(function () {
+            document.cookie = 'widget' + "=" + '' + expires + "; path=/";
             var value = $(this).text();
-            $("#Last_Display_Size").val(value);
+            $("#Last_Display_Size").val(value);      
+            IsClick = true;
             hideShowTodos();
+                      
+            document.cookie = 'widget' + "=" + value + expires + "; path=/";           
+           
         });
-
+        
         function hideShowTodos() {
             var classToIntersect = "";
             var selectedTodoType = $("#toDoSelect").find('option:selected').val();
@@ -16,8 +30,17 @@ define(['urls', 'jquery'], function (urls, $) {
             if (selectedTodoType) {
                 classToIntersect = "." + selectedTodoType;
             }
-
-            var value = $("#Last_Display_Size").val();
+          
+            //value = $("#Last_Display_Size").val();
+            if (IsClick)
+            {
+                value = $("#Last_Display_Size").val();
+                document.cookie = 'widget' + "=" + value + expires + "; path=/";
+            }
+            else {
+                value = document.cookie.substring(7);
+            }
+                                    
             if (value == 'All') {
                 $('.todo').addClass('hide');
                 $('.todo' + classToIntersect).removeClass('hide');
