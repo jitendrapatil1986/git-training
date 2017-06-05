@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Warranty.Core.Features.HelpDoc
+namespace Warranty.Core.Features.HelpDocument
 {
-    public class HelpDocQuery : IQuery<HelpDocModel>
+    public class HelpDocumentQuery : IQuery<HelpDocumentModel>
     {
     }
 }

@@ -1,0 +1,33 @@
+﻿@using Warranty.Core.Features.HelpDocument
+@model HelpDocumentModel
+<div id="helpDocsModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Help Documents</h4>
+            </div>
+            <form id="helpDocsForm">
+                <div class="modal-body">
+                    <ul>
+                        @foreach (var docFeature in Model.DocumentFeatures)
+                        {
+                            <li>
+                                <b>@docFeature.DocumentFeatureName</b>
+                                <ul>
+                                    @foreach (var docFeatureItem in docFeature.DocumentFeatureItems)
+                                    {
+                                        if (docFeatureItem.DocumentFeatureId == docFeature.DocumentFeatureId)
+                                        {                                           
+                                            <li><a href="@docFeatureItem.Url" data-toggle="modal" target="_blank">@docFeatureItem.DocumentFeatureItemName</a></li>
+                                        }
+                                    }
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
