@@ -1,7 +1,8 @@
 ﻿namespace Warranty.Core.Features.HelpDocument
 {
-    using NPoco;    
+    using NPoco;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class HelpDocumentHandler : IQueryHandler<HelpDocumentQuery,HelpDocumentModel>
     {
@@ -27,18 +28,21 @@
             using (_database)
             {
                 const string Sql = @"SELECT DocumentFeatureId, DocumentFeatureName FROM HelpDocumentFeatures order by DocumentFeatureName";
+                const string featureItemSql = @"SELECT DocumentFeatureItemId, DocumentFeatureId, DocumentFeatureItemName, Url FROM HelpDocumentFeatureItems";
+                                
+                var features = _database.Fetch<HelpDocumentModel.HelpDocumentFeature>(Sql);
+                var items = _database.Fetch<HelpDocumentModel.HelpDocumentFeatureItem>(featureItemSql);
+                items.ForEach(item => {
+                    var feature = features.SingleOrDefault(f => f.DocumentFeatureId == item.DocumentFeatureId);    
+                    if (feature != null)
+                    {
+                        if(feature.DocumentFeatureItems == null)
+                            feature.DocumentFeatureItems = new List<HelpDocumentModel.HelpDocumentFeatureItem>();
+                        feature.DocumentFeatureItems.Add(item);
+                    }
+                });
 
-                var docfeatures = _database.Fetch<HelpDocumentModel.HelpDocumentFeature>(Sql);
-
-                foreach (var docfeature in docfeatures)
-                {
-                    const string featureItemSql = @"SELECT DocumentFeatureItemId, DocumentFeatureId, DocumentFeatureItemName, Url FROM HelpDocumentFeatureItems WHERE DocumentFeatureId = @0";
-
-                    docfeature.DocumentFeatureItems = _database.Fetch<HelpDocumentModel.HelpDocumentFeatureItem>(featureItemSql, docfeature.DocumentFeatureId);
-                }
-
-                return docfeatures;              
-
+                return features;
             }
         }
     }
