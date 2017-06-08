@@ -582,7 +582,7 @@
                 paymentPaymentType: @Html.Raw(@PaymentTypes.Payment.ToJson()),
             }
         });
-
+        //
         define('dropdownData', function() {
             return {
                 availableLookups: @Html.Raw(Model.ProblemCodes.Select(x => new { problemId = x.Value, problemCode = x.Text }).ToJson())
