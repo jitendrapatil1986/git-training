@@ -158,8 +158,9 @@
                                         </div>
                                         <div class="form-group col-md-3" data-bind="validationElement: invoiceNumber">
                                             @Html.Label("Invoice #", new { @class = "control-label", @for = "invoiceNumber" })
-                                            <input disabled maxlength="3" size="3" value="25" id="counter" style="background: none; border: none">
-                                            <input type="text" class="form-control" onkeyup="textCounter(this,'counter',25)" id="invoiceNumber" data-bind="value: invoiceNumber" />
+                                           
+                                            <label class="control-label" for="invoiceNumber"></label>
+                                            <input type="text" id="invoiceNumber" class="form-control max-length" data-bind="attr:{maxlength: maxInvoiceNumberLength}, value: invoiceNumber" />
                                         </div>
                                         <div class="form-group col-md-3" data-bind="validationElement: amount, validationOptions: { insertMessages: false}">
                                             @Html.Label("Amount", new { @class = "control-label", @for = "amount" })
@@ -222,8 +223,9 @@
 
                                         <div class="form-group col-md-4" data-bind="validationElement: personNotified">
                                             @Html.Label("Person notified", new { @class = "control-label", @for = "personNotified" })
-                                            <input disabled maxlength="3" size="3" value="40" id="counter" style="background: none; border: none">
-                                            <input type="text" class="form-control" onkeyup="textCounter(this,'counter',40)" data-bind="value: personNotified" id="personNotified" />
+                                           
+                                            <label class="control-label" for="personNotified">Notes</label>
+                                            <input type="text" id="personNotified" class="form-control max-length" data-bind="attr:{maxlength: maxPersonNotifiedLength}, value: personNotified" />
 
                                         </div>
 
@@ -583,6 +585,8 @@
                 paymentTypes: @Html.Raw(@PaymentTypes.GetAll().OrderBy(x => x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName }).ToJson()),
                 standAloneBackchargePaymentType: @Html.Raw(@PaymentTypes.StandAloneBackcharge.ToJson()),
                 paymentPaymentType: @Html.Raw(@PaymentTypes.Payment.ToJson()),
+                maxPersonNotifiedLength: @Html.Raw(@WarrantyConstants.maxPersonNotifiedLength),
+                maxInvoiceNumberLength: @Html.Raw(@WarrantyConstants.maxInvoiceNumberLength),
             }
         });
 
