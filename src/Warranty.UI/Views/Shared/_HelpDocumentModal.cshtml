@@ -17,10 +17,7 @@
                                 <ul>
                                     @foreach (var docFeatureItem in docFeature.DocumentFeatureItems)
                                     {
-                                        if (docFeatureItem.DocumentFeatureId == docFeature.DocumentFeatureId)
-                                        {                                           
-                                            <li><a href="@docFeatureItem.Url" data-toggle="modal" target="_blank">@docFeatureItem.DocumentFeatureItemName</a></li>
-                                        }
+                                        <li><a href="@docFeatureItem.Url" data-toggle="modal" target="_blank">@docFeatureItem.DocumentFeatureItemName</a></li>
                                     }
                                 </ul>
                             </li>
