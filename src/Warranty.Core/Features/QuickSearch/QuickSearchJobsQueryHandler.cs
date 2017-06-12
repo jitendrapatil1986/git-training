@@ -21,7 +21,7 @@
             var currentuser = _userSession.GetCurrentUser();
             var markets = currentuser.Markets;
 
-            const string sqlTemplate = @"SELECT TOP 20 j.JobId as Id, JobNumber, AddressLine, HomeOwnerName, HomeOwnerNumber, HomePhone, EmailAddress
+            const string sqlTemplate = @"SELECT TOP 40 j.JobId as Id, JobNumber, AddressLine, HomeOwnerName, HomeOwnerNumber, HomePhone, EmailAddress
                                 FROM Jobs j
                                 LEFT JOIN HomeOwners h
                                 ON j.CurrentHomeOwnerId = h.HomeOwnerId and HomeOwnerNumber=(select max(homeownernumber) from HomeOwners WHERE JobId=j.JobId)
