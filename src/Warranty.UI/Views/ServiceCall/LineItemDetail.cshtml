@@ -158,7 +158,10 @@
                                         </div>
                                         <div class="form-group col-md-3" data-bind="validationElement: invoiceNumber">
                                             @Html.Label("Invoice #", new { @class = "control-label", @for = "invoiceNumber" })
-                                            <input type="text" class="form-control" id="invoiceNumber" data-bind="value: invoiceNumber" />
+                                           
+                                            <label class="control-label" for="invoiceNumber"></label>
+                                            <input type="text" id="invoiceNumber" class="form-control max-length" maxlength="@WarrantyConstants.maxInvoiceNumberLength" />
+                                            
                                         </div>
                                         <div class="form-group col-md-3" data-bind="validationElement: amount, validationOptions: { insertMessages: false}">
                                             @Html.Label("Amount", new { @class = "control-label", @for = "amount" })
@@ -221,7 +224,10 @@
 
                                         <div class="form-group col-md-4" data-bind="validationElement: personNotified">
                                             @Html.Label("Person notified", new { @class = "control-label", @for = "personNotified" })
-                                            <input type="text" class="form-control" data-bind="value: personNotified" id="personNotified" />
+                                           
+                                            <label class="control-label" for="personNotified"></label>
+                                            <input type="text" id="personNotified" class="form-control max-length" maxlength="@WarrantyConstants.maxPersonNotifiedLength"  />
+                                            
                                         </div>
 
                                         <div class="form-group col-md-4" data-bind="validationElement: personNotifiedPhoneNumber">
@@ -580,6 +586,8 @@
                 paymentTypes: @Html.Raw(@PaymentTypes.GetAll().OrderBy(x => x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName }).ToJson()),
                 standAloneBackchargePaymentType: @Html.Raw(@PaymentTypes.StandAloneBackcharge.ToJson()),
                 paymentPaymentType: @Html.Raw(@PaymentTypes.Payment.ToJson()),
+                maxPersonNotifiedLength: @Html.Raw(@WarrantyConstants.maxPersonNotifiedLength),
+                maxInvoiceNumberLength: @Html.Raw(@WarrantyConstants.maxInvoiceNumberLength),
             }
         });
 
@@ -588,5 +596,7 @@
                 availableLookups: @Html.Raw(Model.ProblemCodes.Select(x => new { problemId = x.Value, problemCode = x.Text }).ToJson())
                 }
         });
+
+       
     </script>
 }
