@@ -160,7 +160,8 @@
                                             @Html.Label("Invoice #", new { @class = "control-label", @for = "invoiceNumber" })
                                            
                                             <label class="control-label" for="invoiceNumber"></label>
-                                            <input type="text" id="invoiceNumber" class="form-control max-length" data-bind="attr:{maxlength: maxInvoiceNumberLength}, value: invoiceNumber" />
+                                            <input type="text" id="invoiceNumber" class="form-control max-length" maxlength="@WarrantyConstants.maxInvoiceNumberLength" />
+                                            
                                         </div>
                                         <div class="form-group col-md-3" data-bind="validationElement: amount, validationOptions: { insertMessages: false}">
                                             @Html.Label("Amount", new { @class = "control-label", @for = "amount" })
@@ -224,9 +225,9 @@
                                         <div class="form-group col-md-4" data-bind="validationElement: personNotified">
                                             @Html.Label("Person notified", new { @class = "control-label", @for = "personNotified" })
                                            
-                                            <label class="control-label" for="personNotified">Notes</label>
-                                            <input type="text" id="personNotified" class="form-control max-length" data-bind="attr:{maxlength: maxPersonNotifiedLength}, value: personNotified" />
-
+                                            <label class="control-label" for="personNotified"></label>
+                                            <input type="text" id="personNotified" class="form-control max-length" maxlength="@WarrantyConstants.maxPersonNotifiedLength"  />
+                                            
                                         </div>
 
                                         <div class="form-group col-md-4" data-bind="validationElement: personNotifiedPhoneNumber">

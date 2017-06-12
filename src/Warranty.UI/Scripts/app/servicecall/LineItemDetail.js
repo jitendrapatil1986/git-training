@@ -10,8 +10,7 @@
                 
                 $.fn.editableform.buttons =
                     '<button type="submit" class="btn btn-primary editable-submit btn-sm"><i class="glyphicon glyphicon-ok"></i></button>';
-
-                //personNotified
+                
                 $('body').on('focus', '.max-length', function () {
                     $(this).maxlength({
                         alwaysShow: true,
@@ -91,11 +90,7 @@
                     self.notifiedProjectCoordinator = options.notifiedProjectCoordinator;
                     self.projectCoordinatorEmailToNotify = options.projectCoordinatorEmailToNotify;
                     self.sendCheckToProjectCoordinator = options.sendCheckToProjectCoordinator;
-                    //personNotified
-                    //self.maxPersonNotifiedLength = options.maxPersonNotifiedLength;
-
-                    self.maxPersonNotifiedLength = ko.observable().extend({ maxLength: modelData.maxPersonNotifiedLength });
-                    self.maxInvoiceNumberLength = ko.observable().extend({ maxLength: modelData.maxInvoiceNumberLength });
+                   
 
                     self.isHomeownerPayment = ko.computed(function() {
                         if (self.sendCheckToProjectCoordinator)
@@ -482,10 +477,7 @@
                     self.hasAnyPayments = ko.observable(modelData.initialServiceCallLineItem.hasAnyPayments);
                     self.hasAnyPurchaseOrders = ko.observable(modelData.initialServiceCallLineItem.hasAnyPurchaseOrders);
 
-                    ////personNotified
-                    self.maxPersonNotifiedLength = modelData.maxPersonNotifiedLength;
-                    self.maxInvoiceNumberLength = modelData.maxInvoiceNumberLength;
-                    //self.personNotified = ko.observable().extend({ maxLength: modelData.maxPersonNotifiedLength });
+                    
                     
                     self.groupedConstructionVendors = ko.computed(function () {
                         var rows = [], current = [];
@@ -816,9 +808,7 @@
                             notifiedProjectCoordinator: self.notifiedProjectCoordinator(),
                             projectCoordinatorEmailToNotify: self.projectCoordinatorEmail(),
                             sendCheckToProjectCoordinator: self.sendCheckToPC(),
-                            //personNotified
-                            maxPersonNotifiedLength: self.maxPersonNotifiedLength,
-                            maxInvoiceNumberLength: self.maxInvoiceNumberLength,
+                            
                         });
 
                         var paymentData = ko.toJSON(newPayment);
@@ -873,9 +863,7 @@
                             personNotifiedDate: self.personNotifiedDate(),
                             backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
                             backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
-                            maxPersonNotifiedLength: self.maxPersonNotifiedLength(),
-                            //invoiceNumber
-                            maxInvoiceNumberLength: self.maxInvoiceNumberLength(),
+                            
                         });
 
                         var standAloneBackchargeData = ko.toJSON(newStandAloneBackcharge);
