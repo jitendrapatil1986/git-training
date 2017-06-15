@@ -160,7 +160,7 @@
                                             @Html.Label("Invoice #", new { @class = "control-label", @for = "invoiceNumber" })
                                            
                                             <label class="control-label" for="invoiceNumber"></label>
-                                            <input type="text" id="invoiceNumber" class="form-control max-length" maxlength="@WarrantyConstants.maxInvoiceNumberLength" />
+                                            <input type="text" id="invoiceNumber" class="form-control max-length" maxlength="@WarrantyConstants.maxInvoiceNumberLength" data-bind="value: invoiceNumber" />
                                             
                                         </div>
                                         <div class="form-group col-md-3" data-bind="validationElement: amount, validationOptions: { insertMessages: false}">
@@ -226,7 +226,7 @@
                                             @Html.Label("Person notified", new { @class = "control-label", @for = "personNotified" })
                                            
                                             <label class="control-label" for="personNotified"></label>
-                                            <input type="text" id="personNotified" class="form-control max-length" maxlength="@WarrantyConstants.maxPersonNotifiedLength"  />
+                                            <input type="text" id="personNotified" class="form-control max-length" maxlength="@WarrantyConstants.maxPersonNotifiedLength" data-bind="value: personNotified"  />
                                             
                                         </div>
 
