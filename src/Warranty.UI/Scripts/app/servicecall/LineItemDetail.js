@@ -90,7 +90,7 @@
                     self.notifiedProjectCoordinator = options.notifiedProjectCoordinator;
                     self.projectCoordinatorEmailToNotify = options.projectCoordinatorEmailToNotify;
                     self.sendCheckToProjectCoordinator = options.sendCheckToProjectCoordinator;
-                   
+                                        
 
                     self.isHomeownerPayment = ko.computed(function() {
                         if (self.sendCheckToProjectCoordinator)
@@ -475,10 +475,11 @@
                     self.constructionVendors = modelData.vendors;
                     self.hasEverBeenCompleted = ko.observable(modelData.initialServiceCallLineItem.hasEverBeenCompleted);
                     self.hasAnyPayments = ko.observable(modelData.initialServiceCallLineItem.hasAnyPayments);
-                    self.hasAnyPurchaseOrders = ko.observable(modelData.initialServiceCallLineItem.hasAnyPurchaseOrders);
-
-                    
-                    
+                    self.hasAnyPurchaseOrders = ko.observable(modelData.initialServiceCallLineItem.hasAnyPurchaseOrders);                    
+                    		                   
+                    self.maxPersonNotifiedLength = modelData.maxPersonNotifiedLength;		
+                    self.maxInvoiceNumberLength = modelData.maxInvoiceNumberLength;		
+                   
                     self.groupedConstructionVendors = ko.computed(function () {
                         var rows = [], current = [];
                         rows.push(current);
@@ -807,8 +808,8 @@
                             backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
                             notifiedProjectCoordinator: self.notifiedProjectCoordinator(),
                             projectCoordinatorEmailToNotify: self.projectCoordinatorEmail(),
-                            sendCheckToProjectCoordinator: self.sendCheckToPC(),
-                            
+                            sendCheckToProjectCoordinator: self.sendCheckToPC(),                           	
+                            maxInvoiceNumberLength: self.maxInvoiceNumberLength,
                         });
 
                         var paymentData = ko.toJSON(newPayment);
@@ -863,6 +864,7 @@
                             personNotifiedDate: self.personNotifiedDate(),
                             backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
                             backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
+                            maxPersonNotifiedLength: self.maxPersonNotifiedLength,		                        
                             
                         });
 
