@@ -234,11 +234,11 @@
                                         </div>
                                         <div class="form-group col-md-4" data-bind="validationElement: personNotifiedDate,  validationOptions: { insertMessages: false}">
                                             @Html.Label("Date notified", new { @class = "control-label", @for = "Person_Notified_Date" })
-                                            <div class="input-group" >                                               
-                                                <input id="Person_Notified_Date" type="text" data-bind="value: personNotifiedDate" class="form-control" readonly />   
-                                                <span class="input-group-addon" id="personNotifiedBtnPicker">
+                                            <div class="input-group datepicer-icon" >                                               
+                                                <span class="input-group-addon btn">
                                                     <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>                                             
+                                                </span>                                                 
+                                                <input id="Person_Notified_Date" type="text" data-bind="value: personNotifiedDate" class="form-control datepicker" placeholder="MM/DD/YYYY" />  
                                             </div>
                                             <span data-bind="validationMessage: personNotifiedDate" class="help-block"></span>
                                         </div>
