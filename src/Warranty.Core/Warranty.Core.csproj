@@ -280,7 +280,6 @@
     <Compile Include="DataAccess\Mappings\JobAttachmentMap.cs" />
     <Compile Include="DataAccess\Mappings\JobMap.cs" />
     <Compile Include="DataAccess\Mappings\JobNoteMap.cs" />
-    <Compile Include="DataAccess\Mappings\JobStageMap.cs" />
     <Compile Include="DataAccess\Mappings\JobVendorCostCodeMap.cs" />
     <Compile Include="DataAccess\Mappings\Lookups\ClassificationCodeMap.cs" />
     <Compile Include="DataAccess\Mappings\Lookups\LookupMap.cs" />
@@ -315,7 +314,6 @@
     <Compile Include="Entities\JobAttachment.cs" />
     <Compile Include="Entities\JobNote.cs" />
     <Compile Include="Entities\JobOption.cs" />
-    <Compile Include="Entities\JobStage.cs" />
     <Compile Include="Entities\JobVendorCostCode.cs" />
     <Compile Include="Entities\Lookups\ClassificationCode.cs" />
     <Compile Include="Entities\Lookups\LookupEntity.cs" />

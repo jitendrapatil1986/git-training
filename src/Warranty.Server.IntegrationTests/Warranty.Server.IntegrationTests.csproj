@@ -228,8 +228,6 @@
     <Compile Include="Handlers\Jobs\JobSaleApprovedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobPrimaryBuilderUpdatedHandlerNewBuilderTester.cs" />
     <Compile Include="Handlers\Jobs\JobPrimaryBuilderUpdatedHandlerExistingBuilderTester.cs" />
-    <Compile Include="Handlers\JobStages\JobStageDateAddedHandlerTester.cs" />
-    <Compile Include="Handlers\JobStages\JobStageDateUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobElevationUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobPlanUpdatedHandlerTester.cs" />
     <Compile Include="Handlers\Jobs\JobStageUpdatedHandlerTester.cs" />
@@ -254,7 +252,6 @@
     <Compile Include="SetUp\HomeOwnerEntityBuilder.cs" />
     <Compile Include="SetUp\EmployeeEntityBuilder.cs" />
     <Compile Include="SetUp\JobEntityBuilder.cs" />
-    <Compile Include="SetUp\JobStageEntityBuilder.cs" />
     <Compile Include="SetUp\PaymentEntityBuilder.cs" />
     <Compile Include="SetUp\IEntityBuilder.cs" />
     <Compile Include="SetUp\EntityBuilder.cs" />
