@@ -205,6 +205,9 @@
     <Compile Include="Features\EditServiceCallNote\EditServiceCallNoteCommand.cs" />
     <Compile Include="Features\EditServiceCallNote\EditServiceCallNoteCommandHandler.cs" />
     <Compile Include="Features\EditServiceCallNote\EditServiceCallNoteModel.cs" />
+    <Compile Include="Features\HelpDocument\HelpDocumentHandler.cs" />
+    <Compile Include="Features\HelpDocument\HelpDocumentModel.cs" />
+    <Compile Include="Features\HelpDocument\HelpDocumentQuery.cs" />
     <Compile Include="Features\Homeowner\AssignHomeOwnerToJobCommand.cs" />
     <Compile Include="Features\Homeowner\AssignHomeOwnerToJobCommandHandler.cs" />
     <Compile Include="Features\Homeowner\CreateNewHomeOwnerCommand.cs" />

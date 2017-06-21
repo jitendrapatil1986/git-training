@@ -22,6 +22,7 @@
     using Warranty.Core.Features.SendFeedback;
     using Warranty.Core.Features.ServiceCallsWidget;
     using Warranty.Core.Features.WarrantyDollarsSpentWidget;
+    using Warranty.Core.Features.HelpDocument;
 
     public class HomeController : Controller
     {
@@ -244,6 +245,13 @@
             }
 
             return result;
+        }
+
+        [ChildActionOnly]
+        public ActionResult HelpDocumentModal()
+        {
+            var model = _mediator.Request(new HelpDocumentQuery());           
+            return PartialView("_HelpDocumentModal", model);
         }
     }
 }
