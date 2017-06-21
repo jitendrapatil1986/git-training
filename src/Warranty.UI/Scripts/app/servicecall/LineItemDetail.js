@@ -1,5 +1,5 @@
 ﻿require(['/Scripts/app/main.js'], function () {
-    require(['jquery', 'ko', 'ko.x-editable', 'moment', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/BackchargeStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'enumeration/PurchaseOrderLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchProjectCoordinator', 'app/serviceCall/SearchBackchargeVendor'], function ($, ko, koxeditable, moment, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, backchargeStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, purchaseOrderLineItemStatusEnum, bootbox) {
+    require(['jquery', 'ko', 'ko.x-editable', 'moment', 'urls', 'toastr', 'modelData', 'dropdownData', 'x-editable', 'enumeration/PaymentStatus', 'enumeration/BackchargeStatus', 'enumeration/PhoneNumberType', 'enumeration/ActivityType', 'jquery.maskedinput', 'enumeration/ServiceCallStatus', 'enumeration/ServiceCallLineItemStatus', 'enumeration/PurchaseOrderLineItemStatus', 'bootbox', 'app/formUploader', 'app/serviceCall/SearchVendor', 'app/serviceCall/SearchProjectCoordinator', 'app/serviceCall/SearchBackchargeVendor', "maxlength"], function ($, ko, koxeditable, moment, urls, toastr, modelData, dropdownData, xeditable, paymentStatusEnum, backchargeStatusEnum, phoneNumberTypeEnum, activityTypeEnum, maskedInput, serviceCallStatusData, serviceCallLineItemStatusData, purchaseOrderLineItemStatusEnum, bootbox) {
         window.ko = ko; //manually set the global ko property.
 
         require(['ko.validation', 'jquery.color'], function () {
@@ -10,6 +10,14 @@
                 
                 $.fn.editableform.buttons =
                     '<button type="submit" class="btn btn-primary editable-submit btn-sm"><i class="glyphicon glyphicon-ok"></i></button>';
+                
+                $('body').on('focus', '.max-length', function () {
+                    $(this).maxlength({
+                        alwaysShow: true,
+                        separator: ' out of ',
+                        postText: ' characters entered',
+                    });
+                });
 
                 $(".attached-file-display-name").editable();
 
@@ -82,6 +90,7 @@
                     self.notifiedProjectCoordinator = options.notifiedProjectCoordinator;
                     self.projectCoordinatorEmailToNotify = options.projectCoordinatorEmailToNotify;
                     self.sendCheckToProjectCoordinator = options.sendCheckToProjectCoordinator;
+                                        
 
                     self.isHomeownerPayment = ko.computed(function() {
                         if (self.sendCheckToProjectCoordinator)
@@ -466,8 +475,11 @@
                     self.constructionVendors = modelData.vendors;
                     self.hasEverBeenCompleted = ko.observable(modelData.initialServiceCallLineItem.hasEverBeenCompleted);
                     self.hasAnyPayments = ko.observable(modelData.initialServiceCallLineItem.hasAnyPayments);
-                    self.hasAnyPurchaseOrders = ko.observable(modelData.initialServiceCallLineItem.hasAnyPurchaseOrders);
-                    
+                    self.hasAnyPurchaseOrders = ko.observable(modelData.initialServiceCallLineItem.hasAnyPurchaseOrders);                    
+                    		                   
+                    self.maxPersonNotifiedLength = modelData.maxPersonNotifiedLength;		
+                    self.maxInvoiceNumberLength = modelData.maxInvoiceNumberLength;		
+                   
                     self.groupedConstructionVendors = ko.computed(function () {
                         var rows = [], current = [];
                         rows.push(current);
@@ -796,7 +808,8 @@
                             backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
                             notifiedProjectCoordinator: self.notifiedProjectCoordinator(),
                             projectCoordinatorEmailToNotify: self.projectCoordinatorEmail(),
-                            sendCheckToProjectCoordinator: self.sendCheckToPC(),
+                            sendCheckToProjectCoordinator: self.sendCheckToPC(),                           	
+                            maxInvoiceNumberLength: self.maxInvoiceNumberLength,
                         });
 
                         var paymentData = ko.toJSON(newPayment);
@@ -851,6 +864,8 @@
                             personNotifiedDate: self.personNotifiedDate(),
                             backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
                             backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
+                            maxPersonNotifiedLength: self.maxPersonNotifiedLength,		                        
+                            
                         });
 
                         var standAloneBackchargeData = ko.toJSON(newStandAloneBackcharge);
