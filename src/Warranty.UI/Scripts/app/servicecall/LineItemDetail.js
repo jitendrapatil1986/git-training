@@ -635,11 +635,10 @@
                         },
                         validation: {
                             validator: function (val) {
-                                if (val != null && val != "") {
-                                    var getYear = val.split('/');
-                                    if (moment(val, 'MM/DD/YYYY', true).isValid() == false)
+                                if (val !== null && val !== "") {                                    
+                                    if (moment(val, 'MM/DD/YYYY', true).isValid() === false)
                                         return false;
-                                    else if (getYear.length > 3 || (parseInt(getYear[2]) < 1900 || parseInt(getYear[2]) > 3000))
+                                    else if (val.split('/').length > 3 || (moment(val, 'MM/DD/YYYY').year() < 1900 || moment(val, 'MM/DD/YYYY').year() > 3000))
                                         return false;
                                 }
                                 return true;
@@ -909,7 +908,7 @@
                     $('.datepicker').datepicker({
                         format: 'mm/dd/yyyy',
                         startDate: '01/01/1900',
-                        endDate: '31/12/3000',
+                        endDate: '12/31/3000',
                         forceParse: false
                     });
 
@@ -931,9 +930,10 @@
                     });
 
                     $('#Person_Notified_Date').blur(function () {
-                        if ($('#Person_Notified_Date').val() != null && $('#Person_Notified_Date').val() != "") {
-                            if (moment($('#Person_Notified_Date').val(), 'MM/DD/YYYY', true).isValid() == true) {
-                                var date = $("#Person_Notified_Date").val().split('/');
+                        var inputDate = $('#Person_Notified_Date').val();
+                        if (inputDate != null && inputDate != "") {
+                            if (moment(inputDate, 'MM/DD/YYYY', true).isValid() == true) {                                
+                                var date = inputDate.split('/');
                                 if (date[0].length == 1) {
                                     $("#Person_Notified_Date").val("0" + date[0] + "/" + date[1] + "/" + date[2]);
                                 }
