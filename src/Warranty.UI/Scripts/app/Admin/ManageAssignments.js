@@ -5,8 +5,7 @@
                 nodata: 'No results found'
             });
 
-            function CommunityAssignmentsItemsViewModel(options) {
-                debugger;
+            function CommunityAssignmentsItemsViewModel(options) {                
                 var self = this;
                 
                 self.communityId = options.id;
