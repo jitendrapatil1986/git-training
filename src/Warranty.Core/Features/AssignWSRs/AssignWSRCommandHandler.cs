@@ -53,8 +53,6 @@ namespace Warranty.Core.Features.AssignWSRs
         {
             using (_database)
             {
-                //const string sql = @"SELECT * FROM CommunityAssignments WHERE CommunityId = @0";
-
                 const string sql = @"SELECT * FROM CommunityAssignments WHERE CommunityId = @0 ORDER BY EmployeeAssignmentId  desc";
 
                 var communityAssignment =
