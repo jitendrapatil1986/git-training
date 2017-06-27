@@ -23,6 +23,7 @@
     using Warranty.Core.Features.ServiceCallsWidget;
     using Warranty.Core.Features.WarrantyDollarsSpentWidget;
     using Warranty.Core.Features.HelpDocument;
+    using Warranty.Core.Features.SetDefaultWidgetSize;
 
     public class HomeController : Controller
     {
@@ -78,6 +79,12 @@
         {
             var model = _mediator.Request(new ServiceCallsWidgetQuery());
             return PartialView(model);
+        }
+        
+        public JsonResult SetDefaultWidgetSize(string defaultWidgetSize)
+        {
+            _mediator.Send(new SetDefaultWidgetSizeCommand { ServiceCallWidgetSize = Convert.ToInt32(defaultWidgetSize) });           
+            return Json(new { success = "true" }, JsonRequestBehavior.AllowGet);            
         }
 
         [ChildActionOnly]

@@ -5,6 +5,8 @@
     using NPoco;
     using Common.Security.Session;
     using Extensions;
+    using Entities;
+    using System;
 
     public class ServiceCallsWidgetQueryHandler : IQueryHandler<ServiceCallsWidgetQuery, ServiceCallsWidgetModel>
     {
@@ -29,9 +31,17 @@
                                OpenServiceCalls = GetOpenServiceCalls(user),
                                SpecialProjectServiceCalls = GetSpecialProjects(user),
                                EscalatedServiceCalls = GetEscalatedServiceCalls(user),
+                               WidgetSize = GetServiceCallWidgetSize(user),
                            };
             }
         }
+
+        const string SqlTemplate1 = @"SELECT Top 1 ServiceCallWidgetSize, max(U.UpdatedDate) as UpdatedDate from UserSettings U
+                                               INNER JOIN Employees E
+                                               ON U.EmployeeId = E.EmployeeId
+											   Where E.EmployeeId = @0 
+											   Group by ServiceCallWidgetSize, U.UpdatedDate
+											   Order by U.UpdatedDate DESC";
 
         const string SqlTemplate = @"SELECT 
                                           wc.ServiceCallId as ServiceCallId
@@ -70,6 +80,32 @@
                                      {0} /* WHERE */
                                      {1} /* ORDER BY */";
 
+
+       private int GetServiceCallWidgetSize (IUser user)
+        {
+            var emp = _userSession.GetCurrentUser();
+            using (_database)
+            {
+              
+                
+
+                var SqlTemplate = @"SELECT Top 1 ServiceCallWidgetSize, max(U.UpdatedDate) as UpdatedDate from UserSettings U
+                                               INNER JOIN Employees E
+                                               ON U.EmployeeId = E.EmployeeId
+											   Where Exists(Select EmployeeId from Employees where E.EmployeeNumber = @0) 
+                                                Group by ServiceCallWidgetSize, U.UpdatedDate 
+                                                Order by U.UpdatedDate DESC";
+
+                
+                var result = _database.SingleOrDefault<ServiceCallsWidgetModel.UserSettings>(SqlTemplate, emp.EmployeeNumber);
+                if(result != null)
+                {
+                    return result.ServiceCallWidgetSize;
+                }
+                else
+                return 5;
+            }
+        }
         private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetOpenServiceCalls(IUser user)
         {
             var markets = user.Markets;
