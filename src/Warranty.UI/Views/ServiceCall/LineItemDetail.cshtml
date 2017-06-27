@@ -221,7 +221,6 @@
 
                                     </div>
                                     <div class="row">
-
                                         <div class="form-group col-md-4" data-bind="validationElement: personNotified">
                                             @Html.Label("Person notified", new { @class = "control-label", @for = "personNotified" })
                                            
@@ -229,17 +228,20 @@
                                             <input type="text" id="personNotified" class="form-control max-length" maxlength="@WarrantyConstants.maxPersonNotifiedLength" data-bind="value: personNotified"  />
                                             
                                         </div>
-
                                         <div class="form-group col-md-4" data-bind="validationElement: personNotifiedPhoneNumber">
                                             @Html.Label("Phone number", new { @class = "control-label", @for = "personNotifiedPhoneNumber" })
                                             <input type="text" class="form-control phone-number-with-extension" data-bind="value: personNotifiedPhoneNumber" id="personNotifiedPhoneNumber" />
                                         </div>
-
-                                        <div class="form-group col-md-4" data-bind="validationElement: personNotifiedDate">
+                                        <div class="form-group col-md-4" data-bind="validationElement: personNotifiedDate,  validationOptions: { insertMessages: false}">
                                             @Html.Label("Date notified", new { @class = "control-label", @for = "Person_Notified_Date" })
-                                            <input id="Person_Notified_Date" type="text" data-bind="value: personNotifiedDate" class="form-control" />
+                                            <div class="input-group datepicer-icon" >                                               
+                                                <span class="input-group-addon btn">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>                                                 
+                                                <input id="Person_Notified_Date" type="text" data-bind="value: personNotifiedDate" class="form-control datepicker" placeholder="MM/DD/YYYY" />  
+                                            </div>
+                                            <span data-bind="validationMessage: personNotifiedDate" class="help-block"></span>
                                         </div>
-
                                         <div class="form-group col-md-12" data-bind="validationElement: backchargeResponseFromVendor">
                                             @Html.Label("Response from vendor", new { @class = "control-label", @for = "backchargeResponseFromVendor" })
                                             <textarea class="form-control" maxlength="255" data-bind="value: backchargeResponseFromVendor" id="backchargeResponseFromVendor"></textarea>
@@ -596,7 +598,6 @@
                 availableLookups: @Html.Raw(Model.ProblemCodes.Select(x => new { problemId = x.Value, problemCode = x.Text }).ToJson())
                 }
         });
-
-       
     </script>
 }
+
