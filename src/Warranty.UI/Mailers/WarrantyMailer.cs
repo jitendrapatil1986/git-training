@@ -37,25 +37,17 @@ namespace Warranty.UI.Mailers
             ViewBag.Comments = model.Comments;
             ViewBag.ServiceCallNumber = model.ServiceCallNumber;
             ViewBag.Url = model.Url;
-            if (model.LineItems != null && model.LineItems.Count > 0)
-            {
-                ViewBag.LineItems = model.LineItems;
-            }
-            else
-            {
-                ViewBag.LineItems = null;
-            }           
 
             if (!ConfigurationManager.AppSettings["sendEmailsForTest"].IsNullOrEmpty())
             {
                 model.WarrantyRepresentativeEmployeeEmail = _userSession.GetActualUser().Email;
-            }          
+            }
+
             return Populate(x =>
             {
                 x.Subject = string.Format("Warranty Call # {0}", model.ServiceCallNumber);
                 x.ViewName = "NewServiceCallAssignedToWsr";
                 x.To.Add(model.WarrantyRepresentativeEmployeeEmail);
-               
             });
         }
 
