@@ -92,7 +92,10 @@ namespace Warranty.Core.Features.ServiceCallToggleActions
             var emails = new List<string>();
             if (serviceCall.IsEscalated)
             {
-                emails = QueryForCcmEmails(GetServiceCallMarket(serviceCall)).ToList();
+                string market = GetServiceCallMarket(serviceCall);
+                var wsrEmails = QueryForEmails(market, UserRoles.WarrantyServiceRepresentativeRole);
+                var ccmEmails = QueryForEmails(market, UserRoles.CustomerCareManagerRole);
+                emails = wsrEmails.Concat(ccmEmails).Distinct().ToList<string>();
             }
             return emails;
         }
@@ -112,9 +115,9 @@ namespace Warranty.Core.Features.ServiceCallToggleActions
             return _database.ExecuteScalar<string>(sql, serviceCall.ServiceCallId);
         }
 
-        private static IEnumerable<string> QueryForCcmEmails(string market)
+        private static IEnumerable<string> QueryForEmails(string market, string role)
         {
-            var query = new Common.Security.Queries.GetUsersByMarketAndRoleQuery(market, UserRoles.CustomerCareManagerRole);
+            var query = new Common.Security.Queries.GetUsersByMarketAndRoleQuery(market, role);
             var result = query.Execute();
             return result.Select(x => x.Email);
         }
