@@ -11,6 +11,25 @@
 <br />
 <strong>Address: </strong>@ViewBag.AddressLine
 <br />
+@if (ViewBag.LineItems != null)
+{
+    <strong>Line Items:</strong>
+    <table style="border:1px solid #dddddd;width: 100%;margin-top:5px;">
+        <tr>
+            <td style="border:1px solid #dddddd;width:10%;text-align:center;">Line Item(s)</td>
+            <td style="border:1px solid #dddddd;width:15%;text-align:center;">Problem Code(s) </td>
+            <td style="border:1px solid #dddddd;width:75%;text-align:center;">Description(s) </td>
+        </tr>
+        @foreach (var item in ViewBag.LineItems)
+        {
+            <tr style="border:1px solid #dddddd;">
+                <td style="border:1px solid #dddddd;text-align:center">@item.LineNumber</td>
+                <td style="border:1px solid #dddddd;text-align:left">@item.ProblemCode</td>
+                <td style="border:1px solid #dddddd;text-align:left">@item.ProblemDescription</td>
+            </tr>
+        }
+    </table>
+}
 @if (((List<string>)@ViewBag.Comments).Any())
 {
     <strong>Comments:</strong>
