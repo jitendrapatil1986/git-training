@@ -1,4 +1,7 @@
 define(['urls', 'jquery'], function (urls, $) {
+    
+   
+
     $(function () {
         
         $('.todo:lt(5)').removeClass('hide');
@@ -6,6 +9,7 @@ define(['urls', 'jquery'], function (urls, $) {
         $('.show-more-todos').click(function () {
             var value = $(this).text();
             $("#Last_Display_Size").val(value);
+            
             hideShowTodos();
         });
 
@@ -18,6 +22,7 @@ define(['urls', 'jquery'], function (urls, $) {
             }
 
             var value = $("#Last_Display_Size").val();
+            
             if (value == 'All') {
                 $('.todo').addClass('hide');
                 $('.todo' + classToIntersect).removeClass('hide');

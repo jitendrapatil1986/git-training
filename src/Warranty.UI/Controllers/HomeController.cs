@@ -13,6 +13,7 @@
     using Warranty.Core.Extensions;
     using Warranty.Core.Features.AmountSpentWidget;
     using Warranty.Core.Features.AverageDaysClosedWidget;
+    using Warranty.Core.Features.SetDefaultWidgetSize;
     using Warranty.Core.Features.MyTeam;
     using Warranty.Core.Features.PercentClosedWithinSevenDaysWidget;
     using Warranty.Core.Features.PercentSurveyOutstandingWidget;
@@ -23,7 +24,6 @@
     using Warranty.Core.Features.ServiceCallsWidget;
     using Warranty.Core.Features.WarrantyDollarsSpentWidget;
     using Warranty.Core.Features.HelpDocument;
-    using Warranty.Core.Features.SetDefaultWidgetSize;
 
     public class HomeController : Controller
     {

@@ -11,6 +11,7 @@
         public const string DefaultActiveCommunityCode = "A";
         public static readonly int DefaultJdePurchaseOrderLineItemDescriptionLength = 30;
         public static readonly int DefaultJdePurchaseOrderNotesLength = 60;
+        public static readonly int DefaultWidgetSize = 5;
         //personNotified
         public static readonly int maxPersonNotifiedLength = 40;
         //invoiceNumber

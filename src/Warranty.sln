@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.UI", "Warranty.UI\Warranty.UI.csproj", "{ECCA9355-3FF0-4C3A-BE4C-9E02B5C8D242}"
 EndProject
@@ -99,6 +99,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Up", "Up", "{20518451-E144-
 		Database\Warranty\Up\0100_AlterPurchaseOrdersAddPurchaseOrderNumber.sql = Database\Warranty\Up\0100_AlterPurchaseOrdersAddPurchaseOrderNumber.sql
 		Database\Warranty\Up\0141_AlterPaymentsToAdd_SendCheckToPC.sql = Database\Warranty\Up\0141_AlterPaymentsToAdd_SendCheckToPC.sql
 		Database\Warranty\Up\0142_AlterPaymentsToAdd_NotifiedPC.sql = Database\Warranty\Up\0142_AlterPaymentsToAdd_NotifiedPC.sql
+		Database\Warranty\Up\0143_Create_UserSettingsTable.sql = Database\Warranty\Up\0143_Create_UserSettingsTable.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{D0DD7813-D199-44F7-A1F3-EC38DCA342F2}"
