@@ -122,6 +122,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
@@ -210,6 +211,9 @@
     <Compile Include="Features\EditServiceCallNote\EditServiceCallNoteCommand.cs" />
     <Compile Include="Features\EditServiceCallNote\EditServiceCallNoteCommandHandler.cs" />
     <Compile Include="Features\EditServiceCallNote\EditServiceCallNoteModel.cs" />
+    <Compile Include="Features\HelpDocument\HelpDocumentHandler.cs" />
+    <Compile Include="Features\HelpDocument\HelpDocumentModel.cs" />
+    <Compile Include="Features\HelpDocument\HelpDocumentQuery.cs" />
     <Compile Include="Features\Homeowner\AssignHomeOwnerToJobCommand.cs" />
     <Compile Include="Features\Homeowner\AssignHomeOwnerToJobCommandHandler.cs" />
     <Compile Include="Features\Homeowner\CreateNewHomeOwnerCommand.cs" />
@@ -239,9 +243,6 @@
     <Compile Include="Features\Report\WSROpenedClosedCalls\WSROpenedClosedCallsModel.cs" />
     <Compile Include="Features\Report\WSROpenedClosedCalls\WSROpenedClosedCallsQuery.cs" />
     <Compile Include="Features\Report\WSROpenedClosedCalls\WSROpenedClosedCallsQueryHandler.cs" />
-    <Compile Include="Features\Report\WSRCallSummary\WSRCallSummaryModel.cs" />
-    <Compile Include="Features\Report\WSRCallSummary\WSRCallSummaryQuery.cs" />
-    <Compile Include="Features\Report\WSRCallSummary\WSRCallSummaryQueryHandler.cs" />
     <Compile Include="Features\Report\WSRSummary\WSRSummaryModel.cs" />
     <Compile Include="Features\Report\WSRSummary\WSRSummaryQuery.cs" />
     <Compile Include="Features\Report\WSRSummary\WSRSummaryQueryHandler.cs" />
@@ -288,7 +289,6 @@
     <Compile Include="DataAccess\Mappings\JobAttachmentMap.cs" />
     <Compile Include="DataAccess\Mappings\JobMap.cs" />
     <Compile Include="DataAccess\Mappings\JobNoteMap.cs" />
-    <Compile Include="DataAccess\Mappings\JobStageMap.cs" />
     <Compile Include="DataAccess\Mappings\JobVendorCostCodeMap.cs" />
     <Compile Include="DataAccess\Mappings\Lookups\ClassificationCodeMap.cs" />
     <Compile Include="DataAccess\Mappings\Lookups\LookupMap.cs" />
@@ -323,7 +323,6 @@
     <Compile Include="Entities\JobAttachment.cs" />
     <Compile Include="Entities\JobNote.cs" />
     <Compile Include="Entities\JobOption.cs" />
-    <Compile Include="Entities\JobStage.cs" />
     <Compile Include="Entities\JobVendorCostCode.cs" />
     <Compile Include="Entities\Lookups\ClassificationCode.cs" />
     <Compile Include="Entities\Lookups\LookupEntity.cs" />

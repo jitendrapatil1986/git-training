@@ -38,7 +38,12 @@ namespace Warranty.Core.Features.AssignWSRs
                                             GROUP BY C.CommunityId
                                          ) a
                                          LEFT JOIN CommunityAssignments ca
-                                         ON a.CommunityId = ca.CommunityId
+                                         ON (a.CommunityId = ca.CommunityId AND 
+                                             ca.EmployeeAssignmentId = (SELECT TOP 1 ca1.EmployeeAssignmentId 
+                                                                        FROM CommunityAssignments ca1
+                                                                        WHERE ca1.CommunityId = a.CommunityId 
+                                                                        ORDER BY ca1.AssignmentDate DESC)
+                                            )
                                          LEFT JOIN Employees e
                                          ON e.EmployeeId = ca.EmployeeId
                                          ORDER BY CommunityName";

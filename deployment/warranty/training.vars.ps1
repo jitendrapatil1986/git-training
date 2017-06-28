@@ -6,7 +6,7 @@ $web_directory = "C:\Applications\WarrantyTraining"
 $newRelicAppName = "Warranty (Training)"
 
 $db_server = "WKSQL3"
-$db_name = "WarrantyTraining"
+$db_name = "WarrantyTrain"
 $db_web_application_name = "Warranty.UI.Training"
 
 $header_image_file_name = "DWH logo_color_233x34_Train.png"

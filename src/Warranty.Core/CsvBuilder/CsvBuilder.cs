@@ -8,20 +8,31 @@ namespace Warranty.Core.CsvBuilder
 
     public class CsvBuilder : ICsvBuilder
     {
-        public byte[] GetCsvBytes<T>(IEnumerable<string> linesBeforeHeader, IEnumerable<T> csvRecords, bool includeHeaderRow = true, char quoteChar = '"', bool quoteAllFields = false)
+        public static readonly Dictionary<string, string> _ColumnDescription = new Dictionary<string, string>()
+        {
+            {"EmptyField1", ""},
+            {"EmptyField2", ""},
+            {"HomeownerName", "Homeowner Name"},
+            {"AddressLine", "Address"},
+            {"City", "City"},
+            {"StateCode", "State"},
+            {"PostalCode", "Zip Code"},
+            {"HomePhone", "Home Phone"},
+            {"CommunityName", "Community"},
+            {"CloseDate", "Close Date"},
+        };
+        public byte[] GetCsvBytes<T>(IEnumerable<string> linesBeforeHeader, IEnumerable<T> csvRecords, char quoteChar = '"', bool quoteAllFields = false)
         {
             var tempFileName = Path.GetTempFileName();
             using (var writer = new StreamWriter(tempFileName))
             {
                 var csv = ConfigureCsvWriter<T>(quoteChar, quoteAllFields, writer);
                 WriteLinesBeforeHeader<T>(linesBeforeHeader, writer);
-                WriteHeader<T>(includeHeaderRow, csv);
+                WriteHeader<T>(csvRecords, csv);
                 WriteCsvRecords(csvRecords, csv);
             }
-
             var bytes = File.ReadAllBytes(tempFileName);
-
-            if(File.Exists(tempFileName))
+            if (File.Exists(tempFileName))
                 File.Delete(tempFileName);
 
             return bytes;
@@ -43,12 +54,21 @@ namespace Warranty.Core.CsvBuilder
             }
         }
 
-        private static void WriteHeader<T>(bool includeHeaderRow, CsvWriter csv)
+        private static void WriteHeader<T>(IEnumerable<T> csvRecords, CsvWriter csv)
         {
-            if (includeHeaderRow)
+            var customer = csvRecords.FirstOrDefault();
+            if (customer != null)
             {
-                csv.WriteHeader<T>();
+                var columnNames = customer.GetType().GetProperties().Select(column => column.Name);
+                foreach (var column in columnNames)
+                {
+                    string header = string.Empty;
+                    _ColumnDescription.TryGetValue(column, out header);
+                    csv.WriteField(header);
+                }
             }
+            csv.NextRecord();
+
         }
 
         private static void WriteLinesBeforeHeader<T>(IEnumerable<string> linesBeforeHeader, StreamWriter writer)
