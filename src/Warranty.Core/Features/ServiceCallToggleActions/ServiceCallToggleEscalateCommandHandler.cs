@@ -77,6 +77,12 @@ namespace Warranty.Core.Features.ServiceCallToggleActions
 
                 model.Comments = _database.Fetch<string>(sqlcomments, serviceCall.ServiceCallId);
 
+                const string sqlLineItems = @"SELECT LineNumber, ProblemCode, ProblemDescription
+                                              FROM ServiceCallLineItems 
+                                              WHERE ServiceCallId = @0";
+
+                model.LineItems = _database.Fetch<ServiceCallToggleEscalateCommandResult.ServiceCallLine>(sqlLineItems, serviceCall.ServiceCallId);
+
                 return model;
             }
         }
@@ -86,7 +92,7 @@ namespace Warranty.Core.Features.ServiceCallToggleActions
             var emails = new List<string>();
             if (serviceCall.IsEscalated)
             {
-                emails = QueryForWsrEmails(GetServiceCallMarket(serviceCall)).ToList();
+                emails = QueryForCcmEmails(GetServiceCallMarket(serviceCall)).ToList();
             }
             return emails;
         }
@@ -106,9 +112,9 @@ namespace Warranty.Core.Features.ServiceCallToggleActions
             return _database.ExecuteScalar<string>(sql, serviceCall.ServiceCallId);
         }
 
-        private static IEnumerable<string> QueryForWsrEmails(string market)
+        private static IEnumerable<string> QueryForCcmEmails(string market)
         {
-            var query = new Common.Security.Queries.GetUsersByMarketAndRoleQuery(market, UserRoles.WarrantyCoordinatorRole);
+            var query = new Common.Security.Queries.GetUsersByMarketAndRoleQuery(market, UserRoles.CustomerCareManagerRole);
             var result = query.Execute();
             return result.Select(x => x.Email);
         }
