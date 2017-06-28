@@ -68,7 +68,7 @@
       
         public class UserSettings
         {
-            public int WidgetSize_Id { get; set; }
+            public Guid UserSettingsId { get; set; }
             public int ServiceCallWidgetSize { get; set; }
         }
 

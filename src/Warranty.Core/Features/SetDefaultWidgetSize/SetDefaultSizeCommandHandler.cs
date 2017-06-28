@@ -2,13 +2,12 @@
 namespace Warranty.Core.Features.SetDefaultWidgetSize
 {
     using System;
-    using Entities;
-    using Enumerations;
-    using InnerMessages;
+    using Entities;   
     using NPoco;
    
     using Common.Security.Session;
     using NServiceBus;
+    
     public class SetDefaultSizeCommandHandler: ICommandHandler<SetDefaultWidgetSizeCommand, UserSettings>
     {
         private readonly IDatabase _database;
@@ -31,15 +30,31 @@ namespace Warranty.Core.Features.SetDefaultWidgetSize
                 var sql = string.Format(SqlTemplate, "where EmployeNumber= @0");
                 
                 var employee = _database.FirstOrDefault<Employee>("Where EmployeeNumber=@0", emp.EmployeeNumber);
-                var DefaultWidgetSize = new UserSettings
+
+                var DefaultWidget = _database.FirstOrDefault<UserSettings>("Where EmployeeId=@0", employee.EmployeeId);
+                if (DefaultWidget != null)
                 {
 
-                    EmployeeId = employee.EmployeeId,
-                    ServiceCallWidgetSize = message.ServiceCallWidgetSize,
-                    UpdatedDate = DateTime.Now,
-                };
-                _database.Insert(DefaultWidgetSize);
-                return DefaultWidgetSize;
+                    DefaultWidget.ServiceCallWidgetSize = message.ServiceCallWidgetSize;
+                    DefaultWidget.UpdatedDate = DateTime.Now;
+                    _database.Update(DefaultWidget);
+
+                    return DefaultWidget;
+                
+                }
+                else
+                {
+                    var DefaultWidgetSize = new UserSettings
+                    {
+
+                        EmployeeId = employee.EmployeeId,
+                        ServiceCallWidgetSize = message.ServiceCallWidgetSize,
+                        UpdatedDate = DateTime.Now,
+                    };
+                    _database.Insert(DefaultWidgetSize);
+                    return DefaultWidgetSize;
+                    
+                }
             }                     
         }
     }

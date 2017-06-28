@@ -11,6 +11,7 @@
         public const string DefaultActiveCommunityCode = "A";
         public static readonly int DefaultJdePurchaseOrderLineItemDescriptionLength = 30;
         public static readonly int DefaultJdePurchaseOrderNotesLength = 60;
+        public static readonly int DefaultWidgetSize = 5;
 
         public static readonly List<string> LaborObjectAccounts = new List<string> { "9430", "9440" };
         public static readonly List<string> MaterialObjectAccounts = new List<string> { "9425", "9435" };

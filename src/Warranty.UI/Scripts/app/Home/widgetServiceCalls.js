@@ -1,14 +1,10 @@
-
-
 define(['urls', 'jquery'], function (urls, $) {
     $(function () {
-        var size = $('input[name="WidgetSize"]').val();
-       
+        var size = $('input[name="WidgetSize"]').val();     
        $('.my-service-call:lt('+size+')').removeClass('hide');
-
         $('.show-more-service-calls').click(function () {
             if ($(this).text() == 'All') {
-                var defaultWidgetSize = 2147483647; //Int32.Maxvalue
+                var defaultWidgetSize = 2147483647; 
                 $('.my-service-call').removeClass('hide');
             } else {
                 var show = $(this).text() - 1;
@@ -20,8 +16,7 @@ define(['urls', 'jquery'], function (urls, $) {
             $.ajax({
                 type: "POST",
                 dataType: 'json',
-                url: urls.Home.SetDefaultWidgetSize,
-                //urls.Home.SetDefaultWidgetSize
+                url: urls.Home.SetDefaultWidgetSize,               
                 data: { defaultWidgetSize: defaultWidgetSize },
                 error: function () {
                     alert('ajax call failed...');
