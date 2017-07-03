@@ -1,10 +1,8 @@
-﻿
-namespace Warranty.Core.Features.SetDefaultWidgetSize
+﻿namespace Warranty.Core.Features.SetDefaultWidgetSize
 {
     using System;
     using Entities;   
-    using NPoco;
-   
+    using NPoco;  
     using Common.Security.Session;
     using NServiceBus;
     
@@ -31,29 +29,24 @@ namespace Warranty.Core.Features.SetDefaultWidgetSize
                 
                 var employee = _database.FirstOrDefault<Employee>("Where EmployeeNumber=@0", emp.EmployeeNumber);
 
-                var DefaultWidget = _database.FirstOrDefault<UserSettings>("Where EmployeeId=@0", employee.EmployeeId);
-                if (DefaultWidget != null)
+                var defaultWidget = _database.FirstOrDefault<UserSettings>("Where EmployeeId=@0", employee.EmployeeId);
+                if (defaultWidget != null)
                 {
-
-                    DefaultWidget.ServiceCallWidgetSize = message.ServiceCallWidgetSize;
-                    DefaultWidget.UpdatedDate = DateTime.Now;
-                    _database.Update(DefaultWidget);
-
-                    return DefaultWidget;
-                
+                    defaultWidget.ServiceCallWidgetSize = message.ServiceCallWidgetSize;
+                    defaultWidget.UpdatedDate = DateTime.Now;
+                    _database.Update(defaultWidget);
+                    return defaultWidget;                
                 }
                 else
                 {
-                    var DefaultWidgetSize = new UserSettings
-                    {
-
+                    var defaultWidgetSize = new UserSettings
+                    {                    
                         EmployeeId = employee.EmployeeId,
                         ServiceCallWidgetSize = message.ServiceCallWidgetSize,
                         UpdatedDate = DateTime.Now,
                     };
-                    _database.Insert(DefaultWidgetSize);
-                    return DefaultWidgetSize;
-                    
+                    _database.Insert(defaultWidgetSize);
+                    return defaultWidgetSize;                   
                 }
             }                     
         }
