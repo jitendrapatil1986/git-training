@@ -4,8 +4,7 @@
     using Enumerations;
     using Extensions;
     using NPoco;
-    using Common.Security.Session;
-    using Warranty.Core.Configurations;
+    using Common.Security.Session;   
 
     public class WarrantyServiceRepServiceCallsWidgetQueryHandler : ServiceCallQueryHandlerBase, IQueryHandler<WarrantyServiceRepServiceCallsWidgetQuery, ServiceCallsWidgetModel>
     {
@@ -71,13 +70,10 @@
                                        ON cm.CityId = ci.CityId
                                      {0} /* WHERE */
                                      {1} /* ORDER BY */";
-
-        
-
+      
         private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetOverdueServiceCalls(IUser user)
         {
             var markets = user.Markets;
-
             var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId<>@1 AND DATEADD(dd, 7, wc.CreatedDate) <= getdate() AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ") AND EmployeeNumber=@0", "ORDER BY EmployeeName, wc.CreatedDate");
 
             var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, user.EmployeeNumber, ServiceCallStatus.Complete.Value);
@@ -95,7 +91,6 @@
         private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetSpecialProjects(IUser user)
         {
             var markets = user.Markets;
-
             var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId<>@1 AND (CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ") OR EmployeeNumber=@0) AND SpecialProject = 1", "ORDER BY EmployeeName, wc.CreatedDate");
 
             var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, user.EmployeeNumber, ServiceCallStatus.Complete.Value);
@@ -105,7 +100,6 @@
         private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetEscalatedServiceCalls(IUser user)
         {
             var markets = user.Markets;
-
             var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId<>@1 AND EmployeeNumber=@0 AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ") AND Escalated = 1", "ORDER BY EmployeeName, wc.CreatedDate");
 
             var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, user.EmployeeNumber, ServiceCallStatus.Complete.Value);

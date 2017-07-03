@@ -1,10 +1,5 @@
 ﻿using Common.Security.Session;
 using NPoco;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Warranty.Core.Configurations;
 
 namespace Warranty.Core.Features.ServiceCallsWidget
@@ -23,13 +18,12 @@ namespace Warranty.Core.Features.ServiceCallsWidget
             var emp = _userSession.GetCurrentUser();
             using (_database)
             {
-
                 var SqlTemplate = @"SELECT Top 1 ServiceCallWidgetSize, max(U.UpdatedDate) as UpdatedDate from UserSettings U
-                                               INNER JOIN Employees E
-                                               ON U.EmployeeId = E.EmployeeId
-											   Where Exists(Select EmployeeId from Employees where E.EmployeeNumber = @0) 
-                                                Group by ServiceCallWidgetSize, U.UpdatedDate 
-                                                Order by U.UpdatedDate DESC";
+                                  INNER JOIN Employees E
+                                  ON U.EmployeeId = E.EmployeeId
+								  Where Exists(Select EmployeeId from Employees where E.EmployeeNumber = @0) 
+                                  Group by ServiceCallWidgetSize, U.UpdatedDate 
+                                  Order by U.UpdatedDate DESC";
 
                 var result = _database.SingleOrDefault<ServiceCallsWidgetModel.UserSettings>(SqlTemplate, emp.EmployeeNumber);
 
