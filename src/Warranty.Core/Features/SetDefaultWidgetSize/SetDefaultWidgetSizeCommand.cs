@@ -10,7 +10,7 @@ namespace Warranty.Core.Features.SetDefaultWidgetSize
    public class SetDefaultWidgetSizeCommand : ICommand<UserSettings>
     {
         public Guid EmployeeId { get; set; }
-        public Int32 ServiceCallWidgetSize { get; set; }
+        public int ServiceCallWidgetSize { get; set; }
         public DateTime UpdatedDate { get; set; }
     }
 }

@@ -23,10 +23,9 @@
         {
             var emp = _userSession.GetCurrentUser();
             using (_database)
-            {                               
+            {                
                 var employee = _database.FirstOrDefault<Employee>("Where EmployeeNumber=@0", emp.EmployeeNumber);
                 var defaultWidget = _database.FirstOrDefault<UserSettings>("Where EmployeeId=@0", employee.EmployeeId);
-
                 if (defaultWidget != null)
                 {
                     defaultWidget.ServiceCallWidgetSize = message.ServiceCallWidgetSize;
