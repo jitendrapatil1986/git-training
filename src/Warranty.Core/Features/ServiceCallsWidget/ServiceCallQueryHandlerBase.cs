@@ -18,12 +18,10 @@ namespace Warranty.Core.Features.ServiceCallsWidget
             var emp = _userSession.GetCurrentUser();
             using (_database)
             {
-                var SqlTemplate = @"SELECT Top 1 ServiceCallWidgetSize, max(U.UpdatedDate) as UpdatedDate from UserSettings U
-                                  INNER JOIN Employees E
-                                  ON U.EmployeeId = E.EmployeeId
-								  Where Exists(Select EmployeeId from Employees where E.EmployeeNumber = @0) 
-                                  Group by ServiceCallWidgetSize, U.UpdatedDate 
-                                  Order by U.UpdatedDate DESC";
+                var SqlTemplate = @"SELECT ServiceCallWidgetSize
+                                    FROM UserSettings U
+                                    INNER JOIN Employees E ON U.EmployeeId = E.EmployeeId
+                                    WHERE E.EmployeeId=@0";
 
                 var result = _database.SingleOrDefault<ServiceCallsWidgetModel.UserSettings>(SqlTemplate, emp.EmployeeNumber);
 
@@ -32,7 +30,10 @@ namespace Warranty.Core.Features.ServiceCallsWidget
                     return result.ServiceCallWidgetSize;
                 }
                 else
+                {
                     return WarrantyConstants.DefaultWidgetSize;
+                }
+                    
             }
         }
     }
