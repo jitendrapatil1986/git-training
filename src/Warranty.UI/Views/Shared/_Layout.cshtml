@@ -14,6 +14,10 @@
     {
         @NavHeaderItemHelper(NavHeaderItem.GetAll(key).First())
     }
+    else if (key == NavHeaderItem.BTWW.Key)
+    {
+        @NavHeaderItemHelper(NavHeaderItem.GetAll(key).First())
+    }
     else
     {
         <li class="dropdown">
@@ -125,8 +129,11 @@
                 {
                     @NavItemSectionHelper(NavHeaderItem.Administration.Key)
                     <li class="divider divider-vertical hidden-xs"></li>
-                }
+                }                            
                 @{ Html.RenderAction("MyTeamDropdown", "Home"); }
+                <li class="divider divider-vertical hidden-xs"></li> 
+                @NavItemSectionHelper(NavHeaderItem.BTWW.Key)
+                <li class="divider divider-vertical hidden-xs"></li> 
             </ul>
             <div class="main-search nav-extra">
                 <div class="input-group vertical-menu-scroll">
