@@ -18,12 +18,12 @@ namespace Warranty.Core.Features.ServiceCallsWidget
             var emp = _userSession.GetCurrentUser();
             using (_database)
             {
-                var SqlTemplate = @"SELECT Top 1 ServiceCallWidgetSize from UserSettings U
+                var sqlTemplate = @"SELECT Top 1 ServiceCallWidgetSize from UserSettings U
                                     INNER JOIN Employees E
                                     ON U.EmployeeId = E.EmployeeId
-                                    Where Exists(Select EmployeeId from Employees where E.EmployeeNumber = @0)";                                    
-
-                var result = _database.SingleOrDefault<ServiceCallsWidgetModel.UserSettings>(SqlTemplate, emp.EmployeeNumber);
+                                    Where E.EmployeeNumber = @0 ";
+                
+                var result = _database.SingleOrDefault<ServiceCallsWidgetModel.UserSettings>(sqlTemplate, emp.EmployeeNumber);
 
                 if (result != null)
                 {
