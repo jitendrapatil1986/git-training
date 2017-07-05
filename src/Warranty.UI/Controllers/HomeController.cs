@@ -13,6 +13,7 @@
     using Warranty.Core.Extensions;
     using Warranty.Core.Features.AmountSpentWidget;
     using Warranty.Core.Features.AverageDaysClosedWidget;
+    using Warranty.Core.Features.SetDefaultWidgetSize;
     using Warranty.Core.Features.MyTeam;
     using Warranty.Core.Features.PercentClosedWithinSevenDaysWidget;
     using Warranty.Core.Features.PercentSurveyOutstandingWidget;
@@ -23,6 +24,7 @@
     using Warranty.Core.Features.ServiceCallsWidget;
     using Warranty.Core.Features.WarrantyDollarsSpentWidget;
     using Warranty.Core.Features.HelpDocument;
+
 
     public class HomeController : Controller
     {
@@ -78,6 +80,12 @@
         {
             var model = _mediator.Request(new ServiceCallsWidgetQuery());
             return PartialView(model);
+        }
+        
+        public JsonResult SetDefaultWidgetSize(string defaultWidgetSize)
+        {
+            _mediator.Send(new SetDefaultWidgetSizeCommand { ServiceCallWidgetSize = Convert.ToInt32(defaultWidgetSize) });           
+            return Json(new { success = "true" }, JsonRequestBehavior.AllowGet);            
         }
 
         [ChildActionOnly]

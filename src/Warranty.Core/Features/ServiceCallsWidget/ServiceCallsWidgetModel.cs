@@ -4,16 +4,16 @@
     using System.Collections.Generic;
     using System.Linq;
     using Services;
-
+  
     public class ServiceCallsWidgetModel
-    {
+    {      
         public ServiceCallsWidgetModel()
-        {
+        {          
             MyServiceCalls = new List<ServiceCall>();
             OpenServiceCalls = new List<ServiceCall>();
             SpecialProjectServiceCalls = new List<ServiceCall>();
             EscalatedServiceCalls = new List<ServiceCall>();
-            ClosedServiceCalls = new List<ServiceCall>();
+            ClosedServiceCalls = new List<ServiceCall>();           
         }
 
         public IEnumerable<ServiceCall> MyServiceCalls { get; set; }
@@ -21,6 +21,7 @@
         public IEnumerable<ServiceCall> SpecialProjectServiceCalls { get; set; }
         public IEnumerable<ServiceCall> EscalatedServiceCalls { get; set; }
         public IEnumerable<ServiceCall> ClosedServiceCalls { get; set; } 
+        public int WidgetSize { get; set; }
 
         public IEnumerable<RepresentativeWithCallCount> RepresentativesWithOpenCalls
         {
@@ -58,13 +59,19 @@
                                      })
                         .OrderByDescending(x => x.ServiceCallsCount);
         }
+      
+        public class UserSettings
+        {
+            public Guid UserSettingsId { get; set; }
+            public int ServiceCallWidgetSize { get; set; }
+        }
 
         public class RepresentativeWithCallCount
-        {
+        {            
             public string EmployeeNumber { get; set; }
             public string Name { get; set; }
-            public int ServiceCallsCount { get; set; }
-        }
+            public int ServiceCallsCount { get; set; }          
+        }     
 
         public class ServiceCall
         {
@@ -87,7 +94,7 @@
             public bool IsEscalated { get; set; }
             public int DaysOpenedFor { get; set; }
             public DateTime? CompletionDate { get; set; }
-
+            
             public int PercentComplete
             {
                 get { return ServiceCallCalculator.CalculatePercentComplete(NumberOfDaysRemaining); }

@@ -181,8 +181,14 @@
     <Compile Include="Calculator\MonthYearModel.cs" />
     <Compile Include="Calculator\SurveyDataResult.cs" />
     <Compile Include="Calculator\WarrantyCalculator.cs" />
+    <Compile Include="DataAccess\Mappings\UserSettingsMap.cs" />
+    <Compile Include="Entities\UserSettings.cs" />
     <Compile Include="Enumerations\PaymentTypes.cs" />
     <Compile Include="Exceptions\DeleteServiceCallException.cs" />
+    <Compile Include="Features\ServiceCallsWidget\ServiceCallQueryHandlerBase.cs" />
+    <Compile Include="Features\SetDefaultWidgetSize\ServiceCallWidgetSizeViewModel.cs" />
+    <Compile Include="Features\SetDefaultWidgetSize\SetDefaultSizeCommandHandler.cs" />
+    <Compile Include="Features\SetDefaultWidgetSize\SetDefaultWidgetSizeCommand.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddPaymentCommandDto.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddStandAloneBackchargeCommand.cs" />
     <Compile Include="Features\AddServiceCallPayment\AddStandAloneBackchargeCommandDto.cs" />

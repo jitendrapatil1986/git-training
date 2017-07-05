@@ -6,12 +6,12 @@
     using Common.Security.Session;
     using Extensions;
 
-    public class ServiceCallsWidgetQueryHandler : IQueryHandler<ServiceCallsWidgetQuery, ServiceCallsWidgetModel>
+    public class ServiceCallsWidgetQueryHandler : ServiceCallQueryHandlerBase, IQueryHandler<ServiceCallsWidgetQuery, ServiceCallsWidgetModel>
     {
         private readonly IDatabase _database;
         private readonly IUserSession _userSession;
 
-        public ServiceCallsWidgetQueryHandler(IDatabase database, IUserSession userSession)
+        public ServiceCallsWidgetQueryHandler(IDatabase database, IUserSession userSession) : base(database, userSession)
         {
             _database = database;
             _userSession = userSession;
@@ -29,10 +29,11 @@
                                OpenServiceCalls = GetOpenServiceCalls(user),
                                SpecialProjectServiceCalls = GetSpecialProjects(user),
                                EscalatedServiceCalls = GetEscalatedServiceCalls(user),
+                               WidgetSize = GetServiceCallWidgetSize(user),
                            };
             }
         }
-
+       
         const string SqlTemplate = @"SELECT 
                                           wc.ServiceCallId as ServiceCallId
                                         , j.JobId
@@ -69,11 +70,10 @@
                                        ON cm.CityId = ci.CityId
                                      {0} /* WHERE */
                                      {1} /* ORDER BY */";
-
+       
         private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetOpenServiceCalls(IUser user)
         {
             var markets = user.Markets;
-
             var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId<>@0 AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ")", "ORDER BY EmployeeName, wc.CreatedDate");
 
             var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, ServiceCallStatus.Complete.Value);
@@ -91,7 +91,6 @@
         private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetSpecialProjects(IUser user)
         {
             var markets = user.Markets;
-
             var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId<>@0 AND (CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ")) AND SpecialProject = 1", "ORDER BY EmployeeName, wc.CreatedDate");
 
             var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, ServiceCallStatus.Complete.Value);
@@ -101,7 +100,6 @@
         private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetEscalatedServiceCalls(IUser user)
         {
             var markets = user.Markets;
-
             var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId<>@0 AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ") AND Escalated = 1", "ORDER BY EmployeeName, wc.CreatedDate");
 
             var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, ServiceCallStatus.Complete.Value);
