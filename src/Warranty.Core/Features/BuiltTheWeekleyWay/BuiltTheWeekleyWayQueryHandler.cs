@@ -25,9 +25,10 @@
             var files = _builtTheWeekleyWayService.GetFiles(marketCode);
             Regex regex = new Regex(@"^(?<beforeDecimal>\d*)\.(?<afterDecimal>\d*)");
 
+            // files sequence can be 0.1, 1.10, 1.1, 1.11 , 2.10, 2.1 etc.. so this code will sort the file order and display proper file name.
             return new BuiltTheWeekleyWayModel
             {
-                MarketName = marketCode,
+                MarketName = marketCode,                
                 Contents = files.OrderBy(x => regex.IsMatch(x.Name) ? int.Parse(regex.Match(x.Name).Groups["beforeDecimal"].Value) : int.MaxValue)
                                 .ThenBy(x => regex.IsMatch(x.Name) ? int.Parse(regex.Match(x.Name).Groups["afterDecimal"].Value) : int.MaxValue)
                                 .ThenBy(x => x.Name)
