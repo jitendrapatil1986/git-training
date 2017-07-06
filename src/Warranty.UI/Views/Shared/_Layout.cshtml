@@ -10,14 +10,10 @@
 
 @helper NavItemSectionHelper(string key)
 {
-    if (key == NavHeaderItem.Home.Key)
+    if (key == NavHeaderItem.Home.Key || key == NavHeaderItem.BTWW.Key)
     {
         @NavHeaderItemHelper(NavHeaderItem.GetAll(key).First())
-    }
-    else if (key == NavHeaderItem.BTWW.Key)
-    {
-        @NavHeaderItemHelper(NavHeaderItem.GetAll(key).First())
-    }
+    }   
     else
     {
         <li class="dropdown">

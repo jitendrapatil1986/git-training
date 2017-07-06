@@ -36,7 +36,7 @@
             var name = documentName.Replace(" ", "");
             name = name.Replace(".doc", "");
             name = name.Replace(".docx", "");
-            var eventNameWords = Regex.Split(name, "([A-Z]+[a-z]+)").Where(s => s != string.Empty).ToArray().ToArray();
+            var eventNameWords = Regex.Split(name, "([A-Za-z]+)").Where(s => s != string.Empty).ToArray().ToArray(); 
 
             return string.Join(" ", eventNameWords);
         }
