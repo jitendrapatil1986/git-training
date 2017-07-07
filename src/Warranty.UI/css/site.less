@@ -1222,28 +1222,29 @@ a.boxclose {
 ul.btww-list{
     list-style: none;
     margin-bottom: 30px;
-}
-
-ul.btww-list li{
-    border-bottom: 1px solid #ddd;
-}
-
-ul.btww-list li:hover{
-    background-color: #F0F8FF;
-}
-
-ul.btww-list li:first-child{
-    background-color: #ebebeb;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    font-weight: bold;
-}
-
-ul.btww-list li:first-child a{
-    padding: 5px 10px;
-}
-
-ul.btww-list li a{
-    display: block;
-    padding: 5px 35px;
+    li
+    {
+         border-bottom: 1px solid #ddd;
+         a
+         {
+            display: block;
+            padding: 5px 35px;
+         }
+         &:hover
+         {
+            background-color: #F0F8FF;
+         }
+         &:first-child
+         {
+            background-color: #ebebeb;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-weight: bold;
+            a
+            {
+                padding: 5px 10px;
+            }
+         }
+        
+    }
 }
