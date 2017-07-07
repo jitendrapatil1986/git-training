@@ -3,12 +3,13 @@
 @section header
 {
     <style type="text/css" media="print">
-       .panel {
-           border: none;
-       }
-       body {
-           padding: 5% !important;
-       }
+        .panel {
+            border: none;
+        }
+
+        body {
+            padding: 5% !important;
+        }
     </style>
 }
 <h2>Outstanding Activity Report</h2>
@@ -20,40 +21,40 @@
                 <div class="no-bottom-padding">
                     @using (Html.BeginForm("WSROutstandingActivityReport", "Report", FormMethod.Post, new { @class = "form-inline" }))
                     {
-                    <div class="row">
-                        <div class="col-md-12">
-                            @Html.ValidationSummary()
-                            @Html.HiddenFor(m => m.ShowReportFilters)
-                            <div class="form-group">
-                                @Html.DropDownListFor(m => m.DivisionId, Model.MyDivisions, "Division - All", new {@class = "form-control text-capitalize"})
-                            </div>
-                            <div class="form-group">
-                                @Html.DropDownListFor(m => m.ProjectId, Model.MyProjects, "Project - All", new {@class = "form-control text-capitalize"})
-                            </div>
-                            <div class="form-group">
-                                @Html.DropDownListFor(m => m.TeamMemberId, Model.MyTeamMembers, "Team Member - All", new {@class = "form-control text-capitalize"})
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary" name="Action" value="web">Run Report</button>
-                                @*<button type="submit" class="btn btn-default" name="Action" value="pdf">
-                                    <span class="glyphicon glyphicon-share"></span>
-                                    PDF
-                                </button>
-                                <button type="submit" class="btn btn-default" name="Action" value="xls">
-                                    <span class="glyphicon glyphicon-share"></span>
-                                    XLS
-                                </button>*@
-                                @Html.ActionLink("Reset", "WSROutstandingActivityReport", null, new {@class = "btn btn-default"})
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 no-bottom-padding">
-                            <div class="alert alert-info margin-top-10" role="alert">
-                                <strong>Filters:</strong> The most accurate selection above will be used. For example, if you select a project, the division selection is ignored.
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.ValidationSummary()
+                                @Html.HiddenFor(m => m.ShowReportFilters)
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.DivisionId, Model.MyDivisions, "Division - All", new { @class = "form-control text-capitalize" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.ProjectId, Model.MyProjects, "Project - All", new { @class = "form-control text-capitalize" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.DropDownListFor(m => m.TeamMemberId, Model.MyTeamMembers, "Team Member - All", new { @class = "form-control text-capitalize" })
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary" name="Action" value="web">Run Report</button>
+                                    @*<button type="submit" class="btn btn-default" name="Action" value="pdf">
+                                            <span class="glyphicon glyphicon-share"></span>
+                                            PDF
+                                        </button>
+                                        <button type="submit" class="btn btn-default" name="Action" value="xls">
+                                            <span class="glyphicon glyphicon-share"></span>
+                                            XLS
+                                        </button>*@
+                                    @Html.ActionLink("Reset", "WSROutstandingActivityReport", null, new { @class = "btn btn-default" })
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-md-12 no-bottom-padding">
+                                <div class="alert alert-info margin-top-10" role="alert">
+                                    <strong>Filters:</strong> The most accurate selection above will be used. For example, if you select a project, the division selection is ignored.
+                                </div>
+                            </div>
+                        </div>
                     }
                 </div>
             </div>
@@ -107,101 +108,110 @@
 
     foreach (var activity in Model.OpenActivities.OrderBy(a => a.EmployeeName))
     {
-    <div class="panel panel-primary employeeContainer" style="page-break-before: always">
-        <div class="panel-heading cursor-pointer">
-            <span class="no-print glyphicon glyphicon-chevron-down activityToggle margin-right-10"></span>
-            <span class="text-larger"><strong>@activity.EmployeeName</strong></span>
-            <span class="badge margin-left-15">@activity.OpenTasks.Count() outstanding tasks</span>
-            <span class="badge margin-left-15">@activity.ServiceCalls.Count() outstanding calls</span>
-        </div>
-        <div class="panel-body">
-            <h4>Outstanding Tasks <span class="badge">@activity.OpenTasks.Count()</span></h4>
-            <div class="row">
-            @foreach (var taskType in activity.OpenTasks.Where(t => t.JobNumber != null).GroupBy(t => t.TaskType.Stage).OrderBy(t => t.Key))
-            {
-                if (taskType.Any())
-                {
-                <div class="col-xs-4">
-                    <strong>Jobs awaiting @taskType.FirstOrDefault().TaskType.ReportDisplay</strong>
-                    <ul>
-                    @foreach (var task in taskType.OrderByDescending(t => t.DaysOutstanding))
-                    {
-                        <li>@Html.ActionLink(task.JobNumber, "JobSummary", "Job", new { id = task.ReferenceId }, new { target = "_blank" }) - @task.DaysOutstanding.Days days outstanding</li>
-                    }
-                    </ul>
-                </div>    
-                }
-            }
+        <div class="panel panel-primary employeeContainer" style="page-break-before: always">
+            <div class="panel-heading cursor-pointer">
+                <span class="no-print glyphicon glyphicon-chevron-down activityToggle margin-right-10"></span>
+                <span class="text-larger"><strong>@activity.EmployeeName</strong></span>
+                <span class="badge margin-left-15">@activity.OpenTasks.Count() outstanding tasks</span>
+                <span class="badge margin-left-15">@activity.ServiceCalls.Count() outstanding calls</span>
             </div>
-
-            @foreach (var communityGroup in @activity.ServiceCalls.GroupBy(sc => sc.CommunityName))
-            {
-                <h4>@communityGroup.Key - Outstanding Calls</h4>
-                var communityId = communityGroup.Select(c => c.CommunityId).FirstOrDefault();
-                var communityTasks = activity.OpenTasks.Where(t => t.ReferenceId == communityId);
-                if (communityTasks.Any())
-                {
-                    <ul class="list-group no-margin">
-                        @foreach (var task in communityTasks)
-                        {
-                            <li class="list-group-item">@task.Description</li>
-                        }
-                    </ul>
-                }
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <td><b>Job Number</b></td>
-                        <td><b>Homeowner</b></td>
-                        <td><b>Address</b></td>
-                        <td><b>Phone</b></td>
-                        <td><b>Days Outstanding</b></td>
-                    </tr>
-                    </thead>
-                    @foreach (var serviceCall in communityGroup.OrderByDescending(sc => Math.Abs((DateTime.Today - sc.CreatedDate.Date).TotalDays)))
+            <div class="panel-body">
+                <h4>Outstanding Tasks <span class="badge">@activity.OpenTasks.Count()</span></h4>
+                <div class="row">
+                    @foreach (var taskType in activity.OpenTasks.Where(t => t.JobNumber != null).GroupBy(t => t.TaskType.Stage).OrderBy(t => t.Key))
                     {
-                        <tr>
-                            <td>@Html.ActionLink(serviceCall.JobNumber, "JobSummary", "Job", new { id = serviceCall.JobId }, new { target = "_blank" })</td>
-                            <td>@serviceCall.HomeownerName</td>
-                            <td>@serviceCall.Address</td>
-                            <td>@serviceCall.HomePhone.ToPhoneNumberWithExtension()</td>
-                            @if (serviceCall.IsSpecialProject)
-                            {
-                                <td>Special Project</td>
-                            }
-                            else
-                            {
-                                <td>@(Math.Abs((DateTime.Today - serviceCall.CreatedDate.Date).TotalDays)) days</td>
-                            }
-                        </tr>
-                        <tr>
-                            <td colspan="5">
-                                <h6><strong>Line Item Problem Code and Description</strong></h6>
+                        if (taskType.Any())
+                        {
+                            <div class="col-xs-4">
+                                <strong>Jobs awaiting @taskType.FirstOrDefault().TaskType.ReportDisplay</strong>
                                 <ul>
-                                    @foreach (var line in serviceCall.ServiceCallLines)
+                                    @foreach (var task in taskType.OrderByDescending(t => t.DaysOutstanding))
                                     {
-                                        <li>@line.ProblemCode - @line.ProblemDescription</li>
+                                        <li>@Html.ActionLink(task.JobNumber, "JobSummary", "Job", new { id = task.ReferenceId }, new { target = "_blank" }) - @task.DaysOutstanding.Days days outstanding</li>
                                     }
                                 </ul>
-                                @if (serviceCall.ServiceCallNotes != null && serviceCall.ServiceCallNotes.Any())
-                                {
-                                    <div class="notes-container hidden no-print">
-                                        <h6><strong>Notes</strong></h6>
-                                        <ul>
-                                            @foreach (var note in serviceCall.ServiceCallNotes)
-                                            {
-                                                <li>@note.Note</li>
-                                            }
-                                        </ul>    
-                                    </div>
-                                }
-                            </td>
-                        </tr>
+                            </div>
+                        }
                     }
-                </table>
-            }
+                </div>
+
+                @foreach (var communityGroup in @activity.ServiceCalls.GroupBy(sc => sc.CommunityName))
+                {
+                    <h4>@communityGroup.Key - Outstanding Calls</h4>
+                    var communityId = communityGroup.Select(c => c.CommunityId).FirstOrDefault();
+                    var communityTasks = activity.OpenTasks.Where(t => t.ReferenceId == communityId);
+                    if (communityTasks.Any())
+                    {
+                        <ul class="list-group no-margin">
+                            @foreach (var task in communityTasks)
+                            {
+                                <li class="list-group-item">@task.Description</li>
+                            }
+                        </ul>
+                    }
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <td><b>Job Number</b></td>
+                                <td><b>Homeowner</b></td>
+                                <td><b>Address</b></td>
+                                <td><b>Phone</b></td>
+                                <td><b>Days Outstanding</b></td>
+                            </tr>
+                        </thead>
+                        @foreach (var serviceCall in communityGroup.OrderByDescending(sc => Math.Abs((DateTime.Today - sc.CreatedDate.Date).TotalDays)))
+                        {
+                            <tr class="line-item-display collapsed cursor-pointer has-bottom-tooltip" data-original-title="Select to expand call">
+                                <td>@Html.ActionLink(serviceCall.JobNumber, "JobSummary", "Job", new { id = serviceCall.JobId }, new { target = "_blank" })</td>
+                                <td>@serviceCall.HomeownerName</td>
+                                <td>@serviceCall.Address</td>
+                                <td>@serviceCall.HomePhone.ToPhoneNumberWithExtension()</td>
+                                @if (serviceCall.IsSpecialProject)
+                                {
+                                    <td>Special Project</td>
+                                }
+                                else
+                                {
+                                    <td>@(Math.Abs((DateTime.Today - serviceCall.CreatedDate.Date).TotalDays)) days</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <div style="display: none;">
+                                        <h6><strong>Line Item Problem Code and Description</strong></h6>
+                                        <ul>
+                                            @foreach (var line in serviceCall.ServiceCallLines)
+                                            {
+                                                if (line.ServiceCallLineItemStatus.DisplayName == "Complete")
+                                                {
+                                                    <li class="has-bottom-tooltip" style="color: #BDC3C7;" data-original-title="Line item is complete.">@line.ProblemCode - @line.ProblemDescription</li>
+                                                }
+                                                else
+                                                {
+                                                    <li class="has-bottom-tooltip" data-original-title="Line item is @line.ServiceCallLineItemStatus.DisplayName.">@line.ProblemCode - @line.ProblemDescription</li>
+                                                }
+                                            }
+                                        </ul>
+                                        @if (serviceCall.ServiceCallNotes != null && serviceCall.ServiceCallNotes.Any())
+                                        {
+                                            <div class="notes-container hidden no-print">
+                                                <h6><strong>Notes</strong></h6>
+                                                <ul>
+                                                    @foreach (var note in serviceCall.ServiceCallNotes)
+                                                    {
+                                                        <li>@note.Note</li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
+            </div>
         </div>
-    </div>
     }
 }
 else
