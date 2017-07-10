@@ -29,9 +29,7 @@
 
             $('.line-item-display').click(function () {
                 if ($(this).hasClass("collapsed")) {
-                    $(this).nextUntil('tr.line-item-display')
-                    .find('td')
-                    .parent()
+                    $(this).nextUntil('tr.line-item-display')                    
                     .find('td > div')
                     .slideDown("fast", function () {
                         var $set = $(this);
@@ -41,7 +39,7 @@
                 } else {
                     $(this).nextUntil('tr.line-item-display')
                     .find('td')
-                    .wrapInner('<div style="display: block;" />')
+                    .wrapInner('<div/>')
                     .parent()
                     .find('td > div')
                     .slideUp("fast");

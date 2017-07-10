@@ -1,4 +1,5 @@
 ﻿@model Warranty.Core.Features.Report.WSROpenActivity.WSROpenActivityModel
+@using Warranty.Core.Enumerations
 @using Warranty.Core.Extensions
 @section header
 {
@@ -182,7 +183,7 @@
                                         <ul>
                                             @foreach (var line in serviceCall.ServiceCallLines)
                                             {
-                                                if (line.ServiceCallLineItemStatus.DisplayName == "Complete")
+                                                if (line.ServiceCallLineItemStatus.DisplayName == ServiceCallLineItemStatus.Complete.ToString())
                                                 {
                                                     <li class="has-bottom-tooltip" style="color: #BDC3C7;" data-original-title="Line item is complete.">@line.ProblemCode - @line.ProblemDescription</li>
                                                 }
