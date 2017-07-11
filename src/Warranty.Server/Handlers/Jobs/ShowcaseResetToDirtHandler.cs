@@ -56,9 +56,6 @@ namespace Warranty.Server.Handlers.Jobs
             _log.InfoFormat("Deleting Tasks for JobNumber {0} ({1})", message.JobNumber, job.JobId);
             _database.Delete<Task>("WHERE ReferenceId = @0", job.JobId);
             
-            _log.InfoFormat("Deleting JobStages for JobNumber {0} ({1})", message.JobNumber, job.JobId);
-            _database.Delete<JobStage>("WHERE JobId = @0", job.JobId);
-
             _log.InfoFormat("Deleting Job with JobNumber {0} ({1})", message.JobNumber, job.JobId);
             _database.Delete(job);
         }
