@@ -104,6 +104,7 @@ namespace Warranty.Core.Features.Report.WSROpenActivity
                             , li.LineNumber
                             , li.ProblemCode
                             , li.ProblemDescription
+                            , li.ServiceCallLineItemStatusId as ServiceCallLineItemStatus
                             , j.CommunityId
                         FROM ServiceCalls sc
 	                        INNER JOIN Jobs j ON sc.JobId = j.JobId
