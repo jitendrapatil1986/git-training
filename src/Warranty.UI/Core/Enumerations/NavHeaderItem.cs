@@ -21,6 +21,8 @@
         public static NavHeaderItem AssignWSR = new NavHeaderItem(7, Administration.Key, Administration.Display.AssignWSRName, "Admin", "ManageAssignments");
         public static NavHeaderItem ManageCostCode = new NavHeaderItem(8, Administration.Key, Administration.Display.MarketCostCodeName, "Admin", "ManageProblemCodeCostCodes");
 
+        public static NavHeaderItem BtwwPage = new NavHeaderItem(13, BTWW.Key, BTWW.Display.BtwwName, "Btww", "Index");
+
         protected NavHeaderItem(int value, string key, string displayName, string controller, string action, bool hasDivider = false)
             : base(value, displayName)
         {
@@ -76,6 +78,16 @@
             {
                 public const string AssignWSRName = "Assign WSRs";
                 public const string MarketCostCodeName = "Market Cost Codes";
+            }
+        }
+
+        public static class BTWW
+        {
+            public const string Key = "Btww";
+
+            internal static class Display
+            {
+                public const string BtwwName = "BTWW";
             }
         }
     }
