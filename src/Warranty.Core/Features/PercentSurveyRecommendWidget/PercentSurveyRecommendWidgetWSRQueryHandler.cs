@@ -32,6 +32,7 @@
             if (thisMonthRawSurveys != null)
             {
                 thisMonthSurveys = thisMonthRawSurveys.Details.ToObject<List<ApiResult>>();
+                thisMonthSurveys = thisMonthSurveys.Where(s => !string.IsNullOrWhiteSpace(s.DefinitelyWillRecommend) && !s.DefinitelyWillRecommend.Equals("N/A", StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             var totalThisMonthSurveys = thisMonthSurveys.Count();
@@ -46,6 +47,7 @@
             if (lastMonthRawSurveys != null)
             {
                 lastMonthSurveys = lastMonthRawSurveys.Details.ToObject<List<ApiResult>>();
+                lastMonthSurveys = lastMonthSurveys.Where(s => !string.IsNullOrWhiteSpace(s.DefinitelyWillRecommend) && !s.DefinitelyWillRecommend.Equals("N/A", StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             var totalLastMonthSurveys = lastMonthSurveys.Count();
