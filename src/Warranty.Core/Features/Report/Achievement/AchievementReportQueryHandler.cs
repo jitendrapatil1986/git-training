@@ -27,8 +27,18 @@
                 EmployeeTiedToRepresentatives = GetEmployeesTiedToRepresentatives(),
             };
 
-            if (!query.queryModel.HasSearchCriteria)
+            if (!query.queryModel.HasSearchCriteria || string.IsNullOrWhiteSpace(query.queryModel.SelectedEmployeeNumber))
                 return model;
+
+            if (model.EmployeeTiedToRepresentatives.Count() == 1)
+            {
+                model.SelectedEmployeeNumber = model.EmployeeTiedToRepresentatives.First().EmployeeNumber;
+                model.TeamMemberName = GetNameFromEmployeeNumber(model.EmployeeTiedToRepresentatives.First().EmployeeNumber);
+            }
+            else
+            {
+                model.TeamMemberName = GetNameFromEmployeeNumber(query.queryModel != null ? query.queryModel.SelectedEmployeeNumber : "");
+            }
 
             var monthlyAchievementSummary = GetMonthlyAchievementSummary(query);
             var periodAchievementSummary = GetPeriodAchievementSummary(monthlyAchievementSummary);
@@ -37,6 +47,15 @@
             model.PeriodAchievementSummary = periodAchievementSummary;
 
             return model;
+        }
+
+        private string GetNameFromEmployeeNumber(string EmployeeNumber)
+        {
+            using (_database)
+            {
+                string TeamMemberName =  _database.Single<string>(@"SELECT EmployeeName FROM Employees WHERE EmployeeNumber = @0", EmployeeNumber);
+                return TeamMemberName;
+            }               
         }
 
         private AchievementReportModel.AchievementSummary GetPeriodAchievementSummary(SurveyReportData surveyReportData)

@@ -21,6 +21,7 @@
 
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public string TeamMemberName { get; set; }
 
         public class AchievementSummary
         {
