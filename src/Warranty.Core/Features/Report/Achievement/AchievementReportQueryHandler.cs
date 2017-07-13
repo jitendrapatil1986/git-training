@@ -29,22 +29,13 @@
 
             if (!query.queryModel.HasSearchCriteria || string.IsNullOrWhiteSpace(query.queryModel.SelectedEmployeeNumber))
                 return model;
-
-            if (model.EmployeeTiedToRepresentatives.Count() == 1)
-            {
-                model.SelectedEmployeeNumber = model.EmployeeTiedToRepresentatives.First().EmployeeNumber;
-                model.TeamMemberName = GetNameFromEmployeeNumber(model.EmployeeTiedToRepresentatives.First().EmployeeNumber);
-            }
-            else
-            {
-                model.TeamMemberName = GetNameFromEmployeeNumber(query.queryModel != null ? query.queryModel.SelectedEmployeeNumber : "");
-            }
-
+                       
             var monthlyAchievementSummary = GetMonthlyAchievementSummary(query);
             var periodAchievementSummary = GetPeriodAchievementSummary(monthlyAchievementSummary);
 
             model.MonthlyAchievementSummary = monthlyAchievementSummary.AchievementSummaries;
             model.PeriodAchievementSummary = periodAchievementSummary;
+            model.TeamMemberName = GetNameFromEmployeeNumber(query.queryModel.SelectedEmployeeNumber);
 
             return model;
         }
