@@ -7,8 +7,22 @@
     </div>
     <div class="panel-body">
         <a href="@Url.Action("Index", "Stats", new{id=StatView.AvgDaysClosed.DisplayName})">
-            <div class="dashboard-widget-number">@Model.AvgDaysClosedThisMonth</div>
-            <div class="dashboard-widget-previous-number">@Model.AvgDaysClosedLastMonth last month</div>
+            @if (Model.AvgDaysClosedThisMonth == 0)
+            {
+                <div class="dashboard-widget-number">N/A</div>
+            }
+            else
+            {
+                <div class="dashboard-widget-number">@Model.AvgDaysClosedThisMonth</div>
+            }
+            @if (Model.AvgDaysClosedLastMonth == 0)
+            {
+                <div class="dashboard-widget-previous-number">N/A last month</div>
+            }
+            else
+            {
+                <div class="dashboard-widget-previous-number">@Model.AvgDaysClosedLastMonth last month</div>
+            }
         </a>
     </div>
 </div>
