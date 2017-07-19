@@ -6,14 +6,14 @@
             $(function () {
                 var nowTemp = new Date();
                 var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-                
+
                 $(".datepicker").datepicker({
                     onRender: function (date) {
                         return date.valueOf() < now.valueOf() ? 'disabled' : '';
                     }
                 });
 
-                $('body').on('focus', '.max-length', function() {
+                $('body').on('focus', '.max-length', function () {
                     $(this).maxlength({
                         alwaysShow: true,
                         separator: ' out of ',
@@ -23,7 +23,7 @@
 
                 function PurchaseOrderLineViewModel() {
                     var self = this;
-                    
+
                     self.lineNumber = ko.observable();
                     self.quantity = ko.observable();
                     self.unitCost = ko.observable();
@@ -38,17 +38,17 @@
 
                     self.unitCost.extend({
                         required: {
-                            onlyIf: function() { return (self.quantity() || self.description()); }
+                            onlyIf: function () { return (self.quantity() || self.description()); }
                         }
                     });
 
                     self.description.extend({
                         required: {
-                            onlyIf: function() { return (self.quantity() || self.unitCost()); }
+                            onlyIf: function () { return (self.quantity() || self.unitCost()); }
                         },
                         maxLength: modelData.maxPurchaseOrderLineItemDescriptionLength
                     });
-                    
+
                     self.subTotal = ko.computed(function () {
                         if (!self.quantity() || !self.unitCost())
                             return 0;
@@ -56,18 +56,18 @@
                         return self.quantity() * self.unitCost();
                     });
                 }
-                
+
                 function purchaseOrderViewModel() {
                     var self = this;
 
                     self.serviceCallLineItemId = modelData.initialPurchaseOrder.serviceCallLineItemId;
                     self.vendorOnHold = ko.observable(false);
-                    self.vendorName = ko.observable().extend({required : true});
+                    self.vendorName = ko.observable().extend({ required: true });
                     self.vendorNumber = ko.observable().extend({ required: true, vendorIsOnHold: self.vendorOnHold });
                     self.deliveryInstructionCodes = ko.observableArray(modelData.deliveryInstructionCodes);
                     self.selectedDeliveryInstruction = ko.observable().extend({ required: true });
-                    self.deliveryDate = ko.observable().extend({ required: true, minDate: now});
-                    self.isMaterialObjectAccount = ko.observable('true').extend({required: true});
+                    self.deliveryDate = ko.observable().extend({ required: true, minDate: now });
+                    self.isMaterialObjectAccount = ko.observable('true').extend({ required: true });
                     self.jobNumber = ko.observable(modelData.initialPurchaseOrder.jobNumber);
                     self.address = ko.observable(modelData.initialPurchaseOrder.addressLine);
                     self.city = ko.observable(modelData.initialPurchaseOrder.city);
@@ -103,7 +103,34 @@
 
                     self.totalCost.extend(
                     {
-                        max: { params: self.purchaseOrderMaxAmount()?self.purchaseOrderMaxAmount().toFixed(2):99999999, message: 'Maximum: ${0}' }
+                        max: { params: self.purchaseOrderMaxAmount() ? self.purchaseOrderMaxAmount().toFixed(2) : 99999999, message: 'Maximum: ${0}' }
+                    });
+
+                    self.canSave = ko.computed(function () {
+                        if (((self.line1.quantity() !== undefined && self.line1.quantity() != "") && (self.line1.description() !== undefined && self.line1.description() != "") && (self.line1.unitCost() !== undefined && self.line1.unitCost() != "")) ||
+                             ((self.line2.quantity() !== undefined && self.line2.quantity() != "") && (self.line2.description() !== undefined && self.line2.description() != "") && (self.line2.unitCost() !== undefined && self.line2.unitCost() != "")) ||
+                             ((self.line3.quantity() !== undefined && self.line3.quantity() != "") && (self.line3.description() !== undefined && self.line3.description() != "") && (self.line3.unitCost() !== undefined && self.line3.unitCost() != "")) ||
+                             ((self.line4.quantity() !== undefined && self.line4.quantity() != "") && (self.line4.description() !== undefined && self.line4.description() != "") && (self.line4.unitCost() !== undefined && self.line4.unitCost() != "")) ||
+                             ((self.line5.quantity() !== undefined && self.line5.quantity() != "") && (self.line5.description() !== undefined && self.line5.description() != "") && (self.line5.unitCost() !== undefined && self.line5.unitCost() != ""))) {
+                            return true;
+                        }
+                        else if (self.allPurchaseOrderLines() !== undefined) {
+                            self.checkPurchaseOrderLines = false;
+                            ko.utils.arrayForEach(self.allPurchaseOrderLines(), function (lineItem) {
+                                if ((lineItem.quantity() !== undefined && lineItem.quantity() != "") && (lineItem.description() !== undefined && lineItem.description() != "") && (lineItem.unitCost() !== undefined && lineItem.unitCost() != "")) {
+                                    self.checkPurchaseOrderLines = true;
+                                    return true;
+                                }
+                            });
+
+                            if (self.checkPurchaseOrderLines == true)
+                                return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                        
                     });
 
                     self.addPurchaseOrderLine = function () {
@@ -117,7 +144,7 @@
                             self.errors.showAllMessages();
                             return;
                         }
-                        
+
                         var newPurchaseOrder = {
                             ServiceCallLineItemId: self.serviceCallLineItemId,
                             VendorNumber: self.vendorNumber(),
@@ -134,13 +161,13 @@
                         newPurchaseOrder.ServiceCallLineItemPurchaseOrderLines.push(self.line3);
                         newPurchaseOrder.ServiceCallLineItemPurchaseOrderLines.push(self.line4);
                         newPurchaseOrder.ServiceCallLineItemPurchaseOrderLines.push(self.line5);
-                        
-                        ko.utils.arrayForEach(self.allPurchaseOrderLines(), function(lineItem) {
+
+                        ko.utils.arrayForEach(self.allPurchaseOrderLines(), function (lineItem) {
                             newPurchaseOrder.ServiceCallLineItemPurchaseOrderLines.push(lineItem);
                         });
-                        
+
                         var modelData = ko.toJSON(newPurchaseOrder);
-                        
+
                         $.ajax({
                             url: urls.ManageServiceCall.AddPurchaseOrder,
                             type: "POST",
@@ -148,15 +175,15 @@
                             processData: false,
                             contentType: "application/json; charset=utf-8"
                         })
-                            .fail(function(response) {
+                            .fail(function (response) {
                                 toastr.error("There was a problem creating the purchase order. Please try again.");
                             })
-                            .done(function(response) {
+                            .done(function (response) {
                                 toastr.success("Success! Purchase order created.");
                                 window.location.href = urls.ServiceCall.LineItemDetail + '/' + self.serviceCallLineItemId;
                             });
                     };
-                    
+
                     $(document).on('vendor-number-selected', function () {
                         var vendorNumber = $('#vendor-search').attr('data-vendor-number');
                         var vendorName = $('#vendor-search').attr('data-vendor-name');
@@ -165,7 +192,7 @@
                         self.vendorNumber(vendorNumber);
                         self.vendorName(vendorName);
                     });
-                    
+
                     $("#deliveryDate").on('changeDate', function (e) {
                         self.deliveryDate(moment(e.date).format("L"));
                     });
@@ -184,7 +211,7 @@
                     },
                     message: 'Date must be greater than or equal to {0}.'
                 };
-                
+
                 ko.validation.rules["vendorIsOnHold"] = {
                     validator: function (val, condition) {
                         if (condition() === 'true' || condition() === true) {
@@ -197,7 +224,7 @@
                 };
 
                 ko.validation.registerExtenders();
-                
+
                 var viewModel = new purchaseOrderViewModel();
                 viewModel.errors = ko.validation.group(viewModel);
                 ko.applyBindings(viewModel);
