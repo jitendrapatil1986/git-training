@@ -8,22 +8,8 @@
     </div>
     <div class="panel-body">
         <a href="@Url.Action("Index", "Stats", new{id=StatView.PercentClosed.DisplayName})">
-            @if (Model.PercentClosedThisMonth == 0)
-            {
-                <div class="dashboard-widget-number">N/A</div>
-            }
-            else
-            {
-                <div class="dashboard-widget-number">@Format.Percentage(Model.PercentClosedThisMonth)</div>
-            }
-            @if (Model.PercentClosedLastMonth == 0)
-            {
-                <div class="dashboard-widget-previous-number">N/A last month</div>
-            }
-            else
-            {
-                <div class="dashboard-widget-previous-number">@Format.Percentage(Model.PercentClosedLastMonth) last month</div>
-            }
+            <div class="dashboard-widget-number">@Format.Percentage(Model.PercentClosedThisMonth)</div>
+            <div class="dashboard-widget-previous-number">@Format.Percentage(Model.PercentClosedLastMonth) last month</div>
         </a>
     </div>
 </div>

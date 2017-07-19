@@ -3,6 +3,7 @@
     using Extensions;
     using NPoco;
     using Common.Security.Session;
+    using System;
 
     public class AverageDaysClosedWidgetWSRQueryHandler : IQueryHandler<AverageDaysClosedWidgetWSRQuery, AverageDaysClosedWidgetModel>
     {
@@ -36,8 +37,8 @@
                                               AND EmployeeNumber=@1
                                               AND sc.ServiceCallType = 'Warranty Service Request'";
 
-                var avgDaysClosedThisMonth = _database.ExecuteScalar<int>(string.Format(sqlAvgDays, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today, user.EmployeeNumber);
-                var avgDaysClosedLastMonth = _database.ExecuteScalar<int>(string.Format(sqlAvgDays, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today.ToLastDay().AddMonths(-1), user.EmployeeNumber);
+                var avgDaysClosedThisMonth = Convert.ToInt32(Math.Round(_database.ExecuteScalar<decimal>(string.Format(sqlAvgDays, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today, user.EmployeeNumber), MidpointRounding.AwayFromZero));
+                var avgDaysClosedLastMonth = Convert.ToInt32(Math.Round(_database.ExecuteScalar<decimal>(string.Format(sqlAvgDays, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today.ToLastDay().AddMonths(-1), user.EmployeeNumber), MidpointRounding.AwayFromZero));
 
                 return new AverageDaysClosedWidgetModel
                            {

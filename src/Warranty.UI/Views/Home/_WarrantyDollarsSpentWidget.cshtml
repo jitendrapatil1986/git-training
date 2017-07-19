@@ -8,22 +8,8 @@
     </div>
     <div class="panel-body">
         <a href="@Url.Action("Index", "Stats", new{id=StatView.DollarsSpent.DisplayName})">
-            @if (Model.AmountSpentThisMonth == 0)
-            {
-                <div class="dashboard-widget-number">N/A</div>
-            }
-            else
-            {
-                <div class="dashboard-widget-number">@Format.MoneyWithoutDecimal(Model.AmountSpentThisMonth)</div>
-            }  
-            @if (Model.AmountSpentLastMonth == 0)
-            {
-                <div class="dashboard-widget-previous-number">N/A last month</div>
-            }
-            else
-            {
-                <div class="dashboard-widget-previous-number">@Format.MoneyWithoutDecimal(Model.AmountSpentLastMonth) last month</div>
-            }  
+            <div class="dashboard-widget-number">@Format.MoneyWithoutDecimal(Model.AmountSpentThisMonth)</div>
+            <div class="dashboard-widget-previous-number">@Format.MoneyWithoutDecimal(Model.AmountSpentLastMonth) last month</div>
         </a>
     </div>
 </div>
