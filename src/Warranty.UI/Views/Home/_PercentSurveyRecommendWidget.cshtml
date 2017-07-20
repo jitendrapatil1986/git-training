@@ -7,7 +7,7 @@
         <div class="dashboard-widget-title">% DEFINITELY RECOMMEND</div>
     </div>
     <div class="panel-body">
-        @if (Model.PercentRecommendThisMonth == 0)
+        @if (Model.TotalSurveysThisMonth == 0)
         {
             <div class="dashboard-widget-number">N/A</div>
         }
@@ -15,7 +15,7 @@
         {
             <div class="dashboard-widget-number">@Format.Percentage(Model.PercentRecommendThisMonth)</div>
         }
-        @if (Model.PercentRecommendLastMonth == 0)
+        @if (Model.TotalSurveysLastMonth == 0)
         {
             <div class="dashboard-widget-previous-number">N/A last month</div>
         }
