@@ -27,16 +27,26 @@
                 EmployeeTiedToRepresentatives = GetEmployeesTiedToRepresentatives(),
             };
 
-            if (!query.queryModel.HasSearchCriteria)
+            if (!query.queryModel.HasSearchCriteria || string.IsNullOrWhiteSpace(query.queryModel.SelectedEmployeeNumber))
                 return model;
-
+                       
             var monthlyAchievementSummary = GetMonthlyAchievementSummary(query);
             var periodAchievementSummary = GetPeriodAchievementSummary(monthlyAchievementSummary);
 
             model.MonthlyAchievementSummary = monthlyAchievementSummary.AchievementSummaries;
             model.PeriodAchievementSummary = periodAchievementSummary;
+            model.TeamMemberName = GetNameFromEmployeeNumber(query.queryModel.SelectedEmployeeNumber);
 
             return model;
+        }
+
+        private string GetNameFromEmployeeNumber(string EmployeeNumber)
+        {
+            using (_database)
+            {
+                string TeamMemberName =  _database.Single<string>(@"SELECT EmployeeName FROM Employees WHERE EmployeeNumber = @0", EmployeeNumber);
+                return TeamMemberName;
+            }               
         }
 
         private AchievementReportModel.AchievementSummary GetPeriodAchievementSummary(SurveyReportData surveyReportData)
