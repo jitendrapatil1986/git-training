@@ -10,7 +10,7 @@
 
                 $.fn.editableform.buttons =
                     '<button type="submit" class="btn btn-primary editable-submit btn-sm"><i class="glyphicon glyphicon-ok"></i></button>';
-                
+
                 $('body').on('focus', '.max-length', function () {
                     $(this).maxlength({
                         alwaysShow: true,
@@ -90,7 +90,7 @@
                     self.notifiedProjectCoordinator = options.notifiedProjectCoordinator;
                     self.projectCoordinatorEmailToNotify = options.projectCoordinatorEmailToNotify;
                     self.sendCheckToProjectCoordinator = options.sendCheckToProjectCoordinator;
-                                        
+
 
                     self.isHomeownerPayment = ko.computed(function () {
                         if (self.sendCheckToProjectCoordinator)
@@ -415,772 +415,804 @@
                             toastr.success("Success! Item completed.");
                         });
                 }
-
-                function reopenServiceCallLineItem(line) {
-                    var lineData = ko.toJSON(line);
-
-                    $.ajax({
-                        url: urls.ManageServiceCall.ReopenLineItem,
-                        type: "POST",
-                        data: lineData,
-                        dataType: "json",
-                        processData: false,
-                        contentType: "application/json; charset=utf-8"
-                    })
-                        .fail(function (response) {
-                            toastr.error("There was an issue reopening the line item. Please try again!");
-                        })
-                        .done(function (response) {
-                            toastr.success("Success! Item reopened.");
-                            line.serviceCallLineItemStatusDisplayName(response.ServiceCallLineItemStatus.DisplayName);
-                        });
-                }
-
-                function noActionServiceCallLineItem(line) {
-                    var lineData = ko.toJSON(line);
-
-                    $.ajax({
-                        url: urls.ManageServiceCall.NoActionLineItem,
-                        type: "POST",
-                        data: lineData,
-                        dataType: "json",
-                        processData: false,
-                        contentType: "application/json; charset=utf-8"
-                    })
-                        .fail(function (response) {
-                            toastr.error("There was an issue setting the line item to no action. Please try again!");
-                        })
-                        .done(function (response) {
-                            line.serviceCallLineItemStatusDisplayName(response.DisplayName);
-                            line.rootProblemId(modelData.noActionRootProblemCode.value);
-                            line.rootProblem(modelData.noActionRootProblemCode.displayName);
-                            line.rootCauseId(modelData.noActionRootCauseCode.value);
-                            line.rootCause(modelData.noActionRootCauseCode.displayName);
-                            toastr.success("Success! Item set to no action.");
-                        });
-                }
-
-                function serviceCallLineItemViewModel() {
-                    var self = this;
-
-                    self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
-                    self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
-                    self.completed = modelData.initialServiceCallLineItem.completed;
-                    self.completeButtonClicked = ko.observable(false);
-
-                    self.problemCodeId = ko.observable(modelData.initialServiceCallLineItem.problemCodeId);
-                    self.problemCode = ko.observable(modelData.initialServiceCallLineItem.problemCode);
-                    self.problemDescription = ko.observable(modelData.initialServiceCallLineItem.problemDescription);
-                    self.jobNumber = ko.observable(modelData.initialServiceCallLineItem.jobNumber);
-                    self.constructionVendors = modelData.vendors;
-                    self.hasEverBeenCompleted = ko.observable(modelData.initialServiceCallLineItem.hasEverBeenCompleted);
-                    self.hasAnyPayments = ko.observable(modelData.initialServiceCallLineItem.hasAnyPayments);
-                    self.hasAnyPurchaseOrders = ko.observable(modelData.initialServiceCallLineItem.hasAnyPurchaseOrders);
-
-                    self.maxPersonNotifiedLength = modelData.maxPersonNotifiedLength;		
-                    self.maxInvoiceNumberLength = modelData.maxInvoiceNumberLength;	
-
-                    self.groupedConstructionVendors = ko.computed(function () {
-                        var rows = [], current = [];
-                        rows.push(current);
-                        for (var i = 0; i < self.constructionVendors.length; i += 1) {
-                            current.push(self.constructionVendors[i]);
-                            if (((i + 1) % 3) === 0) {
-                                current = [];
-                                rows.push(current);
-                            }
-                        }
-                        return rows;
-                    }, this);
-
-                    //Value saved in db is string but ddl needs id to set default value.
-                    self.rootCause = ko.observable(modelData.initialServiceCallLineItem.rootCause);
-                    self.hasRootCause = ko.computed(function () {
-                        return self.rootCause() != null && self.rootCause() != 'Imported';
-                    });
-
-                    var selectedRootCause = ko.utils.arrayFirst(modelData.rootCauseCodes, function (item) {
-                        return item.text === modelData.initialServiceCallLineItem.rootCause;
-                    });
-                    self.rootCauseId = ko.observable(selectedRootCause ? selectedRootCause.value : '').extend({
-                        required: {
-                            onlyIf: function () {
-                                return self.completeButtonClicked() === true || self.hasRootCause();
-                            }
-                        }
-                    });
-
-                    self.rootProblem = ko.observable(modelData.initialServiceCallLineItem.rootProblem);
-                    self.hasRootProblem = ko.computed(function () {
-                        return self.rootProblem() != null && self.rootProblem() != 'Imported';
-                    });
-
-                    var selectedRootProblem = ko.utils.arrayFirst(modelData.rootProblemCodes, function (item) {
-                        return item.text === modelData.initialServiceCallLineItem.rootProblem;
-                    });
-                    self.rootProblemId = ko.observable(selectedRootProblem ? selectedRootProblem.value : '').extend({
-                        required: {
-                            onlyIf: function () {
-                                return self.completeButtonClicked() === true || self.hasRootProblem();
-                            }
-                        }
-                    });
-
-                    self.rootCauseCodes = ko.observableArray(modelData.rootCauseCodes);
-                    self.rootProblemCodes = ko.observableArray(modelData.rootProblemCodes);
-
-                    self.rootCauseId.subscribe(function (rootCauseId) {
-                        var matchedRootCause = ko.utils.arrayFirst(modelData.rootCauseCodes, function (item) {
-                            return Number(item.value) === Number(rootCauseId);
-                        });
-
-                        if (matchedRootCause) {
-                            self.rootCause(matchedRootCause.text);
-
+                function deleteServiceCallLineItem(e) {
+                    bootbox.confirm("Are you sure you want to delete this LineItem?", function (result) {
+                        if (result) {
                             $.ajax({
-                                url: urls.ManageServiceCall.EditLineItem,
-                                type: "POST",
-                                data: ko.toJSON({ serviceCallLineItemId: self.serviceCallLineItemId, rootCause: rootCauseId }),
-                                dataType: "json",
-                                processData: false,
-                                contentType: "application/json; charset=utf-8"
-                            }).fail(function () {
-                                viewModel.completeButtonClicked(false);
-                                toastr.error("There was an error updating the root cause");
-                            }).success(function () {
-                                viewModel.completeButtonClicked(false);
-                                toastr.success("Successfully updated root cause");
-                            });
-                        }
-                    });
-
-                    self.rootProblemId.subscribe(function (rootProblemId) {
-                        var matchedRootProblem = ko.utils.arrayFirst(modelData.rootProblemCodes, function (item) {
-                            return Number(item.value) === Number(rootProblemId);
-                        });
-
-                        if (matchedRootProblem) {
-                            self.rootProblem(matchedRootProblem.text);
-
-                            $.ajax({
-                                url: urls.ManageServiceCall.EditLineItem,
-                                type: "POST",
-                                data: ko.toJSON({ serviceCallLineItemId: self.serviceCallLineItemId, rootProblem: rootProblemId }),
-                                dataType: "json",
-                                processData: false,
-                                contentType: "application/json; charset=utf-8"
-                            }).fail(function () {
-                                viewModel.completeButtonClicked(false);
-                                toastr.error("There was an error updating the root problem");
-                            }).success(function () {
-                                viewModel.completeButtonClicked(false);
-                                toastr.success("Successfully updated root problem");
-                            });
-                        }
-                    });
-
-                    self.paymentTypes = ko.observableArray(modelData.paymentTypes);
-                    self.paymentTypeId = ko.observable();
-                    self.isStandAloneBackcharge = ko.computed(function () {
-                        return self.paymentTypeId() === modelData.standAloneBackchargePaymentType.value;
-                    });
-                    self.isPayment = ko.computed(function () {
-                        return self.paymentTypeId() === modelData.paymentPaymentType.value;
-                    });
-
-                    self.invoiceNumber = ko.observable('').extend({
-                        required: {
-                            onlyIf: function () { return self.isPayment() === true; }
-                        }
-                    });
-                    self.comments = ko.observable('');
-                    self.amount = ko.observable().extend({
-                        required: {
-                            onlyIf: function () { return self.isPayment() === true; }
-                        }, min: 0
-                    });
-                    self.isBackcharge = ko.observable(false);
-                    self.backchargeAmount = ko.observable().extend({
-                        required: {
-                            onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
-                        },
-                        validation: {
-                            validator: function (val) {
-                                if (self.isBackcharge() === false || self.isStandAloneBackcharge() === false)
-                                    return true;
-
-                                return Number(val) > 0;
-                            },
-                            message: 'Must be greater than 0',
-                        }
-                    });
-                    self.backchargeReason = ko.observable('').extend({
-                        required: {
-                            onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
-                        }
-                    });
-                    self.personNotified = ko.observable('').extend({
-                        required: {
-                            onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
-                        }
-                    });
-                    self.personNotifiedPhoneNumber = ko.observable('').extend({
-                        required: {
-                            onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
-                        }
-                    });
-                    self.personNotifiedDate = ko.observable('').extend({
-                        required: {
-                            onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
-                        },
-                        validation: {
-                            validator: function (val) {
-                                if (val !== null && val !== "") {                                    
-                                    if (moment(val, 'MM/DD/YYYY', true).isValid() === false)
-                                        return false;
-                                    else if (val.split('/').length > 3 || (moment(val, 'MM/DD/YYYY').year() < 1900 || moment(val, 'MM/DD/YYYY').year() > 3000))
-                                        return false;
+                                type: "DELETE",
+                                url: urls.ManageServiceCall.DeleteLineItem,
+                                data: { ServiceCallLineItemId: e.serviceCallLineItemId },
+                                success: function () {
+                                    window.location.href = urls.ServiceCall.CallSummary + '/' + e.serviceCallId;
+                                    toastr.success("Success! Line Item deleted.");
                                 }
-                                return true;
-                            },
-                            message: 'Must be valid date',
+                            });
                         }
                     });
-                    self.backchargeResponseFromVendor = ko.observable('').extend({
-                        required: {
-                            onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
-                        }
-                    });
-                    self.vendorOnHold = ko.observable(false);
-                    self.vendorName = ko.observable('').extend({
-                        required: {
-                            onlyIf: function () { return self.isPayment() === true && !self.payHomeownerSelected(); }
-                        }
-                    });
-                    self.vendorNumber = ko.observable('').extend({
-                        required: {
-                            onlyIf: function () { return self.isPayment() === true && !self.payHomeownerSelected(); }
-                        },
-                        vendorIsOnHold: self.vendorOnHold
-                    });
+                }
 
-                    self.backchargeVendorOnHold = ko.observable(false);
-                    self.backchargeVendorName = ko.observable('').extend({
-                        required: {
-                            onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
-                        }
-                    });
-                    self.backchargeVendorNumber = ko.observable('').extend({
-                        required: {
-                            onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
-                        }
-                    });
+            function reopenServiceCallLineItem(line) {
+                var lineData = ko.toJSON(line);
 
-                    self.allPaymentsAndBackcharges = ko.observableArray([]);
-
-                    self.canAddPayment = ko.computed(function () {
-                        return true;
-                    });
-
-                    self.clearPaymentFields = function () {
-                        $('#vendor-search').val('');
-                        $('#backcharge-vendor-search').val('');
-                        $('#pc-search').val('');
-                        self.vendorNumber('');
-                        self.backchargeVendorNumber('');
-                        self.invoiceNumber('');
-                        self.comments('');
-                        self.amount('');
-                        self.payHomeownerSelected(false);
-                        self.projectCoordinatorEmail('');
-                        self.sendCheckToPC(false);
-                        self.backchargeAmount('');
-                        self.isBackcharge(false);
-                        self.backchargeReason('');
-                        self.personNotified('');
-                        self.personNotifiedPhoneNumber('');
-                        self.personNotifiedDate('');
-                        self.backchargeResponseFromVendor('');
-                        self.errors.showAllMessages(false);
-                    };
-
-                    $(document).on('vendor-number-selected', function () {
-                        var vendorNumber = $('#vendor-search').attr('data-vendor-number');
-                        var vendorName = $('#vendor-search').attr('data-vendor-name');
-                        var vendorOnHold = $('#vendor-search').attr('data-vendor-on-hold');
-                        self.vendorOnHold(vendorOnHold);
-                        self.vendorNumber(vendorNumber);
-                        self.vendorName(vendorName);
-                    });
-
-                    self.canPayHomeowner = ko.observable(false);
-                    self.cannotPayHomeowner = ko.computed(function() {
-                        return !self.canPayHomeowner();                    
-                    });
-                    self.cannotPayHomeownerHelpText = ko.computed(function() {
-                        return self.canPayHomeowner() ? "" : "Cannot find homeowner in supply master; please contact your PC.";
-                    });
-                    
-                    $.ajax({
-                        url: urls.ManageServiceCall.GetHomeownerId,
-                        type: "GET",
-                        data: { jobNumber: self.jobNumber() },
-                        contentType: "application/json; charset=utf-8"
-                    })
+                $.ajax({
+                    url: urls.ManageServiceCall.ReopenLineItem,
+                    type: "POST",
+                    data: lineData,
+                    dataType: "json",
+                    processData: false,
+                    contentType: "application/json; charset=utf-8"
+                })
                     .fail(function (response) {
-                        console.error(response);
-                        toastr.error("Failed to validate whether homeowner is payable");
+                        toastr.error("There was an issue reopening the line item. Please try again!");
                     })
                     .done(function (response) {
-                        if (response.IsValid) {
-                            self.canPayHomeowner(true);
-                            self.homeownerName(response.HomeownerName);
-                            self.homeownerId(response.HomeownerNumber);
-                        }
+                        toastr.success("Success! Item reopened.");
+                        line.serviceCallLineItemStatusDisplayName(response.ServiceCallLineItemStatus.DisplayName);
                     });
-                    self.homeownerId = ko.observable();
-                    self.homeownerName = ko.observable();
-                    self.payHomeownerSelected = ko.observable(false);
-                    self.payHomeownerSelected.subscribe(function (newValue) {
-                        if (newValue) {
-                            self.vendorOnHold(false);
-                            self.vendorNumber(self.homeownerId());
-                            self.vendorName(self.homeownerName());
-                            $('#vendor-search').val(self.homeownerName());
-                            $("#invoiceNumber").focus();
-                        } else {
-                            self.vendorOnHold(false);
-                            self.vendorNumber('');
-                            self.vendorName('');
-                            $('#vendor-search').val('');
-                            $("#vendor-search").focus();
-                        }
+            }
+
+            function noActionServiceCallLineItem(line) {
+                var lineData = ko.toJSON(line);
+
+                $.ajax({
+                    url: urls.ManageServiceCall.NoActionLineItem,
+                    type: "POST",
+                    data: lineData,
+                    dataType: "json",
+                    processData: false,
+                    contentType: "application/json; charset=utf-8"
+                })
+                    .fail(function (response) {
+                        toastr.error("There was an issue setting the line item to no action. Please try again!");
+                    })
+                    .done(function (response) {
+                        line.serviceCallLineItemStatusDisplayName(response.DisplayName);
+                        line.rootProblemId(modelData.noActionRootProblemCode.value);
+                        line.rootProblem(modelData.noActionRootProblemCode.displayName);
+                        line.rootCauseId(modelData.noActionRootCauseCode.value);
+                        line.rootCause(modelData.noActionRootCauseCode.displayName);
+                        toastr.success("Success! Item set to no action.");
                     });
+            }
 
-                    self.sendCheckToPC = ko.observable();
-                    self.notifiedProjectCoordinator = ko.observable();
-                    self.projectCoordinatorEmail = ko.observable().extend({
-                        required: {
-                            onlyIf: function () { return (self.payHomeownerSelected() === true); }
-                        }
-                    });;
-                    $(document).on('pc-selected', function () {
-                        var projectCoordinatorEmail = $('#pc-search').attr('data-pc-email');
-                        var notifiedProjectCoordinator = $('#pc-search').attr('data-pc-name');
-                        self.projectCoordinatorEmail(projectCoordinatorEmail);
-                        self.notifiedProjectCoordinator(notifiedProjectCoordinator);
-                    });
-
-                    $(document).on('backcharge-vendor-number-selected', function () {
-                        var vendorNumber = $('#backcharge-vendor-search').attr('data-vendor-number');
-                        var vendorName = $('#backcharge-vendor-search').attr('data-vendor-name');
-                        var vendorOnHold = $('#backcharge-vendor-search').attr('data-vendor-on-hold');
-                        self.backchargeVendorOnHold(vendorOnHold);
-                        self.backchargeVendorNumber(vendorNumber);
-                        self.backchargeVendorName(vendorName);
-                    });
-
-                    function formHasErrors(theModel) {
-                        var errors = ko.validation.group(theModel);
-
-                        if (errors().length != 0) {
-                            viewModel.errors.showAllMessages(false);
-                            errors.showAllMessages();
-                            return true;
-                        }
-
-                        return false;
-                    }
-
-                    self.addPayment = function () {
-
-                        if (formHasErrors([self.invoiceNumber, self.amount, self.backchargeAmount, self.backchargeReason, self.personNotified, self.personNotifiedPhoneNumber, self.personNotifiedDate, self.backchargeResponseFromVendor, self.vendorNumber, self.backchargeVendorName, self.backchargeVendorNumber, self.projectCoordinatorEmail]))
-                            return;
-
-                        self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
-                        self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
-
-                        var newPayment = new PaymentAndBackchargeViewModel({
-                            serviceCallLineItemId: self.serviceCallLineItemId,
-                            vendorNumber: self.vendorNumber(),
-                            vendorName: self.vendorName(),
-                            backchargeVendorNumber: self.backchargeVendorNumber(),
-                            backchargeVendorName: self.backchargeVendorName(),
-                            invoiceNumber: self.invoiceNumber(),
-                            comments: self.comments(),
-                            amount: self.amount(),
-                            backchargeAmount: self.backchargeAmount(),
-                            isBackcharge: self.isBackcharge(),
-                            backchargeReason: self.backchargeReason(),
-                            personNotified: self.personNotified(),
-                            personNotifiedPhoneNumber: self.personNotifiedPhoneNumber(),
-                            personNotifiedDate: self.personNotifiedDate(),
-                            backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
-                            paymentStatusDisplayName: paymentStatusEnum.Requested.DisplayName,
-                            backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
-                            notifiedProjectCoordinator: self.notifiedProjectCoordinator(),
-                            projectCoordinatorEmailToNotify: self.projectCoordinatorEmail(),
-                            sendCheckToProjectCoordinator: self.sendCheckToPC(),                           	
-                            maxInvoiceNumberLength: self.maxInvoiceNumberLength,
-                        });
-
-                        var paymentData = ko.toJSON(newPayment);
-
-                        $.ajax({
-                            url: urls.ManageServiceCall.AddPayment,
-                            type: "POST",
-                            data: paymentData,
-                            dataType: "json",
-                            processData: false,
-                            contentType: "application/json; charset=utf-8"
-                        })
-                            .fail(function (response) {
-                                if (response.responseJSON.ExceptionMessage === "EMAIL_SEND_FAILURE")
-                                    toastr.error("Failed to send email to Project Coordinator");
-                                else
-                                    toastr.error("There was a problem adding the payment. Please try again.");
-                            })
-                            .done(function (response) {
-                                newPayment.paymentId = response.PaymentId;
-                                newPayment.costCode = { costCode: response.CostCode.CostCode, displayName: response.CostCode.DisplayName };
-                                newPayment.standAloneBackcharge(false);
-
-                                if (response.BackchargeId) {
-                                    newPayment.BackchargeId = response.BackchargeId;
-                                }
-
-                                self.allPaymentsAndBackcharges.unshift(newPayment);
-                                toastr.success("Success! Payment added.");
-                                highlight($("#allServiceCallPaymentsAndBackcharges").first());
-                                self.hasAnyPayments(true);
-                                self.clearPaymentFields();
-                            });
-                    };
-
-                    self.addStandAloneBackcharge = function () {
-
-                        if (formHasErrors([self.backchargeAmount, self.backchargeReason, self.personNotified, self.personNotifiedPhoneNumber, self.personNotifiedDate, self.backchargeResponseFromVendor, self.backchargeVendorName, self.backchargeVendorNumber]))
-                            return;
-
-                        self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
-                        self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
-
-                        var newStandAloneBackcharge = new PaymentAndBackchargeViewModel({
-                            serviceCallLineItemId: self.serviceCallLineItemId,
-                            backchargeVendorNumber: self.backchargeVendorNumber(),
-                            backchargeVendorName: self.backchargeVendorName(),
-                            backchargeAmount: self.backchargeAmount(),
-                            backchargeReason: self.backchargeReason(),
-                            personNotified: self.personNotified(),
-                            personNotifiedPhoneNumber: self.personNotifiedPhoneNumber(),
-                            personNotifiedDate: self.personNotifiedDate(),
-                            backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
-                            backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
-                            maxPersonNotifiedLength: self.maxPersonNotifiedLength,		                        
-                            
-                        });
-
-                        var standAloneBackchargeData = ko.toJSON(newStandAloneBackcharge);
-
-                        $.ajax({
-                            url: urls.ManageServiceCall.AddStandAloneBackcharge,
-                            type: "POST",
-                            data: standAloneBackchargeData,
-                            dataType: "json",
-                            processData: false,
-                            contentType: "application/json; charset=utf-8"
-                        })
-                            .fail(function (response) {
-                                toastr.error("There was a problem adding the stand alone backcharge. Please try again.");
-                            })
-                            .done(function (response) {
-                                newStandAloneBackcharge.backchargeId = response.BackchargeId;
-                                newStandAloneBackcharge.costCode = { costCode: response.CostCode.CostCode, displayName: response.CostCode.DisplayName };
-                                newStandAloneBackcharge.standAloneBackcharge(true);
-                                self.allPaymentsAndBackcharges.unshift(newStandAloneBackcharge);
-                                toastr.success("Success! Stand alone backcharge added.");
-                                highlight($("#allServiceCallPaymentsAndBackcharges").first());
-                                self.hasAnyPayments(true);
-                                self.clearPaymentFields();
-                            });
-                    };
-
-                    $('.datepicker').datepicker({
-                        format: 'mm/dd/yyyy',
-                        startDate: '01/01/1900',
-                        endDate: '12/31/3000',
-                        forceParse: false
-                    });
-
-                    $('.datepicer-icon').on('click', '.btn', function (e) {
-                        $(e.delegateTarget).find('.datepicker').focus();
-                    });
-
-                    $("#Person_Notified_Date").on('keydown', function (e) {
-                        if ((!(event.keyCode == 8                                             // backspace
-                            || event.keyCode == 46                                            // delete
-                            || (event.keyCode >= 35 && event.keyCode <= 40)                   // arrow keys/home/end
-                            || (event.keyCode >= 48 && event.keyCode <= 57)                   // numbers on keyboard
-                            || (event.keyCode >= 96 && event.keyCode <= 105)                  // number on keypad
-                            || event.keyCode == 191                                           //forward slash
-                            || event.keyCode == 111)) || e.shiftKey || e.ctrlKey || e.altKey  //divide
-                            ) {
-                            event.preventDefault();     // Prevent character input
-                        }
-                    });
-
-                    $('#Person_Notified_Date').blur(function () {
-                        var inputDate = $('#Person_Notified_Date').val();
-                        if (inputDate != null && inputDate != "") {
-                            if (moment(inputDate, 'MM/DD/YYYY', true).isValid() == true) {                                
-                                var date = inputDate.split('/');
-                                if (date[0].length == 1) {
-                                    $("#Person_Notified_Date").val("0" + date[0] + "/" + date[1] + "/" + date[2]);
-                                }
-                                self.personNotifiedDate($("#Person_Notified_Date").val());
-                            }                           
-                        }
-                    });
-
-                    self.completeLine = function () {
-                        self.completeButtonClicked(true);
-
-                        if (formHasErrors([self.rootCauseId, self.rootProblemId])) {
-                            return;
-                        }
-
-                        completeServiceCallLineItem(this);
-                    };
-
-                    self.reopenLine = function () {
-                        reopenServiceCallLineItem(this);
-                    };
-
-                    self.noActionForLine = function () {
-                        noActionServiceCallLineItem(this);
-                    };
-
-                    self.lineNumber = ko.observable(modelData.initialServiceCallLineItem.lineNumber);
-
-                    self.lineNumberWithProblemCode = ko.computed(function () {
-                        return self.lineNumber() + " - " + self.problemCode();
-                    });
-
-                    self.serviceCallLineItemStatus = ko.observable(modelData.initialServiceCallLineItem.serviceCallLineItemStatus);
-
-                    self.serviceCallLineItemStatusDisplayName = ko.observable('');
-                    if (modelData.initialServiceCallLineItem.serviceCallLineItemStatus) {
-                        if (modelData.initialServiceCallLineItem.serviceCallLineItemStatus.displayName)
-                            self.serviceCallLineItemStatusDisplayName(modelData.initialServiceCallLineItem.serviceCallLineItemStatus.displayName); //TODO: displayName works for model passed into js file via toJSON().
-                        if (modelData.initialServiceCallLineItem.serviceCallLineItemStatus.DisplayName)
-                            self.serviceCallLineItemStatusDisplayName(modelData.initialServiceCallLineItem.serviceCallLineItemStatus.DisplayName); //TODO: DisplayName works for model passed from ajax call. Need to keep both similar.
-                    }
-
-                    self.lineItemStatusCSS = ko.computed(function () {
-                        var displayName = self.serviceCallLineItemStatusDisplayName().toLowerCase();
-                        displayName = displayName.replace(' ', '-');
-
-                        return self.serviceCallLineItemStatusDisplayName() ? 'label label-' + displayName + '-service-line-item' : '';
-                    });
-
-                    self.isLineItemCompleted = function () {
-                        if (!self.serviceCallLineItemStatusDisplayName())
-                            return false;
-
-                        return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase() ? true : false;
-                    };
-
-                    self.isLineItemNoAction = function () {
-                        if (!self.serviceCallLineItemStatusDisplayName())
-                            return false;
-
-                        return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.NoAction.DisplayName.toLowerCase() ? true : false;
-                    };
-
-                    self.theLookups = dropdownData.availableLookups; //dropdown list does not need to be observable. Only the actual elements w/i the array do.
-                    self.allCallNotes = ko.observableArray([]);
-                    self.allAttachments = ko.observableArray([]);
-                    self.allPurchaseOrders = ko.observableArray([]);
-                    self.noteDescriptionToAdd = ko.observable('').extend({ required: true });
-
-                    self.canRecodeImportedData = ko.computed(function () {
-                        return self.rootProblem() == 'Imported' && self.isLineItemCompleted();
-                    });
-
-                    self.recodeEnabled = ko.observable(false);
-                    self.enableRecode = function () {
-                        self.recodeEnabled(true);
-                    };
-
-                    self.enableRootProblem = ko.computed(function () {
-                        // Enable root problem if it was imported and there are no payments
-                        if (self.recodeEnabled())
-                            return true;
-
-                        return !(self.hasAnyPayments() || self.hasAnyPurchaseOrders() || self.isLineItemNoAction());
-                    });
-
-                    self.enableRootCause = ko.computed(function () {
-                        return !(self.hasAnyPayments() || self.hasAnyPurchaseOrders() || self.isLineItemNoAction()) || !self.hasRootCause();
-                    });
-
-                    self.removeAttachment = function (e) {
-                        bootbox.confirm(modelData.attachmentRemovalMessage, function (result) {
-                            if (result) {
-                                var item = $('.boxclose[data-attachment-id="' + e.serviceCallAttachmentId + '"]');
-                                var actionUrl = item.data('url');
-                                var attachmentId = e.serviceCallAttachmentId;
-                                $.ajax({
-                                    type: "POST",
-                                    url: actionUrl,
-                                    data: { id: attachmentId },
-                                    success: function (data) {
-                                        self.allAttachments.remove(e);
-                                        toastr.success("Success! Attachment deleted.");
-                                    }
-                                });
-                            }
-                        });
-                    };
-
-                    self.addCallNote = function () {
-                        var errors = ko.validation.group([self.noteDescriptionToAdd]);
-
-                        if (errors().length != 0) {
-                            errors.showAllMessages();
-                            return;
-                        }
-
-                        self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
-                        self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
-                        self.note = $("#addCallNoteDescription").val();
-
-                        var newCallNote = new CallNotesViewModel({
-                            serviceCallId: self.serviceCallId,
-                            serviceCallLineItemId: self.serviceCallLineItemId,
-                            note: self.note,
-                            serviceCallCommentTypeId: self.serviceCallCommentTypeId
-                        });
-
-                        var lineNoteData = ko.toJSON(newCallNote);
-
-                        $.ajax({
-                            url: urls.ManageServiceCall.AddNote,
-                            type: "POST",
-                            data: lineNoteData,
-                            dataType: "json",
-                            processData: false,
-                            contentType: "application/json; charset=utf-8"
-                        })
-                            .fail(function (response) {
-                                toastr.error("There was a problem adding the call note. Please try again.");
-                            })
-                            .done(function (response) {
-                                self.allCallNotes.unshift(new CallNotesViewModel({
-                                    serviceCallNoteId: response.ServiceCallNoteId,
-                                    serviceCallId: self.serviceCallId,
-                                    serviceCallLineItemId: self.serviceCallLineItemId,
-                                    note: self.note,
-                                    serviceCallCommentTypeId: self.serviceCallCommentTypeId,
-                                    createdBy: response.CreatedBy,
-                                    createdDate: response.CreatedDate
-                                }));
-
-                                self.serviceCallLineItemStatusDisplayName(response.ServiceCallLineItemStatus.DisplayName);
-                                toastr.success("Success! Note added.");
-                                highlight($("#allServiceCallNotes").first());
-                                clearNoteFields();
-                            });
-                    };
-
-                    self.cancelCallNote = function () {
-                        clearNoteFields();
-                    };
-
-                    self.createPurchaseOrderClicked = ko.observable().extend({
-                        required: {
-                            onlyIf: function () {
-                                return (self.hasRootProblem() === false);
-                            },
-                            message: 'To create a PO, select a Root Problem'
-                        }
-                    });
-
-                    self.createPurchaseOrder = function () {
-                        if (formHasErrors([self.createPurchaseOrderClicked]))
-                            return;
-
-                        window.location.href = urls.ServiceCall.CreatePurchaseOrder + '/' + self.serviceCallLineItemId;
-                    };
-
-                    self.expandPaymentClicked = ko.observable().extend({
-                        required: {
-                            onlyIf: function () {
-                                return (self.hasRootProblem() === false);
-                            },
-                            message: 'To add a payment, select a Root Problem'
-                        }
-                    });
-
-                    self.expandPayment = function (e) {
-                        formHasErrors([self.expandPaymentClicked]);
-                    };
-                }
-
-                ko.validation.init({
-                    errorElementClass: 'has-error',
-                    errorMessageClass: 'help-block',
-                    decorateElement: true
-                });
-
-                ko.validation.rules["vendorIsOnHold"] = {
-                    validator: function (val, condition) {
-                        if (condition() === 'true' || condition() === true) {
-                            return false;
-                        }
-
-                        return true;
-                    },
-                    message: 'Vendor on hold.'
-                };
-
-                ko.validation.registerExtenders();
-
-                var viewModel = new serviceCallLineItemViewModel();
-                viewModel.errors = ko.validation.group(viewModel);
-                ko.applyBindings(viewModel);
-
+            function serviceCallLineItemViewModel() {
+                var self = this;
                 var persistedAllCallNotesViewModel = modelData.initialServiceCallLineNotes;
-
+                self.allCallNotes = ko.observableArray([]);
                 _(persistedAllCallNotesViewModel).each(function (note) {
-                    viewModel.allCallNotes.push(new CallNotesViewModel(note));
+                    self.allCallNotes.push(new CallNotesViewModel(note));
                 });
 
                 var persistedAllAttachmentsViewModel = modelData.initialServiceCallLineAttachments;
-
+                self.allAttachments = ko.observableArray([]);
+                
                 _(persistedAllAttachmentsViewModel).each(function (attachment) {
-                    viewModel.allAttachments.push(new CallAttachmentsViewModel(attachment));
+                    self.allAttachments.push(new CallAttachmentsViewModel(attachment));
                 });
 
                 var persistedAllPaymentsAndBackchargesViewModel = modelData.initialServiceCallLinePayments;
-
+                self.allPaymentsAndBackcharges = ko.observableArray([]);
                 _(persistedAllPaymentsAndBackchargesViewModel).each(function (payment) {
-                    viewModel.allPaymentsAndBackcharges.push(new PaymentAndBackchargeViewModel(payment));
+                    self.allPaymentsAndBackcharges.push(new PaymentAndBackchargeViewModel(payment));
                 });
 
                 var persistedAllStandAloneBackchargesViewModel = modelData.initialServiceCallLineStandAloneBackcharges;
 
                 _(persistedAllStandAloneBackchargesViewModel).each(function (backcharge) {
-                    viewModel.allPaymentsAndBackcharges.push(new PaymentAndBackchargeViewModel(backcharge));
+                    self.allPaymentsAndBackcharges.push(new PaymentAndBackchargeViewModel(backcharge));
                 });
 
                 var persistedAllPurchaseOrdersViewModel = modelData.initialServiceCallLinePurchaseOrders;
-
+                self.allPurchaseOrders = ko.observableArray([]);
                 _(persistedAllPurchaseOrdersViewModel).each(function (purchaseOrder) {
-                    viewModel.allPurchaseOrders.push(new PurchaseOrderViewModel(purchaseOrder));
+                    self.allPurchaseOrders.push(new PurchaseOrderViewModel(purchaseOrder));
                 });
 
+                self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
+                self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
+                self.completed = modelData.initialServiceCallLineItem.completed;
+                self.completeButtonClicked = ko.observable(false);
+
+                self.problemCodeId = ko.observable(modelData.initialServiceCallLineItem.problemCodeId);
+                self.problemCode = ko.observable(modelData.initialServiceCallLineItem.problemCode);
+                self.problemDescription = ko.observable(modelData.initialServiceCallLineItem.problemDescription);
+                self.jobNumber = ko.observable(modelData.initialServiceCallLineItem.jobNumber);
+                self.constructionVendors = modelData.vendors;
+                self.hasEverBeenCompleted = ko.observable(modelData.initialServiceCallLineItem.hasEverBeenCompleted);
+                self.hasAnyPayments = ko.observable(modelData.initialServiceCallLineItem.hasAnyPayments);
+                
+                self.hasAnyAttachments = ko.observable(modelData.initialServiceCallLineItem.hasAnyAttachments);
+                self.hasAnyPurchaseOrders = ko.observable(modelData.initialServiceCallLineItem.hasAnyPurchaseOrders);
+                self.maxPersonNotifiedLength = modelData.maxPersonNotifiedLength;
+                self.maxInvoiceNumberLength = modelData.maxInvoiceNumberLength;
+
+                self.groupedConstructionVendors = ko.computed(function () {
+                    var rows = [], current = [];
+                    rows.push(current);
+                    for (var i = 0; i < self.constructionVendors.length; i += 1) {
+                        current.push(self.constructionVendors[i]);
+                        if (((i + 1) % 3) === 0) {
+                            current = [];
+                            rows.push(current);
+                        }
+                    }
+                    return rows;
+                }, this);
+                self.POPaymentsAttachNotes = ko.observable(modelData.initialServiceCallLineItem.POPaymentsAttachNotes);
+
+                self.hasAnyNotes = ko.computed(function () {
+                    return self.allCallNotes().length > 0;
+                });
+                self.hasPOPaymentsAttachNotes = ko.computed(function () {
+                    var hasAnyPayment = self.hasAnyPayments();
+                    var hasAnyNotes = self.hasAnyNotes();
+                    var hasAnyAttachments = self.hasAnyAttachments();
+                    var hasAnyPurchaseOrders = self.hasAnyPurchaseOrders();
+                    var hasEverBeenCompleted = self.hasEverBeenCompleted();
+
+                    if (hasAnyNotes || hasAnyPurchaseOrders || hasAnyPayment || hasAnyAttachments || hasEverBeenCompleted) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                });
+
+                //Value saved in db is string but ddl needs id to set default value.
+                self.rootCause = ko.observable(modelData.initialServiceCallLineItem.rootCause);
+                self.hasRootCause = ko.computed(function () {
+                    return self.rootCause() != null && self.rootCause() != 'Imported';
+                });
+
+                var selectedRootCause = ko.utils.arrayFirst(modelData.rootCauseCodes, function (item) {
+                    return item.text === modelData.initialServiceCallLineItem.rootCause;
+                });
+                self.rootCauseId = ko.observable(selectedRootCause ? selectedRootCause.value : '').extend({
+                    required: {
+                        onlyIf: function () {
+                            return self.completeButtonClicked() === true || self.hasRootCause();
+                        }
+                    }
+                });
+
+                self.rootProblem = ko.observable(modelData.initialServiceCallLineItem.rootProblem);
+                self.hasRootProblem = ko.computed(function () {
+                    return self.rootProblem() != null && self.rootProblem() != 'Imported';
+                });
+
+                var selectedRootProblem = ko.utils.arrayFirst(modelData.rootProblemCodes, function (item) {
+                    return item.text === modelData.initialServiceCallLineItem.rootProblem;
+                });
+                self.rootProblemId = ko.observable(selectedRootProblem ? selectedRootProblem.value : '').extend({
+                    required: {
+                        onlyIf: function () {
+                            return self.completeButtonClicked() === true || self.hasRootProblem();
+                        }
+                    }
+                });
+
+                self.rootCauseCodes = ko.observableArray(modelData.rootCauseCodes);
+                self.rootProblemCodes = ko.observableArray(modelData.rootProblemCodes);
+
+                self.rootCauseId.subscribe(function (rootCauseId) {
+                    var matchedRootCause = ko.utils.arrayFirst(modelData.rootCauseCodes, function (item) {
+                        return Number(item.value) === Number(rootCauseId);
+                    });
+
+                    if (matchedRootCause) {
+                        self.rootCause(matchedRootCause.text);
+
+                        $.ajax({
+                            url: urls.ManageServiceCall.EditLineItem,
+                            type: "POST",
+                            data: ko.toJSON({ serviceCallLineItemId: self.serviceCallLineItemId, rootCause: rootCauseId }),
+                            dataType: "json",
+                            processData: false,
+                            contentType: "application/json; charset=utf-8"
+                        }).fail(function () {
+                            viewModel.completeButtonClicked(false);
+                            toastr.error("There was an error updating the root cause");
+                        }).success(function () {
+                            viewModel.completeButtonClicked(false);
+                            toastr.success("Successfully updated root cause");
+                        });
+                    }
+                });
+
+                self.rootProblemId.subscribe(function (rootProblemId) {
+                    var matchedRootProblem = ko.utils.arrayFirst(modelData.rootProblemCodes, function (item) {
+                        return Number(item.value) === Number(rootProblemId);
+                    });
+
+                    if (matchedRootProblem) {
+                        self.rootProblem(matchedRootProblem.text);
+
+                        $.ajax({
+                            url: urls.ManageServiceCall.EditLineItem,
+                            type: "POST",
+                            data: ko.toJSON({ serviceCallLineItemId: self.serviceCallLineItemId, rootProblem: rootProblemId }),
+                            dataType: "json",
+                            processData: false,
+                            contentType: "application/json; charset=utf-8"
+                        }).fail(function () {
+                            viewModel.completeButtonClicked(false);
+                            toastr.error("There was an error updating the root problem");
+                        }).success(function () {
+                            viewModel.completeButtonClicked(false);
+                            toastr.success("Successfully updated root problem");
+                        });
+                    }
+                });
+
+                self.paymentTypes = ko.observableArray(modelData.paymentTypes);
+                self.paymentTypeId = ko.observable();
+                self.isStandAloneBackcharge = ko.computed(function () {
+                    return self.paymentTypeId() === modelData.standAloneBackchargePaymentType.value;
+                });
+                self.isPayment = ko.computed(function () {
+                    return self.paymentTypeId() === modelData.paymentPaymentType.value;
+                });
+
+                self.invoiceNumber = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return self.isPayment() === true; }
+                    }
+                });
+                self.comments = ko.observable('');
+                self.amount = ko.observable().extend({
+                    required: {
+                        onlyIf: function () { return self.isPayment() === true; }
+                    }, min: 0
+                });
+                self.isBackcharge = ko.observable(false);
+                self.backchargeAmount = ko.observable().extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
+                    },
+                    validation: {
+                        validator: function (val) {
+                            if (self.isBackcharge() === false || self.isStandAloneBackcharge() === false)
+                                return true;
+
+                            return Number(val) > 0;
+                        },
+                        message: 'Must be greater than 0',
+                    }
+                });
+                self.backchargeReason = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
+                    }
+                });
+                self.personNotified = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
+                    }
+                });
+                self.personNotifiedPhoneNumber = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
+                    }
+                });
+                self.personNotifiedDate = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
+                    },
+                    validation: {
+                        validator: function (val) {
+                            if (val !== null && val !== "") {
+                                if (moment(val, 'MM/DD/YYYY', true).isValid() === false)
+                                    return false;
+                                else if (val.split('/').length > 3 || (moment(val, 'MM/DD/YYYY').year() < 1900 || moment(val, 'MM/DD/YYYY').year() > 3000))
+                                    return false;
+                            }
+                            return true;
+                        },
+                        message: 'Must be valid date',
+                    }
+                });
+                self.backchargeResponseFromVendor = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
+                    }
+                });
+                self.vendorOnHold = ko.observable(false);
+                self.vendorName = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return self.isPayment() === true && !self.payHomeownerSelected(); }
+                    }
+                });
+                self.vendorNumber = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return self.isPayment() === true && !self.payHomeownerSelected(); }
+                    },
+                    vendorIsOnHold: self.vendorOnHold
+                });
+
+                self.backchargeVendorOnHold = ko.observable(false);
+                self.backchargeVendorName = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
+                    }
+                });
+                self.backchargeVendorNumber = ko.observable('').extend({
+                    required: {
+                        onlyIf: function () { return (self.isBackcharge() === true || self.isStandAloneBackcharge() === true); }
+                    }
+                });
+
+                self.canAddPayment = ko.computed(function () {
+                    return true;
+                });
+
+                self.clearPaymentFields = function () {
+                    $('#vendor-search').val('');
+                    $('#backcharge-vendor-search').val('');
+                    $('#pc-search').val('');
+                    self.vendorNumber('');
+                    self.backchargeVendorNumber('');
+                    self.invoiceNumber('');
+                    self.comments('');
+                    self.amount('');
+                    self.payHomeownerSelected(false);
+                    self.projectCoordinatorEmail('');
+                    self.sendCheckToPC(false);
+                    self.backchargeAmount('');
+                    self.isBackcharge(false);
+                    self.backchargeReason('');
+                    self.personNotified('');
+                    self.personNotifiedPhoneNumber('');
+                    self.personNotifiedDate('');
+                    self.backchargeResponseFromVendor('');
+                    self.errors.showAllMessages(false);
+                };
+
+                $(document).on('vendor-number-selected', function () {
+                    var vendorNumber = $('#vendor-search').attr('data-vendor-number');
+                    var vendorName = $('#vendor-search').attr('data-vendor-name');
+                    var vendorOnHold = $('#vendor-search').attr('data-vendor-on-hold');
+                    self.vendorOnHold(vendorOnHold);
+                    self.vendorNumber(vendorNumber);
+                    self.vendorName(vendorName);
+                });
+
+                self.canPayHomeowner = ko.observable(false);
+                self.cannotPayHomeowner = ko.computed(function () {
+                    return !self.canPayHomeowner();
+                });
+                self.cannotPayHomeownerHelpText = ko.computed(function () {
+                    return self.canPayHomeowner() ? "" : "Cannot find homeowner in supply master; please contact your PC.";
+                });
+
+                $.ajax({
+                    url: urls.ManageServiceCall.GetHomeownerId,
+                    type: "GET",
+                    data: { jobNumber: self.jobNumber() },
+                    contentType: "application/json; charset=utf-8"
+                })
+                .fail(function (response) {
+                    console.error(response);
+                    toastr.error("Failed to validate whether homeowner is payable");
+                })
+                .done(function (response) {
+                    if (response.IsValid) {
+                        self.canPayHomeowner(true);
+                        self.homeownerName(response.HomeownerName);
+                        self.homeownerId(response.HomeownerNumber);
+                    }
+                });
+                self.homeownerId = ko.observable();
+                self.homeownerName = ko.observable();
+                self.payHomeownerSelected = ko.observable(false);
+                self.payHomeownerSelected.subscribe(function (newValue) {
+                    if (newValue) {
+                        self.vendorOnHold(false);
+                        self.vendorNumber(self.homeownerId());
+                        self.vendorName(self.homeownerName());
+                        $('#vendor-search').val(self.homeownerName());
+                        $("#invoiceNumber").focus();
+                    } else {
+                        self.vendorOnHold(false);
+                        self.vendorNumber('');
+                        self.vendorName('');
+                        $('#vendor-search').val('');
+                        $("#vendor-search").focus();
+                    }
+                });
+
+                self.sendCheckToPC = ko.observable();
+                self.notifiedProjectCoordinator = ko.observable();
+                self.projectCoordinatorEmail = ko.observable().extend({
+                    required: {
+                        onlyIf: function () { return (self.payHomeownerSelected() === true); }
+                    }
+                });;
+                $(document).on('pc-selected', function () {
+                    var projectCoordinatorEmail = $('#pc-search').attr('data-pc-email');
+                    var notifiedProjectCoordinator = $('#pc-search').attr('data-pc-name');
+                    self.projectCoordinatorEmail(projectCoordinatorEmail);
+                    self.notifiedProjectCoordinator(notifiedProjectCoordinator);
+                });
+
+                $(document).on('backcharge-vendor-number-selected', function () {
+                    var vendorNumber = $('#backcharge-vendor-search').attr('data-vendor-number');
+                    var vendorName = $('#backcharge-vendor-search').attr('data-vendor-name');
+                    var vendorOnHold = $('#backcharge-vendor-search').attr('data-vendor-on-hold');
+                    self.backchargeVendorOnHold(vendorOnHold);
+                    self.backchargeVendorNumber(vendorNumber);
+                    self.backchargeVendorName(vendorName);
+                });
+
+                function formHasErrors(theModel) {
+                    var errors = ko.validation.group(theModel);
+
+                    if (errors().length != 0) {
+                        viewModel.errors.showAllMessages(false);
+                        errors.showAllMessages();
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                self.addPayment = function () {
+
+                    if (formHasErrors([self.invoiceNumber, self.amount, self.backchargeAmount, self.backchargeReason, self.personNotified, self.personNotifiedPhoneNumber, self.personNotifiedDate, self.backchargeResponseFromVendor, self.vendorNumber, self.backchargeVendorName, self.backchargeVendorNumber, self.projectCoordinatorEmail]))
+                        return;
+
+                    self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
+                    self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
+
+                    var newPayment = new PaymentAndBackchargeViewModel({
+                        serviceCallLineItemId: self.serviceCallLineItemId,
+                        vendorNumber: self.vendorNumber(),
+                        vendorName: self.vendorName(),
+                        backchargeVendorNumber: self.backchargeVendorNumber(),
+                        backchargeVendorName: self.backchargeVendorName(),
+                        invoiceNumber: self.invoiceNumber(),
+                        comments: self.comments(),
+                        amount: self.amount(),
+                        backchargeAmount: self.backchargeAmount(),
+                        isBackcharge: self.isBackcharge(),
+                        backchargeReason: self.backchargeReason(),
+                        personNotified: self.personNotified(),
+                        personNotifiedPhoneNumber: self.personNotifiedPhoneNumber(),
+                        personNotifiedDate: self.personNotifiedDate(),
+                        backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
+                        paymentStatusDisplayName: paymentStatusEnum.Requested.DisplayName,
+                        backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
+                        notifiedProjectCoordinator: self.notifiedProjectCoordinator(),
+                        projectCoordinatorEmailToNotify: self.projectCoordinatorEmail(),
+                        sendCheckToProjectCoordinator: self.sendCheckToPC(),
+                        maxInvoiceNumberLength: self.maxInvoiceNumberLength,
+                    });
+
+                    var paymentData = ko.toJSON(newPayment);
+
+                    $.ajax({
+                        url: urls.ManageServiceCall.AddPayment,
+                        type: "POST",
+                        data: paymentData,
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    })
+                        .fail(function (response) {
+                            if (response.responseJSON.ExceptionMessage === "EMAIL_SEND_FAILURE")
+                                toastr.error("Failed to send email to Project Coordinator");
+                            else
+                                toastr.error("There was a problem adding the payment. Please try again.");
+                        })
+                        .done(function (response) {
+                            newPayment.paymentId = response.PaymentId;
+                            newPayment.costCode = { costCode: response.CostCode.CostCode, displayName: response.CostCode.DisplayName };
+                            newPayment.standAloneBackcharge(false);
+
+                            if (response.BackchargeId) {
+                                newPayment.BackchargeId = response.BackchargeId;
+                            }
+
+                            self.allPaymentsAndBackcharges.unshift(newPayment);
+                            toastr.success("Success! Payment added.");
+                            highlight($("#allServiceCallPaymentsAndBackcharges").first());
+                            self.hasAnyPayments(true);
+                            self.clearPaymentFields();
+                        });
+                };
+
+                self.addStandAloneBackcharge = function () {
+
+                    if (formHasErrors([self.backchargeAmount, self.backchargeReason, self.personNotified, self.personNotifiedPhoneNumber, self.personNotifiedDate, self.backchargeResponseFromVendor, self.backchargeVendorName, self.backchargeVendorNumber]))
+                        return;
+
+                    self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
+                    self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
+
+                    var newStandAloneBackcharge = new PaymentAndBackchargeViewModel({
+                        serviceCallLineItemId: self.serviceCallLineItemId,
+                        backchargeVendorNumber: self.backchargeVendorNumber(),
+                        backchargeVendorName: self.backchargeVendorName(),
+                        backchargeAmount: self.backchargeAmount(),
+                        backchargeReason: self.backchargeReason(),
+                        personNotified: self.personNotified(),
+                        personNotifiedPhoneNumber: self.personNotifiedPhoneNumber(),
+                        personNotifiedDate: self.personNotifiedDate(),
+                        backchargeResponseFromVendor: self.backchargeResponseFromVendor(),
+                        backchargeStatusDisplayName: backchargeStatusEnum.Requested.DisplayName,
+                        maxPersonNotifiedLength: self.maxPersonNotifiedLength,
+
+                    });
+
+                    var standAloneBackchargeData = ko.toJSON(newStandAloneBackcharge);
+
+                    $.ajax({
+                        url: urls.ManageServiceCall.AddStandAloneBackcharge,
+                        type: "POST",
+                        data: standAloneBackchargeData,
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    })
+                        .fail(function (response) {
+                            toastr.error("There was a problem adding the stand alone backcharge. Please try again.");
+                        })
+                        .done(function (response) {
+                            newStandAloneBackcharge.backchargeId = response.BackchargeId;
+                            newStandAloneBackcharge.costCode = { costCode: response.CostCode.CostCode, displayName: response.CostCode.DisplayName };
+                            newStandAloneBackcharge.standAloneBackcharge(true);
+                            self.allPaymentsAndBackcharges.unshift(newStandAloneBackcharge);
+                            toastr.success("Success! Stand alone backcharge added.");
+                            highlight($("#allServiceCallPaymentsAndBackcharges").first());
+                            self.hasAnyPayments(true);
+                            self.clearPaymentFields();
+                        });
+                };
+
+                $('.datepicker').datepicker({
+                    format: 'mm/dd/yyyy',
+                    startDate: '01/01/1900',
+                    endDate: '12/31/3000',
+                    forceParse: false
+                });
+
+                $('.datepicer-icon').on('click', '.btn', function (e) {
+                    $(e.delegateTarget).find('.datepicker').focus();
+                });
+
+                $("#Person_Notified_Date").on('keydown', function (e) {
+                    if ((!(event.keyCode == 8                                             // backspace
+                        || event.keyCode == 46                                            // delete
+                        || (event.keyCode >= 35 && event.keyCode <= 40)                   // arrow keys/home/end
+                        || (event.keyCode >= 48 && event.keyCode <= 57)                   // numbers on keyboard
+                        || (event.keyCode >= 96 && event.keyCode <= 105)                  // number on keypad
+                        || event.keyCode == 191                                           //forward slash
+                        || event.keyCode == 111)) || e.shiftKey || e.ctrlKey || e.altKey  //divide
+                        ) {
+                        event.preventDefault();     // Prevent character input
+                    }
+                });
+
+                $('#Person_Notified_Date').blur(function () {
+                    var inputDate = $('#Person_Notified_Date').val();
+                    if (inputDate != null && inputDate != "") {
+                        if (moment(inputDate, 'MM/DD/YYYY', true).isValid() == true) {
+                            var date = inputDate.split('/');
+                            if (date[0].length == 1) {
+                                $("#Person_Notified_Date").val("0" + date[0] + "/" + date[1] + "/" + date[2]);
+                            }
+                            self.personNotifiedDate($("#Person_Notified_Date").val());
+                        }
+                    }
+                });
+
+                self.completeLine = function () {
+                    self.completeButtonClicked(true);
+
+                    if (formHasErrors([self.rootCauseId, self.rootProblemId])) {
+                        return;
+                    }
+
+                    completeServiceCallLineItem(this);
+                };
+                self.deleteLineItem = function () {
+                    deleteServiceCallLineItem(this);
+                };
+
+                self.reopenLine = function () {
+                    reopenServiceCallLineItem(this);
+                };
+
+                self.noActionForLine = function () {
+                    noActionServiceCallLineItem(this);
+                };
+
+                self.lineNumber = ko.observable(modelData.initialServiceCallLineItem.lineNumber);
+
+                self.lineNumberWithProblemCode = ko.computed(function () {
+                    return self.lineNumber() + " - " + self.problemCode();
+                });
+
+                self.serviceCallLineItemStatus = ko.observable(modelData.initialServiceCallLineItem.serviceCallLineItemStatus);
+
+                self.serviceCallLineItemStatusDisplayName = ko.observable('');
+                if (modelData.initialServiceCallLineItem.serviceCallLineItemStatus) {
+                    if (modelData.initialServiceCallLineItem.serviceCallLineItemStatus.displayName)
+                        self.serviceCallLineItemStatusDisplayName(modelData.initialServiceCallLineItem.serviceCallLineItemStatus.displayName); //TODO: displayName works for model passed into js file via toJSON().
+                    if (modelData.initialServiceCallLineItem.serviceCallLineItemStatus.DisplayName)
+                        self.serviceCallLineItemStatusDisplayName(modelData.initialServiceCallLineItem.serviceCallLineItemStatus.DisplayName); //TODO: DisplayName works for model passed from ajax call. Need to keep both similar.
+                }
+
+                self.lineItemStatusCSS = ko.computed(function () {
+                    var displayName = self.serviceCallLineItemStatusDisplayName().toLowerCase();
+                    displayName = displayName.replace(' ', '-');
+
+                    return self.serviceCallLineItemStatusDisplayName() ? 'label label-' + displayName + '-service-line-item' : '';
+                });
+
+                self.isLineItemCompleted = function () {
+                    if (!self.serviceCallLineItemStatusDisplayName())
+                        return false;
+
+                    return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.Complete.DisplayName.toLowerCase() ? true : false;
+                };
+
+                self.isLineItemNoAction = function () {
+                    if (!self.serviceCallLineItemStatusDisplayName())
+                        return false;
+
+                    return self.serviceCallLineItemStatusDisplayName().toLowerCase() == serviceCallLineItemStatusData.NoAction.DisplayName.toLowerCase() ? true : false;
+                };
+
+                self.theLookups = dropdownData.availableLookups; //dropdown list does not need to be observable. Only the actual elements w/i the array do.
+                self.noteDescriptionToAdd = ko.observable('').extend({ required: true });
+
+                self.canRecodeImportedData = ko.computed(function () {
+                    return self.rootProblem() == 'Imported' && self.isLineItemCompleted();
+                });
+
+                self.recodeEnabled = ko.observable(false);
+                self.enableRecode = function () {
+                    self.recodeEnabled(true);
+                };
+
+                self.enableRootProblem = ko.computed(function () {
+                    // Enable root problem if it was imported and there are no payments
+                    if (self.recodeEnabled())
+                        return true;
+
+                    return !(self.hasAnyPayments() || self.hasAnyPurchaseOrders() || self.isLineItemNoAction());
+                });
+
+                self.enableRootCause = ko.computed(function () {
+                    return !(self.hasAnyPayments() || self.hasAnyPurchaseOrders() || self.isLineItemNoAction()) || !self.hasRootCause();
+                });
+
+                self.removeAttachment = function (e) {
+                    bootbox.confirm(modelData.attachmentRemovalMessage, function (result) {
+                        if (result) {
+                            var item = $('.boxclose[data-attachment-id="' + e.serviceCallAttachmentId + '"]');
+                            var actionUrl = item.data('url');
+                            var attachmentId = e.serviceCallAttachmentId;
+                            $.ajax({
+                                type: "POST",
+                                url: actionUrl,
+                                data: { id: attachmentId },
+                                success: function (data) {
+                                    self.allAttachments.remove(e);
+                                    toastr.success("Success! Attachment deleted.");
+                                }
+                            });
+                        }
+                    });
+                };
+
+                self.addCallNote = function () {
+                    var errors = ko.validation.group([self.noteDescriptionToAdd]);
+
+                    if (errors().length != 0) {
+                        errors.showAllMessages();
+                        return;
+                    }
+
+                    self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
+                    self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
+                    self.note = $("#addCallNoteDescription").val();
+
+                    var newCallNote = new CallNotesViewModel({
+                        serviceCallId: self.serviceCallId,
+                        serviceCallLineItemId: self.serviceCallLineItemId,
+                        note: self.note,
+                        serviceCallCommentTypeId: self.serviceCallCommentTypeId
+                    });
+
+                    var lineNoteData = ko.toJSON(newCallNote);
+
+                    $.ajax({
+                        url: urls.ManageServiceCall.AddNote,
+                        type: "POST",
+                        data: lineNoteData,
+                        dataType: "json",
+                        processData: false,
+                        contentType: "application/json; charset=utf-8"
+                    })
+                        .fail(function (response) {
+                            toastr.error("There was a problem adding the call note. Please try again.");
+                        })
+                        .done(function (response) {
+                            self.allCallNotes.unshift(new CallNotesViewModel({
+                                serviceCallNoteId: response.ServiceCallNoteId,
+                                serviceCallId: self.serviceCallId,
+                                serviceCallLineItemId: self.serviceCallLineItemId,
+                                note: self.note,
+                                serviceCallCommentTypeId: self.serviceCallCommentTypeId,
+                                createdBy: response.CreatedBy,
+                                createdDate: response.CreatedDate
+                            }));
+
+                            self.serviceCallLineItemStatusDisplayName(response.ServiceCallLineItemStatus.DisplayName);
+                            toastr.success("Success! Note added.");
+                            highlight($("#allServiceCallNotes").first());
+                            clearNoteFields();
+                        });
+                };
+
+                self.cancelCallNote = function () {
+                    clearNoteFields();
+                };
+
+                self.createPurchaseOrderClicked = ko.observable().extend({
+                    required: {
+                        onlyIf: function () {
+                            return (self.hasRootProblem() === false);
+                        },
+                        message: 'To create a PO, select a Root Problem'
+                    }
+                });
+
+                self.createPurchaseOrder = function () {
+                    if (formHasErrors([self.createPurchaseOrderClicked]))
+                        return;
+
+                    window.location.href = urls.ServiceCall.CreatePurchaseOrder + '/' + self.serviceCallLineItemId;
+                };
+
+                self.expandPaymentClicked = ko.observable().extend({
+                    required: {
+                        onlyIf: function () {
+                            return (self.hasRootProblem() === false);
+                        },
+                        message: 'To add a payment, select a Root Problem'
+                    }
+                });
+
+                self.expandPayment = function (e) {
+                    formHasErrors([self.expandPaymentClicked]);
+                };
+            }
+
+            ko.validation.init({
+                errorElementClass: 'has-error',
+                errorMessageClass: 'help-block',
+                decorateElement: true
             });
+
+            ko.validation.rules["vendorIsOnHold"] = {
+                validator: function (val, condition) {
+                    if (condition() === 'true' || condition() === true) {
+                        return false;
+                    }
+
+                    return true;
+                },
+                message: 'Vendor on hold.'
+            };
+
+            ko.validation.registerExtenders();
+            var viewModel = new serviceCallLineItemViewModel();
+            viewModel.errors = ko.validation.group(viewModel);
+            ko.applyBindings(viewModel);
+
         });
     });
+});
 });
