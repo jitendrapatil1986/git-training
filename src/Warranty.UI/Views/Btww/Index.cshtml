@@ -1,0 +1,28 @@
+﻿@model Warranty.Core.Features.BuiltTheWeekleyWay.BuiltTheWeekleyWayModel
+
+@{
+    ViewBag.Title = String.Format("{0} BTWW", @Model.MarketName);
+}
+
+<h4 class="my-widget">BTWW for the @Model.MarketName Market</h4>
+
+@if (Model.Contents.Any())
+{
+    foreach (var content in Model.Contents)
+    {
+        if (content == Model.Contents.First())
+        {
+            @Html.Raw("<ul class='btww-list'>")
+        }
+        else if (content.IsSection)
+        {
+            @Html.Raw("</ul><ul class='btww-list'>")
+        }
+        <li>@Html.ActionLink(@content.DisplayName, "DownloadDocument", new { @content.FileName, @content.MarketCode })</li>
+    }
+    @Html.Raw("</ul>")
+}
+else
+{
+    <em>BTWW not found for @Model.MarketName market</em>
+}

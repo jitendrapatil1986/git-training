@@ -28,3 +28,4 @@ $accountingEndPointServer = "wkcorpappprod1"
 $TIPSEndpointServer = "wkcorpcrm2012"
 
 $config_transform = "Release"
+$BTWWSharePath = "\\wkcorpdata1\BTWW"
