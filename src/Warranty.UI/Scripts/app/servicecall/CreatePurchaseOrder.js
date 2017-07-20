@@ -55,6 +55,16 @@
 
                         return self.quantity() * self.unitCost();
                     });
+
+                    self.isValid = ko.computed(function () {
+                        if (((self.quantity() !== undefined && self.quantity() !== "") && (self.description() !== undefined && self.description() !== "") && (self.unitCost() !== undefined && self.unitCost() !== ""))) {
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+
+                    });
                 }
 
                 function purchaseOrderViewModel() {
@@ -107,30 +117,24 @@
                     });
 
                     self.canSave = ko.computed(function () {
-                        if (((self.line1.quantity() !== undefined && self.line1.quantity() != "") && (self.line1.description() !== undefined && self.line1.description() != "") && (self.line1.unitCost() !== undefined && self.line1.unitCost() != "")) ||
-                             ((self.line2.quantity() !== undefined && self.line2.quantity() != "") && (self.line2.description() !== undefined && self.line2.description() != "") && (self.line2.unitCost() !== undefined && self.line2.unitCost() != "")) ||
-                             ((self.line3.quantity() !== undefined && self.line3.quantity() != "") && (self.line3.description() !== undefined && self.line3.description() != "") && (self.line3.unitCost() !== undefined && self.line3.unitCost() != "")) ||
-                             ((self.line4.quantity() !== undefined && self.line4.quantity() != "") && (self.line4.description() !== undefined && self.line4.description() != "") && (self.line4.unitCost() !== undefined && self.line4.unitCost() != "")) ||
-                             ((self.line5.quantity() !== undefined && self.line5.quantity() != "") && (self.line5.description() !== undefined && self.line5.description() != "") && (self.line5.unitCost() !== undefined && self.line5.unitCost() != ""))) {
+                        if (self.line1.isValid() || self.line2.isValid() || self.line3.isValid() || self.line4.isValid() || self.line5.isValid()) {
                             return true;
                         }
                         else if (self.allPurchaseOrderLines() !== undefined) {
                             self.checkPurchaseOrderLines = false;
-                            ko.utils.arrayForEach(self.allPurchaseOrderLines(), function (lineItem) {
-                                if ((lineItem.quantity() !== undefined && lineItem.quantity() != "") && (lineItem.description() !== undefined && lineItem.description() != "") && (lineItem.unitCost() !== undefined && lineItem.unitCost() != "")) {
+                            self.allPurchaseOrderLines().forEach(function (lineItem) {
+                                if (lineItem.isValid()) {
                                     self.checkPurchaseOrderLines = true;
                                     return true;
                                 }
                             });
-
                             if (self.checkPurchaseOrderLines == true)
                                 return true;
                         }
-                        else
-                        {
+                        else {
                             return false;
                         }
-                        
+
                     });
 
                     self.addPurchaseOrderLine = function () {
