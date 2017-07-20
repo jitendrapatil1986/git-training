@@ -23,8 +23,28 @@
             $(".panel-heading").click(function () {
                 $(this).children(".activityToggle").toggleClass("glyphicon-chevron-right");
                 $(this).children(".activityToggle").toggleClass("glyphicon-chevron-down");
-                $(this).closest(".employeeContainer").find(".panel-body").toggleClass("hidden");
+                $(this).closest(".employeeContainer").find(".panel-body").toggleClass("hidden");                
                 $(this).closest(".employeeContainer").toggleClass("no-print");
+            });
+
+            $('.line-item-display').click(function () {
+                if ($(this).hasClass("collapsed")) {
+                    $(this).nextUntil('tr.line-item-display')                    
+                    .find('td > div')
+                    .slideDown("fast", function () {
+                        var $set = $(this);
+                        $set.replaceWith($set.contents());
+                    });
+                    $(this).removeClass("collapsed");
+                } else {
+                    $(this).nextUntil('tr.line-item-display')
+                    .find('td')
+                    .wrapInner('<div/>')
+                    .parent()
+                    .find('td > div')
+                    .slideUp("fast");
+                    $(this).addClass("collapsed");
+                }
             });
 
             $("#notesToggle").click(function () {
