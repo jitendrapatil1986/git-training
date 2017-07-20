@@ -14,15 +14,7 @@ namespace Warranty.Core.Features.CreateServiceCall
         public string CommunityName { get; set; }
         public string AddressLine { get; set; }
         public string EmployeeNumber { get; set; }
-        public List<string> Comments { get; set; }    
-        public List<ServiceCallLine> LineItems { get; set; }        
+        public List<string> Comments { get; set; }
         public string Url { get; set; }
-
-        public class ServiceCallLine
-        {
-            public int LineNumber { get; set; }
-            public string ProblemCode { get; set; }
-            public string ProblemDescription { get; set; }
-        }
     }
 }
