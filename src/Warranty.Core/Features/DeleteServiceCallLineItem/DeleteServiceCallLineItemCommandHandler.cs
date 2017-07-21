@@ -1,10 +1,7 @@
 ﻿namespace Warranty.Core.Features.DeleteServiceCallLineItem 
 {
-using System;
 using ActivityLogger;
 using Entities;
-using Enumerations;
-using InnerMessages;
 using NPoco;
 using NServiceBus;
 
@@ -25,14 +22,7 @@ public class DeleteServiceCallLineItemCommandHandler : ICommandHandler<DeleteSer
         {
             _database.BeginTransaction();
             _database.DeleteWhere<ServiceCallLineItem>("ServiceCallLineItemId = @0", message.ServiceCallLineItemId);
-
             _database.CompleteTransaction();
-
-            _activityLogger.Write("Service Call Line Item deleted", string.Empty, message.ServiceCallLineItemId, ActivityType.LineItemDelete, ReferenceType.LineItem);
-            _bus.Send<NotifyLineItemDeleted>(x =>
-            {
-                x.ServiceCallLineItemId = message.ServiceCallLineItemId;
-            });
         }
     }
 }

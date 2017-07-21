@@ -417,14 +417,15 @@
                 }
                 function deleteServiceCallLineItem(e) {
                     bootbox.confirm("Are you sure you want to delete this LineItem?", function (result) {
-                        if (result) {
+                        if (!result)
+                            return;
+                        else{
                             $.ajax({
                                 type: "DELETE",
                                 url: urls.ManageServiceCall.DeleteLineItem,
                                 data: { ServiceCallLineItemId: e.serviceCallLineItemId },
                                 success: function () {
                                     window.location.href = urls.ServiceCall.CallSummary + '/' + e.serviceCallId;
-                                    toastr.success("Success! Line Item deleted.");
                                 }
                             });
                         }

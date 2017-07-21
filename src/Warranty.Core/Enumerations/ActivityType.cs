@@ -28,6 +28,5 @@
         public static readonly ActivityType ChangeNote = new ActivityType(19, "Change Note");
         public static readonly ActivityType DeleteNote = new ActivityType(20, "Delete Note");
         public static readonly ActivityType BackchargeDelete = new ActivityType(21, "Backcharge Delete");
-        public static readonly ActivityType LineItemDelete = new ActivityType(22, "LineItem Delete");
     }
 }
