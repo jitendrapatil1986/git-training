@@ -1,5 +1,4 @@
-﻿@using Warranty.UI.Core.Helpers
-@model Warranty.Core.Features.ServiceCallsWidget.ServiceCallsWidgetModel
+﻿@model Warranty.Core.Features.ServiceCallsWidget.ServiceCallsWidgetModel
 
 @if (!Model.MyServiceCalls.Any())
 {
@@ -14,8 +13,6 @@ else
         <div class="my-service-call hide">
             @Html.Partial("_ServiceCallListItem", line)
         </div>
-
-
     }
     if (Model.MyServiceCalls.Count() > 5)
     {
@@ -30,6 +27,9 @@ else
             {
                 <span> | <a href="#" class="show-more-service-calls">All</a></span>
             }
+
+            <input id="WidgetSize" name="WidgetSize" type="hidden" value=@Model.WidgetSize />
         </div>
     }
 }
+

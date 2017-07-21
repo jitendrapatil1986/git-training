@@ -45,6 +45,7 @@ Role "Web" -Incremental {
 	poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='Accounting.API.BaseUri']/@value" $accountingApiBaseUri
 	poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='ApiServiceUrl']/@value" $jobServiceApiBaseUri
     poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='NewRelic.AppName']/@value" $newRelicAppName
+    poke-xml "$web_directory\web.config" "configuration/appSettings/add[@key='BTWWSharePath']/@value" $BTWWSharePath
 
     poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@to" $errorReportingEmailAddresses
     poke-xml "$web_directory\web.config" "configuration/elmah/errorMail/@subject" $errorReportingSubject

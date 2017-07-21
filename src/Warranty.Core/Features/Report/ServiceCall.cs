@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Warranty.Core.Entities;
+using Warranty.Core.Enumerations;
 using Warranty.Core.Services;
 
 namespace Warranty.Core.Features.Report
@@ -35,6 +36,7 @@ namespace Warranty.Core.Features.Report
         public int LineNumber { get; set; }
         public string ProblemCode { get; set; }
         public string ProblemDescription { get; set; }
+        public ServiceCallLineItemStatus ServiceCallLineItemStatus { get; set; }
     }
 
     public class ServiceCallNote
