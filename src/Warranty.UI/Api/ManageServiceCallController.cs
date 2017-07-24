@@ -28,6 +28,7 @@ namespace Warranty.UI.Api
     using Warranty.Core.Features.UpdateServiceCallLineItem;
     using Warranty.Core.Features.EditServiceCallStatus;
     using Warranty.Core.Features.NoActionServiceCallLineItem;
+    using Warranty.Core.Features.DeleteServiceCallLineItem;
 
     public class ManageServiceCallController: ApiController
     {
@@ -56,6 +57,13 @@ namespace Warranty.UI.Api
             return resultModel;
         }
 
+        [System.Web.Http.HttpDelete]
+        public string DeleteLineItem(DeleteServiceCallLineItemCommand model)
+        {
+            _mediator.Send(model);
+            return "success";
+        }
+
         [HttpPost]
         public Guid EditLineItem(EditServiceCallLineCommand model)
         {
@@ -63,7 +71,7 @@ namespace Warranty.UI.Api
 
             return result;
         }
-
+        
         [HttpPost]
         public AddServiceCallLineItemModel AddLineItem(AddServiceCallLineItemModel model)
         {

@@ -31,6 +31,8 @@ namespace Warranty.Core.Features.ServiceCallSummary.ServiceCallLineItem
         public bool HasEverBeenCompleted { get { return LastCompletedDate != null; } }
         public bool HasAnyPayments { get { return ServiceCallLineItemPayments.Any(); } }
         public bool HasAnyPurchaseOrders { get { return ServiceCallLineItemPurchaseOrders.Any(); } }
+        public bool HasAnyAttachments { get { return ServiceCallLineItemAttachments.Any(); } }
+        public bool HasAnyNotes { get { return ServiceCallLineItemNotes.Any(); } }
         public ServiceCallLineItemStatus ServiceCallLineItemStatus { get; set; }
         public IEnumerable<SelectListItem> ProblemCodes { get; set; }
         public IEnumerable<ServiceCallLineItemNote> ServiceCallLineItemNotes { get; set; }
