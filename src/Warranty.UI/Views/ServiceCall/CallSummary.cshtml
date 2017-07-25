@@ -214,7 +214,7 @@
                                         @Html.TextArea("Description", null, new { id = "addCallLineProblemDescription", @class = "form-control", data_bind = "value: problemDescriptionToAdd, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add description'}" })
                                     </div>
                                     <div class="form-submit">
-                                        <button class="btn btn-primary" data-bind="click: addLineItem">Add</button>
+                                        <button class="btn btn-primary" data-bind="click: addLineItem, enable : !addingLineItem()">Add</button>
                                         <button class="btn btn-link" data-toggle="collapse" data-target="#addCallLineItem">Cancel</button>
                                     </div>
                                 </div></div>
