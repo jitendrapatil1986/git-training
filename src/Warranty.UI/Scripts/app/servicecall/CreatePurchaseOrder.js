@@ -6,14 +6,14 @@
             $(function () {
                 var nowTemp = new Date();
                 var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-                
+
                 $(".datepicker").datepicker({
                     onRender: function (date) {
                         return date.valueOf() < now.valueOf() ? 'disabled' : '';
                     }
                 });
 
-                $('body').on('focus', '.max-length', function() {
+                $('body').on('focus', '.max-length', function () {
                     $(this).maxlength({
                         alwaysShow: true,
                         separator: ' out of ',
@@ -23,7 +23,7 @@
 
                 function PurchaseOrderLineViewModel() {
                     var self = this;
-                    
+
                     self.lineNumber = ko.observable();
                     self.quantity = ko.observable();
                     self.unitCost = ko.observable();
@@ -38,36 +38,46 @@
 
                     self.unitCost.extend({
                         required: {
-                            onlyIf: function() { return (self.quantity() || self.description()); }
+                            onlyIf: function () { return (self.quantity() || self.description()); }
                         }
                     });
 
                     self.description.extend({
                         required: {
-                            onlyIf: function() { return (self.quantity() || self.unitCost()); }
+                            onlyIf: function () { return (self.quantity() || self.unitCost()); }
                         },
                         maxLength: modelData.maxPurchaseOrderLineItemDescriptionLength
                     });
-                    
+
                     self.subTotal = ko.computed(function () {
                         if (!self.quantity() || !self.unitCost())
                             return 0;
 
                         return self.quantity() * self.unitCost();
                     });
+
+                    self.isValid = ko.computed(function () {
+                        if (((self.quantity() !== undefined && self.quantity() !== "") && (self.description() !== undefined && self.description() !== "") && (self.unitCost() !== undefined && self.unitCost() !== ""))) {
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+
+                    });
                 }
-                
+
                 function purchaseOrderViewModel() {
                     var self = this;
 
                     self.serviceCallLineItemId = modelData.initialPurchaseOrder.serviceCallLineItemId;
                     self.vendorOnHold = ko.observable(false);
-                    self.vendorName = ko.observable().extend({required : true});
+                    self.vendorName = ko.observable().extend({ required: true });
                     self.vendorNumber = ko.observable().extend({ required: true, vendorIsOnHold: self.vendorOnHold });
                     self.deliveryInstructionCodes = ko.observableArray(modelData.deliveryInstructionCodes);
                     self.selectedDeliveryInstruction = ko.observable().extend({ required: true });
-                    self.deliveryDate = ko.observable().extend({ required: true, minDate: now});
-                    self.isMaterialObjectAccount = ko.observable('true').extend({required: true});
+                    self.deliveryDate = ko.observable().extend({ required: true, minDate: now });
+                    self.isMaterialObjectAccount = ko.observable('true').extend({ required: true });
                     self.jobNumber = ko.observable(modelData.initialPurchaseOrder.jobNumber);
                     self.address = ko.observable(modelData.initialPurchaseOrder.addressLine);
                     self.city = ko.observable(modelData.initialPurchaseOrder.city);
@@ -103,7 +113,28 @@
 
                     self.totalCost.extend(
                     {
-                        max: { params: self.purchaseOrderMaxAmount()?self.purchaseOrderMaxAmount().toFixed(2):99999999, message: 'Maximum: ${0}' }
+                        max: { params: self.purchaseOrderMaxAmount() ? self.purchaseOrderMaxAmount().toFixed(2) : 99999999, message: 'Maximum: ${0}' }
+                    });
+
+                    self.canSave = ko.computed(function () {
+                        if (self.line1.isValid() || self.line2.isValid() || self.line3.isValid() || self.line4.isValid() || self.line5.isValid()) {
+                            return true;
+                        }
+                        else if (self.allPurchaseOrderLines() !== undefined) {
+                            self.checkPurchaseOrderLines = false;
+                            self.allPurchaseOrderLines().forEach(function (lineItem) {
+                                if (lineItem.isValid()) {
+                                    self.checkPurchaseOrderLines = true;
+                                    return true;
+                                }
+                            });
+                            if (self.checkPurchaseOrderLines == true)
+                                return true;
+                        }
+                        else {
+                            return false;
+                        }
+
                     });
 
                     self.addPurchaseOrderLine = function () {
@@ -117,7 +148,7 @@
                             self.errors.showAllMessages();
                             return;
                         }
-                        
+
                         var newPurchaseOrder = {
                             ServiceCallLineItemId: self.serviceCallLineItemId,
                             VendorNumber: self.vendorNumber(),
@@ -134,13 +165,13 @@
                         newPurchaseOrder.ServiceCallLineItemPurchaseOrderLines.push(self.line3);
                         newPurchaseOrder.ServiceCallLineItemPurchaseOrderLines.push(self.line4);
                         newPurchaseOrder.ServiceCallLineItemPurchaseOrderLines.push(self.line5);
-                        
-                        ko.utils.arrayForEach(self.allPurchaseOrderLines(), function(lineItem) {
+
+                        ko.utils.arrayForEach(self.allPurchaseOrderLines(), function (lineItem) {
                             newPurchaseOrder.ServiceCallLineItemPurchaseOrderLines.push(lineItem);
                         });
-                        
+
                         var modelData = ko.toJSON(newPurchaseOrder);
-                        
+
                         $.ajax({
                             url: urls.ManageServiceCall.AddPurchaseOrder,
                             type: "POST",
@@ -148,15 +179,15 @@
                             processData: false,
                             contentType: "application/json; charset=utf-8"
                         })
-                            .fail(function(response) {
+                            .fail(function (response) {
                                 toastr.error("There was a problem creating the purchase order. Please try again.");
                             })
-                            .done(function(response) {
+                            .done(function (response) {
                                 toastr.success("Success! Purchase order created.");
                                 window.location.href = urls.ServiceCall.LineItemDetail + '/' + self.serviceCallLineItemId;
                             });
                     };
-                    
+
                     $(document).on('vendor-number-selected', function () {
                         var vendorNumber = $('#vendor-search').attr('data-vendor-number');
                         var vendorName = $('#vendor-search').attr('data-vendor-name');
@@ -165,7 +196,7 @@
                         self.vendorNumber(vendorNumber);
                         self.vendorName(vendorName);
                     });
-                    
+
                     $("#deliveryDate").on('changeDate', function (e) {
                         self.deliveryDate(moment(e.date).format("L"));
                     });
@@ -184,7 +215,7 @@
                     },
                     message: 'Date must be greater than or equal to {0}.'
                 };
-                
+
                 ko.validation.rules["vendorIsOnHold"] = {
                     validator: function (val, condition) {
                         if (condition() === 'true' || condition() === true) {
@@ -197,7 +228,7 @@
                 };
 
                 ko.validation.registerExtenders();
-                
+
                 var viewModel = new purchaseOrderViewModel();
                 viewModel.errors = ko.validation.group(viewModel);
                 ko.applyBindings(viewModel);
