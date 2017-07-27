@@ -99,6 +99,7 @@
                     self.line5.lineNumber(5);
 
                     self.allPurchaseOrderLines = ko.observableArray([]);
+                    self.addingPurchaseOrder = ko.observable(false);
 
                     self.totalCost = ko.computed(function () {
                         var total = 0;
@@ -117,10 +118,10 @@
                     });
 
                     self.canSave = ko.computed(function () {
-                        if (self.line1.isValid() || self.line2.isValid() || self.line3.isValid() || self.line4.isValid() || self.line5.isValid()) {
+                        if ((self.line1.isValid() || self.line2.isValid() || self.line3.isValid() || self.line4.isValid() || self.line5.isValid()) && !self.addingPurchaseOrder()) {
                             return true;
                         }
-                        else if (self.allPurchaseOrderLines() !== undefined) {
+                        else if (self.allPurchaseOrderLines() !== undefined && !self.addingPurchaseOrder()) {
                             self.checkPurchaseOrderLines = false;
                             self.allPurchaseOrderLines().forEach(function (lineItem) {
                                 if (lineItem.isValid()) {
@@ -149,6 +150,7 @@
                             return;
                         }
 
+                        self.addingPurchaseOrder(true);
                         var newPurchaseOrder = {
                             ServiceCallLineItemId: self.serviceCallLineItemId,
                             VendorNumber: self.vendorNumber(),
@@ -185,6 +187,9 @@
                             .done(function (response) {
                                 toastr.success("Success! Purchase order created.");
                                 window.location.href = urls.ServiceCall.LineItemDetail + '/' + self.serviceCallLineItemId;
+                            })
+                            .always(function (response) {
+                                self.addingPurchaseOrder(false);
                             });
                     };
 
