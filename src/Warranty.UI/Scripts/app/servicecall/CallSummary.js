@@ -441,7 +441,7 @@ require(['/Scripts/app/main.js'], function () {
 
                 self.problemDetailCodes = ko.observableArray([]);
                 self.relatedCalls = ko.observableArray([]);
-
+                self.addingLineItem = ko.observable(false);
 
                 self.areAllLineItemsCompletedOrNoAction = ko.computed(function () {
                     var lineExistsThatIsNotCompletedAndNotNoAction = ko.utils.arrayFirst(self.allLineItems(), function (i) {
@@ -527,7 +527,8 @@ require(['/Scripts/app/main.js'], function () {
                 self.addLineItem = function () {
                     if (formHasErrors([self.problemJdeCodeToAdd, self.problemDescriptionToAdd]))
                         return;
-                    
+
+                    self.addingLineItem(true);
                     self.serviceCallId = $("#callSummaryServiceCallId").val();
                     self.problemCode = $("#addCallLineProblemCode").find('option:selected').text();
                     self.problemJdeCode = $("#addCallLineProblemCode").val();
@@ -573,6 +574,9 @@ require(['/Scripts/app/main.js'], function () {
                             self.problemJdeCodeToAdd.isModified(false);
                             self.problemDescriptionToAdd('');
                             self.problemDescriptionToAdd.isModified(false);
+                        })
+                        .always(function (response) {
+                            self.addingLineItem(false);
                         });
                 };
 
