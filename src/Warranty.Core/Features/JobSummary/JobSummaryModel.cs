@@ -147,8 +147,9 @@ namespace Warranty.Core.Features.JobSummary
             public string OptionDescription { get; set; }
             public string Notes { get; set; }
             public IEnumerable<Attribute> Attributes { get; set; }
-            public int RoomValue { get; set; }
-            public string RoomDisplayName { get; set; }
+            public DateTime DateSelected { get; set; }
+            public string Category { get; set; }
+            public int Quantity { get; set; }
         }
 
         public class JobServiceCall
@@ -244,6 +245,7 @@ namespace Warranty.Core.Features.JobSummary
         {
             public string Type { get; set; }
             public string Value { get; set; }
+            public int DisplayOrder { get; set; }
         }
     }
 }
