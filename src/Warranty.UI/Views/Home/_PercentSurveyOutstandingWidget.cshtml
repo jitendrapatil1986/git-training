@@ -7,13 +7,25 @@
         <div class="dashboard-widget-title">% OUTSTANDING SERVICE</div>
     </div>
     <div class="panel-body">
-        @*<a href="@Url.Action("Index", "Stats", new{id=StatView.PercentClosed.DisplayName})">*@
+        @if (Model.TotalSurveysThisMonth == 0)
+        {
+            <div class="dashboard-widget-number">N/A</div>
+        }
+        else
+        {
             <div class="dashboard-widget-number">@Format.Percentage(Model.PercentOutstandingThisMonth)</div>
-        <div class="dashboard-widget-previous-number">@Format.Percentage(Model.PercentOutstandingLastMonth) last month</div>
+        }
+        @if (Model.TotalSurveysLastMonth == 0)
+        {
+            <div class="dashboard-widget-previous-number">N/A last month</div>
+        }
+        else
+        {
+            <div class="dashboard-widget-previous-number">@Format.Percentage(Model.PercentOutstandingLastMonth) last month</div>
+        }
         <div class="dashboard-widget-footnote">
             <span class="pull-left">@Month.FromValue(DateTime.Today.AddMonths(-1).Month).Abbreviation: @Model.TotalSurveysLastMonth</span>
             <span class="pull-right">@Month.FromValue(DateTime.Today.Month).Abbreviation: @Model.TotalSurveysThisMonth</span>
-        </div>
-        @*</a>*@
+        </div>        
     </div>
 </div>

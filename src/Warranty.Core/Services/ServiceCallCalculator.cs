@@ -32,7 +32,7 @@
             {
                 return 0;
             }
-            return value * 100 / total;
+            return  Convert.ToInt32(Math.Round((float)value * 100 / total, MidpointRounding.AwayFromZero));
         }
     
     }

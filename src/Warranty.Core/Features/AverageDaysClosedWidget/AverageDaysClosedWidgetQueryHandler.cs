@@ -3,6 +3,7 @@
     using Extensions;
     using NPoco;
     using Common.Security.Session;
+    using System;
 
     public class AverageDaysClosedWidgetQueryHandler : IQueryHandler<AverageDaysClosedWidgetQuery, AverageDaysClosedWidgetModel>
     {
@@ -35,8 +36,8 @@
                                               AND CityCode IN ({0})
                                               AND sc.ServiceCallType = 'Warranty Service Request'";
 
-                var avgDaysClosedThisMonth = _database.ExecuteScalar<int>(string.Format(sqlAvgDays, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today);
-                var avgDaysClosedLastMonth = _database.ExecuteScalar<int>(string.Format(sqlAvgDays, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today.ToLastDay().AddMonths(-1));
+                var avgDaysClosedThisMonth = Convert.ToInt32(Math.Round(_database.ExecuteScalar<decimal>(string.Format(sqlAvgDays, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today), MidpointRounding.AwayFromZero));
+                var avgDaysClosedLastMonth = Convert.ToInt32(Math.Round(_database.ExecuteScalar<decimal>(string.Format(sqlAvgDays, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today.ToLastDay().AddMonths(-1)), MidpointRounding.AwayFromZero));
 
                 return new AverageDaysClosedWidgetModel
                            {

@@ -3,6 +3,7 @@
     using Extensions;
     using NPoco;
     using Common.Security.Session;
+    using System;
 
     public class PercentClosedWithinSevenDaysWidgetQueryHandler : IQueryHandler<PercentClosedWithinSevenDaysWidgetQuery, PercentClosedWithinSevenDaysWidgetModel>
     {
@@ -34,8 +35,8 @@
                                             WHERE MONTH(CompletionDate) = MONTH(@0) AND YEAR(CompletionDate) = YEAR(@0)
                                               AND CityCode IN ({0})";
 
-                var percentClosedThisMonth = _database.ExecuteScalar<int>(string.Format(sqlPercentClosed, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today);
-                var percentClosedLastMonth = _database.ExecuteScalar<int>(string.Format(sqlPercentClosed, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today.ToLastDay().AddMonths(-1));
+                var percentClosedThisMonth = Convert.ToInt32(Math.Round(_database.ExecuteScalar<decimal>(string.Format(sqlPercentClosed, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today), MidpointRounding.AwayFromZero));
+                var percentClosedLastMonth = Convert.ToInt32(Math.Round(_database.ExecuteScalar<decimal>(string.Format(sqlPercentClosed, user.Markets.CommaSeparateWrapWithSingleQuote()), SystemTime.Today.ToLastDay().AddMonths(-1)), MidpointRounding.AwayFromZero));
 
                 return new PercentClosedWithinSevenDaysWidgetModel
                            {
