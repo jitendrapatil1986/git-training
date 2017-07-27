@@ -318,38 +318,18 @@
                     <div class="tab-pane" id="job_selections">
                             @if (Model.JobSelections.Any())
                             {
-                                <div class="service-call-line">
-                                    <div class="col-md-10 text-capitalize small"><strong>Description</strong></div>
-                                    <div class="col-md-1 text-capitalize small"><strong>Date</strong></div>
-                                    <div class="col-md-1 text-capitalize small text-right"><strong>Quantity</strong></div>
-                                    <div class="clearfix"></div>
-                                </div>
                                 foreach (var selection in Model.JobSelections)
                                 {
                                     <div class="service-call-line">
-                                        <div class="col-md-5 text-capitalize small">
-                                            <div>
-                                                @Html.DisplayFor(x => selection.OptionDescription)
-                                            </div>
-                                            <div>
-                                                @Html.DisplayFor(x => selection.OptionNumber)
-                                            </div>                                            
+                                        <div class="col-md-1">
+                                            <small class="text-muted">
+                                                <strong>
+                                                    @Html.DisplayFor(x => selection.OptionNumber)
+                                                </strong>
+                                            </small>
                                         </div>
-                                        <div class="col-md-5 text-capitalize small">
-                                            @Html.DisplayFor(x => selection.Notes)
-                                            @foreach (var attribute in selection.Attributes)
-                                            {
-                                                <div>
-                                                    @Html.DisplayFor(x => attribute.Type):
-                                                    @Html.DisplayFor(x => attribute.Value)
-                                                </div>
-                                            }
-                                        </div>
-                                        <div class="col-md-1 text-capitalize small">
-                                            @Format.DateMonthDayYear(selection.DateSelected)
-                                        </div>
-                                        <div class="col-md-1 text-capitalize small text-right">
-                                            @Html.DisplayFor(x => selection.Quantity)
+                                        <div class="col-md-11 text-capitalize small">
+                                            @Html.DisplayFor(x => selection.OptionDescription)
                                         </div>
                                         <div class="clearfix"></div>
                                     </div>
