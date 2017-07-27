@@ -30,6 +30,7 @@
             if (thisMonthRawSurveys != null)
             {
                 thisMonthSurveysInMarket = thisMonthRawSurveys.Details.ToObject<List<ApiResult>>();
+                thisMonthSurveysInMarket = thisMonthSurveysInMarket.Where(s => !string.IsNullOrWhiteSpace(s.WarrantyServiceScore) && !s.WarrantyServiceScore.Equals("N/A", StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             var totalThisMonthSurveys =
@@ -47,6 +48,7 @@
             if (lastMonthRawSurveys != null)
             {
                 lastMonthSurveysInMarket = lastMonthRawSurveys.Details.ToObject<List<ApiResult>>();
+                lastMonthSurveysInMarket = lastMonthSurveysInMarket.Where(s => !string.IsNullOrWhiteSpace(s.WarrantyServiceScore) && !s.WarrantyServiceScore.Equals("N/A", StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             var totalLastMonthSurveys =

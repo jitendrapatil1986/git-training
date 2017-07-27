@@ -208,6 +208,8 @@
     <Compile Include="Features\DeleteServiceCall\AdminDeleteServiceCallCommandHandler.cs" />
     <Compile Include="Features\DeleteServiceCall\DeleteServiceCallCommandHandler.cs" />
     <Compile Include="Features\DeleteServiceCallNote\DeleteServiceCallNoteModel.cs" />
+    <Compile Include="Features\DeleteServiceCallLineItem\DeleteServiceCallLineItemCommand.cs" />
+    <Compile Include="Features\DeleteServiceCallLineItem\DeleteServiceCallLineItemCommandHandler.cs" />
     <Compile Include="Features\EditServiceCallLineItemNote\EditServiceCallLineItemNoteCommand.cs" />
     <Compile Include="Features\EditServiceCallLineItemNote\EditServiceCallLineItemNoteCommandHandler.cs" />
     <Compile Include="Features\EditServiceCallLineItemNote\EditServiceCallLineItemNoteModel.cs" />

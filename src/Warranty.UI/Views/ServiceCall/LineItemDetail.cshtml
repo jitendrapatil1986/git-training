@@ -18,6 +18,10 @@
                     <a class="bread-crumb" href="@Url.Action("CallSummary", "ServiceCall", new { id = Model.ServiceCallId })">@Model.ServiceCallTitle</a>
                     @Model.LineNumber - <span data-bind="text: problemCode"></span>
                     <div class="pull-right no-right-padding no-print">
+                        @if (User.IsInRole(UserRoles.WarrantyAdmin))
+                        {
+                            <button id="btn_line_Item_Delete" type="button" class="btn btn-default btn-hover-show has-bottom-tooltip" data-bind="click: deleteLineItem, enable: !hasPOPaymentsAttachNotes() ">Delete</button>
+                        }
                         <button id="btn-no-action-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: noActionForLine, visible: !hasEverBeenCompleted() && !isLineItemCompleted() && !isLineItemNoAction()">No Action</button>
                         <button id="btn-complete-line-item" type="button" class="btn btn-default btn-hover-show" data-bind="click: completeLine, visible: !isLineItemCompleted() && !isLineItemNoAction()">Complete</button>
                         @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
@@ -579,6 +583,7 @@
                 initialServiceCallLinePayments: @Html.Raw(Model.ServiceCallLineItemPayments.ToJson()),
                 initialServiceCallLineStandAloneBackcharges: @Html.Raw(Model.ServiceCallLineItemStandAloneBackcharges.ToJson()),
                 initialServiceCallLinePurchaseOrders: @Html.Raw(Model.ServiceCallLineItemPurchaseOrders.ToJson()),
+
                 attachmentRemovalMessage: '@WarrantyConstants.AttachmentRemovalMessage',
                 vendors: @Html.Raw(Model.Vendors.ToJson()),
                 rootCauseCodes: @Html.Raw(@RootCause.GetAll().Where(x => x.Value != @RootCause.Imported.Value).OrderBy(x => x.DisplayName).Select(x => new { x.Value, Text = x.DisplayName, }).ToJson()),
