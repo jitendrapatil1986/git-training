@@ -1,28 +1,38 @@
 define(['urls', 'jquery'], function (urls, $) {
     $(function () {
         var size = $('input[name="WidgetSize"]').val();     
-        $('.my-service-call:lt('+size+')').removeClass('hide');
+        $('.my-service-call:lt(' + size + ')').removeClass('hide');
+        $('.my-closed-call:lt(' + size + ')').removeClass('hide');
+
         $('.show-more-service-calls').click(function () {
-            if ($(this).text() == 'All') {
-                var defaultWidgetSize = 10000; 
-                $('.my-service-call').removeClass('hide');
+            setWidgetSize('.my-service-call', this);
+        });
+
+        $('.show-more-closed-calls').click(function () {
+            setWidgetSize('.my-closed-call', this);
+        });
+
+        function setWidgetSize(className,el) {
+            if ($(el).text() == 'All') {
+                var defaultWidgetSize = 10000;
+                $(className).removeClass('hide');
             } else {
-                var show = $(this).text() - 1;
-                defaultWidgetSize = $(this).text();
-                $('.my-service-call').removeClass('hide');
-                $('.my-service-call:gt("' + show + '")').addClass('hide');
+                var show = $(el).text() - 1;
+                defaultWidgetSize = $(el).text();
+                $(className).removeClass('hide');
+                $(className + ':gt("' + show + '")').addClass('hide');
             }
 
             $.ajax({
                 type: "POST",
                 dataType: 'json',
-                url: urls.Home.SetDefaultWidgetSize,               
+                url: urls.Home.SetDefaultWidgetSize,
                 data: { defaultWidgetSize: defaultWidgetSize },
                 error: function () {
                     alert('ajax call failed...');
                 }
             });
-        });      
+        }
     });
 });
 
