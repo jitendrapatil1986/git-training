@@ -28,7 +28,12 @@
                                     INNER JOIN Communities c
                                         ON j.CommunityId = c.CommunityId
                                     LEFT JOIN CommunityAssignments ca
-                                        ON c.CommunityId = ca.CommunityId
+                                        ON (c.CommunityId = ca.CommunityId AND
+                                            ca.EmployeeAssignmentId = (SELECT TOP 1 ca1.EmployeeAssignmentId 
+                                                                        FROM CommunityAssignments ca1
+                                                                        WHERE ca1.CommunityId = c.CommunityId 
+                                                                        ORDER BY ca1.AssignmentDate DESC)
+                                            )
                                     INNER JOIN Cities ci
                                         ON c.CityId = ci.CityId
                                     WHERE sc.ServiceCallId = @0;";
