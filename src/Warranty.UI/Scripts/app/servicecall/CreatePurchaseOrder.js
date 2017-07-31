@@ -220,10 +220,6 @@
                         $(e.delegateTarget).find('.datepicker').focus();
                     });
 
-                    //$("#deliveryDate").on('changeDate', function (e) {
-                    //    self.deliveryDate(moment(e.date).format("L"));
-                    //});
-
                     $("#deliveryDate").on('keydown', function (e) {
                         if ((!(event.keyCode == 8                                             // backspace
                             || event.keyCode == 46                                            // delete
