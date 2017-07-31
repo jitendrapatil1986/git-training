@@ -8,6 +8,10 @@
                 var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
                 $(".datepicker").datepicker({
+                    format: 'mm/dd/yyyy',
+                    startDate: '01/01/1900',
+                    endDate: '12/31/3000',
+                    forceParse: false,
                     onRender: function (date) {
                         return date.valueOf() < now.valueOf() ? 'disabled' : '';
                     }
@@ -76,7 +80,22 @@
                     self.vendorNumber = ko.observable().extend({ required: true, vendorIsOnHold: self.vendorOnHold });
                     self.deliveryInstructionCodes = ko.observableArray(modelData.deliveryInstructionCodes);
                     self.selectedDeliveryInstruction = ko.observable().extend({ required: true });
-                    self.deliveryDate = ko.observable().extend({ required: true, minDate: now });
+                    self.deliveryDate = ko.observable().extend({
+                        required: true,
+                        validation: {
+                            validator: function (val) {
+                                if (val !== null && val !== "") {
+                                    if (moment(val, 'MM/DD/YYYY', true).isValid() === false)
+                                        return false;
+                                    else if (val.split('/').length > 3 || (moment(val, 'MM/DD/YYYY').year() < 1900 || moment(val, 'MM/DD/YYYY').year() > 3000))
+                                        return false;
+                                }
+                                return true;
+                            },
+                            message: 'Must be valid date',
+                        },
+                        minDate: now
+                    });
                     self.isMaterialObjectAccount = ko.observable('true').extend({ required: true });
                     self.jobNumber = ko.observable(modelData.initialPurchaseOrder.jobNumber);
                     self.address = ko.observable(modelData.initialPurchaseOrder.addressLine);
@@ -197,8 +216,38 @@
                         self.vendorName(vendorName);
                     });
 
-                    $("#deliveryDate").on('changeDate', function (e) {
-                        self.deliveryDate(moment(e.date).format("L"));
+                    $('.datepicer-icon').on('click', '.btn', function (e) {
+                        $(e.delegateTarget).find('.datepicker').focus();
+                    });
+
+                    //$("#deliveryDate").on('changeDate', function (e) {
+                    //    self.deliveryDate(moment(e.date).format("L"));
+                    //});
+
+                    $("#deliveryDate").on('keydown', function (e) {
+                        if ((!(event.keyCode == 8                                             // backspace
+                            || event.keyCode == 46                                            // delete
+                            || (event.keyCode >= 35 && event.keyCode <= 40)                   // arrow keys/home/end
+                            || (event.keyCode >= 48 && event.keyCode <= 57)                   // numbers on keyboard
+                            || (event.keyCode >= 96 && event.keyCode <= 105)                  // number on keypad
+                            || event.keyCode == 191                                           //forward slash
+                            || event.keyCode == 111)) || e.shiftKey || e.ctrlKey || e.altKey  //divide
+                            ) {
+                            event.preventDefault();     // Prevent character input
+                        }
+                    });
+
+                    $('#deliveryDate').blur(function () {
+                        var inputDate = $('#deliveryDate').val();
+                        if (inputDate != null && inputDate != "") {
+                            if (moment(inputDate, 'MM/DD/YYYY', true).isValid() == true) {
+                                var date = inputDate.split('/');
+                                if (date[0].length == 1) {
+                                    $("#deliveryDate").val("0" + date[0] + "/" + date[1] + "/" + date[2]);
+                                }
+                                self.deliveryDate($("#deliveryDate").val());
+                            }
+                        }
                     });
                 };
 

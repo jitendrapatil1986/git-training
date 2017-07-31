@@ -52,9 +52,15 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="control-group" data-bind="validationElement: deliveryDate">
+                                <div class="control-group" data-bind="validationElement: deliveryDate, validationOptions: { insertMessages: false}">
                                     <label class="control-label" for="deliveryDate">Delivery Date</label>
-                                    <input id="deliveryDate" type="text" class="form-control datepicker" data-bind="value: deliveryDate" placeholder="Select Date" />
+                                    <div class="input-group datepicer-icon">
+                                        <span class="input-group-addon btn">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                        <input id="deliveryDate" type="text" data-bind="value: deliveryDate" class="form-control datepicker" placeholder="Select Date" />
+                                    </div> 
+                                    <span data-bind="validationMessage: deliveryDate" class="help-block"></span> 
                                 </div>
                             </div>
                             <div class="col-md-3">
