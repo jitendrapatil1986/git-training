@@ -489,15 +489,12 @@
                     return (new CallAttachmentsViewModel(attachment));
                 }))
 
-                var persistedAllPaymentsAndBackchargesViewModel = modelData.initialServiceCallLinePayments;
-                self.allPaymentsAndBackcharges = ko.observableArray(persistedAllPaymentsAndBackchargesViewModel.map(function (payment) {
-                    return (new PaymentAndBackchargeViewModel(payment));
-                }))
+                var allPersistedPaymentsAndBackcharges = modelData.initialServiceCallLinePayments
+                                                 .concat(modelData.initialServiceCallLineStandAloneBackcharges);
 
-                var persistedAllStandAloneBackchargesViewModel = modelData.initialServiceCallLineStandAloneBackcharges;
-                self.allPaymentsAndBackcharges = ko.observableArray(persistedAllStandAloneBackchargesViewModel.map(function (backcharge) {
-                    return (new PaymentAndBackchargeViewModel(backcharge));
-                }))
+                self.allPaymentsAndBackcharges = ko.observableArray(allPersistedPaymentsAndBackcharges.map(function (payment) {
+                    return (new PaymentAndBackchargeViewModel(payment));
+                }));
 
                 var persistedAllPurchaseOrdersViewModel = modelData.initialServiceCallLinePurchaseOrders;
                 self.allPurchaseOrders = ko.observableArray(persistedAllPurchaseOrdersViewModel.map(function (purchaseOrder) {
