@@ -27,4 +27,4 @@ $accountingEndPointServer = "wkcorpapptrain1"
 $TIPSEndpointServer = "wkvtipstrain"
 
 $config_transform = "Test"
-$BTWWSharePath = "\\wkcorpdata1\BTWW"
+$BTWWSharePath = "\\CORPFS\BTWW"
