@@ -137,10 +137,13 @@
                     });
 
                     self.canSave = ko.computed(function () {
-                        if ((self.line1.isValid() || self.line2.isValid() || self.line3.isValid() || self.line4.isValid() || self.line5.isValid()) && !self.addingPurchaseOrder()) {
+                        if (self.addingPurchaseOrder()) {
+                            return false;
+                        }
+                        if ((self.line1.isValid() || self.line2.isValid() || self.line3.isValid() || self.line4.isValid() || self.line5.isValid())) {
                             return true;
                         }
-                        else if (self.allPurchaseOrderLines() !== undefined && !self.addingPurchaseOrder()) {
+                        else if (self.allPurchaseOrderLines() !== undefined) {
                             self.checkPurchaseOrderLines = false;
                             self.allPurchaseOrderLines().forEach(function (lineItem) {
                                 if (lineItem.isValid()) {
@@ -154,7 +157,6 @@
                         else {
                             return false;
                         }
-
                     });
 
                     self.addPurchaseOrderLine = function () {
