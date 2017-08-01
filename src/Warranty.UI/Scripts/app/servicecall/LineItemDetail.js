@@ -482,12 +482,12 @@
                 var persistedAllCallNotesViewModel = modelData.initialServiceCallLineNotes;
                 self.allCallNotes = ko.observableArray(persistedAllCallNotesViewModel.map(function (note) {
                     return (new CallNotesViewModel(note));
-                }))
+                }));
 
                 var persistedAllAttachmentsViewModel = modelData.initialServiceCallLineAttachments;
                 self.allAttachments = ko.observableArray(persistedAllAttachmentsViewModel.map(function (attachment) {
                     return (new CallAttachmentsViewModel(attachment));
-                }))
+                }));
 
                 var allPersistedPaymentsAndBackcharges = modelData.initialServiceCallLinePayments
                                                  .concat(modelData.initialServiceCallLineStandAloneBackcharges);
@@ -499,7 +499,7 @@
                 var persistedAllPurchaseOrdersViewModel = modelData.initialServiceCallLinePurchaseOrders;
                 self.allPurchaseOrders = ko.observableArray(persistedAllPurchaseOrdersViewModel.map(function (purchaseOrder) {
                     return (new PurchaseOrderViewModel(purchaseOrder));
-                }))
+                }));
 
                 self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
                 self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
