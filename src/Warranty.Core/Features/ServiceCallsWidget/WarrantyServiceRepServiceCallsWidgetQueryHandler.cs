@@ -82,7 +82,7 @@
 
         private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetMyServiceCalls(IUser user)
         {
-            var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId<>@1 and EmployeeNumber=@0", "ORDER BY (7-DATEDIFF(d, wc.CreatedDate, GETDATE())), wc.CreatedDate, NumberOfLineItems DESC");
+            var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId<>@1 and EmployeeNumber=@0 AND SpecialProject<>1", "ORDER BY (7-DATEDIFF(d, wc.CreatedDate, GETDATE())), wc.CreatedDate, NumberOfLineItems DESC");
 
             var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, user.EmployeeNumber, ServiceCallStatus.Complete.Value);
             return result;
@@ -91,7 +91,7 @@
         private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetSpecialProjects(IUser user)
         {
             var markets = user.Markets;
-            var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId<>@1 AND (CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ") OR EmployeeNumber=@0) AND SpecialProject = 1", "ORDER BY EmployeeName, wc.CreatedDate");
+            var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId<>@1 AND (CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ") OR EmployeeNumber=@0) AND SpecialProject = 1 AND EmployeeNumber=@0", "ORDER BY EmployeeName, wc.CreatedDate");
 
             var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, user.EmployeeNumber, ServiceCallStatus.Complete.Value);
             return result;
