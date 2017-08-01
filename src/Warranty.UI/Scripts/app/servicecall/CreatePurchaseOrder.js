@@ -216,18 +216,18 @@
                         self.vendorName(vendorName);
                     });
 
-                    $('.datepicer-icon').on('click', '.btn', function (e) {
+                    $('.datepicker-icon').on('click', '.btn', function (e) {
                         $(e.delegateTarget).find('.datepicker').focus();
                     });
 
                     $("#deliveryDate").on('keydown', function (e) {
-                        if ((!(event.keyCode == 8                                             // backspace
-                            || event.keyCode == 46                                            // delete
+                        if ((!(event.keyCode === 8                                             // backspace
+                            || event.keyCode === 46                                            // delete
                             || (event.keyCode >= 35 && event.keyCode <= 40)                   // arrow keys/home/end
                             || (event.keyCode >= 48 && event.keyCode <= 57)                   // numbers on keyboard
                             || (event.keyCode >= 96 && event.keyCode <= 105)                  // number on keypad
-                            || event.keyCode == 191                                           //forward slash
-                            || event.keyCode == 111)) || e.shiftKey || e.ctrlKey || e.altKey  //divide
+                            || event.keyCode === 191                                           //forward slash
+                            || event.keyCode === 111)) || e.shiftKey || e.ctrlKey || e.altKey  //divide
                             ) {
                             event.preventDefault();     // Prevent character input
                         }
@@ -235,10 +235,10 @@
 
                     $('#deliveryDate').blur(function () {
                         var inputDate = $('#deliveryDate').val();
-                        if (inputDate != null && inputDate != "") {
-                            if (moment(inputDate, 'MM/DD/YYYY', true).isValid() == true) {
+                        if (inputDate !== null && inputDate !== "") {
+                            if (moment(inputDate, 'MM/DD/YYYY', true).isValid() === true) {
                                 var date = inputDate.split('/');
-                                if (date[0].length == 1) {
+                                if (date[0].length === 1) {
                                     $("#deliveryDate").val("0" + date[0] + "/" + date[1] + "/" + date[2]);
                                 }
                                 self.deliveryDate($("#deliveryDate").val());
