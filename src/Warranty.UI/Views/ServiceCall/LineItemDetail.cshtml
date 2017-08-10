@@ -47,20 +47,24 @@
                             <div class="col-md-3">
                                 <div class="control-group" data-bind="validationElement: rootProblemId, visible: !isLineItemCompleted() || recodeEnabled()">
                                     <label class="control-label" for="rootProblemId">Root Problem</label>
+                                    <i title="" class="glyphicon glyphicon-info-sign has-bottom-tooltip" data-original-title="Root Problem is the reason we are having to fix the break (Problem Code). The Root Problem is required for PO and Payments so that the correct cost code is paid."></i>
                                     <select id="rootProblemId" class="form-control" data-bind="options: rootProblemCodes, value: rootProblemId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Root Problem', enable: enableRootProblem()"></select>
                                 </div>
                                 <div class="form-group no-margin" data-bind="visible: isLineItemCompleted() && !recodeEnabled()">
                                     <label class="control-label">Root Problem</label>
+                                    <i title="" class="glyphicon glyphicon-info-sign fa-2x has-bottom-tooltip" data-original-title="Root Problem is the reason we are having to fix the break (Problem Code). The Root Problem is required for PO and Payments so that the correct cost code is paid."></i>
                                     <p class="form-control-static" data-bind="text: rootProblem"></p>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="control-group" data-bind="validationElement: rootCauseId, visible: !isLineItemCompleted() || recodeEnabled()">
                                     <label class="control-label" for="rootCauseId">Root Cause</label>
+                                    <i title="" class="glyphicon glyphicon-info-sign has-bottom-tooltip" data-original-title="Provides more insight into why the Root Problem happened"></i>
                                     <select id="rootCauseId" class="form-control" data-bind="options: rootCauseCodes, value: rootCauseId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Root Cause', enable: enableRootCause()"></select>
                                 </div>
                                 <div class="form-group no-margin" data-bind="visible: isLineItemCompleted() && !recodeEnabled()">
                                     <label class="control-label">Root Cause</label>
+                                    <i title="" class="glyphicon glyphicon-info-sign has-bottom-tooltip" data-original-title="Provides more insight into why the Root Problem happened"></i>
                                     <p class="form-control-static" data-bind="text: rootCause"></p>
                                 </div>
                             </div>
