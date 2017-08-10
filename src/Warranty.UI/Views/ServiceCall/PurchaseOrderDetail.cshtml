@@ -1,0 +1,139 @@
+﻿@using Warranty.Core.Configurations
+@using Warranty.Core.Extensions
+@using Warranty.Core.Enumerations
+@model Warranty.Core.Features.ServiceCallPurchaseOrderDetail.ServiceCallPurchaseOrderDetailModel
+
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <section class="margin-bottom-10">
+                    <h2 class="no-margin">
+                        Purchase Order Details
+                    </h2>
+                </section>
+                <section class="margin-bottom-10">
+                    <div class="warranty-header-buttons">
+                        <a href="javascript:window.print()" class="btn btn-default pull-right margin-botom-10 no-print"><span class="glyphicon glyphicon-print"></span> Print</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </section>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row margin-bottom-10">
+                            <div class="col-md-6 col-xs-6">
+                                <div class="control-group">
+                                    <label class="control-label" for="vendor-search">Vendor</label>
+                                    <input type="text" id="vendorName" class="form-control" data-bind="value : vendorName" placeholder="Type vendor name or vendor number" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-xs-3">
+                                <div class="control-group padding-top-31">
+                                    <label class="radio-inline">
+                                        <input type="radio" id="materialAccount" name="isMaterialObjectAccount" data-bind="checked: isMaterialObjectAccount" value="true"> Material
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" id="laborAccount" name="isMaterialObjectAccount" data-bind="checked: isMaterialObjectAccount" value="false"> Labor
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-xs-3">
+                                <label>Ship To</label>
+                                <div class="small">
+                                    <a class="" data-bind="text: 'Job #' + jobNumber()" href="@Url.Action("JobSummary", "Job", new {id = Model.JobId})"></a>
+                                    <br />
+                                    <span data-bind="text: address"></span>
+                                    <br />
+                                    <span data-bind="text: city() + ', ' + stateCode() + ' ' + postalCode()"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row margin-bottom-10">
+                            <div class="col-md-6 col-xs-6">
+                                <div class="control-group" data-bind="validationElement: selectedDeliveryInstruction">
+                                    <label class="control-label" for="selectedDeliveryInstruction">Delivery Instructions</label>
+                                    <select id="selectedDeliveryInstruction" class="form-control" data-bind="options: deliveryInstructionCodes, optionsText: 'displayText', optionsValue: 'value', value: selectedDeliveryInstruction, optionsCaption: 'Select Delivery Instruction'"></select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-xs-3">
+                                <div class="control-group" data-bind="validationElement: deliveryDate">
+                                    <label class="control-label" for="deliveryDate">Delivery Date</label>
+                                    <input id="deliveryDate" type="text" class="form-control datepicker" data-bind="value: deliveryDate" placeholder="Select Date" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-xs-3">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12">
+                                <h3>Items</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 col-xs-2"><label>Quantity</label></div>
+                            <div class="col-md-7 col-xs-7"><label>Description</label></div>
+                            <div class="col-md-2 col-xs-2"><label>Unit Cost</label></div>
+                            <div class="col-md-1 col-xs-1"><label class="text-right pull-right">Subtotal</label></div>
+                        </div>
+                        <!-- ko foreach: allPurchaseOrderLineItems -->
+                        <div class="row margin-bottom-10">
+                            <div class="col-md-2 col-xs-2">
+                                <div class="control-group">
+                                    <input type="text" class="form-control" data-bind="value: quantity" />
+                                </div>
+                            </div>
+                            <div class="col-md-7 col-xs-7">
+                                <div class="control-group">
+                                    <input id="description" type="text" class="form-control" data-bind="value: description" />
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-xs-2">
+                                <div class="control-group">
+                                    <input id="unitCost" type="text" class="form-control" data-bind="value: unitCost" />
+                                </div>
+                            </div>
+                            <div class="col-md-1 col-xs-1">
+                                <p class="text-right" data-bind="currency: subTotal"></p>
+                            </div>
+                        </div>
+                        <!-- /ko -->
+                        <div class="row margin-bottom-10">
+                            <div class="col-md-9 col-xs-9">
+                                &nbsp;
+                            </div>
+                            <div class="col-md-3 col-xs-3">
+                                <div class="control-group">
+                                    <label class="control-label" for="totalCost">Total</label>
+                                    <label id="totalCost" class="pull-right" data-bind="currency: totalCost"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row margin-top-10">
+                            <div class="col-md-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="notes">Notes</label>
+                                    <textarea id="notes" class="form-control" data-bind="value: notes" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section modules
+{
+    <script>
+        define('modelData', function() {
+            return {
+                initialPurchaseOrder: @Html.Raw(Model.ToJson()),
+                deliveryInstructionCodes: @Html.Raw(@DeliveryInstruction.GetAll().OrderBy(x => x.DisplayName).Select(x => new {DisplayText = x.DisplayName, Value = x.Value}).ToJson()),
+            };
+        });
+        define('dropdownData', function() {
+        });
+    </script>
+}

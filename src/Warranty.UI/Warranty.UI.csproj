@@ -324,6 +324,7 @@
     </Compile>
     <Compile Include="Mailers\WarrantyMailer.cs" />
     <Compile Include="Mailers\IWarrantyMailer.cs" />
+    <Content Include="Scripts\app\servicecall\PurchaseOrderDetail.js" />
     <Content Include="Scripts\app\servicecall\SearchProjectCoordinator.js" />
     <Compile Include="UploadHandler.ashx.cs">
       <DependentUpon>UploadHandler.ashx</DependentUpon>
@@ -332,6 +333,7 @@
     <Content Include="Views\WarrantyMailer\_simpleLayout.cshtml" />
     <Content Include="Views\Shared\_HelpDocumentModal.cshtml" />
     <Content Include="Views\Btww\Index.cshtml" />
+    <Content Include="Views\ServiceCall\PurchaseOrderDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />

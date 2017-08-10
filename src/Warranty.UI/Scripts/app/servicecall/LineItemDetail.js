@@ -40,6 +40,7 @@
                     var self = this;
 
                     self.serviceCallLineItemId = options.serviceCallLineItemId;
+                    self.PurchaseOrderId = options.purchaseOrderId;
                     self.purchaseOrderNumber = options.purchaseOrderNumber;
                     self.vendorNumber = options.vendorNumber;
                     self.vendorName = options.vendorName;
@@ -741,6 +742,10 @@
                     return true;
                 });
 
+                self.jumpToPurchaseOrderDetailPage = function (item) {
+                    window.location.href = urls.ServiceCall.PurchaseOrderDetail + '/' + self.serviceCallLineItemId + '?purchaseOrderId=' + item.PurchaseOrderId;
+                };
+
                 self.clearPaymentFields = function () {
                     $('#vendor-search').val('');
                     $('#backcharge-vendor-search').val('');
@@ -1185,6 +1190,8 @@
                     formHasErrors([self.expandPaymentClicked]);
                 };
             }
+
+
 
             ko.validation.init({
                 errorElementClass: 'has-error',
