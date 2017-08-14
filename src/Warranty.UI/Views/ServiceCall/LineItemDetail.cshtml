@@ -109,7 +109,7 @@
                         <div class="clearfix"></div>
                         <p class="padding-left-15" data-bind="visible: allPurchaseOrders().length < 1" ><em>No Purchase Orders Available</em></p>
                         <!-- ko foreach: allPurchaseOrders -->
-                        <div class="row service-call-line">
+                        <div class="row service-call-line"  data-bind="click: $root.jumpToPurchaseOrderDetailPage, css: { 'cursor-pointer': true }">
                             <div class="col-md-4">
                                 <strong><span data-bind="text: vendorName"></span></strong>
                                 <br/>
