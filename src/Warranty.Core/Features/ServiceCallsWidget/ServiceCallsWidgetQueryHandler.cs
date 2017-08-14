@@ -74,7 +74,7 @@
         private IEnumerable<ServiceCallsWidgetModel.ServiceCall> GetOpenServiceCalls(IUser user)
         {
             var markets = user.Markets;
-            var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId<>@0 AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ")", "ORDER BY EmployeeName, wc.CreatedDate");
+            var sql = string.Format(SqlTemplate, "WHERE ServiceCallStatusId<>@0 AND CityCode IN (" + markets.CommaSeparateWrapWithSingleQuote() + ") AND SpecialProject<>1", "ORDER BY EmployeeName, wc.CreatedDate");
 
             var result = _database.Fetch<ServiceCallsWidgetModel.ServiceCall>(sql, ServiceCallStatus.Complete.Value);
             return result;

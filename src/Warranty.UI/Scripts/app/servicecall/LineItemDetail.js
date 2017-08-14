@@ -482,27 +482,24 @@
                 var persistedAllCallNotesViewModel = modelData.initialServiceCallLineNotes;
                 self.allCallNotes = ko.observableArray(persistedAllCallNotesViewModel.map(function (note) {
                     return (new CallNotesViewModel(note));
-                }))
+                }));
 
                 var persistedAllAttachmentsViewModel = modelData.initialServiceCallLineAttachments;
                 self.allAttachments = ko.observableArray(persistedAllAttachmentsViewModel.map(function (attachment) {
                     return (new CallAttachmentsViewModel(attachment));
-                }))
+                }));
 
-                var persistedAllPaymentsAndBackchargesViewModel = modelData.initialServiceCallLinePayments;
-                self.allPaymentsAndBackcharges = ko.observableArray(persistedAllPaymentsAndBackchargesViewModel.map(function (payment) {
+                var allPersistedPaymentsAndBackcharges = modelData.initialServiceCallLinePayments
+                                                 .concat(modelData.initialServiceCallLineStandAloneBackcharges);
+
+                self.allPaymentsAndBackcharges = ko.observableArray(allPersistedPaymentsAndBackcharges.map(function (payment) {
                     return (new PaymentAndBackchargeViewModel(payment));
-                }))
-
-                var persistedAllStandAloneBackchargesViewModel = modelData.initialServiceCallLineStandAloneBackcharges;
-                self.allPaymentsAndBackcharges = ko.observableArray(persistedAllStandAloneBackchargesViewModel.map(function (backcharge) {
-                    return (new PaymentAndBackchargeViewModel(backcharge));
-                }))
+                }));
 
                 var persistedAllPurchaseOrdersViewModel = modelData.initialServiceCallLinePurchaseOrders;
                 self.allPurchaseOrders = ko.observableArray(persistedAllPurchaseOrdersViewModel.map(function (purchaseOrder) {
                     return (new PurchaseOrderViewModel(purchaseOrder));
-                }))
+                }));
 
                 self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
                 self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
