@@ -66,108 +66,128 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2"><label>Quantity</label></div>
-                            <div class="col-md-7"><label>Description</label></div>
-                            <div class="col-md-2"><label>Unit Cost</label></div>
-                            <div class="col-md-1"><label class="text-right pull-right">Subtotal</label></div>
+                            <div class="col-sm-2 hidden-xs"><label>Quantity</label></div>
+                            <div class="col-sm-7 hidden-xs"><label>Description</label></div>
+                            <div class="col-sm-2 hidden-xs"><label>Unit Cost</label></div>
+                            <div class="col-md-1 hidden-xs"><label class="text-left pull-left">Subtotal</label></div>
                         </div>
                         <div class="row margin-bottom-10">
-                            <div class="col-md-2">
+                            <div class="col-sm-2">
+                                <label class="hidden-lg hidden-md hidden-sm">Quantity</label>
                                 <div class="control-group" data-bind="validationElement: line1.quantity">
                                     <input id="line1.quantity" type="text" class="form-control numeric" data-bind="value: line1.quantity, valueUpdate: 'blur'" />
                                 </div>
                             </div>
-                            <div class="col-md-7">
+                            <div class="col-sm-7">
+                                <label class="hidden-lg hidden-md hidden-sm">Description</label>
                                 <div class="control-group" data-bind="validationElement: line1.description">
                                     <input id="line1.description" type="text" class="form-control max-length" data-bind="attr:{maxlength: line1.maxPurchaseOrderLineItemDescriptionLength}, value: line1.description" />
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-sm-2">
+                                <label class="hidden-lg hidden-md hidden-sm">Unit Cost</label>
                                 <div class="control-group" data-bind="validationElement: line1.unitCost">
                                     <input type="text" class="form-control numeric" data-bind="value: line1.unitCost, valueUpdate: 'blur'" />
                                 </div>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-sm-1">
+                                <label class="pull-left text-left hidden-lg hidden-md hidden-sm create_Po_Subtotal">Subtotal</label>
                                 <p class="text-right" data-bind="currency: line1.subTotal"></p>
                             </div>
                         </div>
                         <div class="row margin-bottom-10">
                             <div class="col-md-2">
+                                <label class="hidden-lg hidden-md hidden-sm">Quantity</label>
                                 <div class="control-group" data-bind="validationElement: line2.quantity">
                                     <input type="text" class="form-control numeric" data-bind="value: line2.quantity, valueUpdate: 'blur'" />
                                 </div>
                             </div>
                             <div class="col-md-7">
+                                <label class="hidden-lg hidden-md hidden-sm">Description</label>
                                 <div class="control-group" data-bind="validationElement: line2.description">
                                     <input type="text" class="form-control max-length" data-bind="attr:{maxlength: line2.maxPurchaseOrderLineItemDescriptionLength}, value: line2.description" />
                                 </div>
                             </div>
                             <div class="col-md-2">
+                                <label class="hidden-lg hidden-md hidden-sm">Unit Cost</label>
                                 <div class="control-group" data-bind="validationElement: line2.unitCost">
                                     <input type="text" class="form-control numeric" data-bind="value: line2.unitCost, valueUpdate: 'blur'" />
                                 </div>
                             </div>
                             <div class="col-md-1">
+                                <label class="pull-left text-left hidden-lg hidden-md hidden-sm create_Po_Subtotal">Subtotal</label>
                                 <p class="text-right" data-bind="currency: line2.subTotal"></p>
                             </div>
                         </div>
                         <div class="row margin-bottom-10">
                             <div class="col-md-2">
+                                <label class="hidden-lg hidden-md hidden-sm">Quantity</label>
                                 <div class="control-group" data-bind="validationElement: line3.quantity">
                                     <input type="text" class="form-control numeric" data-bind="value: line3.quantity, valueUpdate: 'blur'" />
                                 </div>
                             </div>
                             <div class="col-md-7">
+                                <label class="hidden-lg hidden-md hidden-sm">Description</label>
                                 <div class="control-group" data-bind="validationElement: line3.description">
                                     <input type="text" class="form-control max-length" data-bind="attr:{maxlength: line3.maxPurchaseOrderLineItemDescriptionLength}, value: line3.description" />
                                 </div>
                             </div>
                             <div class="col-md-2">
+                                <label class="hidden-lg hidden-md">Unit Cost</label>
                                 <div class="control-group" data-bind="validationElement: line3.unitCost">
                                     <input type="text" class="form-control numeric" data-bind="value: line3.unitCost, valueUpdate: 'blur'" />
                                 </div>
                             </div>
                             <div class="col-md-1">
+                                <label class="pull-left text-left hidden-lg hidden-md hidden-sm create_Po_Subtotal">Subtotal</label>
                                 <p class="text-right" data-bind="currency: line3.subTotal"></p>
                             </div>
                         </div>
                         <div class="row margin-bottom-10">
                             <div class="col-md-2">
+                                <label class="hidden-lg hidden-md hidden-sm">Quantity</label>
                                 <div class="control-group" data-bind="validationElement: line4.quantity">
                                     <input type="text" class="form-control numeric" data-bind="value: line4.quantity, valueUpdate: 'blur'" />
                                 </div>
                             </div>
                             <div class="col-md-7">
+                                <label class="hidden-lg hidden-md hidden-sm">Description</label>
                                 <div class="control-group" data-bind="validationElement: line4.description">
                                     <input type="text" class="form-control max-length" data-bind="attr:{maxlength: line4.maxPurchaseOrderLineItemDescriptionLength}, value: line4.description" />
                                 </div>
                             </div>
                             <div class="col-md-2">
+                                <label class="hidden-lg hidden-md hidden-sm">Unit Cost</label>
                                 <div class="control-group" data-bind="validationElement: line4.unitCost">
                                     <input type="text" class="form-control numeric" data-bind="value: line4.unitCost, valueUpdate: 'blur'" />
                                 </div>
                             </div>
                             <div class="col-md-1">
+                                <label class="pull-left text-left hidden-lg hidden-md hidden-sm create_Po_Subtotal">Subtotal</label>
                                 <p class="text-right" data-bind="currency: line4.subTotal"></p>
                             </div>
                         </div>
                         <div class="row margin-bottom-10">
                             <div class="col-md-2">
+                                <label class="hidden-lg hidden-md hidden-sm">Quantity</label>
                                 <div class="control-group" data-bind="validationElement: line5.quantity">
                                     <input type="text" class="form-control numeric" data-bind="value: line5.quantity, valueUpdate: 'blur'" />
                                 </div>
                             </div>
                             <div class="col-md-7">
+                                <label class="hidden-lg hidden-md hidden-sm">Description</label>
                                 <div class="control-group" data-bind="validationElement: line5.description">
                                     <input type="text" class="form-control max-length" data-bind="attr:{maxlength: line5.maxPurchaseOrderLineItemDescriptionLength}, value: line5.description" />
                                 </div>
                             </div>
                             <div class="col-md-2">
+                                <label class="hidden-lg hidden-md hidden-sm">Unit Cost</label>
                                 <div class="control-group" data-bind="validationElement: line5.unitCost">
                                     <input type="text" class="form-control numeric" data-bind="value: line5.unitCost, valueUpdate: 'blur'" />
                                 </div>
                             </div>
                             <div class="col-md-1">
+                                <label class="pull-left text-left hidden-lg hidden-md hidden-sm create_Po_Subtotal">Subtotal</label>
                                 <p class="text-right" data-bind="currency: line5.subTotal"></p>
                             </div>
                         </div>
@@ -175,21 +195,25 @@
                         <!-- ko foreach: allPurchaseOrderLines -->
                         <div class="row margin-bottom-10">
                             <div class="col-md-2">
+                                <label class="hidden-lg hidden-md hidden-sm">Quantity</label>
                                 <div class="control-group" data-bind="validationElement: quantity">
                                     <input type="text" class="form-control" data-bind="value: quantity, attr: {id: 'quantity_' + lineNumber()}, valueUpdate: 'blur'" />
                                 </div>
                             </div>
                             <div class="col-md-7">
+                                <label class="hidden-lg hidden-md hidden-sm">Description</label>
                                 <div class="control-group" data-bind="validationElement: description">
                                     <input id="description" type="text" class="form-control max-length" data-bind="attr:{maxlength: maxPurchaseOrderLineItemDescriptionLength}, value: description" />
                                 </div>
                             </div>
                             <div class="col-md-2">
+                                <label class="hidden-lg hidden-md hidden-sm">Unit Cost</label>
                                 <div class="control-group" data-bind="validationElement: unitCost">
                                     <input id="unitCost" type="text" class="form-control" data-bind="value: unitCost, attr: {id: 'unitCost_' + lineNumber()}, valueUpdate: 'blur'" />
                                 </div>
                             </div>
                             <div class="col-md-1">
+                                <label class="pull-left text-left hidden-lg hidden-md hidden-sm create_Po_Subtotal">Subtotal</label>
                                 <p class="text-right" data-bind="currency: subTotal"></p>
                             </div>
                             <span class="hidden" data-bind="value: lineNumber($index() + 6)"></span>
@@ -220,7 +244,7 @@
                         </div>
 
                         <span class="has-bottom-tooltip span-align" data-original-title="At least one line item must be entered in order to submit PO">
-                            <input type="submit" class="btn btn-info" data-bind="click: submitPurchaseOrder, enable : canSave" value="Submit"/>
+                            <input type="submit" class="btn btn-info" data-bind="click: submitPurchaseOrder, enable : canSave" value="Submit" />
                         </span>
                         <a href="@Url.Action("LineItemDetail", "ServiceCall", new { id = Model.ServiceCallLineItemId })" class="btn btn-link">Cancel</a>
 
