@@ -324,7 +324,6 @@
     </Compile>
     <Compile Include="Mailers\WarrantyMailer.cs" />
     <Compile Include="Mailers\IWarrantyMailer.cs" />
-    <Content Include="Scripts\app\servicecall\PurchaseOrderDetail.js" />
     <Content Include="Scripts\app\servicecall\SearchProjectCoordinator.js" />
     <Compile Include="UploadHandler.ashx.cs">
       <DependentUpon>UploadHandler.ashx</DependentUpon>
