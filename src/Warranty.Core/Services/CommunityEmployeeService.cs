@@ -17,15 +17,14 @@ namespace Warranty.Core.Services
         {
             using (_database)
             {
-                const string sqlEmployeeId = @"SELECT TOP 1 ca.EmployeeId
-                                                    FROM CommunityAssignments ca
-                                                    INNER JOIN Jobs j
-                                                    ON ca.CommunityId = j.CommunityId
-                                                    WHERE j.JobId = @0";
-
+                const string sqlEmployeeId = @"Select Top 1 ca.EmployeeId from CommunityAssignments ca
+                                                INNER JOIN Communities c  On ca.CommunityId = c.CommunityId
+                                                INNER JOIN Jobs j On c.CommunityId = j.CommunityId
+                                                Where j.JobId = @0 AND AssignmentDate=(Select MAX(AssignmentDate) from CommunityAssignments)
+                                                Group By  EmployeeId";
 
                 var employeeId = _database.FirstOrDefault<Guid>(sqlEmployeeId, jobId);
-
+                
                 return employeeId == Guid.Empty ? (Guid?) null : employeeId;
             }
         }
