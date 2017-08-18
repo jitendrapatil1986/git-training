@@ -100,7 +100,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Up", "Up", "{20518451-E144-
 		Database\Warranty\Up\0141_AlterPaymentsToAdd_SendCheckToPC.sql = Database\Warranty\Up\0141_AlterPaymentsToAdd_SendCheckToPC.sql
 		Database\Warranty\Up\0142_AlterPaymentsToAdd_NotifiedPC.sql = Database\Warranty\Up\0142_AlterPaymentsToAdd_NotifiedPC.sql
 		Database\Warranty\Up\0143_Create_UserSettingsTable.sql = Database\Warranty\Up\0143_Create_UserSettingsTable.sql
-		0144_Patch_CommunityAssignmentDates.sql = 0144_Patch_CommunityAssignmentDates.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{D0DD7813-D199-44F7-A1F3-EC38DCA342F2}"
@@ -151,6 +150,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warranty.Debug", "Warranty.Debug\Warranty.Debug.csproj", "{6ABFC392-F422-4167-ADBF-5A05F90345B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{831C5674-B17A-4D56-8FCF-93B1471196B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Patch", "Patch", "{CAD6219A-DDA6-4690-B5BD-E26581C27A90}"
+	ProjectSection(SolutionItems) = preProject
+		Database\Warranty\Up\Patch\0000_PatchCommunityAssignmentDates.sql = Database\Warranty\Up\Patch\0000_PatchCommunityAssignmentDates.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -221,5 +225,6 @@ Global
 		{D76E83FE-4DBA-4953-BCE6-A903B4A99A06} = {774F9200-608F-47BB-9529-283346F7A9BB}
 		{19625032-FBA1-4B3C-AA2D-1470DFF6313B} = {A17141C5-B96A-4407-9175-FF9DB67885C9}
 		{6ABFC392-F422-4167-ADBF-5A05F90345B0} = {831C5674-B17A-4D56-8FCF-93B1471196B0}
+		{CAD6219A-DDA6-4690-B5BD-E26581C27A90} = {774F9200-608F-47BB-9529-283346F7A9BB}
 	EndGlobalSection
 EndGlobal
