@@ -157,12 +157,15 @@
                             <li>@Model.City, @Model.StateCode @Model.PostalCode</li>
                             @if (Model.Stage >= 10)
                             {
+                                if(Model.HomeOwnerName != "" && Model.HomeOwnerNumber != 0)
+                                { 
                                 <li>
                                     @Format.EditablePhoneNumber(PhoneNumberType.Home, Format.PhoneNumberWithExtension(Model.HomePhone), Url.Action("AddOrUpdatePhoneNumber", "Homeowner"), Model.HomeownerId)
                                 </li>
                                 <li>
                                     @Format.EditableEmailForJob(Model.EmailAddress, Url.Action("AddOrUpdateEmail", "Homeowner"), Model.HomeownerId)
                                 </li>
+                                }
                             }
                         </ul>
                     </div>
@@ -185,7 +188,11 @@
                     </div>
                 </div>
             </div>
+
+            @if(Model.HomeOwnerName != "" && Model.HomeOwnerNumber != 0 )
+            { 
             @Html.Partial("_AdditionalContacts", Model.HomeownerId)
+            }
 
             <div class="col-md-12 no-left-right-padding margin-top-10">
                 <ul class="nav nav-tabs responsive" role="tablist">
