@@ -24,6 +24,7 @@ namespace Warranty.UI.Controllers
     using Warranty.Core.Features.ServiceCallSummary.ReassignEmployee;
     using Warranty.Core.Features.ServiceCallToggleActions;
     using Warranty.Core.Features.ServiceCallPurchaseOrderSearch;
+    using Warranty.Core.Features.ServiceCallPurchaseOrderDetail;
 
     public class ServiceCallController : Controller
     {
@@ -187,7 +188,14 @@ namespace Warranty.UI.Controllers
 
         public ActionResult InlineReassign(ReassignEmployeeCommand command)
         {
-            _mediator.Send(command);
+            _mediator.Send(command);       
+
+            var notificationModel = _mediator.Request(new NewServiceCallAssignedToWsrNotificationQuery { ServiceCallId = command.Pk });
+            if (notificationModel.WarrantyRepresentativeEmployeeEmail != null)
+            {
+                notificationModel.Url = UrlBuilderHelper.GetUrl("ServiceCall", "CallSummary", new { command.Pk });
+                _mailer.NewServiceCallAssignedToWsr(notificationModel).SendAsync();
+            }
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
 
@@ -247,6 +255,13 @@ namespace Warranty.UI.Controllers
         {
             var resultModel = _mediator.Request(new ServiceCallPurchaseOrderSearchQuery { queryModel = model });
             return View(resultModel);
+        }
+
+        public ActionResult PurchaseOrderDetail(Guid id , Guid purchaseOrderId)
+        {
+            var model = _mediator.Request(new ServiceCallPurchaseOrderDetailQuery { ServiceCallLineItemId = id , PurchaseOrderId = purchaseOrderId });
+
+            return View(model);
         }
     }
 }

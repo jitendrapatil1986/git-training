@@ -188,6 +188,9 @@
     <Compile Include="Features\ServiceCallPurchaseOrderSearch\ServiceCallPurchaseOrderSearchHandler.cs" />
     <Compile Include="Features\ServiceCallPurchaseOrderSearch\ServiceCallPurchaseOrderSearchModel.cs" />
     <Compile Include="Features\ServiceCallPurchaseOrderSearch\ServiceCallPurchaseOrderSearchQuery.cs" />
+    <Compile Include="Features\ServiceCallPurchaseOrderDetail\ServiceCallPurchaseOrderDetailModel.cs" />
+    <Compile Include="Features\ServiceCallPurchaseOrderDetail\ServiceCallPurchaseOrderDetailQuery.cs" />
+    <Compile Include="Features\ServiceCallPurchaseOrderDetail\ServiceCallPurchaseOrderDetailQueryHandler.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallQueryHandlerBase.cs" />
     <Compile Include="Features\SetDefaultWidgetSize\ServiceCallWidgetSizeViewModel.cs" />
     <Compile Include="Features\SetDefaultWidgetSize\SetDefaultSizeCommandHandler.cs" />
