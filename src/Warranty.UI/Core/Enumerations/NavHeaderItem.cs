@@ -23,6 +23,8 @@
 
         public static NavHeaderItem BtwwPage = new NavHeaderItem(13, BTWW.Key, BTWW.Display.BtwwName, "Btww", "Index");
 
+        public static NavHeaderItem PurchaseOrderSearch = new NavHeaderItem(14, Search.Key, Search.Display.PurchaseOrder, "ServiceCall", "SearchPurchaseOrder");
+
         protected NavHeaderItem(int value, string key, string displayName, string controller, string action, bool hasDivider = false)
             : base(value, displayName)
         {
@@ -88,6 +90,16 @@
             internal static class Display
             {
                 public const string BtwwName = "BTWW";
+            }
+        }
+
+        public static class Search
+        {
+            public const string Key = "Search";
+
+            internal static class Display
+            {
+                public const string PurchaseOrder = "Purchase Orders";
             }
         }
     }

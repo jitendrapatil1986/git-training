@@ -31,4 +31,10 @@
     $('.phone-number').mask('(999)-999-9999');
     
     $('.phone-number-with-extension').mask("(999) 999-9999? x99999", { placeholder: " " });
+
+    $('.simple-form-submit').on('click', function (e) {
+        e.preventDefault();
+        $(this).parents('form').submit();
+    });
+
 });

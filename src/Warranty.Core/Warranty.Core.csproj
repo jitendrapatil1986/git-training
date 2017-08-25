@@ -185,6 +185,9 @@
     <Compile Include="Entities\UserSettings.cs" />
     <Compile Include="Enumerations\PaymentTypes.cs" />
     <Compile Include="Exceptions\DeleteServiceCallException.cs" />
+    <Compile Include="Features\ServiceCallPurchaseOrderSearch\ServiceCallPurchaseOrderSearchHandler.cs" />
+    <Compile Include="Features\ServiceCallPurchaseOrderSearch\ServiceCallPurchaseOrderSearchModel.cs" />
+    <Compile Include="Features\ServiceCallPurchaseOrderSearch\ServiceCallPurchaseOrderSearchQuery.cs" />
     <Compile Include="Features\ServiceCallsWidget\ServiceCallQueryHandlerBase.cs" />
     <Compile Include="Features\SetDefaultWidgetSize\ServiceCallWidgetSizeViewModel.cs" />
     <Compile Include="Features\SetDefaultWidgetSize\SetDefaultSizeCommandHandler.cs" />

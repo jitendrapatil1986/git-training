@@ -23,6 +23,7 @@ namespace Warranty.UI.Controllers
     using Warranty.Core.Features.ServiceCallApproval;
     using Warranty.Core.Features.ServiceCallSummary.ReassignEmployee;
     using Warranty.Core.Features.ServiceCallToggleActions;
+    using Warranty.Core.Features.ServiceCallPurchaseOrderSearch;
 
     public class ServiceCallController : Controller
     {
@@ -239,6 +240,13 @@ namespace Warranty.UI.Controllers
             var model = _mediator.Request(new AddServiceCallPurchaseOrderQuery { ServiceCallLineItemId = id });
 
             return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult SearchPurchaseOrder(ServiceCallPurchaseOrderSearchModel model)
+        {
+            var resultModel = _mediator.Request(new ServiceCallPurchaseOrderSearchQuery { queryModel = model });
+            return View(resultModel);
         }
     }
 }

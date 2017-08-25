@@ -1,0 +1,70 @@
+﻿namespace Warranty.Core.Features.ServiceCallPurchaseOrderSearch
+{
+    using Common.Security.Session;
+    using NPoco;
+    using Services;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+
+    public class ServiceCallPurchaseOrderSearchHandler : IQueryHandler<ServiceCallPurchaseOrderSearchQuery, ServiceCallPurchaseOrderSearchModel>
+    {
+        private readonly IDatabase _database;
+        private readonly IUserSession _userSession;
+
+        public ServiceCallPurchaseOrderSearchHandler(IDatabase database, IUserSession userSession)
+        {
+            _database = database;
+            _userSession = userSession;
+        }
+
+        public ServiceCallPurchaseOrderSearchModel Handle(ServiceCallPurchaseOrderSearchQuery query)
+        {
+            var user = _userSession.GetCurrentUser();
+            using (_database)
+            {
+                if (!query.queryModel.HasSearchCriteria())
+                    return query.queryModel;
+
+                if((!query.queryModel.FromDate.HasValue && query.queryModel.ThruDate.HasValue) || (query.queryModel.FromDate.HasValue && !query.queryModel.ThruDate.HasValue))
+                    return query.queryModel;
+
+
+                var sql = @";with li as (
+                            select li.[PurchaseOrderId]
+                            from PurchaseOrderLineItems as li 
+                                left join PurchaseOrders as po on po.[PurchaseOrderId] = li.[PurchaseOrderId]
+                            group by li.[PurchaseOrderId]
+                        )
+                        select top 100 po.[PurchaseOrderId]
+                            ,   po.[PurchaseOrderNumber]
+                            ,   po.[ServiceCallLineItemId]
+                            ,   v.[Name] [VendorName]
+                            ,   v.[Number] [VendorNumber]
+                            ,   j.[JobId]
+                            ,   j.[JobNumber]
+                            ,   j.[AddressLine]
+                        from PurchaseOrders as po
+                            inner join li on po.[PurchaseOrderId] = li.[PurchaseOrderId]
+                            left join Jobs j on j.[JobNumber] = po.[JobNumber]
+                            left join Vendors as v on v.[Number] = po.[VendorNumber]
+                        where ((po.[PurchaseOrderNumber] = @0 or @0 IS NULL) and
+                               (po.[PurchaseOrderNumber] IS NOT NULL) and
+                               (po.[VendorNumber] = @1 or @1 IS NULL) and
+                               (po.[JobNumber] = @2 or @2 IS NULL) and
+                               ((po.[CreatedDate] between @3 and @4) or ( @3 IS NULL AND @4 IS NULL ))
+                              )
+                        order by
+                            po.[CreatedDate] desc, v.[Name], j.[JobNumber]";
+                
+                var result = _database.Fetch<ServiceCallPurchaseOrderSearchModel.PurchaseOrderDetail>(sql, query.queryModel.PurchaseOrderNumber, query.queryModel.VendorNumber, query.queryModel.JobNumber, query.queryModel.FromDate, query.queryModel.ThruDate);
+
+                if (result != null)
+                {
+                    query.queryModel.Results = result;
+                }
+                
+                return query.queryModel;
+            }
+        }
+    }
+}
