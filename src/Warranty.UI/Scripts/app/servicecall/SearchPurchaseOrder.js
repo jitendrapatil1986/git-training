@@ -13,19 +13,19 @@
                     });
                 });
 
-                var getEndpoints = function (window) {
+                var getEndpoints = function () {
                     return [jobSearch];
                 };
 
                 search.init({
                     searchBarId: '#searchBarPO',
-                    endpoints: getEndpoints(window),
-                    isFromSerachPurchaseOrder: true
+                    endpoints: getEndpoints(),
+                    isFromSearchPurchaseOrder: true
                 });
                 
                 function SearchpurchaseOrderViewModel() {
                     var self = this;
-                    if (modelData.initialSearchPurchaseOrder.vendorName != null && modelData.initialSearchPurchaseOrder.vendorName != "") {
+                    if (modelData.initialSearchPurchaseOrder.vendorName !== null && modelData.initialSearchPurchaseOrder.vendorName !== "") {
                         self.vendorName = ko.observable(modelData.initialSearchPurchaseOrder.vendorName);
                         self.vendorNumber = ko.observable(modelData.initialSearchPurchaseOrder.vendorNumber);
                         self.hasSelectedVendor = ko.observable(true);
@@ -36,7 +36,7 @@
                         self.hasSelectedVendor = ko.observable(false);
                     }
 
-                    if (modelData.initialSearchPurchaseOrder.homeOwnerName != null && modelData.initialSearchPurchaseOrder.homeOwnerName != "") {
+                    if (modelData.initialSearchPurchaseOrder.homeOwnerName !== null && modelData.initialSearchPurchaseOrder.homeOwnerName !== "") {
                         self.homeOwnerName = ko.observable(modelData.initialSearchPurchaseOrder.homeOwnerName);
                         self.jobNumber = ko.observable(modelData.initialSearchPurchaseOrder.jobNumber);
                         self.hasSelectedJob = ko.observable(true);

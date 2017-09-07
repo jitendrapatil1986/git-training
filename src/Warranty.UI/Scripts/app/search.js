@@ -11,7 +11,7 @@
                 var searchBar = $(searchConfig.searchBarId),
                     searchingFor = _.first(searchConfig.endpoints).display,
                     addOnMap = [],
-                    isPurchaseOrder = (searchConfig.isFromSerachPurchaseOrder !== undefined && searchConfig.isFromSerachPurchaseOrder == true) ? true : false,
+                    isPurchaseOrder = (searchConfig.isFromSearchPurchaseOrder !== undefined && searchConfig.isFromSearchPurchaseOrder == true) ? true : false,
                     options = searchConfig;
 
                 var start = function (config) {
