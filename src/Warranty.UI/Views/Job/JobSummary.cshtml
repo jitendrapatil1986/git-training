@@ -128,7 +128,7 @@
             <h2 class="pull-left no-margin">Job #@Model.JobNumber <small>@Format.YearsWithinWarranty(Model.YearsWithinWarranty, Model.WarrantyStartDate, Model.Stage)</small>
             </h2>
             <div class="pull-right">
-                @using (Html.BeginForm("Create", "ServiceCall", new { id = Model.JobId }))
+                @using (Html.BeginForm("Create", "ServiceCall", new { id = Model.JobId } , FormMethod.Post, new { id = "frmCreteServiceCall", role = "form"}))
                 {
                     if (Model.Stage >= 10 && Model.CloseDate != null)
                     {
