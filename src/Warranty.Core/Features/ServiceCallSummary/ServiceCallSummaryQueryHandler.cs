@@ -80,6 +80,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                     , DATEDIFF(dd, wc.CreatedDate, wc.CompletionDate) as DaysOpenedFor
                                     , DATEDIFF(yy, j.CloseDate, wc.CreatedDate) as YearsWithinWarranty
                                     , j.CloseDate as WarrantyStartDate
+                                    , je.EmployeeName as BuilderName
                                     , wc.EscalationReason
                                     , wc.EscalationDate
                                     , d.DivisionName
@@ -100,6 +101,8 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                 ON wc.ServiceCallId = li.ServiceCallId
                                 LEFT JOIN Employees e
                                 ON wc.WarrantyRepresentativeEmployeeId = e.EmployeeId
+                                INNER JOIN Employees je
+                                ON je.EmployeeId = j.BuilderEmployeeId
                                 INNER JOIN Communities cm
                                 ON j.CommunityId = cm.CommunityId
                                 INNER JOIN Cities ci

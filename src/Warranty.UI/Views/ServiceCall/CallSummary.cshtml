@@ -119,16 +119,24 @@
                         </div>
                         <div class="col-md-3 no-print">
                             <div id="approveCommands" class="margin-bottom-10">
-                            
-                                @if (Model.ServiceCallSummary.ServiceCallStatus == ServiceCallStatus.Requested && Model.CanApprove)
-                                {
-                                    <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" data-display-status="true" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
-                                    <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" data-display-status="true" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
-                                }
-                                else
-                                {
-                                    <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus") </span>
-                                }
+                                <div class="col-md-12">
+                                    <ul class="border-bottom-1-solid">
+                                        <li>
+                                            @if (Model.ServiceCallSummary.ServiceCallStatus == ServiceCallStatus.Requested && Model.CanApprove)
+                                            {
+                                                <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" data-display-status="true" class="approve-button"><span class="glyphicon glyphicon-thumbs-up approve-todo"></span>&nbsp;Approve</a>
+                                                <a href="#" data-service-call-id="@Model.ServiceCallSummary.ServiceCallId" data-display-status="true" class="deny-button"><span class="glyphicon glyphicon-thumbs-down deny-todo"></span>&nbsp;Deny</a>
+                                            }
+                                            else
+                                            {
+                                                <span>Status: @Format.ServiceCallStatus(Model.ServiceCallSummary.ServiceCallStatus, "callSummaryServiceCallStatus", "text: callSummaryServiceCallStatus, value: callSummaryServiceCallStatus, css: cssforCallSummaryServiceCallStatus") </span>
+                                            }
+                                        </li>
+                                        <li>
+                                            <span>Builder: @Model.ServiceCallSummary.BuilderName</span>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                             
                             @if (!Model.ServiceCallSummary.IsSpecialProject)
