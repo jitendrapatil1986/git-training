@@ -23,7 +23,7 @@
                     isFromSearchPurchaseOrder: true
                 });
                 
-                function SearchpurchaseOrderViewModel() {
+                function SearchPurchaseOrderViewModel() {
                     var self = this;
                     if (modelData.initialSearchPurchaseOrder.vendorName !== null && modelData.initialSearchPurchaseOrder.vendorName !== "") {
                         self.vendorName = ko.observable(modelData.initialSearchPurchaseOrder.vendorName);
@@ -84,7 +84,7 @@
                 });
                 
                 ko.validation.registerExtenders();
-                var viewModel = new SearchpurchaseOrderViewModel();
+                var viewModel = new SearchPurchaseOrderViewModel();
                 viewModel.errors = ko.validation.group(viewModel);
                 ko.applyBindings(viewModel);
 

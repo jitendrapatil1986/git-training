@@ -253,7 +253,7 @@ namespace Warranty.UI.Controllers
         [HttpGet]
         public ActionResult SearchPurchaseOrder(ServiceCallPurchaseOrderSearchModel model)
         {
-            var resultModel = _mediator.Request(new ServiceCallPurchaseOrderSearchQuery { queryModel = model });
+            var resultModel = _mediator.Request(new ServiceCallPurchaseOrderSearchQuery { QueryModel = model });
             return View(resultModel);
         }
 

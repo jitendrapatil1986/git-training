@@ -24,13 +24,10 @@
         {
             get { return (Results != null && Results.Any()) ? Results.Count() : 0; }
         }
-
-        //this is here in case it ever needs to be a user input
         public int MaxResults
         {
             get { return 100; }
         }
-
         public bool HasSearchCriteria()
         {
             return FromDate.HasValue || ThruDate.HasValue || VendorNumber.HasValue || JobNumber.HasValue || !string.IsNullOrEmpty(PurchaseOrderNumber) || PurchaseOrderLineItemStatus.HasValue;

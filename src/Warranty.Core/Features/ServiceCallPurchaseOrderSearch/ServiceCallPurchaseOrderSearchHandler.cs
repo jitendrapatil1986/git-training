@@ -22,12 +22,12 @@
             var user = _userSession.GetCurrentUser();
             using (_database)
             {
-                if (!query.queryModel.HasSearchCriteria())
-                    return query.queryModel;
+                var queryModel = query.QueryModel;
+                if (!queryModel.HasSearchCriteria())
+                    return queryModel;
 
-                if((!query.queryModel.FromDate.HasValue && query.queryModel.ThruDate.HasValue) || (query.queryModel.FromDate.HasValue && !query.queryModel.ThruDate.HasValue))
-                    return query.queryModel;
-
+                if((!queryModel.FromDate.HasValue && queryModel.ThruDate.HasValue) || (queryModel.FromDate.HasValue && !queryModel.ThruDate.HasValue))
+                    return queryModel;
 
                 var sql = @";with li as (
                             select li.[PurchaseOrderId]
@@ -55,15 +55,15 @@
                               )
                         order by
                             po.[CreatedDate] desc, v.[Name], j.[JobNumber]";
-                
-                var result = _database.Fetch<ServiceCallPurchaseOrderSearchModel.PurchaseOrderDetail>(sql, query.queryModel.PurchaseOrderNumber, query.queryModel.VendorNumber, query.queryModel.JobNumber, query.queryModel.FromDate, query.queryModel.ThruDate);
+               
+                var result = _database.Fetch<ServiceCallPurchaseOrderSearchModel.PurchaseOrderDetail>(sql, queryModel.PurchaseOrderNumber, queryModel.VendorNumber, queryModel.JobNumber, queryModel.FromDate, queryModel.ThruDate);
 
                 if (result != null)
                 {
-                    query.queryModel.Results = result;
+                    queryModel.Results = result;
                 }
                 
-                return query.queryModel;
+                return queryModel;
             }
         }
     }

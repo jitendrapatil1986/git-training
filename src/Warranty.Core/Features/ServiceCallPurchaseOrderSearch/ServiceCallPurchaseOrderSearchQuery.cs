@@ -2,11 +2,11 @@
 {
     public class ServiceCallPurchaseOrderSearchQuery : IQuery<ServiceCallPurchaseOrderSearchModel>
     {
-        public ServiceCallPurchaseOrderSearchModel queryModel { get; set; }
+        public ServiceCallPurchaseOrderSearchModel QueryModel { get; set; }
 
         public ServiceCallPurchaseOrderSearchQuery()
         {
-            queryModel = new ServiceCallPurchaseOrderSearchModel();
+            QueryModel = new ServiceCallPurchaseOrderSearchModel();
         }
     }
 }
