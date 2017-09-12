@@ -58,7 +58,6 @@ require(['/Scripts/app/main.js'], function () {
 
                 function jobSummaryViewModel() {
                     var self = this;
-                    self.isCreateServiceCall = ko.observable(false);
                     self.jobId = ko.observable($("#jobId").val());
                     self.allJobNotes = ko.observableArray([]);
                     self.jobNoteDescriptionToAdd = ko.observable('').extend({ required: true });
@@ -170,14 +169,9 @@ require(['/Scripts/app/main.js'], function () {
 
                     self.allJobPayments = ko.observableArray([]);
 
-                    $("#frmCreteServiceCall").click(function () {
-                        if (self.isCreateServiceCall() == false) {
-                            self.isCreateServiceCall = ko.observable(true);
-                            $("#frmCreteServiceCall").submit();
-                        }
-                        else {
-                            return false;
-                        }
+                    $("#creteServiceCall").click(function () {                        
+                        $("#creteServiceCall").attr("disabled", true);
+                        $("#frmCreteServiceCall").submit();
                     });
                 }
 
