@@ -35,12 +35,27 @@
             <div id="serviceCallLineItemDetailPage">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <p class="panel-title text-capitalize margin-bottom-10 main-info">
-                            <strong>Status: </strong><span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
-                            <span>
-                                <button type="button" class="btn btn-default pull-right no-print hidden-sm hidden-xs" data-bind="click: enableRecode, visible: canRecodeImportedData()" title="Re-Code is only used on jobs imported from Lotus Notes">Re-Code</button>
-                            </span>
-                        </p>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group no-margin">
+                                    <p class="panel-title text-capitalize margin-bottom-10 main-info panel_LineItem">
+                                        <strong>Status: </strong><span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
+                                        <span>
+                                            <button type="button" class="btn btn-default pull-right no-print hidden-sm hidden-xs" data-bind="click: enableRecode, visible: canRecodeImportedData()" title="Re-Code is only used on jobs imported from Lotus Notes">Re-Code</button>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="panel-title text-capitalize margin-bottom-10 main-info">
+                                    <strong>Builder Name</strong>
+                                    <span>
+                                        @Model.BuilderName
+                                    </span>
+                                    </p>
+                            </div>
+                        </div>
+                        
                         <p class="view margin-bottom-20" data-bind="text: problemDescription"></p>
                         <p></p>
                         <div class="row">

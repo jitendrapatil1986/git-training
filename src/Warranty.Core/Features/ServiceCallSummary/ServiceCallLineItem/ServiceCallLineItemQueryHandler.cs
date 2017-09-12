@@ -115,18 +115,21 @@
                                     li.[LastCompletedDate],
                                     cc.[CostCode],
                                     job.[JobNumber],
+                                    e.[EmployeeName] as BuilderName,
                                     city.CityCode
                                 FROM ServiceCallLineItems li
                                 INNER JOIN ServiceCalls sc
                                     ON li.ServiceCallId = sc.ServiceCallId
                                 INNER JOIN Jobs job
                                     ON job.JobId = sc.JobId
+                                LEFT JOIN Employees e
+                                    ON e.EmployeeId = job.BuilderEmployeeId
                                 INNER JOIN Communities community
                                     ON community.CommunityId = job.CommunityId
                                 INNER JOIN Cities city
                                     ON city.CityId = community.CityId
                                 LEFT JOIN CityCodeProblemCodeCostCodes cc
-                                    ON cc.CityCode = city.CityCode AND cc.ProblemJdeCode = li.ProblemJDECode
+                                    ON cc.CityCode = city.CityCode AND cc.ProblemJdeCode = li.ProblemJDECode														
                                 WHERE ServiceCallLineItemId = @0";
 
             var result = _database.Single<ServiceCallLineItemModel>(sql, serviceCallLineItemId);

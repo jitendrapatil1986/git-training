@@ -101,7 +101,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
                                 ON wc.ServiceCallId = li.ServiceCallId
                                 LEFT JOIN Employees e
                                 ON wc.WarrantyRepresentativeEmployeeId = e.EmployeeId
-                                INNER JOIN Employees je
+                                LEFT JOIN Employees je
                                 ON je.EmployeeId = j.BuilderEmployeeId
                                 INNER JOIN Communities cm
                                 ON j.CommunityId = cm.CommunityId
