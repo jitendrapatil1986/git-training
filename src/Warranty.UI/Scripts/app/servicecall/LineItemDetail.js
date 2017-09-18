@@ -734,8 +734,10 @@
                     }
                 });
 
+                self.addingPayment = ko.observable(false);
+
                 self.canAddPayment = ko.computed(function () {
-                    return true;
+                    return !self.addingPayment()
                 });
 
                 self.clearPaymentFields = function () {
@@ -853,6 +855,7 @@
                     if (formHasErrors([self.invoiceNumber, self.amount, self.backchargeAmount, self.backchargeReason, self.personNotified, self.personNotifiedPhoneNumber, self.personNotifiedDate, self.backchargeResponseFromVendor, self.vendorNumber, self.backchargeVendorName, self.backchargeVendorNumber, self.projectCoordinatorEmail]))
                         return;
 
+                    self.addingPayment(true);
                     self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
                     self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
 
@@ -910,6 +913,9 @@
                             highlight($("#allServiceCallPaymentsAndBackcharges").first());
                             self.hasAnyPayments(true);
                             self.clearPaymentFields();
+                        })
+                        .always(function (response) { 
+                            self.addingPayment(false) 
                         });
                 };
 
