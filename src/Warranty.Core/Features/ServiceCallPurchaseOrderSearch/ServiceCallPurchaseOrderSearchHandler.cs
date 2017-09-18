@@ -32,7 +32,7 @@
                 var sql = @";with li as (
                             select li.[PurchaseOrderId]
                             from PurchaseOrderLineItems as li 
-                                left join PurchaseOrders as po on po.[PurchaseOrderId] = li.[PurchaseOrderId]
+                                inner join PurchaseOrders as po on po.[PurchaseOrderId] = li.[PurchaseOrderId]
                             group by li.[PurchaseOrderId]
                         )
                         select top 100 po.[PurchaseOrderId]
