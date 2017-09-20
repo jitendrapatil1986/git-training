@@ -174,7 +174,7 @@
                                                 <label class="control-label" for="verifyHomeownerType"></label>
                                                 <select id="verifyHomeownerType" class="form-control" data-bind="options: homeownerVerificationCodes, value: homeownerVerificationTypeId, optionsText: 'displayText', optionsValue: 'value', optionsCaption: 'Select Verification Type'"></select>
                                             </div>
-                                            <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationSignature">
+                                            <div class="control-group col-md-4 no-right-padding" data-bind="validationElement: homeownerVerificationSignature">
                                                 <label class="control-label" for="homeownerVerificationSignature"></label>
                                                 @Html.TextBox("Signature", null, new {id = "homeownerVerificationSignature", @class = "form-control", data_bind = "value: homeownerVerificationSignature, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Signature'}"})
                                             </div>
@@ -183,7 +183,7 @@
                                                 @Html.TextBox("Date", null, new {id = "homeownerVerificationSignatureDate", @class = "datepicker-input form-control", data_bind = "value: homeownerVerificationSignatureDate, attr:{placeholder: 'Select Date'}"})
                                             </div>
                                             <br />
-                                            <div class="col-md-2 no-right-padding">
+                                            <div class="col-md-1 no-right-padding">
                                                 <button class="btn btn-primary" data-bind="click: verifySignatureAndCloseCall">Verify & Close Call</button>
                                             </div>
                                         </form>
