@@ -168,9 +168,9 @@
                         <div id="verifyHomeownerSignature">
                             <div class="panel panel-default no-border">
                                 <div class="panel-body">
-                                    <div class="row view-display-inline" >
+                                    <div class="row view-display-inline">
                                         <form>
-                                            <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationTypeId">
+                                            <div class="control-group col-md-4 no-right-padding" data-bind="validationElement: homeownerVerificationTypeId">
                                                 <label class="control-label" for="verifyHomeownerType"></label>
                                                 <select id="verifyHomeownerType" class="form-control" data-bind="options: homeownerVerificationCodes, value: homeownerVerificationTypeId, optionsText: 'displayText', optionsValue: 'value', optionsCaption: 'Select Verification Type'"></select>
                                             </div>
@@ -178,7 +178,7 @@
                                                 <label class="control-label" for="homeownerVerificationSignature"></label>
                                                 @Html.TextBox("Signature", null, new {id = "homeownerVerificationSignature", @class = "form-control", data_bind = "value: homeownerVerificationSignature, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Signature'}"})
                                             </div>
-                                            <div class="control-group col-md-2 no-right-padding" data-bind="validationElement: homeownerVerificationSignatureDate">
+                                            <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationSignatureDate">
                                                 <label class="control-label" for="homeownerVerificationSignatureDate"></label>
                                                 @Html.TextBox("Date", null, new {id = "homeownerVerificationSignatureDate", @class = "datepicker-input form-control", data_bind = "value: homeownerVerificationSignatureDate, attr:{placeholder: 'Select Date'}"})
                                             </div>
