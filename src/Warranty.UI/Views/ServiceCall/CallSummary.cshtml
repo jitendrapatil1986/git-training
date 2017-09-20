@@ -135,14 +135,17 @@
                                         <li>
                                             <span>Builder: @Model.ServiceCallSummary.BuilderName</span>
                                         </li>
+                                        <li>
+                                            @if (!Model.ServiceCallSummary.IsSpecialProject)
+                                            {
+                                                @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
+                                            }
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
                             
-                            @if (!Model.ServiceCallSummary.IsSpecialProject)
-                            {
-                                @ServiceCallStatusIconHelper(Model.ServiceCallSummary.CompletionDate, Model.ServiceCallSummary.CreatedDate, Model.ServiceCallSummary.DaysOpenedFor, Model.ServiceCallSummary.NumberOfDaysRemaining, Model.ServiceCallSummary.PercentComplete)
-                            }
+                           
                         </div>
                     </div>
                 </div>
