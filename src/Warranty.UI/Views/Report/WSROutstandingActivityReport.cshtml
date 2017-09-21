@@ -94,6 +94,10 @@
             <span class="glyphicon glyphicon-chevron-down margin-right-10"></span>
             <span class="text">Hide All</span>
         </button>
+        <button class="btn btn-sm btn-secondary " role="button" id="expandAllCalls">
+            <span class="glyphicon glyphicon-chevron-right margin-right-10"></span>
+            <span class="text">Expand All Calls</span>
+        </button>
         <button class="btn btn-default pull-right margin-botom-10 no-print" role="button" id="printButton">
             <span class="glyphicon glyphicon-print margin-right-10"></span>
             <span class="text">Print</span>
@@ -150,7 +154,7 @@
                             }
                         </ul>
                     }
-                    <table class="table table-striped">
+                    <table class="table table-striped" id="tblRptSummary">
                         <thead>
                             <tr>
                                 <td><b>Job Number</b></td>
@@ -176,9 +180,9 @@
                                     <td>@(Math.Abs((DateTime.Today - serviceCall.CreatedDate.Date).TotalDays)) days</td>
                                 }
                             </tr>
-                            <tr>
+                            <tr id="collapseRow">
                                 <td colspan="5">
-                                    <div style="display: none;">
+                                    <div id="collapse" class="edit">
                                         <h6><strong>Line Item Problem Code and Description</strong></h6>
                                         <ul>
                                             @foreach (var line in serviceCall.ServiceCallLines)
@@ -210,6 +214,9 @@
                             </tr>
                         }
                     </table>
+
+
+
                 }
             </div>
         </div>
