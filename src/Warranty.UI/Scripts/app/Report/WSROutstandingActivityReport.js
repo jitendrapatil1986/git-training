@@ -58,7 +58,7 @@
                     $('div.edit').removeClass("edit");                  
                 } else {
                     $(this).children(".text").text("Expand All Calls");                  
-                    $('tr#collapseRow').find('td > div').addClass("edit"); 
+                    $('tr.collapseRow').find('td > div').addClass("edit"); 
                 }
             });
 

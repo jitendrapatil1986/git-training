@@ -180,9 +180,9 @@
                                     <td>@(Math.Abs((DateTime.Today - serviceCall.CreatedDate.Date).TotalDays)) days</td>
                                 }
                             </tr>
-                            <tr id="collapseRow">
+                            <tr class="collapseRow">
                                 <td colspan="5">
-                                    <div id="collapse" class="edit">
+                                    <div  class="edit">
                                         <h6><strong>Line Item Problem Code and Description</strong></h6>
                                         <ul>
                                             @foreach (var line in serviceCall.ServiceCallLines)
