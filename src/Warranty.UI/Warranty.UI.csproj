@@ -332,6 +332,7 @@
     <Content Include="Views\WarrantyMailer\_simpleLayout.cshtml" />
     <Content Include="Views\Shared\_HelpDocumentModal.cshtml" />
     <Content Include="Views\Btww\Index.cshtml" />
+    <Content Include="Views\ServiceCall\PurchaseOrderDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
