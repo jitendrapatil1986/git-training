@@ -93,8 +93,8 @@ namespace Warranty.Core.Features.ServiceCallToggleActions
             if (serviceCall.IsEscalated)
             {
                 string market = GetServiceCallMarket(serviceCall);
-                var wsrEmails = QueryForEmails(market, UserRoles.WarrantyServiceRepresentativeRole);
-                var ccmEmails = QueryForEmails(market, UserRoles.CustomerCareManagerRole);
+                var wsrEmails = QueryForEmails(market, UserRoles.WarrantyServiceCoordinator);
+                var ccmEmails = QueryForEmails(market, UserRoles.CustomerCareManager);
                 emails = wsrEmails.Concat(ccmEmails).Distinct().ToList<string>();
             }
             return emails;
