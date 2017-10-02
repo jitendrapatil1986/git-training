@@ -139,7 +139,7 @@ namespace Warranty.Core.Features.JobSummary
                             LEFT OUTER JOIN Projects pr
                             ON pr.ProjectId = co.ProjectId
                             WHERE j.JobId = @0
-                            ORDER BY ho.HomeownerNumber, AssignmentDate DESC";
+                            ORDER BY ho.HomeownerNumber DESC, AssignmentDate DESC";
 
             var result = _database.Single<JobSummaryModel>(sql, jobId);
 
