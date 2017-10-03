@@ -175,25 +175,26 @@
                 {
                     <section data-bind="visible: areAllLineItemsCompletedOrNoAction() && !callSummaryStatusComplete() && !callSummaryStatusSigned()">
                         <h3 class="col-md-12">Verify Homeowner Signature</h3>
+                        <h4 class="col-md-12">HOMEOWNER acknowledges that the items listed on this Warranty Service Request have been completed to their satisfaction and that there are no further losses or damages incurred in connection with the items listed unless specified above.</h4>
                         <div id="verifyHomeownerSignature">
                             <div class="panel panel-default no-border">
                                 <div class="panel-body">
-                                    <div class="row">
+                                    <div class="row view-display-inline">
                                         <form>
-                                            <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationTypeId">
+                                            <div class="control-group col-md-4 no-right-padding" data-bind="validationElement: homeownerVerificationTypeId">
                                                 <label class="control-label" for="verifyHomeownerType"></label>
                                                 <select id="verifyHomeownerType" class="form-control" data-bind="options: homeownerVerificationCodes, value: homeownerVerificationTypeId, optionsText: 'displayText', optionsValue: 'value', optionsCaption: 'Select Verification Type'"></select>
                                             </div>
-                                            <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationSignature">
+                                            <div class="control-group col-md-4 no-right-padding" data-bind="validationElement: homeownerVerificationSignature">
                                                 <label class="control-label" for="homeownerVerificationSignature"></label>
                                                 @Html.TextBox("Signature", null, new {id = "homeownerVerificationSignature", @class = "form-control", data_bind = "value: homeownerVerificationSignature, valueUpdate: 'afterkeydown', attr:{placeholder: 'Add Signature'}"})
                                             </div>
-                                            <div class="control-group col-md-2 no-right-padding" data-bind="validationElement: homeownerVerificationSignatureDate">
+                                            <div class="control-group col-md-3 no-right-padding" data-bind="validationElement: homeownerVerificationSignatureDate">
                                                 <label class="control-label" for="homeownerVerificationSignatureDate"></label>
                                                 @Html.TextBox("Date", null, new {id = "homeownerVerificationSignatureDate", @class = "datepicker-input form-control", data_bind = "value: homeownerVerificationSignatureDate, attr:{placeholder: 'Select Date'}"})
                                             </div>
-                                            <br/>
-                                            <div class="col-md-1">
+                                            <br />
+                                            <div class="col-md-1 no-right-padding">
                                                 <button class="btn btn-primary" data-bind="click: verifySignatureAndCloseCall">Verify & Close Call</button>
                                             </div>
                                         </form>
@@ -390,6 +391,8 @@
             </div>
             
             <div class="print-only">
+                <br/>
+                <h4 class="col-md-12">HOMEOWNER acknowledges that the items listed on this Warranty Service Request have been completed to their satisfaction and that there are no further losses or damages incurred in connection with the items listed unless specified above.</h4>
                 <br/>
                 <label>Signature: __________________________________________ &ensp; Date: _________________</label>
             </div>
