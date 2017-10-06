@@ -30,7 +30,7 @@
                                 INNER JOIN Cities m
                                 ON c.CityId = m.CityId
                                 WHERE CityCode IN ({0}) AND JobNumber+AddressLine+ISNULL(HomeOwnerName, '')+ ISNULL(HomePhone, '') + ISNULL(EmailAddress, '')  LIKE '%'+ @0 +'%' 
-                                AND j.Stage >= 3
+                                AND j.Stage >= 1
                                 ORDER BY HomeOwnerName";
 
             var result = _database.Fetch<QuickSearchJobModel>(string.Format(sqlTemplate, markets.CommaSeparateWrapWithSingleQuote()), query.Query);
