@@ -486,5 +486,13 @@ namespace Warranty.UI.Core.Helpers
         {
             return decimal.Round(number, 1, MidpointRounding.AwayFromZero).ToString();
         }
+      
+        public static MvcHtmlString Address(/*string city,string stateCode,string postalCode,*/string address, string City, string StateCode ,string PostalCode)
+        {
+            var htmlString =
+                string.Format("<a href='#' target='_blank' class='hidden-xs map' >{0} <br> {1},{2} {3}</a><span class='glyphicon glyphicon-map-marker text-muted hidden-xs'>", /*city,stateCode,postalCode,*/address,City,StateCode,PostalCode);
+
+            return MvcHtmlString.Create(htmlString);
+        }
     }
 }

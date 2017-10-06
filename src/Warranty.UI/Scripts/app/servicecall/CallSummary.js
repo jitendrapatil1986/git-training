@@ -31,6 +31,12 @@ require(['/Scripts/app/main.js'], function () {
                 $(this).data('editable').input.$input.mask("(999) 999-9999? x99999", { placeholder: " " });
             });
 
+            $(".map").on('click', function () {
+
+                var add = $(this).text();
+                window.open("https://maps.google.com?daddr='" + add + "'");
+            });
+
             $("#homeownerVerificationSignatureDate").datepicker({
                 format: 'm/d/yyyy'
             });

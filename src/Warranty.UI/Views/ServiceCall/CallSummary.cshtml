@@ -76,9 +76,8 @@
                         <div class="col-md-3 main-info">
                             <h3 class="panel-title text-capitalize">@Format.HomeOwner(Model.ServiceCallSummary.HomeownerName, Model.ServiceCallSummary.HomeownerNumber)</h3>
                             <ul>
-                                <li>@Model.ServiceCallSummary.CommunityName</li>
-                                <li class="text-capitalize">@Model.ServiceCallSummary.Address</li>
-                                <li>@Model.ServiceCallSummary.City, @Model.ServiceCallSummary.StateCode @Model.ServiceCallSummary.PostalCode</li>
+                                <li>@Model.ServiceCallSummary.CommunityName</li>                             
+                                <li>@Format.Address(Model.ServiceCallSummary.Address, Model.ServiceCallSummary.City, Model.ServiceCallSummary.StateCode, Model.ServiceCallSummary.PostalCode) </li>
                                 <li class="no-print">
                                     @Format.EditablePhoneNumber(PhoneNumberType.Home, Format.PhoneNumberWithExtension(Model.ServiceCallSummary.HomePhone),Url.Action("AddOrUpdatePhoneNumber","Homeowner"), Model.ServiceCallSummary.HomeownerId)
                                 </li>

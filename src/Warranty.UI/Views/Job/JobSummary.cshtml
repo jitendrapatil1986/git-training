@@ -153,8 +153,7 @@
                         <ul>
                             <li></li>
                             <li>@Html.DisplayFor(x => x.CommunityName)</li>
-                            <li>@Html.DisplayFor(x => x.AddressLine)</li>
-                            <li>@Model.City, @Model.StateCode @Model.PostalCode</li>
+                            <li>@Format.Address(Model.AddressLine, Model.City, Model.StateCode, Model.PostalCode) </li>     
                             @if (Model.Stage >= 10)
                             {
                                 if(Model.HomeOwnerName != "" && Model.HomeOwnerNumber != 0)
