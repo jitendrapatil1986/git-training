@@ -5,7 +5,9 @@
 @using Warranty.UI.Core.Helpers
 @using Common.Extensions
 @model JobSummaryModel
-
+@{
+    var address = Model.AddressLine + "','" + Model.City + "','" + Model.StateCode + "','" + Model.PostalCode;
+}
 @functions {
     private bool IsFirstHomeowner(JobSummaryModel.Homeowner homeowner)
     {
@@ -153,7 +155,8 @@
                         <ul>
                             <li></li>
                             <li>@Html.DisplayFor(x => x.CommunityName)</li>
-                            <li>@Format.Address(Model.AddressLine, Model.City, Model.StateCode, Model.PostalCode) </li>     
+                            <li><a href='@string.Format("https://maps.google.com?daddr={0}",address)' target='_blank' class='hidden-xs'>@Model.AddressLine</a><span class='glyphicon glyphicon-map-marker text-muted hidden-xs'></span></li>
+                            <li>@Model.City, @Model.StateCode @Model.PostalCode</li>      
                             @if (Model.Stage >= 10)
                             {
                                 if(Model.HomeOwnerName != "" && Model.HomeOwnerNumber != 0)

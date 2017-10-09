@@ -27,15 +27,7 @@ require(['/Scripts/app/main.js'], function () {
 
                 $(".phone-number-with-extension").on('shown', function () {
                     $(this).data('editable').input.$input.mask('(999) 999-9999? x99999', { placeholder: " " });
-                });
-             
-                $(".map").on('click', function () {
-                    
-                    var add = $(this).text();
-                    window.open("https://maps.google.com?daddr='"+add+"'");                  
-                });
-
-                $(".attached-file-display-name").editable();          
+                });             
                
                 $(".attached-file-display-name").editable();
 
