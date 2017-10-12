@@ -57,6 +57,7 @@
                     self.clearJob = function () {
                         self.jobNumber("");
                         self.homeOwnerName("");
+                        $("#searchBarPO").val("");
                         self.hasSelectedJob(false)
                     };
 
