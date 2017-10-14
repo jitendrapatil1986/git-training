@@ -32,6 +32,7 @@ namespace Warranty.UI.Api
             {
                 CommunityId = assignment.SelectedCommunityId,
                 EmployeeId = assignment.SelectedEmployeeId,
+                EmployeeAssignmentId = assignment.SelectedEmployeeAssignmentId
             });
 
             return new PostResponseModel { Success = true };

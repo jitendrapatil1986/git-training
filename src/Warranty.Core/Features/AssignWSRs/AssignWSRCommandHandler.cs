@@ -53,10 +53,8 @@ namespace Warranty.Core.Features.AssignWSRs
         {
             using (_database)
             {
-                const string sql = @"SELECT * FROM CommunityAssignmentHistory WHERE CommunityId = @0 ORDER BY AssignmentDate  desc";
-
-                var communityAssignment =
-                    _database.FirstOrDefault<CommunityAssignment>(sql, cmd.CommunityId);
+                const string sqlAssignment = @"SELECT * FROM CommunityAssignments WHERE CommunityId = @0 ORDER BY CreatedDate  desc";
+                var communityAssignment = _database.FirstOrDefault<CommunityAssignment>(sqlAssignment, cmd.CommunityId);
 
                 var communityNumber =
                     _database.Single<string>(@"SELECT CommunityNumber FROM Communities WHERE CommunityId = @0",
@@ -72,16 +70,25 @@ namespace Warranty.Core.Features.AssignWSRs
                 if (string.IsNullOrWhiteSpace(employeeNumber))
                     throw new Exception(string.Format("No team member was found with the Id of {0}.", cmd.EmployeeId));
 
-                if ((communityAssignment == null) || (communityAssignment.EmployeeId != cmd.EmployeeId))
+                if (communityAssignment == null)
                 {
                     var newCommunityAssignment = new CommunityAssignment
                     {
-                        AssignmentDate = DateTime.UtcNow,
                         CommunityId = cmd.CommunityId,
                         EmployeeId = cmd.EmployeeId,
                     };
-
                     _database.Insert(newCommunityAssignment);
+
+                    communityAssignment = _database.FirstOrDefault<CommunityAssignment>(sqlAssignment, cmd.CommunityId);
+
+                    var newCommunityAssignmentHistory = new CommunityAssignmentHistory
+                    {
+                        AssignmentDate = DateTime.UtcNow,
+                        CommunityId = cmd.CommunityId,
+                        EmployeeId = cmd.EmployeeId
+                    };
+
+                    _database.Insert(newCommunityAssignmentHistory);
 
                     _bus.Send<NotifyWarrantyRepresentativeAssignedToCommunity>(x =>
                     {
@@ -93,12 +100,14 @@ namespace Warranty.Core.Features.AssignWSRs
                 }
                 else
                 {
-                    communityAssignment.EmployeeId = cmd.EmployeeId;
+                    
                     var tasks = GetTasksForCommunity(communityNumber);
+
                     using (_database.Transaction)
                     {
                         _database.BeginTransaction();
-                        communityAssignment.AssignmentDate = DateTime.UtcNow;
+                        communityAssignment.EmployeeId = cmd.EmployeeId;
+                        communityAssignment.EmployeeAssignmentId = cmd.EmployeeAssignmentId;
                         _database.Update(communityAssignment);
 
                         var taskTypesToTransfer = TaskType.GetAll().Where(t => t.IsTransferable).ToDictionary(x => x.Value);
@@ -109,6 +118,15 @@ namespace Warranty.Core.Features.AssignWSRs
                         }
                         _database.CompleteTransaction();
                     }
+
+                    var newCommunityAssignmentHistory = new CommunityAssignmentHistory
+                    {
+                        AssignmentDate = DateTime.UtcNow,
+                        UpdatedDate = DateTime.UtcNow,
+                        CommunityId = cmd.CommunityId,
+                        EmployeeId = cmd.EmployeeId
+                    };
+                    _database.Insert(newCommunityAssignmentHistory);
 
                     _bus.Send<NotifyCommunityWarrantyRepresentativeAssignmentChanged>(x =>
                     {

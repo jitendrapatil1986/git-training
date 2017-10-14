@@ -6,6 +6,8 @@ CREATE TABLE CommunityAssignmentHistory (
 	EmployeeId UNIQUEIDENTIFIER,
     CreatedDate DATETIME2,
     CreatedBy VARCHAR(255),
+	UpdatedDate DATETIME2,
+	UpdatedBy VARCHAR(255),
 	AssignmentDate DATETIME2,
     CONSTRAINT PK_EmployeeAssignmentHistoryId
         PRIMARY KEY (EmployeeAssignmentHistoryId),
