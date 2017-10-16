@@ -1,1 +1,0 @@
-.\pstrami.bat deploy-package prod . %1
