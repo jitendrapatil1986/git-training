@@ -1,1 +1,0 @@
-.\pstrami.bat deploy-package training . %1
