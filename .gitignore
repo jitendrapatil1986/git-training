@@ -110,3 +110,10 @@ UpgradeLog*.XML
 # Custom Warranty Project settings
 lib/roundhouse/output/
 _build/
+
+##############
+## Warranty
+##############
+
+src/.vs/Warranty/
+src/.vs/Warranty.sqlite
