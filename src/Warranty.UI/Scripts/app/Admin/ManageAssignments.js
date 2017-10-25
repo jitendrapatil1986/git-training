@@ -31,7 +31,6 @@
                         data: {
                             selectedCommunityId: this.communityId,
                             selectedEmployeeId: this.employeeId(),
-                            SelectedEmployeeAssignmentId : this.communityAssignmentId,
                         },
                         dataType: "json"
                     }).fail(function () {

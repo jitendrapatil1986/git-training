@@ -72,23 +72,29 @@ namespace Warranty.Core.Features.AssignWSRs
 
                 if (communityAssignment == null)
                 {
-                    var newCommunityAssignment = new CommunityAssignment
+                    using (_database.Transaction)
                     {
-                        CommunityId = cmd.CommunityId,
-                        EmployeeId = cmd.EmployeeId,
-                    };
-                    _database.Insert(newCommunityAssignment);
+                        _database.BeginTransaction();
+                        var newCommunityAssignment = new CommunityAssignment
+                        {
+                            CommunityId = cmd.CommunityId,
+                            EmployeeId = cmd.EmployeeId,
+                        };
+                        _database.Insert(newCommunityAssignment);
 
-                    communityAssignment = _database.FirstOrDefault<CommunityAssignment>(sqlAssignment, cmd.CommunityId);
+                        communityAssignment = _database.FirstOrDefault<CommunityAssignment>(sqlAssignment, cmd.CommunityId);
 
-                    var newCommunityAssignmentHistory = new CommunityAssignmentHistory
-                    {
-                        AssignmentDate = DateTime.UtcNow,
-                        CommunityId = cmd.CommunityId,
-                        EmployeeId = cmd.EmployeeId
-                    };
+                        var newCommunityAssignmentHistory = new CommunityAssignmentHistory
+                        {
+                            AssignmentDate = DateTime.UtcNow,
+                            CommunityId = cmd.CommunityId,
+                            EmployeeId = cmd.EmployeeId
+                        };
+                        _database.Insert(newCommunityAssignmentHistory);
 
-                    _database.Insert(newCommunityAssignmentHistory);
+                        _database.CompleteTransaction();
+                    }
+                        
 
                     _bus.Send<NotifyWarrantyRepresentativeAssignedToCommunity>(x =>
                     {
@@ -107,7 +113,6 @@ namespace Warranty.Core.Features.AssignWSRs
                     {
                         _database.BeginTransaction();
                         communityAssignment.EmployeeId = cmd.EmployeeId;
-                        communityAssignment.EmployeeAssignmentId = cmd.EmployeeAssignmentId;
                         _database.Update(communityAssignment);
 
                         var taskTypesToTransfer = TaskType.GetAll().Where(t => t.IsTransferable).ToDictionary(x => x.Value);
@@ -116,17 +121,16 @@ namespace Warranty.Core.Features.AssignWSRs
                             task.EmployeeId = cmd.EmployeeId;
                             _database.Update(task);
                         }
+
+                        var newCommunityAssignmentHistory = new CommunityAssignmentHistory
+                        {
+                            AssignmentDate = DateTime.UtcNow,
+                            CommunityId = cmd.CommunityId,
+                            EmployeeId = cmd.EmployeeId
+                        };
+                        _database.Insert(newCommunityAssignmentHistory);
                         _database.CompleteTransaction();
                     }
-
-                    var newCommunityAssignmentHistory = new CommunityAssignmentHistory
-                    {
-                        AssignmentDate = DateTime.UtcNow,
-                        UpdatedDate = DateTime.UtcNow,
-                        CommunityId = cmd.CommunityId,
-                        EmployeeId = cmd.EmployeeId
-                    };
-                    _database.Insert(newCommunityAssignmentHistory);
 
                     _bus.Send<NotifyCommunityWarrantyRepresentativeAssignmentChanged>(x =>
                     {
