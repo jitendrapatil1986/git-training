@@ -65,13 +65,12 @@
                                         ON sc.WarrantyRepresentativeEmployeeId = e.EmployeeId
                                         WHERE ci.CityCode IN ({0})
                                         AND sc.CreatedDate <= @1
-                                        AND e.EmployeeNumber <> @4
                                         GROUP BY e.EmployeeNumber, e.EmployeeName
                                     ) a
                                     ORDER BY EmployeeName";
-                
+
                 var results = _database.Fetch<WSROpenedClosedCallsModel.WSRSummaryLine>(string.Format(sql, user.Markets.CommaSeparateWrapWithSingleQuote()), startdate, endDate,
-                                ServiceCallStatus.Open.Value, ServiceCallStatus.Complete.Value, user.EmployeeNumber);
+                                ServiceCallStatus.Open.Value, ServiceCallStatus.Complete.Value);
 
                 var serviceCallMarket = user.Markets.First();
 
@@ -83,7 +82,6 @@
                                                       Enumerations.UserRoles.WarrantyServiceRepresentativeRole).Execute();
 
                 var employeesAssignableToServiceCall = warrantyEmployees.Where(x => employeesByServiceCallMarket.Select(y => y.EmployeeNumber).Contains(x.Number));
-
                 results = results.Where(x => employeesAssignableToServiceCall.Select(y => y.Number).Contains(x.EmployeeNumber)).ToList();
 
                 return results;
