@@ -19,8 +19,8 @@ if object_id('CommunityAssignmentHistory') is not null
 begin
     Truncate table CommunityAssignmentHistory
 end
-Insert into CommunityAssignmentHistory(CommunityId, EmployeeId, CreatedBy, CreatedDate)
-Select CommunityId, EmployeeId, CreatedBy, CreatedDate from #historyIds
+INSERT INTO CommunityAssignmentHistory(CommunityId, EmployeeId, CreatedBy, CreatedDate, AssignmentDate)
+Select CommunityId, EmployeeId, CreatedBy, CreatedDate, AssignmentDate from CommunityAssignments
 
 Delete from CommunityAssignments where CommunityId In (Select CommunityId from #historyIds)
 
