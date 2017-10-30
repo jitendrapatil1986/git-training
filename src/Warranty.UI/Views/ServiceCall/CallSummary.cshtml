@@ -79,9 +79,22 @@
                         <div class="col-md-3 main-info">
                             <h3 class="panel-title text-capitalize">@Format.HomeOwner(Model.ServiceCallSummary.HomeownerName, Model.ServiceCallSummary.HomeownerNumber)</h3>
                             <ul>
-                                <li>@Model.ServiceCallSummary.CommunityName</li>                             
-                                <li><a href='@string.Format("https://maps.google.com?daddr={0}",address)' target='_blank' class='hidden-xs'>@Model.ServiceCallSummary.Address</a><span class='glyphicon glyphicon-map-marker text-muted hidden-xs'></span></li>
+                                <li>@Model.ServiceCallSummary.CommunityName</li>                            
+                               
+                                <li>
+                                    <a href='@string.Format("https://maps.google.com?daddr={0}",address)' target='_blank'>
+                                       @Model.ServiceCallSummary.Address
+                                        <span class='glyphicon glyphicon-map-marker text-muted hidden-xs'></span>
+                                    </a>
+                                </li>
                                 <li>@Model.ServiceCallSummary.City, @Model.ServiceCallSummary.StateCode @Model.ServiceCallSummary.PostalCode</li> 
+                                <li>
+                                    <div class='inline-editable-textlabel'>
+                                        <a href='@string.Format("https://maps.google.com?daddr={0}",address)' class="hidden-lg" target='_blank'>
+                                            <span class='glyphicon glyphicon-map-marker text-muted hidden-lg  hidden-md hidden-sm'></span>
+                                        </a>
+                                    </div>
+                                </li>
                                 <li class="no-print">
                                     @Format.EditablePhoneNumber(PhoneNumberType.Home, Format.PhoneNumberWithExtension(Model.ServiceCallSummary.HomePhone),Url.Action("AddOrUpdatePhoneNumber","Homeowner"), Model.ServiceCallSummary.HomeownerId)
                                 </li>
