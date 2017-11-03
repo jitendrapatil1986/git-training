@@ -20,7 +20,7 @@
 
             var entity = new Task
             {
-                TaskType = TaskType.JobStage7,
+                TaskType = TaskType.WarrantyWalk,
                 IsNoAction = true,
                 IsComplete = false,
                 Description = "Test Task",

@@ -77,7 +77,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             UpdateToStageAssertTasksExist(3, tasks =>
             {
                 tasks.Count.ShouldEqual(1);
-                tasks[0].TaskType.ShouldEqual(TaskType.JobStage3);
+                tasks[0].TaskType.ShouldEqual(TaskType.QualityIntroductionofWSR);
             });
         }
 
@@ -87,7 +87,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             UpdateToStageAssertTasksExist(7, tasks =>
             {
                 tasks.Count.ShouldEqual(1);
-                tasks[0].TaskType.ShouldEqual(TaskType.JobStage7);
+                tasks[0].TaskType.ShouldEqual(TaskType.WarrantyWalk);
             });
         }
 
@@ -106,7 +106,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
             UpdateToStageAssertTasksExist(7, tasks =>
             {
                 tasks.Count.ShouldEqual(1);
-                tasks[0].TaskType.ShouldEqual(TaskType.JobStage7);
+                tasks[0].TaskType.ShouldEqual(TaskType.WarrantyWalk);
             }, showcase: true);
         }
 
