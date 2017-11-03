@@ -7,6 +7,7 @@ using NPoco;
 using NPoco.Expressions;
 using Warranty.Core.Enumerations;
 using Task = Warranty.Core.Entities.Task;
+using Warranty.Core.Extensions;
 
 namespace Warranty.Core.Services
 {
@@ -68,43 +69,22 @@ namespace Warranty.Core.Services
         public void CreateTasks(Guid jobId)
         {
             var job = _jobService.GetJobById(jobId);
-            if (_jobService.IsModelOrShowcase(job))
-            {
-                CreateModelOrShowcaseTasks(jobId, job.Stage);
-            }
-            else
-            {
-                CreateJobTasks(jobId, job.Stage);
-            }
+            var isModelOrShowcase = _jobService.IsModelOrShowcase(job);
+            var validTaskTypes = ValidTaskTypes(isModelOrShowcase);
+
+            validTaskTypes
+                .Where(type => type.Stage <= job.Stage)
+                .ForEach(type =>
+                    CreateTaskUnlessExists(jobId, type)
+                );
         }
 
-        private TaskType GetTaskTypeByStage(int stage)
+        private IEnumerable<TaskType> ValidTaskTypes(bool isModelOrShowcase)
         {
-            return TaskType.GetAll().SingleOrDefault(t => t.Stage.HasValue && t.Stage == stage);
-        }
+            if (isModelOrShowcase)
+                return TaskType.ValidModelOrShowcaseTasks;
 
-        private void CreateTasks(Guid jobId, int stage, int[] validStages)
-        {
-            if (stage.In(validStages))
-            {
-                var taskType = GetTaskTypeByStage(stage);
-                if (taskType != null)
-                {
-                    CreateTaskUnlessExists(jobId, taskType);
-                }
-            }
-        }
-
-        private void CreateModelOrShowcaseTasks(Guid jobId, int stage)
-        {
-            var validShowcaseOrModelStages = new[] {7};
-            CreateTasks(jobId, stage, validShowcaseOrModelStages);
-        }
-
-        private void CreateJobTasks(Guid jobId, int stage)
-        {
-            var validJobStages = new[] {3,7};
-            CreateTasks(jobId, stage, validJobStages);
+            return TaskType.ValidJobWithHomeOwnerTasks;
         }
 
         private void CreateTask(Guid jobId, TaskType taskType)
