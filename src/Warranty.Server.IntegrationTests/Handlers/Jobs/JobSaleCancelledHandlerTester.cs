@@ -7,7 +7,6 @@ using TIPS.Events.JobEvents;
 using Warranty.Core.Entities;
 using Warranty.Core.Enumerations;
 using Warranty.Core.Services;
-using Warranty.Server.Extensions;
 using Warranty.Server.Handlers.Jobs;
 using Job = Warranty.Core.Entities.Job;
 

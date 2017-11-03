@@ -5,7 +5,6 @@ namespace Warranty.Core.Features.JobSummary
     using System;
     using System.Collections.Generic;
     using System.Configuration;
-    using System.Net.Http;
     using Enumerations;
     using JobServiceApiHelpers;
     using log4net;

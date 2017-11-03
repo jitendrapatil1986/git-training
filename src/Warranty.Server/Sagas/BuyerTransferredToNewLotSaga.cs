@@ -1,6 +1,5 @@
 ﻿using System;
 using AutoMapper;
-using Common.Messages;
 using log4net;
 using Newtonsoft.Json;
 using NServiceBus;

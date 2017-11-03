@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NPoco;
-using NPoco.Expressions;
 using Warranty.Core.Enumerations;
 using Task = Warranty.Core.Entities.Task;
 using Warranty.Core.Extensions;
