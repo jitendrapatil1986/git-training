@@ -1,5 +1,6 @@
 ﻿namespace Warranty.Core.Enumerations
 {
+    using System.Collections.Generic;
     using Yay.Enumerations;
 
     public class TaskType : Enumeration<TaskType>
@@ -38,5 +39,28 @@
         public string ReportDisplay { get; private set; }
 
         public bool ShowInReports { get { return !string.IsNullOrWhiteSpace(ReportDisplay); } }
+
+        public static IEnumerable<TaskType> ValidModelOrShowcaseTasks
+        {
+            get
+            {
+                return new List<TaskType>
+                {
+                    WarrantyWalk
+                };
+            }
+        }
+
+        public static IEnumerable<TaskType> ValidJobWithHomeOwnerTasks
+        {
+            get
+            {
+                return new List<TaskType>
+                {
+                    QualityIntroductionofWSR,
+                    WarrantyWalk
+                };
+            }
+        }
     }
 }
