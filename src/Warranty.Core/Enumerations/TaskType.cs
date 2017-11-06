@@ -51,7 +51,7 @@
             }
         }
 
-        public static IEnumerable<TaskType> ValidJobWithHomeOwnerTasks
+        public static IEnumerable<TaskType> ValidSoldJobTasks
         {
             get
             {

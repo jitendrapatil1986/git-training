@@ -81,7 +81,7 @@ namespace Warranty.Core.Services
             if (isModelOrShowcase)
                 return TaskType.ValidModelOrShowcaseTasks;
 
-            return TaskType.ValidJobWithHomeOwnerTasks;
+            return TaskType.ValidSoldJobTasks;
         }
 
         private void CreateTask(Guid jobId, TaskType taskType)
