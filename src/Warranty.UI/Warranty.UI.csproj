@@ -268,6 +268,7 @@
       <DependentUpon>Log4Net.config</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Compile Include="Constants\WSROpenedClosedReportsConstants.cs" />
     <Compile Include="Controllers\BtwwController.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
     <Compile Include="Api\UserSessionController.cs" />

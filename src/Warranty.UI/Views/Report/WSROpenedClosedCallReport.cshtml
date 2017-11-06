@@ -1,4 +1,5 @@
-﻿@using Warranty.UI.Core.Helpers
+﻿@using Warranty.UI.Constants
+@using Warranty.UI.Core.Helpers
 @model Warranty.Core.Features.Report.WSROpenedClosedCalls.WSROpenedClosedCallsModel
 
 <div class="container">
@@ -53,12 +54,12 @@
                         <tr>
                             <th>Team Member Name</th>
                             <th>Team Member Number</th>
-                            <th>Starting Number of Calls</th>
-                            <th>Number of Opened Calls</th>
-                            <th>Number of Closed Calls</th>
-                            <th>Ending Number of Calls</th>
+                            <th>@Html.RenderTableHeaderTextWithBottomTooltip("Starting Number Of Calls", WSROpenedClosedReportsConstants.StartingNumberOfCalls)</th>
+                            <th>@Html.RenderTableHeaderTextWithBottomTooltip("Number Of Opened Calls", WSROpenedClosedReportsConstants.NumberOfOpenedCalls)</th>
+                            <th>@Html.RenderTableHeaderTextWithBottomTooltip("Number Of Closed Calls", WSROpenedClosedReportsConstants.NumberOfClosedCalls)</th>
+                            <th>@Html.RenderTableHeaderTextWithBottomTooltip("Ending Number Of Calls", WSROpenedClosedReportsConstants.EndingNumberOfCalls)</th>
                         </tr>
-                    </thead>
+                    </thead> 
                     <tbody>
                         @foreach (var line in Model.WSRSummaryLines)
                         {
