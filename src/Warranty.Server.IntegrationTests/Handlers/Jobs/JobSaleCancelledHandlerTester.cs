@@ -73,7 +73,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
                 });
             }
 
-            _taskService.CreateTaskUnlessExists(job.JobId, TaskType.QualityIntroductionofWSR);
+            _taskService.CreateTaskUnlessExists(job.JobId, TaskType.QualityIntroductionOfWSR);
             _taskService.CreateTaskUnlessExists(job.JobId, TaskType.WarrantyWalk);
             _taskService.CreateTaskUnlessExists(job.JobId, TaskType.JobStage10JobClosed);
 

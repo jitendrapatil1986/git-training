@@ -37,7 +37,7 @@ namespace Warranty.Server.IntegrationTests.Services
         [Test]
         public void Check_CreateTaskIfDoesntExist_CreatesTaskIfDoesntExist()
         {
-            var taskType = TaskType.QualityIntroductionofWSR;
+            var taskType = TaskType.QualityIntroductionOfWSR;
             var community = Get<Community>();
             var job = Get<Job>(j => j.CommunityId = community.CommunityId);
             var wsr = Get<Employee>();
@@ -59,7 +59,7 @@ namespace Warranty.Server.IntegrationTests.Services
         [Test]
         public void Check_CreateTaskIfDoesntExist_DoesntCreateTaskIfExists()
         {
-            var taskType = TaskType.QualityIntroductionofWSR;
+            var taskType = TaskType.QualityIntroductionOfWSR;
             var community = Get<Community>();
             var job = Get<Job>(j => j.CommunityId = community.CommunityId);
             var wsr = Get<Employee>();

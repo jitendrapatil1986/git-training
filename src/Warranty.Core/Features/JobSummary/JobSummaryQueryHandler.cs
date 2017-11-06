@@ -262,7 +262,7 @@ namespace Warranty.Core.Features.JobSummary
 
             var result = _database.Fetch<JobSummaryModel.Task>(sql, jobId);
 
-            return result.Where(x => (x.TaskType.Value == TaskType.QualityIntroductionofWSR.Value) || (x.TaskType.Value == TaskType.WarrantyWalk.Value) ||
+            return result.Where(x => (x.TaskType.Value == TaskType.QualityIntroductionOfWSR.Value) || (x.TaskType.Value == TaskType.WarrantyWalk.Value) ||
                                      (x.TaskType.Value == TaskType.JobStage10JobClosed.Value) || (x.TaskType.Value == TaskType.Job10MonthAnniversary.Value)).ToList(); ;
         }
 
