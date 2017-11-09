@@ -1,3 +1,4 @@
+
 require(['/Scripts/app/main.js'], function () {
     require(['jquery', 'x-editable', 'ko', 'ko.x-editable', 'toastr', 'urls', 'modelData', 'enumeration/PhoneNumberType', 'enumeration/PaymentStatus', 'enumeration/BackchargeStatus', 'bootbox', 'jquery.maskedinput', 'app/formUploader', 'app/additionalContacts', 'app/approveServiceCalls'], function ($, xeditable, ko, koxeditable, toastr, urls, modelData, phoneNumberTypeEnum, paymentStatusEnum, backchargeStatusEnum, bootbox) {
         window.ko = ko; //manually set the global ko property.
@@ -26,8 +27,8 @@ require(['/Scripts/app/main.js'], function () {
 
                 $(".phone-number-with-extension").on('shown', function () {
                     $(this).data('editable').input.$input.mask('(999) 999-9999? x99999', { placeholder: " " });
-                });
-
+                });             
+               
                 $(".attached-file-display-name").editable();
 
                 function highlight(elemId) {

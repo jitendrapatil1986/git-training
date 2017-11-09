@@ -30,7 +30,7 @@ require(['/Scripts/app/main.js'], function () {
             $(".phone-number-with-extension").on('shown', function () {
                 $(this).data('editable').input.$input.mask("(999) 999-9999? x99999", { placeholder: " " });
             });
-
+           
             $("#homeownerVerificationSignatureDate").datepicker({
                 format: 'm/d/yyyy'
             });
