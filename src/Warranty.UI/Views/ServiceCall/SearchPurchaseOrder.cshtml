@@ -1,0 +1,140 @@
+﻿@using Warranty.Core.Extensions
+@model Warranty.Core.Features.ServiceCallPurchaseOrderSearch.ServiceCallPurchaseOrderSearchModel
+<html>
+<body>
+    @using (Html.BeginForm("SearchPurchaseOrder", "ServiceCall", FormMethod.Get))
+    {
+        <div class="container">
+            <section class="margin-bottom-10">
+                <h2 class="pull-left no-margin">Search Purchase Orders</h2>
+                <div class="clearfix"></div>
+            </section>
+            <div class="panel panel-default no-print">
+                <div class="panel-heading">
+                    <div>
+                        <div class="row margin-bottom-10">
+                            <div class="col-md-12  margin-bottom-10">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(x => x.PurchaseOrderNumber, new { Class = "control-label" })
+                                    @Html.TextBox("Model.PurchaseOrderNumber", null, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">Select Vendor</label>
+                                    <input type="text" id="vendor-search" class="form-control" autocomplete="off" placeholder="Select Vendor" data-bind="visible: !hasSelectedVendor()" />
+                                    <div class="selected-result" data-bind="visible: hasSelectedVendor()" style="display:none;">
+                                        <p>
+                                            <b data-bind="text: vendorNumber, attr: { name: 'VendorNumber' }"></b>- <span data-bind="text: vendorName"></span>
+                                            <input type="hidden" id="VendorNumber" name="Model.VendorNumber" data-bind="value: vendorNumber" />
+                                            <input type="hidden" id="VendorName" name="Model.VendorName" data-bind="value: vendorName" />
+                                            <a href="#" data-bind="click: clearVendor"><i class="glyphicon glyphicon-remove text-danger" title="Clear Vendor"></i></a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="control-label">Job</label>
+                                    <input id="searchBarPO" name="query" type="text" class="form-control" autocomplete="off" placeholder="" data-bind="visible : !hasSelectedJob()" />
+                                    <div class="selected-result" data-bind="visible: hasSelectedJob()" style="display:none;">
+                                        <p>
+                                            <span data-bind="text: homeOwnerName"></span>
+                                            <input type="hidden" id="JobNumber" name="Model.JobNumber" data-bind="value: jobNumber" />
+                                            <input type="hidden" id="HomeOwnerName" name="Model.HomeOwnerName" data-bind="value: homeOwnerName" />
+                                            <a href="#" data-bind="click: clearJob"><i class="glyphicon glyphicon-remove text-danger" title="Clear Job"></i></a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-3 form-group">
+                                    @Html.LabelFor(x => x.FromDate, new { Class = "control-label" })
+                                    @Html.TextBox("Model.FromDate", null, new { @class = "form-control datepicker-input", placeholder = "Select Start Date" })
+                                </div>
+                                <div class="col-md-3">
+                                    @Html.LabelFor(x => x.ThruDate, new { Class = "control-label" })
+                                    @Html.TextBox("Model.ThruDate", null, new { @class = "form-control datepicker-input", placeholder = "Select End Date" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-right form-submit">
+                                    <button id="btnsubmit" type="submit" class="btn btn-success simple-form-submit" value="Search">
+                                        <i class="glyphicon glyphicon-search"></i>&nbsp;Search
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="clearfix"></div>
+    @if (Model.HasSearchCriteria())
+    {
+        if (Model.Results.Any())
+        {
+            <div id="SearchSummary" class="col-md-12 purchase-order-detail">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>PO #</th>
+                            <th>Job</th>
+                            <th>Vendor Number</th>
+                            <th>Vendor Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Results)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("PurchaseOrderDetail", "ServiceCall",new { id= item.ServiceCallLineItemId, purchaseOrderId = item.PurchaseOrderId })">@item.PurchaseOrderNumber</a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("JobSummary", "Job",new { id= item.JobId} )">@item.JobNumber</a>
+                                </td>
+                                <td>@item.VendorNumber</td>
+                                <td>@item.VendorName</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <td colspan="4">
+                            <div class="pull-right">
+                                <em>Showing @Model.ResultCount results of a maximum @Model.MaxResults.</em>
+                            </div>
+                        </td>
+                    </tfoot>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="panel-heading">
+                <em>No Purchase Orders matched your search.</em>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="panel-heading">
+            <em>Please specify some search criteria above.</em>
+        </div>
+    }
+
+</body>
+</html>
+
+@section modules
+{
+    <script>
+        define('modelData', function () {
+            return {
+                initialSearchPurchaseOrder: @Html.Raw(Model.ToJson()),
+            }
+        });
+        
+    </script>
+}
