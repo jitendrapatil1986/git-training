@@ -7,7 +7,6 @@ using TIPS.Events.JobEvents;
 using Warranty.Core.Entities;
 using Warranty.Core.Enumerations;
 using Warranty.Core.Services;
-using Warranty.Server.Extensions;
 using Warranty.Server.Handlers.Jobs;
 using Job = Warranty.Core.Entities.Job;
 
@@ -74,8 +73,8 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
                 });
             }
 
-            _taskService.CreateTaskUnlessExists(job.JobId, TaskType.JobStage3);
-            _taskService.CreateTaskUnlessExists(job.JobId, TaskType.JobStage7);
+            _taskService.CreateTaskUnlessExists(job.JobId, TaskType.QualityIntroductionOfWSR);
+            _taskService.CreateTaskUnlessExists(job.JobId, TaskType.WarrantyWalk);
             _taskService.CreateTaskUnlessExists(job.JobId, TaskType.JobStage10JobClosed);
 
             var allTasks = _taskService.GetTasksByJobId(job.JobId);
@@ -84,7 +83,7 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
 
             allTasks = _taskService.GetTasksByJobId(job.JobId);
             allTasks.Count.ShouldEqual(1);
-            allTasks.First().TaskType.ShouldEqual(TaskType.JobStage7);
+            allTasks.First().TaskType.ShouldEqual(TaskType.WarrantyWalk);
         }
     }
 }

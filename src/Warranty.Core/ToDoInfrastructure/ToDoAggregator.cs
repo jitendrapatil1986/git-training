@@ -55,8 +55,8 @@ namespace Warranty.Core.ToDoInfrastructure
 
                 if (ToDoType.JobChangedTask.HasAccess(user.Roles))
                 {
-                    var taskJobChangedToDos = GetJobChangedTaskToDos(user, _database, TaskType.JobStage3).ToList();
-                    taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage7));
+                    var taskJobChangedToDos = GetJobChangedTaskToDos(user, _database, TaskType.QualityIntroductionOfWSR).ToList();
+                    taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.WarrantyWalk));
                     taskJobChangedToDos.AddRange(GetJobChangedTaskToDos(user, _database, TaskType.JobStage10JobClosed));
 
                     //Pull deprecated job task type ToDos for users to complete for those created before the new job task types.

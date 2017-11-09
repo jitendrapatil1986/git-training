@@ -103,8 +103,8 @@ namespace Warranty.Server.IntegrationTests.Handlers.Jobs
                     var todo = TestDatabase.First<Task>(string.Format("WHERE ReferenceId = '{0}'", job.JobId));
                     todo.ShouldNotBeNull();
 
-                    todo.Description.ShouldEqual(TaskType.JobStage7.DisplayName);
-                    todo.TaskType.ShouldEqual(TaskType.JobStage7);
+                    todo.Description.ShouldEqual(TaskType.WarrantyWalk.DisplayName);
+                    todo.TaskType.ShouldEqual(TaskType.WarrantyWalk);
                 }
             });
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using AutoMapper;
-using Common.Messages;
 using log4net;
 using Newtonsoft.Json;
 using NServiceBus;
@@ -146,7 +145,7 @@ namespace Warranty.Server.Sagas
                 _homeOwnerService.RemoveFromJob(previousHomeOwner, previousJob);
 
                 _log.InfoFormat("Removing tasks from previous job {0} on SaleId {1}", Data.PreviousJobNumber, Data.SaleId);
-                _taskService.DeleteTask(previousJob.JobId, TaskType.JobStage3);
+                _taskService.DeleteTask(previousJob.JobId, TaskType.QualityIntroductionOfWSR);
                 _taskService.DeleteTask(previousJob.JobId, TaskType.JobStage10JobClosed);
 
                 _log.InfoFormat("Creating tasks for previous job {0} on SaleId {1}", Data.PreviousJobNumber, Data.SaleId);

@@ -1,5 +1,6 @@
 ﻿namespace Warranty.Core.Enumerations
 {
+    using System.Collections.Generic;
     using Yay.Enumerations;
 
     public class TaskType : Enumeration<TaskType>
@@ -18,8 +19,8 @@
 
         public static readonly TaskType Job10MonthAnniversary = new TaskType(6, "Job 10 Month Anniversary - 1 Year Walk", true, null, "1 Year Walkthrough");
         public static readonly TaskType PaymentStatusChanged = new TaskType(7, "Payment Status Changed", false);
-        public static readonly TaskType JobStage3 = new TaskType(8, "Job is at Stage 3 - time to schedule a warranty introduction.", true, 3, "Warranty Introduction");
-        public static readonly TaskType JobStage7 = new TaskType(9, "Job is at Stage 7 - time to schedule a 244 walk.", true, 7, "244 Walkthrough");
+        public static readonly TaskType QualityIntroductionOfWSR = new TaskType(8, "Job is at Stage 1 - time to schedule a Quality Introduction of WSR.", true, 1, "Quality Introduction of WSR");
+        public static readonly TaskType WarrantyWalk = new TaskType(9, "Job is at Stage 7 - time to schedule a warranty walk.", true, 7, "Warranty Walk");
         public static readonly TaskType JobStage10JobClosed = new TaskType(10, "Job Closed - Warranty Orientation Due", true, 10, "Warranty Orientation");
         public static readonly TaskType JobStage10Approval = new TaskType(11, "Warranty Orientation Approval", true);
 
@@ -38,5 +39,28 @@
         public string ReportDisplay { get; private set; }
 
         public bool ShowInReports { get { return !string.IsNullOrWhiteSpace(ReportDisplay); } }
+
+        public static IEnumerable<TaskType> ValidModelOrShowcaseTasks
+        {
+            get
+            {
+                return new List<TaskType>
+                {
+                    WarrantyWalk
+                };
+            }
+        }
+
+        public static IEnumerable<TaskType> ValidSoldJobTasks
+        {
+            get
+            {
+                return new List<TaskType>
+                {
+                    QualityIntroductionOfWSR,
+                    WarrantyWalk
+                };
+            }
+        }
     }
 }

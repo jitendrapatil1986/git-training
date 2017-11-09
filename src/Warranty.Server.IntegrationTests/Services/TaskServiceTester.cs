@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using Should;
 using StructureMap;
@@ -40,7 +37,7 @@ namespace Warranty.Server.IntegrationTests.Services
         [Test]
         public void Check_CreateTaskIfDoesntExist_CreatesTaskIfDoesntExist()
         {
-            var taskType = TaskType.JobStage3;
+            var taskType = TaskType.QualityIntroductionOfWSR;
             var community = Get<Community>();
             var job = Get<Job>(j => j.CommunityId = community.CommunityId);
             var wsr = Get<Employee>();
@@ -62,7 +59,7 @@ namespace Warranty.Server.IntegrationTests.Services
         [Test]
         public void Check_CreateTaskIfDoesntExist_DoesntCreateTaskIfExists()
         {
-            var taskType = TaskType.JobStage3;
+            var taskType = TaskType.QualityIntroductionOfWSR;
             var community = Get<Community>();
             var job = Get<Job>(j => j.CommunityId = community.CommunityId);
             var wsr = Get<Employee>();
