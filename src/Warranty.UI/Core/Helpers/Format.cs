@@ -386,7 +386,7 @@ namespace Warranty.UI.Core.Helpers
         public static MvcHtmlString EditablePhoneNumber(PhoneNumberType phoneNumberType, string phoneNumber, string postUrl, Guid homeownerId)
         {
             var htmlString =
-                string.Format("<div class='inline-editable-text'><a href='tel:{4}'><span class='glyphicon glyphicon-{0} text-muted visible-xs'></span></a><span class='glyphicon glyphicon-{0} text-muted hidden-xs'></span> <a href='#' class='hidden-xs phone-number-with-extension' data-type='text' data-emptytext='Add Primary Phone' id='{1}_Phone' data-url='{2}' data-pk='{3}' data-clear='false' data-value='{4}'>{4}</a><span class='hidden-xs'> (Primary)</span></div>", phoneNumberType.Icon, phoneNumberType.DisplayName, postUrl, homeownerId, phoneNumber);
+                string.Format("<div class='inline-editable-textlabel'><a href='tel:{4}'><span class='glyphicon glyphicon-{0} text-muted visible-xs'></span></a><span class='glyphicon glyphicon-{0} text-muted hidden-xs'></span> <a href='#' class='hidden-xs phone-number-with-extension' data-type='text' data-emptytext='Add Primary Phone' id='{1}_Phone' data-url='{2}' data-pk='{3}' data-clear='false' data-value='{4}'>{4}</a><span class='hidden-xs'> (Primary)</span></div>", phoneNumberType.Icon, phoneNumberType.DisplayName, postUrl, homeownerId, phoneNumber);
 
             return MvcHtmlString.Create(htmlString);
         }
@@ -395,7 +395,7 @@ namespace Warranty.UI.Core.Helpers
         {
             return
                 MvcHtmlString.Create(
-                    string.Format(@"<div class='inline-editable-text'><a class='glyphicon glyphicon-envelope text-muted' href='mailto:{2}?subject=David Weekley Homes Warranty Service Call %23 {3}'></a> 
+                    string.Format(@"<div class='inline-editable-textlabel'><a class='glyphicon glyphicon-envelope text-muted' href='mailto:{2}?subject=David Weekley Homes Warranty Service Call %23 {3}'></a> 
                                     <a href='mailto:{2}?subject=David Weekley Homes Warranty Service Call %23 {3}' class='hidden-xs' data-type='text' data-emptytext='Add Primary Email' id='Email' data-url='{0}' data-pk='{1}' data-clear='false' data-value='{2}'>{2}</a><span class='hidden-xs'> (Primary)</span></div>", postUrl, homeownerId, email, callNumber));
         }
 
@@ -403,7 +403,7 @@ namespace Warranty.UI.Core.Helpers
         {
             return
                 MvcHtmlString.Create(
-                    string.Format(@"<div class='inline-editable-text'><a class='glyphicon glyphicon-envelope text-muted' href='mailto:{2}?subject=David Weekley Homes Warranty'></a> 
+                    string.Format(@"<div class='inline-editable-textlabel'><a class='glyphicon glyphicon-envelope text-muted' href='mailto:{2}?subject=David Weekley Homes Warranty'></a> 
                                     <a href='mailto:{2}?subject=David Weekley Homes Warranty' class='hidden-xs' data-type='text' data-emptytext='Add Primary Email' id='Email' data-url='{0}' data-pk='{1}' data-clear='false' data-value='{2}'>{2}</a><span class='hidden-xs'> (Primary)</span></div>", postUrl, homeownerId, email));
         }
 
@@ -485,6 +485,6 @@ namespace Warranty.UI.Core.Helpers
         public static string WithOneDecimal(decimal number)
         {
             return decimal.Round(number, 1, MidpointRounding.AwayFromZero).ToString();
-        }
+        } 
     }
 }

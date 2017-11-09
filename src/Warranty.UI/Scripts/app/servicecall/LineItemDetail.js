@@ -40,6 +40,7 @@
                     var self = this;
 
                     self.serviceCallLineItemId = options.serviceCallLineItemId;
+                    self.PurchaseOrderId = options.purchaseOrderId;
                     self.purchaseOrderNumber = options.purchaseOrderNumber;
                     self.vendorNumber = options.vendorNumber;
                     self.vendorName = options.vendorName;
@@ -734,9 +735,15 @@
                     }
                 });
 
+                self.addingPayment = ko.observable(false);
+
                 self.canAddPayment = ko.computed(function () {
-                    return true;
+                    return !self.addingPayment()
                 });
+
+                self.jumpToPurchaseOrderDetailPage = function (item) {
+                    window.location.href = urls.ServiceCall.PurchaseOrderDetail + '/' + self.serviceCallLineItemId + '?purchaseOrderId=' + item.PurchaseOrderId;
+                };
 
                 self.clearPaymentFields = function () {
                     $('#vendor-search').val('');
@@ -853,6 +860,7 @@
                     if (formHasErrors([self.invoiceNumber, self.amount, self.backchargeAmount, self.backchargeReason, self.personNotified, self.personNotifiedPhoneNumber, self.personNotifiedDate, self.backchargeResponseFromVendor, self.vendorNumber, self.backchargeVendorName, self.backchargeVendorNumber, self.projectCoordinatorEmail]))
                         return;
 
+                    self.addingPayment(true);
                     self.serviceCallId = modelData.initialServiceCallLineItem.serviceCallId;
                     self.serviceCallLineItemId = modelData.initialServiceCallLineItem.serviceCallLineItemId;
 
@@ -910,6 +918,9 @@
                             highlight($("#allServiceCallPaymentsAndBackcharges").first());
                             self.hasAnyPayments(true);
                             self.clearPaymentFields();
+                        })
+                        .always(function (response) { 
+                            self.addingPayment(false) 
                         });
                 };
 
@@ -1182,6 +1193,8 @@
                     formHasErrors([self.expandPaymentClicked]);
                 };
             }
+
+
 
             ko.validation.init({
                 errorElementClass: 'has-error',

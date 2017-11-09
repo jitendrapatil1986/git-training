@@ -35,32 +35,51 @@
             <div id="serviceCallLineItemDetailPage">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <p class="panel-title text-capitalize margin-bottom-10 main-info">
-                            <strong>Status: </strong><span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
-                            <span>
-                                <button type="button" class="btn btn-default pull-right no-print hidden-sm hidden-xs" data-bind="click: enableRecode, visible: canRecodeImportedData()" title="Re-Code is only used on jobs imported from Lotus Notes">Re-Code</button>
-                            </span>
-                        </p>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group no-margin">
+                                    <p class="panel-title text-capitalize margin-bottom-10 main-info panel_LineItem">
+                                        <strong>Status: </strong><span class="text-muted view" data-bind="text: serviceCallLineItemStatusDisplayName() ? serviceCallLineItemStatusDisplayName() : '', css: lineItemStatusCSS"></span>
+                                        <span>
+                                            <button type="button" class="btn btn-default pull-right no-print hidden-sm hidden-xs" data-bind="click: enableRecode, visible: canRecodeImportedData()" title="Re-Code is only used on jobs imported from Lotus Notes">Re-Code</button>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="panel-title text-capitalize margin-bottom-10 main-info">
+                                    <strong>Builder: </strong>
+                                    <span>
+                                        @Model.BuilderName
+                                    </span>
+                                    </p>
+                            </div>
+                        </div>
+                        
                         <p class="view margin-bottom-20" data-bind="text: problemDescription"></p>
                         <p></p>
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="control-group" data-bind="validationElement: rootProblemId, visible: !isLineItemCompleted() || recodeEnabled()">
                                     <label class="control-label" for="rootProblemId">Root Problem</label>
+                                    <i title="" class="glyphicon glyphicon-info-sign has-bottom-tooltip" data-original-title="Root Problem is the reason we are having to fix the break (Problem Code). The Root Problem is required for PO and Payments so that the correct cost code is paid."></i>
                                     <select id="rootProblemId" class="form-control" data-bind="options: rootProblemCodes, value: rootProblemId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Root Problem', enable: enableRootProblem()"></select>
                                 </div>
                                 <div class="form-group no-margin" data-bind="visible: isLineItemCompleted() && !recodeEnabled()">
                                     <label class="control-label">Root Problem</label>
+                                    <i title="" class="glyphicon glyphicon-info-sign fa-2x has-bottom-tooltip" data-original-title="Root Problem is the reason we are having to fix the break (Problem Code). The Root Problem is required for PO and Payments so that the correct cost code is paid."></i>
                                     <p class="form-control-static" data-bind="text: rootProblem"></p>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="control-group" data-bind="validationElement: rootCauseId, visible: !isLineItemCompleted() || recodeEnabled()">
                                     <label class="control-label" for="rootCauseId">Root Cause</label>
+                                    <i title="" class="glyphicon glyphicon-info-sign has-bottom-tooltip" data-original-title="Provides more insight into why the Root Problem happened"></i>
                                     <select id="rootCauseId" class="form-control" data-bind="options: rootCauseCodes, value: rootCauseId, optionsText: 'text', optionsValue: 'value', optionsCaption: 'Select Root Cause', enable: enableRootCause()"></select>
                                 </div>
                                 <div class="form-group no-margin" data-bind="visible: isLineItemCompleted() && !recodeEnabled()">
                                     <label class="control-label">Root Cause</label>
+                                    <i title="" class="glyphicon glyphicon-info-sign has-bottom-tooltip" data-original-title="Provides more insight into why the Root Problem happened"></i>
                                     <p class="form-control-static" data-bind="text: rootCause"></p>
                                 </div>
                             </div>
@@ -102,14 +121,14 @@
                     <section>
                         <h3 class="col-md-12">POs
                             <span>
-                                <button type="button" class="btn btn-default pull-right no-print hidden-sm hidden-xs" data-bind="click: createPurchaseOrder">Create PO</button>
+                                <button type="button" class="btn btn-default pull-right no-print" data-bind="click: createPurchaseOrder">Create PO</button>
                             </span>
                         </h3>
                         <p data-bind="validationMessage: createPurchaseOrderClicked" class="pull-right alert alert-warning enable-button-warning hidden-sm hidden-xs"></p>
                         <div class="clearfix"></div>
                         <p class="padding-left-15" data-bind="visible: allPurchaseOrders().length < 1" ><em>No Purchase Orders Available</em></p>
                         <!-- ko foreach: allPurchaseOrders -->
-                        <div class="row service-call-line">
+                        <div class="row service-call-line"  data-bind="click: $root.jumpToPurchaseOrderDetailPage, css: { 'cursor-pointer': true }">
                             <div class="col-md-4">
                                 <strong><span data-bind="text: vendorName"></span></strong>
                                 <br/>

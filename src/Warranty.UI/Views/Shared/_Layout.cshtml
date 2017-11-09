@@ -26,7 +26,8 @@
                         (key == NavHeaderItem.Reports.Key && item.Value == NavHeaderItem.MailMergeReport.Value && User.IsInRole(UserRoles.WarrantyServiceRepresentative)) ||                        
                         (key == NavHeaderItem.Reports.Key && item.Value == NavHeaderItem.WsrOutstantindActivity.Value && User.IsInRole(UserRoles.WarrantyServiceRepresentative)) ||
                         (key == NavHeaderItem.Administration.Key && item.Value != NavHeaderItem.ManageCostCode.Value && (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))) ||
-                        (key == NavHeaderItem.Administration.Key && item.Value == NavHeaderItem.ManageCostCode.Value && User.IsInRole(UserRoles.WarrantyAdmin))
+                        (key == NavHeaderItem.Administration.Key && item.Value == NavHeaderItem.ManageCostCode.Value && User.IsInRole(UserRoles.WarrantyAdmin)) ||
+                        (key == NavHeaderItem.Search.Key)
                         )
                     {
                         if (item.HasDivider)
@@ -36,7 +37,7 @@
                         @NavHeaderItemHelper(item)
                     }
                 }
-                @if (User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager))
+                @if ((User.IsInRole(UserRoles.WarrantyServiceCoordinator) || User.IsInRole(UserRoles.CustomerCareManager)) && key != NavHeaderItem.Search.Key)
                 {
                     
                     <li><a href="http://jde.dwhomes.net:8000/secure/sequel?Obj=WA_TODO2%24&Lib=SEQPROD&databind=N" target="_blank">Outstanding Warranty ToDo Report</a></li>
@@ -129,6 +130,8 @@
                 @{ Html.RenderAction("MyTeamDropdown", "Home"); }
                 <li class="divider divider-vertical hidden-xs"></li> 
                 @NavItemSectionHelper(NavHeaderItem.BTWW.Key)
+                <li class="divider divider-vertical hidden-xs"></li>
+                @NavItemSectionHelper(NavHeaderItem.Search.Key)
                 <li class="divider divider-vertical hidden-xs"></li> 
             </ul>
             <div class="main-search nav-extra">

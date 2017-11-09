@@ -70,6 +70,7 @@ namespace Warranty.Core.Features.ServiceCallSummary
             public bool CanBeReopened { get; set; }
             public DateTime? EscalationDate { get; set; }
             public string EscalationReason { get; set; }
+            public string BuilderName { get; set; }
             public string DivisionName { get; set; }
             public string ProjectName { get; set; }
             public string CommunityName { get; set; }

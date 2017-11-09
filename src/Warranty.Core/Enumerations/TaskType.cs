@@ -20,7 +20,7 @@
         public static readonly TaskType Job10MonthAnniversary = new TaskType(6, "Job 10 Month Anniversary - 1 Year Walk", true, null, "1 Year Walkthrough");
         public static readonly TaskType PaymentStatusChanged = new TaskType(7, "Payment Status Changed", false);
         public static readonly TaskType QualityIntroductionOfWSR = new TaskType(8, "Job is at Stage 1 - time to schedule a Quality Introduction of WSR.", true, 1, "Quality Introduction of WSR");
-        public static readonly TaskType WarrantyWalk = new TaskType(9, "Job is at Stage 7 - time to schedule a warranty walk.", true, 7, "Warranty Walk");
+        public static readonly TaskType JobStage7 = new TaskType(9, "Job is at Stage 7 - time to schedule a warranty walk.", true, 7, "Warranty Walk");
         public static readonly TaskType JobStage10JobClosed = new TaskType(10, "Job Closed - Warranty Orientation Due", true, 10, "Warranty Orientation");
         public static readonly TaskType JobStage10Approval = new TaskType(11, "Warranty Orientation Approval", true);
 

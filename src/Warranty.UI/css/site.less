@@ -205,8 +205,8 @@ section.line-items {
 }
 
     .opened-for div:first-child{
-        font-size: 28px;
-        line-height: 26px;
+        font-size: 25px;
+        line-height: 20px;
     }
 
     #jobSummaryPage .opened-for{
@@ -985,6 +985,11 @@ span.boxclose{
     font-size: 16px;
 }
 
+
+.view-display-inline{
+   display:inline-block;
+}
+
 .table-wsr-loading tr th:first-child, .table-wsr-loading tr td:first-child{
     width: 800px;
 }
@@ -1142,6 +1147,17 @@ a.boxclose {
         z-index: 1;
     }
 
+    .inline-editable-textlabel .glyphicon {
+        width: 31%;
+        margin: 2px;
+        float: left;
+        padding: 10px;
+        text-align: center;
+        border: 1px solid lightgrey;
+        background: white;
+        z-index: 1;
+    }
+
     .main-container {
         margin-top: 0px;
     }
@@ -1156,6 +1172,7 @@ a.boxclose {
         top: 59px;
         margin-left: -150px; //half of width.
     }
+
 }
 
 @media print {
@@ -1257,3 +1274,40 @@ ul.btww-list{
 .my-widget {
     padding-left: 40px;
 }
+
+.selected-result {
+    margin-top : -12px;
+}
+
+.table-po-search tr th{
+    text-align: right;
+    vertical-align: middle !important;
+    width:25%;
+}
+
+.purchase-order-detail {
+    table {
+        width: 100%;
+
+        th {
+            text-align: left;
+            font-weight: bold;
+            padding: 0 12px;
+            border-left: 1px dashed gainsboro;
+        }
+
+        td, tr {
+            padding: 4px 4px 4px 12px;
+            border-bottom: 1px solid gainsboro;
+
+            .currency {
+                text-align: right;
+            }
+        }
+    }
+}
+
+.create_Po_Subtotal{
+    padding-left: 550px;
+}
+

@@ -268,6 +268,7 @@
       <DependentUpon>Log4Net.config</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Compile Include="Constants\WSROpenedClosedReportsConstants.cs" />
     <Compile Include="Controllers\BtwwController.cs" />
     <Compile Include="Controllers\CommunityController.cs" />
     <Compile Include="Api\UserSessionController.cs" />
@@ -324,6 +325,7 @@
     </Compile>
     <Compile Include="Mailers\WarrantyMailer.cs" />
     <Compile Include="Mailers\IWarrantyMailer.cs" />
+    <Content Include="Scripts\app\servicecall\SearchPurchaseOrder.js" />
     <Content Include="Scripts\app\servicecall\SearchProjectCoordinator.js" />
     <Compile Include="UploadHandler.ashx.cs">
       <DependentUpon>UploadHandler.ashx</DependentUpon>
@@ -332,6 +334,8 @@
     <Content Include="Views\WarrantyMailer\_simpleLayout.cshtml" />
     <Content Include="Views\Shared\_HelpDocumentModal.cshtml" />
     <Content Include="Views\Btww\Index.cshtml" />
+    <Content Include="Views\ServiceCall\SearchPurchaseOrder.cshtml" />
+    <Content Include="Views\ServiceCall\PurchaseOrderDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -473,7 +477,9 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Home\ServiceCallsWidget.cshtml" />
     <Content Include="Views\Shared\_RequireJsConfig.cshtml" />
     <Content Include="Views\ServiceCall\Reassign.cshtml" />

@@ -1,0 +1,132 @@
+﻿@using Warranty.Core.Configurations
+@using Warranty.Core.Extensions
+@using Warranty.Core.Enumerations
+@using Warranty.UI.Core.Helpers
+@using Warranty.Core.Enumerations;
+@model Warranty.Core.Features.ServiceCallPurchaseOrderDetail.ServiceCallPurchaseOrderDetailModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <section class="margin-bottom-10">
+                <h2 class="no-margin">
+                    Purchase Order Details
+                </h2>
+            </section>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row margin-bottom-10">
+                        <div class="col-md-6">
+                            <div class="control-group">
+                                <label class="control-label" for="vendor-search">Vendor</label>
+                                <input type="text" id="vendor-search" class="form-control" value="@Model.ServiceCallLineItemPurchaseOrders.VendorName" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="control-group padding-top-31">
+                                @if (Model.ServiceCallLineItemPurchaseOrders.IsMaterialObjectAccount == true)
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" id="materialAccount" checked="checked"> Material
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" id="laborAccount" disabled> Labor
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" id="materialAccount" disabled> Material
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" id="laborAccount" checked="checked"> Labor
+                                    </label>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Ship To</label>
+                            <div class="small">
+                                <a class="" href="@Url.Action("JobSummary", "Job", new {id = Model.JobId})">Job # @Model.JobNumber</a>
+                                <br />
+                                <span>@Model.AddressLine</span>
+                                <br />
+                                <span>@Model.City , @(Model.StateCode + " " + Model.PostalCode)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row margin-bottom-10">
+                        <div class="col-md-6">
+                            <div class="control-group">
+                                <label class="control-label" for="selectedDeliveryInstruction">Delivery Instructions</label>
+                                <select id="selectedDeliveryInstruction" class="form-control" readonly><option selected="selected">@DeliveryInstruction.GetAll().Where(x => x.Value.Equals(Convert.ToInt32(Model.ServiceCallLineItemPurchaseOrders.DeliveryInstructions))).FirstOrDefault().DisplayName</option></select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="control-group" data-bind="validationElement: deliveryDate">
+                                <label class="control-label" for="deliveryDate">Delivery Date</label>
+                                <input id="deliveryDate" type="text" class="form-control" value="@Format.DateMonthDayYear(Model.ServiceCallLineItemPurchaseOrders.CreatedDate)" readonly/>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                        </div>
+                    </div>
+                    @if (Model.ServiceCallLineItemPurchaseOrders.ServiceCallLineItemPurchaseOrderLines.Any())
+                    {
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>Items</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2"><label>Quantity</label></div>
+                            <div class="col-md-7"><label>Description</label></div>
+                            <div class="col-md-2"><label>Unit Cost</label></div>
+                            <div class="col-md-1"><label class="text-right pull-right">Subtotal</label></div>
+                        </div>
+                        foreach(var items in Model.ServiceCallLineItemPurchaseOrders.ServiceCallLineItemPurchaseOrderLines)
+                        {
+                            <div class="row margin-bottom-10">
+                                <div class="col-md-2">
+                                    <div class="control-group">
+                                        <input type="text" class="form-control" value="@(items.Quantity)" readonly />
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="control-group">
+                                        <input id="description" type="text" class="form-control" value="@items.Description" readonly />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="control-group">
+                                        <input id="unitCost" type="text" class="form-control" value="@(items.UnitCost)" readonly />
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <p class="text-right">@Format.Money(items.Quantity * items.UnitCost)</p>
+                                </div>
+                            </div>
+                        }
+                    }
+                    <div class="row margin-bottom-10">
+                        <div class="col-md-3 pull-right">
+                            <div class="control-group">
+                                <label class="control-label" for="totalCost">Total</label>
+                                <label id="totalCost" class="pull-right">@Format.Money(Model.ServiceCallLineItemPurchaseOrders.TotalCost)</label>
+                                <br />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row margin-top-10">
+                        <div class="col-md-12">
+                            <div class="form-group" data-bind="validationElement: notes">
+                                <label class="control-label" for="notes">Notes</label>
+                                <textarea id="notes" class="form-control" rows="2" readonly>@Model.ServiceCallLineItemPurchaseOrders.PurchaseOrderNote</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

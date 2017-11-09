@@ -96,6 +96,7 @@ namespace Warranty.Core.Calculator
                                             AND CityCode IN ({0})
                                             AND EmployeeNumber=@2
                                             AND sc.ServiceCallType = 'Warranty Service Request'
+                                            AND SpecialProject<>1
                                      GROUP BY month(completiondate), year(completionDate)";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
@@ -123,6 +124,7 @@ namespace Warranty.Core.Calculator
                                             AND CompletionDate <= @1
                                                 AND CityCode IN ({0})
                                                 AND d.DivisionName=@2
+                                            AND SpecialProject<>1
                                         group by month(completiondate), year(completionDate)";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, divisionName);
@@ -150,6 +152,7 @@ namespace Warranty.Core.Calculator
                                             AND CompletionDate <= @1
                                                 AND CityCode IN ({0})
                                                 AND pr.ProjectName=@2
+                                            AND SpecialProject<>1
                                             group by month(completiondate), year(completionDate)";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, projectName);
@@ -303,6 +306,7 @@ namespace Warranty.Core.Calculator
                                     AND CityCode IN ({0})
                                     AND EmployeeNumber=@2
                             AND sc.ServiceCallType = 'Warranty Service Request'
+                            AND SpecialProject<>1
                         group by month(completiondate), year(completionDate)";
 
                 var result = _database.Fetch<CalculatorResult>(string.Format(sql, _userMarkets), startDate, endDate, employeeNumber);
