@@ -5,14 +5,17 @@
     using Warranty.Core;
     using Warranty.Core.Features.CreateServiceCallCustomerSearch;
     using Warranty.Core.Features.QuickSearch;
+    using Common.Security.Session;
 
     public class QuickSearchController : ApiController
     {
         private readonly IMediator _mediator;
+        private readonly IUser _currentUser;
 
-        public QuickSearchController(IMediator mediator)
+        public QuickSearchController(IMediator mediator, IUserSession currentSession)
         {
             _mediator = mediator;
+            _currentUser = currentSession.GetCurrentUser();
         }
         
         [HttpGet]
@@ -46,10 +49,13 @@
         [HttpGet]
         public IEnumerable<QuickSearchCallVendorModel> Vendors(string query, string cityCode, string invoicePayableCode)
         {
+            var userMarkets = _currentUser.Markets;
+            var userMarketsString = string.Join(",", userMarkets);
+            var markets = cityCode ?? userMarketsString;
             var results = _mediator.Request(new QuickSearchVendorsQuery
                 {
                     Query = query,
-                    CityCode = cityCode,
+                    CityCode = markets,
                     InvoicePayableCode = invoicePayableCode
                 });
             return results;
