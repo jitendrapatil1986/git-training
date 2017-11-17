@@ -181,7 +181,9 @@
     <Compile Include="Calculator\MonthYearModel.cs" />
     <Compile Include="Calculator\SurveyDataResult.cs" />
     <Compile Include="Calculator\WarrantyCalculator.cs" />
+    <Compile Include="DataAccess\Mappings\CommunityAssignmentHistoryMap.cs" />
     <Compile Include="DataAccess\Mappings\UserSettingsMap.cs" />
+    <Compile Include="Entities\CommunityAssignmentHistory.cs" />
     <Compile Include="Entities\UserSettings.cs" />
     <Compile Include="Enumerations\PaymentTypes.cs" />
     <Compile Include="Exceptions\DeleteServiceCallException.cs" />

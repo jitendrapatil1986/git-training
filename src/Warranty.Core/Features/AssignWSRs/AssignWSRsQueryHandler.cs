@@ -42,7 +42,7 @@ namespace Warranty.Core.Features.AssignWSRs
                                              ca.EmployeeAssignmentId = (SELECT TOP 1 ca1.EmployeeAssignmentId 
                                                                         FROM CommunityAssignments ca1
                                                                         WHERE ca1.CommunityId = a.CommunityId 
-                                                                        ORDER BY ca1.AssignmentDate DESC)
+                                                                        ORDER BY ca1.CreatedDate DESC)
                                             )
                                          LEFT JOIN Employees e
                                          ON e.EmployeeId = ca.EmployeeId

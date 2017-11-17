@@ -19,7 +19,7 @@ namespace Warranty.Core.Services
             {
                 const string sqlEmployeeId = @"Select Top 1 ca.EmployeeId from CommunityAssignments ca
                                                 INNER JOIN Jobs j On ca.CommunityId = j.CommunityId
-                                                Where j.JobId = @0 AND IsNull (AssignmentDate, '01-01-1753')=(Select MAX(IsNull (AssignmentDate, '01-01-1753')) from CommunityAssignments m where m.CommunityId = ca.CommunityId)";
+                                                Where j.JobId = @0";
 
                 var employeeId = _database.FirstOrDefault<Guid>(sqlEmployeeId, jobId);
                 

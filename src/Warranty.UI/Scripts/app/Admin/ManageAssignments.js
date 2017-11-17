@@ -30,7 +30,7 @@
                         url: urls.AssignWSR.UpdateAssignment,
                         data: {
                             selectedCommunityId: this.communityId,
-                            selectedEmployeeId: this.employeeId()
+                            selectedEmployeeId: this.employeeId(),
                         },
                         dataType: "json"
                     }).fail(function () {
