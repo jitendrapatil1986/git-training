@@ -1,2 +1,2 @@
 README
-Feature A changes
+Feature B Changes
